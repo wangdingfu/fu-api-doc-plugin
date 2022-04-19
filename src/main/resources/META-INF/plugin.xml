@@ -1,18 +1,37 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.wangdingfu.fuapidocplugin</id>
-    <name>fu-api-doc-plugin</name>
-    <vendor>wangdingfu</vendor>
+    <id>com.wdf.api</id>
+    <name>Fu-Doc</name>
+    <version>1.0</version>
+    <vendor email="wangdingfu1024@163.com" url="http://www.wangdingfu.com">暂无</vendor>
 
+    <description>
+        这是一款可以根据java（Controller）代码一键生成API接口文档的插件
+        无需任何二次开发，基于代码的注释生成，只要你有一个编写注释的好习惯，它可以帮你省掉编写API接口文档的工作
+    </description>
+
+    <change-notes>
+        V1.0.0 开始初始化项目
+    </change-notes>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>org.intellij.plugins.markdown</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.wangdingfu.fuapidocplugin.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.wangdingfu.fuapidocplugin.services.MyProjectService"/>
+        <!-- Add your extensions here -->
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.wangdingfu.fuapidocplugin.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+    <actions>
+        <!-- Add your actions here -->
+        <action id="gen-api-doc" class="com.wdf.apidoc.action.GenApiDocAction" text="生成接口文档">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
+        </action>
+    </actions>
+
 </idea-plugin>

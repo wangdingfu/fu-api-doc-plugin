@@ -21,8 +21,20 @@ version = properties("pluginVersion")
 
 // Configure project's dependencies
 repositories {
+    mavenLocal()
+    maven {
+        setUrl("https://maven.aliyun.com/nexus/content/groups/public/")
+    }
     mavenCentral()
 }
+
+dependencies {
+    //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+    implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    implementation("org.projectlombok:lombok:1.18.20")
+}
+
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
