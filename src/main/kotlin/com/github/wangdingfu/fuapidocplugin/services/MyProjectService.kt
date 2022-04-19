@@ -1,7 +1,7 @@
-package org.jetbrains.plugins.template.services
+package com.github.wangdingfu.fuapidocplugin.services
 
 import com.intellij.openapi.project.Project
-import org.jetbrains.plugins.template.MyBundle
+import com.github.wangdingfu.fuapidocplugin.MyBundle
 
 class MyProjectService(project: Project) {
 
