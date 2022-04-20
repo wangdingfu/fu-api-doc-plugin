@@ -5,9 +5,10 @@ import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.bo.ParseObjectParentBO;
+import com.wdf.apidoc.bo.ParseObjectBO;
 import com.wdf.apidoc.data.ApiDocObjectData;
 import com.wdf.apidoc.enumtype.CommonObjectType;
+import com.wdf.apidoc.execute.ParseObjectExecutor;
 import com.wdf.apidoc.handler.AbstractParseObjectHandler;
 import org.apache.commons.lang3.StringUtils;
 
@@ -49,26 +50,36 @@ public class ParseCollectionObjectHandler extends AbstractParseObjectHandler {
      * @return 集合类型解析后的描述对象
      */
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectParentBO parent) {
-        ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
+    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parseObjectBO) {
         //获取集合的泛型对象
         PsiType iterableType = PsiUtil.extractIterableTypeParameter(psiType, false);
         if (Objects.isNull(iterableType)) {
             //没有泛型 无法继续遍历 直接退出解析
-            return apiDocObjectData;
+            return buildDefault(psiType, getCollectionType(null), parseObjectBO);
         }
         //基本数据类型和公共数据类型 则不处理
-        if (iterableType instanceof PsiPrimitiveType || StringUtils.isNotBlank(CommonObjectType.getName(psiType.getCanonicalText()))) {
-            apiDocObjectData.setCanonicalText(psiType.getPresentableText());
-            return apiDocObjectData;
+        if (iterableType instanceof PsiPrimitiveType) {
+            return buildDefault(psiType, getCollectionType(iterableType.getCanonicalText()), parseObjectBO);
         }
+        String name = CommonObjectType.getName(iterableType.getCanonicalText());
+        if (StringUtils.isNotBlank(name)) {
+            return buildDefault(psiType, getCollectionType(name), parseObjectBO);
+        }
+        ApiDocObjectData apiDocObjectData = buildDefault(psiType, getCollectionType(null), parseObjectBO);
+        ApiDocObjectData iterableApiDoc = ParseObjectExecutor.execute(iterableType, new ParseObjectBO());
+        if (Objects.nonNull(iterableApiDoc)) {
+            //将泛型对象的字段集合设置到当前apiDoc中
+            apiDocObjectData.setChildList(iterableApiDoc.getChildList());
+        }
+        return apiDocObjectData;
+    }
 
-        //泛型填充
 
-        //遍历泛型对象
-
-
-        return null;
+    private String getCollectionType(String generics) {
+        if (StringUtils.isBlank(generics)) {
+            return "array";
+        }
+        return String.format("array[%s]", generics);
     }
 
 

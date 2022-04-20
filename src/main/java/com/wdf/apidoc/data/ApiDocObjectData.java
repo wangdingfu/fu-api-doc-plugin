@@ -6,26 +6,44 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * @descption: API接口文档参数解析后的数据对象(存放了指定参数的所有信息)
+ * @descption: 参数字段属性数据对象
  * @author wangdingfu
- * @date 2022-04-05 20:04:47
+ * @date 2022-04-05 22:10:26
  */
 @Getter
 @Setter
-public class ApiDocObjectData extends AnnotationDataMap {
+public class ApiDocObjectData extends AnnotationDataMap{
 
     /**
-     * 全称
+     * 字段类型
      */
-    private String qualifiedName;
+    private String type;
 
     /**
-     * 带泛型全名称(一个对象的唯一性)
+     * 页面显示的类型
      */
-    private String canonicalText;
+    private String typeView;
+
 
     /**
-     * 字段集合
+     * 字段名称
      */
-    private List<ApiDocObjectFieldData> fieldDataList;
+    private String name;
+
+
+    /**
+     * 字段注释
+     */
+    private String docText;
+
+    /**
+     * 必填属性
+     */
+    private boolean required;
+
+
+    /**
+     * 子属性字段集合(当前对象不为基本对象 且有自己属性字段时)
+     */
+    private List<ApiDocObjectData> childList;
 }

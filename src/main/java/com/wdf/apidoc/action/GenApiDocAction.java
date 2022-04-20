@@ -2,11 +2,19 @@ package com.wdf.apidoc.action;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.psi.PsiClass;
+import com.wdf.apidoc.context.ApiDocContext;
+import com.wdf.apidoc.data.ApiDocData;
+import com.wdf.apidoc.parse.ApiDocParse;
+import com.wdf.apidoc.parse.ControllerApiDocParse;
+import com.wdf.apidoc.util.PsiClassUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
- * @descption: 一键生成API接口文档入口类
  * @author wangdingfu
+ * @descption: 一键生成API接口文档入口类
  * @date 2022-04-16 18:53:05
  */
 public class GenApiDocAction extends AnAction {
@@ -30,8 +38,15 @@ public class GenApiDocAction extends AnAction {
      */
     @Override
     public void actionPerformed(AnActionEvent e) {
+        PsiClass psiClass = PsiClassUtils.getPsiClass(e);
+        if (Objects.isNull(psiClass)) {
+            return;
+        }
 
-
-
+        ApiDocContext apiDocContext = new ApiDocContext();
+        apiDocContext.setProject(e.getProject());
+        ApiDocParse apiDocParse = new ControllerApiDocParse();
+        ApiDocData parse = apiDocParse.parse(apiDocContext, psiClass, null);
+        System.out.println(parse.toString());
     }
 }

@@ -1,9 +1,9 @@
 package com.wdf.apidoc.parse;
 
-import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
+import com.wdf.apidoc.bo.ParseObjectBO;
 import com.wdf.apidoc.context.ApiDocContext;
 import com.wdf.apidoc.data.ApiDocObjectData;
 import com.wdf.apidoc.execute.ParseObjectExecutor;
@@ -26,8 +26,11 @@ public class ControllerApiDocParse extends AbstractApiDocParse {
     protected ApiDocObjectData requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod) {
         PsiParameterList parameterList = psiMethod.getParameterList();
         for (PsiParameter parameter : parameterList.getParameters()) {
-            PsiAnnotation[] annotations = parameter.getAnnotations();
-            ApiDocObjectData apiDocObjectData = ParseObjectExecutor.execute(parameter.getType(), null);
+            ParseObjectBO parseObjectBO = new ParseObjectBO();
+            parseObjectBO.setPsiParameter(parameter);
+            ApiDocObjectData apiDocObjectData = ParseObjectExecutor.execute(parameter.getType(), parseObjectBO);
+            System.out.println(apiDocObjectData);
+            return apiDocObjectData;
         }
         return null;
     }

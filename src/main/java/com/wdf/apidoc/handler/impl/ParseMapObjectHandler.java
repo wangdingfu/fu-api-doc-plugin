@@ -3,7 +3,7 @@ package com.wdf.apidoc.handler.impl;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
-import com.wdf.apidoc.bo.ParseObjectParentBO;
+import com.wdf.apidoc.bo.ParseObjectBO;
 import com.wdf.apidoc.data.ApiDocObjectData;
 import com.wdf.apidoc.handler.AbstractParseObjectHandler;
 
@@ -25,7 +25,7 @@ public class ParseMapObjectHandler extends AbstractParseObjectHandler {
     }
 
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectParentBO parent) {
+    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent) {
         return null;
     }
 }

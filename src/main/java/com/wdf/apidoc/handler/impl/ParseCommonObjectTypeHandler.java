@@ -1,7 +1,7 @@
 package com.wdf.apidoc.handler.impl;
 
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.bo.ParseObjectParentBO;
+import com.wdf.apidoc.bo.ParseObjectBO;
 import com.wdf.apidoc.data.ApiDocObjectData;
 import com.wdf.apidoc.enumtype.CommonObjectType;
 import com.wdf.apidoc.handler.AbstractParseObjectHandler;
@@ -44,7 +44,7 @@ public class ParseCommonObjectTypeHandler extends AbstractParseObjectHandler {
      * @return ApiDoc文档数据对象
      */
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectParentBO parent) {
-        return null;
+    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent) {
+        return buildDefault(psiType, CommonObjectType.getName(psiType.getCanonicalText()), parent);
     }
 }

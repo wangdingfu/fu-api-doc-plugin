@@ -1,7 +1,8 @@
 package com.wdf.apidoc.handler.impl;
 
+import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.bo.ParseObjectParentBO;
+import com.wdf.apidoc.bo.ParseObjectBO;
 import com.wdf.apidoc.data.ApiDocObjectData;
 import com.wdf.apidoc.handler.AbstractParseObjectHandler;
 
@@ -25,7 +26,7 @@ public class ParseJavaLangObjectTypeHandler extends AbstractParseObjectHandler {
      */
     @Override
     public boolean isParse(PsiType psiType) {
-        return false;
+        return psiType.getCanonicalText().startsWith(CommonClassNames.DEFAULT_PACKAGE);
     }
 
     /**
@@ -36,7 +37,7 @@ public class ParseJavaLangObjectTypeHandler extends AbstractParseObjectHandler {
      * @return java.lang包对象在文档显示的默认值
      */
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectParentBO parent) {
-        return null;
+    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent) {
+        return buildDefault(psiType, "---", parent);
     }
 }

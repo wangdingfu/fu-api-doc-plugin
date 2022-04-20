@@ -2,7 +2,7 @@ package com.wdf.apidoc.handler.impl;
 
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.bo.ParseObjectParentBO;
+import com.wdf.apidoc.bo.ParseObjectBO;
 import com.wdf.apidoc.data.ApiDocObjectData;
 import com.wdf.apidoc.handler.AbstractParseObjectHandler;
 
@@ -44,7 +44,7 @@ public class ParsePrimitiveTypeHandler extends AbstractParseObjectHandler {
      * @return 描述基本数据类型的文档信息对象
      */
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectParentBO parent) {
-        return null;
+    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent) {
+        return buildDefault(psiType, psiType.getCanonicalText(), parent);
     }
 }

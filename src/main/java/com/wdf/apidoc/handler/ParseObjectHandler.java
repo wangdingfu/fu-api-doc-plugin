@@ -1,7 +1,7 @@
 package com.wdf.apidoc.handler;
 
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.bo.ParseObjectParentBO;
+import com.wdf.apidoc.bo.ParseObjectBO;
 import com.wdf.apidoc.data.ApiDocObjectData;
 
 /**
@@ -34,5 +34,5 @@ public interface ParseObjectHandler {
      * @param parent  对象所属父级对象的信息bo
      * @return 解析后的ApiDoc对象
      */
-    ApiDocObjectData parse(PsiType psiType, ParseObjectParentBO parent);
+    ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent);
 }
