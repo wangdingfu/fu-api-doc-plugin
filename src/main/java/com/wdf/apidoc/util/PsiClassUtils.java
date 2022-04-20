@@ -20,6 +20,9 @@ import java.util.Objects;
 public class PsiClassUtils {
 
 
+    /**
+     * 获取用户光标当前所在的类
+     */
     public static PsiClass getPsiClass(AnActionEvent e) {
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
         Editor editor = e.getData(PlatformDataKeys.EDITOR);
@@ -53,7 +56,7 @@ public class PsiClassUtils {
      * @return 父类的类型
      */
     public static PsiClassTypeBO getSuperClassType(PsiClass psiClass) {
-        if(isClass(psiClass) && isClass(psiClass.getSuperClass())){
+        if (isClass(psiClass) && isClass(psiClass.getSuperClass())) {
             for (PsiClassType superType : psiClass.getSuperTypes()) {
                 PsiClass superClass = PsiUtil.resolveClassInType(superType);
                 if (Objects.nonNull(superClass) && !superClass.isInterface() && !superClass.isEnum()) {
@@ -65,6 +68,12 @@ public class PsiClassUtils {
     }
 
 
+    /**
+     * 判断是否为一个java类（不是接口或者枚举或者注解等）
+     *
+     * @param psiClass class对象
+     * @return true-是一个类
+     */
     public static boolean isClass(PsiClass psiClass) {
         return !(Objects.isNull(psiClass) || psiClass.isEnum() || psiClass.isInterface() || psiClass.isAnnotationType() || psiClass.isRecord());
     }
