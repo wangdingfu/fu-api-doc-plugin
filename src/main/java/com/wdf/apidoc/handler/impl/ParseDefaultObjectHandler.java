@@ -55,8 +55,6 @@ public class ParseDefaultObjectHandler extends AbstractParseObjectHandler {
      */
     @Override
     public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parseObjectBO) {
-        //泛型替换
-        psiType = formatPsiType(psiType, parseObjectBO);
         List<ApiDocObjectData> apiDocObjectDataList = Lists.newArrayList();
         PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
         parseObject(psiType, psiClass, apiDocObjectDataList);

@@ -19,25 +19,44 @@ import java.util.Objects;
 public abstract class AbstractParseObjectHandler implements ParseObjectHandler {
 
 
-    protected ApiDocObjectData buildDefault(PsiType psiType, String type, ParseObjectBO parseObjectBO) {
+    /**
+     * 构建一个默认的ApiDoc对象
+     *
+     * @param psiType       对象类型
+     * @param typeView      页面文档显示的类型
+     * @param parseObjectBO 解析对象参数
+     * @return 指定对象解析后的接口文档描述信息
+     */
+    protected ApiDocObjectData buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
         ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
         apiDocObjectData.setDocText(parseObjectBO.getDocText());
         apiDocObjectData.setName(parseObjectBO.getName());
-        apiDocObjectData.setTypeView(type);
-        apiDocObjectData.setType(psiType.getCanonicalText());
+        apiDocObjectData.setTypeView(typeView);
+        apiDocObjectData.setType(psiType.getPresentableText());
         return apiDocObjectData;
     }
 
 
+    /**
+     * 获取类上的泛型和字段泛型的对应关系
+     *
+     * @param psiType  对象类型
+     * @param psiClass 对象class
+     * @return key:泛型（例如T,E） value:泛型对应的对象类型
+     */
     protected Map<String, PsiType> buildGenericsMap(PsiType psiType, PsiClass psiClass) {
         Map<String, PsiType> genericsMap = new HashMap<>();
         if (psiType instanceof PsiClassType) {
             PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
-            if (typeParameters.length > 0) {
-                PsiType[] parameters = ((PsiClassType) psiType).getParameters();
+            PsiType[] parameters = ((PsiClassType) psiType).getParameters();
+            int parametersLength = parameters.length;
+            if (typeParameters.length > 0 && parametersLength > 0) {
                 for (int i = 0; i < typeParameters.length; i++) {
                     PsiTypeParameter typeParameter = typeParameters[i];
-                    genericsMap.put(typeParameter.getName(), parameters[i]);
+                    if (parametersLength > i) {
+                        //防止数组越界 （有可能某些类没有指定泛型的具体类）
+                        genericsMap.put(typeParameter.getName(), parameters[i]);
+                    }
                 }
             }
         }
@@ -45,19 +64,4 @@ public abstract class AbstractParseObjectHandler implements ParseObjectHandler {
     }
 
 
-    /**
-     * 格式化对象类型（如果对象为泛型 则将泛型替换为真实对象类型）
-     *
-     * @param psiType       对象类型
-     * @param parseObjectBO 解析对象所需要的参数
-     * @return 实际的对象类型
-     */
-    protected PsiType formatPsiType(PsiType psiType, ParseObjectBO parseObjectBO) {
-        PsiType generics;
-        if (Objects.nonNull(parseObjectBO) && Objects.nonNull(generics = parseObjectBO.getPsiType(psiType.getCanonicalText()))) {
-            //替换泛型类
-            return generics;
-        }
-        return psiType;
-    }
 }

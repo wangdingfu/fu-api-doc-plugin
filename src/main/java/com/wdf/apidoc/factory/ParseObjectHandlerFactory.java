@@ -5,6 +5,7 @@ import com.wdf.apidoc.handler.impl.*;
 import lombok.Getter;
 import org.apache.commons.compress.utils.Lists;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,6 +25,8 @@ public class ParseObjectHandlerFactory {
         parseObjectHandlerList.add(new ParseCollectionObjectHandler());
         parseObjectHandlerList.add(new ParseMapObjectHandler());
         parseObjectHandlerList.add(new ParseDefaultObjectHandler());
+        //根据各自实现类的优先加载顺序来排序
+        parseObjectHandlerList.sort(Comparator.comparing(ParseObjectHandler::sort));
     }
 
 }

@@ -1,8 +1,6 @@
 package com.wdf.apidoc.parse;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.psi.*;
 import com.wdf.apidoc.bo.ParseObjectBO;
 import com.wdf.apidoc.context.ApiDocContext;
 import com.wdf.apidoc.data.ApiDocObjectData;
@@ -25,7 +23,9 @@ public class ControllerApiDocParse extends AbstractApiDocParse {
     @Override
     protected ApiDocObjectData requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod) {
         PsiParameterList parameterList = psiMethod.getParameterList();
+        //判断当前请求参数是否为@RequestBody注解
         for (PsiParameter parameter : parameterList.getParameters()) {
+            PsiAnnotation[] annotations = parameter.getAnnotations();
             ParseObjectBO parseObjectBO = new ParseObjectBO();
             parseObjectBO.setPsiParameter(parameter);
             ApiDocObjectData apiDocObjectData = ParseObjectExecutor.execute(parameter.getType(), parseObjectBO);
@@ -45,6 +45,9 @@ public class ControllerApiDocParse extends AbstractApiDocParse {
      */
     @Override
     protected ApiDocObjectData responseParse(ApiDocContext apiDocContext, PsiMethod psiMethod) {
-        return null;
+        PsiType returnType = psiMethod.getReturnType();
+        ApiDocObjectData execute = ParseObjectExecutor.execute(returnType, new ParseObjectBO());
+        System.out.println(execute);
+        return execute;
     }
 }
