@@ -1,7 +1,7 @@
 package com.wdf.apidoc.service.impl;
 
 import com.intellij.psi.*;
-import com.wdf.apidoc.execute.ParseObjectExecutor;
+import com.wdf.apidoc.execute.ObjectParserExecutor;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
@@ -29,7 +29,7 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
             PsiAnnotation[] annotations = parameter.getAnnotations();
             ParseObjectBO parseObjectBO = new ParseObjectBO();
             parseObjectBO.setPsiParameter(parameter);
-            ApiDocObjectData apiDocObjectData = ParseObjectExecutor.execute(parameter.getType(), parseObjectBO);
+            ApiDocObjectData apiDocObjectData = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
             System.out.println(apiDocObjectData);
             return apiDocObjectData;
         }
@@ -47,7 +47,7 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
     @Override
     protected ApiDocObjectData responseParse(ApiDocContext apiDocContext, PsiMethod psiMethod) {
         PsiType returnType = psiMethod.getReturnType();
-        ApiDocObjectData execute = ParseObjectExecutor.execute(returnType, new ParseObjectBO());
+        ApiDocObjectData execute = ObjectParserExecutor.execute(returnType, new ParseObjectBO());
         System.out.println(execute);
         return execute;
     }

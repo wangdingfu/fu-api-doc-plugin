@@ -3,6 +3,7 @@ package com.wdf.apidoc.pojo.data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,9 +16,14 @@ import java.util.Map;
 public class ApiDocCommentData {
 
     /**
-     * 主注释
+     * 注释标题
      */
-    private String mainBody;
+    private String commentTitle;
+
+    /**
+     * 注释详细描述信息
+     */
+    private List<String> commentDescList;
 
     /**
      * 参数注释map

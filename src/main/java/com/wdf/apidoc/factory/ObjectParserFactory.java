@@ -13,7 +13,7 @@ import java.util.List;
  * @description 解析对象处理器工厂类
  * @Date 2022-04-18 21:07:58
  */
-public class ParseObjectHandlerFactory {
+public class ObjectParserFactory {
 
     @Getter
     private static final List<ApiDocObjectParser> OBJECT_PARSER_LIST = Lists.newArrayList();

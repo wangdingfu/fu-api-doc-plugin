@@ -8,7 +8,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.enumtype.CommonObjectType;
-import com.wdf.apidoc.execute.ParseObjectExecutor;
+import com.wdf.apidoc.execute.ObjectParserExecutor;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import org.apache.commons.lang3.StringUtils;
 
@@ -66,7 +66,7 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
             return buildDefault(psiType, getCollectionType(name), parseObjectBO);
         }
         ApiDocObjectData apiDocObjectData = buildDefault(psiType, getCollectionType(null), parseObjectBO);
-        ApiDocObjectData iterableApiDoc = ParseObjectExecutor.execute(iterableType, new ParseObjectBO());
+        ApiDocObjectData iterableApiDoc = ObjectParserExecutor.execute(iterableType, new ParseObjectBO());
         if (Objects.nonNull(iterableApiDoc)) {
             //将泛型对象的字段集合设置到当前apiDoc中
             apiDocObjectData.setChildList(iterableApiDoc.getChildList());

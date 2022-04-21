@@ -3,7 +3,7 @@ package com.wdf.apidoc.execute;
 import com.intellij.psi.PsiType;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
-import com.wdf.apidoc.factory.ParseObjectHandlerFactory;
+import com.wdf.apidoc.factory.ObjectParserFactory;
 import com.wdf.apidoc.parse.object.ApiDocObjectParser;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -15,7 +15,7 @@ import java.util.Objects;
  * @description 解析对象执行器
  * @Date 2022-04-18 21:09:26
  */
-public class ParseObjectExecutor {
+public class ObjectParserExecutor {
 
 
     /**
@@ -26,7 +26,7 @@ public class ParseObjectExecutor {
      * @return 解析后生成的ApiDoc数据对象
      */
     public static ApiDocObjectData execute(PsiType psiType, ParseObjectBO parseObjectBO) {
-        List<ApiDocObjectParser> apiDocObjectParserList = ParseObjectHandlerFactory.getOBJECT_PARSER_LIST();
+        List<ApiDocObjectParser> apiDocObjectParserList = ObjectParserFactory.getOBJECT_PARSER_LIST();
         if (CollectionUtils.isNotEmpty(apiDocObjectParserList)) {
             //泛型替换
             psiType = formatPsiType(psiType, parseObjectBO);
