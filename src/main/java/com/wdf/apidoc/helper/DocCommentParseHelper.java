@@ -45,7 +45,7 @@ public class DocCommentParseHelper {
             apiDocCommentData.setReturnComment(formatComment(tag, CommentTagType.RETURN));
 
             //获取方法标题注释
-            apiDocCommentData.setMainBody(getCommentContent(psiDocComment));
+            apiDocCommentData.setCommentTitle(getCommentContent(psiDocComment));
         }
         return apiDocCommentData;
 
