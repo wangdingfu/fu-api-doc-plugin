@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /**
  * @author wangdingfu
- * @Descption 对象解析器(用户自定义对象)
+ * @description 对象解析器(用户自定义对象)
  * @Date 2022-04-18 21:34:42
  */
 public class ParseDefaultObjectHandler extends AbstractParseObjectHandler {

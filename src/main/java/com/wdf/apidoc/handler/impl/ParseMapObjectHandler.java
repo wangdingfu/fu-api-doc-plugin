@@ -9,7 +9,7 @@ import com.wdf.apidoc.handler.AbstractParseObjectHandler;
 
 /**
  * @author wangdingfu
- * @Descption map对象解析器
+ * @description map对象解析器
  * @Date 2022-04-18 21:33:58
  */
 public class ParseMapObjectHandler extends AbstractParseObjectHandler {

@@ -8,7 +8,7 @@ import com.wdf.apidoc.handler.AbstractParseObjectHandler;
 
 /**
  * @author wangdingfu
- * @Descption 解析基础数据类型
+ * @description 解析基础数据类型
  * @Date 2022-04-18 21:13:00
  */
 public class ParsePrimitiveTypeHandler extends AbstractParseObjectHandler {

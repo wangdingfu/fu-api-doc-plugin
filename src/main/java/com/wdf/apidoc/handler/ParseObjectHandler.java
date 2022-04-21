@@ -6,7 +6,7 @@ import com.wdf.apidoc.data.ApiDocObjectData;
 
 /**
  * @author wangdingfu
- * @Descption 解析对象
+ * @description 解析对象
  * @Date 2022-04-18 20:44:18
  */
 public interface ParseObjectHandler {

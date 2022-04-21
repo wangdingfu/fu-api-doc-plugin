@@ -6,11 +6,9 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
 import com.wdf.apidoc.context.ApiDocContext;
-import com.wdf.apidoc.data.AnnotationData;
-import com.wdf.apidoc.data.ApiDocData;
-import com.wdf.apidoc.data.ApiDocMethodData;
-import com.wdf.apidoc.data.ApiDocObjectData;
+import com.wdf.apidoc.data.*;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
+import com.wdf.apidoc.helper.DocCommentParseHelper;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
@@ -66,6 +64,8 @@ public abstract class AbstractApiDocParse implements ApiDocParse {
                     //过滤没有指定的方法
                     continue;
                 }
+                ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
+                System.out.println(apiDocCommentData.toString());
                 ApiDocMethodData apiDocMethodData = new ApiDocMethodData();
                 //设置方法上注解
                 apiDocMethodData.setAnnotationDataMap(annotationParse(apiDocContext, method));

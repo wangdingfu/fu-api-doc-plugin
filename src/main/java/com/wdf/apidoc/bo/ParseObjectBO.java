@@ -14,7 +14,7 @@ import java.util.Objects;
 
 /**
  * @author wangdingfu
- * @Descption 解析对象的父级对象信息bo
+ * @description 解析对象的父级对象信息bo
  * @Date 2022-04-18 20:58:23
  */
 @Getter

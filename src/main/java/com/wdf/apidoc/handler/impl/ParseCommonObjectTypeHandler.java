@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author wangdingfu
- * @Descption 解析公共java对象
+ * @description 解析公共java对象
  * @Date 2022-04-18 21:26:53
  */
 public class ParseCommonObjectTypeHandler extends AbstractParseObjectHandler {

@@ -1,7 +1,7 @@
 package com.wdf.apidoc.enumtype;
 
 import com.intellij.psi.CommonClassNames;
-import com.wdf.apidoc.constant.ApiDocTypeConstants;
+import com.wdf.apidoc.constant.ApiDocConstants;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,7 +24,7 @@ public enum CommonObjectType {
     CHARACTER(CommonClassNames.JAVA_LANG_CHARACTER, "char"),
     BUFFER(CommonClassNames.JAVA_LANG_STRING_BUFFER, "string"),
     BUILDER(CommonClassNames.JAVA_LANG_STRING_BUILDER, "string"),
-    BIG_DECIMAL(ApiDocTypeConstants.ClassPkg.BIG_DECIMAL, "bigDecimal"),
+    BIG_DECIMAL(ApiDocConstants.ClassPkg.BIG_DECIMAL, "bigDecimal"),
 
     ;
 

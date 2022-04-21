@@ -8,7 +8,7 @@ import com.wdf.apidoc.handler.AbstractParseObjectHandler;
 
 /**
  * @author wangdingfu
- * @Descption 解析java.lang包下的对象
+ * @description 解析java.lang包下的对象
  * @Date 2022-04-18 21:30:15
  */
 public class ParseJavaLangObjectTypeHandler extends AbstractParseObjectHandler {

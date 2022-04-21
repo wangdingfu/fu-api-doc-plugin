@@ -16,7 +16,7 @@ import java.util.Objects;
 
 /**
  * @author wangdingfu
- * @Descption 集合对象解析器
+ * @description 集合对象解析器
  * @Date 2022-04-18 21:33:19
  */
 public class ParseCollectionObjectHandler extends AbstractParseObjectHandler {

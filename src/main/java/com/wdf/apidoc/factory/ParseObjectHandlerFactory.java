@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @author wangdingfu
- * @Descption 解析对象处理器工厂类
+ * @description 解析对象处理器工厂类
  * @Date 2022-04-18 21:07:58
  */
 public class ParseObjectHandlerFactory {

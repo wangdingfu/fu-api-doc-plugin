@@ -3,9 +3,11 @@ package com.wdf.apidoc.data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Map;
+
 /**
  * @author wangdingfu
- * @Descption 注释数据对象
+ * @description 注释数据对象
  * @Date 2022-04-21 14:11:36
  */
 @Getter
@@ -21,7 +23,7 @@ public class ApiDocCommentData {
      * 参数注释map
      * key:参数名  value:参数对应的注释
      */
-    private String paramCommentMap;
+    private Map<String, String> paramCommentMap;
 
     /**
      * 返回注释内容
