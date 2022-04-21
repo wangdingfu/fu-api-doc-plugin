@@ -1,8 +1,8 @@
 package com.wdf.apidoc.helper;
 
 import com.intellij.psi.PsiAnnotation;
-import com.wdf.apidoc.context.ApiDocContext;
-import com.wdf.apidoc.data.AnnotationData;
+import com.wdf.apidoc.pojo.context.ApiDocContext;
+import com.wdf.apidoc.pojo.data.AnnotationData;
 
 import java.util.HashMap;
 import java.util.Map;

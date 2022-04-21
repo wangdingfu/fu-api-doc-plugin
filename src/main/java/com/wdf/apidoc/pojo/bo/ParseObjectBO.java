@@ -1,4 +1,4 @@
-package com.wdf.apidoc.bo;
+package com.wdf.apidoc.pojo.bo;
 
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiParameter;

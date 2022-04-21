@@ -1,7 +1,7 @@
-package com.wdf.apidoc.context;
+package com.wdf.apidoc.pojo.context;
 
 import com.intellij.openapi.project.Project;
-import com.wdf.apidoc.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import lombok.Getter;
 import lombok.Setter;
 

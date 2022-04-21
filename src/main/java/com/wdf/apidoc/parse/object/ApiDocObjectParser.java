@@ -1,15 +1,15 @@
-package com.wdf.apidoc.handler;
+package com.wdf.apidoc.parse.object;
 
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.bo.ParseObjectBO;
-import com.wdf.apidoc.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.bo.ParseObjectBO;
+import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 
 /**
  * @author wangdingfu
- * @description 解析对象
+ * @description 对象解析器
  * @Date 2022-04-18 20:44:18
  */
-public interface ParseObjectHandler {
+public interface ApiDocObjectParser {
 
     /**
      * 排序规则 按从小到大执行

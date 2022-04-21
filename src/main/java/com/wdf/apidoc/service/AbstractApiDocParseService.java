@@ -1,14 +1,14 @@
-package com.wdf.apidoc.parse;
+package com.wdf.apidoc.service;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
-import com.wdf.apidoc.context.ApiDocContext;
-import com.wdf.apidoc.data.*;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
+import com.wdf.apidoc.pojo.context.ApiDocContext;
+import com.wdf.apidoc.pojo.data.*;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
@@ -17,12 +17,11 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @descption: API接口参数解析器抽象类
  * @author wangdingfu
- * @date 2022-04-05 20:03:47
+ * @Descption API接口参数解析器抽象类
+ * @Date 2022-04-21 20:52:09
  */
-public abstract class AbstractApiDocParse implements ApiDocParse {
-
+public abstract class AbstractApiDocParseService  implements ApiDocParseService {
 
     /**
      * 解析指定方法的请求参数

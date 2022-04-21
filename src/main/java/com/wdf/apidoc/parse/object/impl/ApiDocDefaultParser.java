@@ -1,12 +1,12 @@
-package com.wdf.apidoc.handler.impl;
+package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.bo.ParseObjectBO;
-import com.wdf.apidoc.bo.PsiClassTypeBO;
-import com.wdf.apidoc.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.bo.ParseObjectBO;
+import com.wdf.apidoc.pojo.bo.PsiClassTypeBO;
+import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.execute.ParseObjectExecutor;
-import com.wdf.apidoc.handler.AbstractParseObjectHandler;
+import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
@@ -17,10 +17,10 @@ import java.util.Objects;
 
 /**
  * @author wangdingfu
- * @description 对象解析器(用户自定义对象)
+ * @description 默认对象解析器(用户自定义对象)
  * @Date 2022-04-18 21:34:42
  */
-public class ParseDefaultObjectHandler extends AbstractParseObjectHandler {
+public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
 
 
     /**

@@ -1,7 +1,7 @@
 package com.wdf.apidoc.factory;
 
-import com.wdf.apidoc.handler.ParseObjectHandler;
-import com.wdf.apidoc.handler.impl.*;
+import com.wdf.apidoc.parse.object.ApiDocObjectParser;
+import com.wdf.apidoc.parse.object.impl.*;
 import lombok.Getter;
 import org.apache.commons.compress.utils.Lists;
 
@@ -16,17 +16,17 @@ import java.util.List;
 public class ParseObjectHandlerFactory {
 
     @Getter
-    private static final List<ParseObjectHandler> parseObjectHandlerList = Lists.newArrayList();
+    private static final List<ApiDocObjectParser> OBJECT_PARSER_LIST = Lists.newArrayList();
 
     static {
-        parseObjectHandlerList.add(new ParsePrimitiveTypeHandler());
-        parseObjectHandlerList.add(new ParseCommonObjectTypeHandler());
-        parseObjectHandlerList.add(new ParseJavaLangObjectTypeHandler());
-        parseObjectHandlerList.add(new ParseCollectionObjectHandler());
-        parseObjectHandlerList.add(new ParseMapObjectHandler());
-        parseObjectHandlerList.add(new ParseDefaultObjectHandler());
+        OBJECT_PARSER_LIST.add(new ApiDocPrimitiveParser());
+        OBJECT_PARSER_LIST.add(new ApiDocCommonObjectParser());
+        OBJECT_PARSER_LIST.add(new ApiDocOtherObjectParser());
+        OBJECT_PARSER_LIST.add(new ApiDocCollectionParser());
+        OBJECT_PARSER_LIST.add(new ApiDocMapParser());
+        OBJECT_PARSER_LIST.add(new ApiDocDefaultParser());
         //根据各自实现类的优先加载顺序来排序
-        parseObjectHandlerList.sort(Comparator.comparing(ParseObjectHandler::sort));
+        OBJECT_PARSER_LIST.sort(Comparator.comparing(ApiDocObjectParser::sort));
     }
 
 }

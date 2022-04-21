@@ -1,4 +1,4 @@
-package com.wdf.apidoc.data;
+package com.wdf.apidoc.pojo.data;
 
 /**
  * @descption: 注解属性数据对象

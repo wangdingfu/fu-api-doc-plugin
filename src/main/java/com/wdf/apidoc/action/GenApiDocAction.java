@@ -3,10 +3,10 @@ package com.wdf.apidoc.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
-import com.wdf.apidoc.context.ApiDocContext;
-import com.wdf.apidoc.data.ApiDocData;
-import com.wdf.apidoc.parse.ApiDocParse;
-import com.wdf.apidoc.parse.ControllerApiDocParse;
+import com.wdf.apidoc.pojo.context.ApiDocContext;
+import com.wdf.apidoc.pojo.data.ApiDocData;
+import com.wdf.apidoc.service.ApiDocParseService;
+import com.wdf.apidoc.service.impl.ApiDocParseControllerServiceImpl;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +45,7 @@ public class GenApiDocAction extends AnAction {
 
         ApiDocContext apiDocContext = new ApiDocContext();
         apiDocContext.setProject(e.getProject());
-        ApiDocParse apiDocParse = new ControllerApiDocParse();
+        ApiDocParseService apiDocParse = new ApiDocParseControllerServiceImpl();
         ApiDocData parse = apiDocParse.parse(apiDocContext, psiClass, null);
         System.out.println(parse.toString());
     }

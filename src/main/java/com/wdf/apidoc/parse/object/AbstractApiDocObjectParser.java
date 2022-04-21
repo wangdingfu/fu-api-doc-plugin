@@ -1,11 +1,11 @@
-package com.wdf.apidoc.handler;
+package com.wdf.apidoc.parse.object;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
-import com.wdf.apidoc.bo.ParseObjectBO;
-import com.wdf.apidoc.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.bo.ParseObjectBO;
+import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @description 解析java对象成ApiDoc对象抽象类
  * @Date 2022-04-18 20:49:48
  */
-public abstract class AbstractParseObjectHandler implements ParseObjectHandler {
+public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
 
 
     /**

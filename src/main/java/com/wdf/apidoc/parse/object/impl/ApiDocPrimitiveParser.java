@@ -1,17 +1,17 @@
-package com.wdf.apidoc.handler.impl;
+package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.bo.ParseObjectBO;
-import com.wdf.apidoc.data.ApiDocObjectData;
-import com.wdf.apidoc.handler.AbstractParseObjectHandler;
+import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
+import com.wdf.apidoc.pojo.bo.ParseObjectBO;
+import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 
 /**
  * @author wangdingfu
- * @description 解析基础数据类型
+ * @description 基础数据类型解析器
  * @Date 2022-04-18 21:13:00
  */
-public class ParsePrimitiveTypeHandler extends AbstractParseObjectHandler {
+public class ApiDocPrimitiveParser extends AbstractApiDocObjectParser {
 
 
     /**

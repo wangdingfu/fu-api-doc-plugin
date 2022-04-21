@@ -1,18 +1,18 @@
-package com.wdf.apidoc.parse;
+package com.wdf.apidoc.service;
 
 import com.intellij.psi.PsiClass;
-import com.wdf.apidoc.context.ApiDocContext;
-import com.wdf.apidoc.data.ApiDocData;
+import com.wdf.apidoc.pojo.context.ApiDocContext;
+import com.wdf.apidoc.pojo.data.ApiDocData;
 
 import java.util.List;
 
 /**
- * @descption: API接口参数解析器
+ * 解析java类(Controller | Feign | Dubbo) 将java类中的数据转换为生成接口文档需要的数据
+ *
  * @author wangdingfu
- * @date 2022-04-05 20:00:05
+ * @Date 2022-04-21 20:21:50
  */
-public interface ApiDocParse {
-
+public interface ApiDocParseService {
 
     /**
      * 解析指定类的指定方法的参数(请求参数/响应结果)

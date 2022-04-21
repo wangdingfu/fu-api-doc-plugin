@@ -1,17 +1,18 @@
-package com.wdf.apidoc.parse;
+package com.wdf.apidoc.service.impl;
 
 import com.intellij.psi.*;
-import com.wdf.apidoc.bo.ParseObjectBO;
-import com.wdf.apidoc.context.ApiDocContext;
-import com.wdf.apidoc.data.ApiDocObjectData;
 import com.wdf.apidoc.execute.ParseObjectExecutor;
+import com.wdf.apidoc.pojo.bo.ParseObjectBO;
+import com.wdf.apidoc.pojo.context.ApiDocContext;
+import com.wdf.apidoc.pojo.data.ApiDocObjectData;
+import com.wdf.apidoc.service.AbstractApiDocParseService;
 
 /**
  * @author wangdingfu
- * @descption: Controller解析器
- * @date 2022-04-05 21:54:12
+ * @Descption Controller解析器
+ * @Date 2022-04-21 20:53:55
  */
-public class ControllerApiDocParse extends AbstractApiDocParse {
+public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService {
 
     /**
      * 请求参数转换器

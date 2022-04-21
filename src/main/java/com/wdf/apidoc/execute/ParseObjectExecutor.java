@@ -1,10 +1,10 @@
 package com.wdf.apidoc.execute;
 
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.bo.ParseObjectBO;
-import com.wdf.apidoc.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.bo.ParseObjectBO;
+import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.factory.ParseObjectHandlerFactory;
-import com.wdf.apidoc.handler.ParseObjectHandler;
+import com.wdf.apidoc.parse.object.ApiDocObjectParser;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -26,13 +26,13 @@ public class ParseObjectExecutor {
      * @return 解析后生成的ApiDoc数据对象
      */
     public static ApiDocObjectData execute(PsiType psiType, ParseObjectBO parseObjectBO) {
-        List<ParseObjectHandler> parseObjectHandlerList = ParseObjectHandlerFactory.getParseObjectHandlerList();
-        if (CollectionUtils.isNotEmpty(parseObjectHandlerList)) {
+        List<ApiDocObjectParser> apiDocObjectParserList = ParseObjectHandlerFactory.getOBJECT_PARSER_LIST();
+        if (CollectionUtils.isNotEmpty(apiDocObjectParserList)) {
             //泛型替换
             psiType = formatPsiType(psiType, parseObjectBO);
-            for (ParseObjectHandler parseObjectHandler : parseObjectHandlerList) {
-                if (parseObjectHandler.isParse(psiType)) {
-                    return parseObjectHandler.parse(psiType, parseObjectBO);
+            for (ApiDocObjectParser apiDocObjectParser : apiDocObjectParserList) {
+                if (apiDocObjectParser.isParse(psiType)) {
+                    return apiDocObjectParser.parse(psiType, parseObjectBO);
                 }
             }
         }

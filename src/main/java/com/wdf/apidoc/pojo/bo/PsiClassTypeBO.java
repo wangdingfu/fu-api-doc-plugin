@@ -1,4 +1,4 @@
-package com.wdf.apidoc.bo;
+package com.wdf.apidoc.pojo.bo;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiType;

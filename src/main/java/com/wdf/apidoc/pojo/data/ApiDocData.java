@@ -1,4 +1,4 @@
-package com.wdf.apidoc.data;
+package com.wdf.apidoc.pojo.data;
 
 
 import lombok.Getter;
