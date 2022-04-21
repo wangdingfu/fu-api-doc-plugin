@@ -24,7 +24,6 @@ public class ApiDocObjectData extends AnnotationDataMap{
      */
     private String typeView;
 
-
     /**
      * 字段名称
      */
