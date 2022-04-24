@@ -28,6 +28,13 @@ public interface ApiDocConstants {
          * psi中描述注释内容的类型
          */
         String PSI_COMMENT_DATA = "DOC_COMMENT_DATA";
+
+
+        String COMMENT_START_1 = "/*";
+        String COMMENT_START_2 = "//";
+        String COMMENT_END_1 = "*/";
+
+        String COMMENT_X = "*";
     }
 
 }
