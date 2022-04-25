@@ -59,25 +59,73 @@ public class CommentUtils {
             //第一行解析
             if (lineText.startsWith(ApiDocConstants.Comment.COMMENT_START_1)) {
                 commentLineBO.setPrefix(StringUtils.substringBefore(lineText, ApiDocConstants.Comment.COMMENT_X));
-                if(lineText.endsWith(ApiDocConstants.Comment.COMMENT_END_1)){
+                if (lineText.endsWith(ApiDocConstants.Comment.COMMENT_END_1)) {
                     commentLineBO.setSuffix(StringUtils.substringAfter(lineText, ApiDocConstants.Comment.COMMENT_X));
                 }
 
-            }else if(lineText.startsWith(ApiDocConstants.Comment.COMMENT_START_2)){
+            } else if (lineText.startsWith(ApiDocConstants.Comment.COMMENT_START_2)) {
 
             }
             return null;
         }
-        if(lineText.indexOf("@") > 0){
+        if (parseTag(lineText, commentLineBO)) {
             //有注释标签
-            String s = StringUtils.substringBetween(lineText, "@", " ");
+            return commentLineBO;
         }
+
         //没有注释标签
         return null;
     }
 
-    public static void main(String[] args) {
-        System.out.println(StringUtils.substringBetween("@param", "@", " "));
+
+    private static boolean parseTag(String lineText, CommentLineBO commentLineBO) {
+        if (StringUtils.isNotBlank(lineText)) {
+            StringBuilder sb = null;
+            String tag = null, param = null;
+            for (int i = 0; i < lineText.length(); i++) {
+                char charAt = lineText.charAt(i);
+                if (Objects.isNull(tag)) {
+                    if (charAt == 64) {
+                        sb = Objects.isNull(sb) ? new StringBuilder() : sb;
+                        continue;
+                    }
+                    if (Objects.isNull(sb)) {
+                        if (charAt == 32 || charAt == 42 || charAt == 10) {
+                            continue;
+                        }
+                        break;
+                    }
+                    if (charAt == 32 || charAt == 10) {
+                        tag = sb.toString();
+                        sb = null;
+                        continue;
+                    }
+                    sb.append(charAt);
+                } else if (Objects.isNull(param)) {
+                    if (Objects.isNull(sb) && (charAt == 32 || charAt == 10)) {
+                        continue;
+                    }
+                    sb = Objects.isNull(sb) ? new StringBuilder() : sb;
+                    if (charAt == 32 || charAt == 10) {
+                        param = sb.toString();
+                        sb = null;
+                        continue;
+                    }
+                    sb.append(charAt);
+                } else {
+                    if (Objects.isNull(sb) && (charAt == 32 || charAt == 10)) {
+                        continue;
+                    }
+                    sb = Objects.isNull(sb) ? new StringBuilder() : sb;
+                    sb.append(charAt);
+                }
+            }
+            commentLineBO.setTag(Objects.nonNull(tag) ? tag : StringUtils.EMPTY);
+            commentLineBO.setKey(Objects.nonNull(param) ? param : StringUtils.EMPTY);
+            commentLineBO.setContent(Objects.nonNull(sb) ? sb.toString() : StringUtils.EMPTY);
+            return true;
+        }
+        return false;
     }
 
 

@@ -24,6 +24,11 @@ public class CommentLineBO {
     private String tag;
 
     /**
+     * 注释tag的参数名
+     */
+    private String key;
+
+    /**
      * 注释内容
      */
     private String content;
