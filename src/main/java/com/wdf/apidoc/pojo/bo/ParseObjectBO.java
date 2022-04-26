@@ -4,6 +4,7 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.javadoc.PsiDocComment;
+import com.wdf.apidoc.pojo.context.ApiDocContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.MapUtils;
@@ -20,6 +21,11 @@ import java.util.Objects;
 @Getter
 @Setter
 public class ParseObjectBO {
+
+    /**
+     * 上下文对象
+     */
+    private ApiDocContext apiDocContext;
 
     /**
      * 字段

@@ -2,11 +2,12 @@ package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.pojo.bo.ParseObjectBO;
-import com.wdf.apidoc.pojo.bo.PsiClassTypeBO;
-import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.execute.ObjectParserExecutor;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
+import com.wdf.apidoc.pojo.bo.ParseObjectBO;
+import com.wdf.apidoc.pojo.bo.PsiClassTypeBO;
+import com.wdf.apidoc.pojo.context.ApiDocContext;
+import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
@@ -55,12 +56,19 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
      */
     @Override
     public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parseObjectBO) {
-        List<ApiDocObjectData> apiDocObjectDataList = Lists.newArrayList();
-        PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
-        parseObject(psiType, psiClass, apiDocObjectDataList);
-        ApiDocObjectData apiDocObjectData = buildDefault(psiType, "object", parseObjectBO);
-        if (CollectionUtils.isNotEmpty(apiDocObjectDataList)) {
-            apiDocObjectData.setChildList(apiDocObjectDataList);
+        ApiDocContext apiDocContext = parseObjectBO.getApiDocContext();
+        String canonicalText = psiType.getCanonicalText();
+        ApiDocObjectData apiDocObjectData = apiDocContext.getApiDocObjectData(canonicalText);
+        if (Objects.isNull(apiDocObjectData)) {
+            List<ApiDocObjectData> apiDocObjectDataList = Lists.newArrayList();
+            PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
+            parseObject(psiType, psiClass, apiDocObjectDataList);
+            apiDocObjectData = buildDefault(psiType, "object", parseObjectBO);
+            if (CollectionUtils.isNotEmpty(apiDocObjectDataList)) {
+                apiDocObjectData.setChildList(apiDocObjectDataList);
+            }
+            //将当前解析过的对象加入上下文中缓存下来
+            apiDocContext.add(canonicalText, apiDocObjectData);
         }
         return apiDocObjectData;
     }

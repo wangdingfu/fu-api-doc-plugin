@@ -21,25 +21,27 @@ import java.util.Objects;
  * @Descption API接口参数解析器抽象类
  * @Date 2022-04-21 20:52:09
  */
-public abstract class AbstractApiDocParseService  implements ApiDocParseService {
+public abstract class AbstractApiDocParseService implements ApiDocParseService {
 
     /**
      * 解析指定方法的请求参数
      *
-     * @param apiDocContext 全局上下文
-     * @param psiMethod     指定的方法
+     * @param apiDocContext     全局上下文
+     * @param psiMethod         指定的方法
+     * @param apiDocCommentData 方法的注释内容
      * @return 参数解析后的数据(参数的属性)对象
      */
-    protected abstract ApiDocObjectData requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod);
+    protected abstract ApiDocObjectData requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData);
 
     /**
      * 解析指定方法的返回参数
      *
-     * @param apiDocContext 全局上下文
-     * @param psiMethod     指定的方法
+     * @param apiDocContext     全局上下文
+     * @param psiMethod         指定的方法
+     * @param apiDocCommentData 方法的注释内容
      * @return 参数解析后的数据(参数的属性)对象
      */
-    protected abstract ApiDocObjectData responseParse(ApiDocContext apiDocContext, PsiMethod psiMethod);
+    protected abstract ApiDocObjectData responseParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData);
 
 
     /**
@@ -64,14 +66,13 @@ public abstract class AbstractApiDocParseService  implements ApiDocParseService 
                     continue;
                 }
                 ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
-                System.out.println(apiDocCommentData.toString());
                 ApiDocMethodData apiDocMethodData = new ApiDocMethodData();
                 //设置方法上注解
                 apiDocMethodData.setAnnotationDataMap(annotationParse(apiDocContext, method));
                 //设置请求参数
-                apiDocMethodData.setRequest(requestParse(apiDocContext, method));
+                apiDocMethodData.setRequest(requestParse(apiDocContext, method, apiDocCommentData));
                 //设置响应参数
-                apiDocMethodData.setResponse(responseParse(apiDocContext, method));
+                apiDocMethodData.setResponse(responseParse(apiDocContext, method, apiDocCommentData));
                 apiDocMethodDataList.add(apiDocMethodData);
             }
         }
