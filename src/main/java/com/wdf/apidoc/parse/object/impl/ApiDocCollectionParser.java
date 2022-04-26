@@ -5,11 +5,11 @@ import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.pojo.bo.ParseObjectBO;
-import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.enumtype.CommonObjectType;
 import com.wdf.apidoc.execute.ObjectParserExecutor;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
+import com.wdf.apidoc.pojo.bo.ParseObjectBO;
+import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -66,7 +66,10 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
             return buildDefault(psiType, getCollectionType(name), parseObjectBO);
         }
         ApiDocObjectData apiDocObjectData = buildDefault(psiType, getCollectionType(null), parseObjectBO);
-        ApiDocObjectData iterableApiDoc = ObjectParserExecutor.execute(iterableType, new ParseObjectBO());
+        ParseObjectBO iterableParseObjectBO = new ParseObjectBO();
+        iterableParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
+        iterableParseObjectBO.setGenericsMap(parseObjectBO.getGenericsMap());
+        ApiDocObjectData iterableApiDoc = ObjectParserExecutor.execute(iterableType, iterableParseObjectBO);
         if (Objects.nonNull(iterableApiDoc)) {
             //将泛型对象的字段集合设置到当前apiDoc中
             apiDocObjectData.setChildList(iterableApiDoc.getChildList());
