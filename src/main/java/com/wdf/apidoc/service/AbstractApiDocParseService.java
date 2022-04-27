@@ -31,7 +31,7 @@ public abstract class AbstractApiDocParseService implements ApiDocParseService {
      * @param apiDocCommentData 方法的注释内容
      * @return 参数解析后的数据(参数的属性)对象
      */
-    protected abstract ApiDocObjectData requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData);
+    protected abstract List<ApiDocObjectData> requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData);
 
     /**
      * 解析指定方法的返回参数
@@ -70,7 +70,7 @@ public abstract class AbstractApiDocParseService implements ApiDocParseService {
                 //设置方法上注解
                 apiDocMethodData.setAnnotationDataMap(annotationParse(apiDocContext, method));
                 //设置请求参数
-                apiDocMethodData.setRequest(requestParse(apiDocContext, method, apiDocCommentData));
+                apiDocMethodData.setRequestList(requestParse(apiDocContext, method, apiDocCommentData));
                 //设置响应参数
                 apiDocMethodData.setResponse(responseParse(apiDocContext, method, apiDocCommentData));
                 apiDocMethodDataList.add(apiDocMethodData);

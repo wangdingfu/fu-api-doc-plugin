@@ -2,9 +2,10 @@ package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiType;
+import com.wdf.apidoc.constant.CommonObjectNames;
+import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
-import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 
 /**
  * @author wangdingfu
@@ -26,7 +27,9 @@ public class ApiDocOtherObjectParser extends AbstractApiDocObjectParser {
      */
     @Override
     public boolean isParse(PsiType psiType) {
-        return psiType.getCanonicalText().startsWith(CommonClassNames.DEFAULT_PACKAGE);
+        String canonicalText = psiType.getCanonicalText();
+        return canonicalText.startsWith(CommonClassNames.DEFAULT_PACKAGE)
+                || CommonObjectNames.filterList.contains(canonicalText);
     }
 
     /**
@@ -38,6 +41,8 @@ public class ApiDocOtherObjectParser extends AbstractApiDocObjectParser {
      */
     @Override
     public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent) {
-        return buildDefault(psiType, "---", parent);
+        ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
+        apiDocObjectData.setFilterObject(true);
+        return apiDocObjectData;
     }
 }

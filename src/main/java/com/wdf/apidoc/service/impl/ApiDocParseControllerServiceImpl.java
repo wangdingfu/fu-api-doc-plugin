@@ -1,12 +1,20 @@
 package com.wdf.apidoc.service.impl;
 
-import com.intellij.psi.*;
+import com.google.common.collect.Lists;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiParameterList;
+import com.intellij.psi.PsiType;
+import com.wdf.apidoc.enumtype.RequestType;
 import com.wdf.apidoc.execute.ObjectParserExecutor;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.service.AbstractApiDocParseService;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -23,19 +31,20 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
      * @return 解析后的请求参数
      */
     @Override
-    protected ApiDocObjectData requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
+    protected List<ApiDocObjectData> requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
         PsiParameterList parameterList = psiMethod.getParameterList();
-        //判断当前请求参数是否为@RequestBody注解
+        List<ApiDocObjectData> bodyList = Lists.newArrayList();
+        List<ApiDocObjectData> paramList = Lists.newArrayList();
         for (PsiParameter parameter : parameterList.getParameters()) {
-            PsiAnnotation[] annotations = parameter.getAnnotations();
             ParseObjectBO parseObjectBO = new ParseObjectBO();
             parseObjectBO.setPsiParameter(parameter);
             parseObjectBO.setApiDocContext(apiDocContext);
             ApiDocObjectData apiDocObjectData = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
-            System.out.println(apiDocObjectData);
-            return apiDocObjectData;
+            if (Objects.nonNull(apiDocObjectData) && !apiDocObjectData.isFilterObject()) {
+                bodyList.add(apiDocObjectData);
+            }
         }
-        return null;
+        return Lists.newArrayList(convert(bodyList, RequestType.BODY), convert(paramList, RequestType.PARAM));
     }
 
 
@@ -52,5 +61,12 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
         ApiDocObjectData execute = ObjectParserExecutor.execute(returnType, new ParseObjectBO());
         System.out.println(execute);
         return execute;
+    }
+
+    private ApiDocObjectData convert(List<ApiDocObjectData> apiDocObjectDataList, RequestType requestType) {
+        ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
+        apiDocObjectData.setChildList(apiDocObjectDataList);
+        apiDocObjectData.setRequestType(requestType);
+        return apiDocObjectData;
     }
 }

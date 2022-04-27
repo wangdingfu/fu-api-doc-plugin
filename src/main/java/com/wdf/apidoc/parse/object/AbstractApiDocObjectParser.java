@@ -32,6 +32,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         apiDocObjectData.setName(parseObjectBO.getName());
         apiDocObjectData.setTypeView(typeView);
         apiDocObjectData.setType(psiType.getPresentableText());
+        apiDocObjectData.setFilterObject(false);
         return apiDocObjectData;
     }
 

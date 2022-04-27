@@ -3,6 +3,8 @@ package com.wdf.apidoc.pojo.data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * @descption: API接口方法级别属性数据
  * @author wangdingfu
@@ -20,7 +22,8 @@ public class ApiDocMethodData extends AnnotationDataMap{
     /**
      * 请求参数
      */
-    private ApiDocObjectData request;
+    private List<ApiDocObjectData> requestList;
+
 
     /**
      * 响应参数

@@ -1,18 +1,19 @@
 package com.wdf.apidoc.pojo.data;
 
+import com.wdf.apidoc.enumtype.RequestType;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
 /**
- * @descption: 参数字段属性数据对象
  * @author wangdingfu
+ * @descption: 参数字段属性数据对象
  * @date 2022-04-05 22:10:26
  */
 @Getter
 @Setter
-public class ApiDocObjectData extends AnnotationDataMap{
+public class ApiDocObjectData extends AnnotationDataMap {
 
     /**
      * 字段类型
@@ -39,6 +40,16 @@ public class ApiDocObjectData extends AnnotationDataMap{
      * 必填属性
      */
     private boolean required;
+
+    /**
+     * 是否为不处理对象
+     */
+    private boolean isFilterObject;
+
+    /**
+     * 请求类型
+     */
+    private RequestType requestType;
 
 
     /**
