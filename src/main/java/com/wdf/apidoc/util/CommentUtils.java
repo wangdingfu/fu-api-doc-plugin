@@ -22,10 +22,6 @@ public class CommentUtils {
      * @param comment 注释内容
      * @return 每一行注释集合
      */
-
-    /**
-     * 解析注释 注释内容
-     */
     public static List<CommentLineBO> parseComment(String comment) {
         List<CommentLineBO> resultList = Lists.newArrayList();
         if (StringUtils.isNotBlank(comment)) {
@@ -62,7 +58,6 @@ public class CommentUtils {
                 if (lineText.endsWith(ApiDocConstants.Comment.COMMENT_END_1)) {
                     commentLineBO.setSuffix(StringUtils.substringAfter(lineText, ApiDocConstants.Comment.COMMENT_X));
                 }
-
             } else if (lineText.startsWith(ApiDocConstants.Comment.COMMENT_START_2)) {
 
             }
