@@ -3,6 +3,7 @@ package com.wdf.apidoc.parse.object.impl;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.execute.ObjectParserExecutor;
+import com.wdf.apidoc.parse.ApiDocPsiField;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.bo.PsiClassTypeBO;
@@ -114,7 +115,7 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
             ParseObjectBO parentBO = new ParseObjectBO();
             parentBO.setGenericsMap(buildGenericsMap(psiType, psiClass));
             for (PsiField psiField : psiClass.getFields()) {
-                parentBO.setPsiField(psiField);
+                parentBO.setApiDocField(new ApiDocPsiField(psiField));
                 childList.add(ObjectParserExecutor.execute(psiField.getType(), parentBO));
             }
             childList.removeAll(Collections.singleton(null));

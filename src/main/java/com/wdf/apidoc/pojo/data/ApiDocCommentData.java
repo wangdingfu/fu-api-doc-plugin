@@ -2,6 +2,8 @@ package com.wdf.apidoc.pojo.data;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -36,4 +38,16 @@ public class ApiDocCommentData {
      */
     private String returnComment;
 
+
+    /**
+     * 根据参数名称获取对应注释
+     * @param param 参数名
+     * @return 对应的注释内容
+     */
+    public String getCommentByParam(String param) {
+        if (StringUtils.isNotBlank(param) && MapUtils.isNotEmpty(paramCommentMap)) {
+            return paramCommentMap.get(param);
+        }
+        return StringUtils.EMPTY;
+    }
 }

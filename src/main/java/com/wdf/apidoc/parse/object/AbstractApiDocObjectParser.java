@@ -4,11 +4,13 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
+import com.wdf.apidoc.parse.ApiDocField;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -28,8 +30,11 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
      */
     protected ApiDocObjectData buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
         ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
-        apiDocObjectData.setDocText(parseObjectBO.getDocText());
-        apiDocObjectData.setName(parseObjectBO.getName());
+        ApiDocField apiDocField = parseObjectBO.getApiDocField();
+        if(Objects.nonNull(apiDocField)){
+            apiDocObjectData.setDocText(apiDocField.getComment());
+            apiDocObjectData.setName(apiDocField.getName());
+        }
         apiDocObjectData.setTypeView(typeView);
         apiDocObjectData.setType(psiType.getPresentableText());
         apiDocObjectData.setFilterObject(false);

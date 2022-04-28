@@ -6,6 +6,7 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
 import com.wdf.apidoc.enumtype.RequestType;
 import com.wdf.apidoc.execute.ObjectParserExecutor;
+import com.wdf.apidoc.parse.object.ApiDocPsiParameter;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
@@ -36,7 +37,7 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
         List<ApiDocObjectData> paramList = Lists.newArrayList();
         for (PsiParameter parameter : parameterList.getParameters()) {
             ParseObjectBO parseObjectBO = new ParseObjectBO();
-            parseObjectBO.setPsiParameter(parameter);
+            parseObjectBO.setApiDocField(new ApiDocPsiParameter(parameter, apiDocCommentData));
             parseObjectBO.setApiDocContext(apiDocContext);
             ApiDocObjectData apiDocObjectData = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
             if (Objects.nonNull(apiDocObjectData) && !apiDocObjectData.isFilterObject()) {
