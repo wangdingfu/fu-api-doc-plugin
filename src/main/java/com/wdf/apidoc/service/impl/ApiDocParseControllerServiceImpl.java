@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
-import com.intellij.psi.PsiType;
 import com.wdf.apidoc.enumtype.RequestType;
 import com.wdf.apidoc.execute.ObjectParserExecutor;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
@@ -57,15 +56,20 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
      */
     @Override
     protected ApiDocObjectData responseParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
-        PsiType returnType = psiMethod.getReturnType();
-        ApiDocObjectData execute = ObjectParserExecutor.execute(returnType, new ParseObjectBO());
-        System.out.println(execute);
-        return execute;
+        return ObjectParserExecutor.execute(psiMethod.getReturnType(), new ParseObjectBO());
     }
 
     private ApiDocObjectData convert(List<ApiDocObjectData> apiDocObjectDataList, RequestType requestType) {
         ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
-        apiDocObjectData.setChildList(apiDocObjectDataList);
+        List<ApiDocObjectData> childList = Lists.newArrayList();
+        if (RequestType.BODY.equals(requestType)) {
+            for (ApiDocObjectData docObjectData : apiDocObjectDataList) {
+                childList.addAll(docObjectData.getChildList());
+            }
+        } else {
+            childList = apiDocObjectDataList;
+        }
+        apiDocObjectData.setChildList(childList);
         apiDocObjectData.setRequestType(requestType);
         return apiDocObjectData;
     }
