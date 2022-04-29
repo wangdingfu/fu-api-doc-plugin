@@ -24,6 +24,7 @@ public class AnnotationParseHelper {
      */
     public static Map<String, AnnotationData> parse(ApiDocContext apiDocContext, PsiAnnotation[] psiAnnotations) {
         Map<String, AnnotationData> annotationDataMap = new HashMap<>();
+
         return annotationDataMap;
     }
 }
