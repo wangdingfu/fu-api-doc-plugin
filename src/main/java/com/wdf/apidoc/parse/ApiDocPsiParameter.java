@@ -39,7 +39,7 @@ public class ApiDocPsiParameter extends AbstractApiDocField {
      */
     @Override
     public String getComment() {
-        if (Objects.nonNull(apiDocCommentData)) {
+        if (Objects.isNull(apiDocCommentData)) {
             return StringUtils.EMPTY;
         }
         return apiDocCommentData.getCommentByParam(getName());
