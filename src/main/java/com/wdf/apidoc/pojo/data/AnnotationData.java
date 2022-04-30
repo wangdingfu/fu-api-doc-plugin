@@ -2,8 +2,11 @@ package com.wdf.apidoc.pojo.data;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -17,19 +20,23 @@ public class AnnotationData {
     /**
      * 注解全路径
      */
-    private String qualiName;
-
-    /**
-     * 注解value值
-     */
-    private String value;
+    private String qualifiedName;
 
 
     /**
      * 注解属性map
      * key:属性名  value:属性值
      */
-    private Map<String, String> attrMap;
+    private Map<String, Object> attrMap;
+
+    public void addAttr(String attrName, Object value) {
+        if (StringUtils.isNotBlank(attrName) && Objects.nonNull(value)) {
+            if (Objects.isNull(attrMap)) {
+                this.attrMap = new HashMap<>();
+            }
+            this.attrMap.put(attrName, value);
+        }
+    }
 
 
 }

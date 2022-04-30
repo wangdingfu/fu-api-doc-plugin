@@ -65,6 +65,7 @@ public abstract class AbstractApiDocParseService implements ApiDocParseService {
                     //过滤没有指定的方法
                     continue;
                 }
+                Map<String, AnnotationData> parse = AnnotationParseHelper.parse(apiDocContext, method.getAnnotations());
                 ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
                 ApiDocMethodData apiDocMethodData = new ApiDocMethodData();
                 //设置方法上注解
