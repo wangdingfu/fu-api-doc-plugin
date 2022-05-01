@@ -1,5 +1,6 @@
 package com.wdf.apidoc.parse;
 
+import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiParameter;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import org.apache.commons.lang.StringUtils;
@@ -43,5 +44,13 @@ public class ApiDocPsiParameter extends AbstractApiDocField {
             return StringUtils.EMPTY;
         }
         return apiDocCommentData.getCommentByParam(getName());
+    }
+
+    /**
+     * 获取参数上的注解
+     */
+    @Override
+    public PsiAnnotation[] getAnnotations() {
+        return psiParameter.getAnnotations();
     }
 }

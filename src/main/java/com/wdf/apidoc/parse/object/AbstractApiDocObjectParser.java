@@ -4,6 +4,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
+import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.parse.ApiDocField;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
@@ -31,9 +32,10 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
     protected ApiDocObjectData buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
         ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
         ApiDocField apiDocField = parseObjectBO.getApiDocField();
-        if(Objects.nonNull(apiDocField)){
+        if (Objects.nonNull(apiDocField)) {
             apiDocObjectData.setDocText(apiDocField.getComment());
             apiDocObjectData.setName(apiDocField.getName());
+            apiDocObjectData.setAnnotationDataMap(AnnotationParseHelper.parse(parseObjectBO.getApiDocContext(), apiDocField.getAnnotations()));
         }
         apiDocObjectData.setTypeView(typeView);
         apiDocObjectData.setType(psiType.getPresentableText());

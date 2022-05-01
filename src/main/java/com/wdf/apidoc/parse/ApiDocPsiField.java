@@ -1,5 +1,6 @@
 package com.wdf.apidoc.parse;
 
+import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
@@ -43,5 +44,13 @@ public class ApiDocPsiField extends AbstractApiDocField {
             return DocCommentParseHelper.getCommentContent(docComment);
         }
         return StringUtils.EMPTY;
+    }
+
+    /**
+     * 获取字段上的注解
+     */
+    @Override
+    public PsiAnnotation[] getAnnotations() {
+        return psiField.getAnnotations();
     }
 }

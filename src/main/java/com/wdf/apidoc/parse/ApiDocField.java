@@ -1,5 +1,7 @@
 package com.wdf.apidoc.parse;
 
+import com.intellij.psi.PsiAnnotation;
+
 /**
  * @author wangdingfu
  * @Descption
@@ -17,6 +19,12 @@ public interface ApiDocField {
      * 获取字段注释
      */
     String getComment();
+
+
+    /**
+     * 获取注解集合
+     */
+    PsiAnnotation[] getAnnotations();
 
 
 

@@ -39,7 +39,6 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
         List<ApiDocObjectData> bodyList = Lists.newArrayList();
         List<ApiDocObjectData> paramList = Lists.newArrayList();
         for (PsiParameter parameter : parameterList.getParameters()) {
-            Map<String, AnnotationData> parse = AnnotationParseHelper.parse(apiDocContext, parameter.getAnnotations());
             ParseObjectBO parseObjectBO = new ParseObjectBO();
             parseObjectBO.setApiDocField(new ApiDocPsiParameter(parameter, apiDocCommentData));
             parseObjectBO.setApiDocContext(apiDocContext);
