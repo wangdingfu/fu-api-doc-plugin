@@ -1,14 +1,12 @@
 package com.wdf.apidoc.helper;
 
-import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.lang.jvm.annotation.JvmAnnotationAttribute;
-import com.intellij.lang.jvm.annotation.JvmAnnotationAttributeValue;
-import com.intellij.lang.jvm.annotation.JvmAnnotationConstantValue;
-import com.intellij.lang.jvm.annotation.JvmAnnotationEnumFieldValue;
+import com.google.common.collect.Lists;
+import com.intellij.lang.jvm.annotation.*;
 import com.intellij.psi.PsiAnnotation;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.AnnotationData;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,13 +48,25 @@ public class AnnotationParseHelper {
 
 
     private static Object convertAnnotationAttributeValue(JvmAnnotationAttributeValue attributeValue) {
+        if (attributeValue instanceof JvmAnnotationEnumFieldValue) {
+            return ((JvmAnnotationEnumFieldValue) attributeValue).getFieldName();
+        }
+        if (attributeValue instanceof JvmAnnotationArrayValue) {
+            List<Object> resultList = Lists.newArrayList();
+            for (JvmAnnotationAttributeValue value : ((JvmAnnotationArrayValue) attributeValue).getValues()) {
+                resultList.add(annotationConstantValue(value));
+            }
+            return resultList;
+        }
+        return annotationConstantValue(attributeValue);
+    }
+
+
+    private static Object annotationConstantValue(JvmAnnotationAttributeValue attributeValue) {
         if (attributeValue instanceof JvmAnnotationConstantValue) {
             //值为常量
             return ((JvmAnnotationConstantValue) attributeValue).getConstantValue();
         }
-        if (attributeValue instanceof JvmAnnotationEnumFieldValue) {
-            return ((JvmAnnotationEnumFieldValue) attributeValue).getField();
-        }
-        return null;
+        return StringUtils.EMPTY;
     }
 }
