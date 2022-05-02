@@ -26,13 +26,15 @@ public class ObjectParserExecutor {
      * @return 解析后生成的ApiDoc数据对象
      */
     public static ApiDocObjectData execute(PsiType psiType, ParseObjectBO parseObjectBO) {
-        List<ApiDocObjectParser> apiDocObjectParserList = ObjectParserFactory.getOBJECT_PARSER_LIST();
-        if (CollectionUtils.isNotEmpty(apiDocObjectParserList)) {
-            //泛型替换
-            psiType = formatPsiType(psiType, parseObjectBO);
-            for (ApiDocObjectParser apiDocObjectParser : apiDocObjectParserList) {
-                if (apiDocObjectParser.isParse(psiType)) {
-                    return apiDocObjectParser.parse(psiType, parseObjectBO);
+        if (Objects.nonNull(psiType) && Objects.nonNull(parseObjectBO) && Objects.nonNull(parseObjectBO.getApiDocContext())) {
+            List<ApiDocObjectParser> apiDocObjectParserList = ObjectParserFactory.getOBJECT_PARSER_LIST();
+            if (CollectionUtils.isNotEmpty(apiDocObjectParserList)) {
+                //泛型替换
+                psiType = formatPsiType(psiType, parseObjectBO);
+                for (ApiDocObjectParser apiDocObjectParser : apiDocObjectParserList) {
+                    if (apiDocObjectParser.isParse(psiType)) {
+                        return apiDocObjectParser.parse(psiType, parseObjectBO);
+                    }
                 }
             }
         }

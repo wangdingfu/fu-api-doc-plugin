@@ -63,7 +63,7 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
         if (Objects.isNull(apiDocObjectData)) {
             List<ApiDocObjectData> apiDocObjectDataList = Lists.newArrayList();
             PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
-            parseObject(psiType, psiClass, apiDocObjectDataList);
+            parseObject(parseObjectBO, psiType, psiClass, apiDocObjectDataList);
             apiDocObjectData = buildDefault(psiType, "object", parseObjectBO);
             if (CollectionUtils.isNotEmpty(apiDocObjectDataList)) {
                 apiDocObjectData.setChildList(apiDocObjectDataList);
@@ -82,19 +82,19 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
      * @param psiClass             对象class
      * @param apiDocObjectDataList 解析后的对象结果
      */
-    private void parseObject(PsiType psiType, PsiClass psiClass, List<ApiDocObjectData> apiDocObjectDataList) {
+    private void parseObject(ParseObjectBO parseObjectBO, PsiType psiType, PsiClass psiClass, List<ApiDocObjectData> apiDocObjectDataList) {
         if (Objects.nonNull(psiType) && psiType.isValid() && PsiClassUtils.isClass(psiClass)) {
             if (CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
                 //当前class的父类是java.lang.Object时 则直接返回
                 return;
             }
             //解析指定对象为ApiDoc文档对象
-            apiDocObjectDataList.addAll(doParseObject(psiType, psiClass));
+            apiDocObjectDataList.addAll(doParseObject(parseObjectBO, psiType, psiClass));
             //获取父类
             PsiClassTypeBO superClassType = PsiClassUtils.getSuperClassType(psiClass);
             if (Objects.nonNull(superClassType)) {
                 //继续遍历解析父类
-                parseObject(superClassType.getPsiType(), superClassType.getPsiClass(), apiDocObjectDataList);
+                parseObject(parseObjectBO, superClassType.getPsiType(), superClassType.getPsiClass(), apiDocObjectDataList);
             }
         }
     }
@@ -107,16 +107,17 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
      * @param psiClass 对象class
      * @return 解析对象后的ApiDoc对象
      */
-    private List<ApiDocObjectData> doParseObject(PsiType psiType, PsiClass psiClass) {
+    private List<ApiDocObjectData> doParseObject(ParseObjectBO parseObjectBO, PsiType psiType, PsiClass psiClass) {
         List<ApiDocObjectData> childList = Lists.newArrayList();
         PsiField[] fields = psiClass.getFields();
         if (fields.length > 0) {
             ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
-            ParseObjectBO parentBO = new ParseObjectBO();
-            parentBO.setGenericsMap(buildGenericsMap(psiType, psiClass));
+            ParseObjectBO fieldParseObjectBO = new ParseObjectBO();
+            fieldParseObjectBO.setGenericsMap(buildGenericsMap(psiType, psiClass));
+            fieldParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
             for (PsiField psiField : psiClass.getFields()) {
-                parentBO.setApiDocField(new ApiDocPsiField(psiField));
-                childList.add(ObjectParserExecutor.execute(psiField.getType(), parentBO));
+                fieldParseObjectBO.setApiDocField(new ApiDocPsiField(psiField));
+                childList.add(ObjectParserExecutor.execute(psiField.getType(), fieldParseObjectBO));
             }
             childList.removeAll(Collections.singleton(null));
             apiDocObjectData.setChildList(childList);

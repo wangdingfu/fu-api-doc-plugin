@@ -14,6 +14,7 @@ import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.service.AbstractApiDocParseService;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,9 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
      */
     @Override
     protected ApiDocObjectData responseParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
-        return ObjectParserExecutor.execute(psiMethod.getReturnType(), new ParseObjectBO());
+        ParseObjectBO parseObjectBO = new ParseObjectBO();
+        parseObjectBO.setApiDocContext(apiDocContext);
+        return ObjectParserExecutor.execute(psiMethod.getReturnType(), parseObjectBO);
     }
 
     private ApiDocObjectData convert(List<ApiDocObjectData> apiDocObjectDataList, RequestType requestType) {
@@ -68,7 +71,10 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
         List<ApiDocObjectData> childList = Lists.newArrayList();
         if (RequestType.BODY.equals(requestType)) {
             for (ApiDocObjectData docObjectData : apiDocObjectDataList) {
-                childList.addAll(docObjectData.getChildList());
+                List<ApiDocObjectData> children = docObjectData.getChildList();
+                if(CollectionUtils.isNotEmpty(children)){
+                    childList.addAll(children);
+                }
             }
         } else {
             childList = apiDocObjectDataList;
