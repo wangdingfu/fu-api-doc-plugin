@@ -65,7 +65,6 @@ public abstract class AbstractApiDocParseService implements ApiDocParseService {
                     //过滤没有指定的方法
                     continue;
                 }
-                Map<String, AnnotationData> parse = AnnotationParseHelper.parse(apiDocContext, method.getAnnotations());
                 ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
                 ApiDocMethodData apiDocMethodData = new ApiDocMethodData();
                 //设置方法上注解
@@ -92,7 +91,7 @@ public abstract class AbstractApiDocParseService implements ApiDocParseService {
         PsiModifierList modifierList = psiModifierListOwner.getModifierList();
         if (Objects.nonNull(modifierList)) {
             //解析注解
-            return AnnotationParseHelper.parse(apiDocContext, modifierList.getAnnotations());
+            return AnnotationParseHelper.parse(modifierList.getAnnotations());
         }
         return new HashMap<>();
     }

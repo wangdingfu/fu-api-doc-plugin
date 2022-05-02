@@ -35,7 +35,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         if (Objects.nonNull(apiDocField)) {
             apiDocObjectData.setDocText(apiDocField.getComment());
             apiDocObjectData.setName(apiDocField.getName());
-            apiDocObjectData.setAnnotationDataMap(AnnotationParseHelper.parse(parseObjectBO.getApiDocContext(), apiDocField.getAnnotations()));
+            apiDocObjectData.setAnnotationDataMap(AnnotationParseHelper.parse(apiDocField.getAnnotations()));
         }
         apiDocObjectData.setTypeView(typeView);
         apiDocObjectData.setType(psiType.getPresentableText());

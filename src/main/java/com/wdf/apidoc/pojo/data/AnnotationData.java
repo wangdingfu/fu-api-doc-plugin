@@ -1,12 +1,13 @@
 package com.wdf.apidoc.pojo.data;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
+import net.minidev.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -36,6 +37,21 @@ public class AnnotationData {
             }
             this.attrMap.put(attrName, value);
         }
+    }
+
+
+    public String getStringValue(String attr) {
+        if (StringUtils.isNotBlank(attr) && Objects.nonNull(this.attrMap)) {
+            Object value = this.attrMap.get(attr);
+            if (Objects.nonNull(value)) {
+                if (value instanceof String) {
+                    return (String) value;
+                } else if (value instanceof Collection) {
+                    System.out.println(value);
+                }
+            }
+        }
+        return StringUtils.EMPTY;
     }
 
 

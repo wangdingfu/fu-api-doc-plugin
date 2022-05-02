@@ -23,25 +23,24 @@ public class AnnotationParseHelper {
     /**
      * 解析注解
      *
-     * @param apiDocContext  全局上下文
      * @param psiAnnotations 注解集合
      * @return 解析后的注解
      */
-    public static Map<String, AnnotationData> parse(ApiDocContext apiDocContext, PsiAnnotation[] psiAnnotations) {
+    public static Map<String, AnnotationData> parse(PsiAnnotation[] psiAnnotations) {
         Map<String, AnnotationData> annotationDataMap = new HashMap<>();
         for (PsiAnnotation psiAnnotation : psiAnnotations) {
             String qualifiedName = psiAnnotation.getQualifiedName();
+            AnnotationData annotationData = new AnnotationData();
+            annotationData.setQualifiedName(qualifiedName);
             List<JvmAnnotationAttribute> attributes = psiAnnotation.getAttributes();
             if (CollectionUtils.isNotEmpty(attributes)) {
                 for (JvmAnnotationAttribute attribute : attributes) {
                     String attributeName = attribute.getAttributeName();
                     Object value = convertAnnotationAttributeValue(attribute.getAttributeValue());
-                    AnnotationData annotationData = new AnnotationData();
-                    annotationData.setQualifiedName(qualifiedName);
                     annotationData.addAttr(attributeName, value);
-                    annotationDataMap.put(qualifiedName, annotationData);
                 }
             }
+            annotationDataMap.put(qualifiedName, annotationData);
         }
         return annotationDataMap;
     }
