@@ -58,7 +58,7 @@ public abstract class AbstractApiDocParseService implements ApiDocParseService {
         if (Objects.nonNull(apiDocContext) && Objects.nonNull(psiClass)) {
             List<ApiDocMethodData> apiDocMethodDataList = Lists.newArrayList();
             //设置类上的注解
-            apiDocData.setAnnotationDataMap(annotationParse(apiDocContext, psiClass));
+            apiDocData.setAnnotationDataMap(annotationParse(psiClass));
             apiDocData.setApiDocMethodDataList(apiDocMethodDataList);
             for (PsiMethod method : psiClass.getMethods()) {
                 if (CollectionUtils.isNotEmpty(methodList) && !methodList.contains(method.getName())) {
@@ -68,7 +68,7 @@ public abstract class AbstractApiDocParseService implements ApiDocParseService {
                 ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
                 ApiDocMethodData apiDocMethodData = new ApiDocMethodData();
                 //设置方法上注解
-                apiDocMethodData.setAnnotationDataMap(annotationParse(apiDocContext, method));
+                apiDocMethodData.setAnnotationDataMap(annotationParse(method));
                 //设置请求参数
                 apiDocMethodData.setRequestList(requestParse(apiDocContext, method, apiDocCommentData));
                 //设置响应参数
@@ -83,11 +83,10 @@ public abstract class AbstractApiDocParseService implements ApiDocParseService {
     /**
      * 注解解析
      *
-     * @param apiDocContext        全局上下文
      * @param psiModifierListOwner psi
      * @return key: 注解名  value:解析后的注解对象
      */
-    private Map<String, AnnotationData> annotationParse(ApiDocContext apiDocContext, PsiModifierListOwner psiModifierListOwner) {
+    private Map<String, AnnotationData> annotationParse(PsiModifierListOwner psiModifierListOwner) {
         PsiModifierList modifierList = psiModifierListOwner.getModifierList();
         if (Objects.nonNull(modifierList)) {
             //解析注解

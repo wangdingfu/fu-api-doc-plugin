@@ -1,5 +1,6 @@
 package com.wdf.apidoc.action;
 
+import com.google.gson.Gson;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
@@ -47,6 +48,6 @@ public class GenApiDocAction extends AnAction {
         apiDocContext.setProject(e.getProject());
         ApiDocParseService apiDocParse = new ApiDocParseControllerServiceImpl();
         ApiDocData parse = apiDocParse.parse(apiDocContext, psiClass, null);
-        System.out.println(parse.toString());
+        System.out.println(new Gson().toJson(parse));
     }
 }
