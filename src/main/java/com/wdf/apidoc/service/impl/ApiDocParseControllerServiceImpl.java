@@ -37,18 +37,17 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
     @Override
     protected List<ApiDocObjectData> requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
         PsiParameterList parameterList = psiMethod.getParameterList();
-        List<ApiDocObjectData> bodyList = Lists.newArrayList();
-        List<ApiDocObjectData> paramList = Lists.newArrayList();
+        List<ApiDocObjectData> requestList = Lists.newArrayList();
         for (PsiParameter parameter : parameterList.getParameters()) {
             ParseObjectBO parseObjectBO = new ParseObjectBO();
             parseObjectBO.setApiDocField(new ApiDocPsiParameter(parameter, apiDocCommentData));
             parseObjectBO.setApiDocContext(apiDocContext);
             ApiDocObjectData apiDocObjectData = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
             if (Objects.nonNull(apiDocObjectData) && !apiDocObjectData.isFilterObject()) {
-                bodyList.add(apiDocObjectData);
+                requestList.add(apiDocObjectData);
             }
         }
-        return Lists.newArrayList(convert(bodyList, RequestType.BODY), convert(paramList, RequestType.PARAM));
+        return requestList;
     }
 
 
@@ -64,23 +63,5 @@ public class ApiDocParseControllerServiceImpl extends AbstractApiDocParseService
         ParseObjectBO parseObjectBO = new ParseObjectBO();
         parseObjectBO.setApiDocContext(apiDocContext);
         return ObjectParserExecutor.execute(psiMethod.getReturnType(), parseObjectBO);
-    }
-
-    private ApiDocObjectData convert(List<ApiDocObjectData> apiDocObjectDataList, RequestType requestType) {
-        ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
-        List<ApiDocObjectData> childList = Lists.newArrayList();
-        if (RequestType.BODY.equals(requestType)) {
-            for (ApiDocObjectData docObjectData : apiDocObjectDataList) {
-                List<ApiDocObjectData> children = docObjectData.getChildList();
-                if(CollectionUtils.isNotEmpty(children)){
-                    childList.addAll(children);
-                }
-            }
-        } else {
-            childList = apiDocObjectDataList;
-        }
-        apiDocObjectData.setChildList(childList);
-        apiDocObjectData.setRequestType(requestType);
-        return apiDocObjectData;
     }
 }

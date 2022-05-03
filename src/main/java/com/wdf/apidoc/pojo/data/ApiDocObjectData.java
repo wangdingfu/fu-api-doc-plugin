@@ -30,27 +30,15 @@ public class ApiDocObjectData extends AnnotationDataMap {
      */
     private String name;
 
-
     /**
      * 字段注释
      */
     private String docText;
 
     /**
-     * 必填属性
-     */
-    private boolean required;
-
-    /**
      * 是否为不处理对象
      */
     private boolean isFilterObject;
-
-    /**
-     * 请求类型
-     */
-    private RequestType requestType;
-
 
     /**
      * 子属性字段集合(当前对象不为基本对象 且有自己属性字段时)
