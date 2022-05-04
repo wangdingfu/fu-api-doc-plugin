@@ -1,6 +1,8 @@
 package com.wdf.apidoc.execute;
 
 import com.intellij.psi.PsiType;
+import com.intellij.psi.util.PsiUtil;
+import com.wdf.apidoc.parse.ApiDocPsiClass;
 import com.wdf.apidoc.parse.object.impl.*;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
@@ -63,6 +65,7 @@ public class ObjectParserExecutor {
     private static PsiType formatPsiType(PsiType psiType, ParseObjectBO parseObjectBO) {
         PsiType generics;
         if (Objects.nonNull(parseObjectBO) && Objects.nonNull(generics = parseObjectBO.getPsiType(psiType.getCanonicalText()))) {
+            parseObjectBO.setApiDocField(new ApiDocPsiClass(Objects.requireNonNull(PsiUtil.resolveClassInType(generics))));
             //替换泛型类
             return generics;
         }

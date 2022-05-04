@@ -1,14 +1,17 @@
-package com.wdf.apidoc.service;
+package com.wdf.apidoc.service.impl;
 
 import com.google.common.collect.Lists;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.psi.*;
+import com.intellij.psi.util.PsiUtil;
+import com.wdf.apidoc.execute.ObjectParserExecutor;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
+import com.wdf.apidoc.parse.ApiDocPsiClass;
+import com.wdf.apidoc.parse.ApiDocPsiParameter;
+import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.*;
+import com.wdf.apidoc.service.ApiDocParseService;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
@@ -18,31 +21,10 @@ import java.util.Objects;
 
 /**
  * @author wangdingfu
- * @Descption API接口参数解析器抽象类
- * @Date 2022-04-21 20:52:09
+ * @Descption Controller解析器
+ * @Date 2022-04-21 20:53:55
  */
-public abstract class AbstractApiDocParseService implements ApiDocParseService {
-
-    /**
-     * 解析指定方法的请求参数
-     *
-     * @param apiDocContext     全局上下文
-     * @param psiMethod         指定的方法
-     * @param apiDocCommentData 方法的注释内容
-     * @return 参数解析后的数据(参数的属性)对象
-     */
-    protected abstract List<ApiDocObjectData> requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData);
-
-    /**
-     * 解析指定方法的返回参数
-     *
-     * @param apiDocContext     全局上下文
-     * @param psiMethod         指定的方法
-     * @param apiDocCommentData 方法的注释内容
-     * @return 参数解析后的数据(参数的属性)对象
-     */
-    protected abstract ApiDocObjectData responseParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData);
-
+public class ApiDocParseServiceImpl implements ApiDocParseService {
 
     /**
      * 解析java类(controller/dubbo接口/feign接口)
@@ -77,6 +59,45 @@ public abstract class AbstractApiDocParseService implements ApiDocParseService {
             }
         }
         return apiDocData;
+    }
+
+
+    /**
+     * 请求参数转换器
+     *
+     * @param apiDocContext 全局上下文
+     * @param psiMethod     指定的方法
+     * @return 解析后的请求参数
+     */
+    protected List<ApiDocObjectData> requestParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
+        PsiParameterList parameterList = psiMethod.getParameterList();
+        List<ApiDocObjectData> requestList = Lists.newArrayList();
+        for (PsiParameter parameter : parameterList.getParameters()) {
+            ParseObjectBO parseObjectBO = new ParseObjectBO();
+            parseObjectBO.setApiDocField(new ApiDocPsiParameter(parameter, apiDocCommentData));
+            parseObjectBO.setApiDocContext(apiDocContext);
+            ApiDocObjectData apiDocObjectData = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
+            if (Objects.nonNull(apiDocObjectData) && !apiDocObjectData.isFilterObject()) {
+                requestList.add(apiDocObjectData);
+            }
+        }
+        return requestList;
+    }
+
+
+    /**
+     * 解析响应参数
+     *
+     * @param apiDocContext 全局上下文
+     * @param psiMethod     指定的方法
+     * @return 解析后的响应参数对象
+     */
+    protected ApiDocObjectData responseParse(ApiDocContext apiDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
+        ParseObjectBO parseObjectBO = new ParseObjectBO();
+        parseObjectBO.setApiDocContext(apiDocContext);
+        PsiType returnType = psiMethod.getReturnType();
+        parseObjectBO.setApiDocField(new ApiDocPsiClass(PsiUtil.resolveClassInType(returnType), apiDocCommentData));
+        return ObjectParserExecutor.execute(returnType, parseObjectBO);
     }
 
 
