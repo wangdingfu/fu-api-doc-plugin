@@ -4,20 +4,15 @@ import com.google.common.collect.Lists;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
-import com.wdf.apidoc.enumtype.RequestType;
 import com.wdf.apidoc.execute.ObjectParserExecutor;
-import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.parse.ApiDocPsiParameter;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
-import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.service.AbstractApiDocParseService;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**

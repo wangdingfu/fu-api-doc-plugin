@@ -1,4 +1,4 @@
-package com.wdf.apidoc.enumtype;
+package com.wdf.apidoc.constant.enumtype;
 
 import com.intellij.psi.CommonClassNames;
 import com.wdf.apidoc.constant.ApiDocConstants;

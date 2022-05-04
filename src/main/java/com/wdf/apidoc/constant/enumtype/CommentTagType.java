@@ -1,4 +1,4 @@
-package com.wdf.apidoc.enumtype;
+package com.wdf.apidoc.constant.enumtype;
 
 import lombok.Getter;
 

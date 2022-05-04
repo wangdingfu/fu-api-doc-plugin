@@ -1,12 +1,13 @@
 package com.wdf.apidoc.execute;
 
 import com.intellij.psi.PsiType;
+import com.wdf.apidoc.parse.object.impl.*;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
-import com.wdf.apidoc.factory.ObjectParserFactory;
 import com.wdf.apidoc.parse.object.ApiDocObjectParser;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.compress.utils.Lists;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +18,18 @@ import java.util.Objects;
  */
 public class ObjectParserExecutor {
 
+    private static final List<ApiDocObjectParser> OBJECT_PARSER_LIST = Lists.newArrayList();
+
+    static {
+        OBJECT_PARSER_LIST.add(new ApiDocPrimitiveParser());
+        OBJECT_PARSER_LIST.add(new ApiDocCommonObjectParser());
+        OBJECT_PARSER_LIST.add(new ApiDocOtherObjectParser());
+        OBJECT_PARSER_LIST.add(new ApiDocCollectionParser());
+        OBJECT_PARSER_LIST.add(new ApiDocMapParser());
+        OBJECT_PARSER_LIST.add(new ApiDocDefaultParser());
+        //根据各自实现类的优先加载顺序来排序
+        OBJECT_PARSER_LIST.sort(Comparator.comparing(ApiDocObjectParser::sort));
+    }
 
     /**
      * 执行对象解析流程
@@ -27,14 +40,11 @@ public class ObjectParserExecutor {
      */
     public static ApiDocObjectData execute(PsiType psiType, ParseObjectBO parseObjectBO) {
         if (Objects.nonNull(psiType) && Objects.nonNull(parseObjectBO) && Objects.nonNull(parseObjectBO.getApiDocContext())) {
-            List<ApiDocObjectParser> apiDocObjectParserList = ObjectParserFactory.getOBJECT_PARSER_LIST();
-            if (CollectionUtils.isNotEmpty(apiDocObjectParserList)) {
-                //泛型替换
-                psiType = formatPsiType(psiType, parseObjectBO);
-                for (ApiDocObjectParser apiDocObjectParser : apiDocObjectParserList) {
-                    if (apiDocObjectParser.isParse(psiType)) {
-                        return apiDocObjectParser.parse(psiType, parseObjectBO);
-                    }
+            //泛型替换
+            psiType = formatPsiType(psiType, parseObjectBO);
+            for (ApiDocObjectParser apiDocObjectParser : ObjectParserExecutor.OBJECT_PARSER_LIST) {
+                if (apiDocObjectParser.isParse(psiType)) {
+                    return apiDocObjectParser.parse(psiType, parseObjectBO);
                 }
             }
         }

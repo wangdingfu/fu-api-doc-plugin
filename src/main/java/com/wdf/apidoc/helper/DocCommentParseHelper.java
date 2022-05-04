@@ -8,7 +8,7 @@ import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.tree.IElementType;
 import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
-import com.wdf.apidoc.enumtype.CommentTagType;
+import com.wdf.apidoc.constant.enumtype.CommentTagType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;

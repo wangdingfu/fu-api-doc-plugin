@@ -1,6 +1,5 @@
 package com.wdf.apidoc.pojo.data;
 
-import com.wdf.apidoc.enumtype.RequestType;
 import lombok.Getter;
 import lombok.Setter;
 

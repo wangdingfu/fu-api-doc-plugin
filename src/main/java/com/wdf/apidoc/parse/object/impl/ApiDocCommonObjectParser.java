@@ -3,7 +3,7 @@ package com.wdf.apidoc.parse.object.impl;
 import com.intellij.psi.PsiType;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
-import com.wdf.apidoc.enumtype.CommonObjectType;
+import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import org.apache.commons.lang3.StringUtils;
 

@@ -5,7 +5,7 @@ import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.enumtype.CommonObjectType;
+import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.execute.ObjectParserExecutor;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
