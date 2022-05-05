@@ -6,8 +6,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.ApiDocData;
-import com.wdf.apidoc.service.ApiDocParseService;
-import com.wdf.apidoc.service.impl.ApiDocParseServiceImpl;
+import com.wdf.apidoc.parse.ApiDocParseService;
+import com.wdf.apidoc.parse.ApiDocParseServiceImpl;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package com.wdf.apidoc.service.impl;
+package com.wdf.apidoc.parse;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
@@ -11,7 +11,7 @@ import com.wdf.apidoc.parse.ApiDocPsiParameter;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.*;
-import com.wdf.apidoc.service.ApiDocParseService;
+import com.wdf.apidoc.parse.ApiDocParseService;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;

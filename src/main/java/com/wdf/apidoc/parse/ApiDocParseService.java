@@ -1,4 +1,4 @@
-package com.wdf.apidoc.service;
+package com.wdf.apidoc.parse;
 
 import com.intellij.psi.PsiClass;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
