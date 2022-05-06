@@ -1,10 +1,7 @@
 package com.wdf.apidoc.pojo.bo;
 
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiType;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.wdf.apidoc.parse.ApiDocField;
+import com.wdf.apidoc.parse.field.ApiDocField;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import lombok.Getter;
 import lombok.Setter;

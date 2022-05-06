@@ -1,4 +1,4 @@
-package com.wdf.apidoc.parse;
+package com.wdf.apidoc.parse.field;
 
 import com.intellij.psi.PsiAnnotation;
 

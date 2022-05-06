@@ -1,7 +1,8 @@
-package com.wdf.apidoc.parse;
+package com.wdf.apidoc.parse.field;
 
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiParameter;
+import com.wdf.apidoc.parse.field.AbstractApiDocField;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import org.apache.commons.lang.StringUtils;
 

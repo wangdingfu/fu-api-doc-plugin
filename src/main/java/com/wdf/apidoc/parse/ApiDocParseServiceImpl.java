@@ -6,12 +6,11 @@ import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.execute.ObjectParserExecutor;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
-import com.wdf.apidoc.parse.ApiDocPsiClass;
-import com.wdf.apidoc.parse.ApiDocPsiParameter;
+import com.wdf.apidoc.parse.field.ApiDocPsiClass;
+import com.wdf.apidoc.parse.field.ApiDocPsiParameter;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.*;
-import com.wdf.apidoc.parse.ApiDocParseService;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;

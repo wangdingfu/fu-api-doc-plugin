@@ -2,7 +2,7 @@ package com.wdf.apidoc.execute;
 
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.parse.ApiDocPsiClass;
+import com.wdf.apidoc.parse.field.ApiDocPsiClass;
 import com.wdf.apidoc.parse.object.impl.*;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;

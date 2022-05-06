@@ -5,7 +5,7 @@ import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
-import com.wdf.apidoc.parse.ApiDocField;
+import com.wdf.apidoc.parse.field.ApiDocField;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 
