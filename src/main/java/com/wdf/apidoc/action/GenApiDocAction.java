@@ -47,7 +47,11 @@ public class GenApiDocAction extends AnAction {
         ApiDocContext apiDocContext = new ApiDocContext();
         apiDocContext.setProject(e.getProject());
         ApiDocParseService apiDocParse = new ApiDocParseServiceImpl();
+        //解析
         ApiDocData parse = apiDocParse.parse(apiDocContext, psiClass, null);
         System.out.println(new Gson().toJson(parse));
+
+        //转换
+
     }
 }
