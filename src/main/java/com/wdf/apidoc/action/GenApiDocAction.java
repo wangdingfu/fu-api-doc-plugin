@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
+import com.wdf.apidoc.parse.ApiDocClassParser;
+import com.wdf.apidoc.parse.ApiDocClassParserImpl;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
-import com.wdf.apidoc.pojo.data.ApiDocData;
-import com.wdf.apidoc.parse.ApiDocParseService;
-import com.wdf.apidoc.parse.ApiDocParseServiceImpl;
+import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,12 +46,12 @@ public class GenApiDocAction extends AnAction {
 
         ApiDocContext apiDocContext = new ApiDocContext();
         apiDocContext.setProject(e.getProject());
-        ApiDocParseService apiDocParse = new ApiDocParseServiceImpl();
+        ApiDocClassParser apiDocClassParser = new ApiDocClassParserImpl();
         //解析
-        ApiDocData parse = apiDocParse.parse(apiDocContext, psiClass, null);
-        System.out.println(new Gson().toJson(parse));
+        ClassInfoDesc classInfoDesc = apiDocClassParser.parse(apiDocContext, psiClass, null);
+        System.out.println(new Gson().toJson(classInfoDesc));
 
-        //转换
+        //组装ApiDocData对象
 
     }
 }

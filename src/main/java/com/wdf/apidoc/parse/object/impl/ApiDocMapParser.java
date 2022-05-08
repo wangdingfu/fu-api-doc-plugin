@@ -6,6 +6,7 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
+import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 
 /**
  * @author wangdingfu
@@ -25,7 +26,7 @@ public class ApiDocMapParser extends AbstractApiDocObjectParser {
     }
 
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent) {
+    public ObjectInfoDesc parse(PsiType psiType, ParseObjectBO parent) {
         return null;
     }
 }

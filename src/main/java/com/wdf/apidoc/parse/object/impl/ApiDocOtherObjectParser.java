@@ -6,6 +6,7 @@ import com.wdf.apidoc.constant.CommonObjectNames;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 
 /**
  * @author wangdingfu
@@ -40,9 +41,7 @@ public class ApiDocOtherObjectParser extends AbstractApiDocObjectParser {
      * @return java.lang包对象在文档显示的默认值
      */
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent) {
-        ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
-        apiDocObjectData.setFilterObject(true);
-        return apiDocObjectData;
+    public ObjectInfoDesc parse(PsiType psiType, ParseObjectBO parent) {
+        return null;
     }
 }

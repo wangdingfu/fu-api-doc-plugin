@@ -5,6 +5,7 @@ import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
+import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -41,10 +42,10 @@ public class ApiDocCommonObjectParser extends AbstractApiDocObjectParser {
      *
      * @param psiType 对象类型
      * @param parent  对象所属父级对象的信息bo
-     * @return ApiDoc文档数据对象
+     * @return 返回解析对象后的一些属性 注解 注释等描述信息
      */
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent) {
+    public ObjectInfoDesc parse(PsiType psiType, ParseObjectBO parent) {
         return buildDefault(psiType, CommonObjectType.getName(psiType.getCanonicalText()), parent);
     }
 }

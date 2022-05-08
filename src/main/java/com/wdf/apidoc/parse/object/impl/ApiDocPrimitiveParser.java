@@ -5,6 +5,7 @@ import com.intellij.psi.PsiType;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 
 /**
  * @author wangdingfu
@@ -37,14 +38,14 @@ public class ApiDocPrimitiveParser extends AbstractApiDocObjectParser {
 
 
     /**
-     * 将java中的基本数据类型解析成ApiDoc对象
+     * 解析java类的基本数据类型
      *
      * @param psiType 对象类型
      * @param parent  对象所属父级对象的信息bo
-     * @return 描述基本数据类型的文档信息对象
+     * @return 返回描述基本数据类型的文档信息对象
      */
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent) {
+    public ObjectInfoDesc parse(PsiType psiType, ParseObjectBO parent) {
         return buildDefault(psiType, psiType.getCanonicalText(), parent);
     }
 }

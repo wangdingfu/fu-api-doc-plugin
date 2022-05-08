@@ -8,6 +8,7 @@ import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.parse.field.ApiDocField;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,18 +30,18 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
      * @param parseObjectBO 解析对象参数
      * @return 指定对象解析后的接口文档描述信息
      */
-    protected ApiDocObjectData buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
-        ApiDocObjectData apiDocObjectData = new ApiDocObjectData();
+    protected ObjectInfoDesc buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
+        ObjectInfoDesc objectInfoDesc = new ObjectInfoDesc();
         ApiDocField apiDocField = parseObjectBO.getApiDocField();
         if (Objects.nonNull(apiDocField)) {
-            apiDocObjectData.setDocText(apiDocField.getComment());
-            apiDocObjectData.setName(apiDocField.getName());
-            apiDocObjectData.setAnnotationDataMap(AnnotationParseHelper.parse(apiDocField.getAnnotations()));
+            objectInfoDesc.setDocText(apiDocField.getComment());
+            objectInfoDesc.setName(apiDocField.getName());
+            objectInfoDesc.setAnnotationDataMap(AnnotationParseHelper.parse(apiDocField.getAnnotations()));
         }
-        apiDocObjectData.setTypeView(typeView);
-        apiDocObjectData.setType(psiType.getCanonicalText());
-        apiDocObjectData.setFilterObject(false);
-        return apiDocObjectData;
+        objectInfoDesc.setTypeView(typeView);
+        objectInfoDesc.setType(psiType.getCanonicalText());
+        objectInfoDesc.setFilterObject(false);
+        return objectInfoDesc;
     }
 
 

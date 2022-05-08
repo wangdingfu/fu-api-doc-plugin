@@ -3,6 +3,7 @@ package com.wdf.apidoc.parse.object;
 import com.intellij.psi.PsiType;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 
 /**
  * @author wangdingfu
@@ -28,11 +29,11 @@ public interface ApiDocObjectParser {
 
 
     /**
-     * 解析java对象成ApiDoc对象
+     * 解析java对象
      *
-     * @param psiType 对象类型
-     * @param parent  对象所属父级对象的信息bo
-     * @return 解析后的ApiDoc对象
+     * @param psiType       对象类型
+     * @param parseObjectBO 解析对象所需要的参数
+     * @return 返回解析对象后的一些属性 注解 注释等描述信息
      */
-    ApiDocObjectData parse(PsiType psiType, ParseObjectBO parent);
+    ObjectInfoDesc parse(PsiType psiType, ParseObjectBO parseObjectBO);
 }

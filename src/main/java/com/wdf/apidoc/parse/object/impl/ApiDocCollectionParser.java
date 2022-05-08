@@ -6,10 +6,10 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
-import com.wdf.apidoc.execute.ObjectParserExecutor;
+import com.wdf.apidoc.parse.ObjectParserExecutor;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
-import com.wdf.apidoc.pojo.data.ApiDocObjectData;
+import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -50,7 +50,7 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
      * @return 集合类型解析后的描述对象
      */
     @Override
-    public ApiDocObjectData parse(PsiType psiType, ParseObjectBO parseObjectBO) {
+    public ObjectInfoDesc parse(PsiType psiType, ParseObjectBO parseObjectBO) {
         //获取集合的泛型对象
         PsiType iterableType = PsiUtil.extractIterableTypeParameter(psiType, false);
         if (Objects.isNull(iterableType)) {
@@ -65,16 +65,16 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
         if (StringUtils.isNotBlank(name)) {
             return buildDefault(psiType, getCollectionType(name), parseObjectBO);
         }
-        ApiDocObjectData apiDocObjectData = buildDefault(psiType, getCollectionType(null), parseObjectBO);
+        ObjectInfoDesc objectInfoDesc = buildDefault(psiType, getCollectionType(null), parseObjectBO);
         ParseObjectBO iterableParseObjectBO = new ParseObjectBO();
         iterableParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
         iterableParseObjectBO.setGenericsMap(parseObjectBO.getGenericsMap());
-        ApiDocObjectData iterableApiDoc = ObjectParserExecutor.execute(iterableType, iterableParseObjectBO);
-        if (Objects.nonNull(iterableApiDoc)) {
+        ObjectInfoDesc iterableInfoDesc = ObjectParserExecutor.execute(iterableType, iterableParseObjectBO);
+        if (Objects.nonNull(iterableInfoDesc)) {
             //将泛型对象的字段集合设置到当前apiDoc中
-            apiDocObjectData.setChildList(iterableApiDoc.getChildList());
+            objectInfoDesc.setChildList(iterableInfoDesc.getChildList());
         }
-        return apiDocObjectData;
+        return objectInfoDesc;
     }
 
 

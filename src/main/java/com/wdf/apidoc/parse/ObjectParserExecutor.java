@@ -1,12 +1,12 @@
-package com.wdf.apidoc.execute;
+package com.wdf.apidoc.parse;
 
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.parse.field.ApiDocPsiClass;
+import com.wdf.apidoc.parse.object.ApiDocObjectParser;
 import com.wdf.apidoc.parse.object.impl.*;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
-import com.wdf.apidoc.pojo.data.ApiDocObjectData;
-import com.wdf.apidoc.parse.object.ApiDocObjectParser;
+import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Comparator;
@@ -38,9 +38,9 @@ public class ObjectParserExecutor {
      *
      * @param psiType       需要解析的对象类型
      * @param parseObjectBO 解析对象的所属父级对象
-     * @return 解析后生成的ApiDoc数据对象
+     * @return 返回解析对象后的一些属性 注解 注释等描述信息
      */
-    public static ApiDocObjectData execute(PsiType psiType, ParseObjectBO parseObjectBO) {
+    public static ObjectInfoDesc execute(PsiType psiType, ParseObjectBO parseObjectBO) {
         if (Objects.nonNull(psiType) && Objects.nonNull(parseObjectBO) && Objects.nonNull(parseObjectBO.getApiDocContext())) {
             //泛型替换
             psiType = formatPsiType(psiType, parseObjectBO);
