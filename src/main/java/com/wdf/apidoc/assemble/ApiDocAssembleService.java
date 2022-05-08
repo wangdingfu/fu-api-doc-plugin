@@ -1,6 +1,9 @@
 package com.wdf.apidoc.assemble;
 
-import com.wdf.apidoc.pojo.data.ApiDocData;
+import com.wdf.apidoc.pojo.data.FuApiDocData;
+import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
+
+import java.util.List;
 
 /**
  * @author wangdingfu
@@ -10,5 +13,11 @@ import com.wdf.apidoc.pojo.data.ApiDocData;
 public interface ApiDocAssembleService {
 
 
-    ApiDocData assemble();
+    /**
+     * 组装FuApiDocData对象(用于渲染接口文档模板)
+     *
+     * @param methodInfoDescList 方法信息描述对象集合
+     * @return 生成FuApiDoc的数据对象
+     */
+    FuApiDocData assemble(List<MethodInfoDesc> methodInfoDescList);
 }
