@@ -2,10 +2,6 @@ package com.wdf.apidoc.assemble;
 
 import com.wdf.apidoc.pojo.bo.AssembleBO;
 import com.wdf.apidoc.pojo.data.FuApiDocData;
-import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
-import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
-
-import java.util.List;
 
 /**
  * @author wangdingfu
@@ -19,7 +15,7 @@ public interface ApiDocAssembleService {
      * 组装FuApiDocData对象(用于渲染接口文档模板)
      *
      * @param assembleBO 组装参数
-     * @return 生成FuApiDoc的数据对象
+     * @return 生成接口文档（FuApiDoc）的标准对象
      */
     FuApiDocData assemble(AssembleBO assembleBO);
 }

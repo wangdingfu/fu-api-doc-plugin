@@ -3,6 +3,8 @@ package com.wdf.apidoc.pojo.data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * 该类的数据用于渲染接口文档，即当前类已经存储了接口文档中所需要的所有数据
  *
@@ -18,5 +20,11 @@ public class FuApiDocData {
      * 文档标题
      */
     private String title;
+
+
+    /**
+     * 接口列表集合
+     */
+    private List<FuApiDocItemData> itemList;
 
 }
