@@ -7,7 +7,6 @@ import com.intellij.psi.PsiTypeParameter;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.parse.field.ApiDocField;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
-import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 
 import java.util.HashMap;
@@ -40,7 +39,6 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         }
         objectInfoDesc.setTypeView(typeView);
         objectInfoDesc.setType(psiType.getCanonicalText());
-        objectInfoDesc.setFilterObject(false);
         return objectInfoDesc;
     }
 

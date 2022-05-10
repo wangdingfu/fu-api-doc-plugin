@@ -79,7 +79,7 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
             parseObjectBO.setApiDocField(new ApiDocPsiParameter(parameter, apiDocCommentData));
             parseObjectBO.setApiDocContext(apiDocContext);
             ObjectInfoDesc objectInfoDesc = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
-            if (Objects.nonNull(objectInfoDesc) && !objectInfoDesc.isFilterObject()) {
+            if (Objects.nonNull(objectInfoDesc)) {
                 requestList.add(objectInfoDesc);
             }
         }

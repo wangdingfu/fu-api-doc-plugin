@@ -36,11 +36,6 @@ public class ObjectInfoDesc extends AnnotationDataMap {
     private String docText;
 
     /**
-     * 是否过滤(即不展示当前对象)
-     */
-    private boolean isFilterObject;
-
-    /**
      * 子属性字段集合(当前对象不为基本对象 且有自己属性字段时)
      */
     private List<ObjectInfoDesc> childList;
