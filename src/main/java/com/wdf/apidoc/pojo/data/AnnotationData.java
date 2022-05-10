@@ -1,6 +1,7 @@
 package com.wdf.apidoc.pojo.data;
 
 import com.google.common.collect.Lists;
+import com.intellij.psi.PsiAnnotation;
 import lombok.Getter;
 import lombok.Setter;
 import net.minidev.json.JSONArray;
@@ -22,6 +23,11 @@ public class AnnotationData {
      * 注解全路径
      */
     private String qualifiedName;
+
+    /**
+     * 注解信息
+     */
+    private PsiAnnotation psiAnnotation;
 
 
     /**

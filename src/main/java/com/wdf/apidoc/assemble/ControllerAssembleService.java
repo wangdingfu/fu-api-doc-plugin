@@ -1,9 +1,14 @@
 package com.wdf.apidoc.assemble;
 
+import com.google.common.collect.Lists;
+import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
+import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -21,9 +26,12 @@ public class ControllerAssembleService extends AbstractAssembleService {
      */
     @Override
     public boolean isAssemble(ClassInfoDesc classInfoDesc) {
+        if (Objects.isNull(classInfoDesc)) {
+            return false;
+        }
         //判断是否有Controller|RestController注解
-
-        return false;
+        return CollectionUtils.isNotEmpty(classInfoDesc.getMethodList())
+                && classInfoDesc.exists(AnnotationConstants.CONTROLLER, AnnotationConstants.REST_CONTROLLER);
     }
 
     /**
@@ -35,6 +43,22 @@ public class ControllerAssembleService extends AbstractAssembleService {
     @Override
     public List<FuApiDocItemData> assemble(ClassInfoDesc classInfoDesc) {
         //获取Controller类上的请求路径
+        List<String> controllerUrlList = Lists.newArrayList();
+        classInfoDesc.getAnnotation(AnnotationConstants.REQUEST_MAPPING).ifPresent(annotationData -> {
+            //获取value属性值
+        });
+
+        List<MethodInfoDesc> methodList = classInfoDesc.getMethodList();
+        if (CollectionUtils.isNotEmpty(methodList)) {
+            //解析方法
+            for (MethodInfoDesc methodInfoDesc : methodList) {
+                if (methodInfoDesc.exists(AnnotationConstants.MAPPING)) {
+
+                }
+            }
+        }
+
+
         return null;
     }
 }
