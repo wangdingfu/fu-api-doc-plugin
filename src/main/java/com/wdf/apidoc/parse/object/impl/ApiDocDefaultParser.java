@@ -116,6 +116,7 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
             fieldParseObjectBO.setGenericsMap(buildGenericsMap(psiType, psiClass));
             fieldParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
             for (PsiField psiField : psiClass.getFields()) {
+                //TODO 针对final static修饰的字段过滤
                 fieldParseObjectBO.setApiDocField(new ApiDocPsiField(psiField));
                 childList.add(ObjectParserExecutor.execute(psiField.getType(), fieldParseObjectBO));
             }
