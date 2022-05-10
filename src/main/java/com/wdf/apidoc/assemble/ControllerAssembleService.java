@@ -1,7 +1,9 @@
 package com.wdf.apidoc.assemble;
 
-import com.wdf.apidoc.pojo.bo.AssembleBO;
-import com.wdf.apidoc.pojo.data.FuApiDocData;
+import com.wdf.apidoc.pojo.data.FuApiDocItemData;
+import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
+
+import java.util.List;
 
 /**
  * @author wangdingfu
@@ -12,17 +14,27 @@ public class ControllerAssembleService extends AbstractAssembleService {
 
 
     /**
-     * Controller信息组装成接口文档
+     * 判断当前实现类是否为Controller
      *
-     * @param assembleBO 组装参数
-     * @return 生成接口文档的标准对象
+     * @param classInfoDesc java类信息描述对象
+     * @return true:是  false:不是
      */
     @Override
-    public FuApiDocData assemble(AssembleBO assembleBO) {
+    public boolean isAssemble(ClassInfoDesc classInfoDesc) {
+        //判断是否有Controller|RestController注解
 
+        return false;
+    }
 
-
-
+    /**
+     * Controller类组装成接口文档
+     *
+     * @param classInfoDesc Controller类描述信息
+     * @return 接口集合
+     */
+    @Override
+    public List<FuApiDocItemData> assemble(ClassInfoDesc classInfoDesc) {
+        //获取Controller类上的请求路径
         return null;
     }
 }

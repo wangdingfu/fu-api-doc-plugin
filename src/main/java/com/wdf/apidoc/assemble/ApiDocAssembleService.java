@@ -1,7 +1,9 @@
 package com.wdf.apidoc.assemble;
 
-import com.wdf.apidoc.pojo.bo.AssembleBO;
-import com.wdf.apidoc.pojo.data.FuApiDocData;
+import com.wdf.apidoc.pojo.data.FuApiDocItemData;
+import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
+
+import java.util.List;
 
 /**
  * @author wangdingfu
@@ -12,10 +14,20 @@ public interface ApiDocAssembleService {
 
 
     /**
-     * 组装FuApiDocData对象(用于渲染接口文档模板)
+     * 获取实现类是否有能力组装当前的ClassInfoDesc对象为接口文档对象
      *
-     * @param assembleBO 组装参数
-     * @return 生成接口文档（FuApiDoc）的标准对象
+     * @param classInfoDesc java类信息描述对象
+     * @return true: 可以组装成接口文档  false：无法组装
      */
-    FuApiDocData assemble(AssembleBO assembleBO);
+    boolean isAssemble(ClassInfoDesc classInfoDesc);
+
+
+    /**
+     * 根据java类描述信息组装生成接口文档的数据
+     *
+     * @param classInfoDesc java类描述信息(包含注解、注释、字段等信息)
+     * @return 接口文档页面需要渲染的数据
+     */
+    List<FuApiDocItemData> assemble(ClassInfoDesc classInfoDesc);
+
 }

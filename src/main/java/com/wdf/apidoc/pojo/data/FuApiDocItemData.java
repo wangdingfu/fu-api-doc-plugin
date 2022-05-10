@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * @author wangdingfu
- * @descption: 生成每一个接口文档所需的数据
+ * @descption: 生成每一个接口文档所需的数据（渲染一个接口的标准对象）
  * @date 2022-05-09 23:38:40
  */
 @Getter

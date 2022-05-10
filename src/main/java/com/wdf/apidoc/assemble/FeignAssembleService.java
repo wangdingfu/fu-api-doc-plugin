@@ -2,6 +2,10 @@ package com.wdf.apidoc.assemble;
 
 import com.wdf.apidoc.pojo.bo.AssembleBO;
 import com.wdf.apidoc.pojo.data.FuApiDocData;
+import com.wdf.apidoc.pojo.data.FuApiDocItemData;
+import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
+
+import java.util.List;
 
 /**
  * @author wangdingfu
@@ -11,7 +15,12 @@ import com.wdf.apidoc.pojo.data.FuApiDocData;
 public class FeignAssembleService extends AbstractAssembleService{
 
     @Override
-    public FuApiDocData assemble(AssembleBO assembleBO) {
+    public boolean isAssemble(ClassInfoDesc classInfoDesc) {
+        return false;
+    }
+
+    @Override
+    public List<FuApiDocItemData> assemble(ClassInfoDesc classInfoDesc) {
         return null;
     }
 }
