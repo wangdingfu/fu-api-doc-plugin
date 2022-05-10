@@ -68,7 +68,7 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
         ObjectInfoDesc objectInfoDesc = buildDefault(psiType, getCollectionType(null), parseObjectBO);
         ParseObjectBO iterableParseObjectBO = new ParseObjectBO();
         iterableParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
-        iterableParseObjectBO.setGenericsMap(parseObjectBO.getGenericsMap());
+        iterableParseObjectBO.setGenericsMap(buildGenericsMap(iterableType, PsiUtil.resolveClassInType(psiType)));
         ObjectInfoDesc iterableInfoDesc = ObjectParserExecutor.execute(iterableType, iterableParseObjectBO);
         if (Objects.nonNull(iterableInfoDesc)) {
             //将泛型对象的字段集合设置到当前apiDoc中
