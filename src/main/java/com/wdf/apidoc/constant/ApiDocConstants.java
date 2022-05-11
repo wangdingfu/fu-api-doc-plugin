@@ -7,9 +7,14 @@ package com.wdf.apidoc.constant;
  */
 public interface ApiDocConstants {
 
+
+    String VALUE = "value";
+
     interface ClassPkg {
         String BIG_DECIMAL = "java.math.BigDecimal";
     }
+
+
 
 
     interface Comment {

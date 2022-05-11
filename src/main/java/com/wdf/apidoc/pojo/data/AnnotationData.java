@@ -1,14 +1,16 @@
 package com.wdf.apidoc.pojo.data;
 
-import com.google.common.collect.Lists;
 import com.intellij.psi.PsiAnnotation;
+import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.enumtype.AnnotationValueType;
 import lombok.Getter;
 import lombok.Setter;
-import net.minidev.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -34,15 +36,24 @@ public class AnnotationData {
      * 注解属性map
      * key:属性名  value:属性值
      */
-    private Map<String, Object> attrMap;
+    private Map<String, AnnotationValueData> attrMap;
 
-    public void addAttr(String attrName, Object value) {
+    public void addAttr(String attrName, AnnotationValueData value) {
         if (StringUtils.isNotBlank(attrName) && Objects.nonNull(value)) {
             if (Objects.isNull(attrMap)) {
                 this.attrMap = new HashMap<>();
             }
             this.attrMap.put(attrName, value);
         }
+    }
+
+
+    public AnnotationValueType getValueType() {
+        return getValueType(ApiDocConstants.VALUE);
+    }
+
+    public AnnotationValueType getValueType(String attrName) {
+        return AnnotationValueType.CONSTANT;
     }
 
 

@@ -3,8 +3,9 @@ package com.wdf.apidoc.helper;
 import com.google.common.collect.Lists;
 import com.intellij.lang.jvm.annotation.*;
 import com.intellij.psi.PsiAnnotation;
-import com.wdf.apidoc.pojo.context.ApiDocContext;
+import com.wdf.apidoc.constant.enumtype.AnnotationValueType;
 import com.wdf.apidoc.pojo.data.AnnotationData;
+import com.wdf.apidoc.pojo.data.AnnotationValueData;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,7 +37,7 @@ public class AnnotationParseHelper {
             if (CollectionUtils.isNotEmpty(attributes)) {
                 for (JvmAnnotationAttribute attribute : attributes) {
                     String attributeName = attribute.getAttributeName();
-                    Object value = convertAnnotationAttributeValue(attribute.getAttributeValue());
+                    AnnotationValueData value = convertAnnotationAttributeValue(attribute.getAttributeValue());
                     annotationData.addAttr(attributeName, value);
                 }
             }
@@ -46,18 +47,19 @@ public class AnnotationParseHelper {
     }
 
 
-    private static Object convertAnnotationAttributeValue(JvmAnnotationAttributeValue attributeValue) {
+    private static AnnotationValueData convertAnnotationAttributeValue(JvmAnnotationAttributeValue attributeValue) {
         if (attributeValue instanceof JvmAnnotationEnumFieldValue) {
-            return ((JvmAnnotationEnumFieldValue) attributeValue).getFieldName();
+            //值类型为:JvmAnnotationEnumFieldValue
+            return new AnnotationValueData(AnnotationValueType.ENUM, attributeValue);
         }
         if (attributeValue instanceof JvmAnnotationArrayValue) {
             List<Object> resultList = Lists.newArrayList();
             for (JvmAnnotationAttributeValue value : ((JvmAnnotationArrayValue) attributeValue).getValues()) {
                 resultList.add(annotationConstantValue(value));
             }
-            return resultList;
+            return new AnnotationValueData(AnnotationValueType.ARRAY, resultList);
         }
-        return annotationConstantValue(attributeValue);
+        return new AnnotationValueData(AnnotationValueType.CONSTANT, annotationConstantValue(attributeValue));
     }
 
 
