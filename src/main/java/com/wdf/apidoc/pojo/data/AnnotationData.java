@@ -53,23 +53,15 @@ public class AnnotationData {
     }
 
     public AnnotationValueType getValueType(String attrName) {
+        AnnotationValueData annotationValueData;
+        if (Objects.nonNull(this.attrMap) && Objects.nonNull(annotationValueData = this.attrMap.get(attrName))) {
+            return annotationValueData.getValueType();
+        }
         return AnnotationValueType.CONSTANT;
     }
 
 
-    public String getStringValue(String attr) {
-        if (StringUtils.isNotBlank(attr) && Objects.nonNull(this.attrMap)) {
-            Object value = this.attrMap.get(attr);
-            if (Objects.nonNull(value)) {
-                if (value instanceof String) {
-                    return (String) value;
-                } else if (value instanceof Collection) {
-                    System.out.println(value);
-                }
-            }
-        }
-        return StringUtils.EMPTY;
-    }
+
 
 
 }
