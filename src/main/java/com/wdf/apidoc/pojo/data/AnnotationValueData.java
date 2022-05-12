@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -26,4 +30,17 @@ public class AnnotationValueData {
      * 值
      */
     private Object value;
+
+
+    public String getStringValue() {
+        if (Objects.isNull(this.valueType) || Objects.isNull(this.value)) {
+            return StringUtils.EMPTY;
+        }
+        if (AnnotationValueType.CONSTANT.equals(this.valueType)) {
+            return String.valueOf(value);
+        }
+        return StringUtils.EMPTY;
+    }
+
+
 }

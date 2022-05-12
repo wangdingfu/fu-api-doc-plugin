@@ -2,6 +2,7 @@ package com.wdf.apidoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
+import com.wdf.apidoc.pojo.data.AnnotationValueData;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
@@ -46,6 +47,8 @@ public class ControllerAssembleService extends AbstractAssembleService {
         List<String> controllerUrlList = Lists.newArrayList();
         classInfoDesc.getAnnotation(AnnotationConstants.REQUEST_MAPPING).ifPresent(annotationData -> {
             //获取value属性值
+            AnnotationValueData value = annotationData.getValue();
+
         });
 
         List<MethodInfoDesc> methodList = classInfoDesc.getMethodList();

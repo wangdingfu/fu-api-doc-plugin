@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -47,6 +46,18 @@ public class AnnotationData {
         }
     }
 
+    public AnnotationValueData getValue() {
+        return getValue(ApiDocConstants.VALUE);
+    }
+
+
+    public AnnotationValueData getValue(String attrName) {
+        if (Objects.nonNull(this.attrMap) && StringUtils.isNotBlank(attrName)) {
+            return this.attrMap.get(attrName);
+        }
+        return new AnnotationValueData();
+    }
+
 
     public AnnotationValueType getValueType() {
         return getValueType(ApiDocConstants.VALUE);
@@ -59,9 +70,6 @@ public class AnnotationData {
         }
         return AnnotationValueType.CONSTANT;
     }
-
-
-
 
 
 }
