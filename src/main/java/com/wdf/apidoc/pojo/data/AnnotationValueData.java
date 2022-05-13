@@ -1,14 +1,14 @@
 package com.wdf.apidoc.pojo.data;
 
+import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.enumtype.AnnotationValueType;
+import com.wdf.apidoc.util.AnnotationConstantUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -32,14 +32,22 @@ public class AnnotationValueData {
     private Object value;
 
 
+    public List<String> getListValue() {
+        if (AnnotationValueType.CONSTANT.equals(valueType)) {
+            return Lists.newArrayList(getStringValue());
+        }
+        List<String> resultList = Lists.newArrayList();
+        if (AnnotationValueType.ARRAY.equals(this.valueType)) {
+            for (Object o : ((List<?>) this.value)) {
+                resultList.add(AnnotationConstantUtil.castToString(o));
+            }
+        }
+        return resultList;
+    }
+
+
     public String getStringValue() {
-        if (Objects.isNull(this.valueType) || Objects.isNull(this.value)) {
-            return StringUtils.EMPTY;
-        }
-        if (AnnotationValueType.CONSTANT.equals(this.valueType)) {
-            return String.valueOf(value);
-        }
-        return StringUtils.EMPTY;
+        return AnnotationConstantUtil.castToString(this.value);
     }
 
 

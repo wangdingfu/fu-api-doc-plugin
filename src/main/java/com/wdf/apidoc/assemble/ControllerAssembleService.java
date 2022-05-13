@@ -48,6 +48,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
         classInfoDesc.getAnnotation(AnnotationConstants.REQUEST_MAPPING).ifPresent(annotationData -> {
             //获取value属性值
             AnnotationValueData value = annotationData.getValue();
+            List<String> listValue = value.getListValue();
 
         });
 
