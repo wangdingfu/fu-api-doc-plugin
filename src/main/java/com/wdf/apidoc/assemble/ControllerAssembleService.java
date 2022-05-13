@@ -65,6 +65,13 @@ public class ControllerAssembleService extends AbstractAssembleService {
     }
 
 
+    /**
+     * 组装接口文档（具体接口）
+     *
+     * @param methodInfoDesc    controller请求方法描述信息
+     * @param controllerUrlList controller类上的请求地址集合
+     * @return controller类里具体一个请求生成的接口文档
+     */
     private FuApiDocItemData assembleItemApiDoc(MethodInfoDesc methodInfoDesc, List<String> controllerUrlList) {
         FuApiDocItemData fuApiDocItemData = new FuApiDocItemData();
         ApiDocCommentData commentData = methodInfoDesc.getCommentData();
@@ -78,15 +85,21 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 if (Objects.nonNull(requestType)) {
                     fuApiDocItemData.setRequestType(requestType.getRequestType());
                 }
-                fuApiDocItemData.setUrl(formatUrl(controllerUrlList, annotationData.getValue().getStringValue()));
+                fuApiDocItemData.setUrl(joinUrl(controllerUrlList, annotationData.getValue().getStringValue()));
                 break;
             }
         }
         return fuApiDocItemData;
     }
 
-
-    private List<String> formatUrl(List<String> controllerUrls, String methodUrl) {
+    /**
+     * 拼接请求地址(将controller上的请求地址和方法上的请求地址拼接成一个完成的请求地址)
+     *
+     * @param controllerUrls controller上的请求地址集合
+     * @param methodUrl      方法体上的请求地址
+     * @return 该请求存在的请求地址集合
+     */
+    private List<String> joinUrl(List<String> controllerUrls, String methodUrl) {
         if (CollectionUtils.isEmpty(controllerUrls)) {
             return Lists.newArrayList(methodUrl);
         }
