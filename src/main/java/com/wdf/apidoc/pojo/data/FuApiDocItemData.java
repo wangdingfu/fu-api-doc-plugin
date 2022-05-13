@@ -28,7 +28,7 @@ public class FuApiDocItemData {
     /**
      * 接口请求地址
      */
-    private String url;
+    private List<String> url;
 
     /**
      * 接口请求类型

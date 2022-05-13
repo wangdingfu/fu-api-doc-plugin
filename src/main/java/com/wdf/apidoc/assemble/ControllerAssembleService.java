@@ -2,7 +2,9 @@ package com.wdf.apidoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
-import com.wdf.apidoc.pojo.data.AnnotationValueData;
+import com.wdf.apidoc.constant.enumtype.RequestType;
+import com.wdf.apidoc.pojo.data.AnnotationData;
+import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
@@ -10,6 +12,8 @@ import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -43,26 +47,53 @@ public class ControllerAssembleService extends AbstractAssembleService {
      */
     @Override
     public List<FuApiDocItemData> assemble(ClassInfoDesc classInfoDesc) {
-        //获取Controller类上的请求路径
-        List<String> controllerUrlList = Lists.newArrayList();
-        classInfoDesc.getAnnotation(AnnotationConstants.REQUEST_MAPPING).ifPresent(annotationData -> {
-            //获取value属性值
-            AnnotationValueData value = annotationData.getValue();
-            List<String> listValue = value.getListValue();
-
-        });
-
+        List<FuApiDocItemData> resultList = Lists.newArrayList();
         List<MethodInfoDesc> methodList = classInfoDesc.getMethodList();
         if (CollectionUtils.isNotEmpty(methodList)) {
+            //获取Controller类上的请求路径
+            List<String> controllerUrlList = Lists.newArrayList();
+            classInfoDesc.getAnnotation(AnnotationConstants.REQUEST_MAPPING).ifPresent(annotationData ->
+                    controllerUrlList.addAll(annotationData.getValue().getListValue()));
             //解析方法
             for (MethodInfoDesc methodInfoDesc : methodList) {
                 if (methodInfoDesc.exists(AnnotationConstants.MAPPING)) {
-
+                    resultList.add(assembleItemApiDoc(methodInfoDesc, controllerUrlList));
                 }
             }
         }
+        return resultList;
+    }
 
 
-        return null;
+    private FuApiDocItemData assembleItemApiDoc(MethodInfoDesc methodInfoDesc, List<String> controllerUrlList) {
+        FuApiDocItemData fuApiDocItemData = new FuApiDocItemData();
+        ApiDocCommentData commentData = methodInfoDesc.getCommentData();
+        fuApiDocItemData.setTitle(commentData.getCommentTitle());
+        fuApiDocItemData.setDetailInfo(commentData.getCommentDetailInfo());
+        for (String annotationName : AnnotationConstants.MAPPING) {
+            Optional<AnnotationData> annotationOptional = methodInfoDesc.getAnnotation(annotationName);
+            if (annotationOptional.isPresent()) {
+                AnnotationData annotationData = annotationOptional.get();
+                RequestType requestType = RequestType.getByAnnotationName(annotationData.getQualifiedName());
+                if (Objects.nonNull(requestType)) {
+                    fuApiDocItemData.setRequestType(requestType.getRequestType());
+                }
+                fuApiDocItemData.setUrl(formatUrl(controllerUrlList, annotationData.getValue().getStringValue()));
+                break;
+            }
+        }
+        return fuApiDocItemData;
+    }
+
+
+    private List<String> formatUrl(List<String> controllerUrls, String methodUrl) {
+        if (CollectionUtils.isEmpty(controllerUrls)) {
+            return Lists.newArrayList(methodUrl);
+        }
+        return controllerUrls.stream().map(m -> formatUrl(m, methodUrl)).collect(Collectors.toList());
+    }
+
+    private String formatUrl(String controllerUrl, String methodUrl) {
+        return controllerUrl + methodUrl;
     }
 }

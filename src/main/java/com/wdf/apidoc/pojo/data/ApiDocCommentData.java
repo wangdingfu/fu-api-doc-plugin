@@ -25,7 +25,7 @@ public class ApiDocCommentData {
     /**
      * 注释详细描述信息
      */
-    private List<String> commentDescList;
+    private String commentDetailInfo;
 
     /**
      * 参数注释map

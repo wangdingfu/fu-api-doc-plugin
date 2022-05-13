@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,6 +43,7 @@ public class AnnotationValueData {
                 resultList.add(AnnotationConstantUtil.castToString(o));
             }
         }
+        resultList.removeAll(Collections.singleton(null));
         return resultList;
     }
 
