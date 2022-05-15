@@ -6,8 +6,10 @@ import com.wdf.apidoc.constant.enumtype.RequestType;
 import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
+import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
+import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -89,8 +91,24 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 break;
             }
         }
+        //设置请求参数
+        List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
+        if (CollectionUtils.isNotEmpty(requestList)) {
+            List<FuApiDocParamData> requestParams = Lists.newArrayList();
+            for (ObjectInfoDesc objectInfoDesc : requestList) {
+                requestParams.add(buildFuApiDocParamData(objectInfoDesc));
+            }
+            fuApiDocItemData.setRequestParams(requestParams);
+            //TODO 设置请求示例
+        }
+        ObjectInfoDesc response = methodInfoDesc.getResponse();
+        if(Objects.nonNull(response)){
+            fuApiDocItemData.setResponseParams(Lists.newArrayList(buildFuApiDocParamData(response)));
+            //TODO 设置响应示例
+        }
         return fuApiDocItemData;
     }
+
 
     /**
      * 拼接请求地址(将controller上的请求地址和方法上的请求地址拼接成一个完成的请求地址)

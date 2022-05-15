@@ -3,7 +3,6 @@ package com.wdf.apidoc.pojo.data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,6 +13,11 @@ import java.util.Map;
 @Getter
 @Setter
 public class FuApiDocParamData {
+
+    /**
+     * 参数名前缀
+     */
+    private String paramPrefix;
 
     /**
      * 参数名
@@ -35,14 +39,14 @@ public class FuApiDocParamData {
     private String paramDesc;
 
     /**
+     * 分组排序
+     */
+    private String groupSort;
+
+    /**
      * 扩展信息
      */
     private Map<String, Object> extInfo;
-
-    /**
-     * 子集参数
-     */
-    private List<FuApiDocParamData> childList;
 
 
 }
