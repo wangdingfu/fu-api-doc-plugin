@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author wangdingfu
@@ -36,6 +37,24 @@ public class AnnotationDataMap {
             return Optional.ofNullable(this.annotationDataMap.get(annotationName));
         }
         return Optional.empty();
+    }
+
+
+    /**
+     * 根据多个注解名称遍历查询 查询到注解则消费该注解的数据 并退出
+     * @param annotationNames 注解名称集合
+     * @param annotationDataConsumer 注解数据消费者
+     */
+    public void consumerAnnotation(String[] annotationNames, Consumer<AnnotationData> annotationDataConsumer) {
+        if (Objects.isNull(annotationDataConsumer) || Objects.isNull(annotationNames) || annotationNames.length > 0) {
+            for (String annotationName : annotationNames) {
+                Optional<AnnotationData> annotation = getAnnotation(annotationName);
+                if (annotation.isPresent()) {
+                    annotationDataConsumer.accept(annotation.get());
+                    break;
+                }
+            }
+        }
     }
 
 

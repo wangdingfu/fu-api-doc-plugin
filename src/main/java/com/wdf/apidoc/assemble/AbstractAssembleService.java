@@ -42,12 +42,8 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
                 fuApiDocParamData.setParamName(objectInfoDesc.getName());
                 fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
                 fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
-                for (String annotation : AnnotationConstants.VALID_NOT) {
-
-                }
-                objectInfoDesc.getAnnotation()
                 //设置是否必填
-                fuApiDocParamData.setParamRequire();
+                objectInfoDesc.consumerAnnotation(AnnotationConstants.VALID_NOT, annotationData -> fuApiDocParamData.setParamRequire("是"));
                 resultList.add(fuApiDocParamData);
                 List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
                 if (CollectionUtils.isNotEmpty(childList)) {
