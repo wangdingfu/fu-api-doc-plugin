@@ -18,5 +18,11 @@ public interface AnnotationConstants {
     String PATCH_MAPPING = "org.springframework.web.bind.annotation.PatchMapping";
 
 
+    String VALID_NOT_NULL = "";
+    String VALID_NOT_BLANK = "";
+    String VALID_NOT_EMPTY = "";
+
+    String[] VALID_NOT = new String[]{VALID_NOT_NULL, VALID_NOT_BLANK, VALID_NOT_EMPTY};
+
     String[] MAPPING = new String[]{REQUEST_MAPPING, GET_MAPPING, PUT_MAPPING, POST_MAPPING, DELETE_MAPPING, PATCH_MAPPING};
 }

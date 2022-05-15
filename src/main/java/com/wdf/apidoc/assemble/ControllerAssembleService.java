@@ -94,16 +94,12 @@ public class ControllerAssembleService extends AbstractAssembleService {
         //设置请求参数
         List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
         if (CollectionUtils.isNotEmpty(requestList)) {
-            List<FuApiDocParamData> requestParams = Lists.newArrayList();
-            for (ObjectInfoDesc objectInfoDesc : requestList) {
-                requestParams.add(buildFuApiDocParamData(objectInfoDesc));
-            }
-            fuApiDocItemData.setRequestParams(requestParams);
+            fuApiDocItemData.setRequestParams(buildFuApiDocParamData(requestList));
             //TODO 设置请求示例
         }
         ObjectInfoDesc response = methodInfoDesc.getResponse();
-        if(Objects.nonNull(response)){
-            fuApiDocItemData.setResponseParams(Lists.newArrayList(buildFuApiDocParamData(response)));
+        if (Objects.nonNull(response)) {
+            fuApiDocItemData.setResponseParams(buildFuApiDocParamData(Lists.newArrayList(response)));
             //TODO 设置响应示例
         }
         return fuApiDocItemData;

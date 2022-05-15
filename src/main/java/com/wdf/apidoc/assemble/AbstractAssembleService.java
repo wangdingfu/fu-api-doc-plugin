@@ -1,9 +1,13 @@
 package com.wdf.apidoc.assemble;
 
+import com.google.common.collect.Lists;
+import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -16,12 +20,41 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     /**
      * 构建渲染接口文档参数的数据对象
      *
-     * @param objectInfoDesc 对象解析后的描述信息集合
+     * @param objectInfoDescList 对象解析后的描述信息集合
      * @return 接口文档页面显示的参数数据
      */
-    protected FuApiDocParamData buildFuApiDocParamData(ObjectInfoDesc objectInfoDesc) {
-        FuApiDocParamData fuApiDocParamData = new FuApiDocParamData();
+    protected List<FuApiDocParamData> buildFuApiDocParamData(List<ObjectInfoDesc> objectInfoDescList) {
+        List<FuApiDocParamData> fuApiDocParamDataList = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
+            fuApiDocParamDataList.addAll(buildFuApiDocParamData(objectInfoDescList, 0 + ""));
+        }
+        return fuApiDocParamDataList;
+    }
 
-        return fuApiDocParamData;
+
+    protected List<FuApiDocParamData> buildFuApiDocParamData(List<ObjectInfoDesc> objectInfoDescList, String groupSort) {
+        List<FuApiDocParamData> resultList = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
+            for (int i = 0; i < objectInfoDescList.size(); i++) {
+                ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(i);
+                FuApiDocParamData fuApiDocParamData = new FuApiDocParamData();
+                fuApiDocParamData.setGroupSort(groupSort + "_" + i);
+                fuApiDocParamData.setParamName(objectInfoDesc.getName());
+                fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
+                fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
+                for (String annotation : AnnotationConstants.VALID_NOT) {
+
+                }
+                objectInfoDesc.getAnnotation()
+                //设置是否必填
+                fuApiDocParamData.setParamRequire();
+                resultList.add(fuApiDocParamData);
+                List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
+                if (CollectionUtils.isNotEmpty(childList)) {
+                    resultList.addAll(buildFuApiDocParamData(childList, i + ""));
+                }
+            }
+        }
+        return resultList;
     }
 }
