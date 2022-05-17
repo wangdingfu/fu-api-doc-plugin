@@ -4,13 +4,17 @@ import com.google.gson.Gson;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
+import com.wdf.apidoc.assemble.ApiDocAssembleService;
+import com.wdf.apidoc.assemble.ControllerAssembleService;
 import com.wdf.apidoc.parse.ApiDocClassParser;
 import com.wdf.apidoc.parse.ApiDocClassParserImpl;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
+import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -52,6 +56,11 @@ public class GenApiDocAction extends AnAction {
         System.out.println(new Gson().toJson(classInfoDesc));
 
         //组装ApiDocData对象
+        ApiDocAssembleService assembleService = new ControllerAssembleService();
+        boolean assemble = assembleService.isAssemble(classInfoDesc);
+        System.out.println(assemble);
+        List<FuApiDocItemData> resultList = assembleService.assemble(classInfoDesc);
+        System.out.println(new Gson().toJson(resultList));
 
     }
 }
