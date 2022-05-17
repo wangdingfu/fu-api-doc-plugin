@@ -2,6 +2,7 @@ package com.wdf.apidoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
+import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.constant.enumtype.RequestType;
 import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
@@ -95,12 +96,14 @@ public class ControllerAssembleService extends AbstractAssembleService {
         List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
         if (CollectionUtils.isNotEmpty(requestList)) {
             fuApiDocItemData.setRequestParams(buildFuApiDocParamData(requestList));
-            //TODO 设置请求示例
+            //mock请求参数数据
+            fuApiDocItemData.setRequestExample(mockData(ContentType.URLENCODED, requestList));
         }
         ObjectInfoDesc response = methodInfoDesc.getResponse();
         if (Objects.nonNull(response)) {
             fuApiDocItemData.setResponseParams(buildFuApiDocParamData(Lists.newArrayList(response)));
-            //TODO 设置响应示例
+            //mock返回结果数据
+            fuApiDocItemData.setResponseExample(mockData(ContentType.JSON, Lists.newArrayList(response)));
         }
         return fuApiDocItemData;
     }

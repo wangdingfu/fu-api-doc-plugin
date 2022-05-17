@@ -2,6 +2,9 @@ package com.wdf.apidoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
+import com.wdf.apidoc.constant.enumtype.ContentType;
+import com.wdf.apidoc.mock.ApiDocMockData;
+import com.wdf.apidoc.mock.FakerMockData;
 import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
@@ -52,5 +55,11 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
             }
         }
         return resultList;
+    }
+
+
+    protected String mockData(ContentType contentType, List<ObjectInfoDesc> objectInfoDescList) {
+        ApiDocMockData apiDocMockData = new FakerMockData();
+        return apiDocMockData.mock(contentType, objectInfoDescList);
     }
 }
