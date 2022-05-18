@@ -12,13 +12,11 @@ import java.util.Locale;
  * @descption: faker mock数据
  * @date 2022-05-17 23:43:45
  */
-public class FakerMockData extends AbstractApiDocMockData{
+public class ApiDocFakerMockData extends AbstractApiDocMockData{
 
 
     @Override
-    public String mock(ContentType contentType, List<ObjectInfoDesc> objectInfoDescList) {
-        Faker faker = new Faker(Locale.CHINA);
-
+    protected <T> T mock(Class<T> classType, String name) {
         return null;
     }
 }
