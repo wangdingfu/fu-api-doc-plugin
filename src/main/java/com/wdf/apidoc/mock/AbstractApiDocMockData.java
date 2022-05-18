@@ -1,5 +1,6 @@
 package com.wdf.apidoc.mock;
 
+import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.pojo.bo.MockDataValueBO;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -54,19 +56,23 @@ public abstract class AbstractApiDocMockData implements ApiDocMockData {
         if (CollectionUtils.isEmpty(objectInfoDescList)) {
             return StringUtils.EMPTY;
         }
-        StringBuilder sb = new StringBuilder();
+        List<MockDataValueBO> mockDataValueBOList = Lists.newArrayList();
         for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
-            String name = objectInfoDesc.getName();
-            String type = objectInfoDesc.getType();
-
-            sb.append()
+            MockDataValueBO mockDataValueBO = mockCommonType(objectInfoDesc);
+            if (Objects.nonNull(mockDataValueBO)) {
+                mockDataValueBOList.add(mockDataValueBO);
+            }
         }
-        return "?" + sb.toString();
+        String value = null;
+        if (CollectionUtils.isNotEmpty(mockDataValueBOList)) {
+            value = mockDataValueBOList.stream().map(m -> m.getParamName() + "=" + m.getValue()).collect(Collectors.joining("&"));
+        }
+        return Objects.isNull(value) ? StringUtils.EMPTY : "?" + value;
     }
 
 
     private String mockByJson(List<ObjectInfoDesc> objectInfoDescList) {
-
+        return StringUtils.EMPTY;
     }
 
 
