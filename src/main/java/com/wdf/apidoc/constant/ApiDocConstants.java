@@ -12,6 +12,11 @@ public interface ApiDocConstants {
 
     interface ClassPkg {
         String BIG_DECIMAL = "java.math.BigDecimal";
+        String TIMESTAMP = "java.sql.Timestamp";
+        String LOCAL_TIME = "java.time.LocalTime";
+        String LOCAL_DATE = "java.time.LocalDate";
+        String LOCAL_DATE_TIME = "java.time.LocalDateTime";
+        String BIG_INTEGER = "java.math.BigInteger";
     }
 
 

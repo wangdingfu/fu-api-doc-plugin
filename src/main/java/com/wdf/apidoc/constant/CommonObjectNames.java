@@ -19,4 +19,8 @@ public interface CommonObjectNames {
             HTTP_REQUEST,
             HTTP_RESPONSE
     );
+
+
+
+
 }

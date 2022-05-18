@@ -37,6 +37,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")
     implementation("com.github.javafaker:javafaker:1.0.2")
+    implementation("com.github.jsonzou:jmockdata:4.3.0")
 }
 
 
