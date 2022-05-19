@@ -59,25 +59,21 @@ public abstract class AbstractApiDocMockData implements ApiDocMockData {
         if (CollectionUtils.isEmpty(objectInfoDescList)) {
             return StringUtils.EMPTY;
         }
-        List<MockDataValueBO> mockDataValueBOList = Lists.newArrayList();
-        for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
-            List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
-            if (CollectionUtils.isNotEmpty(childList)) {
-                return mockUrlEncodedData(childList);
-            }
-            MockDataValueBO mockDataValueBO = mockCommonType(objectInfoDesc);
-            if (Objects.nonNull(mockDataValueBO)) {
-                mockDataValueBOList.add(mockDataValueBO);
-            }
-        }
-        String value = null;
+        //递归mock对象
+        List<MockDataValueBO> mockDataValueBOList = recursiveMockObject(objectInfoDescList);
         if (CollectionUtils.isNotEmpty(mockDataValueBOList)) {
-            value = mockDataValueBOList.stream().map(m -> m.getParamName() + "=" + m.getValue()).collect(Collectors.joining("&"));
+            return "?" + mockDataValueBOList.stream().map(m -> m.getParamName() + "=" + m.getValue()).collect(Collectors.joining("&"));
         }
-        return Objects.isNull(value) ? StringUtils.EMPTY : "?" + value;
+        return StringUtils.EMPTY;
     }
 
 
+    /**
+     * 递归mock对象 返回一个mock后的json结构数据
+     *
+     * @param objectInfoDescList 对象描述信息集合
+     * @return mock后的数据
+     */
     private Map<String, Object> mockJsonData(List<ObjectInfoDesc> objectInfoDescList) {
         Map<String, Object> map = new HashMap<>(objectInfoDescList.size());
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
@@ -93,6 +89,22 @@ public abstract class AbstractApiDocMockData implements ApiDocMockData {
             }
         }
         return map;
+    }
+
+
+    private List<MockDataValueBO> recursiveMockObject(List<ObjectInfoDesc> objectInfoDescList) {
+        List<MockDataValueBO> resultList = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
+            for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
+                List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
+                if (CollectionUtils.isNotEmpty(childList)) {
+                    resultList.addAll(recursiveMockObject(childList));
+                    continue;
+                }
+                resultList.add(mockCommonType(objectInfoDesc));
+            }
+        }
+        return resultList;
     }
 
 
