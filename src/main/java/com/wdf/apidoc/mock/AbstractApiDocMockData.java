@@ -1,6 +1,7 @@
 package com.wdf.apidoc.mock;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.pojo.bo.MockDataValueBO;
@@ -8,7 +9,9 @@ import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -43,16 +46,16 @@ public abstract class AbstractApiDocMockData implements ApiDocMockData {
         if (Objects.nonNull(contentType)) {
             switch (contentType) {
                 case URLENCODED:
-                    return mockByUrlEncoded(objectInfoDescList);
+                    return mockUrlEncodedData(objectInfoDescList);
                 case JSON:
-                    return mockByJson(objectInfoDescList);
+                    return new Gson().toJson(mockJsonData(objectInfoDescList));
             }
         }
         return StringUtils.EMPTY;
     }
 
 
-    private String mockByUrlEncoded(List<ObjectInfoDesc> objectInfoDescList) {
+    private String mockUrlEncodedData(List<ObjectInfoDesc> objectInfoDescList) {
         if (CollectionUtils.isEmpty(objectInfoDescList)) {
             return StringUtils.EMPTY;
         }
@@ -71,8 +74,21 @@ public abstract class AbstractApiDocMockData implements ApiDocMockData {
     }
 
 
-    private String mockByJson(List<ObjectInfoDesc> objectInfoDescList) {
-        return StringUtils.EMPTY;
+    private Map<String, Object> mockJsonData(List<ObjectInfoDesc> objectInfoDescList) {
+        Map<String, Object> map = new HashMap<>(objectInfoDescList.size());
+        if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
+            for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
+                List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
+                if (CollectionUtils.isNotEmpty(childList)) {
+                    map.put(objectInfoDesc.getName(), Lists.newArrayList(mockJsonData(childList)));
+                }
+                MockDataValueBO mockDataValueBO = mockCommonType(objectInfoDesc);
+                if (Objects.nonNull(mockDataValueBO)) {
+                    map.put(mockDataValueBO.getParamName(),mockDataValueBO.getValue());
+                }
+            }
+        }
+        return map;
     }
 
 
