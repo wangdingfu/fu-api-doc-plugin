@@ -61,7 +61,7 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
                 methodInfoDescList.add(methodInfoDesc);
             }
         }
-        return null;
+        return classInfoDesc;
     }
 
     /**

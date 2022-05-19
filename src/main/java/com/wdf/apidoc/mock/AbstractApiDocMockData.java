@@ -61,6 +61,10 @@ public abstract class AbstractApiDocMockData implements ApiDocMockData {
         }
         List<MockDataValueBO> mockDataValueBOList = Lists.newArrayList();
         for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
+            List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
+            if (CollectionUtils.isNotEmpty(childList)) {
+                return mockUrlEncodedData(childList);
+            }
             MockDataValueBO mockDataValueBO = mockCommonType(objectInfoDesc);
             if (Objects.nonNull(mockDataValueBO)) {
                 mockDataValueBOList.add(mockDataValueBO);
@@ -80,11 +84,11 @@ public abstract class AbstractApiDocMockData implements ApiDocMockData {
             for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
                 List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
                 if (CollectionUtils.isNotEmpty(childList)) {
-                    map.put(objectInfoDesc.getName(), Lists.newArrayList(mockJsonData(childList)));
+                    map.put(objectInfoDesc.getName(), mockJsonData(childList));
                 }
                 MockDataValueBO mockDataValueBO = mockCommonType(objectInfoDesc);
                 if (Objects.nonNull(mockDataValueBO)) {
-                    map.put(mockDataValueBO.getParamName(),mockDataValueBO.getValue());
+                    map.put(mockDataValueBO.getParamName(), mockDataValueBO.getValue());
                 }
             }
         }

@@ -78,8 +78,10 @@ public class ControllerAssembleService extends AbstractAssembleService {
     private FuApiDocItemData assembleItemApiDoc(MethodInfoDesc methodInfoDesc, List<String> controllerUrlList) {
         FuApiDocItemData fuApiDocItemData = new FuApiDocItemData();
         ApiDocCommentData commentData = methodInfoDesc.getCommentData();
-        fuApiDocItemData.setTitle(commentData.getCommentTitle());
-        fuApiDocItemData.setDetailInfo(commentData.getCommentDetailInfo());
+        if(Objects.nonNull(commentData)){
+            fuApiDocItemData.setTitle(commentData.getCommentTitle());
+            fuApiDocItemData.setDetailInfo(commentData.getCommentDetailInfo());
+        }
         for (String annotationName : AnnotationConstants.MAPPING) {
             Optional<AnnotationData> annotationOptional = methodInfoDesc.getAnnotation(annotationName);
             if (annotationOptional.isPresent()) {
