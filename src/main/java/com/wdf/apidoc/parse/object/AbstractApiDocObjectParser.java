@@ -4,6 +4,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
+import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.parse.field.ApiDocField;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
@@ -20,6 +21,10 @@ import java.util.Objects;
  */
 public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
 
+    /**
+     * 获取对象类型
+     */
+    protected abstract ApiDocObjectType getObjectType();
 
     /**
      * 构建一个默认的ApiDoc对象
@@ -39,6 +44,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         }
         objectInfoDesc.setTypeView(typeView);
         objectInfoDesc.setType(psiType.getCanonicalText());
+        objectInfoDesc.setApiDocObjectType(getObjectType());
         return objectInfoDesc;
     }
 

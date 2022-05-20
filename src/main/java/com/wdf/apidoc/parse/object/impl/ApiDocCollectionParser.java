@@ -5,6 +5,7 @@ import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.parse.ObjectParserExecutor;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
@@ -20,6 +21,12 @@ import java.util.Objects;
  * @Date 2022-04-18 21:33:19
  */
 public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
+
+
+    @Override
+    protected ApiDocObjectType getObjectType() {
+        return ApiDocObjectType.COLLECTION_OBJECT;
+    }
 
 
     /**

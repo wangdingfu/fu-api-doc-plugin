@@ -1,6 +1,7 @@
 package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.PsiType;
+import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
@@ -14,6 +15,14 @@ import org.apache.commons.lang3.StringUtils;
  * @Date 2022-04-18 21:26:53
  */
 public class ApiDocCommonObjectParser extends AbstractApiDocObjectParser {
+
+    /**
+     * 公共对象
+     */
+    @Override
+    protected ApiDocObjectType getObjectType() {
+        return ApiDocObjectType.COMMON_OBJECT;
+    }
 
     /**
      * 执行顺序

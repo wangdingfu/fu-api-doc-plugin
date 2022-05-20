@@ -3,6 +3,7 @@ package com.wdf.apidoc.parse.object.impl;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiType;
 import com.wdf.apidoc.constant.CommonObjectNames;
+import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.data.ApiDocObjectData;
@@ -14,6 +15,11 @@ import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
  * @Date 2022-04-18 21:30:15
  */
 public class ApiDocOtherObjectParser extends AbstractApiDocObjectParser {
+
+    @Override
+    protected ApiDocObjectType getObjectType() {
+        return ApiDocObjectType.DEFAULT_OBJECT;
+    }
 
     @Override
     public int sort() {

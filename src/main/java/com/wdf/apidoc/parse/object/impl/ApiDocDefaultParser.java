@@ -2,6 +2,7 @@ package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.parse.ObjectParserExecutor;
 import com.wdf.apidoc.parse.field.ApiDocPsiField;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
@@ -24,7 +25,10 @@ import java.util.Objects;
  */
 public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
 
-
+    @Override
+    protected ApiDocObjectType getObjectType() {
+        return ApiDocObjectType.DEFAULT_OBJECT;
+    }
     /**
      * 默认最后解析  只有所有的解析器都无法解析时 才会走当前的解析器
      *

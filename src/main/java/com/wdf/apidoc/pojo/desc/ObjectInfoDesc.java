@@ -1,5 +1,6 @@
 package com.wdf.apidoc.pojo.desc;
 
+import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.pojo.data.AnnotationDataMap;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,11 @@ import java.util.List;
 @Getter
 @Setter
 public class ObjectInfoDesc extends AnnotationDataMap {
+
+    /**
+     * 对象类型枚举
+     */
+    private ApiDocObjectType apiDocObjectType;
 
     /**
      * 字段类型
@@ -39,5 +45,6 @@ public class ObjectInfoDesc extends AnnotationDataMap {
      * 子属性字段集合(当前对象不为基本对象 且有自己属性字段时)
      */
     private List<ObjectInfoDesc> childList;
+
 
 }
