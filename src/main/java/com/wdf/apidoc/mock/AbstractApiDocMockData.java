@@ -119,6 +119,7 @@ public abstract class AbstractApiDocMockData implements ApiDocMockData {
         if (Objects.isNull(objectInfoDesc) || StringUtils.isBlank(type = objectInfoDesc.getType())) {
             return null;
         }
+
         Class<?> clazz = CommonObjectType.getClass(type);
         //没有可以mock的数据类型
         if (Objects.isNull(clazz)) {
