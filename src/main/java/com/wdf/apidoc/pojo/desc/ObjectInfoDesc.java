@@ -22,6 +22,11 @@ public class ObjectInfoDesc extends AnnotationDataMap {
     private ApiDocObjectType apiDocObjectType;
 
     /**
+     * 泛型类型
+     */
+    private ApiDocObjectType genericsType;
+
+    /**
      * 字段类型
      */
     private String type;

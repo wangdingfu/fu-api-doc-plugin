@@ -13,6 +13,7 @@ import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * @author wangdingfu
@@ -26,6 +27,10 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
      */
     protected abstract ApiDocObjectType getObjectType();
 
+    protected ObjectInfoDesc buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
+        return buildDefault(psiType, typeView, parseObjectBO, null);
+    }
+
     /**
      * 构建一个默认的ApiDoc对象
      *
@@ -34,7 +39,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
      * @param parseObjectBO 解析对象参数
      * @return 指定对象解析后的接口文档描述信息
      */
-    protected ObjectInfoDesc buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
+    protected ObjectInfoDesc buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO, Consumer<ObjectInfoDesc> consumer) {
         ObjectInfoDesc objectInfoDesc = new ObjectInfoDesc();
         ApiDocField apiDocField = parseObjectBO.getApiDocField();
         if (Objects.nonNull(apiDocField)) {
@@ -45,6 +50,9 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         objectInfoDesc.setTypeView(typeView);
         objectInfoDesc.setType(psiType.getCanonicalText());
         objectInfoDesc.setApiDocObjectType(getObjectType());
+        if (Objects.nonNull(consumer)) {
+            consumer.accept(objectInfoDesc);
+        }
         return objectInfoDesc;
     }
 

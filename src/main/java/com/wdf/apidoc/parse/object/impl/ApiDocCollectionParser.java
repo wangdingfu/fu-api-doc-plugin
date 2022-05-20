@@ -1,7 +1,6 @@
 package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
@@ -59,24 +58,23 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
     @Override
     public ObjectInfoDesc parse(PsiType psiType, ParseObjectBO parseObjectBO) {
         //获取集合的泛型对象
-        PsiType iterableType = PsiUtil.extractIterableTypeParameter(psiType, false);
-        if (Objects.isNull(iterableType)) {
+        PsiType genericsType = PsiUtil.extractIterableTypeParameter(psiType, false);
+        if (Objects.isNull(genericsType)) {
             //没有泛型 无法继续遍历 直接退出解析
             return buildDefault(psiType, getCollectionType(null), parseObjectBO);
         }
-        //基本数据类型和公共数据类型 则不处理
-        if (iterableType instanceof PsiPrimitiveType) {
-            return buildDefault(psiType, getCollectionType(iterableType.getCanonicalText()), parseObjectBO);
-        }
-        String name = CommonObjectType.getName(iterableType.getCanonicalText());
-        if (StringUtils.isNotBlank(name)) {
+        String canonicalText = genericsType.getCanonicalText();
+        CommonObjectType commonObjectType = CommonObjectType.getEnum(canonicalText);
+        String name = commonObjectType.getName();
+        if (!CommonObjectType.OBJECT_TYPE.equals(commonObjectType)) {
+            //基本数据类型和公共数据类型 可以直接解析返回
             return buildDefault(psiType, getCollectionType(name), parseObjectBO);
         }
-        ObjectInfoDesc objectInfoDesc = buildDefault(psiType, getCollectionType(null), parseObjectBO);
+        ObjectInfoDesc objectInfoDesc = buildDefault(psiType, getCollectionType(name), parseObjectBO);
         ParseObjectBO iterableParseObjectBO = new ParseObjectBO();
         iterableParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
-        iterableParseObjectBO.setGenericsMap(buildGenericsMap(iterableType, PsiUtil.resolveClassInType(psiType)));
-        ObjectInfoDesc iterableInfoDesc = ObjectParserExecutor.execute(iterableType, iterableParseObjectBO);
+        iterableParseObjectBO.setGenericsMap(buildGenericsMap(genericsType, PsiUtil.resolveClassInType(psiType)));
+        ObjectInfoDesc iterableInfoDesc = ObjectParserExecutor.execute(genericsType, iterableParseObjectBO);
         if (Objects.nonNull(iterableInfoDesc)) {
             //将泛型对象的字段集合设置到当前apiDoc中
             objectInfoDesc.setChildList(iterableInfoDesc.getChildList());
@@ -85,11 +83,11 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
     }
 
 
-    private String getCollectionType(String generics) {
-        if (StringUtils.isBlank(generics)) {
+    private String getCollectionType(String name) {
+        if (StringUtils.isBlank(name)) {
             return "array";
         }
-        return String.format("array[%s]", generics);
+        return String.format("array[%s]", name);
     }
 
 

@@ -40,27 +40,29 @@ public enum CommonObjectType {
      * 常用数据类型
      */
     STRING(CommonClassNames.JAVA_LANG_STRING, "string", String.class),
-    NUMBER(CommonClassNames.JAVA_LANG_NUMBER, "Number", Number.class),
-    BOOLEAN(CommonClassNames.JAVA_LANG_BOOLEAN, "Boolean", Boolean.class),
-    BYTE(CommonClassNames.JAVA_LANG_BYTE, "byte[]", byte.class),
-    SHORT(CommonClassNames.JAVA_LANG_SHORT, "Short", Short.class),
-    INTEGER(CommonClassNames.JAVA_LANG_INTEGER, "Integer", Integer.class),
-    LONG(CommonClassNames.JAVA_LANG_LONG, "Long", Long.class),
-    FLOAT(CommonClassNames.JAVA_LANG_FLOAT, "Float", Float.class),
-    DOUBLE(CommonClassNames.JAVA_LANG_DOUBLE, "Double", Double.class),
+    NUMBER(CommonClassNames.JAVA_LANG_NUMBER, "number", Number.class),
+    BOOLEAN(CommonClassNames.JAVA_LANG_BOOLEAN, "boolean", Boolean.class),
+    BYTE(CommonClassNames.JAVA_LANG_BYTE, "byte", byte.class),
+    SHORT(CommonClassNames.JAVA_LANG_SHORT, "short", Short.class),
+    INTEGER(CommonClassNames.JAVA_LANG_INTEGER, "integer", Integer.class),
+    LONG(CommonClassNames.JAVA_LANG_LONG, "long", Long.class),
+    FLOAT(CommonClassNames.JAVA_LANG_FLOAT, "float", Float.class),
+    DOUBLE(CommonClassNames.JAVA_LANG_DOUBLE, "double", Double.class),
     CHARACTER(CommonClassNames.JAVA_LANG_CHARACTER, "char", char.class),
     BUFFER(CommonClassNames.JAVA_LANG_STRING_BUFFER, "string", String.class),
     BUILDER(CommonClassNames.JAVA_LANG_STRING_BUILDER, "string", String.class),
     BIG_DECIMAL(ApiDocConstants.ClassPkg.BIG_DECIMAL, "bigDecimal", BigDecimal.class),
-    BIG_INTEGER(ApiDocConstants.ClassPkg.BIG_INTEGER, "BigInteger", BigInteger.class),
-    DATE(CommonClassNames.JAVA_UTIL_DATE, "Date", Date.class),
-    CALENDAR(CommonClassNames.JAVA_UTIL_CALENDAR, "Calendar", Calendar.class),
-    LOCAL_DATETIME(ApiDocConstants.ClassPkg.LOCAL_DATE_TIME, "LocalDateTime", LocalDateTime.class),
-    LOCAL_DATE(ApiDocConstants.ClassPkg.LOCAL_DATE, "LocalDate", LocalDate.class),
-    LOCAL_TIME(ApiDocConstants.ClassPkg.LOCAL_TIME, "LocalTime", LocalTime.class),
-    TIMESTAMP(ApiDocConstants.ClassPkg.TIMESTAMP, "Timestamp", Timestamp.class),
-    ENUM(CommonClassNames.JAVA_LANG_ENUM, "Enum", Enum.class),
+    BIG_INTEGER(ApiDocConstants.ClassPkg.BIG_INTEGER, "bigInteger", BigInteger.class),
+    DATE(CommonClassNames.JAVA_UTIL_DATE, "date", Date.class),
+    CALENDAR(CommonClassNames.JAVA_UTIL_CALENDAR, "calendar", Calendar.class),
+    LOCAL_DATETIME(ApiDocConstants.ClassPkg.LOCAL_DATE_TIME, "localDateTime", LocalDateTime.class),
+    LOCAL_DATE(ApiDocConstants.ClassPkg.LOCAL_DATE, "localDate", LocalDate.class),
+    LOCAL_TIME(ApiDocConstants.ClassPkg.LOCAL_TIME, "localTime", LocalTime.class),
+    TIMESTAMP(ApiDocConstants.ClassPkg.TIMESTAMP, "timestamp", Timestamp.class),
+    ENUM(CommonClassNames.JAVA_LANG_ENUM, "enum", Enum.class),
 
+
+    OBJECT_TYPE("java.lang.Object", "object", Object.class),
     ;
 
     private final String objPkg;
@@ -75,25 +77,23 @@ public enum CommonObjectType {
         this.clazz = clazz;
     }
 
-    public static String getName(String objPkg) {
+
+    public static CommonObjectType getEnum(String objPkg) {
         if (StringUtils.isNotBlank(objPkg)) {
             for (CommonObjectType value : CommonObjectType.values()) {
                 if (value.getObjPkg().equals(objPkg)) {
-                    return value.getName();
+                    return value;
                 }
             }
         }
-        return null;
+        return CommonObjectType.OBJECT_TYPE;
+    }
+
+    public static String getName(String objPkg) {
+        return getEnum(objPkg).getName();
     }
 
     public static Class<?> getClass(String objPkg) {
-        if (StringUtils.isNotBlank(objPkg)) {
-            for (CommonObjectType value : CommonObjectType.values()) {
-                if (value.getObjPkg().equals(objPkg)) {
-                    return value.getClazz();
-                }
-            }
-        }
-        return null;
+        return getEnum(objPkg).getClazz();
     }
 }
