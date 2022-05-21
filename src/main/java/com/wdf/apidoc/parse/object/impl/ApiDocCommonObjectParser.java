@@ -42,7 +42,7 @@ public class ApiDocCommonObjectParser extends AbstractApiDocObjectParser {
      */
     @Override
     public boolean isParse(PsiType psiType) {
-        return StringUtils.isNotBlank(CommonObjectType.getName(psiType.getCanonicalText()));
+        return CommonObjectType.isCommon(psiType.getCanonicalText());
     }
 
 

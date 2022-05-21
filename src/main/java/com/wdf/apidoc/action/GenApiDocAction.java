@@ -53,7 +53,6 @@ public class GenApiDocAction extends AnAction {
         ApiDocClassParser apiDocClassParser = new ApiDocClassParserImpl();
         //解析
         ClassInfoDesc classInfoDesc = apiDocClassParser.parse(apiDocContext, psiClass, null);
-        System.out.println(new Gson().toJson(classInfoDesc));
 
         //组装ApiDocData对象
         ApiDocAssembleService assembleService = new ControllerAssembleService();
