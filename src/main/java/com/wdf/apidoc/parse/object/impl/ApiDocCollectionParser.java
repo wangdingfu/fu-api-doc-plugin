@@ -70,7 +70,7 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
         CommonObjectType commonObjectType = CommonObjectType.getEnum(canonicalText);
         if (commonObjectType.isPrimitiveOrCommon()) {
             //基本数据类型和公共数据类型 可以直接解析返回
-            ObjectInfoDesc genericsInfoDesc = buildDefault(psiType, commonObjectType.getName(), parseObjectBO);
+            ObjectInfoDesc genericsInfoDesc = buildDefault(genericsType, commonObjectType.getName(), parseObjectBO);
             objectInfoDesc.setGenericsType(commonObjectType.getApiDocObjectType());
             objectInfoDesc.setChildList(Lists.newArrayList(genericsInfoDesc));
             objectInfoDesc.setTypeView(getCollectionType(genericsInfoDesc.getTypeView()));
