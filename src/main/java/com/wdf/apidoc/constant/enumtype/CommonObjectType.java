@@ -80,9 +80,15 @@ public enum CommonObjectType {
         this.apiDocObjectType = apiDocObjectType;
     }
 
+    public boolean isPrimitiveOrCommon(){
+        return ApiDocObjectType.COMMON_OBJECT.equals(this.getApiDocObjectType())
+                || ApiDocObjectType.PRIMITIVE.equals(this.getApiDocObjectType());
+    }
+
+
     public static boolean isPrimitive(String objPkg) {
         ApiDocObjectType apiDocObjectType = getEnum(objPkg).getApiDocObjectType();
-        return ApiDocObjectType.COMMON_OBJECT.equals(apiDocObjectType);
+        return ApiDocObjectType.PRIMITIVE.equals(apiDocObjectType);
     }
 
     public static boolean isPrimitiveOrCommon(String objPkg) {

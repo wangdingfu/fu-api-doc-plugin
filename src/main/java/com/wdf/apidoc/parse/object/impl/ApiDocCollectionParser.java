@@ -66,18 +66,20 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
         String canonicalText = genericsType.getCanonicalText();
         CommonObjectType commonObjectType = CommonObjectType.getEnum(canonicalText);
         String name = commonObjectType.getName();
-        if (!CommonObjectType.OBJECT_TYPE.equals(commonObjectType)) {
+        if (commonObjectType.isPrimitiveOrCommon()) {
+            ApiDocObjectType apiDocObjectType = commonObjectType.getApiDocObjectType();
             //基本数据类型和公共数据类型 可以直接解析返回
-            return buildDefault(psiType, getCollectionType(name), parseObjectBO);
+            return buildDefault(psiType, getCollectionType(name), parseObjectBO, data -> data.setGenericsType(apiDocObjectType));
         }
         ObjectInfoDesc objectInfoDesc = buildDefault(psiType, getCollectionType(name), parseObjectBO);
-        ParseObjectBO iterableParseObjectBO = new ParseObjectBO();
-        iterableParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
-        iterableParseObjectBO.setGenericsMap(buildGenericsMap(genericsType, PsiUtil.resolveClassInType(psiType)));
-        ObjectInfoDesc iterableInfoDesc = ObjectParserExecutor.execute(genericsType, iterableParseObjectBO);
-        if (Objects.nonNull(iterableInfoDesc)) {
+        ParseObjectBO genericsParseObjectBO = new ParseObjectBO();
+        genericsParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
+        genericsParseObjectBO.setGenericsMap(buildGenericsMap(genericsType, PsiUtil.resolveClassInType(psiType)));
+        ObjectInfoDesc genericsInfoDesc = ObjectParserExecutor.execute(genericsType, genericsParseObjectBO);
+        if (Objects.nonNull(genericsInfoDesc)) {
             //将泛型对象的字段集合设置到当前apiDoc中
-            objectInfoDesc.setChildList(iterableInfoDesc.getChildList());
+            objectInfoDesc.setChildList(genericsInfoDesc.getChildList());
+            objectInfoDesc.setGenericsType(genericsInfoDesc.getApiDocObjectType());
         }
         return objectInfoDesc;
     }
