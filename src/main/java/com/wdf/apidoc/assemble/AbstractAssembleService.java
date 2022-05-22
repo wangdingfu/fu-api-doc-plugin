@@ -68,7 +68,7 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
                 case URLENCODED:
                     return mockUrlEncodedData(objectInfoDescList);
                 case JSON:
-                    return new Gson().toJson(mockJsonData(objectInfoDescList));
+                    return mockJsonData(objectInfoDescList);
             }
         }
         return StringUtils.EMPTY;
