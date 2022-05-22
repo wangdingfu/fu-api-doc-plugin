@@ -1,5 +1,6 @@
 package com.wdf.apidoc.action;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -53,13 +54,15 @@ public class GenApiDocAction extends AnAction {
         ApiDocClassParser apiDocClassParser = new ApiDocClassParserImpl();
         //解析
         ClassInfoDesc classInfoDesc = apiDocClassParser.parse(apiDocContext, psiClass, null);
+        System.out.println(JSON.toJSONString(classInfoDesc));
 
         //组装ApiDocData对象
         ApiDocAssembleService assembleService = new ControllerAssembleService();
         boolean assemble = assembleService.isAssemble(classInfoDesc);
         System.out.println(assemble);
         List<FuApiDocItemData> resultList = assembleService.assemble(classInfoDesc);
-        System.out.println(new Gson().toJson(resultList));
+        System.out.println(JSON.toJSONString(resultList));
+
 
     }
 }

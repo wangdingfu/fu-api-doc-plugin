@@ -2,7 +2,6 @@ package com.wdf.apidoc.assemble;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.ContentType;
