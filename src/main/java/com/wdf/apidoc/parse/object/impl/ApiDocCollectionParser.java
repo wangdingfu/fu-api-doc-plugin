@@ -79,7 +79,7 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
             //非基本数据类型和常用对象类型 需要深度解析
             ParseObjectBO genericsParseObjectBO = new ParseObjectBO();
             genericsParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
-            genericsParseObjectBO.setGenericsMap(buildGenericsMap(genericsType, PsiUtil.resolveClassInType(psiType)));
+            genericsParseObjectBO.setGenericsMap(parseObjectBO.getGenericsMap());
             genericsInfoDesc = ObjectParserExecutor.execute(genericsType, genericsParseObjectBO);
             if (Objects.nonNull(genericsInfoDesc)) {
                 //将泛型对象的字段集合设置到当前apiDoc中
