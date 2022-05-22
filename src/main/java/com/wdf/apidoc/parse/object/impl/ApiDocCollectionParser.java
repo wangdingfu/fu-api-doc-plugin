@@ -68,30 +68,33 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
         }
         String canonicalText = genericsType.getCanonicalText();
         CommonObjectType commonObjectType = CommonObjectType.getEnum(canonicalText);
+        ObjectInfoDesc genericsInfoDesc;
         if (commonObjectType.isPrimitiveOrCommon()) {
             //基本数据类型和公共数据类型 可以直接解析返回
-            ObjectInfoDesc genericsInfoDesc = buildDefault(genericsType, commonObjectType.getName(), parseObjectBO);
+            genericsInfoDesc = buildDefault(genericsType, commonObjectType.getName(), parseObjectBO);
             objectInfoDesc.setGenericsType(commonObjectType.getApiDocObjectType());
             genericsInfoDesc.setValue(mockCommonType(genericsInfoDesc));
             objectInfoDesc.setChildList(Lists.newArrayList(genericsInfoDesc));
-            objectInfoDesc.setValue(Lists.newArrayList(genericsInfoDesc.getValue()));
         } else {
             //非基本数据类型和常用对象类型 需要深度解析
             ParseObjectBO genericsParseObjectBO = new ParseObjectBO();
             genericsParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
             genericsParseObjectBO.setGenericsMap(buildGenericsMap(genericsType, PsiUtil.resolveClassInType(psiType)));
-            ObjectInfoDesc genericsInfoDesc = ObjectParserExecutor.execute(genericsType, genericsParseObjectBO);
+            genericsInfoDesc = ObjectParserExecutor.execute(genericsType, genericsParseObjectBO);
             if (Objects.nonNull(genericsInfoDesc)) {
                 //将泛型对象的字段集合设置到当前apiDoc中
                 ApiDocObjectType apiDocObjectType = genericsInfoDesc.getApiDocObjectType();
                 List<ObjectInfoDesc> childList = genericsInfoDesc.getChildList();
-                if(StringUtils.isBlank(genericsInfoDesc.getName())){
+                if (StringUtils.isBlank(genericsInfoDesc.getName())) {
                     childList = Lists.newArrayList(genericsInfoDesc);
                 }
                 objectInfoDesc.setChildList(childList);
                 objectInfoDesc.setGenericsType(apiDocObjectType);
-                objectInfoDesc.setValue(Lists.newArrayList(genericsInfoDesc.getValue()));
             }
+        }
+        Object value;
+        if (Objects.nonNull(genericsInfoDesc) && Objects.nonNull(value = genericsInfoDesc.getValue())) {
+            objectInfoDesc.setValue(Lists.newArrayList(value));
         }
         return objectInfoDesc;
     }

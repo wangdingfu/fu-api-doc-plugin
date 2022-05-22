@@ -72,6 +72,7 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
             objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
             if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
                 objectInfoDesc.setChildList(objectInfoDescList);
+                objectInfoDesc.setValue(buildValue(objectInfoDescList));
             }
             //将当前解析过的对象加入上下文中缓存下来
             apiDocContext.add(canonicalText, objectInfoDesc);
