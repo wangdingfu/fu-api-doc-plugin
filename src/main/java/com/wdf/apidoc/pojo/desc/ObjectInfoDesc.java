@@ -47,6 +47,11 @@ public class ObjectInfoDesc extends AnnotationDataMap {
     private String docText;
 
     /**
+     * 针对该类型mock的值
+     */
+    private Object value;
+
+    /**
      * 子属性字段集合(当前对象不为基本对象 且有自己属性字段时)
      */
     private List<ObjectInfoDesc> childList;

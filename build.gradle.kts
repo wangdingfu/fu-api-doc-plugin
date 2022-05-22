@@ -28,7 +28,6 @@ repositories {
     }
     mavenCentral()
 }
-
 dependencies {
     //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
@@ -38,6 +37,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.20")
     implementation("com.github.javafaker:javafaker:1.0.2")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
+    implementation("com.alibaba:fastjson:1.2.80")
 }
 
 

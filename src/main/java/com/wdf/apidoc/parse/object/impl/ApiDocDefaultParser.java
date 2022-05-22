@@ -29,6 +29,7 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
     protected ApiDocObjectType getObjectType() {
         return ApiDocObjectType.DEFAULT_OBJECT;
     }
+
     /**
      * 默认最后解析  只有所有的解析器都无法解析时 才会走当前的解析器
      *
@@ -82,8 +83,8 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
     /**
      * 解析对象 递归遍历父类并解析
      *
-     * @param psiType              对象类型
-     * @param psiClass             对象class
+     * @param psiType            对象类型
+     * @param psiClass           对象class
      * @param objectInfoDescList 解析后的对象结果
      */
     private void parseObject(ParseObjectBO parseObjectBO, PsiType psiType, PsiClass psiClass, List<ObjectInfoDesc> objectInfoDescList) {
@@ -126,6 +127,7 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
             }
             childList.removeAll(Collections.singleton(null));
             objectInfoDesc.setChildList(childList);
+            objectInfoDesc.setValue(buildValue(childList));
         }
         return childList;
     }

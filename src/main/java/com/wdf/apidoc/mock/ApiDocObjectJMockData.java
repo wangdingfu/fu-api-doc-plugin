@@ -4,11 +4,10 @@ import com.github.jsonzou.jmockdata.JMockData;
 
 /**
  * @author wangdingfu
- * @Descption JMockData 框架mock数据
- * @Date 2022-05-18 21:37:14
+ * @descption: JMockData 实现mock数据
+ * @date 2022-05-22 21:49:10
  */
-public class ApiDocJMockData extends AbstractApiDocMockData {
-
+public class ApiDocObjectJMockData implements ApiDocObjectMock{
 
     /**
      * JMockData框架mock数据
@@ -19,7 +18,7 @@ public class ApiDocJMockData extends AbstractApiDocMockData {
      * @return mock的值
      */
     @Override
-    protected <T> T mock(Class<T> classType, String name) {
+    public  <T> T mock(Class<T> classType, String name) {
         return JMockData.mock(classType);
     }
 }
