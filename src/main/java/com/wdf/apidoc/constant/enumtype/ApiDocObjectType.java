@@ -12,6 +12,7 @@ public enum ApiDocObjectType {
     DEFAULT_OBJECT,
     MAP_OBJECT,
     COLLECTION_OBJECT,
+    ARRAY,
 
     ;
 

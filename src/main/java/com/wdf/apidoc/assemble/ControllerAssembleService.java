@@ -78,7 +78,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
     private FuApiDocItemData assembleItemApiDoc(MethodInfoDesc methodInfoDesc, List<String> controllerUrlList) {
         FuApiDocItemData fuApiDocItemData = new FuApiDocItemData();
         ApiDocCommentData commentData = methodInfoDesc.getCommentData();
-        if(Objects.nonNull(commentData)){
+        if (Objects.nonNull(commentData)) {
             fuApiDocItemData.setTitle(commentData.getCommentTitle());
             fuApiDocItemData.setDetailInfo(commentData.getCommentDetailInfo());
         }
@@ -90,7 +90,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 if (Objects.nonNull(requestType)) {
                     fuApiDocItemData.setRequestType(requestType.getRequestType());
                 }
-                fuApiDocItemData.setUrl(joinUrl(controllerUrlList, annotationData.getValue().getStringValue()));
+                fuApiDocItemData.setUrl(joinUrl(controllerUrlList, annotationData.getValue().getListValue()));
                 break;
             }
         }
@@ -115,14 +115,20 @@ public class ControllerAssembleService extends AbstractAssembleService {
      * 拼接请求地址(将controller上的请求地址和方法上的请求地址拼接成一个完成的请求地址)
      *
      * @param controllerUrls controller上的请求地址集合
-     * @param methodUrl      方法体上的请求地址
+     * @param methodUrlList  方法体上的请求地址
      * @return 该请求存在的请求地址集合
      */
-    private List<String> joinUrl(List<String> controllerUrls, String methodUrl) {
+    private List<String> joinUrl(List<String> controllerUrls, List<String> methodUrlList) {
         if (CollectionUtils.isEmpty(controllerUrls)) {
-            return Lists.newArrayList(methodUrl);
+            return methodUrlList;
         }
-        return controllerUrls.stream().map(m -> formatUrl(m, methodUrl)).collect(Collectors.toList());
+        List<String> urlList = Lists.newArrayList();
+        for (String controllerUrl : controllerUrls) {
+            for (String methodUrl : methodUrlList) {
+                urlList.add(formatUrl(controllerUrl, methodUrl));
+            }
+        }
+        return urlList;
     }
 
     private String formatUrl(String controllerUrl, String methodUrl) {

@@ -25,7 +25,8 @@ public class ObjectParserExecutor {
     static {
         OBJECT_PARSER_LIST.add(new ApiDocPrimitiveParser());
         OBJECT_PARSER_LIST.add(new ApiDocCommonObjectParser());
-        OBJECT_PARSER_LIST.add(new ApiDocOtherObjectParser());
+        OBJECT_PARSER_LIST.add(new ApiDocFilterObjectParser());
+        OBJECT_PARSER_LIST.add(new ApiDocArrayParser());
         OBJECT_PARSER_LIST.add(new ApiDocCollectionParser());
         OBJECT_PARSER_LIST.add(new ApiDocMapParser());
         OBJECT_PARSER_LIST.add(new ApiDocDefaultParser());

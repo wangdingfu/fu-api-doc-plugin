@@ -73,7 +73,6 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
             ObjectInfoDesc genericsInfoDesc = buildDefault(genericsType, commonObjectType.getName(), parseObjectBO);
             objectInfoDesc.setGenericsType(commonObjectType.getApiDocObjectType());
             objectInfoDesc.setChildList(Lists.newArrayList(genericsInfoDesc));
-            objectInfoDesc.setTypeView(getCollectionType(genericsInfoDesc.getTypeView()));
         } else {
             //非基本数据类型和常用对象类型 需要深度解析
             ParseObjectBO genericsParseObjectBO = new ParseObjectBO();
@@ -83,11 +82,12 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
             if (Objects.nonNull(genericsInfoDesc)) {
                 //将泛型对象的字段集合设置到当前apiDoc中
                 ApiDocObjectType apiDocObjectType = genericsInfoDesc.getApiDocObjectType();
-                List<ObjectInfoDesc> childList = getObjectType().equals(apiDocObjectType)
-                        ? Lists.newArrayList(genericsInfoDesc) : genericsInfoDesc.getChildList();
+                List<ObjectInfoDesc> childList = genericsInfoDesc.getChildList();
+                if(StringUtils.isBlank(genericsInfoDesc.getName())){
+                    childList = Lists.newArrayList(genericsInfoDesc);
+                }
                 objectInfoDesc.setChildList(childList);
                 objectInfoDesc.setGenericsType(apiDocObjectType);
-                objectInfoDesc.setTypeView(getCollectionType(genericsInfoDesc.getTypeView()));
             }
         }
         return objectInfoDesc;
