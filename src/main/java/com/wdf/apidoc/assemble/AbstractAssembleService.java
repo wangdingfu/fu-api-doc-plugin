@@ -53,7 +53,7 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
                 resultList.add(fuApiDocParamData);
                 List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
                 if (CollectionUtils.isNotEmpty(childList)) {
-                    resultList.addAll(buildFuApiDocParamData(childList, i + ""));
+                    resultList.addAll(buildFuApiDocParamData(childList, groupSort + ""));
                 }
             }
         }
