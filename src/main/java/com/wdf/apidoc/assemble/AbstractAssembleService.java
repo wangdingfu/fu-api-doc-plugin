@@ -38,13 +38,14 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     }
 
 
-    protected List<FuApiDocParamData> buildFuApiDocParamData(List<ObjectInfoDesc> objectInfoDescList, String groupSort) {
+    protected List<FuApiDocParamData> buildFuApiDocParamData(List<ObjectInfoDesc> objectInfoDescList, String sort) {
         List<FuApiDocParamData> resultList = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
             for (int i = 0; i < objectInfoDescList.size(); i++) {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(i);
                 FuApiDocParamData fuApiDocParamData = new FuApiDocParamData();
-                fuApiDocParamData.setGroupSort(groupSort + "_" + i);
+                String groupSort = sort + "_" + i;
+                fuApiDocParamData.setGroupSort(groupSort);
                 fuApiDocParamData.setParamName(objectInfoDesc.getName());
                 fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
                 fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
