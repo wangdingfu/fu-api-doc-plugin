@@ -58,6 +58,19 @@ public class AnnotationDataMap {
     }
 
 
+    public Optional<AnnotationData> getAnnotation(String[] annotationNames) {
+        if ( Objects.isNull(annotationNames) || annotationNames.length > 0) {
+            for (String annotationName : annotationNames) {
+                Optional<AnnotationData> annotation = getAnnotation(annotationName);
+                if (annotation.isPresent()) {
+                    return annotation;
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+
     /**
      * 是否存在指定注解
      *

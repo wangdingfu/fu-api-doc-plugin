@@ -85,7 +85,7 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
                 //将泛型对象的字段集合设置到当前apiDoc中
                 ApiDocObjectType apiDocObjectType = genericsInfoDesc.getApiDocObjectType();
                 List<ObjectInfoDesc> childList = genericsInfoDesc.getChildList();
-                if (StringUtils.isBlank(genericsInfoDesc.getName())) {
+                if(genericsInfoDesc.isAttr()){
                     childList = Lists.newArrayList(genericsInfoDesc);
                 }
                 objectInfoDesc.setChildList(childList);

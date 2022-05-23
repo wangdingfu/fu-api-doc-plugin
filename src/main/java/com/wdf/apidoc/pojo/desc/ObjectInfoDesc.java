@@ -27,6 +27,11 @@ public class ObjectInfoDesc extends AnnotationDataMap {
     private ApiDocObjectType genericsType;
 
     /**
+     * 是否为真实属性字段（存在泛型或则解析需要会虚拟出该对象）
+     */
+    private boolean isAttr;
+
+    /**
      * 字段类型
      */
     private String type;

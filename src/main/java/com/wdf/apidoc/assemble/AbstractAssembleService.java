@@ -6,6 +6,7 @@ import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.constant.enumtype.YesOrNo;
+import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -32,29 +34,34 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     protected List<FuApiDocParamData> buildFuApiDocParamData(List<ObjectInfoDesc> objectInfoDescList) {
         List<FuApiDocParamData> fuApiDocParamDataList = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
-            fuApiDocParamDataList.addAll(buildFuApiDocParamData(objectInfoDescList, 0 + ""));
+            fuApiDocParamDataList.addAll(buildFuApiDocParamData(objectInfoDescList, null));
         }
         return fuApiDocParamDataList;
     }
 
 
-    protected List<FuApiDocParamData> buildFuApiDocParamData(List<ObjectInfoDesc> objectInfoDescList, String sort) {
+    protected List<FuApiDocParamData> buildFuApiDocParamData(List<ObjectInfoDesc> objectInfoDescList, FuApiDocParamData parent) {
         List<FuApiDocParamData> resultList = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
             for (int i = 0; i < objectInfoDescList.size(); i++) {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(i);
                 FuApiDocParamData fuApiDocParamData = new FuApiDocParamData();
-                String groupSort = sort + "_" + i;
-                fuApiDocParamData.setGroupSort(groupSort);
+                String groupSort = Objects.nonNull(parent) ? parent.getGroupSort() : StringUtils.EMPTY;
+                fuApiDocParamData.setGroupSort(StringUtils.isNotBlank(groupSort) ? groupSort + "_" + i : i + "");
                 fuApiDocParamData.setParamName(objectInfoDesc.getName());
                 fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
                 fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
+                if (Objects.nonNull(parent)) {
+                    String paramPrefix = parent.getParamPrefix();
+                    fuApiDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);
+                }
                 //设置是否必填
-                objectInfoDesc.consumerAnnotation(AnnotationConstants.VALID_NOT, annotationData -> fuApiDocParamData.setParamRequire("是"));
+                Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
+                fuApiDocParamData.setParamRequire(annotation.isPresent() ? "是" : "否");
                 resultList.add(fuApiDocParamData);
                 List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
                 if (CollectionUtils.isNotEmpty(childList)) {
-                    resultList.addAll(buildFuApiDocParamData(childList, groupSort + ""));
+                    resultList.addAll(buildFuApiDocParamData(childList, fuApiDocParamData));
                 }
             }
         }
