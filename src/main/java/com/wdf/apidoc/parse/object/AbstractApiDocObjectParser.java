@@ -5,13 +5,13 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
+import com.wdf.apidoc.constant.enumtype.ApiDocArrayType;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.mock.ApiDocObjectJMockData;
 import com.wdf.apidoc.mock.ApiDocObjectMock;
 import com.wdf.apidoc.parse.field.ApiDocField;
-import com.wdf.apidoc.pojo.bo.MockDataValueBO;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * @author wangdingfu
@@ -101,8 +100,16 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
             return null;
         }
         CommonObjectType commonObjectType = CommonObjectType.getEnum(type);
+        Class<?> clazz = null;
         if (commonObjectType.isPrimitiveOrCommon()) {
-            return apiDocObjectMock.mock(commonObjectType.getClazz(), objectInfoDesc.getName());
+            clazz = commonObjectType.getClazz();
+        }
+        if (ApiDocObjectType.ARRAY.equals(objectInfoDesc.getApiDocObjectType())) {
+            //当前参数为数组
+            clazz = ApiDocArrayType.getClass(type);
+        }
+        if (Objects.nonNull(clazz)) {
+            return apiDocObjectMock.mock(clazz, objectInfoDesc.getName());
         }
         return null;
     }
