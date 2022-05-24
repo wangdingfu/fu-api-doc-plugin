@@ -46,8 +46,9 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
             for (int i = 0; i < objectInfoDescList.size(); i++) {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(i);
                 FuApiDocParamData fuApiDocParamData = new FuApiDocParamData();
-                String groupSort = Objects.nonNull(parent) ? parent.getGroupSort() : StringUtils.EMPTY;
-                fuApiDocParamData.setGroupSort(StringUtils.isNotBlank(groupSort) ? groupSort + "_" + i : i + "");
+                String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
+                fuApiDocParamData.setParentParamNo(parentParamNo);
+                fuApiDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
                 fuApiDocParamData.setParamName(objectInfoDesc.getName());
                 fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
                 fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());

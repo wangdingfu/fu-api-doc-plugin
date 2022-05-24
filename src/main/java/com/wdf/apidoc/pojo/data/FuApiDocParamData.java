@@ -14,6 +14,17 @@ import java.util.Map;
 @Setter
 public class FuApiDocParamData {
 
+
+    /**
+     * 参数编号
+     */
+    private String paramNo;
+
+    /**
+     * 父级参数编号
+     */
+    private String parentParamNo;
+
     /**
      * 参数名前缀
      */
@@ -37,11 +48,6 @@ public class FuApiDocParamData {
      * 参数描述信息
      */
     private String paramDesc;
-
-    /**
-     * 分组排序
-     */
-    private String groupSort;
 
     /**
      * 扩展信息
