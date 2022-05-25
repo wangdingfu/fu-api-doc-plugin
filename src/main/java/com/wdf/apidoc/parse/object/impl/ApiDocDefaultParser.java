@@ -70,10 +70,10 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
         if (Objects.isNull(objectInfoDesc)) {
             List<ObjectInfoDesc> objectInfoDescList = Lists.newArrayList();
             PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
-            parseObject(parseObjectBO, psiType, psiClass, objectInfoDescList);
-            objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
             ApiDocField apiDocField = parseObjectBO.getApiDocField();
             boolean isAttr = Objects.nonNull(apiDocField) && apiDocField instanceof ApiDocPsiField;
+            parseObject(parseObjectBO, psiType, psiClass, objectInfoDescList);
+            objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
             objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, isAttr);
             if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
                 objectInfoDesc.setChildList(objectInfoDescList);
