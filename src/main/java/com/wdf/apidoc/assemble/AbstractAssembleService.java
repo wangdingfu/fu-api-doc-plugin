@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -75,7 +74,7 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
 
 
     protected boolean filter(ObjectInfoDesc objectInfoDesc) {
-        if(StringUtils.isBlank(objectInfoDesc.getName())){
+        if (StringUtils.isBlank(objectInfoDesc.getName())) {
             return false;
         }
         if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.FINAL)) {
@@ -91,23 +90,41 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     }
 
 
-    protected String mockData(ContentType contentType, List<ObjectInfoDesc> objectInfoDescList) {
+    protected String mockData(ObjectInfoDesc objectInfoDesc) {
+        return mockData(getContentType(objectInfoDesc), objectInfoDesc);
+    }
+
+
+    protected ContentType getContentType(ObjectInfoDesc objectInfoDesc) {
+        if (objectInfoDesc.exists(AnnotationConstants.REQUEST_BODY)) {
+            return ContentType.JSON;
+        }
+        if (objectInfoDesc.exists(AnnotationConstants.PATH_VARIABLE)) {
+            return ContentType.URLENCODED1;
+        }
+        return ContentType.URLENCODED;
+    }
+
+    protected String mockData(ContentType contentType, ObjectInfoDesc objectInfoDesc) {
         if (Objects.nonNull(contentType)) {
             switch (contentType) {
                 case URLENCODED:
-                    return mockUrlEncodedData(objectInfoDescList);
+                    return mockUrlEncodedData(objectInfoDesc);
+                case URLENCODED1:
+
                 case JSON:
-                    return mockJsonData(objectInfoDescList);
+                    return mockJsonData(objectInfoDesc);
             }
         }
         return StringUtils.EMPTY;
     }
 
-    private String mockUrlEncodedData(List<ObjectInfoDesc> objectInfoDescList) {
-        if (CollectionUtils.isEmpty(objectInfoDescList)) {
+
+    private String mockUrlEncodedData(ObjectInfoDesc objectInfoDesc) {
+        if (Objects.isNull(objectInfoDesc)) {
             return StringUtils.EMPTY;
         }
-        String value = objectInfoDescList.stream().map(this::formatValue).collect(Collectors.joining("&"));
+        String value = formatValue(objectInfoDesc);
         return StringUtils.isBlank(value) ? StringUtils.EMPTY : "?" + value;
     }
 
@@ -142,23 +159,22 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     /**
      * 递归mock对象 返回一个mock后的json结构数据
      *
-     * @param objectInfoDescList 对象描述信息集合
+     * @param objectInfoDesc 对象描述信息
      * @return mock后的数据
      */
-    private String mockJsonData(List<ObjectInfoDesc> objectInfoDescList) {
-        if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
-            JSONObject jsonObject = new JSONObject();
-            for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
-                add(objectInfoDesc, jsonObject);
-            }
-            return jsonObject.toJSONString();
+    private String mockJsonData(ObjectInfoDesc objectInfoDesc) {
+        Object value = objectInfoDesc.getValue();
+        if (value instanceof JSONObject) {
+            return ((JSONObject) value).toJSONString();
         }
-        return StringUtils.EMPTY;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(objectInfoDesc.getName(), value);
+        return jsonObject.toJSONString();
     }
 
 
     private void add(ObjectInfoDesc objectInfoDesc, JSONObject jsonObject) {
-        if(filter(objectInfoDesc)){
+        if (filter(objectInfoDesc)) {
             String name = objectInfoDesc.getName();
             Object value = objectInfoDesc.getValue();
             if (StringUtils.isNotBlank(name) && Objects.nonNull(value)) {

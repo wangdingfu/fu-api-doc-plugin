@@ -17,6 +17,10 @@ public interface AnnotationConstants {
     String DELETE_MAPPING = "org.springframework.web.bind.annotation.DeleteMapping";
     String PATCH_MAPPING = "org.springframework.web.bind.annotation.PatchMapping";
 
+    String REQUEST_BODY = "org.springframework.web.bind.annotation.RequestBody";
+    String REQUEST_PARAM = "org.springframework.web.bind.annotation.RequestParam";
+    String PATH_VARIABLE = "org.springframework.web.bind.annotation.PathVariable";
+
 
     String VALID_NOT_NULL = "javax.validation.constraints.NotNull";
     String VALID_NOT_BLANK = "org.hibernate.validator.constraints.NotBlank";
