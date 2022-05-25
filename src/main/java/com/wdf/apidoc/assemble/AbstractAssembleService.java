@@ -75,6 +75,9 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
 
 
     protected boolean filter(ObjectInfoDesc objectInfoDesc) {
+        if(StringUtils.isBlank(objectInfoDesc.getName())){
+            return false;
+        }
         if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.FINAL)) {
             return false;
         }
@@ -144,14 +147,6 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
      */
     private String mockJsonData(List<ObjectInfoDesc> objectInfoDescList) {
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
-            if (objectInfoDescList.size() == 1) {
-                ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(0);
-                Object value = objectInfoDesc.getValue();
-                if (YesOrNo.NO.equals(isSimpleType(objectInfoDesc.getApiDocObjectType()))
-                        && Objects.nonNull(value) && value instanceof JSONObject) {
-                    return ((JSONObject) value).toJSONString();
-                }
-            }
             JSONObject jsonObject = new JSONObject();
             for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
                 add(objectInfoDesc, jsonObject);
@@ -163,10 +158,12 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
 
 
     private void add(ObjectInfoDesc objectInfoDesc, JSONObject jsonObject) {
-        String name = objectInfoDesc.getName();
-        Object value = objectInfoDesc.getValue();
-        if (StringUtils.isNotBlank(name) && Objects.nonNull(value)) {
-            jsonObject.put(name, value);
+        if(filter(objectInfoDesc)){
+            String name = objectInfoDesc.getName();
+            Object value = objectInfoDesc.getValue();
+            if (StringUtils.isNotBlank(name) && Objects.nonNull(value)) {
+                jsonObject.put(name, value);
+            }
         }
     }
 
