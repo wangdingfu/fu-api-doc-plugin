@@ -15,6 +15,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -104,14 +105,12 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
         List<ObjectInfoDesc> itemList = map.get(ContentType.JSON);
         if (CollectionUtils.isNotEmpty(itemList)) {
             fuApiDocItemData.setRequestExample(mockJsonData(itemList));
+            return;
         }
-
-
-    }
-
-
-    protected String mockData(ObjectInfoDesc objectInfoDesc) {
-        return mockData(getContentType(objectInfoDesc), objectInfoDesc);
+        map.forEach(((contentType, list) -> {
+            //TODO 存在PathVariable注解 RequestParam注解等 需要优化
+            fuApiDocItemData.setRequestExample(mockData(contentType, list));
+        }));
     }
 
 
@@ -125,26 +124,25 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
         return ContentType.URLENCODED;
     }
 
-    protected String mockData(ContentType contentType, ObjectInfoDesc objectInfoDesc) {
+    protected String mockData(ContentType contentType, List<ObjectInfoDesc> objectInfoDescList) {
         if (Objects.nonNull(contentType)) {
             switch (contentType) {
                 case URLENCODED:
-                    return mockUrlEncodedData(objectInfoDesc);
                 case URLENCODED1:
-
+                    return mockUrlEncodedData(objectInfoDescList);
                 case JSON:
-                    return mockJsonData(Lists.newArrayList(objectInfoDesc));
+                    return mockJsonData(objectInfoDescList);
             }
         }
         return StringUtils.EMPTY;
     }
 
 
-    private String mockUrlEncodedData(ObjectInfoDesc objectInfoDesc) {
-        if (Objects.isNull(objectInfoDesc)) {
+    private String mockUrlEncodedData(List<ObjectInfoDesc> objectInfoDescList) {
+        if (CollectionUtils.isEmpty(objectInfoDescList)) {
             return StringUtils.EMPTY;
         }
-        String value = formatValue(objectInfoDesc);
+        String value = objectInfoDescList.stream().map(this::formatValue).collect(Collectors.joining("&"));
         return StringUtils.isBlank(value) ? StringUtils.EMPTY : "?" + value;
     }
 
