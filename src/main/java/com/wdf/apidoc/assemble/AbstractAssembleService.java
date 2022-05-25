@@ -147,20 +147,21 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     }
 
     private String formatValue(ObjectInfoDesc objectInfoDesc) {
-        ApiDocObjectType apiDocObjectType;
-        Object value;
-        if (Objects.nonNull(objectInfoDesc)
-                && Objects.nonNull(apiDocObjectType = objectInfoDesc.getApiDocObjectType())
-                && Objects.nonNull(value = objectInfoDesc.getValue())) {
-            if (YesOrNo.YES.equals(isSimpleType(apiDocObjectType))) {
-                return buildExpress(objectInfoDesc.getName(), value.toString());
-            }
-            if (value instanceof JSONObject) {
-                JSONObject data = (JSONObject) value;
-                List<String> expressList = Lists.newArrayList();
-                data.forEach((k, v) -> expressList.add(buildExpress(k, v)));
-                return CollectionUtils.isEmpty(expressList) ? StringUtils.EMPTY
-                        : StringUtils.join(expressList, "&");
+        if (filter(objectInfoDesc)) {
+            ApiDocObjectType apiDocObjectType;
+            Object value;
+            if (Objects.nonNull(apiDocObjectType = objectInfoDesc.getApiDocObjectType())
+                    && Objects.nonNull(value = objectInfoDesc.getValue())) {
+                if (YesOrNo.YES.equals(isSimpleType(apiDocObjectType))) {
+                    return buildExpress(objectInfoDesc.getName(), value.toString());
+                }
+                if (value instanceof JSONObject) {
+                    JSONObject data = (JSONObject) value;
+                    List<String> expressList = Lists.newArrayList();
+                    data.forEach((k, v) -> expressList.add(buildExpress(k, v)));
+                    return CollectionUtils.isEmpty(expressList) ? StringUtils.EMPTY
+                            : StringUtils.join(expressList, "&");
+                }
             }
         }
         return StringUtils.EMPTY;
@@ -185,13 +186,17 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
             if (objectInfoDescList.size() == 1) {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(0);
-                Object value = objectInfoDesc.getValue();
-                if (value instanceof JSONObject) {
-                    return ((JSONObject) value).toJSONString();
+                if (filter(objectInfoDesc)) {
+                    Object value = objectInfoDesc.getValue();
+                    if (value instanceof JSONObject) {
+                        return ((JSONObject) value).toJSONString();
+                    }
                 }
             }
             for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
-                add(objectInfoDesc, jsonObject);
+                if (filter(objectInfoDesc)) {
+                    add(objectInfoDesc, jsonObject);
+                }
             }
         }
         return jsonObject.toJSONString();

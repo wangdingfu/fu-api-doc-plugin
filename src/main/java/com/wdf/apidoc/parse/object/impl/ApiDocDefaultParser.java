@@ -5,6 +5,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.parse.ObjectParserExecutor;
+import com.wdf.apidoc.parse.field.ApiDocField;
 import com.wdf.apidoc.parse.field.ApiDocPsiField;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
@@ -71,7 +72,9 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
             PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
             parseObject(parseObjectBO, psiType, psiClass, objectInfoDescList);
             objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
-            objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, false);
+            ApiDocField apiDocField = parseObjectBO.getApiDocField();
+            boolean isAttr = Objects.nonNull(apiDocField) && apiDocField instanceof ApiDocPsiField;
+            objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, isAttr);
             if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
                 objectInfoDesc.setChildList(objectInfoDescList);
                 objectInfoDesc.setValue(buildValue(objectInfoDescList));
