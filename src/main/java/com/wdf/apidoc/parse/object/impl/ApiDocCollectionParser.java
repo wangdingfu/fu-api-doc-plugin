@@ -5,6 +5,7 @@ import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.parse.ObjectParserExecutor;
@@ -72,7 +73,7 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
         if (commonObjectType.isPrimitiveOrCommon()) {
             //基本数据类型和公共数据类型 可以直接解析返回
             genericsInfoDesc = buildDefault(genericsType, commonObjectType.getName(), parseObjectBO);
-            objectInfoDesc.setGenericsType(commonObjectType.getApiDocObjectType());
+            objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.GENERICS_TYPE, commonObjectType.getApiDocObjectType());
             genericsInfoDesc.setValue(mockCommonType(genericsInfoDesc));
             objectInfoDesc.setChildList(Lists.newArrayList(genericsInfoDesc));
         } else {
@@ -85,11 +86,11 @@ public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
                 //将泛型对象的字段集合设置到当前apiDoc中
                 ApiDocObjectType apiDocObjectType = genericsInfoDesc.getApiDocObjectType();
                 List<ObjectInfoDesc> childList = genericsInfoDesc.getChildList();
-                if(genericsInfoDesc.isAttr()){
+                if (genericsInfoDesc.getBooleanValue(ApiDocConstants.ExtInfo.IS_ATTR)) {
                     childList = Lists.newArrayList(genericsInfoDesc);
                 }
                 objectInfoDesc.setChildList(childList);
-                objectInfoDesc.setGenericsType(apiDocObjectType);
+                objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.GENERICS_TYPE, apiDocObjectType);
             }
         }
         Object value;
