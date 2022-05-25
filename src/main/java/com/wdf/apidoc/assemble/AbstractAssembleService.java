@@ -8,14 +8,13 @@ import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.apidoc.pojo.data.AnnotationData;
+import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author wangdingfu
@@ -90,6 +89,27 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     }
 
 
+    protected void mockRequestData(FuApiDocItemData fuApiDocItemData, List<ObjectInfoDesc> objectInfoDescList) {
+        Map<ContentType, List<ObjectInfoDesc>> map = new HashMap<>();
+        for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
+            ContentType contentType = getContentType(objectInfoDesc);
+            List<ObjectInfoDesc> itemList = map.get(contentType);
+            if (Objects.isNull(itemList)) {
+                itemList = Lists.newArrayList();
+                map.put(contentType, itemList);
+            }
+            itemList.add(objectInfoDesc);
+        }
+        //如果存在RequestBody注解 则优先mock该注解标识的对象
+        List<ObjectInfoDesc> itemList = map.get(ContentType.JSON);
+        if (CollectionUtils.isNotEmpty(itemList)) {
+            fuApiDocItemData.setRequestExample(mockJsonData(itemList));
+        }
+
+
+    }
+
+
     protected String mockData(ObjectInfoDesc objectInfoDesc) {
         return mockData(getContentType(objectInfoDesc), objectInfoDesc);
     }
@@ -113,7 +133,7 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
                 case URLENCODED1:
 
                 case JSON:
-                    return mockJsonData(objectInfoDesc);
+                    return mockJsonData(Lists.newArrayList(objectInfoDesc));
             }
         }
         return StringUtils.EMPTY;
@@ -159,16 +179,23 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     /**
      * 递归mock对象 返回一个mock后的json结构数据
      *
-     * @param objectInfoDesc 对象描述信息
+     * @param objectInfoDescList 对象描述信息
      * @return mock后的数据
      */
-    private String mockJsonData(ObjectInfoDesc objectInfoDesc) {
-        Object value = objectInfoDesc.getValue();
-        if (value instanceof JSONObject) {
-            return ((JSONObject) value).toJSONString();
-        }
+    protected String mockJsonData(List<ObjectInfoDesc> objectInfoDescList) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(objectInfoDesc.getName(), value);
+        if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
+            if (objectInfoDescList.size() == 1) {
+                ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(0);
+                Object value = objectInfoDesc.getValue();
+                if (value instanceof JSONObject) {
+                    return ((JSONObject) value).toJSONString();
+                }
+            }
+            for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
+                add(objectInfoDesc, jsonObject);
+            }
+        }
         return jsonObject.toJSONString();
     }
 
