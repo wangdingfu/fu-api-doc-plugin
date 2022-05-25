@@ -3,6 +3,7 @@ package com.wdf.apidoc.assemble;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
+import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.constant.enumtype.YesOrNo;
@@ -45,21 +46,24 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
             for (int i = 0; i < objectInfoDescList.size(); i++) {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(i);
-                FuApiDocParamData fuApiDocParamData = new FuApiDocParamData();
-                String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
-                fuApiDocParamData.setParentParamNo(parentParamNo);
-                fuApiDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
-                fuApiDocParamData.setParamName(objectInfoDesc.getName());
-                fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
-                fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
-                if (Objects.nonNull(parent)) {
-                    String paramPrefix = parent.getParamPrefix();
-                    fuApiDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);
+                FuApiDocParamData fuApiDocParamData = null;
+                if (filter(objectInfoDesc)) {
+                    fuApiDocParamData = new FuApiDocParamData();
+                    String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
+                    fuApiDocParamData.setParentParamNo(parentParamNo);
+                    fuApiDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
+                    fuApiDocParamData.setParamName(objectInfoDesc.getName());
+                    fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
+                    fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
+                    if (Objects.nonNull(parent)) {
+                        String paramPrefix = parent.getParamPrefix();
+                        fuApiDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);
+                    }
+                    //设置是否必填
+                    Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
+                    fuApiDocParamData.setParamRequire(annotation.isPresent() ? "是" : "否");
+                    resultList.add(fuApiDocParamData);
                 }
-                //设置是否必填
-                Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
-                fuApiDocParamData.setParamRequire(annotation.isPresent() ? "是" : "否");
-                resultList.add(fuApiDocParamData);
                 List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
                 if (CollectionUtils.isNotEmpty(childList)) {
                     resultList.addAll(buildFuApiDocParamData(childList, fuApiDocParamData));
@@ -67,6 +71,20 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
             }
         }
         return resultList;
+    }
+
+
+    protected boolean filter(ObjectInfoDesc objectInfoDesc) {
+        if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.FINAL)) {
+            return false;
+        }
+        if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.STATIC)) {
+            return false;
+        }
+        if (objectInfoDesc.getBooleanValue(ApiDocConstants.ExtInfo.IS_ATTR)) {
+            return true;
+        }
+        return false;
     }
 
 

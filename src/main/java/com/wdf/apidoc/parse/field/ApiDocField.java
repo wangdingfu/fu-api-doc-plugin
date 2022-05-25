@@ -27,5 +27,13 @@ public interface ApiDocField {
     PsiAnnotation[] getAnnotations();
 
 
+    /**
+     * 是否存在修饰属性
+     *
+     * @param name 修饰关键字 例如 static final
+     * @return true 存在
+     */
+    boolean hasProperty(String name);
+
 
 }

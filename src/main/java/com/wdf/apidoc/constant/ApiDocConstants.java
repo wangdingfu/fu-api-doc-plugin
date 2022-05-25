@@ -10,6 +10,17 @@ public interface ApiDocConstants {
 
     String VALUE = "value";
 
+    interface ModifierProperty {
+        String STATIC = "static";
+        String FINAL = "final";
+    }
+
+    interface ExtInfo{
+        String IS_ATTR = "isAttr";
+
+        String GENERICS_TYPE = "genericsType";
+    }
+
     interface ClassPkg {
         String BIG_DECIMAL = "java.math.BigDecimal";
         String TIMESTAMP = "java.sql.Timestamp";
@@ -18,8 +29,6 @@ public interface ApiDocConstants {
         String LOCAL_DATE_TIME = "java.time.LocalDateTime";
         String BIG_INTEGER = "java.math.BigInteger";
     }
-
-
 
 
     interface Comment {

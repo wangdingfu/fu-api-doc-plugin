@@ -2,6 +2,7 @@ package com.wdf.apidoc.parse.field;
 
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
 import com.wdf.apidoc.parse.field.AbstractApiDocField;
@@ -53,5 +54,21 @@ public class ApiDocPsiField extends AbstractApiDocField {
     @Override
     public PsiAnnotation[] getAnnotations() {
         return psiField.getAnnotations();
+    }
+
+
+    /**
+     * 字段是否被指定修饰符修饰
+     *
+     * @param name 修饰关键字 例如 static final
+     * @return true 存在
+     */
+    @Override
+    public boolean hasProperty(String name) {
+        PsiModifierList modifierList = this.psiField.getModifierList();
+        if (Objects.nonNull(modifierList)) {
+            return modifierList.hasModifierProperty(name);
+        }
+        return false;
     }
 }

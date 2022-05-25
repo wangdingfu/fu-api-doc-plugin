@@ -2,6 +2,7 @@ package com.wdf.apidoc.parse.field;
 
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiModifierList;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
 import com.wdf.apidoc.parse.field.AbstractApiDocField;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
@@ -47,5 +48,14 @@ public class ApiDocPsiClass extends AbstractApiDocField {
     @Override
     public PsiAnnotation[] getAnnotations() {
         return this.psiClass.getAnnotations();
+    }
+
+    @Override
+    public boolean hasProperty(String name) {
+        PsiModifierList modifierList = this.psiClass.getModifierList();
+        if (Objects.nonNull(modifierList)) {
+            return modifierList.hasModifierProperty(name);
+        }
+        return false;
     }
 }

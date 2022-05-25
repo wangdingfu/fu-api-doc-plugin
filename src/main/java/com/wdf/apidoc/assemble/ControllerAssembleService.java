@@ -98,8 +98,9 @@ public class ControllerAssembleService extends AbstractAssembleService {
         List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
         if (CollectionUtils.isNotEmpty(requestList)) {
             fuApiDocItemData.setRequestParams(buildFuApiDocParamData(requestList));
+            ContentType contentType = getContentType(methodInfoDesc);
             //mock请求参数数据
-            fuApiDocItemData.setRequestExample(mockData(ContentType.JSON, requestList));
+            fuApiDocItemData.setRequestExample(mockData(contentType, requestList));
         }
         ObjectInfoDesc response = methodInfoDesc.getResponse();
         if (Objects.nonNull(response)) {
@@ -108,6 +109,11 @@ public class ControllerAssembleService extends AbstractAssembleService {
             fuApiDocItemData.setResponseExample(mockData(ContentType.JSON, Lists.newArrayList(response)));
         }
         return fuApiDocItemData;
+    }
+
+
+    private ContentType getContentType(MethodInfoDesc methodInfoDesc) {
+        return ContentType.JSON;
     }
 
 
