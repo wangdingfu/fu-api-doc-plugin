@@ -64,8 +64,6 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
     }
 
 
-
-
     /**
      * 获取类上的泛型和字段泛型的对应关系
      *
@@ -129,13 +127,16 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         if (CollectionUtils.isNotEmpty(childList)) {
             JSONObject jsonObject = new JSONObject();
             for (ObjectInfoDesc objectInfoDesc : childList) {
+                if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.STATIC)
+                        || objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.FINAL)) {
+                    continue;
+                }
                 jsonObject.put(objectInfoDesc.getName(), objectInfoDesc.getValue());
             }
             return jsonObject;
         }
         return null;
     }
-
 
 
     private void addModifierProperty(String property, ApiDocField apiDocField, ObjectInfoDesc objectInfoDesc) {
