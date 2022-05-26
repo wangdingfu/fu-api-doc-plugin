@@ -59,8 +59,8 @@ public class ControllerAssembleService extends AbstractAssembleService {
             for (MethodInfoDesc methodInfoDesc : methodList) {
                 if (methodInfoDesc.exists(AnnotationConstants.MAPPING)) {
                     FuApiDocItemData fuApiDocItemData = assembleItemApiDoc(methodInfoDesc, controllerUrlList);
-                    fuApiDocItemData.setApiDocNo(apiDocNo + "");
                     apiDocNo++;
+                    fuApiDocItemData.setApiDocNo(apiDocNo + "");
                     resultList.add(fuApiDocItemData);
                 }
             }

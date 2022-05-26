@@ -45,7 +45,7 @@ ${requestExample!''}
 ##### 返回参数说明
 |参数名|类型|说明|
 |:-----  |:-----|----- |
-    <#list requestParams as param>
+    <#list responseParams as param>
         <#if param.paramName??>
 |${param.paramPrefix!''} ${param.paramName!''} | ${param.paramType!''}  |${param.paramDesc!''}   |
         </#if>
