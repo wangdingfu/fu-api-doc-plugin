@@ -66,7 +66,11 @@ public class DocCommentParseHelper {
             IElementType elementType = node.getElementType();
             if (ApiDocConstants.Comment.PSI_COMMENT_DATA.equals(elementType.getDebugName())) {
                 //每一行的主体注释内容
-                commentContent.append(node.getText());
+                String text = node.getText();
+                if (StringUtils.isNotBlank(text)) {
+                    text = text.replace("\n", "");
+                    commentContent.append(text);
+                }
             }
         }
         return commentContent.toString();
@@ -86,7 +90,7 @@ public class DocCommentParseHelper {
         }
         String text = tag.getText();
         if (StringUtils.isNotBlank(text)) {
-            text = text.replace("*", "");
+            text = text.replace("*", "").replace("\n", "");
             PsiElement nameElement = tag.getNameElement();
             if (Objects.nonNull(nameElement)) {
                 text = text.replace(nameElement.getText(), "");

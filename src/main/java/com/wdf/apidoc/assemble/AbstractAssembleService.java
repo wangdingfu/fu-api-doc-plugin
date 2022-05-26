@@ -1,6 +1,8 @@
 package com.wdf.apidoc.assemble;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.ApiDocConstants;
@@ -186,14 +188,19 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(0);
                 Object value = objectInfoDesc.getValue();
                 if (value instanceof JSONObject) {
-                    return ((JSONObject) value).toJSONString();
+                    return toJsonString(value);
                 }
             }
             for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
                 add(objectInfoDesc, jsonObject);
             }
         }
-        return jsonObject.toJSONString();
+        return toJsonString(jsonObject);
+    }
+
+
+    private String toJsonString(Object object) {
+        return JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
     }
 
 

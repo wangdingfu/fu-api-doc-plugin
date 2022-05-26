@@ -16,6 +16,11 @@ import java.util.Map;
 public class FuApiDocItemData {
 
     /**
+     * 接口序号
+     */
+    private String apiDocNo;
+
+    /**
      * 接口标题
      */
     private String title;
@@ -28,7 +33,7 @@ public class FuApiDocItemData {
     /**
      * 接口请求地址
      */
-    private List<String> url;
+    private List<String> urlList;
 
     /**
      * 接口请求类型

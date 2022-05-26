@@ -52,6 +52,8 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
                 }
                 ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
                 MethodInfoDesc methodInfoDesc = new MethodInfoDesc();
+                //设置方法上的注释
+                methodInfoDesc.setCommentData(apiDocCommentData);
                 //设置方法上注解
                 methodInfoDesc.setAnnotationDataMap(annotationParse(method));
                 //设置请求参数

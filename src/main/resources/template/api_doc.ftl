@@ -1,30 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>核对结果</title>
+# ${apiDocNo!1}、 ${title!''}
 
-</head>
-
-<body>
-<#if (itemList?size > 0 )>
-    <#list itemList as item>
-        接口参数为:
-        ```
-        ${item.requestExample}
-        ```
-        | 字段     | 请求类型  | 接口描述                       | 是否必填 | 其他 |
-        | ------------- | ----- | --------------------------------- | -------- | ----- |
-
-        接口结果为:
-        ```
-        ${item.responseExample}
-        ```
-    </#list >
+<#if detailInfo??>
+##### 接口描述
+- ${detailInfo}
 </#if>
-</body>
 
-</html>
+
+
+
+<#if urlList?? >
+##### 请求URL
+    <#list urlList as url>
+- ` ${url} `
+
+    </#list>
+</#if>
+
+
+##### 请求方式
+- ${requestType!''}
+
+
+<#if requestParams??>
+##### 参数
+|参数名|必选|类型|说明|
+|:----    |:---|:----- |-----   |
+    <#list requestParams as param>
+|${param.paramPrefix!''} ${param.paramName!''} | ${param.paramType!''}  |${param.paramRequire!''} |${param.paramDesc!''}  |
+    </#list>
+</#if>
+
+
+<#if requestExample??>
+##### 请求示例
+
+```
+${requestExample!''}
+```
+</#if>
+
+
+<#if responseParams??>
+##### 返回参数说明
+|参数名|类型|说明|
+|:-----  |:-----|----- |
+    <#list requestParams as param>
+        <#if param.paramName??>
+|${param.paramPrefix!''} ${param.paramName!''} | ${param.paramType!''}  |${param.paramDesc!''}   |
+        </#if>
+    </#list>
+</#if>
+
+<#if responseExample??>
+##### 返回示例
+
+```
+${responseExample!''}
+```
+</#if>
+
+

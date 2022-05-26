@@ -63,9 +63,10 @@ public class GenApiDocAction extends AnAction {
         System.out.println(assemble);
         List<FuApiDocItemData> resultList = assembleService.assemble(classInfoDesc);
         System.out.println(JSON.toJSONString(resultList));
-        Map<String, List<FuApiDocItemData>> map = new HashMap<>();
-        map.put("itemList", resultList);
-        String content = FreeMarkerConfig.generateContent(map, "api_doc.ftl");
-        System.out.println("接口文档内容:\r\n" + content);
+        for (FuApiDocItemData fuApiDocItemData : resultList) {
+            String content = FreeMarkerConfig.generateContent(fuApiDocItemData, "api_doc.ftl");
+            System.out.println(content + "\r\n");
+        }
+
     }
 }

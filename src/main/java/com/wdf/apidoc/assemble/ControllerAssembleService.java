@@ -55,9 +55,13 @@ public class ControllerAssembleService extends AbstractAssembleService {
             classInfoDesc.getAnnotation(AnnotationConstants.REQUEST_MAPPING).ifPresent(annotationData ->
                     controllerUrlList.addAll(annotationData.getValue().getListValue()));
             //解析方法
+            int apiDocNo = 0;
             for (MethodInfoDesc methodInfoDesc : methodList) {
                 if (methodInfoDesc.exists(AnnotationConstants.MAPPING)) {
-                    resultList.add(assembleItemApiDoc(methodInfoDesc, controllerUrlList));
+                    FuApiDocItemData fuApiDocItemData = assembleItemApiDoc(methodInfoDesc, controllerUrlList);
+                    fuApiDocItemData.setApiDocNo(apiDocNo + "");
+                    apiDocNo++;
+                    resultList.add(fuApiDocItemData);
                 }
             }
         }
@@ -87,7 +91,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 if (Objects.nonNull(requestType)) {
                     fuApiDocItemData.setRequestType(requestType.getRequestType());
                 }
-                fuApiDocItemData.setUrl(joinUrl(controllerUrlList, annotationData.getValue().getListValue()));
+                fuApiDocItemData.setUrlList(joinUrl(controllerUrlList, annotationData.getValue().getListValue()));
                 break;
             }
         }
