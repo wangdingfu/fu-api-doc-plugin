@@ -20,10 +20,9 @@ public class FreeMarkerConfig {
 
     static {
         try {
-            configuration.setDirectoryForTemplateLoading(new File("/template"));
-
+            configuration.setClassLoaderForTemplateLoading(FreeMarkerConfig.class.getClassLoader(), "/template/");
             configuration.setDefaultEncoding("utf-8");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
