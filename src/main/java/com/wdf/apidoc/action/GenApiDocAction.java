@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.wdf.apidoc.assemble.ApiDocAssembleService;
 import com.wdf.apidoc.assemble.ControllerAssembleService;
+import com.wdf.apidoc.config.FreeMarkerConfig;
 import com.wdf.apidoc.parse.ApiDocClassParser;
 import com.wdf.apidoc.parse.ApiDocClassParserImpl;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
@@ -14,7 +15,9 @@ import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -60,5 +63,9 @@ public class GenApiDocAction extends AnAction {
         System.out.println(assemble);
         List<FuApiDocItemData> resultList = assembleService.assemble(classInfoDesc);
         System.out.println(JSON.toJSONString(resultList));
+        Map<String, List<FuApiDocItemData>> map = new HashMap<>();
+        map.put("itemList", resultList);
+        String content = FreeMarkerConfig.generateContent(map, "api_doc.ftl");
+        System.out.println("接口文档内容:\r\n" + content);
     }
 }
