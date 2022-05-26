@@ -5,6 +5,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
+import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocArrayType;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
@@ -51,8 +52,10 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
             objectInfoDesc.setDocText(apiDocField.getComment());
             objectInfoDesc.setName(apiDocField.getName());
             objectInfoDesc.setAnnotationDataMap(AnnotationParseHelper.parse(apiDocField.getAnnotations()));
+            addModifierProperty(ApiDocConstants.ModifierProperty.STATIC, apiDocField, objectInfoDesc);
+            addModifierProperty(ApiDocConstants.ModifierProperty.FINAL, apiDocField, objectInfoDesc);
         }
-        objectInfoDesc.setAttr(true);
+        objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, true);
         objectInfoDesc.setTypeView(typeView);
         objectInfoDesc.setType(psiType.getCanonicalText());
         objectInfoDesc.setApiDocObjectType(getObjectType());
@@ -124,10 +127,21 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         if (CollectionUtils.isNotEmpty(childList)) {
             JSONObject jsonObject = new JSONObject();
             for (ObjectInfoDesc objectInfoDesc : childList) {
+                if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.STATIC)
+                        || objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.FINAL)) {
+                    continue;
+                }
                 jsonObject.put(objectInfoDesc.getName(), objectInfoDesc.getValue());
             }
             return jsonObject;
         }
         return null;
+    }
+
+
+    private void addModifierProperty(String property, ApiDocField apiDocField, ObjectInfoDesc objectInfoDesc) {
+        if (apiDocField.hasProperty(property)) {
+            objectInfoDesc.addExtInfo(property, true);
+        }
     }
 }

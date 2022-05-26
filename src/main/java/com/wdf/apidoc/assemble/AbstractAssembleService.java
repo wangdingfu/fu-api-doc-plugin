@@ -3,18 +3,18 @@ package com.wdf.apidoc.assemble;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
+import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.apidoc.pojo.data.AnnotationData;
+import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -45,21 +45,24 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
             for (int i = 0; i < objectInfoDescList.size(); i++) {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(i);
-                FuApiDocParamData fuApiDocParamData = new FuApiDocParamData();
-                String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
-                fuApiDocParamData.setParentParamNo(parentParamNo);
-                fuApiDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
-                fuApiDocParamData.setParamName(objectInfoDesc.getName());
-                fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
-                fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
-                if (Objects.nonNull(parent)) {
-                    String paramPrefix = parent.getParamPrefix();
-                    fuApiDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);
+                FuApiDocParamData fuApiDocParamData = null;
+                if (filter(objectInfoDesc)) {
+                    fuApiDocParamData = new FuApiDocParamData();
+                    String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
+                    fuApiDocParamData.setParentParamNo(parentParamNo);
+                    fuApiDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
+                    fuApiDocParamData.setParamName(objectInfoDesc.getName());
+                    fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
+                    fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
+                    if (Objects.nonNull(parent)) {
+                        String paramPrefix = parent.getParamPrefix();
+                        fuApiDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);
+                    }
+                    //设置是否必填
+                    Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
+                    fuApiDocParamData.setParamRequire(annotation.isPresent() ? "是" : "否");
+                    resultList.add(fuApiDocParamData);
                 }
-                //设置是否必填
-                Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
-                fuApiDocParamData.setParamRequire(annotation.isPresent() ? "是" : "否");
-                resultList.add(fuApiDocParamData);
                 List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
                 if (CollectionUtils.isNotEmpty(childList)) {
                     resultList.addAll(buildFuApiDocParamData(childList, fuApiDocParamData));
@@ -70,10 +73,62 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     }
 
 
+    protected boolean filter(ObjectInfoDesc objectInfoDesc) {
+        if (StringUtils.isBlank(objectInfoDesc.getName())) {
+            return false;
+        }
+        if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.FINAL)) {
+            return false;
+        }
+        if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.STATIC)) {
+            return false;
+        }
+        if (objectInfoDesc.getBooleanValue(ApiDocConstants.ExtInfo.IS_ATTR)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    protected void mockRequestData(FuApiDocItemData fuApiDocItemData, List<ObjectInfoDesc> objectInfoDescList) {
+        Map<ContentType, List<ObjectInfoDesc>> map = new HashMap<>();
+        for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
+            ContentType contentType = getContentType(objectInfoDesc);
+            List<ObjectInfoDesc> itemList = map.get(contentType);
+            if (Objects.isNull(itemList)) {
+                itemList = Lists.newArrayList();
+                map.put(contentType, itemList);
+            }
+            itemList.add(objectInfoDesc);
+        }
+        //如果存在RequestBody注解 则优先mock该注解标识的对象
+        List<ObjectInfoDesc> itemList = map.get(ContentType.JSON);
+        if (CollectionUtils.isNotEmpty(itemList)) {
+            fuApiDocItemData.setRequestExample(mockJsonData(itemList));
+            return;
+        }
+        map.forEach(((contentType, list) -> {
+            //TODO 存在PathVariable注解 RequestParam注解等 需要优化
+            fuApiDocItemData.setRequestExample(mockData(contentType, list));
+        }));
+    }
+
+
+    protected ContentType getContentType(ObjectInfoDesc objectInfoDesc) {
+        if (objectInfoDesc.exists(AnnotationConstants.REQUEST_BODY)) {
+            return ContentType.JSON;
+        }
+        if (objectInfoDesc.exists(AnnotationConstants.PATH_VARIABLE)) {
+            return ContentType.URLENCODED1;
+        }
+        return ContentType.URLENCODED;
+    }
+
     protected String mockData(ContentType contentType, List<ObjectInfoDesc> objectInfoDescList) {
         if (Objects.nonNull(contentType)) {
             switch (contentType) {
                 case URLENCODED:
+                case URLENCODED1:
                     return mockUrlEncodedData(objectInfoDescList);
                 case JSON:
                     return mockJsonData(objectInfoDescList);
@@ -81,6 +136,7 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
         }
         return StringUtils.EMPTY;
     }
+
 
     private String mockUrlEncodedData(List<ObjectInfoDesc> objectInfoDescList) {
         if (CollectionUtils.isEmpty(objectInfoDescList)) {
@@ -93,8 +149,7 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     private String formatValue(ObjectInfoDesc objectInfoDesc) {
         ApiDocObjectType apiDocObjectType;
         Object value;
-        if (Objects.nonNull(objectInfoDesc)
-                && Objects.nonNull(apiDocObjectType = objectInfoDesc.getApiDocObjectType())
+        if (Objects.nonNull(apiDocObjectType = objectInfoDesc.getApiDocObjectType())
                 && Objects.nonNull(value = objectInfoDesc.getValue())) {
             if (YesOrNo.YES.equals(isSimpleType(apiDocObjectType))) {
                 return buildExpress(objectInfoDesc.getName(), value.toString());
@@ -121,34 +176,34 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
     /**
      * 递归mock对象 返回一个mock后的json结构数据
      *
-     * @param objectInfoDescList 对象描述信息集合
+     * @param objectInfoDescList 对象描述信息
      * @return mock后的数据
      */
-    private String mockJsonData(List<ObjectInfoDesc> objectInfoDescList) {
+    protected String mockJsonData(List<ObjectInfoDesc> objectInfoDescList) {
+        JSONObject jsonObject = new JSONObject();
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
             if (objectInfoDescList.size() == 1) {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(0);
                 Object value = objectInfoDesc.getValue();
-                if (YesOrNo.NO.equals(isSimpleType(objectInfoDesc.getApiDocObjectType()))
-                        && Objects.nonNull(value) && value instanceof JSONObject) {
+                if (value instanceof JSONObject) {
                     return ((JSONObject) value).toJSONString();
                 }
             }
-            JSONObject jsonObject = new JSONObject();
             for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
                 add(objectInfoDesc, jsonObject);
             }
-            return jsonObject.toJSONString();
         }
-        return StringUtils.EMPTY;
+        return jsonObject.toJSONString();
     }
 
 
     private void add(ObjectInfoDesc objectInfoDesc, JSONObject jsonObject) {
-        String name = objectInfoDesc.getName();
-        Object value = objectInfoDesc.getValue();
-        if (StringUtils.isNotBlank(name) && Objects.nonNull(value)) {
-            jsonObject.put(name, value);
+        if (filter(objectInfoDesc)) {
+            String name = objectInfoDesc.getName();
+            Object value = objectInfoDesc.getValue();
+            if (StringUtils.isNotBlank(name) && Objects.nonNull(value)) {
+                jsonObject.put(name, value);
+            }
         }
     }
 

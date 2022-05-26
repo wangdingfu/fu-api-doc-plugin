@@ -66,7 +66,6 @@ public class ObjectParserExecutor {
     private static PsiType formatPsiType(PsiType psiType, ParseObjectBO parseObjectBO) {
         PsiType generics;
         if (Objects.nonNull(parseObjectBO) && Objects.nonNull(generics = parseObjectBO.getPsiType(psiType.getCanonicalText()))) {
-            parseObjectBO.setApiDocField(new ApiDocPsiClass(Objects.requireNonNull(PsiUtil.resolveClassInType(generics))));
             //替换泛型类
             return generics;
         }

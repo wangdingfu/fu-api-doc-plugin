@@ -1,11 +1,14 @@
 package com.wdf.apidoc.pojo.desc;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.pojo.data.AnnotationDataMap;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -20,17 +23,6 @@ public class ObjectInfoDesc extends AnnotationDataMap {
      * 对象类型枚举
      */
     private ApiDocObjectType apiDocObjectType;
-
-    /**
-     * 泛型类型
-     */
-    private ApiDocObjectType genericsType;
-
-    /**
-     * 是否为真实属性字段（存在泛型或则解析需要会虚拟出该对象）
-     */
-    private boolean isAttr;
-
     /**
      * 字段类型
      */
@@ -61,5 +53,30 @@ public class ObjectInfoDesc extends AnnotationDataMap {
      */
     private List<ObjectInfoDesc> childList;
 
+    /**
+     * 扩展属性
+     */
+    private JSONObject extInfo;
+
+
+    public void addExtInfo(String name, Object value) {
+        if (Objects.isNull(this.extInfo)) {
+            this.extInfo = new JSONObject();
+        }
+        this.extInfo.put(name, value);
+    }
+
+
+    public <T> T getValue(String name, Class<T> clazz) {
+        if (Objects.isNull(this.extInfo)) {
+            return null;
+        }
+        return this.extInfo.getObject(name, clazz);
+    }
+
+    public boolean getBooleanValue(String name) {
+        Boolean value = getValue(name, boolean.class);
+        return !Objects.isNull(value) && value;
+    }
 
 }

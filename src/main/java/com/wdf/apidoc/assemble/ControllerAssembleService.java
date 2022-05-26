@@ -2,12 +2,10 @@ package com.wdf.apidoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
-import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.constant.enumtype.RequestType;
 import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
-import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
@@ -16,7 +14,6 @@ import org.apache.commons.collections.CollectionUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -99,13 +96,13 @@ public class ControllerAssembleService extends AbstractAssembleService {
         if (CollectionUtils.isNotEmpty(requestList)) {
             fuApiDocItemData.setRequestParams(buildFuApiDocParamData(requestList));
             //mock请求参数数据
-            fuApiDocItemData.setRequestExample(mockData(ContentType.JSON, requestList));
+            mockRequestData(fuApiDocItemData, requestList);
         }
         ObjectInfoDesc response = methodInfoDesc.getResponse();
         if (Objects.nonNull(response)) {
             fuApiDocItemData.setResponseParams(buildFuApiDocParamData(Lists.newArrayList(response)));
             //mock返回结果数据
-            fuApiDocItemData.setResponseExample(mockData(ContentType.JSON, Lists.newArrayList(response)));
+            fuApiDocItemData.setResponseExample(mockJsonData(Lists.newArrayList(response)));
         }
         return fuApiDocItemData;
     }

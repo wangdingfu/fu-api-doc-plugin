@@ -8,7 +8,14 @@ package com.wdf.apidoc.constant.enumtype;
 public enum ContentType {
 
 
+    /**
+     * 正常GET请求
+     */
     URLENCODED("application/x-www-form-urlencoded",""),
+    /**
+     * GET请求  参数需要替换url PathVariable
+     */
+    URLENCODED1("application/x-www-form-urlencoded",""),
     FORM_DATA("multipart/form-data",""),
     JSON("content-type:application/json","")
     ;

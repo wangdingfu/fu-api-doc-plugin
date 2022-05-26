@@ -2,8 +2,10 @@ package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.parse.ObjectParserExecutor;
+import com.wdf.apidoc.parse.field.ApiDocField;
 import com.wdf.apidoc.parse.field.ApiDocPsiField;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
@@ -68,9 +70,11 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
         if (Objects.isNull(objectInfoDesc)) {
             List<ObjectInfoDesc> objectInfoDescList = Lists.newArrayList();
             PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
+            ApiDocField apiDocField = parseObjectBO.getApiDocField();
+            boolean isAttr = Objects.nonNull(apiDocField) && apiDocField instanceof ApiDocPsiField;
             parseObject(parseObjectBO, psiType, psiClass, objectInfoDescList);
             objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
-            objectInfoDesc.setAttr(false);
+            objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, isAttr);
             if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
                 objectInfoDesc.setChildList(objectInfoDescList);
                 objectInfoDesc.setValue(buildValue(objectInfoDescList));
@@ -123,7 +127,6 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
             fieldParseObjectBO.setGenericsMap(buildGenericsMap(psiType, psiClass));
             fieldParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
             for (PsiField psiField : psiClass.getFields()) {
-                //TODO 针对final static修饰的字段过滤
                 fieldParseObjectBO.setApiDocField(new ApiDocPsiField(psiField));
                 childList.add(ObjectParserExecutor.execute(psiField.getType(), fieldParseObjectBO));
             }

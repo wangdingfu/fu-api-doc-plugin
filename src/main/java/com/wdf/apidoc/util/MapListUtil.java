@@ -14,9 +14,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
- * @Description map构建帮助类
- * @Author wangdingfu
- * @Date 2021-12-06
+ * @author wangdingfu
+ * @descption: map工具类
+ * @date 2022-05-25 23:35:34
  */
 public class MapListUtil<K, T> {
 
