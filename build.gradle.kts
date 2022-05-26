@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.ir.backend.js.compile
 
 fun properties(key: String) = project.findProperty(key).toString()
 
+
 plugins {
     // Java support
     id("java")
@@ -16,6 +17,8 @@ plugins {
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
 }
+
+
 
 group = properties("pluginGroup")
 version = properties("pluginVersion")
@@ -37,7 +40,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.20")
     implementation("com.github.javafaker:javafaker:1.0.2")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
-    implementation("com.alibaba:fastjson:1.2.80")
+    implementation("com.alibaba:fastjson:2.0.3")
     implementation("org.freemarker:freemarker:2.3.29")
 }
 

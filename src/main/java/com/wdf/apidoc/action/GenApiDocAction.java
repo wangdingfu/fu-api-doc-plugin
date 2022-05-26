@@ -3,6 +3,7 @@ package com.wdf.apidoc.action;
 import com.alibaba.fastjson.JSON;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.ui.MessageDialogBuilder;
 import com.intellij.psi.PsiClass;
 import com.wdf.apidoc.assemble.ApiDocAssembleService;
 import com.wdf.apidoc.assemble.ControllerAssembleService;
@@ -67,6 +68,7 @@ public class GenApiDocAction extends AnAction {
             String content = FreeMarkerConfig.generateContent(fuApiDocItemData, "api_doc.ftl");
             System.out.println(content + "\r\n");
         }
+        MessageDialogBuilder.yesNo("操作结果","生成文档成功!").show();
 
     }
 }
