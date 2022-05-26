@@ -133,6 +133,6 @@ public class ControllerAssembleService extends AbstractAssembleService {
     }
 
     private String formatUrl(String controllerUrl, String methodUrl) {
-        return controllerUrl + methodUrl;
+        return controllerUrl + "/" + methodUrl;
     }
 }
