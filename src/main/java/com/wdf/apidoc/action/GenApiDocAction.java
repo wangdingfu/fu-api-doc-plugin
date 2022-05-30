@@ -8,8 +8,10 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.wdf.apidoc.assemble.ApiDocAssembleService;
+import com.wdf.apidoc.assemble.AssembleServiceExecutor;
 import com.wdf.apidoc.assemble.ControllerAssembleService;
 import com.wdf.apidoc.config.FreeMarkerConfig;
+import com.wdf.apidoc.helper.ServiceHelper;
 import com.wdf.apidoc.parse.ApiDocClassParser;
 import com.wdf.apidoc.parse.ApiDocClassParserImpl;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
@@ -57,19 +59,16 @@ public class GenApiDocAction extends AnAction {
         if (Objects.isNull(psiClass)) {
             return;
         }
-
         ApiDocContext apiDocContext = new ApiDocContext();
         apiDocContext.setProject(e.getProject());
-        ApiDocClassParser apiDocClassParser = new ApiDocClassParserImpl();
+
         //解析
+        ApiDocClassParser apiDocClassParser = ServiceHelper.getService(ApiDocClassParserImpl.class);
         ClassInfoDesc classInfoDesc = apiDocClassParser.parse(apiDocContext, psiClass, null);
 
         //组装ApiDocData对象
-        ApiDocAssembleService assembleService = new ControllerAssembleService();
-        boolean assemble = assembleService.isAssemble(classInfoDesc);
-        System.out.println(assemble);
-        List<FuApiDocItemData> resultList = assembleService.assemble(classInfoDesc);
-        System.out.println(JSON.toJSONString(resultList));
+        List<FuApiDocItemData> resultList = AssembleServiceExecutor.execute(classInfoDesc);
+
         StringBuilder sb = new StringBuilder();
         for (FuApiDocItemData fuApiDocItemData : resultList) {
             String content = FreeMarkerConfig.generateContent(fuApiDocItemData, "api_doc.ftl");

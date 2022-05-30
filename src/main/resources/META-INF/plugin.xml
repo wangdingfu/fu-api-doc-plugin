@@ -25,6 +25,23 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <notificationGroup id="fu-doc-notify-group" displayType="BALLOON"/>
+
+
+        <!-- service -->
+
+        <!-- parse service -->
+        <applicationService serviceImplementation=" com.wdf.apidoc.parse.ApiDocClassParserImpl"/>
+
+
+        <!-- assemble service -->
+        <applicationService serviceImplementation="com.wdf.apidoc.assemble.ControllerAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.apidoc.assemble.DubboAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.apidoc.assemble.FeignAssembleService"/>
+
+        <!-- mock service -->
+        <applicationService serviceImplementation="com.wdf.apidoc.mock.ApiDocObjectJMockData"/>
+
+
     </extensions>
 
     <actions>
