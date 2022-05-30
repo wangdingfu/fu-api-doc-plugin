@@ -1,6 +1,7 @@
-package com.wdf.apidoc.assemble;
+package com.wdf.apidoc.assemble.impl;
 
 import com.google.common.collect.Lists;
+import com.wdf.apidoc.assemble.AbstractAssembleService;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.enumtype.RequestType;
 import com.wdf.apidoc.pojo.data.AnnotationData;

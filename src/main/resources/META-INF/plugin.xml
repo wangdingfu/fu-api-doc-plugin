@@ -34,9 +34,9 @@
 
 
         <!-- assemble service -->
-        <applicationService serviceImplementation="com.wdf.apidoc.assemble.ControllerAssembleService"/>
-        <applicationService serviceImplementation="com.wdf.apidoc.assemble.DubboAssembleService"/>
-        <applicationService serviceImplementation="com.wdf.apidoc.assemble.FeignAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.ControllerAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.DubboAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.FeignAssembleService"/>
 
         <!-- mock service -->
         <applicationService serviceImplementation="com.wdf.apidoc.mock.ApiDocObjectJMockData"/>

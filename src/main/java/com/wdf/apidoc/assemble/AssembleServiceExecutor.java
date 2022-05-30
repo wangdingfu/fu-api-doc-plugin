@@ -1,6 +1,9 @@
 package com.wdf.apidoc.assemble;
 
 import com.google.common.collect.Lists;
+import com.wdf.apidoc.assemble.impl.ControllerAssembleService;
+import com.wdf.apidoc.assemble.impl.DubboAssembleService;
+import com.wdf.apidoc.assemble.impl.FeignAssembleService;
 import com.wdf.apidoc.helper.ServiceHelper;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
