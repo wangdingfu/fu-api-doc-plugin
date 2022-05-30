@@ -40,7 +40,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.20")
     implementation("com.github.javafaker:javafaker:1.0.2")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
-    implementation("com.alibaba:fastjson:2.0.3")
+    implementation("com.alibaba:fastjson:1.2.58")
     implementation("org.freemarker:freemarker:2.3.29")
 }
 
