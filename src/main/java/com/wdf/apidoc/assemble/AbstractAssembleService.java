@@ -1,8 +1,6 @@
 package com.wdf.apidoc.assemble;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.ApiDocConstants;
@@ -13,10 +11,14 @@ import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.apidoc.util.FastJsonUtils;
+import com.wdf.apidoc.util.MapListUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -93,23 +95,14 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
 
 
     protected void mockRequestData(FuApiDocItemData fuApiDocItemData, List<ObjectInfoDesc> objectInfoDescList) {
-        Map<ContentType, List<ObjectInfoDesc>> map = new HashMap<>();
-        for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
-            ContentType contentType = getContentType(objectInfoDesc);
-            List<ObjectInfoDesc> itemList = map.get(contentType);
-            if (Objects.isNull(itemList)) {
-                itemList = Lists.newArrayList();
-                map.put(contentType, itemList);
-            }
-            itemList.add(objectInfoDesc);
-        }
+        MapListUtil<ContentType, ObjectInfoDesc> instance = MapListUtil.getInstance(objectInfoDescList, this::getContentType);
         //如果存在RequestBody注解 则优先mock该注解标识的对象
-        List<ObjectInfoDesc> itemList = map.get(ContentType.JSON);
+        List<ObjectInfoDesc> itemList = instance.get(ContentType.JSON);
         if (CollectionUtils.isNotEmpty(itemList)) {
             fuApiDocItemData.setRequestExample(mockJsonData(itemList));
             return;
         }
-        map.forEach(((contentType, list) -> {
+        instance.foreach(((contentType, list) -> {
             //TODO 存在PathVariable注解 RequestParam注解等 需要优化
             fuApiDocItemData.setRequestExample(mockData(contentType, list));
         }));
@@ -188,19 +181,14 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(0);
                 Object value = objectInfoDesc.getValue();
                 if (value instanceof JSONObject) {
-                    return toJsonString(value);
+                    return FastJsonUtils.toJsonString(value);
                 }
             }
             for (ObjectInfoDesc objectInfoDesc : objectInfoDescList) {
                 add(objectInfoDesc, jsonObject);
             }
         }
-        return toJsonString(jsonObject);
-    }
-
-
-    private String toJsonString(Object object) {
-        return JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
+        return FastJsonUtils.toJsonString(jsonObject);
     }
 
 
