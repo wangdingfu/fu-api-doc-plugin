@@ -1,6 +1,7 @@
 package com.wdf.apidoc.assemble.impl;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.components.Service;
 import com.wdf.apidoc.assemble.AbstractAssembleService;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.enumtype.RequestType;
@@ -10,6 +11,7 @@ import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.apidoc.util.PathUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.Optional;
  * @descption: 组装Controller接口文档
  * @date 2022-05-09 23:32:39
  */
+@Service
 public class ControllerAssembleService extends AbstractAssembleService {
 
 
@@ -127,13 +130,9 @@ public class ControllerAssembleService extends AbstractAssembleService {
         List<String> urlList = Lists.newArrayList();
         for (String controllerUrl : controllerUrls) {
             for (String methodUrl : methodUrlList) {
-                urlList.add(formatUrl(controllerUrl, methodUrl));
+                urlList.add(PathUtils.httpPathJoin(controllerUrl, methodUrl));
             }
         }
         return urlList;
-    }
-
-    private String formatUrl(String controllerUrl, String methodUrl) {
-        return controllerUrl + "/" + methodUrl;
     }
 }

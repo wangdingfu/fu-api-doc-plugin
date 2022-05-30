@@ -1,6 +1,7 @@
 package com.wdf.apidoc.parse;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.components.Service;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
@@ -26,6 +27,7 @@ import java.util.Objects;
  * @descption: java类解析实现类
  * @date 2022-05-08 22:38:21
  */
+@Service
 public class ApiDocClassParserImpl implements ApiDocClassParser {
 
     /**
