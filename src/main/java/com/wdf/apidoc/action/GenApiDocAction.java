@@ -3,6 +3,7 @@ package com.wdf.apidoc.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
+import com.wdf.apidoc.FuDocMessageBundle;
 import com.wdf.apidoc.FuDocNotification;
 import com.wdf.apidoc.FuDocRender;
 import com.wdf.apidoc.assemble.AssembleServiceExecutor;
@@ -52,6 +53,7 @@ public class GenApiDocAction extends AnAction {
         }
         ApiDocContext apiDocContext = new ApiDocContext();
         apiDocContext.setProject(e.getProject());
+        String qualifiedName = psiClass.getQualifiedName();
         //向全局上下文中添加Project内容
         FuDocDataContent.consumerData(fuDocData -> fuDocData.setProject(e.getProject()));
 
@@ -70,6 +72,6 @@ public class GenApiDocAction extends AnAction {
         ClipboardUtil.copyToClipboard(content);
 
         //通知接口文档已经拷贝至剪贴板
-        FuDocNotification.notifyInfo(MessageConstants.NOTIFY_COPY_OK);
+        FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, qualifiedName));
     }
 }

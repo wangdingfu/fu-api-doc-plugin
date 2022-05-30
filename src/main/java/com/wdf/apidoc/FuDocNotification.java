@@ -19,21 +19,17 @@ public class FuDocNotification {
             .getNotificationGroup(ApiDocConstants.Notify.NOTIFY_GROUP);
 
 
-    public static void notifyWarn(String key) {
-        NOTIFICATION_GROUP.createNotification(getMessage(key), NotificationType.WARNING).notify(FuDocDataContent.getProject());
+    public static void notifyWarn(String message) {
+        NOTIFICATION_GROUP.createNotification(message, NotificationType.WARNING).notify(FuDocDataContent.getProject());
     }
 
-    public static void notifyInfo(String key) {
-        NOTIFICATION_GROUP.createNotification(getMessage(key), NotificationType.INFORMATION).notify(FuDocDataContent.getProject());
+    public static void notifyInfo(String message) {
+        NOTIFICATION_GROUP.createNotification(message, NotificationType.INFORMATION).notify(FuDocDataContent.getProject());
     }
 
-    public static void notifyError(String key) {
-        NOTIFICATION_GROUP.createNotification(getMessage(key), NotificationType.ERROR).notify(FuDocDataContent.getProject());
+    public static void notifyError(String message) {
+        NOTIFICATION_GROUP.createNotification(message, NotificationType.ERROR).notify(FuDocDataContent.getProject());
     }
 
-    private static String getMessage(String key) {
-        String message = FuDocMessageBundle.message(key);
-        return StringUtils.isBlank(message) ? key : message;
-    }
 
 }
