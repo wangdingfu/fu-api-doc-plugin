@@ -1,9 +1,11 @@
 package com.wdf.apidoc.action;
 
 import com.alibaba.fastjson.JSON;
+import com.intellij.notification.NotificationGroup;
+import com.intellij.notification.NotificationGroupManager;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.ui.MessageDialogBuilder;
 import com.intellij.psi.PsiClass;
 import com.wdf.apidoc.assemble.ApiDocAssembleService;
 import com.wdf.apidoc.assemble.ControllerAssembleService;
@@ -16,9 +18,10 @@ import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -39,6 +42,9 @@ public class GenApiDocAction extends AnAction {
         super.update(e);
     }
 
+
+    private static final NotificationGroup notificationGroup = NotificationGroupManager.getInstance()
+            .getNotificationGroup("fu-doc-notify-group");
 
     /**
      * 点击按钮或按下快捷键触发生成API接口文档方法
@@ -64,11 +70,17 @@ public class GenApiDocAction extends AnAction {
         System.out.println(assemble);
         List<FuApiDocItemData> resultList = assembleService.assemble(classInfoDesc);
         System.out.println(JSON.toJSONString(resultList));
+        StringBuilder sb = new StringBuilder();
         for (FuApiDocItemData fuApiDocItemData : resultList) {
             String content = FreeMarkerConfig.generateContent(fuApiDocItemData, "api_doc.ftl");
-            System.out.println(content + "\r\n");
+            sb.append(content).append("\r\n\r\n\r\n");
         }
-        MessageDialogBuilder.yesNo("操作结果","生成文档成功!").show();
+        String content = sb.toString();
+        System.out.println("接口文档内容:\r\n" + content);
+        StringSelection selection = new StringSelection(content);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
+        notificationGroup.createNotification("接口文档内容已复制到剪贴板", NotificationType.INFORMATION).notify(e.getProject());
 
     }
 }
