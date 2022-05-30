@@ -2,11 +2,10 @@
     <id>com.wdf.api</id>
     <name>Fu-Doc</name>
     <version>1.0</version>
-    <vendor email="wangdingfu1024@163.com" url="http://www.wangdingfu.com">暂无</vendor>
+    <vendor email="wangdingfu1024@163.com" url="https://www.wangdingfu.com">WANG DINGFU</vendor>
 
     <description>
-        这是一款可以根据java（Controller）代码一键生成API接口文档的插件
-        无需任何二次开发，基于代码的注释生成，只要你有一个编写注释的好习惯，它可以帮你省掉编写API接口文档的工作
+        <![CDATA[ Description will be added by gradle build]]>
     </description>
 
     <change-notes>
