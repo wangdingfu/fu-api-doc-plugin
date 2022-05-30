@@ -24,7 +24,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <notificationGroup id="fu-doc-notify-group" displayType="BALLOON"/>
+        <notificationGroup id="fu_doc_notify_group" displayType="BALLOON"/>
 
 
         <!-- service -->

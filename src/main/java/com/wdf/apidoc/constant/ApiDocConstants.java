@@ -15,7 +15,7 @@ public interface ApiDocConstants {
         String FINAL = "final";
     }
 
-    interface ExtInfo{
+    interface ExtInfo {
         String IS_ATTR = "isAttr";
 
         String GENERICS_TYPE = "genericsType";
@@ -28,6 +28,10 @@ public interface ApiDocConstants {
         String LOCAL_DATE = "java.time.LocalDate";
         String LOCAL_DATE_TIME = "java.time.LocalDateTime";
         String BIG_INTEGER = "java.math.BigInteger";
+    }
+
+    interface Notify {
+        String NOTIFY_GROUP = "fu_doc_notify_group";
     }
 
 

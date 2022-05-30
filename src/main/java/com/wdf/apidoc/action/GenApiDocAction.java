@@ -45,7 +45,7 @@ public class GenApiDocAction extends AnAction {
      * @param e 点击事件
      */
     @Override
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(@NotNull AnActionEvent e) {
         PsiClass psiClass = PsiClassUtils.getPsiClass(e);
         if (Objects.isNull(psiClass)) {
             return;
@@ -71,6 +71,5 @@ public class GenApiDocAction extends AnAction {
 
         //通知接口文档已经拷贝至剪贴板
         FuDocNotification.notifyInfo(MessageConstants.NOTIFY_COPY_OK);
-
     }
 }

@@ -3,6 +3,7 @@ package com.wdf.apidoc;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
+import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.data.FuDocDataContent;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,7 +16,7 @@ public class FuDocNotification {
 
 
     private static final NotificationGroup NOTIFICATION_GROUP = NotificationGroupManager.getInstance()
-            .getNotificationGroup("fu-doc-notify-group");
+            .getNotificationGroup(ApiDocConstants.Notify.NOTIFY_GROUP);
 
 
     public static void notifyWarn(String key) {
