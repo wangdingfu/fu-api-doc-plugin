@@ -53,7 +53,6 @@ public class GenApiDocAction extends AnAction {
         }
         ApiDocContext apiDocContext = new ApiDocContext();
         apiDocContext.setProject(e.getProject());
-        String qualifiedName = psiClass.getQualifiedName();
         //向全局上下文中添加Project内容
         FuDocDataContent.consumerData(fuDocData -> fuDocData.setProject(e.getProject()));
 
@@ -72,6 +71,6 @@ public class GenApiDocAction extends AnAction {
         ClipboardUtil.copyToClipboard(content);
 
         //通知接口文档已经拷贝至剪贴板
-        FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, qualifiedName));
+        FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, psiClass.getName()));
     }
 }
