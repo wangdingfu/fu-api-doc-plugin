@@ -22,13 +22,19 @@ public class ObjectParserExecutor {
     private static final List<ApiDocObjectParser> OBJECT_PARSER_LIST = Lists.newArrayList();
 
     static {
-        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocPrimitiveParser.class));
-        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocCommonObjectParser.class));
-        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocFilterObjectParser.class));
-        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocArrayParser.class));
-        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocCollectionParser.class));
-        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocMapParser.class));
-        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocDefaultParser.class));
+        OBJECT_PARSER_LIST.add(new ApiDocPrimitiveParser());
+        OBJECT_PARSER_LIST.add(new ApiDocCommonObjectParser());
+        OBJECT_PARSER_LIST.add(new ApiDocFilterObjectParser());
+        OBJECT_PARSER_LIST.add(new ApiDocArrayParser());
+        OBJECT_PARSER_LIST.add(new ApiDocCollectionParser());
+        OBJECT_PARSER_LIST.add(new ApiDocMapParser());
+        OBJECT_PARSER_LIST.add(new ApiDocDefaultParser());
+//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocCommonObjectParser.class));
+//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocFilterObjectParser.class));
+//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocArrayParser.class));
+//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocCollectionParser.class));
+//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocMapParser.class));
+//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocDefaultParser.class));
         //根据各自实现类的优先加载顺序来排序
         OBJECT_PARSER_LIST.sort(Comparator.comparing(ApiDocObjectParser::sort));
     }

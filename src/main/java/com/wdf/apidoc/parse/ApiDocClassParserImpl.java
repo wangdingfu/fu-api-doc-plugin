@@ -6,6 +6,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
+import com.wdf.apidoc.parse.ApiDocClassParser;
+import com.wdf.apidoc.parse.ObjectParserExecutor;
 import com.wdf.apidoc.parse.field.ApiDocPsiClass;
 import com.wdf.apidoc.parse.field.ApiDocPsiParameter;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
@@ -27,7 +29,6 @@ import java.util.Objects;
  * @descption: java类解析实现类
  * @date 2022-05-08 22:38:21
  */
-@Service
 public class ApiDocClassParserImpl implements ApiDocClassParser {
 
     /**

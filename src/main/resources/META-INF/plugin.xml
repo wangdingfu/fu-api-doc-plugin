@@ -28,15 +28,15 @@
 
         <!-- service -->
 
-
+        <!-- parse service -->
+        <applicationService serviceImplementation="com.wdf.apidoc.parse.ApiDocClassParserImpl"/>
 
         <!-- assemble service -->
         <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.ControllerAssembleService"/>
         <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.DubboAssembleService"/>
         <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.FeignAssembleService"/>
 
-        <!-- parse service -->
-        <applicationService serviceInterface="com.wdf.apidoc.parse.ApiDocClassParser" serviceImplementation=" com.wdf.apidoc.parse.ApiDocClassParserImpl"/>
+
 
         <!-- mock service -->
         <applicationService serviceImplementation="com.wdf.apidoc.mock.ApiDocObjectJMockData"/>
