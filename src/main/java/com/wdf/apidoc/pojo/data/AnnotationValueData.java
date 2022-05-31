@@ -1,8 +1,8 @@
 package com.wdf.apidoc.pojo.data;
 
+import com.alibaba.fastjson.util.TypeUtils;
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.enumtype.AnnotationValueType;
-import com.wdf.apidoc.util.AnnotationConstantUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,7 +40,7 @@ public class AnnotationValueData {
         List<String> resultList = Lists.newArrayList();
         if (AnnotationValueType.ARRAY.equals(this.valueType)) {
             for (Object o : ((List<?>) this.value)) {
-                resultList.add(AnnotationConstantUtil.castToString(o));
+                resultList.add(TypeUtils.castToString(o));
             }
         }
         resultList.removeAll(Collections.singleton(null));
@@ -49,7 +49,7 @@ public class AnnotationValueData {
 
 
     public String getStringValue() {
-        return AnnotationConstantUtil.castToString(this.value);
+        return TypeUtils.castToString(this.value);
     }
 
 

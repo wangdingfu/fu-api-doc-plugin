@@ -13,4 +13,10 @@ public interface MessageConstants {
      * 通知拷贝消息至剪贴板成功的key
      */
     String NOTIFY_COPY_OK = "notify.copy.ok";
+
+
+    /**
+     * 通知无法获取到类
+     */
+    String NOTIFY_NOT_FUND_CLASS = "notify.not.fund.class";
 }

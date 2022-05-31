@@ -1,5 +1,8 @@
 package com.wdf.apidoc.data;
 
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 
 import java.util.Map;
@@ -55,9 +58,22 @@ public class FuDocDataContent {
     public static Project getProject() {
         FuDocData fuDocData = getFuDocData();
         if (Objects.nonNull(fuDocData)) {
-            return fuDocData.getProject();
+            return fuDocData.getEvent().getProject();
         }
         return null;
+    }
+
+
+    /**
+     * 获取当前事件选中的文本内容
+     */
+    public static String getSelectedText() {
+        //获取当前编辑器对象
+        Editor editor = getFuDocData().getEvent().getRequiredData(CommonDataKeys.EDITOR);
+        //获取选择的数据模型
+        SelectionModel selectionModel = editor.getSelectionModel();
+        //获取当前选择的文本
+        return selectionModel.getSelectedText();
     }
 
 }

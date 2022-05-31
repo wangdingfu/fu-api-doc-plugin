@@ -1,6 +1,7 @@
 package com.wdf.apidoc.parse;
 
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiMethod;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 
@@ -24,5 +25,5 @@ public interface ApiDocClassParser {
      * @param methodList    指定方法集合(为空则当前类所有方法都解析)
      * @return java类信息描述对象
      */
-    ClassInfoDesc parse(ApiDocContext apiDocContext, PsiClass psiClass, List<String> methodList);
+    ClassInfoDesc parse(ApiDocContext apiDocContext, PsiClass psiClass, List<PsiMethod> methodList);
 }

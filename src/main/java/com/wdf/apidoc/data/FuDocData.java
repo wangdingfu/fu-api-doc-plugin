@@ -1,5 +1,6 @@
 package com.wdf.apidoc.data;
 
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import lombok.Setter;
 public class FuDocData {
 
     /**
-     * 当前项目
+     * 当前点击的事件对象
      */
-    private Project project;
+    private AnActionEvent event;
 }

@@ -20,19 +20,46 @@ import java.util.Objects;
 public class PsiClassUtils {
 
 
+
     /**
-     * 获取用户光标当前所在的类
+     * 获取当前光标所在的节点
+     *
+     * @param e 事件对象
+     * @return 光标所在的节点
      */
-    public static PsiClass getPsiClass(AnActionEvent e) {
+    public static PsiElement getTargetElement(AnActionEvent e) {
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
         Editor editor = e.getData(PlatformDataKeys.EDITOR);
         if (psiFile == null || editor == null) {
             return null;
         }
         int offset = editor.getCaretModel().getOffset();
-        PsiElement element = psiFile.findElementAt(offset);
-        return PsiTreeUtil.getParentOfType(element, PsiClass.class);
+        return psiFile.findElementAt(offset);
     }
+
+
+    /**
+     * 获取用户光标当前所在的类
+     */
+    public static PsiClass getPsiClass(PsiElement psiElement) {
+        return PsiTreeUtil.getParentOfType(psiElement, PsiClass.class);
+    }
+
+    /**
+     * 获取当前光标所在的方法
+     *
+     * @param psiElement 光标所在的节点
+     * @return 光标所在的方法对象
+     */
+    public static PsiMethod getTargetMethod(PsiElement psiElement) {
+        if (Objects.nonNull(psiElement)) {
+            // 当前方法
+            PsiMethod target = PsiTreeUtil.getParentOfType(psiElement, PsiMethod.class);
+            return target instanceof SyntheticElement ? null : target;
+        }
+        return null;
+    }
+
 
     /**
      * 获取PsiClass

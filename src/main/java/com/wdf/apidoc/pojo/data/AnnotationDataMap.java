@@ -1,5 +1,6 @@
 package com.wdf.apidoc.pojo.data;
 
+import com.wdf.apidoc.constant.AnnotationConstants;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +43,8 @@ public class AnnotationDataMap {
 
     /**
      * 根据多个注解名称遍历查询 查询到注解则消费该注解的数据 并退出
-     * @param annotationNames 注解名称集合
+     *
+     * @param annotationNames        注解名称集合
      * @param annotationDataConsumer 注解数据消费者
      */
     public void consumerAnnotation(String[] annotationNames, Consumer<AnnotationData> annotationDataConsumer) {
@@ -59,7 +61,7 @@ public class AnnotationDataMap {
 
 
     public Optional<AnnotationData> getAnnotation(String[] annotationNames) {
-        if ( Objects.isNull(annotationNames) || annotationNames.length > 0) {
+        if (Objects.isNull(annotationNames) || annotationNames.length > 0) {
             for (String annotationName : annotationNames) {
                 Optional<AnnotationData> annotation = getAnnotation(annotationName);
                 if (annotation.isPresent()) {
@@ -87,4 +89,14 @@ public class AnnotationDataMap {
         }
         return false;
     }
+
+
+    /**
+     * 校验是否为Controller
+     */
+    public boolean isController() {
+        return exists(AnnotationConstants.CONTROLLER, AnnotationConstants.REST_CONTROLLER);
+    }
+
+
 }

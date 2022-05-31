@@ -2,7 +2,10 @@ package com.wdf.apidoc.action;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
 import com.wdf.apidoc.FuDocMessageBundle;
 import com.wdf.apidoc.FuDocNotification;
 import com.wdf.apidoc.FuDocRender;
@@ -13,10 +16,14 @@ import com.wdf.apidoc.helper.ServiceHelper;
 import com.wdf.apidoc.parse.ApiDocClassParser;
 import com.wdf.apidoc.parse.ApiDocClassParserImpl;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
+import com.wdf.apidoc.pojo.data.AnnotationDataMap;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
+import com.wdf.apidoc.util.AnnotationUtils;
 import com.wdf.apidoc.util.ClipboardUtil;
+import com.wdf.apidoc.util.ObjectUtils;
 import com.wdf.apidoc.util.PsiClassUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,6 +34,7 @@ import java.util.Objects;
  * @descption: 一键生成API接口文档入口类
  * @date 2022-04-16 18:53:05
  */
+@Slf4j
 public class GenApiDocAction extends AnAction {
 
 
@@ -37,7 +45,17 @@ public class GenApiDocAction extends AnAction {
      */
     @Override
     public void update(@NotNull AnActionEvent e) {
-        super.update(e);
+        Presentation presentation = e.getPresentation();
+
+        PsiElement targetElement = PsiClassUtils.getTargetElement(e);
+        AnnotationDataMap parse = AnnotationUtils.parse(PsiClassUtils.getPsiClass(targetElement));
+        //判断当前类是否为Controller
+        if (parse.isController()) {
+            //目前FuDoc只支持Controller生成接口文档 后续将开发Feign|Dubbo
+            presentation.setEnabledAndVisible(true);
+            return;
+        }
+        presentation.setEnabledAndVisible(false);
     }
 
     /**
@@ -47,22 +65,26 @@ public class GenApiDocAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        PsiClass psiClass = PsiClassUtils.getPsiClass(e);
-        if (Objects.isNull(psiClass)) {
+        PsiElement targetElement = PsiClassUtils.getTargetElement(e);
+        if (Objects.isNull(targetElement)) {
+            FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.NOTIFY_NOT_FUND_CLASS));
             return;
         }
+        //获取当前操作的类
+        PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
         ApiDocContext apiDocContext = new ApiDocContext();
         apiDocContext.setProject(e.getProject());
         //向全局上下文中添加Project内容
-        FuDocDataContent.consumerData(fuDocData -> fuDocData.setProject(e.getProject()));
+        FuDocDataContent.consumerData(fuDocData -> fuDocData.setEvent(e));
 
+        //获取当前操作的方法
+        PsiMethod targetMethod = PsiClassUtils.getTargetMethod(targetElement);
         //解析java类
         ApiDocClassParser apiDocClassParser = ServiceHelper.getService(ApiDocClassParserImpl.class);
-        ClassInfoDesc classInfoDesc = apiDocClassParser.parse(apiDocContext, psiClass, null);
+        ClassInfoDesc classInfoDesc = apiDocClassParser.parse(apiDocContext, psiClass, ObjectUtils.newArrayList(targetMethod));
 
         //组装ApiDocData对象
         List<FuApiDocItemData> resultList = AssembleServiceExecutor.execute(classInfoDesc);
-
 
         //将接口文档数据渲染成markdown格式接口文档
         String content = FuDocRender.markdownRender(resultList);

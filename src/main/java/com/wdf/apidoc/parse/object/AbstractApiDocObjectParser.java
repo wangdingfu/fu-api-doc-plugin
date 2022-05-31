@@ -9,12 +9,12 @@ import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocArrayType;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
-import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.mock.ApiDocObjectJMockData;
 import com.wdf.apidoc.mock.ApiDocObjectMock;
 import com.wdf.apidoc.parse.field.ApiDocField;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.apidoc.util.AnnotationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,7 +51,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         if (Objects.nonNull(apiDocField)) {
             objectInfoDesc.setDocText(apiDocField.getComment());
             objectInfoDesc.setName(apiDocField.getName());
-            objectInfoDesc.setAnnotationDataMap(AnnotationParseHelper.parse(apiDocField.getAnnotations()));
+            objectInfoDesc.setAnnotationDataMap(AnnotationUtils.parse(apiDocField.getAnnotations()));
             addModifierProperty(ApiDocConstants.ModifierProperty.STATIC, apiDocField, objectInfoDesc);
             addModifierProperty(ApiDocConstants.ModifierProperty.FINAL, apiDocField, objectInfoDesc);
         }

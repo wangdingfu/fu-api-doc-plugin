@@ -40,7 +40,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
         }
         //判断是否有Controller|RestController注解
         return CollectionUtils.isNotEmpty(classInfoDesc.getMethodList())
-                && classInfoDesc.exists(AnnotationConstants.CONTROLLER, AnnotationConstants.REST_CONTROLLER);
+                && classInfoDesc.isController();
     }
 
     /**

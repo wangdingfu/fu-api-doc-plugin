@@ -1,13 +1,9 @@
 package com.wdf.apidoc.parse;
 
 import com.google.common.collect.Lists;
-import com.intellij.openapi.components.Service;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.helper.AnnotationParseHelper;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
-import com.wdf.apidoc.parse.ApiDocClassParser;
-import com.wdf.apidoc.parse.ObjectParserExecutor;
 import com.wdf.apidoc.parse.field.ApiDocPsiClass;
 import com.wdf.apidoc.parse.field.ApiDocPsiParameter;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
@@ -17,6 +13,7 @@ import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.apidoc.util.AnnotationUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
@@ -40,7 +37,7 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
      * @return java类信息描述对象
      */
     @Override
-    public ClassInfoDesc parse(ApiDocContext apiDocContext, PsiClass psiClass, List<String> methodList) {
+    public ClassInfoDesc parse(ApiDocContext apiDocContext, PsiClass psiClass, List<PsiMethod> methodList) {
         ClassInfoDesc classInfoDesc = new ClassInfoDesc();
         if (Objects.nonNull(apiDocContext) && Objects.nonNull(psiClass)) {
             List<MethodInfoDesc> methodInfoDescList = Lists.newArrayList();
@@ -49,21 +46,19 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
             classInfoDesc.setMethodList(methodInfoDescList);
             classInfoDesc.setCommentData(DocCommentParseHelper.parseComment(psiClass.getDocComment()));
             for (PsiMethod method : psiClass.getMethods()) {
-                if (CollectionUtils.isNotEmpty(methodList) && !methodList.contains(method.getName())) {
-                    //过滤没有指定的方法
-                    continue;
+                if (CollectionUtils.isEmpty(methodList) || methodList.contains(method)) {
+                    ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
+                    MethodInfoDesc methodInfoDesc = new MethodInfoDesc();
+                    //设置方法上的注释
+                    methodInfoDesc.setCommentData(apiDocCommentData);
+                    //设置方法上注解
+                    methodInfoDesc.setAnnotationDataMap(annotationParse(method));
+                    //设置请求参数
+                    methodInfoDesc.setRequestList(requestParse(apiDocContext, method, apiDocCommentData));
+                    //设置响应参数
+                    methodInfoDesc.setResponse(responseParse(apiDocContext, method, apiDocCommentData));
+                    methodInfoDescList.add(methodInfoDesc);
                 }
-                ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
-                MethodInfoDesc methodInfoDesc = new MethodInfoDesc();
-                //设置方法上的注释
-                methodInfoDesc.setCommentData(apiDocCommentData);
-                //设置方法上注解
-                methodInfoDesc.setAnnotationDataMap(annotationParse(method));
-                //设置请求参数
-                methodInfoDesc.setRequestList(requestParse(apiDocContext, method, apiDocCommentData));
-                //设置响应参数
-                methodInfoDesc.setResponse(responseParse(apiDocContext, method, apiDocCommentData));
-                methodInfoDescList.add(methodInfoDesc);
             }
         }
         return classInfoDesc;
@@ -118,7 +113,7 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
         PsiModifierList modifierList = psiModifierListOwner.getModifierList();
         if (Objects.nonNull(modifierList)) {
             //解析注解
-            return AnnotationParseHelper.parse(modifierList.getAnnotations());
+            return AnnotationUtils.parse(modifierList.getAnnotations());
         }
         return new HashMap<>();
     }

@@ -8,10 +8,6 @@
         <![CDATA[ Description will be added by gradle build]]>
     </description>
 
-    <change-notes>
-        V1.0.0 开始初始化项目
-    </change-notes>
-
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
     <idea-version since-build="173.0"/>
 
