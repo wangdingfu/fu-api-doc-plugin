@@ -16,7 +16,7 @@
 
 ![插件截图1](https://user-images.githubusercontent.com/100477650/171110675-0822fee0-7a3e-4c59-b7cc-d645ac9feaee.png)
 
-![插件截图2](https://user-images.githubusercontent.com/100477650/171110766-40aa0c8e-20ae-4e7c-a3d1-152a99d71811.png)
+![插件截图2](https://user-images.githubusercontent.com/100477650/171111214-a5e3a164-ad59-4645-a03d-b84a95f51a48.png)
 
 ![插件生成的接口文档](https://user-images.githubusercontent.com/100477650/171110794-b1aacc55-8ca1-4795-a018-9e429b62fa9f.png)
 
