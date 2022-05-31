@@ -25,7 +25,7 @@
 ---
 
 - **在线安装:**
-    - `File` -> `Setting` -> `Plugins` -> 搜索 `FuDoc`
+    - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu-Doc`
 
 - **手动安装:**
     - [下载插件](https://github.com/wangdingfu/fu-api-doc-plugin/releases") 
@@ -39,7 +39,7 @@
 - 右键菜单选择 `生成接口文档`
 - 去接口文档系统直接将内容粘贴即可（例如ShowDoc或者YApi等）
 
-开发计划
+未来版本计划
 ----
 
 - 支持Feign、Dubbo类生成接口文档
