@@ -15,12 +15,10 @@
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
-    <depends>org.intellij.plugins.markdown</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <notificationGroup id="fu_doc_notify_group" displayType="BALLOON"/>
-
 
         <!-- service -->
 
