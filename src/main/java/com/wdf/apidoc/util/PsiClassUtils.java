@@ -102,6 +102,6 @@ public class PsiClassUtils {
      * @return true-是一个类
      */
     public static boolean isClass(PsiClass psiClass) {
-        return !(Objects.isNull(psiClass) || psiClass.isEnum() || psiClass.isInterface() || psiClass.isAnnotationType() || psiClass.isRecord());
+        return !(Objects.isNull(psiClass) || psiClass.isEnum() || psiClass.isInterface() || psiClass.isAnnotationType());
     }
 }

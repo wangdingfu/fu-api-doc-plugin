@@ -64,7 +64,7 @@ public class DocCommentParseHelper {
         for (PsiElement descriptionElement : descriptionElements) {
             ASTNode node = descriptionElement.getNode();
             IElementType elementType = node.getElementType();
-            if (ApiDocConstants.Comment.PSI_COMMENT_DATA.equals(elementType.getDebugName())) {
+            if (ApiDocConstants.Comment.PSI_COMMENT_DATA.equals(elementType.toString())) {
                 //每一行的主体注释内容
                 String text = node.getText();
                 if (StringUtils.isNotBlank(text)) {
