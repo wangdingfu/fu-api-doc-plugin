@@ -28,9 +28,11 @@
     - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu-Doc`
 
 - **手动安装:**
-    - [下载插件](https://github.com/wangdingfu/fu-api-doc-plugin/releases") 
+    - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
+    - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/igx8P05q4h1e)
     - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins`
       -> `Install Plugin from Disk...`
+      
 
 使用
 ----
@@ -47,7 +49,7 @@
 - 支持自定义高级扩展配置（例如解析自定义注解在接口文档中展示等扩展功能）
 - 支持接口模板动态配置
 
-注意事项
+其他
 ---
 
 - Intellij Idea 版本支持2018.1 以上
