@@ -40,7 +40,7 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action id="gen-api-doc" class="com.wdf.apidoc.action.GenApiDocAction" text="生成接口文档">
+        <action id="gen-api-doc" class="com.wdf.apidoc.action.GenApiDocAction" text="Fu Doc">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
         </action>
