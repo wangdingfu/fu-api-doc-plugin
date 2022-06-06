@@ -77,22 +77,29 @@ public class GenApiDocAction extends AnAction {
         //向全局上下文中添加Project内容
         FuDocDataContent.consumerData(fuDocData -> fuDocData.setEvent(e));
 
-        //获取当前操作的方法
-        PsiMethod targetMethod = PsiClassUtils.getTargetMethod(targetElement);
-        //解析java类
-        ApiDocClassParser apiDocClassParser = ServiceHelper.getService(ApiDocClassParserImpl.class);
-        ClassInfoDesc classInfoDesc = apiDocClassParser.parse(apiDocContext, psiClass, ObjectUtils.newArrayList(targetMethod));
+        try {
+            //获取当前操作的方法
+            PsiMethod targetMethod = PsiClassUtils.getTargetMethod(targetElement);
+            //解析java类
+            ApiDocClassParser apiDocClassParser = ServiceHelper.getService(ApiDocClassParserImpl.class);
+            ClassInfoDesc classInfoDesc = apiDocClassParser.parse(apiDocContext, psiClass, ObjectUtils.newArrayList(targetMethod));
 
-        //组装ApiDocData对象
-        List<FuApiDocItemData> resultList = AssembleServiceExecutor.execute(classInfoDesc);
+            //组装ApiDocData对象
+            List<FuApiDocItemData> resultList = AssembleServiceExecutor.execute(classInfoDesc);
 
-        //将接口文档数据渲染成markdown格式接口文档
-        String content = FuDocRender.markdownRender(resultList);
+            //将接口文档数据渲染成markdown格式接口文档
+            String content = FuDocRender.markdownRender(resultList);
 
-        //将接口文档内容拷贝至剪贴板
-        ClipboardUtil.copyToClipboard(content);
+            //将接口文档内容拷贝至剪贴板
+            ClipboardUtil.copyToClipboard(content);
 
-        //通知接口文档已经拷贝至剪贴板
-        FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, psiClass.getName()));
+            //通知接口文档已经拷贝至剪贴板
+            FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, psiClass.getName()));
+        } catch (Exception exception) {
+            //发送失败通知
+            log.error("【Fu Doc】解析生成接口文档失败", exception);
+            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.NOTIFY_GEN_FAIL));
+        }
+
     }
 }

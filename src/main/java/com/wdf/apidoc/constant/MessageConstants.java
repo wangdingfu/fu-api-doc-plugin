@@ -16,6 +16,12 @@ public interface MessageConstants {
 
 
     /**
+     * 通知生成接口文档失败
+     */
+    String NOTIFY_GEN_FAIL = "notify.gen.fail";
+
+
+    /**
      * 通知无法获取到类
      */
     String NOTIFY_NOT_FUND_CLASS = "notify.not.fund.class";
