@@ -1,6 +1,5 @@
 <!-- Plugin description -->
 # Generate MarkDown API DOC
-一键生成MarkDown格式的接口文档
 
 
 [&emsp; GitHub   &emsp;|](https://github.com/wangdingfu/fu-api-doc-plugin)
