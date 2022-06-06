@@ -95,7 +95,7 @@ public class GenApiDocAction extends AnAction {
 
             //通知接口文档已经拷贝至剪贴板
             FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, psiClass.getName()));
-        } catch (Exception exception) {
+        } catch (Throwable exception) {
             //发送失败通知
             log.error("【Fu Doc】解析生成接口文档失败", exception);
             FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.NOTIFY_GEN_FAIL));
