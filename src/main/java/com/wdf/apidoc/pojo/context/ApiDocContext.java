@@ -1,7 +1,6 @@
 package com.wdf.apidoc.pojo.context;
 
 import com.intellij.openapi.project.Project;
-import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +31,12 @@ public class ApiDocContext {
      */
     private Map<String, ObjectInfoDesc> objectInfoDescMap;
 
+    /**
+     * 存放还未解析完成的对象
+     * 当对象解析完成后会被移动到objectInfoDescMap中
+     */
+    private Map<String, ObjectInfoDesc> earlyObjectInfoDescMap;
+
 
     public ObjectInfoDesc getObjectInfoDesc(String key) {
         if (Objects.nonNull(objectInfoDescMap)) {
@@ -43,11 +48,16 @@ public class ApiDocContext {
 
     public void add(String key, ObjectInfoDesc objectInfoDesc) {
         if (StringUtils.isNotBlank(key) && Objects.nonNull(objectInfoDesc)) {
-            if (Objects.isNull(this.objectInfoDescMap)) {
-                this.objectInfoDescMap = new HashMap<>();
+            if (Objects.isNull(this.earlyObjectInfoDescMap)) {
+                this.earlyObjectInfoDescMap = new HashMap<>();
             }
-            this.objectInfoDescMap.put(key, objectInfoDesc);
+            this.earlyObjectInfoDescMap.put(key, objectInfoDesc);
         }
     }
 
+    public void parseFinish(String key){
+        if(StringUtils.isNotBlank(key) && Objects.nonNull(this.earlyObjectInfoDescMap)){
+            this.objectInfoDescMap.put(key,this.earlyObjectInfoDescMap.get(key));
+        }
+    }
 }

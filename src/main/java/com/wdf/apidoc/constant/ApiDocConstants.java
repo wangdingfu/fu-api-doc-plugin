@@ -17,6 +17,10 @@ public interface ApiDocConstants {
 
     interface ExtInfo {
         String IS_ATTR = "isAttr";
+        /**
+         * 标识当前对象还未解析完成
+         */
+        String IS_EARLY = "isEarly";
 
         String GENERICS_TYPE = "genericsType";
     }
