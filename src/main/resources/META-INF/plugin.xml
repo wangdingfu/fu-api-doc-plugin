@@ -2,7 +2,7 @@
     <id>com.wdf.api</id>
     <name>Fu Doc</name>
     <version>1.0</version>
-    <vendor email="wangdingfu1024@163.com" url="https://www.wangdingfu.com">WANG DINGFU</vendor>
+    <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
         <![CDATA[ Description will be added by gradle build]]>
