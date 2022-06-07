@@ -66,15 +66,13 @@ public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
     public ObjectInfoDesc parse(PsiType psiType, ParseObjectBO parseObjectBO) {
         ApiDocContext apiDocContext = parseObjectBO.getApiDocContext();
         String canonicalText = psiType.getCanonicalText();
-        ObjectInfoDesc objectInfoDesc = apiDocContext.getObjectInfoDesc(canonicalText);
+        ObjectInfoDesc objectInfoDesc = apiDocContext.getFromCache(canonicalText);
         if (Objects.isNull(objectInfoDesc)) {
             List<ObjectInfoDesc> objectInfoDescList = Lists.newArrayList();
             PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
             ApiDocField apiDocField = parseObjectBO.getApiDocField();
             objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
             boolean isAttr = Objects.nonNull(apiDocField) && apiDocField instanceof ApiDocPsiField;
-            //标识当前对象还未解析完成
-            objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR,true);
             objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, isAttr);
             //添加到EarlyMap中（半成品对象）
             apiDocContext.add(canonicalText, objectInfoDesc);

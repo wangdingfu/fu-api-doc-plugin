@@ -1,6 +1,9 @@
 package com.wdf.apidoc.pojo.context;
 
+import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
+import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.factory.ObjectInfoDescFactory;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,9 +41,30 @@ public class ApiDocContext {
     private Map<String, ObjectInfoDesc> earlyObjectInfoDescMap;
 
 
+    public ObjectInfoDesc getFromCache(String key) {
+        ObjectInfoDesc objectInfoDesc = getObjectInfoDesc(key);
+        if (Objects.isNull(objectInfoDesc)) {
+            objectInfoDesc = getObjectInfoDescFromEarly(key);
+            if (Objects.nonNull(objectInfoDesc)) {
+                objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_EARLY, true);
+                //构造引用对象返回
+                objectInfoDesc.setChildList(Lists.newArrayList(ObjectInfoDescFactory.buildReference()));
+            }
+        }
+        return objectInfoDesc;
+    }
+
+
     public ObjectInfoDesc getObjectInfoDesc(String key) {
         if (Objects.nonNull(objectInfoDescMap)) {
             return objectInfoDescMap.get(key);
+        }
+        return null;
+    }
+
+    public ObjectInfoDesc getObjectInfoDescFromEarly(String key) {
+        if (Objects.nonNull(earlyObjectInfoDescMap)) {
+            return earlyObjectInfoDescMap.get(key);
         }
         return null;
     }
@@ -55,9 +79,12 @@ public class ApiDocContext {
         }
     }
 
-    public void parseFinish(String key){
-        if(StringUtils.isNotBlank(key) && Objects.nonNull(this.earlyObjectInfoDescMap)){
-            this.objectInfoDescMap.put(key,this.earlyObjectInfoDescMap.get(key));
+    public void parseFinish(String key) {
+        if (StringUtils.isNotBlank(key) && Objects.nonNull(this.earlyObjectInfoDescMap)) {
+            if (Objects.isNull(this.objectInfoDescMap)) {
+                this.objectInfoDescMap = new HashMap<>();
+            }
+            this.objectInfoDescMap.put(key, this.earlyObjectInfoDescMap.remove(key));
         }
     }
 }
