@@ -3,7 +3,6 @@ package com.wdf.apidoc.parse;
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
 import com.wdf.apidoc.parse.field.ApiDocPsiClass;
 import com.wdf.apidoc.parse.field.ApiDocPsiParameter;
@@ -15,6 +14,7 @@ import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.apidoc.util.AnnotationUtils;
+import com.wdf.apidoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
@@ -99,7 +99,7 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
         ParseObjectBO parseObjectBO = new ParseObjectBO();
         parseObjectBO.setApiDocContext(apiDocContext);
         PsiType returnType = psiMethod.getReturnType();
-        if (returnType instanceof PsiPrimitiveType && ApiDocConstants.ModifierProperty.VOID.equals(returnType.getCanonicalText())) {
+        if (PsiClassUtils.isVoid(returnType)) {
             //响应类型为void  则不解析
             return null;
         }

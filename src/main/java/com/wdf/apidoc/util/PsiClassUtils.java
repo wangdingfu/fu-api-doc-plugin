@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.pojo.bo.PsiClassTypeBO;
 
 import java.util.Objects;
@@ -18,7 +19,6 @@ import java.util.Objects;
  * @date 2022-04-09 15:12:35
  */
 public class PsiClassUtils {
-
 
 
     /**
@@ -103,5 +103,19 @@ public class PsiClassUtils {
      */
     public static boolean isClass(PsiClass psiClass) {
         return !(Objects.isNull(psiClass) || psiClass.isEnum() || psiClass.isInterface() || psiClass.isAnnotationType());
+    }
+
+
+    /**
+     * 判断PsiType是否为Void
+     *
+     * @param psiType java类型
+     * @return true 是Void
+     */
+    public static boolean isVoid(PsiType psiType) {
+        if (Objects.isNull(psiType)) {
+            return false;
+        }
+        return psiType instanceof PsiPrimitiveType && ApiDocConstants.ModifierProperty.VOID.equals(psiType.getCanonicalText());
     }
 }
