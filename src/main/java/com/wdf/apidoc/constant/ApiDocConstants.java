@@ -8,6 +8,7 @@ package com.wdf.apidoc.constant;
 public interface ApiDocConstants {
 
 
+    String KEY = "key";
     String VALUE = "value";
 
     interface ModifierProperty {

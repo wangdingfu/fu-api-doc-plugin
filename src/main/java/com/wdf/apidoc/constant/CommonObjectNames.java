@@ -15,6 +15,9 @@ public interface CommonObjectNames {
     String HTTP_RESPONSE = "javax.servlet.http.HttpServletResponse";
 
 
+    String MULTIPART_FILE = "org.springframework.web.multipart.MultipartFile";
+
+
     List<String> filterList = Lists.newArrayList(
             HTTP_REQUEST,
             HTTP_RESPONSE

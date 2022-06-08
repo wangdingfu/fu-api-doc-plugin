@@ -50,7 +50,7 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
             classInfoDesc.setMethodList(methodInfoDescList);
             classInfoDesc.setCommentData(DocCommentParseHelper.parseComment(psiClass.getDocComment()));
             for (PsiMethod method : psiClass.getMethods()) {
-                if (FuDocUtils.isValidMethod(javaClassType, method)) {
+                if (!FuDocUtils.isValidMethod(javaClassType, method)) {
                     //过滤不需要解析的方法
                     continue;
                 }

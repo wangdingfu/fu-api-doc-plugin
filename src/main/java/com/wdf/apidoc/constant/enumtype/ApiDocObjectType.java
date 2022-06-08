@@ -13,6 +13,8 @@ public enum ApiDocObjectType {
     MAP_OBJECT,
     COLLECTION_OBJECT,
     ARRAY,
+    MULTIPART_FILE,
+
 
     ;
 

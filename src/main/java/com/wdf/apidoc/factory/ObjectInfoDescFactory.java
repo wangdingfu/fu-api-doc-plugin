@@ -18,7 +18,18 @@ public class ObjectInfoDescFactory {
         objectInfoDesc.setTypeView("object");
         objectInfoDesc.setApiDocObjectType(ApiDocObjectType.DEFAULT_OBJECT);
         objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, true);
-        objectInfoDesc.setDocText("引用和父级同级的所有字段");
+        objectInfoDesc.setDocText("`引用和父级同级的所有字段`");
+        return objectInfoDesc;
+    }
+
+
+    public static ObjectInfoDesc build(String name, String typeView, String comment) {
+        ObjectInfoDesc objectInfoDesc = new ObjectInfoDesc();
+        objectInfoDesc.setName(name);
+        objectInfoDesc.setTypeView(typeView);
+        objectInfoDesc.setApiDocObjectType(ApiDocObjectType.DEFAULT_OBJECT);
+        objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, true);
+        objectInfoDesc.setDocText(comment);
         return objectInfoDesc;
     }
 }
