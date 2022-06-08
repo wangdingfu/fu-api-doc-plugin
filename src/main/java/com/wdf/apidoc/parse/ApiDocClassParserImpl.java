@@ -3,6 +3,7 @@ package com.wdf.apidoc.parse;
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
 import com.wdf.apidoc.parse.field.ApiDocPsiClass;
 import com.wdf.apidoc.parse.field.ApiDocPsiParameter;
@@ -14,6 +15,7 @@ import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.apidoc.util.AnnotationUtils;
+import com.wdf.apidoc.util.FuDocUtils;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -41,13 +43,17 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
     public ClassInfoDesc parse(ApiDocContext apiDocContext, PsiClass psiClass, List<PsiMethod> methodList) {
         ClassInfoDesc classInfoDesc = new ClassInfoDesc();
         if (Objects.nonNull(apiDocContext) && Objects.nonNull(psiClass)) {
+            JavaClassType javaClassType = JavaClassType.get(psiClass);
             List<MethodInfoDesc> methodInfoDescList = Lists.newArrayList();
             //注解解析
             classInfoDesc.setAnnotationDataMap(annotationParse(psiClass));
             classInfoDesc.setMethodList(methodInfoDescList);
             classInfoDesc.setCommentData(DocCommentParseHelper.parseComment(psiClass.getDocComment()));
             for (PsiMethod method : psiClass.getMethods()) {
-                //过滤不需要解析的方法
+                if (FuDocUtils.isValidMethod(javaClassType, method)) {
+                    //过滤不需要解析的方法
+                    continue;
+                }
                 if (CollectionUtils.isEmpty(methodList) || methodList.contains(method)) {
                     ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
                     MethodInfoDesc methodInfoDesc = new MethodInfoDesc();
