@@ -14,7 +14,6 @@ import com.wdf.apidoc.parse.field.FuDocCustomerField;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
-import org.apache.commons.collections.MapUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -47,20 +46,20 @@ public class ApiDocMapParser extends AbstractApiDocObjectParser {
         //获取泛型
         Map<String, PsiType> genericsMap = buildGenericsMap(psiType, PsiUtil.resolveClassInType(psiType));
         List<ObjectInfoDesc> childList = Lists.newArrayList();
-        childList.add(build(genericsMap.get("K"), parseObjectBO,"属性名(key)",CommonObjectType.STRING.getName()));
-        childList.add(build(genericsMap.get("V"), parseObjectBO,"属性值(value)",CommonObjectType.OBJECT_TYPE.getName()));
+        childList.add(build(genericsMap.get("K"), parseObjectBO, ApiDocConstants.KEY,"属性名(key)",  CommonObjectType.STRING.getName()));
+        childList.add(build(genericsMap.get("V"), parseObjectBO, ApiDocConstants.VALUE,"属性值(value)",  CommonObjectType.OBJECT_TYPE.getName()));
         objectInfoDesc.setChildList(childList);
         return objectInfoDesc;
     }
 
 
-    private ObjectInfoDesc build(PsiType psiType, ParseObjectBO parseObjectBO,String comment,String typeView) {
+    private ObjectInfoDesc build(PsiType psiType, ParseObjectBO parseObjectBO, String name, String comment, String typeView) {
         if (Objects.isNull(psiType)) {
-            return ObjectInfoDescFactory.build(ApiDocConstants.KEY, typeView, comment);
+            return ObjectInfoDescFactory.build(name, typeView, comment);
         }
         ParseObjectBO genericParseObjectBO = new ParseObjectBO();
         genericParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
-        genericParseObjectBO.setApiDocField(new FuDocCustomerField(ApiDocConstants.KEY, comment));
+        genericParseObjectBO.setApiDocField(new FuDocCustomerField(name, comment));
         return ObjectParserExecutor.execute(psiType, genericParseObjectBO);
     }
 

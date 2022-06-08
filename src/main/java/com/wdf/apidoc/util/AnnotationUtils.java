@@ -40,19 +40,21 @@ public class AnnotationUtils {
      */
     public static Map<String, AnnotationData> parse(PsiAnnotation[] psiAnnotations) {
         Map<String, AnnotationData> annotationDataMap = new HashMap<>();
-        for (PsiAnnotation psiAnnotation : psiAnnotations) {
-            String qualifiedName = psiAnnotation.getQualifiedName();
-            AnnotationData annotationData = new AnnotationData();
-            annotationData.setQualifiedName(qualifiedName);
-            List<JvmAnnotationAttribute> attributes = psiAnnotation.getAttributes();
-            if (CollectionUtils.isNotEmpty(attributes)) {
-                for (JvmAnnotationAttribute attribute : attributes) {
-                    String attributeName = attribute.getAttributeName();
-                    AnnotationValueData value = convertAnnotationAttributeValue(attribute.getAttributeValue());
-                    annotationData.addAttr(attributeName, value);
+        if(Objects.nonNull(psiAnnotations)){
+            for (PsiAnnotation psiAnnotation : psiAnnotations) {
+                String qualifiedName = psiAnnotation.getQualifiedName();
+                AnnotationData annotationData = new AnnotationData();
+                annotationData.setQualifiedName(qualifiedName);
+                List<JvmAnnotationAttribute> attributes = psiAnnotation.getAttributes();
+                if (CollectionUtils.isNotEmpty(attributes)) {
+                    for (JvmAnnotationAttribute attribute : attributes) {
+                        String attributeName = attribute.getAttributeName();
+                        AnnotationValueData value = convertAnnotationAttributeValue(attribute.getAttributeValue());
+                        annotationData.addAttr(attributeName, value);
+                    }
                 }
+                annotationDataMap.put(qualifiedName, annotationData);
             }
-            annotationDataMap.put(qualifiedName, annotationData);
         }
         return annotationDataMap;
     }

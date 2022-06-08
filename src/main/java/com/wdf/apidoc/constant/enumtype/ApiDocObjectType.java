@@ -14,6 +14,7 @@ public enum ApiDocObjectType {
     COLLECTION_OBJECT,
     ARRAY,
     MULTIPART_FILE,
+    OBJECT,
 
 
     ;

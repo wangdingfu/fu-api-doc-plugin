@@ -29,6 +29,7 @@ public class ObjectParserExecutor {
         OBJECT_PARSER_LIST.add(new ApiDocCollectionParser());
         OBJECT_PARSER_LIST.add(new ApiDocMapParser());
         OBJECT_PARSER_LIST.add(new ApiDocDefaultParser());
+        OBJECT_PARSER_LIST.add(new FuDocObjectParser());
 //        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocCommonObjectParser.class));
 //        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocFilterObjectParser.class));
 //        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocArrayParser.class));
