@@ -1,5 +1,7 @@
 package com.wdf.apidoc.pojo.data;
 
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiClass;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import lombok.Getter;
 import lombok.Setter;
@@ -91,12 +93,17 @@ public class AnnotationDataMap {
     }
 
 
+
+
     /**
-     * 校验是否为Controller
+     * 校验java类是否为Controller
+     *
+     * @return true 是一个Controller
      */
     public boolean isController() {
         return exists(AnnotationConstants.CONTROLLER, AnnotationConstants.REST_CONTROLLER);
     }
+
 
 
 }

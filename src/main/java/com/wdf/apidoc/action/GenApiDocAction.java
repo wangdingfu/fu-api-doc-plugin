@@ -11,15 +11,14 @@ import com.wdf.apidoc.FuDocNotification;
 import com.wdf.apidoc.FuDocRender;
 import com.wdf.apidoc.assemble.AssembleServiceExecutor;
 import com.wdf.apidoc.constant.MessageConstants;
+import com.wdf.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.apidoc.data.FuDocDataContent;
 import com.wdf.apidoc.helper.ServiceHelper;
 import com.wdf.apidoc.parse.ApiDocClassParser;
 import com.wdf.apidoc.parse.ApiDocClassParserImpl;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
-import com.wdf.apidoc.pojo.data.AnnotationDataMap;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
-import com.wdf.apidoc.util.AnnotationUtils;
 import com.wdf.apidoc.util.ClipboardUtil;
 import com.wdf.apidoc.util.ObjectUtils;
 import com.wdf.apidoc.util.PsiClassUtils;
@@ -46,16 +45,15 @@ public class GenApiDocAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         Presentation presentation = e.getPresentation();
-
         PsiElement targetElement = PsiClassUtils.getTargetElement(e);
-        AnnotationDataMap parse = AnnotationUtils.parse(PsiClassUtils.getPsiClass(targetElement));
-        //判断当前类是否为Controller
-        if (parse.isController()) {
-            //目前FuDoc只支持Controller生成接口文档 后续将开发Feign|Dubbo
-            presentation.setEnabledAndVisible(true);
+        PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
+        JavaClassType javaClassType = JavaClassType.get(psiClass);
+        if (JavaClassType.isNone(javaClassType)) {
+            presentation.setEnabledAndVisible(false);
             return;
         }
-        presentation.setEnabledAndVisible(false);
+        //目前FuDoc只支持Controller生成接口文档
+        presentation.setEnabledAndVisible(true);
     }
 
     /**

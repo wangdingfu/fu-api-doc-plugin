@@ -10,6 +10,9 @@ public interface AnnotationConstants {
     String CONTROLLER = "org.springframework.stereotype.Controller";
     String REST_CONTROLLER = "org.springframework.web.bind.annotation.RestController";
 
+
+    String FEIGN_CLIENT = "org.springframework.cloud.openfeign.FeignClient";
+
     String REQUEST_MAPPING = "org.springframework.web.bind.annotation.RequestMapping";
     String GET_MAPPING = "org.springframework.web.bind.annotation.GetMapping";
     String PUT_MAPPING = "org.springframework.web.bind.annotation.PutMapping";

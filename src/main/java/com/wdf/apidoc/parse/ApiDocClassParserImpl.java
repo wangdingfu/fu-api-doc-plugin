@@ -47,6 +47,7 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
             classInfoDesc.setMethodList(methodInfoDescList);
             classInfoDesc.setCommentData(DocCommentParseHelper.parseComment(psiClass.getDocComment()));
             for (PsiMethod method : psiClass.getMethods()) {
+                //过滤不需要解析的方法
                 if (CollectionUtils.isEmpty(methodList) || methodList.contains(method)) {
                     ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
                     MethodInfoDesc methodInfoDesc = new MethodInfoDesc();
