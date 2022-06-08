@@ -130,7 +130,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
         List<String> urlList = Lists.newArrayList();
         for (String controllerUrl : controllerUrls) {
             for (String methodUrl : methodUrlList) {
-                urlList.add(PathUtils.httpPathJoin(controllerUrl, methodUrl));
+                urlList.add(PathUtils.urlJoin(controllerUrl, methodUrl));
             }
         }
         return urlList;

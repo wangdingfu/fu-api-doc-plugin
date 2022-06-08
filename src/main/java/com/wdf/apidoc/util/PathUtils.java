@@ -1,6 +1,11 @@
 package com.wdf.apidoc.util;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -8,6 +13,8 @@ import java.io.File;
  * @date 2022-05-31 01:46:28
  */
 public class PathUtils {
+
+    private final static String JOINT = "/";
 
     /**
      * 文件系统路径 拼接
@@ -39,31 +46,28 @@ public class PathUtils {
     }
 
     /**
-     * http路径拼接
+     * url请求路径拼接
      *
-     * @param uri  url地址
-     * @param subs 拼接的url段集合
-     * @return 完整的url地址
+     * @param urls 多个url路径
+     * @return 拼接成最终的url
      */
-    public static String httpPathJoin(String uri, String... subs) {
-        if (subs == null || subs.length == 0) {
-            return uri;
+    public static String urlJoin(String... urls) {
+        if (Objects.isNull(urls) || urls.length <= 0) {
+            return StringUtils.EMPTY;
         }
-        StringBuilder path = new StringBuilder(uri);
-        for (String sub : subs) {
-            String s = sub;
-            //若子目录前面也带了斜杠则去掉
-            if (s.startsWith("/")) {
-                s = s.substring(1);
-            }
-            //拼接
-            if (path.toString().endsWith("/")) {
-                path.append(s);
-            } else {
-                path.append("/").append(s);
+        List<String> uriList = Lists.newArrayList();
+        for (String uri : urls) {
+            String[] split = StringUtils.split(uri, JOINT);
+            if (Objects.nonNull(split) && split.length > 0) {
+                for (String s : split) {
+                    s = s.replaceAll(JOINT, "");
+                    if (StringUtils.isNotBlank(s) && !JOINT.equals(s)) {
+                        uriList.add(s);
+                    }
+                }
             }
         }
-        return path.toString();
+        return JOINT + StringUtils.join(uriList, JOINT);
     }
 
 }
