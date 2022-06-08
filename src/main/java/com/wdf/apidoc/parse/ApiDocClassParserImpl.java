@@ -3,6 +3,7 @@ package com.wdf.apidoc.parse;
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.apidoc.constant.ApiDocConstants;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
 import com.wdf.apidoc.parse.field.ApiDocPsiClass;
 import com.wdf.apidoc.parse.field.ApiDocPsiParameter;
@@ -98,7 +99,14 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
         ParseObjectBO parseObjectBO = new ParseObjectBO();
         parseObjectBO.setApiDocContext(apiDocContext);
         PsiType returnType = psiMethod.getReturnType();
-        parseObjectBO.setApiDocField(new ApiDocPsiClass(PsiUtil.resolveClassInType(returnType), apiDocCommentData));
+        if (returnType instanceof PsiPrimitiveType && ApiDocConstants.ModifierProperty.VOID.equals(returnType.getCanonicalText())) {
+            //响应类型为void  则不解析
+            return null;
+        }
+        PsiClass psiClass = PsiUtil.resolveClassInType(returnType);
+        if (Objects.nonNull(psiClass)) {
+            parseObjectBO.setApiDocField(new ApiDocPsiClass(psiClass, apiDocCommentData));
+        }
         return ObjectParserExecutor.execute(returnType, parseObjectBO);
     }
 

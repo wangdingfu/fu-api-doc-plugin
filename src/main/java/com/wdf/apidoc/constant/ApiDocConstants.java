@@ -13,6 +13,7 @@ public interface ApiDocConstants {
     interface ModifierProperty {
         String STATIC = "static";
         String FINAL = "final";
+        String VOID = "void";
     }
 
     interface ExtInfo {
