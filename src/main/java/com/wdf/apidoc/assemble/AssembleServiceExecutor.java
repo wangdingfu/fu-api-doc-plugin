@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class AssembleServiceExecutor {
 
-    private static final List<ApiDocAssembleService> SERVICE_LIST = Lists.newArrayList(
+    private static final List<FuDocAssembleService> SERVICE_LIST = Lists.newArrayList(
             ServiceHelper.getService(ControllerAssembleService.class),
             ServiceHelper.getService(FeignAssembleService.class),
             ServiceHelper.getService(DubboAssembleService.class)
@@ -26,9 +26,9 @@ public class AssembleServiceExecutor {
 
 
     public static List<FuApiDocItemData> execute(ClassInfoDesc classInfoDesc) {
-        for (ApiDocAssembleService apiDocAssembleService : SERVICE_LIST) {
-            if (apiDocAssembleService.isAssemble(classInfoDesc)) {
-                return apiDocAssembleService.assemble(classInfoDesc);
+        for (FuDocAssembleService fuDocAssembleService : SERVICE_LIST) {
+            if (fuDocAssembleService.isAssemble(classInfoDesc)) {
+                return fuDocAssembleService.assemble(classInfoDesc);
             }
         }
         return Lists.newArrayList();

@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.pojo.bo.PsiClassTypeBO;
 
 import java.util.Objects;
@@ -116,6 +116,6 @@ public class PsiClassUtils {
         if (Objects.isNull(psiType)) {
             return false;
         }
-        return psiType instanceof PsiPrimitiveType && ApiDocConstants.ModifierProperty.VOID.equals(psiType.getCanonicalText());
+        return psiType instanceof PsiPrimitiveType && FuDocConstants.ModifierProperty.VOID.equals(psiType.getCanonicalText());
     }
 }

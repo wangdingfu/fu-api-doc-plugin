@@ -10,7 +10,7 @@ import java.util.List;
  * @descption: ApiDoc对象组装
  * @date 2022-05-08 22:19:29
  */
-public interface ApiDocAssembleService {
+public interface FuDocAssembleService {
 
 
     /**

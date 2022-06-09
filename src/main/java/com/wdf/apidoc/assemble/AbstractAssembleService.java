@@ -3,7 +3,7 @@ package com.wdf.apidoc.assemble;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.constant.enumtype.YesOrNo;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @descption: 组装抽象类
  * @date 2022-05-09 23:32:00
  */
-public abstract class AbstractAssembleService implements ApiDocAssembleService {
+public abstract class AbstractAssembleService implements FuDocAssembleService {
 
 
     /**
@@ -81,13 +81,13 @@ public abstract class AbstractAssembleService implements ApiDocAssembleService {
         if (StringUtils.isBlank(objectInfoDesc.getName())) {
             return false;
         }
-        if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.FINAL)) {
+        if (objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.FINAL)) {
             return false;
         }
-        if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.STATIC)) {
+        if (objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.STATIC)) {
             return false;
         }
-        if (objectInfoDesc.getBooleanValue(ApiDocConstants.ExtInfo.IS_ATTR)) {
+        if (objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.IS_ATTR)) {
             return true;
         }
         return false;

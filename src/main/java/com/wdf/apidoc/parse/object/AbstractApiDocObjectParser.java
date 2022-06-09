@@ -5,7 +5,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocArrayType;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
@@ -52,10 +52,10 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
             objectInfoDesc.setDocText(apiDocField.getComment());
             objectInfoDesc.setName(apiDocField.getName());
             objectInfoDesc.setAnnotationDataMap(AnnotationUtils.parse(apiDocField.getAnnotations()));
-            addModifierProperty(ApiDocConstants.ModifierProperty.STATIC, apiDocField, objectInfoDesc);
-            addModifierProperty(ApiDocConstants.ModifierProperty.FINAL, apiDocField, objectInfoDesc);
+            addModifierProperty(FuDocConstants.ModifierProperty.STATIC, apiDocField, objectInfoDesc);
+            addModifierProperty(FuDocConstants.ModifierProperty.FINAL, apiDocField, objectInfoDesc);
         }
-        objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, true);
+        objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, true);
         objectInfoDesc.setTypeView(typeView);
         objectInfoDesc.setType(psiType.getCanonicalText());
         objectInfoDesc.setApiDocObjectType(getObjectType());
@@ -127,8 +127,8 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         if (CollectionUtils.isNotEmpty(childList)) {
             JSONObject jsonObject = new JSONObject();
             for (ObjectInfoDesc objectInfoDesc : childList) {
-                if (objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.STATIC)
-                        || objectInfoDesc.getBooleanValue(ApiDocConstants.ModifierProperty.FINAL)) {
+                if (objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.STATIC)
+                        || objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.FINAL)) {
                     continue;
                 }
                 jsonObject.put(objectInfoDesc.getName(), objectInfoDesc.getValue());

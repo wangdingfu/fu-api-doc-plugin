@@ -2,7 +2,7 @@ package com.wdf.apidoc.pojo.context;
 
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.factory.ObjectInfoDescFactory;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
@@ -46,7 +46,7 @@ public class ApiDocContext {
         if (Objects.isNull(objectInfoDesc)) {
             objectInfoDesc = getObjectInfoDescFromEarly(key);
             if (Objects.nonNull(objectInfoDesc)) {
-                objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_EARLY, true);
+                objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_EARLY, true);
                 //构造引用对象返回
                 objectInfoDesc.setChildList(Lists.newArrayList(ObjectInfoDescFactory.buildReference()));
             }

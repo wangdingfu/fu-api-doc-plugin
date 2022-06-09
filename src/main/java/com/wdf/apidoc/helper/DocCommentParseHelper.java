@@ -6,7 +6,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.tree.IElementType;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.apidoc.constant.enumtype.CommentTagType;
 import org.apache.commons.lang3.StringUtils;
@@ -64,7 +64,7 @@ public class DocCommentParseHelper {
         for (PsiElement descriptionElement : descriptionElements) {
             ASTNode node = descriptionElement.getNode();
             IElementType elementType = node.getElementType();
-            if (ApiDocConstants.Comment.PSI_COMMENT_DATA.equals(elementType.toString())) {
+            if (FuDocConstants.Comment.PSI_COMMENT_DATA.equals(elementType.toString())) {
                 //每一行的主体注释内容
                 String text = node.getText();
                 if (StringUtils.isNotBlank(text)) {

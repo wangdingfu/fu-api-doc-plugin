@@ -2,7 +2,7 @@ package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.parse.ObjectParserExecutor;
 import com.wdf.apidoc.parse.field.ApiDocField;
@@ -73,7 +73,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             ApiDocField apiDocField = parseObjectBO.getApiDocField();
             objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
             boolean isAttr = Objects.nonNull(apiDocField) && apiDocField instanceof ApiDocPsiField;
-            objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, isAttr);
+            objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, isAttr);
             //添加到EarlyMap中（半成品对象）
             apiDocContext.add(canonicalText, objectInfoDesc);
             parseObject(parseObjectBO, psiType, psiClass, objectInfoDescList);

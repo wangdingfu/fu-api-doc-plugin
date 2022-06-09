@@ -1,7 +1,7 @@
 package com.wdf.apidoc.constant.enumtype;
 
 import com.intellij.psi.CommonClassNames;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,14 +51,14 @@ public enum CommonObjectType {
     CHARACTER(CommonClassNames.JAVA_LANG_CHARACTER, "char", char.class, ApiDocObjectType.COMMON_OBJECT),
     BUFFER(CommonClassNames.JAVA_LANG_STRING_BUFFER, "string", String.class, ApiDocObjectType.COMMON_OBJECT),
     BUILDER(CommonClassNames.JAVA_LANG_STRING_BUILDER, "string", String.class, ApiDocObjectType.COMMON_OBJECT),
-    BIG_DECIMAL(ApiDocConstants.ClassPkg.BIG_DECIMAL, "bigDecimal", BigDecimal.class, ApiDocObjectType.COMMON_OBJECT),
-    BIG_INTEGER(ApiDocConstants.ClassPkg.BIG_INTEGER, "bigInteger", BigInteger.class, ApiDocObjectType.COMMON_OBJECT),
+    BIG_DECIMAL(FuDocConstants.ClassPkg.BIG_DECIMAL, "bigDecimal", BigDecimal.class, ApiDocObjectType.COMMON_OBJECT),
+    BIG_INTEGER(FuDocConstants.ClassPkg.BIG_INTEGER, "bigInteger", BigInteger.class, ApiDocObjectType.COMMON_OBJECT),
     DATE(CommonClassNames.JAVA_UTIL_DATE, "date", Date.class, ApiDocObjectType.COMMON_OBJECT),
     CALENDAR(CommonClassNames.JAVA_UTIL_CALENDAR, "calendar", Calendar.class, ApiDocObjectType.COMMON_OBJECT),
-    LOCAL_DATETIME(ApiDocConstants.ClassPkg.LOCAL_DATE_TIME, "localDateTime", LocalDateTime.class, ApiDocObjectType.COMMON_OBJECT),
-    LOCAL_DATE(ApiDocConstants.ClassPkg.LOCAL_DATE, "localDate", LocalDate.class, ApiDocObjectType.COMMON_OBJECT),
-    LOCAL_TIME(ApiDocConstants.ClassPkg.LOCAL_TIME, "localTime", LocalTime.class, ApiDocObjectType.COMMON_OBJECT),
-    TIMESTAMP(ApiDocConstants.ClassPkg.TIMESTAMP, "timestamp", Timestamp.class, ApiDocObjectType.COMMON_OBJECT),
+    LOCAL_DATETIME(FuDocConstants.ClassPkg.LOCAL_DATE_TIME, "localDateTime", LocalDateTime.class, ApiDocObjectType.COMMON_OBJECT),
+    LOCAL_DATE(FuDocConstants.ClassPkg.LOCAL_DATE, "localDate", LocalDate.class, ApiDocObjectType.COMMON_OBJECT),
+    LOCAL_TIME(FuDocConstants.ClassPkg.LOCAL_TIME, "localTime", LocalTime.class, ApiDocObjectType.COMMON_OBJECT),
+    TIMESTAMP(FuDocConstants.ClassPkg.TIMESTAMP, "timestamp", Timestamp.class, ApiDocObjectType.COMMON_OBJECT),
     ENUM(CommonClassNames.JAVA_LANG_ENUM, "enum", Enum.class, ApiDocObjectType.COMMON_OBJECT),
 
 

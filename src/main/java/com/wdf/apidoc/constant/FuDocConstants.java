@@ -5,7 +5,7 @@ package com.wdf.apidoc.constant;
  * @descption: 类型常量
  * @date 2022-04-10 21:42:57
  */
-public interface ApiDocConstants {
+public interface FuDocConstants {
 
 
     String KEY = "key";

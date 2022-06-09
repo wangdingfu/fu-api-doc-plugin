@@ -1,7 +1,7 @@
 package com.wdf.apidoc.pojo.data;
 
 import com.intellij.psi.PsiAnnotation;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.constant.enumtype.AnnotationValueType;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +47,7 @@ public class AnnotationData {
     }
 
     public AnnotationValueData getValue() {
-        return getValue(ApiDocConstants.VALUE);
+        return getValue(FuDocConstants.VALUE);
     }
 
 
@@ -60,7 +60,7 @@ public class AnnotationData {
 
 
     public AnnotationValueType getValueType() {
-        return getValueType(ApiDocConstants.VALUE);
+        return getValueType(FuDocConstants.VALUE);
     }
 
     public AnnotationValueType getValueType(String attrName) {

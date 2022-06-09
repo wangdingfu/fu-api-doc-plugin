@@ -1,7 +1,7 @@
 package com.wdf.apidoc.util;
 
 import com.google.common.collect.Lists;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.pojo.bo.CommentLineBO;
 import org.apache.commons.lang3.StringUtils;
 
@@ -53,12 +53,12 @@ public class CommentUtils {
         }
         if (row == 0) {
             //第一行解析
-            if (lineText.startsWith(ApiDocConstants.Comment.COMMENT_START_1)) {
-                commentLineBO.setPrefix(StringUtils.substringBefore(lineText, ApiDocConstants.Comment.COMMENT_X));
-                if (lineText.endsWith(ApiDocConstants.Comment.COMMENT_END_1)) {
-                    commentLineBO.setSuffix(StringUtils.substringAfter(lineText, ApiDocConstants.Comment.COMMENT_X));
+            if (lineText.startsWith(FuDocConstants.Comment.COMMENT_START_1)) {
+                commentLineBO.setPrefix(StringUtils.substringBefore(lineText, FuDocConstants.Comment.COMMENT_X));
+                if (lineText.endsWith(FuDocConstants.Comment.COMMENT_END_1)) {
+                    commentLineBO.setSuffix(StringUtils.substringAfter(lineText, FuDocConstants.Comment.COMMENT_X));
                 }
-            } else if (lineText.startsWith(ApiDocConstants.Comment.COMMENT_START_2)) {
+            } else if (lineText.startsWith(FuDocConstants.Comment.COMMENT_START_2)) {
 
             }
             return null;

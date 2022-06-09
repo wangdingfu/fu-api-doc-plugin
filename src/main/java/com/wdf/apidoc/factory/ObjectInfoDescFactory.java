@@ -1,6 +1,6 @@
 package com.wdf.apidoc.factory;
 
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 
@@ -17,7 +17,7 @@ public class ObjectInfoDescFactory {
         objectInfoDesc.setName("`reference`");
         objectInfoDesc.setTypeView("object");
         objectInfoDesc.setApiDocObjectType(ApiDocObjectType.DEFAULT_OBJECT);
-        objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, true);
+        objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, true);
         objectInfoDesc.setDocText("`引用和父级同级的所有字段`");
         return objectInfoDesc;
     }
@@ -28,7 +28,7 @@ public class ObjectInfoDescFactory {
         objectInfoDesc.setName(name);
         objectInfoDesc.setTypeView(typeView);
         objectInfoDesc.setApiDocObjectType(ApiDocObjectType.DEFAULT_OBJECT);
-        objectInfoDesc.addExtInfo(ApiDocConstants.ExtInfo.IS_ATTR, true);
+        objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, true);
         objectInfoDesc.setDocText(comment);
         return objectInfoDesc;
     }

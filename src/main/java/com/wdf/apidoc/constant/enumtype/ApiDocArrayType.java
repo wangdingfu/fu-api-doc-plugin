@@ -1,7 +1,7 @@
 package com.wdf.apidoc.constant.enumtype;
 
 import com.intellij.psi.CommonClassNames;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -71,23 +71,23 @@ public enum ApiDocArrayType {
     Calendar1(CommonClassNames.JAVA_UTIL_CALENDAR + "[]", Calendar[].class),
     Calendar2(CommonClassNames.JAVA_UTIL_CALENDAR + "[][]", Calendar[][].class),
 
-    LocalDateTime1(ApiDocConstants.ClassPkg.LOCAL_DATE_TIME + "[]", LocalDateTime[].class),
-    LocalDateTime2(ApiDocConstants.ClassPkg.LOCAL_DATE_TIME + "[][]", LocalDateTime[][].class),
+    LocalDateTime1(FuDocConstants.ClassPkg.LOCAL_DATE_TIME + "[]", LocalDateTime[].class),
+    LocalDateTime2(FuDocConstants.ClassPkg.LOCAL_DATE_TIME + "[][]", LocalDateTime[][].class),
 
-    BigDecimal1(ApiDocConstants.ClassPkg.BIG_DECIMAL + "[]", BigDecimal[].class),
-    BigDecimal2(ApiDocConstants.ClassPkg.BIG_DECIMAL + "[][]", BigDecimal[][].class),
+    BigDecimal1(FuDocConstants.ClassPkg.BIG_DECIMAL + "[]", BigDecimal[].class),
+    BigDecimal2(FuDocConstants.ClassPkg.BIG_DECIMAL + "[][]", BigDecimal[][].class),
 
-    BigInteger1(ApiDocConstants.ClassPkg.BIG_INTEGER + "[]", BigInteger[].class),
-    BigInteger2(ApiDocConstants.ClassPkg.BIG_INTEGER + "[][]", BigInteger[][].class),
+    BigInteger1(FuDocConstants.ClassPkg.BIG_INTEGER + "[]", BigInteger[].class),
+    BigInteger2(FuDocConstants.ClassPkg.BIG_INTEGER + "[][]", BigInteger[][].class),
 
-    LocalDate1(ApiDocConstants.ClassPkg.LOCAL_DATE + "[]", LocalDate[].class),
-    LocalDate2(ApiDocConstants.ClassPkg.LOCAL_DATE + "[][]", LocalDate[][].class),
+    LocalDate1(FuDocConstants.ClassPkg.LOCAL_DATE + "[]", LocalDate[].class),
+    LocalDate2(FuDocConstants.ClassPkg.LOCAL_DATE + "[][]", LocalDate[][].class),
 
-    LocalTime1(ApiDocConstants.ClassPkg.LOCAL_TIME + "[]", LocalTime[].class),
-    LocalTime2(ApiDocConstants.ClassPkg.LOCAL_TIME + "[][]", LocalTime[][].class),
+    LocalTime1(FuDocConstants.ClassPkg.LOCAL_TIME + "[]", LocalTime[].class),
+    LocalTime2(FuDocConstants.ClassPkg.LOCAL_TIME + "[][]", LocalTime[][].class),
 
-    Timestamp1(ApiDocConstants.ClassPkg.TIMESTAMP + "[]", Timestamp[].class),
-    Timestamp2(ApiDocConstants.ClassPkg.TIMESTAMP + "[][]", Timestamp[][].class),
+    Timestamp1(FuDocConstants.ClassPkg.TIMESTAMP + "[]", Timestamp[].class),
+    Timestamp2(FuDocConstants.ClassPkg.TIMESTAMP + "[][]", Timestamp[][].class),
 
 
     Object1("java.lang.Object[]", Object[].class),

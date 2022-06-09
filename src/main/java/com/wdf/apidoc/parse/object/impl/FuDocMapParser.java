@@ -5,7 +5,7 @@ import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.wdf.apidoc.constant.ApiDocConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.factory.ObjectInfoDescFactory;
@@ -46,8 +46,8 @@ public class FuDocMapParser extends AbstractApiDocObjectParser {
         //获取泛型
         Map<String, PsiType> genericsMap = buildGenericsMap(psiType, PsiUtil.resolveClassInType(psiType));
         List<ObjectInfoDesc> childList = Lists.newArrayList();
-        childList.add(build(genericsMap.get("K"), parseObjectBO, ApiDocConstants.KEY,"属性名(key)",  CommonObjectType.STRING.getName()));
-        childList.add(build(genericsMap.get("V"), parseObjectBO, ApiDocConstants.VALUE,"属性值(value)",  CommonObjectType.OBJECT_TYPE.getName()));
+        childList.add(build(genericsMap.get("K"), parseObjectBO, FuDocConstants.KEY,"属性名(key)",  CommonObjectType.STRING.getName()));
+        childList.add(build(genericsMap.get("V"), parseObjectBO, FuDocConstants.VALUE,"属性值(value)",  CommonObjectType.OBJECT_TYPE.getName()));
         objectInfoDesc.setChildList(childList);
         return objectInfoDesc;
     }
