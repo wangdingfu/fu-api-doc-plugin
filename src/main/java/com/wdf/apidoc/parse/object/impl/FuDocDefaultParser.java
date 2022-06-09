@@ -25,7 +25,7 @@ import java.util.Objects;
  * @description 默认对象解析器(用户自定义对象)
  * @Date 2022-04-18 21:34:42
  */
-public class ApiDocDefaultParser extends AbstractApiDocObjectParser {
+public class FuDocDefaultParser extends AbstractApiDocObjectParser {
 
     @Override
     protected ApiDocObjectType getObjectType() {

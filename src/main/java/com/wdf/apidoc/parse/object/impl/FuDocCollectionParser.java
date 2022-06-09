@@ -22,7 +22,7 @@ import java.util.Objects;
  * @description 集合解析器
  * @Date 2022-04-18 21:33:19
  */
-public class ApiDocCollectionParser extends AbstractApiDocObjectParser {
+public class FuDocCollectionParser extends AbstractApiDocObjectParser {
 
 
     @Override

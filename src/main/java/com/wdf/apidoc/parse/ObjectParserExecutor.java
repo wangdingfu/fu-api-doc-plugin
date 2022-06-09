@@ -1,7 +1,6 @@
 package com.wdf.apidoc.parse;
 
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.helper.ServiceHelper;
 import com.wdf.apidoc.parse.object.ApiDocObjectParser;
 import com.wdf.apidoc.parse.object.impl.*;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
@@ -22,13 +21,13 @@ public class ObjectParserExecutor {
     private static final List<ApiDocObjectParser> OBJECT_PARSER_LIST = Lists.newArrayList();
 
     static {
-        OBJECT_PARSER_LIST.add(new ApiDocPrimitiveParser());
-        OBJECT_PARSER_LIST.add(new ApiDocCommonObjectParser());
-        OBJECT_PARSER_LIST.add(new ApiDocFilterObjectParser());
-        OBJECT_PARSER_LIST.add(new ApiDocArrayParser());
-        OBJECT_PARSER_LIST.add(new ApiDocCollectionParser());
-        OBJECT_PARSER_LIST.add(new ApiDocMapParser());
-        OBJECT_PARSER_LIST.add(new ApiDocDefaultParser());
+        OBJECT_PARSER_LIST.add(new FuDocPrimitiveParser());
+        OBJECT_PARSER_LIST.add(new FuDocCommonObjectParser());
+        OBJECT_PARSER_LIST.add(new FuDocFilterObjectParser());
+        OBJECT_PARSER_LIST.add(new FuDocArrayParser());
+        OBJECT_PARSER_LIST.add(new FuDocCollectionParser());
+        OBJECT_PARSER_LIST.add(new FuDocMapParser());
+        OBJECT_PARSER_LIST.add(new FuDocDefaultParser());
         OBJECT_PARSER_LIST.add(new FuDocObjectParser());
 //        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocCommonObjectParser.class));
 //        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocFilterObjectParser.class));

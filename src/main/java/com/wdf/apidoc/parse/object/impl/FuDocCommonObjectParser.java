@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  * @description java 公共常用对象解析器
  * @Date 2022-04-18 21:26:53
  */
-public class ApiDocCommonObjectParser extends AbstractApiDocObjectParser {
+public class FuDocCommonObjectParser extends AbstractApiDocObjectParser {
 
     /**
      * 公共对象

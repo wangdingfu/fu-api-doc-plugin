@@ -12,7 +12,7 @@ import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
  * @descption: 数组解析器
  * @date 2022-05-22 20:22:10
  */
-public class ApiDocArrayParser extends AbstractApiDocObjectParser {
+public class FuDocArrayParser extends AbstractApiDocObjectParser {
     @Override
     protected ApiDocObjectType getObjectType() {
         return ApiDocObjectType.ARRAY;

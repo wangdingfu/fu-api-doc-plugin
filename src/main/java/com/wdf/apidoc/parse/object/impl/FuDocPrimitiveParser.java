@@ -13,7 +13,7 @@ import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
  * @description 基础数据类型解析器
  * @Date 2022-04-18 21:13:00
  */
-public class ApiDocPrimitiveParser extends AbstractApiDocObjectParser {
+public class FuDocPrimitiveParser extends AbstractApiDocObjectParser {
 
     @Override
     protected ApiDocObjectType getObjectType() {

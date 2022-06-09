@@ -24,7 +24,7 @@ import java.util.Objects;
  * @description map对象解析器
  * @Date 2022-04-18 21:33:58
  */
-public class ApiDocMapParser extends AbstractApiDocObjectParser {
+public class FuDocMapParser extends AbstractApiDocObjectParser {
     @Override
     protected ApiDocObjectType getObjectType() {
         return ApiDocObjectType.MAP_OBJECT;
