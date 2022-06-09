@@ -1,10 +1,12 @@
 package com.wdf.apidoc.assemble.impl;
 
 import com.wdf.apidoc.assemble.AbstractAssembleService;
+import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.pojo.bo.AssembleBO;
 import com.wdf.apidoc.pojo.data.FuApiDocData;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
+import com.wdf.apidoc.util.FuDocUtils;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class FeignAssembleService extends AbstractAssembleService {
 
     @Override
     public boolean isAssemble(ClassInfoDesc classInfoDesc) {
-        return false;
+        return classInfoDesc.exists(AnnotationConstants.FEIGN_CLIENT);
     }
 
     @Override
