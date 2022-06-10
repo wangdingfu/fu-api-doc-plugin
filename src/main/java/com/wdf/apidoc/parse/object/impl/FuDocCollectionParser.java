@@ -6,7 +6,7 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.constant.FuDocConstants;
-import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
+import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.parse.ObjectParserExecutor;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
@@ -26,8 +26,8 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
 
 
     @Override
-    protected ApiDocObjectType getObjectType() {
-        return ApiDocObjectType.COLLECTION_OBJECT;
+    protected FuDocObjectType getObjectType() {
+        return FuDocObjectType.COLLECTION_OBJECT;
     }
 
 
@@ -73,7 +73,7 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
         if (commonObjectType.isPrimitiveOrCommon()) {
             //基本数据类型和公共数据类型 可以直接解析返回
             genericsInfoDesc = buildDefault(genericsType, commonObjectType.getName(), new ParseObjectBO());
-            objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.GENERICS_TYPE, commonObjectType.getApiDocObjectType());
+            objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.GENERICS_TYPE, commonObjectType.getFuDocObjectType());
             genericsInfoDesc.setValue(mockCommonType(genericsInfoDesc));
             objectInfoDesc.setChildList(Lists.newArrayList(genericsInfoDesc));
         } else {
@@ -84,13 +84,13 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
             genericsInfoDesc = ObjectParserExecutor.execute(genericsType, genericsParseObjectBO);
             if (Objects.nonNull(genericsInfoDesc)) {
                 //将泛型对象的字段集合设置到当前apiDoc中
-                ApiDocObjectType apiDocObjectType = genericsInfoDesc.getApiDocObjectType();
+                FuDocObjectType fuDocObjectType = genericsInfoDesc.getFuDocObjectType();
                 List<ObjectInfoDesc> childList = genericsInfoDesc.getChildList();
                 if (genericsInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.IS_ATTR)) {
                     childList = Lists.newArrayList(genericsInfoDesc);
                 }
                 objectInfoDesc.setChildList(childList);
-                objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.GENERICS_TYPE, apiDocObjectType);
+                objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.GENERICS_TYPE, fuDocObjectType);
             }
         }
         Object value;

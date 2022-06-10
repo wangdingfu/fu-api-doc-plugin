@@ -7,7 +7,7 @@ import com.intellij.psi.PsiAnnotation;
  * @Descption
  * @Date 2022-04-28 22:18:28
  */
-public interface ApiDocField {
+public interface FuDocField {
 
     /**
      * 获取字段名称

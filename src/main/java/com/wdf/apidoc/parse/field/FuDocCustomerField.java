@@ -7,7 +7,7 @@ import com.intellij.psi.PsiAnnotation;
  * @Descption 自定义字段
  * @Date 2022-06-08 22:20:43
  */
-public class FuDocCustomerField extends AbstractApiDocField {
+public class FuDocCustomerField extends AbstractFuDocField {
 
     private final String fieldName;
 

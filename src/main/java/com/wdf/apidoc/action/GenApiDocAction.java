@@ -14,8 +14,8 @@ import com.wdf.apidoc.constant.MessageConstants;
 import com.wdf.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.apidoc.data.FuDocDataContent;
 import com.wdf.apidoc.helper.ServiceHelper;
-import com.wdf.apidoc.parse.ApiDocClassParser;
-import com.wdf.apidoc.parse.ApiDocClassParserImpl;
+import com.wdf.apidoc.parse.FuDocClassParser;
+import com.wdf.apidoc.parse.FuDocClassParserImpl;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.desc.ClassInfoDesc;
@@ -79,8 +79,8 @@ public class GenApiDocAction extends AnAction {
             //获取当前操作的方法
             PsiMethod targetMethod = PsiClassUtils.getTargetMethod(targetElement);
             //解析java类
-            ApiDocClassParser apiDocClassParser = ServiceHelper.getService(ApiDocClassParserImpl.class);
-            ClassInfoDesc classInfoDesc = apiDocClassParser.parse(apiDocContext, psiClass, ObjectUtils.newArrayList(targetMethod));
+            FuDocClassParser fuDocClassParser = ServiceHelper.getService(FuDocClassParserImpl.class);
+            ClassInfoDesc classInfoDesc = fuDocClassParser.parse(apiDocContext, psiClass, ObjectUtils.newArrayList(targetMethod));
 
             //组装ApiDocData对象
             List<FuApiDocItemData> resultList = AssembleServiceExecutor.execute(classInfoDesc);

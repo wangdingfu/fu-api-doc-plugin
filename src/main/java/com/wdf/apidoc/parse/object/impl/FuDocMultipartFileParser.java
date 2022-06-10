@@ -2,7 +2,7 @@ package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.PsiType;
 import com.wdf.apidoc.constant.CommonObjectNames;
-import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
+import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
@@ -14,8 +14,8 @@ import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
  */
 public class FuDocMultipartFileParser extends AbstractApiDocObjectParser {
     @Override
-    protected ApiDocObjectType getObjectType() {
-        return ApiDocObjectType.MULTIPART_FILE;
+    protected FuDocObjectType getObjectType() {
+        return FuDocObjectType.MULTIPART_FILE;
     }
 
     @Override

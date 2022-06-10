@@ -1,7 +1,7 @@
 package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
+import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
@@ -14,8 +14,8 @@ import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
  */
 public class FuDocObjectParser extends AbstractApiDocObjectParser {
     @Override
-    protected ApiDocObjectType getObjectType() {
-        return ApiDocObjectType.OBJECT;
+    protected FuDocObjectType getObjectType() {
+        return FuDocObjectType.OBJECT;
     }
 
     @Override

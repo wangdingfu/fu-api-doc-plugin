@@ -5,7 +5,6 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
-import com.wdf.apidoc.parse.field.AbstractApiDocField;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Objects;
@@ -15,7 +14,7 @@ import java.util.Objects;
  * @Descption psiField字段
  * @Date 2022-04-28 22:20:47
  */
-public class ApiDocPsiField extends AbstractApiDocField {
+public class FuDocPsiField extends AbstractFuDocField {
 
 
     /**
@@ -23,7 +22,7 @@ public class ApiDocPsiField extends AbstractApiDocField {
      */
     private final PsiField psiField;
 
-    public ApiDocPsiField(PsiField psiField) {
+    public FuDocPsiField(PsiField psiField) {
         this.psiField = psiField;
     }
 

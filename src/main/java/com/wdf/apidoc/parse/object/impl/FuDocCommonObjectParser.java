@@ -1,13 +1,11 @@
 package com.wdf.apidoc.parse.object.impl;
 
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
+import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
-import com.wdf.apidoc.pojo.data.ApiDocObjectData;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author wangdingfu
@@ -20,8 +18,8 @@ public class FuDocCommonObjectParser extends AbstractApiDocObjectParser {
      * 公共对象
      */
     @Override
-    protected ApiDocObjectType getObjectType() {
-        return ApiDocObjectType.COMMON_OBJECT;
+    protected FuDocObjectType getObjectType() {
+        return FuDocObjectType.COMMON_OBJECT;
     }
 
     /**

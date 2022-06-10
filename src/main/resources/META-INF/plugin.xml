@@ -23,7 +23,7 @@
         <!-- service -->
 
         <!-- parse service -->
-        <applicationService serviceImplementation="com.wdf.apidoc.parse.ApiDocClassParserImpl"/>
+        <applicationService serviceImplementation="com.wdf.apidoc.parse.FuDocClassParserImpl"/>
 
         <!-- assemble service -->
         <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.ControllerAssembleService"/>
@@ -33,7 +33,7 @@
 
 
         <!-- mock service -->
-        <applicationService serviceImplementation="com.wdf.apidoc.mock.ApiDocObjectJMockData"/>
+        <applicationService serviceImplementation="com.wdf.apidoc.mock.FuDocObjectJMockData"/>
 
 
     </extensions>

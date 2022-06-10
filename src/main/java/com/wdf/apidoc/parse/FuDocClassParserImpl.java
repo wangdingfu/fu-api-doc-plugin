@@ -5,8 +5,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.apidoc.helper.DocCommentParseHelper;
-import com.wdf.apidoc.parse.field.ApiDocPsiClass;
-import com.wdf.apidoc.parse.field.ApiDocPsiParameter;
+import com.wdf.apidoc.parse.field.FuDocPsiClass;
+import com.wdf.apidoc.parse.field.FuDocPsiParameter;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.data.AnnotationData;
@@ -29,7 +29,7 @@ import java.util.Objects;
  * @descption: java类解析实现类
  * @date 2022-05-08 22:38:21
  */
-public class ApiDocClassParserImpl implements ApiDocClassParser {
+public class FuDocClassParserImpl implements FuDocClassParser {
 
     /**
      * 解析java类 将java类的一些信息解析封装
@@ -84,7 +84,7 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
         List<ObjectInfoDesc> requestList = Lists.newArrayList();
         for (PsiParameter parameter : parameterList.getParameters()) {
             ParseObjectBO parseObjectBO = new ParseObjectBO();
-            parseObjectBO.setApiDocField(new ApiDocPsiParameter(parameter, apiDocCommentData));
+            parseObjectBO.setFuDocField(new FuDocPsiParameter(parameter, apiDocCommentData));
             parseObjectBO.setApiDocContext(apiDocContext);
             ObjectInfoDesc objectInfoDesc = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
             if (Objects.nonNull(objectInfoDesc)) {
@@ -112,7 +112,7 @@ public class ApiDocClassParserImpl implements ApiDocClassParser {
         }
         PsiClass psiClass = PsiUtil.resolveClassInType(returnType);
         if (Objects.nonNull(psiClass)) {
-            parseObjectBO.setApiDocField(new ApiDocPsiClass(psiClass, apiDocCommentData));
+            parseObjectBO.setFuDocField(new FuDocPsiClass(psiClass, apiDocCommentData));
         }
         return ObjectParserExecutor.execute(returnType, parseObjectBO);
     }

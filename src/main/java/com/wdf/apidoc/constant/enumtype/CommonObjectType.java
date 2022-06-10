@@ -26,43 +26,43 @@ public enum CommonObjectType {
     /**
      * java 8中基本数据类型
      */
-    PRIMITIVE_INT("int", "int", int.class, ApiDocObjectType.PRIMITIVE),
-    PRIMITIVE_BOOLEAN("boolean", "boolean", boolean.class, ApiDocObjectType.PRIMITIVE),
-    PRIMITIVE_CHAR("char", "char", char.class, ApiDocObjectType.PRIMITIVE),
-    PRIMITIVE_SHORT("short", "short", short.class, ApiDocObjectType.PRIMITIVE),
-    PRIMITIVE_BYTE("byte", "byte", byte.class, ApiDocObjectType.PRIMITIVE),
-    PRIMITIVE_LONG("long", "long", long.class, ApiDocObjectType.PRIMITIVE),
-    PRIMITIVE_FLOAT("float", "float", float.class, ApiDocObjectType.PRIMITIVE),
-    PRIMITIVE_DOUBLE("double", "double", double.class, ApiDocObjectType.PRIMITIVE),
+    PRIMITIVE_INT("int", "int", int.class, FuDocObjectType.PRIMITIVE),
+    PRIMITIVE_BOOLEAN("boolean", "boolean", boolean.class, FuDocObjectType.PRIMITIVE),
+    PRIMITIVE_CHAR("char", "char", char.class, FuDocObjectType.PRIMITIVE),
+    PRIMITIVE_SHORT("short", "short", short.class, FuDocObjectType.PRIMITIVE),
+    PRIMITIVE_BYTE("byte", "byte", byte.class, FuDocObjectType.PRIMITIVE),
+    PRIMITIVE_LONG("long", "long", long.class, FuDocObjectType.PRIMITIVE),
+    PRIMITIVE_FLOAT("float", "float", float.class, FuDocObjectType.PRIMITIVE),
+    PRIMITIVE_DOUBLE("double", "double", double.class, FuDocObjectType.PRIMITIVE),
 
 
     /**
      * 常用数据类型
      */
-    STRING(CommonClassNames.JAVA_LANG_STRING, "string", String.class, ApiDocObjectType.COMMON_OBJECT),
-    NUMBER(CommonClassNames.JAVA_LANG_NUMBER, "number", Number.class, ApiDocObjectType.COMMON_OBJECT),
-    BOOLEAN(CommonClassNames.JAVA_LANG_BOOLEAN, "boolean", Boolean.class, ApiDocObjectType.COMMON_OBJECT),
-    BYTE(CommonClassNames.JAVA_LANG_BYTE, "byte", byte.class, ApiDocObjectType.COMMON_OBJECT),
-    SHORT(CommonClassNames.JAVA_LANG_SHORT, "short", Short.class, ApiDocObjectType.COMMON_OBJECT),
-    INTEGER(CommonClassNames.JAVA_LANG_INTEGER, "integer", Integer.class, ApiDocObjectType.COMMON_OBJECT),
-    LONG(CommonClassNames.JAVA_LANG_LONG, "long", Long.class, ApiDocObjectType.COMMON_OBJECT),
-    FLOAT(CommonClassNames.JAVA_LANG_FLOAT, "float", Float.class, ApiDocObjectType.COMMON_OBJECT),
-    DOUBLE(CommonClassNames.JAVA_LANG_DOUBLE, "double", Double.class, ApiDocObjectType.COMMON_OBJECT),
-    CHARACTER(CommonClassNames.JAVA_LANG_CHARACTER, "char", char.class, ApiDocObjectType.COMMON_OBJECT),
-    BUFFER(CommonClassNames.JAVA_LANG_STRING_BUFFER, "string", String.class, ApiDocObjectType.COMMON_OBJECT),
-    BUILDER(CommonClassNames.JAVA_LANG_STRING_BUILDER, "string", String.class, ApiDocObjectType.COMMON_OBJECT),
-    BIG_DECIMAL(FuDocConstants.ClassPkg.BIG_DECIMAL, "bigDecimal", BigDecimal.class, ApiDocObjectType.COMMON_OBJECT),
-    BIG_INTEGER(FuDocConstants.ClassPkg.BIG_INTEGER, "bigInteger", BigInteger.class, ApiDocObjectType.COMMON_OBJECT),
-    DATE(CommonClassNames.JAVA_UTIL_DATE, "date", Date.class, ApiDocObjectType.COMMON_OBJECT),
-    CALENDAR(CommonClassNames.JAVA_UTIL_CALENDAR, "calendar", Calendar.class, ApiDocObjectType.COMMON_OBJECT),
-    LOCAL_DATETIME(FuDocConstants.ClassPkg.LOCAL_DATE_TIME, "localDateTime", LocalDateTime.class, ApiDocObjectType.COMMON_OBJECT),
-    LOCAL_DATE(FuDocConstants.ClassPkg.LOCAL_DATE, "localDate", LocalDate.class, ApiDocObjectType.COMMON_OBJECT),
-    LOCAL_TIME(FuDocConstants.ClassPkg.LOCAL_TIME, "localTime", LocalTime.class, ApiDocObjectType.COMMON_OBJECT),
-    TIMESTAMP(FuDocConstants.ClassPkg.TIMESTAMP, "timestamp", Timestamp.class, ApiDocObjectType.COMMON_OBJECT),
-    ENUM(CommonClassNames.JAVA_LANG_ENUM, "enum", Enum.class, ApiDocObjectType.COMMON_OBJECT),
+    STRING(CommonClassNames.JAVA_LANG_STRING, "string", String.class, FuDocObjectType.COMMON_OBJECT),
+    NUMBER(CommonClassNames.JAVA_LANG_NUMBER, "number", Number.class, FuDocObjectType.COMMON_OBJECT),
+    BOOLEAN(CommonClassNames.JAVA_LANG_BOOLEAN, "boolean", Boolean.class, FuDocObjectType.COMMON_OBJECT),
+    BYTE(CommonClassNames.JAVA_LANG_BYTE, "byte", byte.class, FuDocObjectType.COMMON_OBJECT),
+    SHORT(CommonClassNames.JAVA_LANG_SHORT, "short", Short.class, FuDocObjectType.COMMON_OBJECT),
+    INTEGER(CommonClassNames.JAVA_LANG_INTEGER, "integer", Integer.class, FuDocObjectType.COMMON_OBJECT),
+    LONG(CommonClassNames.JAVA_LANG_LONG, "long", Long.class, FuDocObjectType.COMMON_OBJECT),
+    FLOAT(CommonClassNames.JAVA_LANG_FLOAT, "float", Float.class, FuDocObjectType.COMMON_OBJECT),
+    DOUBLE(CommonClassNames.JAVA_LANG_DOUBLE, "double", Double.class, FuDocObjectType.COMMON_OBJECT),
+    CHARACTER(CommonClassNames.JAVA_LANG_CHARACTER, "char", char.class, FuDocObjectType.COMMON_OBJECT),
+    BUFFER(CommonClassNames.JAVA_LANG_STRING_BUFFER, "string", String.class, FuDocObjectType.COMMON_OBJECT),
+    BUILDER(CommonClassNames.JAVA_LANG_STRING_BUILDER, "string", String.class, FuDocObjectType.COMMON_OBJECT),
+    BIG_DECIMAL(FuDocConstants.ClassPkg.BIG_DECIMAL, "bigDecimal", BigDecimal.class, FuDocObjectType.COMMON_OBJECT),
+    BIG_INTEGER(FuDocConstants.ClassPkg.BIG_INTEGER, "bigInteger", BigInteger.class, FuDocObjectType.COMMON_OBJECT),
+    DATE(CommonClassNames.JAVA_UTIL_DATE, "date", Date.class, FuDocObjectType.COMMON_OBJECT),
+    CALENDAR(CommonClassNames.JAVA_UTIL_CALENDAR, "calendar", Calendar.class, FuDocObjectType.COMMON_OBJECT),
+    LOCAL_DATETIME(FuDocConstants.ClassPkg.LOCAL_DATE_TIME, "localDateTime", LocalDateTime.class, FuDocObjectType.COMMON_OBJECT),
+    LOCAL_DATE(FuDocConstants.ClassPkg.LOCAL_DATE, "localDate", LocalDate.class, FuDocObjectType.COMMON_OBJECT),
+    LOCAL_TIME(FuDocConstants.ClassPkg.LOCAL_TIME, "localTime", LocalTime.class, FuDocObjectType.COMMON_OBJECT),
+    TIMESTAMP(FuDocConstants.ClassPkg.TIMESTAMP, "timestamp", Timestamp.class, FuDocObjectType.COMMON_OBJECT),
+    ENUM(CommonClassNames.JAVA_LANG_ENUM, "enum", Enum.class, FuDocObjectType.COMMON_OBJECT),
 
 
-    OBJECT_TYPE("java.lang.Object", "object", Object.class, ApiDocObjectType.DEFAULT_OBJECT),
+    OBJECT_TYPE("java.lang.Object", "object", Object.class, FuDocObjectType.DEFAULT_OBJECT),
     ;
 
     private final String objPkg;
@@ -71,35 +71,35 @@ public enum CommonObjectType {
 
     private final Class<?> clazz;
 
-    private final ApiDocObjectType apiDocObjectType;
+    private final FuDocObjectType fuDocObjectType;
 
-    CommonObjectType(String objPkg, String name, Class<?> clazz, ApiDocObjectType apiDocObjectType) {
+    CommonObjectType(String objPkg, String name, Class<?> clazz, FuDocObjectType fuDocObjectType) {
         this.objPkg = objPkg;
         this.name = name;
         this.clazz = clazz;
-        this.apiDocObjectType = apiDocObjectType;
+        this.fuDocObjectType = fuDocObjectType;
     }
 
     public boolean isPrimitiveOrCommon() {
-        return ApiDocObjectType.COMMON_OBJECT.equals(this.getApiDocObjectType())
-                || ApiDocObjectType.PRIMITIVE.equals(this.getApiDocObjectType());
+        return FuDocObjectType.COMMON_OBJECT.equals(this.getFuDocObjectType())
+                || FuDocObjectType.PRIMITIVE.equals(this.getFuDocObjectType());
     }
 
 
     public static boolean isPrimitive(String objPkg) {
-        ApiDocObjectType apiDocObjectType = getEnum(objPkg).getApiDocObjectType();
-        return ApiDocObjectType.PRIMITIVE.equals(apiDocObjectType);
+        FuDocObjectType fuDocObjectType = getEnum(objPkg).getFuDocObjectType();
+        return FuDocObjectType.PRIMITIVE.equals(fuDocObjectType);
     }
 
     public static boolean isPrimitiveOrCommon(String objPkg) {
-        ApiDocObjectType apiDocObjectType = getEnum(objPkg).getApiDocObjectType();
-        return ApiDocObjectType.COMMON_OBJECT.equals(apiDocObjectType)
-                || ApiDocObjectType.PRIMITIVE.equals(apiDocObjectType);
+        FuDocObjectType fuDocObjectType = getEnum(objPkg).getFuDocObjectType();
+        return FuDocObjectType.COMMON_OBJECT.equals(fuDocObjectType)
+                || FuDocObjectType.PRIMITIVE.equals(fuDocObjectType);
     }
 
     public static boolean isCommon(String objPkg) {
-        ApiDocObjectType apiDocObjectType = getEnum(objPkg).getApiDocObjectType();
-        return ApiDocObjectType.COMMON_OBJECT.equals(apiDocObjectType);
+        FuDocObjectType fuDocObjectType = getEnum(objPkg).getFuDocObjectType();
+        return FuDocObjectType.COMMON_OBJECT.equals(fuDocObjectType);
     }
 
     public static CommonObjectType getEnum(String objPkg) {

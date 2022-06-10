@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.FuDocConstants;
-import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
+import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.apidoc.constant.enumtype.ContentType;
 import com.wdf.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.apidoc.pojo.data.AnnotationData;
@@ -142,11 +142,11 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
     }
 
     private String formatValue(ObjectInfoDesc objectInfoDesc) {
-        ApiDocObjectType apiDocObjectType;
+        FuDocObjectType fuDocObjectType;
         Object value;
-        if (Objects.nonNull(apiDocObjectType = objectInfoDesc.getApiDocObjectType())
+        if (Objects.nonNull(fuDocObjectType = objectInfoDesc.getFuDocObjectType())
                 && Objects.nonNull(value = objectInfoDesc.getValue())) {
-            if (YesOrNo.YES.equals(isSimpleType(apiDocObjectType))) {
+            if (YesOrNo.YES.equals(isSimpleType(fuDocObjectType))) {
                 return buildExpress(objectInfoDesc.getName(), value.toString());
             }
             if (value instanceof JSONObject) {
@@ -203,11 +203,11 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
     }
 
 
-    private YesOrNo isSimpleType(ApiDocObjectType apiDocObjectType) {
-        if (Objects.isNull(apiDocObjectType)) {
+    private YesOrNo isSimpleType(FuDocObjectType fuDocObjectType) {
+        if (Objects.isNull(fuDocObjectType)) {
             return YesOrNo.NO;
         }
-        switch (apiDocObjectType) {
+        switch (fuDocObjectType) {
             case ARRAY:
             case PRIMITIVE:
             case COMMON_OBJECT:

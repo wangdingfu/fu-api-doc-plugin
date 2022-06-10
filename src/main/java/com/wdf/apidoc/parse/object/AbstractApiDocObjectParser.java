@@ -6,12 +6,12 @@ import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
 import com.wdf.apidoc.constant.FuDocConstants;
-import com.wdf.apidoc.constant.enumtype.ApiDocArrayType;
-import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
+import com.wdf.apidoc.constant.enumtype.FuDocArrayType;
+import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
-import com.wdf.apidoc.mock.ApiDocObjectJMockData;
-import com.wdf.apidoc.mock.ApiDocObjectMock;
-import com.wdf.apidoc.parse.field.ApiDocField;
+import com.wdf.apidoc.mock.FuDocObjectJMockData;
+import com.wdf.apidoc.mock.FuDocObjectMock;
+import com.wdf.apidoc.parse.field.FuDocField;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.apidoc.util.AnnotationUtils;
@@ -30,12 +30,12 @@ import java.util.Objects;
  */
 public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
 
-    private final ApiDocObjectMock apiDocObjectMock = new ApiDocObjectJMockData();
+    private final FuDocObjectMock fuDocObjectMock = new FuDocObjectJMockData();
 
     /**
      * 获取对象类型
      */
-    protected abstract ApiDocObjectType getObjectType();
+    protected abstract FuDocObjectType getObjectType();
 
     /**
      * 构建一个默认的ApiDoc对象
@@ -47,18 +47,18 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
      */
     protected ObjectInfoDesc buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
         ObjectInfoDesc objectInfoDesc = new ObjectInfoDesc();
-        ApiDocField apiDocField = parseObjectBO.getApiDocField();
-        if (Objects.nonNull(apiDocField)) {
-            objectInfoDesc.setDocText(apiDocField.getComment());
-            objectInfoDesc.setName(apiDocField.getName());
-            objectInfoDesc.setAnnotationDataMap(AnnotationUtils.parse(apiDocField.getAnnotations()));
-            addModifierProperty(FuDocConstants.ModifierProperty.STATIC, apiDocField, objectInfoDesc);
-            addModifierProperty(FuDocConstants.ModifierProperty.FINAL, apiDocField, objectInfoDesc);
+        FuDocField fuDocField = parseObjectBO.getFuDocField();
+        if (Objects.nonNull(fuDocField)) {
+            objectInfoDesc.setDocText(fuDocField.getComment());
+            objectInfoDesc.setName(fuDocField.getName());
+            objectInfoDesc.setAnnotationDataMap(AnnotationUtils.parse(fuDocField.getAnnotations()));
+            addModifierProperty(FuDocConstants.ModifierProperty.STATIC, fuDocField, objectInfoDesc);
+            addModifierProperty(FuDocConstants.ModifierProperty.FINAL, fuDocField, objectInfoDesc);
         }
         objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, true);
         objectInfoDesc.setTypeView(typeView);
         objectInfoDesc.setType(psiType.getCanonicalText());
-        objectInfoDesc.setApiDocObjectType(getObjectType());
+        objectInfoDesc.setFuDocObjectType(getObjectType());
         objectInfoDesc.setValue(mockCommonType(objectInfoDesc));
         return objectInfoDesc;
     }
@@ -107,12 +107,12 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         if (commonObjectType.isPrimitiveOrCommon()) {
             clazz = commonObjectType.getClazz();
         }
-        if (ApiDocObjectType.ARRAY.equals(objectInfoDesc.getApiDocObjectType())) {
+        if (FuDocObjectType.ARRAY.equals(objectInfoDesc.getFuDocObjectType())) {
             //当前参数为数组
-            clazz = ApiDocArrayType.getClass(type);
+            clazz = FuDocArrayType.getClass(type);
         }
         if (Objects.nonNull(clazz)) {
-            return apiDocObjectMock.mock(clazz, objectInfoDesc.getName());
+            return fuDocObjectMock.mock(clazz, objectInfoDesc.getName());
         }
         return null;
     }
@@ -139,8 +139,8 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
     }
 
 
-    private void addModifierProperty(String property, ApiDocField apiDocField, ObjectInfoDesc objectInfoDesc) {
-        if (apiDocField.hasProperty(property)) {
+    private void addModifierProperty(String property, FuDocField fuDocField, ObjectInfoDesc objectInfoDesc) {
+        if (fuDocField.hasProperty(property)) {
             objectInfoDesc.addExtInfo(property, true);
         }
     }

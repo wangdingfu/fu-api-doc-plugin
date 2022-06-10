@@ -14,7 +14,7 @@ import java.util.List;
  * @descption: 类解析器
  * @date 2022-05-08 22:34:17
  */
-public interface ApiDocClassParser {
+public interface FuDocClassParser {
 
 
     /**

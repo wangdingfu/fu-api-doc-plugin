@@ -1,7 +1,7 @@
 package com.wdf.apidoc.pojo.bo;
 
 import com.intellij.psi.PsiType;
-import com.wdf.apidoc.parse.field.ApiDocField;
+import com.wdf.apidoc.parse.field.FuDocField;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +27,7 @@ public class ParseObjectBO {
     /**
      * 字段
      */
-    private ApiDocField apiDocField;
+    private FuDocField fuDocField;
 
     /**
      * 泛型map

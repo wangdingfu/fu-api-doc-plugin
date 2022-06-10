@@ -7,7 +7,7 @@ import com.github.jsonzou.jmockdata.JMockData;
  * @descption: JMockData 实现mock数据
  * @date 2022-05-22 21:49:10
  */
-public class ApiDocObjectJMockData implements ApiDocObjectMock{
+public class FuDocObjectJMockData implements FuDocObjectMock {
 
     /**
      * JMockData框架mock数据

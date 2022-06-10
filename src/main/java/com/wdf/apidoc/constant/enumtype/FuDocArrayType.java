@@ -20,7 +20,7 @@ import java.util.Date;
  * @Date 2022-05-24 22:45:59
  */
 @Getter
-public enum ApiDocArrayType {
+public enum FuDocArrayType {
 
     int1("int[]", int[].class),
     int2("int[][]", int[][].class),
@@ -99,20 +99,20 @@ public enum ApiDocArrayType {
 
     private final Class<?> arrayClass;
 
-    ApiDocArrayType(String arrayType, Class<?> arrayClass) {
+    FuDocArrayType(String arrayType, Class<?> arrayClass) {
         this.arrayType = arrayType;
         this.arrayClass = arrayClass;
     }
 
-    public static ApiDocArrayType getEnum(String arrayType) {
+    public static FuDocArrayType getEnum(String arrayType) {
         if (StringUtils.isNotBlank(arrayType)) {
-            for (ApiDocArrayType value : ApiDocArrayType.values()) {
+            for (FuDocArrayType value : FuDocArrayType.values()) {
                 if (value.getArrayType().equals(arrayType)) {
                     return value;
                 }
             }
         }
-        return ApiDocArrayType.Object1;
+        return FuDocArrayType.Object1;
     }
 
 

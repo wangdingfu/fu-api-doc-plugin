@@ -3,10 +3,10 @@ package com.wdf.apidoc.parse.object.impl;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.constant.FuDocConstants;
-import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
+import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.apidoc.parse.ObjectParserExecutor;
-import com.wdf.apidoc.parse.field.ApiDocField;
-import com.wdf.apidoc.parse.field.ApiDocPsiField;
+import com.wdf.apidoc.parse.field.FuDocField;
+import com.wdf.apidoc.parse.field.FuDocPsiField;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.apidoc.pojo.bo.PsiClassTypeBO;
@@ -28,8 +28,8 @@ import java.util.Objects;
 public class FuDocDefaultParser extends AbstractApiDocObjectParser {
 
     @Override
-    protected ApiDocObjectType getObjectType() {
-        return ApiDocObjectType.DEFAULT_OBJECT;
+    protected FuDocObjectType getObjectType() {
+        return FuDocObjectType.DEFAULT_OBJECT;
     }
 
     /**
@@ -70,9 +70,9 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
         if (Objects.isNull(objectInfoDesc)) {
             List<ObjectInfoDesc> objectInfoDescList = Lists.newArrayList();
             PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
-            ApiDocField apiDocField = parseObjectBO.getApiDocField();
+            FuDocField fuDocField = parseObjectBO.getFuDocField();
             objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
-            boolean isAttr = Objects.nonNull(apiDocField) && apiDocField instanceof ApiDocPsiField;
+            boolean isAttr = Objects.nonNull(fuDocField) && fuDocField instanceof FuDocPsiField;
             objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, isAttr);
             //添加到EarlyMap中（半成品对象）
             apiDocContext.add(canonicalText, objectInfoDesc);
@@ -129,7 +129,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             fieldParseObjectBO.setGenericsMap(buildGenericsMap(psiType, psiClass));
             fieldParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
             for (PsiField psiField : psiClass.getFields()) {
-                fieldParseObjectBO.setApiDocField(new ApiDocPsiField(psiField));
+                fieldParseObjectBO.setFuDocField(new FuDocPsiField(psiField));
                 childList.add(ObjectParserExecutor.execute(psiField.getType(), fieldParseObjectBO));
             }
             childList.removeAll(Collections.singleton(null));

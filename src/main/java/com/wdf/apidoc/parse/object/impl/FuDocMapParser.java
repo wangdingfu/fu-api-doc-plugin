@@ -6,7 +6,7 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.constant.FuDocConstants;
-import com.wdf.apidoc.constant.enumtype.ApiDocObjectType;
+import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.apidoc.factory.ObjectInfoDescFactory;
 import com.wdf.apidoc.parse.ObjectParserExecutor;
@@ -26,8 +26,8 @@ import java.util.Objects;
  */
 public class FuDocMapParser extends AbstractApiDocObjectParser {
     @Override
-    protected ApiDocObjectType getObjectType() {
-        return ApiDocObjectType.MAP_OBJECT;
+    protected FuDocObjectType getObjectType() {
+        return FuDocObjectType.MAP_OBJECT;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class FuDocMapParser extends AbstractApiDocObjectParser {
         }
         ParseObjectBO genericParseObjectBO = new ParseObjectBO();
         genericParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
-        genericParseObjectBO.setApiDocField(new FuDocCustomerField(name, comment));
+        genericParseObjectBO.setFuDocField(new FuDocCustomerField(name, comment));
         return ObjectParserExecutor.execute(psiType, genericParseObjectBO);
     }
 

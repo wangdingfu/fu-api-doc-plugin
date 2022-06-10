@@ -5,7 +5,7 @@ package com.wdf.apidoc.mock;
  * @descption: ApiDoc mock数据
  * @date 2022-05-22 21:47:46
  */
-public interface ApiDocObjectMock {
+public interface FuDocObjectMock {
 
     /**
      * mock指定类型的数据

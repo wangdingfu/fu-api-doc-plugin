@@ -3,7 +3,6 @@ package com.wdf.apidoc.parse.field;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiParameter;
-import com.wdf.apidoc.parse.field.AbstractApiDocField;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import org.apache.commons.lang.StringUtils;
 
@@ -14,13 +13,13 @@ import java.util.Objects;
  * @Descption
  * @Date 2022-04-28 22:25:06
  */
-public class ApiDocPsiParameter extends AbstractApiDocField {
+public class FuDocPsiParameter extends AbstractFuDocField {
 
     private final PsiParameter psiParameter;
 
     private final ApiDocCommentData apiDocCommentData;
 
-    public ApiDocPsiParameter(PsiParameter psiParameter, ApiDocCommentData apiDocCommentData) {
+    public FuDocPsiParameter(PsiParameter psiParameter, ApiDocCommentData apiDocCommentData) {
         this.psiParameter = psiParameter;
         this.apiDocCommentData = apiDocCommentData;
     }
