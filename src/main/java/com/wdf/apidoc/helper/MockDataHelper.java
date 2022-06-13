@@ -94,7 +94,6 @@ public class MockDataHelper {
             }
             if (objectInfoDesc.exists(AnnotationConstants.PATH_VARIABLE)) {
                 flag = true;
-                instance.add(AnnotationConstants.PATH_VARIABLE, objectInfoDesc);
             }
             if (objectInfoDesc.exists(AnnotationConstants.REQUEST_PARAM)) {
                 flag = true;
@@ -112,9 +111,9 @@ public class MockDataHelper {
         switch (requestType) {
             case GET:
                 //只mock RequestParam注解标识的请求参数
-                return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM, AnnotationConstants.PATH_VARIABLE));
+                return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM));
             case DELETE:
-                List<ObjectInfoDesc> getList = instance.get(AnnotationConstants.REQUEST_PARAM, AnnotationConstants.PATH_VARIABLE);
+                List<ObjectInfoDesc> getList = instance.get(AnnotationConstants.REQUEST_PARAM);
                 if (CollectionUtils.isNotEmpty(getList)) {
                     return mockGetData(getList);
                 }
@@ -125,7 +124,7 @@ public class MockDataHelper {
                 if (CollectionUtils.isNotEmpty(postList)) {
                     return mockJsonData(postList);
                 }
-                return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM, AnnotationConstants.PATH_VARIABLE));
+                return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM));
             default:
         }
         return StringUtils.EMPTY;

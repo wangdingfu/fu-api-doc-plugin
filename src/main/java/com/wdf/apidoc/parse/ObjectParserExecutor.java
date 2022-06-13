@@ -27,14 +27,9 @@ public class ObjectParserExecutor {
         OBJECT_PARSER_LIST.add(new FuDocArrayParser());
         OBJECT_PARSER_LIST.add(new FuDocCollectionParser());
         OBJECT_PARSER_LIST.add(new FuDocMapParser());
-        OBJECT_PARSER_LIST.add(new FuDocDefaultParser());
         OBJECT_PARSER_LIST.add(new FuDocObjectParser());
-//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocCommonObjectParser.class));
-//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocFilterObjectParser.class));
-//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocArrayParser.class));
-//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocCollectionParser.class));
-//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocMapParser.class));
-//        OBJECT_PARSER_LIST.add(ServiceHelper.getService(ApiDocDefaultParser.class));
+        OBJECT_PARSER_LIST.add(new FuDocMultipartFileParser());
+        OBJECT_PARSER_LIST.add(new FuDocDefaultParser());
         //根据各自实现类的优先加载顺序来排序
         OBJECT_PARSER_LIST.sort(Comparator.comparing(ApiDocObjectParser::sort));
     }
