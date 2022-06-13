@@ -5,6 +5,7 @@ import com.intellij.openapi.components.Service;
 import com.wdf.apidoc.assemble.AbstractAssembleService;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.enumtype.RequestType;
+import com.wdf.apidoc.helper.MockDataHelper;
 import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.apidoc.pojo.data.FuApiDocItemData;
@@ -87,11 +88,12 @@ public class ControllerAssembleService extends AbstractAssembleService {
             fuApiDocItemData.setTitle(commentData.getCommentTitle());
             fuApiDocItemData.setDetailInfo(commentData.getCommentDetailInfo());
         }
+        RequestType requestType = null;
         for (String annotationName : AnnotationConstants.MAPPING) {
             Optional<AnnotationData> annotationOptional = methodInfoDesc.getAnnotation(annotationName);
             if (annotationOptional.isPresent()) {
                 AnnotationData annotationData = annotationOptional.get();
-                RequestType requestType = RequestType.getByAnnotationName(annotationData.getQualifiedName());
+                requestType = RequestType.getByAnnotationName(annotationData.getQualifiedName());
                 if (Objects.nonNull(requestType)) {
                     fuApiDocItemData.setRequestType(requestType.getRequestType());
                 }
@@ -99,18 +101,20 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 break;
             }
         }
-        //设置请求参数
-        List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
-        if (CollectionUtils.isNotEmpty(requestList)) {
-            fuApiDocItemData.setRequestParams(buildFuApiDocParamData(requestList));
-            //mock请求参数数据
-            mockRequestData(fuApiDocItemData, requestList);
+        if (Objects.nonNull(requestType)) {
+            //设置请求参数
+            List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
+            if (CollectionUtils.isNotEmpty(requestList)) {
+                fuApiDocItemData.setRequestParams(buildFuApiDocParamData(requestList));
+                //mock请求参数数据
+                fuApiDocItemData.setRequestExample(MockDataHelper.mockRequestData(requestType, requestList));
+            }
         }
         ObjectInfoDesc response = methodInfoDesc.getResponse();
         if (Objects.nonNull(response)) {
             fuApiDocItemData.setResponseParams(buildFuApiDocParamData(Lists.newArrayList(response)));
             //mock返回结果数据
-            fuApiDocItemData.setResponseExample(mockJsonData(Lists.newArrayList(response)));
+            fuApiDocItemData.setResponseExample(MockDataHelper.mockJsonData(Lists.newArrayList(response)));
         }
         return fuApiDocItemData;
     }

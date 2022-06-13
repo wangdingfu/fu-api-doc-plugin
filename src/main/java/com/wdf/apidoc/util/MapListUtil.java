@@ -72,6 +72,17 @@ public class MapListUtil<K, T> {
         return Lists.newArrayList();
     }
 
+
+    public List<T> get(K... keys) {
+        List<T> resultList = Lists.newArrayList();
+        if (Objects.nonNull(keys) && keys.length > 0) {
+            for (K key : keys) {
+                resultList.addAll(get(key));
+            }
+        }
+        return resultList;
+    }
+
     public Set<T> getValues() {
         Set<T> resultSet = Sets.newHashSet();
         resultMap.forEach((key, value) -> resultSet.addAll(value));
