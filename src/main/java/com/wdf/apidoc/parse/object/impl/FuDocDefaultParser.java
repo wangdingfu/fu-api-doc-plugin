@@ -1,5 +1,6 @@
 package com.wdf.apidoc.parse.object.impl;
 
+import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.apidoc.constant.FuDocConstants;
@@ -9,12 +10,10 @@ import com.wdf.apidoc.parse.field.FuDocField;
 import com.wdf.apidoc.parse.field.FuDocPsiField;
 import com.wdf.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.apidoc.pojo.bo.ParseObjectBO;
-import com.wdf.apidoc.pojo.bo.PsiClassTypeBO;
 import com.wdf.apidoc.pojo.context.ApiDocContext;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.apidoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;
 import java.util.List;
@@ -66,76 +65,61 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
     public ObjectInfoDesc parse(PsiType psiType, ParseObjectBO parseObjectBO) {
         ApiDocContext apiDocContext = parseObjectBO.getApiDocContext();
         String canonicalText = psiType.getCanonicalText();
-        ObjectInfoDesc objectInfoDesc = apiDocContext.getFromCache(canonicalText);
-        if (Objects.isNull(objectInfoDesc)) {
-            List<ObjectInfoDesc> objectInfoDescList = Lists.newArrayList();
+        ObjectInfoDesc objectInfoDesc = buildDefaultObjectInfoDesc(psiType, parseObjectBO);
+        ObjectInfoDesc objectInfoDescCache = apiDocContext.getFromCache(canonicalText);
+        if (Objects.isNull(objectInfoDescCache)) {
+            //缓存没有 需要解析
             PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
-            FuDocField fuDocField = parseObjectBO.getFuDocField();
-            objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
-            boolean isAttr = Objects.nonNull(fuDocField) && fuDocField instanceof FuDocPsiField;
-            objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, isAttr);
+            parseObjectBO.setGenericsMap(buildGenericsMap(psiType, psiClass));
             //添加到EarlyMap中（半成品对象）
             apiDocContext.add(canonicalText, objectInfoDesc);
-            parseObject(parseObjectBO, psiType, psiClass, objectInfoDescList);
-            if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
-                objectInfoDesc.setChildList(objectInfoDescList);
-                objectInfoDesc.setValue(buildValue(objectInfoDescList));
-            }
+            //解析对象
+            paddingChildList(objectInfoDesc, doParseDefaultObject(parseObjectBO, psiType, psiClass));
             //当前对象解析完成 从earlyMap中移动到objectInfoDescMap中（从半成品变为成品）
             apiDocContext.parseFinish(canonicalText);
+        } else {
+            //将缓存中之前解析的设置到当前对象中 直接返回 避免重复解析(此处直接返回也是为了避免循环引用)
+            paddingChildList(objectInfoDesc, objectInfoDescCache.getChildList());
         }
         return objectInfoDesc;
     }
 
+    private ObjectInfoDesc buildDefaultObjectInfoDesc(PsiType psiType, ParseObjectBO parseObjectBO) {
+        ObjectInfoDesc objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
+        FuDocField fuDocField = parseObjectBO.getFuDocField();
+        boolean isAttr = Objects.nonNull(fuDocField) && fuDocField instanceof FuDocPsiField;
+        objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, isAttr);
+        return objectInfoDesc;
+    }
+
+
+    private void paddingChildList(ObjectInfoDesc objectInfoDesc, List<ObjectInfoDesc> childList) {
+        if (CollectionUtils.isNotEmpty(childList)) {
+            objectInfoDesc.setChildList(childList);
+            objectInfoDesc.setValue(buildValue(childList));
+        }
+    }
 
     /**
      * 解析对象 递归遍历父类并解析
      *
-     * @param psiType            对象类型
-     * @param psiClass           对象class
-     * @param objectInfoDescList 解析后的对象结果
+     * @param parseObjectBO 解析对象参数
+     * @param psiType       对象类型
+     * @param psiClass      对象class
      */
-    private void parseObject(ParseObjectBO parseObjectBO, PsiType psiType, PsiClass psiClass, List<ObjectInfoDesc> objectInfoDescList) {
-        if (Objects.nonNull(psiType) && psiType.isValid() && PsiClassUtils.isClass(psiClass)) {
-            if (CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
-                //当前class的父类是java.lang.Object时 则直接返回
-                return;
-            }
-            //解析指定对象为ApiDoc文档对象
-            objectInfoDescList.addAll(doParseObject(parseObjectBO, psiType, psiClass));
-            //获取父类
-            PsiClassTypeBO superClassType = PsiClassUtils.getSuperClassType(psiClass);
-            if (Objects.nonNull(superClassType)) {
-                //继续遍历解析父类
-                parseObject(parseObjectBO, superClassType.getPsiType(), superClassType.getPsiClass(), objectInfoDescList);
-            }
-        }
-    }
-
-
-    /**
-     * 解析对象
-     *
-     * @param psiType  对象类型
-     * @param psiClass 对象class
-     * @return 返回解析对象后的一些属性 注解 注释等描述信息
-     */
-    private List<ObjectInfoDesc> doParseObject(ParseObjectBO parseObjectBO, PsiType psiType, PsiClass psiClass) {
+    private List<ObjectInfoDesc> doParseDefaultObject(ParseObjectBO parseObjectBO, PsiType psiType, PsiClass psiClass) {
         List<ObjectInfoDesc> childList = Lists.newArrayList();
-        PsiField[] fields = psiClass.getFields();
-        if (fields.length > 0) {
-            ObjectInfoDesc objectInfoDesc = new ObjectInfoDesc();
-            ParseObjectBO fieldParseObjectBO = new ParseObjectBO();
-            fieldParseObjectBO.setGenericsMap(buildGenericsMap(psiType, psiClass));
-            fieldParseObjectBO.setApiDocContext(parseObjectBO.getApiDocContext());
-            for (PsiField psiField : psiClass.getFields()) {
-                fieldParseObjectBO.setFuDocField(new FuDocPsiField(psiField));
-                childList.add(ObjectParserExecutor.execute(psiField.getType(), fieldParseObjectBO));
+        if (Objects.nonNull(psiType) && psiType.isValid()
+                && PsiClassUtils.isClass(psiClass)
+                && !CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
+            //遍历当前类的所有字段（包含父类）
+            for (PsiField psiField : psiClass.getAllFields()) {
+                parseObjectBO.setFuDocField(new FuDocPsiField(psiField));
+                childList.add(ObjectParserExecutor.execute(psiField.getType(), parseObjectBO));
             }
             childList.removeAll(Collections.singleton(null));
-            objectInfoDesc.setChildList(childList);
-            objectInfoDesc.setValue(buildValue(childList));
         }
         return childList;
     }
+
 }

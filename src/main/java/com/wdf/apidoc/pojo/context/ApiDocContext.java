@@ -84,7 +84,10 @@ public class ApiDocContext {
             if (Objects.isNull(this.objectInfoDescMap)) {
                 this.objectInfoDescMap = new HashMap<>();
             }
-            this.objectInfoDescMap.put(key, this.earlyObjectInfoDescMap.remove(key));
+            ObjectInfoDesc remove = this.earlyObjectInfoDescMap.remove(key);
+            if(Objects.nonNull(remove)){
+                this.objectInfoDescMap.put(key, remove);
+            }
         }
     }
 }
