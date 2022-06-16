@@ -55,8 +55,11 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                     String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
                     fuApiDocParamData.setParentParamNo(parentParamNo);
                     fuApiDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
+                    //TODO name执行器
                     fuApiDocParamData.setParamName(objectInfoDesc.getName());
+                    //TODO 描述信息执行器
                     fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
+                    //TODO 参数类型执行器
                     fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
                     if (Objects.nonNull(parent)) {
                         String paramPrefix = parent.getParamPrefix();
@@ -64,6 +67,7 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                     }
                     //设置是否必填
                     Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
+                    //TODO 是否必填执行器
                     fuApiDocParamData.setParamRequire(annotation.isPresent() ? "是" : "否");
                     resultList.add(fuApiDocParamData);
                 }
