@@ -1,25 +1,17 @@
 package com.wdf.apidoc.assemble;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.FuDocConstants;
-import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
-import com.wdf.apidoc.constant.enumtype.ContentType;
-import com.wdf.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.apidoc.pojo.data.AnnotationData;
-import com.wdf.apidoc.pojo.data.FuApiDocItemData;
 import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
-import com.wdf.apidoc.util.FastJsonUtils;
-import com.wdf.apidoc.util.MapListUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -55,6 +47,9 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                     String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
                     fuApiDocParamData.setParentParamNo(parentParamNo);
                     fuApiDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
+
+
+
                     //TODO name执行器
                     fuApiDocParamData.setParamName(objectInfoDesc.getName());
                     //TODO 描述信息执行器
@@ -96,11 +91,6 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         }
         return false;
     }
-
-
-
-
-
 
 
 }

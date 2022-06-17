@@ -24,7 +24,6 @@ import java.util.Optional;
  * @descption: 组装Controller接口文档
  * @date 2022-05-09 23:32:39
  */
-@Service
 public class ControllerAssembleService extends AbstractAssembleService {
 
 
@@ -40,8 +39,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
             return false;
         }
         //判断是否有Controller|RestController注解
-        return CollectionUtils.isNotEmpty(classInfoDesc.getMethodList())
-                && classInfoDesc.isController();
+        return CollectionUtils.isNotEmpty(classInfoDesc.getMethodList()) && classInfoDesc.isController();
     }
 
     /**
