@@ -1,5 +1,6 @@
 package com.wdf.apidoc.assemble.handler;
 
+import com.wdf.apidoc.assemble.handler.impl.ParamNameFillerHandler;
 import com.wdf.apidoc.constant.enumtype.ParamDataType;
 
 import java.util.Map;
@@ -12,7 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ParamDataExecutor {
 
-    private Map<ParamDataType,FuDocParamDataFillerHandler> paramDataFillerHandlerMap = new ConcurrentHashMap<>();
+    private static final Map<ParamDataType, FuDocParamDataFillerHandler> paramDataFillerHandlerMap = new ConcurrentHashMap<>();
 
+    static {
+        paramDataFillerHandlerMap.put(ParamDataType.PARAM_NAME, new ParamNameFillerHandler());
+    }
 
 }
