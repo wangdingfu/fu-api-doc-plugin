@@ -1,8 +1,10 @@
 package com.wdf.apidoc.assemble;
 
 import com.google.common.collect.Lists;
+import com.wdf.apidoc.assemble.handler.ParamValueExecutor;
 import com.wdf.apidoc.constant.AnnotationConstants;
 import com.wdf.apidoc.constant.FuDocConstants;
+import com.wdf.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.data.FuApiDocParamData;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
@@ -47,23 +49,14 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                     String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
                     fuApiDocParamData.setParentParamNo(parentParamNo);
                     fuApiDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
-
-
-
-                    //TODO name执行器
-                    fuApiDocParamData.setParamName(objectInfoDesc.getName());
-                    //TODO 描述信息执行器
-                    fuApiDocParamData.setParamDesc(objectInfoDesc.getDocText());
-                    //TODO 参数类型执行器
-                    fuApiDocParamData.setParamType(objectInfoDesc.getTypeView());
+                    fuApiDocParamData.setParamName(ParamValueExecutor.doGetValue(ParamValueType.PARAM_NAME, objectInfoDesc));
+                    fuApiDocParamData.setParamDesc(ParamValueExecutor.doGetValue(ParamValueType.PARAM_COMMENT, objectInfoDesc));
+                    fuApiDocParamData.setParamType(ParamValueExecutor.doGetValue(ParamValueType.PARAM_TYPE_VIEW, objectInfoDesc));
                     if (Objects.nonNull(parent)) {
                         String paramPrefix = parent.getParamPrefix();
                         fuApiDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);
                     }
-                    //设置是否必填
-                    Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
-                    //TODO 是否必填执行器
-                    fuApiDocParamData.setParamRequire(annotation.isPresent() ? "是" : "否");
+                    fuApiDocParamData.setParamRequire(ParamValueExecutor.doGetValue(ParamValueType.PARAM_REQUIRE, objectInfoDesc));
                     resultList.add(fuApiDocParamData);
                 }
                 List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();

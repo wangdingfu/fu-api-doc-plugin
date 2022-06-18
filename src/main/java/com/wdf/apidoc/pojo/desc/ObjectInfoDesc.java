@@ -2,7 +2,6 @@ package com.wdf.apidoc.pojo.desc;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wdf.apidoc.constant.enumtype.FuDocObjectType;
-import com.wdf.apidoc.pojo.data.AnnotationDataMap;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +15,7 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-public class ObjectInfoDesc extends AnnotationDataMap {
+public class ObjectInfoDesc extends BaseInfoDesc {
 
     /**
      * 对象类型枚举

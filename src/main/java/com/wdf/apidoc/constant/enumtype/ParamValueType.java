@@ -2,10 +2,10 @@ package com.wdf.apidoc.constant.enumtype;
 
 /**
  * @Author wangdingfu
- * @Description 参数值填充类型
+ * @Description 参数值类型
  * @Date 2022-06-17 21:16:19
  */
-public enum ParamDataType {
+public enum ParamValueType {
 
     PARAM_NAME,
 
@@ -14,6 +14,7 @@ public enum ParamDataType {
     TITLE,
 
     PARAM_REQUIRE,
+    PARAM_TYPE_VIEW,
 
 
 
