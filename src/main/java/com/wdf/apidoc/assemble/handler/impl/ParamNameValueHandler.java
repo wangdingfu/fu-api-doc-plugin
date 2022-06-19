@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @Author wangdingfu
- * @Description 参数值获取器
+ * @Description 参数名称获取接口实现
  * @Date 2022-06-18 22:37:09
  */
 public class ParamNameValueHandler extends BaseParamFieldValueHandler {
@@ -31,7 +31,7 @@ public class ParamNameValueHandler extends BaseParamFieldValueHandler {
         //获取校验注解信息截取出字段名
         String validMessage = ValidateAnnotationUtils.getValidMessage(objectInfoDesc);
         if (StringUtils.isNotBlank(validMessage)) {
-            return validMessage.replace("不能为空", "");
+            return validMessage.replace("不能为空", "").replace("not null", "");
         }
         return "";
     }
