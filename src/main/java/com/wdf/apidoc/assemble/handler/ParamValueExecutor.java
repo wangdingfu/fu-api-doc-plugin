@@ -1,5 +1,6 @@
 package com.wdf.apidoc.assemble.handler;
 
+import com.wdf.apidoc.assemble.handler.impl.FuDocDetailInfoValueHandler;
 import com.wdf.apidoc.assemble.handler.impl.FuDocTitleValueHandler;
 import com.wdf.apidoc.assemble.handler.impl.ParamNameValueHandler;
 import com.wdf.apidoc.assemble.handler.impl.ParamRequireValueHandler;
@@ -24,6 +25,7 @@ public class ParamValueExecutor {
         paramValueHandlerMap.put(ParamValueType.PARAM_NAME, new ParamNameValueHandler());
         paramValueHandlerMap.put(ParamValueType.PARAM_REQUIRE, new ParamRequireValueHandler());
         paramValueHandlerMap.put(ParamValueType.METHOD_TITLE, new FuDocTitleValueHandler());
+        paramValueHandlerMap.put(ParamValueType.METHOD_DETAIL_INFO, new FuDocDetailInfoValueHandler());
     }
 
 
