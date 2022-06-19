@@ -1,11 +1,10 @@
 package com.wdf.apidoc.assemble.handler.impl;
 
-import com.thaiopensource.relaxng.translate.util.Param;
 import com.wdf.apidoc.assemble.handler.BaseParamFieldValueHandler;
-import com.wdf.apidoc.assemble.handler.ParamValueHandler;
 import com.wdf.apidoc.constant.enumtype.ParamValueType;
-import com.wdf.apidoc.pojo.desc.BaseInfoDesc;
 import com.wdf.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.apidoc.util.ValidateAnnotationUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @Author wangdingfu
@@ -22,13 +21,20 @@ public class ParamNameValueHandler extends BaseParamFieldValueHandler {
 
     @Override
     protected String doGetParamValue(ObjectInfoDesc objectInfoDesc) {
-
         //获取swagger注解标识的参数名
 
         //获取注释参数名
-
+        String name = objectInfoDesc.getName();
+        if (StringUtils.isNotBlank(name)) {
+            return name;
+        }
         //获取校验注解信息截取出字段名
+        String validMessage = ValidateAnnotationUtils.getValidMessage(objectInfoDesc);
+        if (StringUtils.isNotBlank(validMessage)) {
+            return validMessage.replace("不能为空", "");
+        }
         return "";
     }
+
 
 }
