@@ -3,7 +3,9 @@ package com.wdf.apidoc.assemble.impl;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.components.Service;
 import com.wdf.apidoc.assemble.AbstractAssembleService;
+import com.wdf.apidoc.assemble.handler.ParamValueExecutor;
 import com.wdf.apidoc.constant.AnnotationConstants;
+import com.wdf.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.apidoc.constant.enumtype.RequestType;
 import com.wdf.apidoc.helper.MockDataHelper;
 import com.wdf.apidoc.pojo.data.AnnotationData;
@@ -83,8 +85,8 @@ public class ControllerAssembleService extends AbstractAssembleService {
         FuApiDocItemData fuApiDocItemData = new FuApiDocItemData();
         ApiDocCommentData commentData = methodInfoDesc.getCommentData();
         if (Objects.nonNull(commentData)) {
-            fuApiDocItemData.setTitle(commentData.getCommentTitle());
-            fuApiDocItemData.setDetailInfo(commentData.getCommentDetailInfo());
+            fuApiDocItemData.setTitle(ParamValueExecutor.doGetValue(ParamValueType.METHOD_TITLE, methodInfoDesc));
+            fuApiDocItemData.setDetailInfo(ParamValueExecutor.doGetValue(ParamValueType.METHOD_DETAIL_INFO, methodInfoDesc));
         }
         RequestType requestType = null;
         for (String annotationName : AnnotationConstants.MAPPING) {

@@ -11,7 +11,8 @@ public enum ParamValueType {
 
     PARAM_COMMENT,
 
-    TITLE,
+    METHOD_TITLE,
+    METHOD_DETAIL_INFO,
 
     PARAM_REQUIRE,
     PARAM_TYPE_VIEW,
