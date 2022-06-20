@@ -31,7 +31,10 @@ public interface AnnotationConstants {
 
 
     String SWAGGER_API = "io.swagger.annotations.Api";
-    String SWAGGER_ApiOperation = "io.swagger.annotations.ApiOperation";
+    String SWAGGER_API_OPERATION = "io.swagger.annotations.ApiOperation";
+    String SWAGGER_API_MODEL = "io.swagger.annotations.ApiModel";
+    String SWAGGER_API_MODEL_PROPERTY = "io.swagger.annotations.ApiModelProperty";
+    String SWAGGER_API_PARAM = "io.swagger.annotations.ApiParam";
 
 
     String[] VALID_NOT = new String[]{VALID_NOT_NULL, VALID_NOT_BLANK, VALID_NOT_EMPTY};
