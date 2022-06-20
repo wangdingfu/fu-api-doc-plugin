@@ -14,13 +14,10 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class ClassInfoDesc extends AnnotationDataMap {
+public class ClassInfoDesc extends BaseInfoDesc {
 
 
-    /**
-     * 类注释信息
-     */
-    private ApiDocCommentData commentData;
+
 
     /**
      * 方法集合
