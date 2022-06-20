@@ -29,6 +29,11 @@ public interface AnnotationConstants {
     String VALID_NOT_BLANK = "org.hibernate.validator.constraints.NotBlank";
     String VALID_NOT_EMPTY = "org.hibernate.validator.constraints.NotEmpty";
 
+
+    String SWAGGER_API = "io.swagger.annotations.Api";
+    String SWAGGER_ApiOperation = "io.swagger.annotations.ApiOperation";
+
+
     String[] VALID_NOT = new String[]{VALID_NOT_NULL, VALID_NOT_BLANK, VALID_NOT_EMPTY};
 
     String[] MAPPING = new String[]{REQUEST_MAPPING, GET_MAPPING, PUT_MAPPING, POST_MAPPING, DELETE_MAPPING, PATCH_MAPPING};
