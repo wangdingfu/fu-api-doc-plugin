@@ -3,18 +3,13 @@ package com.wdf.apidoc.util;
 import com.google.common.collect.Lists;
 import com.intellij.lang.jvm.annotation.*;
 import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiClass;
 import com.wdf.apidoc.constant.enumtype.AnnotationValueType;
 import com.wdf.apidoc.pojo.data.AnnotationData;
-import com.wdf.apidoc.pojo.data.AnnotationDataMap;
 import com.wdf.apidoc.pojo.data.AnnotationValueData;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author wangdingfu
@@ -24,12 +19,19 @@ import java.util.Objects;
 public class AnnotationUtils {
 
 
-    public static AnnotationDataMap parse(PsiClass psiClass) {
-        AnnotationDataMap annotationDataMap = new AnnotationDataMap();
-        if (Objects.nonNull(psiClass)) {
-            annotationDataMap.setAnnotationDataMap(parse(psiClass.getAnnotations()));
+    public static String getAnnotationValue(Optional<AnnotationData> annotation, String... attrNames) {
+        if (annotation.isPresent()) {
+            AnnotationData annotationData = annotation.get();
+            if (Objects.nonNull(attrNames) && attrNames.length > 0) {
+                for (String attrName : attrNames) {
+                    String value = annotationData.getValue(attrName).getStringValue();
+                    if (StringUtils.isNotBlank(value)) {
+                        return value;
+                    }
+                }
+            }
         }
-        return annotationDataMap;
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -40,7 +42,7 @@ public class AnnotationUtils {
      */
     public static Map<String, AnnotationData> parse(PsiAnnotation[] psiAnnotations) {
         Map<String, AnnotationData> annotationDataMap = new HashMap<>();
-        if(Objects.nonNull(psiAnnotations)){
+        if (Objects.nonNull(psiAnnotations)) {
             for (PsiAnnotation psiAnnotation : psiAnnotations) {
                 String qualifiedName = psiAnnotation.getQualifiedName();
                 AnnotationData annotationData = new AnnotationData();

@@ -48,6 +48,7 @@ public class BaseInfoDesc {
     }
 
 
+
     /**
      * 根据多个注解名称遍历查询 查询到注解则消费该注解的数据 并退出
      *

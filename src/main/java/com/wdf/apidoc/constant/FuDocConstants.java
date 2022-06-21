@@ -11,6 +11,11 @@ public interface FuDocConstants {
     String KEY = "key";
     String VALUE = "value";
 
+    interface AnnotationAttr {
+        String MESSAGE = "message";
+        String NAME = "name";
+    }
+
     interface ModifierProperty {
         String STATIC = "static";
         String FINAL = "final";

@@ -1,6 +1,7 @@
 package com.wdf.apidoc.util;
 
 import com.wdf.apidoc.constant.AnnotationConstants;
+import com.wdf.apidoc.constant.FuDocConstants;
 import com.wdf.apidoc.pojo.data.AnnotationData;
 import com.wdf.apidoc.pojo.desc.BaseInfoDesc;
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +54,7 @@ public class ValidateAnnotationUtils {
     private static String getMessageValue(BaseInfoDesc baseInfoDesc, String annotationName) {
         Optional<AnnotationData> annotation = baseInfoDesc.getAnnotation(annotationName);
         if (annotation.isPresent()) {
-            return annotation.get().getValue("message").getStringValue();
+            return annotation.get().getValue(FuDocConstants.AnnotationAttr.MESSAGE).getStringValue();
         }
         return StringUtils.EMPTY;
     }
