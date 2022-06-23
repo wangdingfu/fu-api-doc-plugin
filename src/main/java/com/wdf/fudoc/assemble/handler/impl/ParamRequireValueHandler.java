@@ -2,6 +2,7 @@ package com.wdf.fudoc.assemble.handler.impl;
 
 import com.wdf.fudoc.assemble.handler.BaseParamFieldValueHandler;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
+import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.ValidateAnnotationUtils;
 
@@ -18,7 +19,7 @@ public class ParamRequireValueHandler extends BaseParamFieldValueHandler {
     }
 
     @Override
-    protected String doGetParamValue(ObjectInfoDesc objectInfoDesc) {
+    protected String doGetParamValue(FuDocContext fuDocContext, ObjectInfoDesc objectInfoDesc) {
         //判断当前校验注解是否生效
 
         //设置是否必填

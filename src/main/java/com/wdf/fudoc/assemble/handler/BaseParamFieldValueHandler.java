@@ -1,5 +1,6 @@
 package com.wdf.fudoc.assemble.handler;
 
+import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 
@@ -10,12 +11,12 @@ import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
  */
 public abstract class BaseParamFieldValueHandler implements ParamValueHandler {
 
-    protected abstract String doGetParamValue(ObjectInfoDesc objectInfoDesc);
+    protected abstract String doGetParamValue(FuDocContext fuDocContext, ObjectInfoDesc objectInfoDesc);
 
     @Override
-    public String getParamValue(BaseInfoDesc baseInfoDesc) {
+    public String getParamValue(FuDocContext fuDocContext, BaseInfoDesc baseInfoDesc) {
         if (baseInfoDesc instanceof ObjectInfoDesc) {
-            return doGetParamValue((ObjectInfoDesc) baseInfoDesc);
+            return doGetParamValue(fuDocContext, (ObjectInfoDesc) baseInfoDesc);
         }
         return null;
     }

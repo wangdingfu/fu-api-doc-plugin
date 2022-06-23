@@ -1,7 +1,6 @@
 package com.wdf.fudoc.pojo.context;
 
 import com.google.common.collect.Lists;
-import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.factory.ObjectInfoDescFactory;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
@@ -21,6 +20,19 @@ import java.util.Objects;
 @Getter
 @Setter
 public class FuDocContext {
+
+
+    /**
+     * swagger功能解析是否启用（默认启用）
+     */
+    private boolean enableSwagger = true;
+
+    /**
+     * 校验注解message解析成字段说明是否启用（默认启用）
+     */
+    private boolean enableValidMessage = true;
+
+
 
     /**
      * 存放每一个参数解析后的数据对象
@@ -80,7 +92,7 @@ public class FuDocContext {
                 this.objectInfoDescMap = new HashMap<>();
             }
             ObjectInfoDesc remove = this.earlyObjectInfoDescMap.remove(key);
-            if(Objects.nonNull(remove)){
+            if (Objects.nonNull(remove)) {
                 this.objectInfoDescMap.put(key, remove);
             }
         }

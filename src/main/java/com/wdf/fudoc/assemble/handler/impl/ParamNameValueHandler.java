@@ -4,6 +4,7 @@ import com.wdf.fudoc.assemble.handler.BaseParamFieldValueHandler;
 import com.wdf.fudoc.constant.AnnotationConstants;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
+import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
@@ -26,21 +27,21 @@ public class ParamNameValueHandler extends BaseParamFieldValueHandler {
     }
 
     @Override
-    protected String doGetParamValue(ObjectInfoDesc objectInfoDesc) {
-        //获取swagger注解标识的参数名
+    protected String doGetParamValue(FuDocContext fuDocContext, ObjectInfoDesc objectInfoDesc) {
+        if(fuDocContext.isEnableSwagger()){
+            //ApiModelProperty注解支持
+            Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.SWAGGER_API_MODEL_PROPERTY);
+            String swaggerName = AnnotationUtils.getAnnotationValue(annotation, FuDocConstants.VALUE, FuDocConstants.AnnotationAttr.NAME);
+            if (StringUtils.isNotBlank(swaggerName)) {
+                return swaggerName;
+            }
 
-        //ApiModelProperty注解支持
-        Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.SWAGGER_API_MODEL_PROPERTY);
-        String swaggerName = AnnotationUtils.getAnnotationValue(annotation, FuDocConstants.VALUE, FuDocConstants.AnnotationAttr.NAME);
-        if (StringUtils.isNotBlank(swaggerName)) {
-            return swaggerName;
-        }
-
-        //ApiParam注解支持
-        annotation = objectInfoDesc.getAnnotation(AnnotationConstants.SWAGGER_API_PARAM);
-        swaggerName = AnnotationUtils.getAnnotationValue(annotation, FuDocConstants.AnnotationAttr.NAME, FuDocConstants.VALUE);
-        if (StringUtils.isNotBlank(swaggerName)) {
-            return swaggerName;
+            //ApiParam注解支持
+            annotation = objectInfoDesc.getAnnotation(AnnotationConstants.SWAGGER_API_PARAM);
+            swaggerName = AnnotationUtils.getAnnotationValue(annotation, FuDocConstants.AnnotationAttr.NAME, FuDocConstants.VALUE);
+            if (StringUtils.isNotBlank(swaggerName)) {
+                return swaggerName;
+            }
         }
 
         //获取注释参数名
@@ -48,11 +49,16 @@ public class ParamNameValueHandler extends BaseParamFieldValueHandler {
         if (StringUtils.isNotBlank(name)) {
             return name;
         }
-        //获取校验注解信息截取出字段名
-        String validMessage = ValidateAnnotationUtils.getValidMessage(objectInfoDesc);
-        if (StringUtils.isNotBlank(validMessage)) {
-            return validMessage.replace("不能为空", "").replace("not null", "");
+
+
+        if(fuDocContext.isEnableValidMessage()){
+            //获取校验注解信息截取出字段名
+            String validMessage = ValidateAnnotationUtils.getValidMessage(objectInfoDesc);
+            if (StringUtils.isNotBlank(validMessage)) {
+                return validMessage.replace("不能为空", "").replace("not null", "");
+            }
         }
+
         return "";
     }
 

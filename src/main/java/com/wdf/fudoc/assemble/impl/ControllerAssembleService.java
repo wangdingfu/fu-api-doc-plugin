@@ -6,6 +6,7 @@ import com.wdf.fudoc.assemble.handler.ParamValueExecutor;
 import com.wdf.fudoc.constant.AnnotationConstants;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.constant.enumtype.RequestType;
+import com.wdf.fudoc.helper.AssembleHelper;
 import com.wdf.fudoc.helper.MockDataHelper;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.AnnotationData;
@@ -65,7 +66,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
             int apiDocNo = 0;
             for (MethodInfoDesc methodInfoDesc : methodList) {
                 if (methodInfoDesc.exists(AnnotationConstants.MAPPING)) {
-                    FuApiDocItemData fuApiDocItemData = assembleItemApiDoc(methodInfoDesc, controllerUrlList);
+                    FuApiDocItemData fuApiDocItemData = assembleItemApiDoc(fuDocContext, methodInfoDesc, controllerUrlList);
                     apiDocNo++;
                     fuApiDocItemData.setApiDocNo(apiDocNo + "");
                     resultList.add(fuApiDocItemData);
@@ -79,11 +80,12 @@ public class ControllerAssembleService extends AbstractAssembleService {
     /**
      * 组装接口文档（具体接口）
      *
+     * @param fuDocContext      【FU DOC】全局上下文对象
      * @param methodInfoDesc    controller请求方法描述信息
      * @param controllerUrlList controller类上的请求地址集合
      * @return controller类里具体一个请求生成的接口文档
      */
-    private FuApiDocItemData assembleItemApiDoc(MethodInfoDesc methodInfoDesc, List<String> controllerUrlList) {
+    private FuApiDocItemData assembleItemApiDoc(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, List<String> controllerUrlList) {
         FuApiDocItemData fuApiDocItemData = new FuApiDocItemData();
         ApiDocCommentData commentData = methodInfoDesc.getCommentData();
         if (Objects.nonNull(commentData)) {
@@ -107,14 +109,14 @@ public class ControllerAssembleService extends AbstractAssembleService {
             //设置请求参数
             List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
             if (CollectionUtils.isNotEmpty(requestList)) {
-                fuApiDocItemData.setRequestParams(buildFuApiDocParamData(requestList));
+                fuApiDocItemData.setRequestParams(AssembleHelper.assembleParamData(fuDocContext, requestList, null));
                 //mock请求参数数据
                 fuApiDocItemData.setRequestExample(MockDataHelper.mockRequestData(requestType, requestList));
             }
         }
         ObjectInfoDesc response = methodInfoDesc.getResponse();
         if (Objects.nonNull(response)) {
-            fuApiDocItemData.setResponseParams(buildFuApiDocParamData(Lists.newArrayList(response)));
+            fuApiDocItemData.setResponseParams(AssembleHelper.assembleParamData(fuDocContext, Lists.newArrayList(response), null));
             //mock返回结果数据
             fuApiDocItemData.setResponseExample(MockDataHelper.mockJsonData(Lists.newArrayList(response)));
         }

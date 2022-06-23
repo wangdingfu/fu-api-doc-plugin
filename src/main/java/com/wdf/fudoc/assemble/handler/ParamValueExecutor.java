@@ -5,6 +5,7 @@ import com.wdf.fudoc.assemble.handler.impl.FuDocTitleValueHandler;
 import com.wdf.fudoc.assemble.handler.impl.ParamNameValueHandler;
 import com.wdf.fudoc.assemble.handler.impl.ParamRequireValueHandler;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
+import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
 
 import java.util.Map;
@@ -29,7 +30,7 @@ public class ParamValueExecutor {
     }
 
 
-    public static String doGetValue(ParamValueType paramValueType, BaseInfoDesc baseInfoDesc) {
+    public static String doGetValue(FuDocContext fuDocContext, ParamValueType paramValueType, BaseInfoDesc baseInfoDesc) {
         ParamValueHandler paramValueHandler = paramValueHandlerMap.get(paramValueType);
         if (Objects.nonNull(paramValueHandler)) {
             return paramValueHandler.getParamValue(baseInfoDesc);

@@ -2,6 +2,7 @@ package com.wdf.fudoc.assemble.handler.impl;
 
 import com.wdf.fudoc.assemble.handler.ParamValueHandler;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
+import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
 import org.apache.commons.lang.StringUtils;
@@ -20,7 +21,7 @@ public class FuDocDetailInfoValueHandler implements ParamValueHandler {
     }
 
     @Override
-    public String getParamValue(BaseInfoDesc baseInfoDesc) {
+    public String getParamValue(FuDocContext fuDocContext, BaseInfoDesc baseInfoDesc) {
         ApiDocCommentData commentData = baseInfoDesc.getCommentData();
         if (Objects.nonNull(commentData)) {
             return commentData.getCommentDetailInfo();
