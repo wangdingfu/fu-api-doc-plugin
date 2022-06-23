@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.assemble.AbstractAssembleService;
 import com.wdf.fudoc.constant.AnnotationConstants;
 import com.wdf.fudoc.constant.enumtype.RequestType;
+import com.wdf.fudoc.pojo.bo.AssembleBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.pojo.data.FuDocItemData;
@@ -40,49 +41,19 @@ public class ControllerAssembleService extends AbstractAssembleService {
         return CollectionUtils.isNotEmpty(classInfoDesc.getMethodList()) && classInfoDesc.isController();
     }
 
-    /**
-     * Controller类组装成接口文档
-     *
-     * @param fuDocContext  【FU DOC】全局上下文对象
-     * @param classInfoDesc Controller类描述信息
-     * @return 接口集合
-     */
     @Override
-    public List<FuDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
-        List<FuDocItemData> resultList = Lists.newArrayList();
-        List<MethodInfoDesc> methodList = classInfoDesc.getMethodList();
-        if (CollectionUtils.isNotEmpty(methodList)) {
-            //获取Controller类上的请求路径
-            List<String> controllerUrlList = Lists.newArrayList();
-            classInfoDesc.getAnnotation(AnnotationConstants.REQUEST_MAPPING).ifPresent(annotationData ->
-                    controllerUrlList.addAll(annotationData.getValue().getListValue()));
-            //解析方法
-            int apiDocNo = 0;
-            for (MethodInfoDesc methodInfoDesc : methodList) {
-                if (methodInfoDesc.exists(AnnotationConstants.MAPPING)) {
-                    FuDocItemData fuDocItemData = assembleItemApiDoc(fuDocContext, methodInfoDesc, controllerUrlList);
-                    apiDocNo++;
-                    fuDocItemData.setApiDocNo(apiDocNo + "");
-                    resultList.add(fuDocItemData);
-                }
-            }
+    protected AssembleBO doAssembleInfoByClass(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
+        AssembleBO assembleBO = new AssembleBO();
+        if (CollectionUtils.isNotEmpty(classInfoDesc.getMethodList())) {
+            classInfoDesc.getAnnotation(AnnotationConstants.REQUEST_MAPPING).ifPresent(annotationData -> {
+                assembleBO.setControllerUrlList(annotationData.getValue().getListValue());
+            });
         }
-        return resultList;
+        return assembleBO;
     }
 
-
-    /**
-     * 组装接口文档（具体接口）
-     *
-     * @param fuDocContext      【FU DOC】全局上下文对象
-     * @param methodInfoDesc    controller请求方法描述信息
-     * @param controllerUrlList controller类上的请求地址集合
-     * @return controller类里具体一个请求生成的接口文档
-     */
-    private FuDocItemData assembleItemApiDoc(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, List<String> controllerUrlList) {
-        FuDocItemData fuDocItemData = new FuDocItemData();
-        //组装接口文档公用信息
-        super.assembleCommonInfo(fuDocContext, methodInfoDesc, fuDocItemData);
+    @Override
+    protected boolean doAssembleInfoMethod(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, FuDocItemData fuDocItemData, AssembleBO assembleBO) {
         for (String annotationName : AnnotationConstants.MAPPING) {
             Optional<AnnotationData> annotationOptional = methodInfoDesc.getAnnotation(annotationName);
             if (annotationOptional.isPresent()) {
@@ -91,13 +62,12 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 if (Objects.nonNull(requestType)) {
                     fuDocItemData.setRequestType(requestType.getRequestType());
                 }
-                fuDocItemData.setUrlList(joinUrl(controllerUrlList, annotationData.getValue().getListValue()));
+                fuDocItemData.setUrlList(joinUrl(assembleBO.getControllerUrlList(), annotationData.getValue().getListValue()));
                 break;
             }
         }
-        return fuDocItemData;
+        return false;
     }
-
 
     /**
      * 拼接请求地址(将controller上的请求地址和方法上的请求地址拼接成一个完成的请求地址)

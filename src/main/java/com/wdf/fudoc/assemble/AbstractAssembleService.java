@@ -7,6 +7,7 @@ import com.wdf.fudoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.helper.AssembleHelper;
 import com.wdf.fudoc.helper.FuDocNoGenHelper;
 import com.wdf.fudoc.helper.MockDataHelper;
+import com.wdf.fudoc.pojo.bo.AssembleBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.pojo.data.FuDocItemData;
@@ -25,17 +26,42 @@ import java.util.Objects;
  */
 public abstract class AbstractAssembleService implements FuDocAssembleService {
 
+    /**
+     * 组装【类|接口】层信息
+     *
+     * @param fuDocContext  【FU DOC】全局上下文对象
+     * @param classInfoDesc 类描述信息
+     * @return 组装产生的一些参数信息
+     */
+    protected abstract AssembleBO doAssembleInfoByClass(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc);
+
+
+    /**
+     * 将一个方法描述信息对象组装一个具体接口文档所需要的数据对象
+     *
+     * @param fuDocContext   【FU DOC】全局上下文对象
+     * @param methodInfoDesc 方法描述信息
+     * @param fuDocItemData  具体每一个接口渲染的数据对象
+     * @param assembleBO     组装参数信息
+     * @return true 该方法需要组装成接口文档  false 不组装该方法
+     */
+    protected abstract boolean doAssembleInfoMethod(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, FuDocItemData fuDocItemData, AssembleBO assembleBO);
+
 
     @Override
     public List<FuDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         List<FuDocItemData> resultList = Lists.newArrayList();
         List<MethodInfoDesc> methodList = classInfoDesc.getMethodList();
+        AssembleBO assembleBO = doAssembleInfoByClass(fuDocContext, classInfoDesc);
         if (CollectionUtils.isNotEmpty(methodList)) {
             for (MethodInfoDesc methodInfoDesc : methodList) {
                 FuDocItemData fuDocItemData = new FuDocItemData();
-                fuDocItemData.setDocNo(FuDocNoGenHelper.genNo(methodInfoDesc.getMethodId()));
-                assembleCommonInfo(fuDocContext, methodInfoDesc, fuDocItemData);
-                resultList.add(fuDocItemData);
+                if (doAssembleInfoMethod(fuDocContext, methodInfoDesc, fuDocItemData, assembleBO)) {
+                    fuDocItemData.setDocNo(FuDocNoGenHelper.genNo(methodInfoDesc.getMethodId()));
+                    //组装公共信息
+                    assembleCommonInfo(fuDocContext, methodInfoDesc, fuDocItemData);
+                    resultList.add(fuDocItemData);
+                }
             }
         }
         return resultList;

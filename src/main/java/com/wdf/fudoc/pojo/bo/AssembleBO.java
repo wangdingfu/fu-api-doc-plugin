@@ -16,12 +16,9 @@ import java.util.List;
 public class AssembleBO {
 
     /**
-     * 标题
+     * controller上的url请求地址集合
      */
-    private String title;
+    private List<String> controllerUrlList;
 
-    /**
-     * java类信息集合
-     */
-    private List<ClassInfoDesc> classInfoDescList;
+
 }
