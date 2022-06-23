@@ -71,7 +71,6 @@ public class GenFuDocAction extends AnAction {
         //获取当前操作的类
         PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
         FuDocContext fuDocContext = new FuDocContext();
-        fuDocContext.setProject(e.getProject());
         //向全局上下文中添加Project内容
         FuDocDataContent.consumerData(fuDocData -> fuDocData.setEvent(e));
 
@@ -83,7 +82,7 @@ public class GenFuDocAction extends AnAction {
             ClassInfoDesc classInfoDesc = fuDocClassParser.parse(fuDocContext, psiClass, ObjectUtils.newArrayList(targetMethod));
 
             //组装ApiDocData对象
-            List<FuApiDocItemData> resultList = AssembleServiceExecutor.execute(classInfoDesc);
+            List<FuApiDocItemData> resultList = AssembleServiceExecutor.execute(fuDocContext, classInfoDesc);
 
             //将接口文档数据渲染成markdown格式接口文档
             String content = FuDocRender.markdownRender(resultList);

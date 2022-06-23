@@ -1,6 +1,7 @@
 package com.wdf.fudoc.assemble.impl;
 
 import com.wdf.fudoc.assemble.AbstractAssembleService;
+import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.FuApiDocItemData;
 import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
 
@@ -15,12 +16,12 @@ public class DubboAssembleService extends AbstractAssembleService {
 
 
     @Override
-    public boolean isAssemble(ClassInfoDesc classInfoDesc) {
+    public boolean isAssemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         return false;
     }
 
     @Override
-    public List<FuApiDocItemData> assemble(ClassInfoDesc classInfoDesc) {
+    public List<FuApiDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         return null;
     }
 }

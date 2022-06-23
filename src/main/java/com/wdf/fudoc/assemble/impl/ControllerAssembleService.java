@@ -7,6 +7,7 @@ import com.wdf.fudoc.constant.AnnotationConstants;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.helper.MockDataHelper;
+import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.pojo.data.FuApiDocItemData;
@@ -31,11 +32,12 @@ public class ControllerAssembleService extends AbstractAssembleService {
     /**
      * 判断当前实现类是否为Controller
      *
+     * @param fuDocContext  【FU DOC】全局上下文对象
      * @param classInfoDesc java类信息描述对象
      * @return true:是  false:不是
      */
     @Override
-    public boolean isAssemble(ClassInfoDesc classInfoDesc) {
+    public boolean isAssemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         if (Objects.isNull(classInfoDesc)) {
             return false;
         }
@@ -46,11 +48,12 @@ public class ControllerAssembleService extends AbstractAssembleService {
     /**
      * Controller类组装成接口文档
      *
+     * @param fuDocContext  【FU DOC】全局上下文对象
      * @param classInfoDesc Controller类描述信息
      * @return 接口集合
      */
     @Override
-    public List<FuApiDocItemData> assemble(ClassInfoDesc classInfoDesc) {
+    public List<FuApiDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         List<FuApiDocItemData> resultList = Lists.newArrayList();
         List<MethodInfoDesc> methodList = classInfoDesc.getMethodList();
         if (CollectionUtils.isNotEmpty(methodList)) {

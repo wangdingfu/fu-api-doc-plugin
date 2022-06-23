@@ -5,9 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -17,7 +15,10 @@ import java.util.function.Consumer;
  */
 public class FuDocDataContent {
 
-    private static final Map<Long, FuDocData> FU_DOC_DATA_MAP = new ConcurrentHashMap<>();
+    /**
+     * 存放本次动作的一些全局上下文数据
+     */
+    private static final ThreadLocal<FuDocData> FU_DOC_DATA_THREAD_LOCAL = new ThreadLocal<>();
 
 
     /**
@@ -29,11 +30,10 @@ public class FuDocDataContent {
         if (Objects.isNull(consumer)) {
             return;
         }
-        long threadId = Thread.currentThread().getId();
-        FuDocData fuDocData = FU_DOC_DATA_MAP.get(threadId);
+        FuDocData fuDocData = FU_DOC_DATA_THREAD_LOCAL.get();
         if (Objects.isNull(fuDocData)) {
             fuDocData = new FuDocData();
-            FU_DOC_DATA_MAP.put(threadId, fuDocData);
+            FU_DOC_DATA_THREAD_LOCAL.set(fuDocData);
         }
         consumer.accept(fuDocData);
     }
@@ -45,8 +45,7 @@ public class FuDocDataContent {
      * @return FuDoc数据对象
      */
     public static FuDocData getFuDocData() {
-        long threadId = Thread.currentThread().getId();
-        return FU_DOC_DATA_MAP.get(threadId);
+        return FU_DOC_DATA_THREAD_LOCAL.get();
     }
 
 

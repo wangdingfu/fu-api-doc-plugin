@@ -22,11 +22,6 @@ import java.util.Objects;
 public abstract class AbstractAssembleService implements FuDocAssembleService {
 
 
-    @Override
-    public List<FuApiDocItemData> assemble(ClassInfoDesc classInfoDesc) {
-        return null;
-    }
-
     /**
      * 构建渲染接口文档参数的数据对象
      *
