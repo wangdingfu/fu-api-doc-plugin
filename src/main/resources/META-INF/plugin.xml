@@ -23,24 +23,24 @@
         <!-- service -->
 
         <!-- parse service -->
-        <applicationService serviceImplementation="com.wdf.apidoc.parse.FuDocClassParserImpl"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.parse.FuDocClassParserImpl"/>
 
         <!-- assemble service -->
-        <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.ControllerAssembleService"/>
-        <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.DubboAssembleService"/>
-        <applicationService serviceImplementation="com.wdf.apidoc.assemble.impl.FeignAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.ControllerAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.DubboAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.FeignAssembleService"/>
 
 
 
         <!-- mock service -->
-        <applicationService serviceImplementation="com.wdf.apidoc.mock.FuDocObjectJMockData"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.mock.FuDocObjectJMockData"/>
 
 
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
-        <action id="gen-api-doc" class="com.wdf.apidoc.action.GenApiDocAction" text="Fu Doc">
+        <action id="gen-api-doc" class="com.wdf.fudoc.action.GenFuDocAction" text="Fu Doc">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
         </action>
