@@ -33,7 +33,7 @@ public class ParamValueExecutor {
     public static String doGetValue(FuDocContext fuDocContext, ParamValueType paramValueType, BaseInfoDesc baseInfoDesc) {
         ParamValueHandler paramValueHandler = paramValueHandlerMap.get(paramValueType);
         if (Objects.nonNull(paramValueHandler)) {
-            return paramValueHandler.getParamValue(baseInfoDesc);
+            return paramValueHandler.getParamValue(fuDocContext, baseInfoDesc);
         }
         return "";
     }

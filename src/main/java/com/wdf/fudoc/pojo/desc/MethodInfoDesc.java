@@ -14,6 +14,10 @@ import java.util.List;
 @Setter
 public class MethodInfoDesc extends BaseInfoDesc {
 
+    /**
+     * 方法唯一标识
+     */
+    private String methodId;
 
     /**
      * 请求参数集合

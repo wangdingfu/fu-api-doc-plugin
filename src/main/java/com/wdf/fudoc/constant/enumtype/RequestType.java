@@ -38,4 +38,13 @@ public enum RequestType {
         }
         return null;
     }
+
+    public static RequestType getRequestType(String requestType) {
+        for (RequestType value : RequestType.values()) {
+            if (value.getRequestType().equals(requestType)) {
+                return value;
+            }
+        }
+        return null;
+    }
 }

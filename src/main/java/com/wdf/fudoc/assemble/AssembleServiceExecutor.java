@@ -6,7 +6,7 @@ import com.wdf.fudoc.assemble.impl.DubboAssembleService;
 import com.wdf.fudoc.assemble.impl.FeignAssembleService;
 import com.wdf.fudoc.helper.ServiceHelper;
 import com.wdf.fudoc.pojo.context.FuDocContext;
-import com.wdf.fudoc.pojo.data.FuApiDocItemData;
+import com.wdf.fudoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class AssembleServiceExecutor {
     );
 
 
-    public static List<FuApiDocItemData> execute(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
+    public static List<FuDocItemData> execute(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         for (FuDocAssembleService fuDocAssembleService : SERVICE_LIST) {
             if (fuDocAssembleService.isAssemble(fuDocContext, classInfoDesc)) {
                 return fuDocAssembleService.assemble(fuDocContext, classInfoDesc);

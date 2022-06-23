@@ -3,7 +3,7 @@ package com.wdf.fudoc.assemble.impl;
 import com.wdf.fudoc.assemble.AbstractAssembleService;
 import com.wdf.fudoc.constant.AnnotationConstants;
 import com.wdf.fudoc.pojo.context.FuDocContext;
-import com.wdf.fudoc.pojo.data.FuApiDocItemData;
+import com.wdf.fudoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class FeignAssembleService extends AbstractAssembleService {
     }
 
     @Override
-    public List<FuApiDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
+    public List<FuDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         return null;
     }
 }

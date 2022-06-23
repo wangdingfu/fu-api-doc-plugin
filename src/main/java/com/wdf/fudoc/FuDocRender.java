@@ -1,7 +1,7 @@
 package com.wdf.fudoc;
 
 import com.wdf.fudoc.config.FreeMarkerConfig;
-import com.wdf.fudoc.pojo.data.FuApiDocItemData;
+import com.wdf.fudoc.pojo.data.FuDocItemData;
 
 import java.util.List;
 
@@ -19,10 +19,10 @@ public class FuDocRender {
      * @param dataList 接口文档数据集合
      * @return markdown格式的接口文档内容
      */
-    public static String markdownRender(List<FuApiDocItemData> dataList) {
+    public static String markdownRender(List<FuDocItemData> dataList) {
         StringBuilder sb = new StringBuilder();
-        for (FuApiDocItemData fuApiDocItemData : dataList) {
-            sb.append(markdownRender(fuApiDocItemData)).append("\r\n\r\n\r\n");
+        for (FuDocItemData fuDocItemData : dataList) {
+            sb.append(markdownRender(fuDocItemData)).append("\r\n\r\n\r\n");
         }
         return sb.toString();
     }
@@ -31,11 +31,11 @@ public class FuDocRender {
     /**
      * 根据组装好的数据渲染成markdown接口文档内容
      *
-     * @param fuApiDocItemData 组装完毕的接口文档数据
+     * @param fuDocItemData 组装完毕的接口文档数据
      * @return 渲染完毕后markdown接口文档内容
      */
-    public static String markdownRender(FuApiDocItemData fuApiDocItemData) {
-        return FreeMarkerConfig.generateContent(fuApiDocItemData, "api_doc.ftl");
+    public static String markdownRender(FuDocItemData fuDocItemData) {
+        return FreeMarkerConfig.generateContent(fuDocItemData, "api_doc.ftl");
     }
 
 }

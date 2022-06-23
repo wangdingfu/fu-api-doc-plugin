@@ -5,7 +5,7 @@ import com.wdf.fudoc.assemble.handler.ParamValueExecutor;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.pojo.context.FuDocContext;
-import com.wdf.fudoc.pojo.data.FuApiDocParamData;
+import com.wdf.fudoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,30 +28,30 @@ public class AssembleHelper {
      * @param parent             父级参数 为null则代表本次组装为一级参数
      * @return 返回已经组装完毕可以用于渲染到markdown文本上的数据
      */
-    public static List<FuApiDocParamData> assembleParamData(FuDocContext fuDocContext, List<ObjectInfoDesc> objectInfoDescList, FuApiDocParamData parent) {
-        List<FuApiDocParamData> resultList = Lists.newArrayList();
+    public static List<FuDocParamData> assembleParamData(FuDocContext fuDocContext, List<ObjectInfoDesc> objectInfoDescList, FuDocParamData parent) {
+        List<FuDocParamData> resultList = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
             for (int i = 0; i < objectInfoDescList.size(); i++) {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(i);
-                FuApiDocParamData fuApiDocParamData = null;
+                FuDocParamData fuDocParamData = null;
                 if (filter(objectInfoDesc)) {
-                    fuApiDocParamData = new FuApiDocParamData();
+                    fuDocParamData = new FuDocParamData();
                     String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
-                    fuApiDocParamData.setParentParamNo(parentParamNo);
-                    fuApiDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
-                    fuApiDocParamData.setParamName(ParamValueExecutor.doGetValue(ParamValueType.PARAM_NAME, objectInfoDesc));
-                    fuApiDocParamData.setParamDesc(ParamValueExecutor.doGetValue(ParamValueType.PARAM_COMMENT, objectInfoDesc));
-                    fuApiDocParamData.setParamType(ParamValueExecutor.doGetValue(ParamValueType.PARAM_TYPE_VIEW, objectInfoDesc));
+                    fuDocParamData.setParentParamNo(parentParamNo);
+                    fuDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
+                    fuDocParamData.setParamName(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_NAME, objectInfoDesc));
+                    fuDocParamData.setParamDesc(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_COMMENT, objectInfoDesc));
+                    fuDocParamData.setParamType(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_TYPE_VIEW, objectInfoDesc));
                     if (Objects.nonNull(parent)) {
                         String paramPrefix = parent.getParamPrefix();
-                        fuApiDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);
+                        fuDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);
                     }
-                    fuApiDocParamData.setParamRequire(ParamValueExecutor.doGetValue(ParamValueType.PARAM_REQUIRE, objectInfoDesc));
-                    resultList.add(fuApiDocParamData);
+                    fuDocParamData.setParamRequire(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_REQUIRE, objectInfoDesc));
+                    resultList.add(fuDocParamData);
                 }
                 List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
                 if (CollectionUtils.isNotEmpty(childList)) {
-                    resultList.addAll(assembleParamData(fuDocContext, childList, fuApiDocParamData));
+                    resultList.addAll(assembleParamData(fuDocContext, childList, fuDocParamData));
                 }
             }
         }

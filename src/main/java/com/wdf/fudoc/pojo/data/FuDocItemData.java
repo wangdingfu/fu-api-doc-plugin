@@ -13,12 +13,12 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class FuApiDocItemData {
+public class FuDocItemData {
 
     /**
      * 接口序号
      */
-    private String apiDocNo;
+    private String docNo;
 
     /**
      * 接口标题
@@ -50,7 +50,7 @@ public class FuApiDocItemData {
     /**
      * 请求参数
      */
-    private List<FuApiDocParamData> requestParams;
+    private List<FuDocParamData> requestParams;
 
 
     /**
@@ -62,7 +62,7 @@ public class FuApiDocItemData {
     /**
      * 响应参数
      */
-    private List<FuApiDocParamData> responseParams;
+    private List<FuDocParamData> responseParams;
 
     /**
      * 扩展信息

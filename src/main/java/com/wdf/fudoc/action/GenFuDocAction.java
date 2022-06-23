@@ -17,7 +17,7 @@ import com.wdf.fudoc.helper.ServiceHelper;
 import com.wdf.fudoc.parse.FuDocClassParser;
 import com.wdf.fudoc.parse.FuDocClassParserImpl;
 import com.wdf.fudoc.pojo.context.FuDocContext;
-import com.wdf.fudoc.pojo.data.FuApiDocItemData;
+import com.wdf.fudoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.util.ClipboardUtil;
 import com.wdf.fudoc.util.ObjectUtils;
@@ -82,7 +82,7 @@ public class GenFuDocAction extends AnAction {
             ClassInfoDesc classInfoDesc = fuDocClassParser.parse(fuDocContext, psiClass, ObjectUtils.newArrayList(targetMethod));
 
             //组装ApiDocData对象
-            List<FuApiDocItemData> resultList = AssembleServiceExecutor.execute(fuDocContext, classInfoDesc);
+            List<FuDocItemData> resultList = AssembleServiceExecutor.execute(fuDocContext, classInfoDesc);
 
             //将接口文档数据渲染成markdown格式接口文档
             String content = FuDocRender.markdownRender(resultList);

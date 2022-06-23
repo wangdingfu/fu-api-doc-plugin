@@ -1,7 +1,7 @@
 package com.wdf.fudoc.assemble;
 
 import com.wdf.fudoc.pojo.context.FuDocContext;
-import com.wdf.fudoc.pojo.data.FuApiDocItemData;
+import com.wdf.fudoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
 
 import java.util.List;
@@ -31,6 +31,6 @@ public interface FuDocAssembleService {
      * @param classInfoDesc java类描述信息(包含注解、注释、字段等信息)
      * @return 接口文档页面需要渲染的数据
      */
-    List<FuApiDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc);
+    List<FuDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc);
 
 }

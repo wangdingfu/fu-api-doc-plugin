@@ -12,7 +12,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class FuApiDocParamData {
+public class FuDocParamData {
 
 
     /**

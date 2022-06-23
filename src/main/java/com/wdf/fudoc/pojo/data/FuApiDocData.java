@@ -25,6 +25,6 @@ public class FuApiDocData {
     /**
      * 接口列表集合
      */
-    private List<FuApiDocItemData> itemList;
+    private List<FuDocItemData> itemList;
 
 }
