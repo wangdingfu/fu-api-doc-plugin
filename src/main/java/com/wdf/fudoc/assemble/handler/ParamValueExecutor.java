@@ -1,9 +1,6 @@
 package com.wdf.fudoc.assemble.handler;
 
-import com.wdf.fudoc.assemble.handler.impl.FuDocDetailInfoValueHandler;
-import com.wdf.fudoc.assemble.handler.impl.FuDocTitleValueHandler;
-import com.wdf.fudoc.assemble.handler.impl.ParamNameValueHandler;
-import com.wdf.fudoc.assemble.handler.impl.ParamRequireValueHandler;
+import com.wdf.fudoc.assemble.handler.impl.*;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
@@ -27,6 +24,7 @@ public class ParamValueExecutor {
         paramValueHandlerMap.put(ParamValueType.PARAM_REQUIRE, new ParamRequireValueHandler());
         paramValueHandlerMap.put(ParamValueType.METHOD_TITLE, new FuDocTitleValueHandler());
         paramValueHandlerMap.put(ParamValueType.METHOD_DETAIL_INFO, new FuDocDetailInfoValueHandler());
+        paramValueHandlerMap.put(ParamValueType.PARAM_COMMENT, new ParamCommentValueHandler());
     }
 
 
