@@ -14,6 +14,7 @@ public interface FuDocConstants {
     interface AnnotationAttr {
         String MESSAGE = "message";
         String NAME = "name";
+        String DESCRIPTION = "description";
     }
 
     interface ModifierProperty {
