@@ -25,6 +25,7 @@ public class ParamValueExecutor {
         paramValueHandlerMap.put(ParamValueType.METHOD_TITLE, new FuDocTitleValueHandler());
         paramValueHandlerMap.put(ParamValueType.METHOD_DETAIL_INFO, new FuDocDetailInfoValueHandler());
         paramValueHandlerMap.put(ParamValueType.PARAM_COMMENT, new ParamCommentValueHandler());
+        paramValueHandlerMap.put(ParamValueType.PARAM_TYPE_VIEW, new ParamTypeViewValueHandler());
     }
 
 
