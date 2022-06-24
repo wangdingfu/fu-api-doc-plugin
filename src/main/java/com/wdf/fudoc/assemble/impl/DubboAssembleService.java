@@ -1,9 +1,11 @@
 package com.wdf.fudoc.assemble.impl;
 
 import com.wdf.fudoc.assemble.AbstractAssembleService;
+import com.wdf.fudoc.pojo.bo.AssembleBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
+import com.wdf.fudoc.pojo.desc.MethodInfoDesc;
 
 import java.util.List;
 
@@ -21,7 +23,13 @@ public class DubboAssembleService extends AbstractAssembleService {
     }
 
     @Override
-    public List<FuDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
+    protected AssembleBO doAssembleInfoByClass(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         return null;
     }
+
+    @Override
+    protected boolean doAssembleInfoMethod(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, FuDocItemData fuDocItemData, AssembleBO assembleBO) {
+        return false;
+    }
+
 }

@@ -41,6 +41,13 @@ public class ControllerAssembleService extends AbstractAssembleService {
         return CollectionUtils.isNotEmpty(classInfoDesc.getMethodList()) && classInfoDesc.isController();
     }
 
+
+    /**
+     * 组装信息-类层信息
+     * @param fuDocContext  【FU DOC】全局上下文对象
+     * @param classInfoDesc 类描述信息
+     * @return 解析出类这一层的信息返回出去 用于在解析方法层时使用
+     */
     @Override
     protected AssembleBO doAssembleInfoByClass(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         AssembleBO assembleBO = new AssembleBO();
@@ -52,6 +59,15 @@ public class ControllerAssembleService extends AbstractAssembleService {
         return assembleBO;
     }
 
+
+    /**
+     * 组织方法层信息
+     * @param fuDocContext   【FU DOC】全局上下文对象
+     * @param methodInfoDesc 方法描述信息
+     * @param fuDocItemData  具体每一个接口渲染的数据对象
+     * @param assembleBO     组装参数信息
+     * @return true: 该方法可以生成接口文档  false: 该方法过滤掉 不生成接口文档
+     */
     @Override
     protected boolean doAssembleInfoMethod(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, FuDocItemData fuDocItemData, AssembleBO assembleBO) {
         for (String annotationName : AnnotationConstants.MAPPING) {
