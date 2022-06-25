@@ -25,6 +25,8 @@ public interface AnnotationConstants {
     String PATH_VARIABLE = "org.springframework.web.bind.annotation.PathVariable";
 
 
+    String VALIDATED = "org.springframework.validation.annotation.Validated";
+
     String VALID_NOT_NULL = "javax.validation.constraints.NotNull";
     String VALID_NOT_BLANK = "org.hibernate.validator.constraints.NotBlank";
     String VALID_NOT_EMPTY = "org.hibernate.validator.constraints.NotEmpty";
