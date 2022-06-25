@@ -48,9 +48,29 @@ public class AnnotationValueData {
     }
 
 
+    public List<Class<?>> getListClassValue() {
+        if (AnnotationValueType.CLASS.equals(valueType)) {
+            return Lists.newArrayList(getClassValue(this.value));
+        }
+        List<Class<?>> resultList = Lists.newArrayList();
+        if (AnnotationValueType.ARRAY.equals(this.valueType)) {
+            for (Object o : ((List<?>) this.value)) {
+                resultList.add(getClassValue(o));
+            }
+        }
+        resultList.removeAll(Collections.singleton(null));
+        return resultList;
+    }
+
+
     public String getStringValue() {
         return TypeUtils.castToString(this.value);
     }
 
+
+
+    public Class<?> getClassValue(Object value) {
+        return (Class<?>) value;
+    }
 
 }
