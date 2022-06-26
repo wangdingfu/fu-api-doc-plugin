@@ -17,14 +17,14 @@ import java.util.Objects;
 @Setter
 public class ObjectInfoDesc extends BaseInfoDesc {
     /**
-     * 描述ID（当前参数的唯一标识 格式：包路径+3位数序号）
+     * 描述ID（当前参数的唯一标识）
      */
-    private String descId;
+    private int descId;
 
     /**
      * 根节点参数ID
      */
-    private String rootId;
+    private int rootId;
 
     /**
      * 对象类型枚举

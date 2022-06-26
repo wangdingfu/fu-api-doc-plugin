@@ -12,7 +12,9 @@ import com.wdf.fudoc.constant.enumtype.CommonObjectType;
 import com.wdf.fudoc.mock.FuDocObjectJMockData;
 import com.wdf.fudoc.mock.FuDocObjectMock;
 import com.wdf.fudoc.parse.field.FuDocField;
+import com.wdf.fudoc.parse.field.FuDocPsiParameter;
 import com.wdf.fudoc.pojo.bo.ParseObjectBO;
+import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -47,8 +49,15 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
      */
     protected ObjectInfoDesc buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
         ObjectInfoDesc objectInfoDesc = new ObjectInfoDesc();
+        FuDocContext fuDocContext = parseObjectBO.getFuDocContext();
+        objectInfoDesc.setDescId(fuDocContext.genDescId());
         FuDocField fuDocField = parseObjectBO.getFuDocField();
         if (Objects.nonNull(fuDocField)) {
+            if (fuDocField instanceof FuDocPsiParameter) {
+                //根节点参数
+                objectInfoDesc.setRootId(objectInfoDesc.getDescId());
+                fuDocContext.addRoot(objectInfoDesc.getDescId(), objectInfoDesc);
+            }
             objectInfoDesc.setDocText(fuDocField.getComment());
             objectInfoDesc.setName(fuDocField.getName());
             objectInfoDesc.setAnnotationDataMap(AnnotationUtils.parse(fuDocField.getAnnotations()));
@@ -127,8 +136,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         if (CollectionUtils.isNotEmpty(childList)) {
             JSONObject jsonObject = new JSONObject();
             for (ObjectInfoDesc objectInfoDesc : childList) {
-                if (objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.STATIC)
-                        || objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.FINAL)) {
+                if (objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.STATIC) || objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.FINAL)) {
                     continue;
                 }
                 jsonObject.put(objectInfoDesc.getName(), objectInfoDesc.getValue());

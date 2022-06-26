@@ -8,8 +8,10 @@ package com.wdf.fudoc.helper;
 public class FuDocNoGenHelper {
 
 
+
     public static String genNo(String methodId) {
         //TODO 生成接口序号
         return "";
     }
+
 }

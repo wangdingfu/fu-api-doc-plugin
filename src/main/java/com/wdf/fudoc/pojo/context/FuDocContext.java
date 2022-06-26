@@ -21,7 +21,10 @@ import java.util.Objects;
 @Getter
 @Setter
 public class FuDocContext {
-
+    /**
+     * desc自增ID
+     */
+    private transient int descId;
 
     /**
      * swagger功能解析是否启用（默认启用）
@@ -37,7 +40,7 @@ public class FuDocContext {
     /**
      * key:根节点ID value:根节点描述对象
      */
-    private Map<String, ObjectInfoDesc> rootInfoDescMap;
+    private Map<Integer, ObjectInfoDesc> rootInfoDescMap;
 
 
     /**
@@ -53,12 +56,28 @@ public class FuDocContext {
      */
     private Map<String, ObjectInfoDesc> earlyObjectInfoDescMap;
 
+    /**
+     * 生成descId
+     */
+    public int genDescId() {
+        return ++descId;
+    }
 
-    public ObjectInfoDesc getByRootId(String rootId) {
-        if (Objects.nonNull(this.rootInfoDescMap) && StringUtils.isNotBlank(rootId)) {
+
+    public ObjectInfoDesc getByRootId(Integer rootId) {
+        if (Objects.nonNull(this.rootInfoDescMap) && Objects.nonNull(rootId)) {
             return this.rootInfoDescMap.get(rootId);
         }
         return null;
+    }
+
+    public void addRoot(Integer rootId, ObjectInfoDesc objectInfoDesc) {
+        if (Objects.nonNull(rootId) && Objects.nonNull(objectInfoDesc)) {
+            if (Objects.isNull(this.rootInfoDescMap)) {
+                this.rootInfoDescMap = new HashMap<>();
+            }
+            this.rootInfoDescMap.put(rootId, objectInfoDesc);
+        }
     }
 
 
