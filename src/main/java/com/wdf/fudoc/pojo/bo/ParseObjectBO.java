@@ -19,6 +19,12 @@ import java.util.Map;
 @Setter
 public class ParseObjectBO {
 
+
+    /**
+     * 是否解析根节点参数
+     */
+    private boolean root;
+
     /**
      * 上下文对象
      */

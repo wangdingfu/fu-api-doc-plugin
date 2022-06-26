@@ -15,8 +15,6 @@ import java.util.List;
 public class ClassInfoDesc extends BaseInfoDesc {
 
 
-
-
     /**
      * 方法集合
      */

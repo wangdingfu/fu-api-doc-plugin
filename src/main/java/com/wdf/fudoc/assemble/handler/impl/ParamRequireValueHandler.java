@@ -1,6 +1,5 @@
 package com.wdf.fudoc.assemble.handler.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.wdf.fudoc.assemble.handler.BaseParamFieldValueHandler;
 import com.wdf.fudoc.constant.AnnotationConstants;
 import com.wdf.fudoc.constant.FuDocConstants;
@@ -8,7 +7,6 @@ import com.wdf.fudoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.AnnotationData;
-import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -29,28 +27,35 @@ public class ParamRequireValueHandler extends BaseParamFieldValueHandler {
         return ParamValueType.PARAM_REQUIRE;
     }
 
+    /**
+     * 获取当前参数是否必填值
+     * @param fuDocContext 全局上下文
+     * @param objectInfoDesc 参数描述对象
+     * @return 是否必填属性的值
+     */
     @Override
     protected String doGetParamValue(FuDocContext fuDocContext, ObjectInfoDesc objectInfoDesc) {
-        //判断当前校验注解是否生效
-        Optional<AnnotationData> annotationDataOptional = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
-        if (annotationDataOptional.isPresent()) {
-            JSONObject extInfo = objectInfoDesc.getExtInfo();
-            BaseInfoDesc root;
-            if (Objects.nonNull(extInfo) && Objects.nonNull(root = extInfo.getObject("root", BaseInfoDesc.class))) {
-                Optional<AnnotationData> annotation = root.getAnnotation(AnnotationConstants.VALIDATED);
-                if (annotation.isPresent()) {
-                    List<Class<?>> groupClassValueList = annotation.get().getValue().getListClassValue();
-                    if (CollectionUtils.isNotEmpty(groupClassValueList)) {
-                        List<Class<?>> groups = annotationDataOptional.get().getValue(FuDocConstants.AnnotationAttr.GROUPS).getListClassValue();
-                        if (CollectionUtils.isNotEmpty(groups)) {
-                            return new HashSet<>(groups).containsAll(groupClassValueList) ? YesOrNo.YES.getDesc() : YesOrNo.NO.getDesc();
-                        }
-                        return YesOrNo.NO.getDesc();
-                    }
+        //获取当前参数的根节点
+        ObjectInfoDesc rootInfoDesc = fuDocContext.getByRootId(objectInfoDesc.getRootId());
+        if(Objects.isNull(rootInfoDesc)){
+            return YesOrNo.NO.getDesc();
+        }
+        Optional<AnnotationData> annotation = rootInfoDesc.getAnnotation(AnnotationConstants.VALIDATED);
+        if(annotation.isPresent()){
+            //有“@Validated()”注解
+            Optional<AnnotationData> annotationDataOptional = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
+            if(annotationDataOptional.isPresent()){
+                //有标识必填注解 需要进一步判断group
+                List<Class<?>> groupClassValueList = annotation.get().getValue().getListClassValue();
+                if(CollectionUtils.isEmpty(groupClassValueList)){
+                    //没指定哪一个group 则标识了必填注解的参数都为必填
                     return YesOrNo.YES.getDesc();
                 }
+                List<Class<?>> groups = annotationDataOptional.get().getValue(FuDocConstants.AnnotationAttr.GROUPS).getListClassValue();
+                return new HashSet<>(groups).containsAll(groupClassValueList) ? YesOrNo.YES.getDesc() : YesOrNo.NO.getDesc();
             }
         }
+        //请求入参中没有表示“@Validated()”注解 则直接返回不必填
         return YesOrNo.NO.getDesc();
     }
 }

@@ -3,6 +3,7 @@ package com.wdf.fudoc.pojo.context;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.factory.ObjectInfoDescFactory;
+import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +34,11 @@ public class FuDocContext {
     private boolean enableValidMessage = true;
 
 
+    /**
+     * key:根节点ID value:根节点描述对象
+     */
+    private Map<String, ObjectInfoDesc> rootInfoDescMap;
+
 
     /**
      * 存放每一个参数解析后的数据对象
@@ -46,6 +52,14 @@ public class FuDocContext {
      * 当对象解析完成后会被移动到objectInfoDescMap中
      */
     private Map<String, ObjectInfoDesc> earlyObjectInfoDescMap;
+
+
+    public ObjectInfoDesc getByRootId(String rootId) {
+        if (Objects.nonNull(this.rootInfoDescMap) && StringUtils.isNotBlank(rootId)) {
+            return this.rootInfoDescMap.get(rootId);
+        }
+        return null;
+    }
 
 
     public ObjectInfoDesc getFromCache(String key) {
