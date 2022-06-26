@@ -81,6 +81,7 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
             ParseObjectBO genericsParseObjectBO = new ParseObjectBO();
             genericsParseObjectBO.setFuDocContext(parseObjectBO.getFuDocContext());
             genericsParseObjectBO.setGenericsMap(parseObjectBO.getGenericsMap());
+            genericsParseObjectBO.setRootId(parseObjectBO.getRootId());
             genericsInfoDesc = ObjectParserExecutor.execute(genericsType, genericsParseObjectBO);
             if (Objects.nonNull(genericsInfoDesc)) {
                 //将泛型对象的字段集合设置到当前apiDoc中

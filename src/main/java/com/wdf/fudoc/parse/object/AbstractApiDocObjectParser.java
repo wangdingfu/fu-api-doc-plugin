@@ -56,6 +56,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
             if (fuDocField instanceof FuDocPsiParameter) {
                 //根节点参数
                 objectInfoDesc.setRootId(objectInfoDesc.getDescId());
+                parseObjectBO.setRootId(objectInfoDesc.getRootId());
                 fuDocContext.addRoot(objectInfoDesc.getDescId(), objectInfoDesc);
             }
             objectInfoDesc.setDocText(fuDocField.getComment());
@@ -69,6 +70,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         objectInfoDesc.setType(psiType.getCanonicalText());
         objectInfoDesc.setFuDocObjectType(getObjectType());
         objectInfoDesc.setValue(mockCommonType(objectInfoDesc));
+        objectInfoDesc.setRootId(parseObjectBO.getRootId());
         return objectInfoDesc;
     }
 

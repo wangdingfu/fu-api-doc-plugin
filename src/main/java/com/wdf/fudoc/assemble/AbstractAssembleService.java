@@ -57,7 +57,7 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
             for (MethodInfoDesc methodInfoDesc : methodList) {
                 FuDocItemData fuDocItemData = new FuDocItemData();
                 if (doAssembleInfoMethod(fuDocContext, methodInfoDesc, fuDocItemData, assembleBO)) {
-                    fuDocItemData.setDocNo(FuDocNoGenHelper.genNo(methodInfoDesc.getMethodId()));
+                    fuDocItemData.setDocNo(FuDocNoGenHelper.genNo(methodInfoDesc.getMethodId()) + "");
                     //组装公共信息
                     assembleCommonInfo(fuDocContext, methodInfoDesc, fuDocItemData);
                     resultList.add(fuDocItemData);
