@@ -83,6 +83,10 @@ public class AnnotationUtils {
             //值为常量
             return ((JvmAnnotationConstantValue) attributeValue).getConstantValue();
         }
+        if (attributeValue instanceof JvmAnnotationClassValue) {
+            //值为常量
+            return ((JvmAnnotationClassValue) attributeValue).getClazz();
+        }
         return StringUtils.EMPTY;
     }
 }

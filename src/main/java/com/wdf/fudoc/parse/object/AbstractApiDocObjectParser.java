@@ -12,6 +12,7 @@ import com.wdf.fudoc.constant.enumtype.CommonObjectType;
 import com.wdf.fudoc.mock.FuDocObjectJMockData;
 import com.wdf.fudoc.mock.FuDocObjectMock;
 import com.wdf.fudoc.parse.field.FuDocField;
+import com.wdf.fudoc.parse.field.FuDocPsiClass;
 import com.wdf.fudoc.parse.field.FuDocPsiParameter;
 import com.wdf.fudoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
@@ -53,7 +54,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         objectInfoDesc.setDescId(fuDocContext.genDescId());
         FuDocField fuDocField = parseObjectBO.getFuDocField();
         if (Objects.nonNull(fuDocField)) {
-            if (fuDocField instanceof FuDocPsiParameter) {
+            if (fuDocField instanceof FuDocPsiParameter || fuDocField instanceof FuDocPsiClass) {
                 //根节点参数
                 objectInfoDesc.setRootId(objectInfoDesc.getDescId());
                 parseObjectBO.setRootId(objectInfoDesc.getRootId());
@@ -70,7 +71,10 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         objectInfoDesc.setType(psiType.getCanonicalText());
         objectInfoDesc.setFuDocObjectType(getObjectType());
         objectInfoDesc.setValue(mockCommonType(objectInfoDesc));
-        objectInfoDesc.setRootId(parseObjectBO.getRootId());
+        Integer rootId = parseObjectBO.getRootId();
+        if (Objects.nonNull(rootId)) {
+            objectInfoDesc.setRootId(rootId);
+        }
         return objectInfoDesc;
     }
 

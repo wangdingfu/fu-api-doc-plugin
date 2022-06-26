@@ -17,7 +17,7 @@ public class FuDocNoGenHelper {
 
 
     public static Integer genNo(String methodId) {
-        if (StringUtils.isNotBlank(methodId)) {
+        if (StringUtils.isBlank(methodId)) {
             return 0;
         }
         if (PARAM_NO_MAP.containsKey(methodId)) {

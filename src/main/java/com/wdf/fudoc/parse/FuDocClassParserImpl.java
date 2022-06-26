@@ -35,8 +35,8 @@ public class FuDocClassParserImpl implements FuDocClassParser {
      * 解析java类 将java类的一些信息解析封装
      *
      * @param fuDocContext 全局上下文
-     * @param psiClass      指定类的PsiClass
-     * @param methodList    指定方法集合(为空则当前类所有方法都解析)
+     * @param psiClass     指定类的PsiClass
+     * @param methodList   指定方法集合(为空则当前类所有方法都解析)
      * @return java类信息描述对象
      */
     @Override
@@ -57,6 +57,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
                 if (CollectionUtils.isEmpty(methodList) || methodList.contains(method)) {
                     ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
                     MethodInfoDesc methodInfoDesc = new MethodInfoDesc();
+                    methodInfoDesc.setMethodId(psiClass.getQualifiedName() + "#" + method.getName());
                     //设置方法上的注释
                     methodInfoDesc.setCommentData(apiDocCommentData);
                     //设置方法上注解
@@ -76,7 +77,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
      * 请求参数转换器
      *
      * @param fuDocContext 全局上下文
-     * @param psiMethod     指定的方法
+     * @param psiMethod    指定的方法
      * @return 解析后的请求参数
      */
     protected List<ObjectInfoDesc> requestParse(FuDocContext fuDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
@@ -99,7 +100,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
      * 解析响应参数
      *
      * @param fuDocContext 全局上下文
-     * @param psiMethod     指定的方法
+     * @param psiMethod    指定的方法
      * @return 解析后的响应参数对象
      */
     protected ObjectInfoDesc responseParse(FuDocContext fuDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {

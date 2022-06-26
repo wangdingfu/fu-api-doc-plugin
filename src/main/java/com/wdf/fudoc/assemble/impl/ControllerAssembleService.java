@@ -44,6 +44,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
 
     /**
      * 组装信息-类层信息
+     *
      * @param fuDocContext  【FU DOC】全局上下文对象
      * @param classInfoDesc 类描述信息
      * @return 解析出类这一层的信息返回出去 用于在解析方法层时使用
@@ -62,6 +63,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
 
     /**
      * 组织方法层信息
+     *
      * @param fuDocContext   【FU DOC】全局上下文对象
      * @param methodInfoDesc 方法描述信息
      * @param fuDocItemData  具体每一个接口渲染的数据对象
@@ -79,8 +81,8 @@ public class ControllerAssembleService extends AbstractAssembleService {
                     fuDocItemData.setRequestType(requestType.getRequestType());
                 }
                 fuDocItemData.setUrlList(joinUrl(assembleBO.getControllerUrlList(), annotationData.getValue().getListValue()));
-                break;
             }
+            return true;
         }
         return false;
     }
