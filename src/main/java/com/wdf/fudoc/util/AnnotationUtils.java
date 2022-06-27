@@ -6,6 +6,7 @@ import com.intellij.psi.PsiAnnotation;
 import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.pojo.data.AnnotationValueData;
+import com.wdf.fudoc.pojo.data.annotation.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,7 +25,7 @@ public class AnnotationUtils {
             AnnotationData annotationData = annotation.get();
             if (Objects.nonNull(attrNames) && attrNames.length > 0) {
                 for (String attrName : attrNames) {
-                    String value = annotationData.getValue(attrName).getStringValue();
+                    String value = annotationData.constant(attrName).getStringValue();
                     if (StringUtils.isNotBlank(value)) {
                         return value;
                     }
@@ -50,9 +51,10 @@ public class AnnotationUtils {
                 List<JvmAnnotationAttribute> attributes = psiAnnotation.getAttributes();
                 if (CollectionUtils.isNotEmpty(attributes)) {
                     for (JvmAnnotationAttribute attribute : attributes) {
-                        String attributeName = attribute.getAttributeName();
-                        AnnotationValueData value = convertAnnotationAttributeValue(attribute.getAttributeValue());
-                        annotationData.addAttr(attributeName, value);
+                        AnnotationValueData annotationValueData = convert(attribute.getAttributeValue());
+                        if (Objects.nonNull(annotationValueData)) {
+                            annotationData.addAttr(attribute.getAttributeName(), annotationValueData);
+                        }
                     }
                 }
                 annotationDataMap.put(qualifiedName, annotationData);
@@ -62,31 +64,53 @@ public class AnnotationUtils {
     }
 
 
-    private static AnnotationValueData convertAnnotationAttributeValue(JvmAnnotationAttributeValue attributeValue) {
-        if (attributeValue instanceof JvmAnnotationEnumFieldValue) {
-            //值类型为:JvmAnnotationEnumFieldValue
-            return new AnnotationValueData(AnnotationValueType.ENUM, attributeValue);
-        }
-        if (attributeValue instanceof JvmAnnotationArrayValue) {
-            List<Object> resultList = Lists.newArrayList();
-            for (JvmAnnotationAttributeValue value : ((JvmAnnotationArrayValue) attributeValue).getValues()) {
-                resultList.add(annotationConstantValue(value));
-            }
-            return new AnnotationValueData(AnnotationValueType.ARRAY, resultList);
-        }
-        return new AnnotationValueData(AnnotationValueType.CONSTANT, annotationConstantValue(attributeValue));
-    }
-
-
-    private static Object annotationConstantValue(JvmAnnotationAttributeValue attributeValue) {
+    private static AnnotationValueData convert(JvmAnnotationAttributeValue attributeValue) {
         if (attributeValue instanceof JvmAnnotationConstantValue) {
-            //值为常量
-            return ((JvmAnnotationConstantValue) attributeValue).getConstantValue();
+            return convertConstant((JvmAnnotationConstantValue) attributeValue);
         }
         if (attributeValue instanceof JvmAnnotationClassValue) {
-            //值为常量
-            return ((JvmAnnotationClassValue) attributeValue).getClazz();
+            return convertClass((JvmAnnotationClassValue) attributeValue);
         }
-        return StringUtils.EMPTY;
+        if (attributeValue instanceof JvmAnnotationEnumFieldValue) {
+            return convertEnum((JvmAnnotationEnumFieldValue) attributeValue);
+        }
+        if (attributeValue instanceof JvmNestedAnnotationValue) {
+            return convertAnnotation((JvmNestedAnnotationValue) attributeValue);
+        }
+        if (attributeValue instanceof JvmAnnotationArrayValue) {
+            return convertArray((JvmAnnotationArrayValue) attributeValue);
+        }
+        return null;
     }
+
+
+    private static AnnotationConstantValueData convertConstant(JvmAnnotationConstantValue constantValue) {
+        return new AnnotationConstantValueData(AnnotationValueType.CONSTANT, constantValue.getConstantValue());
+    }
+
+
+    private static AnnotationEnumValueData convertEnum(JvmAnnotationEnumFieldValue enumFieldValue) {
+        return new AnnotationEnumValueData(AnnotationValueType.ENUM);
+    }
+
+    private static AnnotationClassValueData convertClass(JvmAnnotationClassValue classValue) {
+        return new AnnotationClassValueData(AnnotationValueType.CLASS);
+    }
+
+    private static AnnotationTypeValueData convertAnnotation(JvmNestedAnnotationValue nestedAnnotationValue) {
+        return new AnnotationTypeValueData(AnnotationValueType.NESTED_ANNOTATION);
+    }
+
+
+    private static AnnotationArrayValueData convertArray(JvmAnnotationArrayValue arrayValue) {
+        AnnotationArrayValueData arrayValueData = new AnnotationArrayValueData(AnnotationValueType.ARRAY);
+        List<JvmAnnotationAttributeValue> arrayValueValues = arrayValue.getValues();
+        List<AnnotationValueData> values = Lists.newArrayList();
+        for (JvmAnnotationAttributeValue value : arrayValueValues) {
+            values.add(convert(value));
+        }
+        arrayValueData.setValues(values);
+        return arrayValueData;
+    }
+
 }

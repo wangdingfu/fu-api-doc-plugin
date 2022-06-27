@@ -54,7 +54,7 @@ public class ValidateAnnotationUtils {
     private static String getMessageValue(BaseInfoDesc baseInfoDesc, String annotationName) {
         Optional<AnnotationData> annotation = baseInfoDesc.getAnnotation(annotationName);
         if (annotation.isPresent()) {
-            return annotation.get().getValue(FuDocConstants.AnnotationAttr.MESSAGE).getStringValue();
+            return annotation.get().constant(FuDocConstants.AnnotationAttr.MESSAGE).getStringValue();
         }
         return StringUtils.EMPTY;
     }

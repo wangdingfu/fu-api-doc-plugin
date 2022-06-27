@@ -1,15 +1,8 @@
 package com.wdf.fudoc.pojo.data;
 
-import com.alibaba.fastjson.util.TypeUtils;
-import com.google.common.collect.Lists;
 import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author wangdingfu
@@ -18,8 +11,6 @@ import java.util.List;
  */
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class AnnotationValueData {
 
     /**
@@ -27,50 +18,10 @@ public class AnnotationValueData {
      */
     private AnnotationValueType valueType;
 
-    /**
-     * 值
-     */
-    private Object value;
-
-
-    public List<String> getListValue() {
-        if (AnnotationValueType.CONSTANT.equals(valueType)) {
-            return Lists.newArrayList(getStringValue());
-        }
-        List<String> resultList = Lists.newArrayList();
-        if (AnnotationValueType.ARRAY.equals(this.valueType)) {
-            for (Object o : ((List<?>) this.value)) {
-                resultList.add(TypeUtils.castToString(o));
-            }
-        }
-        resultList.removeAll(Collections.singleton(null));
-        return resultList;
+    public AnnotationValueData(AnnotationValueType valueType) {
+        this.valueType = valueType;
     }
 
-
-    public List<Class<?>> getListClassValue() {
-        if (AnnotationValueType.CLASS.equals(valueType)) {
-            return Lists.newArrayList(getClassValue(this.value));
-        }
-        List<Class<?>> resultList = Lists.newArrayList();
-        if (AnnotationValueType.ARRAY.equals(this.valueType)) {
-            for (Object o : ((List<?>) this.value)) {
-                resultList.add(getClassValue(o));
-            }
-        }
-        resultList.removeAll(Collections.singleton(null));
-        return resultList;
+    public AnnotationValueData() {
     }
-
-
-    public String getStringValue() {
-        return TypeUtils.castToString(this.value);
-    }
-
-
-
-    public Class<?> getClassValue(Object value) {
-        return (Class<?>) value;
-    }
-
 }
