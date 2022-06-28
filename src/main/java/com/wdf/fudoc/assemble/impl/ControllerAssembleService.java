@@ -54,7 +54,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
         AssembleBO assembleBO = new AssembleBO();
         if (CollectionUtils.isNotEmpty(classInfoDesc.getMethodList())) {
             classInfoDesc.getAnnotation(AnnotationConstants.REQUEST_MAPPING).ifPresent(annotationData -> {
-                assembleBO.setControllerUrlList(annotationData.arrayValue().constantStringValue());
+                assembleBO.setControllerUrlList(annotationData.array().constant().stringValue());
             });
         }
         return assembleBO;
@@ -80,7 +80,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 if (Objects.nonNull(requestType)) {
                     fuDocItemData.setRequestType(requestType.getRequestType());
                 }
-                fuDocItemData.setUrlList(joinUrl(assembleBO.getControllerUrlList(), annotationData.arrayValue().constantStringValue()));
+                fuDocItemData.setUrlList(joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
             }
             return true;
         }

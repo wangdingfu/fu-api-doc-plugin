@@ -1,13 +1,14 @@
 package com.wdf.fudoc.pojo.data.annotation;
 
-import com.google.common.collect.Lists;
 import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.pojo.data.AnnotationValueData;
+import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -32,15 +33,64 @@ public class AnnotationArrayValueData extends AnnotationValueData {
     private List<AnnotationValueData> values;
 
 
-    public List<String> constantStringValue() {
-        List<String> resultList = Lists.newArrayList();
-        if (Objects.nonNull(values)) {
-            for (AnnotationValueData value : values) {
-                if (AnnotationValueType.CONSTANT.equals(value.getValueType())) {
-                    resultList.add(((AnnotationConstantValueData) value).getStringValue());
-                }
-            }
+    public ArrayConstantValue constant() {
+        return new ArrayConstantValue(ObjectUtils.listToList(values, data -> (AnnotationConstantValueData) data));
+    }
+
+    public ClassValue clazz() {
+        return new ClassValue(ObjectUtils.listToList(values, data -> (AnnotationClassValueData) data));
+    }
+
+    public EnumValue enumValue() {
+        return new EnumValue(ObjectUtils.listToList(values, data -> (AnnotationEnumValueData) data));
+    }
+
+
+    public NestedAnnotationValue nested() {
+        return new NestedAnnotationValue(ObjectUtils.listToList(values, data -> (AnnotationNestedValueData) data));
+    }
+
+
+    public static class ArrayConstantValue {
+        private final List<AnnotationConstantValueData> valueDataList;
+
+        public ArrayConstantValue(List<AnnotationConstantValueData> valueDataList) {
+            this.valueDataList = valueDataList;
         }
-        return resultList;
+
+        public List<String> stringValue() {
+            return valueDataList.stream().map(AnnotationConstantValueData::stringValue).filter(StringUtils::isEmpty).collect(Collectors.toList());
+        }
+    }
+
+
+    public static class ClassValue {
+        private final List<AnnotationClassValueData> valueDataList;
+
+        ClassValue(List<AnnotationClassValueData> valueDataList) {
+            this.valueDataList = valueDataList;
+        }
+
+        public List<String> className() {
+            return valueDataList.stream().map(AnnotationClassValueData::getClassName).filter(StringUtils::isEmpty).collect(Collectors.toList());
+        }
+    }
+
+
+    public static class EnumValue {
+        private final List<AnnotationEnumValueData> valueDataList;
+
+        EnumValue(List<AnnotationEnumValueData> valueDataList) {
+            this.valueDataList = valueDataList;
+        }
+    }
+
+
+    public static class NestedAnnotationValue {
+        private final List<AnnotationNestedValueData> valueDataList;
+
+        NestedAnnotationValue(List<AnnotationNestedValueData> valueDataList) {
+            this.valueDataList = valueDataList;
+        }
     }
 }

@@ -22,6 +22,5 @@ public class AnnotationValueData {
         this.valueType = valueType;
     }
 
-    public AnnotationValueData() {
-    }
+
 }

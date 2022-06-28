@@ -1,9 +1,12 @@
 package com.wdf.fudoc.util;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -24,5 +27,13 @@ public class ObjectUtils {
             }
         }
         return resultList;
+    }
+
+
+    public static <T, R> List<R> listToList(List<T> tList, Function<T, R> function) {
+        if (CollectionUtils.isNotEmpty(tList) && Objects.nonNull(function)) {
+            return tList.stream().map(function).collect(Collectors.toList());
+        }
+        return Lists.newArrayList();
     }
 }

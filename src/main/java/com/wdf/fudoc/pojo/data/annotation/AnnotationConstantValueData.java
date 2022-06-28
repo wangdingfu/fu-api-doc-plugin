@@ -24,8 +24,13 @@ public class AnnotationConstantValueData extends AnnotationValueData {
     /**
      * 获取String类型的值
      */
-    public String getStringValue() {
+    public String stringValue() {
         return TypeUtils.castToString(this.value);
+    }
+
+
+    public AnnotationConstantValueData(AnnotationValueType valueType) {
+        super(valueType);
     }
 
     public AnnotationConstantValueData(AnnotationValueType valueType, Object value) {

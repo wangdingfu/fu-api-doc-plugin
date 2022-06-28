@@ -29,7 +29,8 @@ public class ParamRequireValueHandler extends BaseParamFieldValueHandler {
 
     /**
      * 获取当前参数是否必填值
-     * @param fuDocContext 全局上下文
+     *
+     * @param fuDocContext   全局上下文
      * @param objectInfoDesc 参数描述对象
      * @return 是否必填属性的值
      */
@@ -37,22 +38,22 @@ public class ParamRequireValueHandler extends BaseParamFieldValueHandler {
     protected String doGetParamValue(FuDocContext fuDocContext, ObjectInfoDesc objectInfoDesc) {
         //获取当前参数的根节点
         ObjectInfoDesc rootInfoDesc = fuDocContext.getByRootId(objectInfoDesc.getRootId());
-        if(Objects.isNull(rootInfoDesc)){
+        if (Objects.isNull(rootInfoDesc)) {
             return YesOrNo.NO.getDesc();
         }
         Optional<AnnotationData> annotation = rootInfoDesc.getAnnotation(AnnotationConstants.VALIDATED);
-        if(annotation.isPresent()){
+        if (annotation.isPresent()) {
             //有“@Validated()”注解
             Optional<AnnotationData> annotationDataOptional = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
-            if(annotationDataOptional.isPresent()){
+            if (annotationDataOptional.isPresent()) {
                 //有标识必填注解 需要进一步判断group
-                List<Class<?>> groupClassValueList = annotation.get().getValue().getListClassValue();
-                if(CollectionUtils.isEmpty(groupClassValueList)){
+                List<String> groupClassNameList = annotation.get().array().clazz().className();
+                if (CollectionUtils.isEmpty(groupClassNameList)) {
                     //没指定哪一个group 则标识了必填注解的参数都为必填
                     return YesOrNo.YES.getDesc();
                 }
-                List<Class<?>> groups = annotationDataOptional.get().getValue(FuDocConstants.AnnotationAttr.GROUPS).getListClassValue();
-                return new HashSet<>(groups).containsAll(groupClassValueList) ? YesOrNo.YES.getDesc() : YesOrNo.NO.getDesc();
+                List<String> groups = annotationDataOptional.get().array(FuDocConstants.AnnotationAttr.GROUPS).clazz().className();
+                return new HashSet<>(groups).containsAll(groupClassNameList) ? YesOrNo.YES.getDesc() : YesOrNo.NO.getDesc();
             }
         }
         //请求入参中没有表示“@Validated()”注解 则直接返回不必填

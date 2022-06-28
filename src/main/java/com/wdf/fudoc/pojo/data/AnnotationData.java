@@ -78,7 +78,7 @@ public class AnnotationData {
      * @param attrName 属性名称
      * @return class类型的值
      */
-    public AnnotationClassValueData classValue(String attrName) {
+    public AnnotationClassValueData clazz(String attrName) {
         AnnotationValueData value = getValue(attrName);
         if (Objects.nonNull(value) && AnnotationValueType.CLASS.equals(value.getValueType())) {
             return (AnnotationClassValueData) value;
@@ -86,6 +86,9 @@ public class AnnotationData {
         return new AnnotationClassValueData(AnnotationValueType.CLASS);
     }
 
+    public AnnotationClassValueData clazz() {
+        return clazz(FuDocConstants.VALUE);
+    }
 
     /**
      * 根据属性名称获取枚举类型的值
@@ -108,12 +111,12 @@ public class AnnotationData {
      * @param attrName 属性名称
      * @return 注解类型的值
      */
-    public AnnotationTypeValueData annotationValue(String attrName) {
+    public AnnotationNestedValueData annotation(String attrName) {
         AnnotationValueData value = getValue(attrName);
         if (Objects.nonNull(value) && AnnotationValueType.NESTED_ANNOTATION.equals(value.getValueType())) {
-            return (AnnotationTypeValueData) value;
+            return (AnnotationNestedValueData) value;
         }
-        return new AnnotationTypeValueData(AnnotationValueType.NESTED_ANNOTATION);
+        return new AnnotationNestedValueData(AnnotationValueType.NESTED_ANNOTATION);
     }
 
 
@@ -123,7 +126,7 @@ public class AnnotationData {
      * @param attrName 属性名称
      * @return 数组类型值
      */
-    public AnnotationArrayValueData arrayValue(String attrName) {
+    public AnnotationArrayValueData array(String attrName) {
         AnnotationValueData value = getValue(attrName);
         if (Objects.nonNull(value) && AnnotationValueType.ARRAY.equals(value.getValueType())) {
             return (AnnotationArrayValueData) value;
@@ -131,16 +134,16 @@ public class AnnotationData {
         return new AnnotationArrayValueData(AnnotationValueType.ARRAY);
     }
 
-    public AnnotationArrayValueData arrayValue() {
-        return arrayValue(FuDocConstants.VALUE);
+    public AnnotationArrayValueData array() {
+        return array(FuDocConstants.VALUE);
     }
 
-    public AnnotationValueData getValue() {
+    private AnnotationValueData getValue() {
         return getValue(FuDocConstants.VALUE);
     }
 
 
-    public AnnotationValueData getValue(String attrName) {
+    private AnnotationValueData getValue(String attrName) {
         if (Objects.nonNull(this.attrMap) && StringUtils.isNotBlank(attrName)) {
             return this.attrMap.get(attrName);
         }

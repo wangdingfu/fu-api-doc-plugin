@@ -22,4 +22,8 @@ public class AnnotationClassValueData extends AnnotationValueData {
     public AnnotationClassValueData(AnnotationValueType valueType) {
         super(valueType);
     }
+
+    public String className() {
+        return this.className;
+    }
 }

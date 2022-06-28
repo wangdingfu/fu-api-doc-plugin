@@ -25,7 +25,7 @@ public class AnnotationUtils {
             AnnotationData annotationData = annotation.get();
             if (Objects.nonNull(attrNames) && attrNames.length > 0) {
                 for (String attrName : attrNames) {
-                    String value = annotationData.constant(attrName).getStringValue();
+                    String value = annotationData.constant(attrName).stringValue();
                     if (StringUtils.isNotBlank(value)) {
                         return value;
                     }
@@ -97,8 +97,8 @@ public class AnnotationUtils {
         return new AnnotationClassValueData(AnnotationValueType.CLASS);
     }
 
-    private static AnnotationTypeValueData convertAnnotation(JvmNestedAnnotationValue nestedAnnotationValue) {
-        return new AnnotationTypeValueData(AnnotationValueType.NESTED_ANNOTATION);
+    private static AnnotationNestedValueData convertAnnotation(JvmNestedAnnotationValue nestedAnnotationValue) {
+        return new AnnotationNestedValueData(AnnotationValueType.NESTED_ANNOTATION);
     }
 
 

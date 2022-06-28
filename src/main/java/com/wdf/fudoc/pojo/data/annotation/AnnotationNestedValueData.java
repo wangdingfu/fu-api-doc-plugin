@@ -12,9 +12,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class AnnotationTypeValueData extends AnnotationValueData {
+public class AnnotationNestedValueData extends AnnotationValueData {
 
-    public AnnotationTypeValueData(AnnotationValueType valueType) {
+    public AnnotationNestedValueData(AnnotationValueType valueType) {
         super(valueType);
     }
 }
