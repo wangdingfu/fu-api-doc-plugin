@@ -37,17 +37,17 @@ public class AnnotationArrayValueData extends AnnotationValueData {
         return new ArrayConstantValue(ObjectUtils.listToList(values, data -> (AnnotationConstantValueData) data));
     }
 
-    public ClassValue clazz() {
-        return new ClassValue(ObjectUtils.listToList(values, data -> (AnnotationClassValueData) data));
+    public ArrayClassValue clazz() {
+        return new ArrayClassValue(ObjectUtils.listToList(values, data -> (AnnotationClassValueData) data));
     }
 
-    public EnumValue enumValue() {
-        return new EnumValue(ObjectUtils.listToList(values, data -> (AnnotationEnumValueData) data));
+    public ArrayEnumValue enumValue() {
+        return new ArrayEnumValue(ObjectUtils.listToList(values, data -> (AnnotationEnumValueData) data));
     }
 
 
-    public NestedAnnotationValue nested() {
-        return new NestedAnnotationValue(ObjectUtils.listToList(values, data -> (AnnotationNestedValueData) data));
+    public ArrayNestedAnnotationValue nested() {
+        return new ArrayNestedAnnotationValue(ObjectUtils.listToList(values, data -> (AnnotationNestedValueData) data));
     }
 
 
@@ -64,10 +64,10 @@ public class AnnotationArrayValueData extends AnnotationValueData {
     }
 
 
-    public static class ClassValue {
+    public static class ArrayClassValue {
         private final List<AnnotationClassValueData> valueDataList;
 
-        ClassValue(List<AnnotationClassValueData> valueDataList) {
+        ArrayClassValue(List<AnnotationClassValueData> valueDataList) {
             this.valueDataList = valueDataList;
         }
 
@@ -77,19 +77,19 @@ public class AnnotationArrayValueData extends AnnotationValueData {
     }
 
 
-    public static class EnumValue {
+    public static class ArrayEnumValue {
         private final List<AnnotationEnumValueData> valueDataList;
 
-        EnumValue(List<AnnotationEnumValueData> valueDataList) {
+        ArrayEnumValue(List<AnnotationEnumValueData> valueDataList) {
             this.valueDataList = valueDataList;
         }
     }
 
 
-    public static class NestedAnnotationValue {
+    public static class ArrayNestedAnnotationValue {
         private final List<AnnotationNestedValueData> valueDataList;
 
-        NestedAnnotationValue(List<AnnotationNestedValueData> valueDataList) {
+        ArrayNestedAnnotationValue(List<AnnotationNestedValueData> valueDataList) {
             this.valueDataList = valueDataList;
         }
     }
