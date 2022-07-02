@@ -5,6 +5,7 @@ import com.wdf.fudoc.parse.object.ApiDocObjectParser;
 import com.wdf.fudoc.parse.object.impl.*;
 import com.wdf.fudoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Comparator;

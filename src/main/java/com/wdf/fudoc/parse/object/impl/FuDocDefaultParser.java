@@ -84,21 +84,6 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
         return objectInfoDesc;
     }
 
-    private ObjectInfoDesc buildDefaultObjectInfoDesc(PsiType psiType, ParseObjectBO parseObjectBO) {
-        ObjectInfoDesc objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
-        FuDocField fuDocField = parseObjectBO.getFuDocField();
-        boolean isAttr = Objects.nonNull(fuDocField) && fuDocField instanceof FuDocPsiField;
-        objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, isAttr);
-        return objectInfoDesc;
-    }
-
-
-    private void paddingChildList(ObjectInfoDesc objectInfoDesc, List<ObjectInfoDesc> childList) {
-        if (CollectionUtils.isNotEmpty(childList)) {
-            objectInfoDesc.setChildList(childList);
-            objectInfoDesc.setValue(buildValue(childList));
-        }
-    }
 
     /**
      * 解析对象 递归遍历父类并解析
@@ -120,6 +105,22 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             childList.removeAll(Collections.singleton(null));
         }
         return childList;
+    }
+
+    private ObjectInfoDesc buildDefaultObjectInfoDesc(PsiType psiType, ParseObjectBO parseObjectBO) {
+        ObjectInfoDesc objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
+        FuDocField fuDocField = parseObjectBO.getFuDocField();
+        boolean isAttr = Objects.nonNull(fuDocField) && fuDocField instanceof FuDocPsiField;
+        objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.IS_ATTR, isAttr);
+        return objectInfoDesc;
+    }
+
+
+    private void paddingChildList(ObjectInfoDesc objectInfoDesc, List<ObjectInfoDesc> childList) {
+        if (CollectionUtils.isNotEmpty(childList)) {
+            objectInfoDesc.setChildList(childList);
+            objectInfoDesc.setValue(buildValue(childList));
+        }
     }
 
 }

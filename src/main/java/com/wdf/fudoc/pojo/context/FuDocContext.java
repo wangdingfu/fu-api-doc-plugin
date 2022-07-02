@@ -38,9 +38,9 @@ public class FuDocContext {
 
 
     /**
-     * key:根节点ID value:根节点描述对象
+     * key:节点ID value:节点描述对象
      */
-    private Map<Integer, ObjectInfoDesc> rootInfoDescMap;
+    private Map<Integer, ObjectInfoDesc> descInfoMap;
 
 
     /**
@@ -64,19 +64,19 @@ public class FuDocContext {
     }
 
 
-    public ObjectInfoDesc getByRootId(Integer rootId) {
-        if (Objects.nonNull(this.rootInfoDescMap) && Objects.nonNull(rootId)) {
-            return this.rootInfoDescMap.get(rootId);
+    public ObjectInfoDesc getByDescId(Integer descId) {
+        if (Objects.nonNull(this.descInfoMap) && Objects.nonNull(descId)) {
+            return this.descInfoMap.get(descId);
         }
         return null;
     }
 
-    public void addRoot(Integer rootId, ObjectInfoDesc objectInfoDesc) {
-        if (Objects.nonNull(rootId) && Objects.nonNull(objectInfoDesc)) {
-            if (Objects.isNull(this.rootInfoDescMap)) {
-                this.rootInfoDescMap = new HashMap<>();
+    public void add(Integer descId, ObjectInfoDesc objectInfoDesc) {
+        if (Objects.nonNull(descId) && Objects.nonNull(objectInfoDesc)) {
+            if (Objects.isNull(this.descInfoMap)) {
+                this.descInfoMap = new HashMap<>();
             }
-            this.rootInfoDescMap.put(rootId, objectInfoDesc);
+            this.descInfoMap.put(descId, objectInfoDesc);
         }
     }
 

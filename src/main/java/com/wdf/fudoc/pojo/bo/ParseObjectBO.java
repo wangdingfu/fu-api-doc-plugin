@@ -19,6 +19,9 @@ import java.util.Map;
 @Setter
 public class ParseObjectBO {
 
+    /**
+     * 根节点ID
+     */
     private Integer rootId;
 
     /**

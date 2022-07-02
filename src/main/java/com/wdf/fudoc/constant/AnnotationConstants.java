@@ -26,6 +26,7 @@ public interface AnnotationConstants {
 
 
     String VALIDATED = "org.springframework.validation.annotation.Validated";
+    String VALID = "javax.validation.Valid";
 
     String VALID_NOT_NULL = "javax.validation.constraints.NotNull";
     String VALID_NOT_BLANK = "org.hibernate.validator.constraints.NotBlank";
