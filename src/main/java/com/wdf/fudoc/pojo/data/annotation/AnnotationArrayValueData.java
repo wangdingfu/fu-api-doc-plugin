@@ -59,7 +59,7 @@ public class AnnotationArrayValueData extends AnnotationValueData {
         }
 
         public List<String> stringValue() {
-            return valueDataList.stream().map(AnnotationConstantValueData::stringValue).filter(StringUtils::isEmpty).collect(Collectors.toList());
+            return valueDataList.stream().map(AnnotationConstantValueData::stringValue).filter(StringUtils::isNotEmpty).collect(Collectors.toList());
         }
     }
 
@@ -72,7 +72,7 @@ public class AnnotationArrayValueData extends AnnotationValueData {
         }
 
         public List<String> className() {
-            return valueDataList.stream().map(AnnotationClassValueData::getClassName).filter(StringUtils::isEmpty).collect(Collectors.toList());
+            return valueDataList.stream().map(AnnotationClassValueData::getClassName).filter(StringUtils::isNotEmpty).collect(Collectors.toList());
         }
     }
 
