@@ -94,7 +94,10 @@ public class AnnotationUtils {
     }
 
     private static AnnotationClassValueData convertClass(JvmAnnotationClassValue classValue) {
-        return new AnnotationClassValueData(AnnotationValueType.CLASS);
+        AnnotationClassValueData annotationClassValueData = new AnnotationClassValueData(AnnotationValueType.CLASS);
+        annotationClassValueData.setClassName(classValue.getQualifiedName());
+        annotationClassValueData.setJvmAnnotationClassValue(classValue);
+        return annotationClassValueData;
     }
 
     private static AnnotationNestedValueData convertAnnotation(JvmNestedAnnotationValue nestedAnnotationValue) {

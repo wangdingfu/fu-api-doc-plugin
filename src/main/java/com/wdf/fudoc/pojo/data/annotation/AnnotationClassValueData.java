@@ -1,5 +1,7 @@
 package com.wdf.fudoc.pojo.data.annotation;
 
+import com.intellij.lang.jvm.JvmClass;
+import com.intellij.lang.jvm.annotation.JvmAnnotationClassValue;
 import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.pojo.data.AnnotationValueData;
 import lombok.Getter;
@@ -19,11 +21,9 @@ public class AnnotationClassValueData extends AnnotationValueData {
      */
     private String className;
 
+    private JvmAnnotationClassValue jvmAnnotationClassValue;
+
     public AnnotationClassValueData(AnnotationValueType valueType) {
         super(valueType);
-    }
-
-    public String className() {
-        return this.className;
     }
 }
