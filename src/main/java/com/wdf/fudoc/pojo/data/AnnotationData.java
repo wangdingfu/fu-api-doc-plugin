@@ -1,5 +1,6 @@
 package com.wdf.fudoc.pojo.data;
 
+import com.google.common.collect.Lists;
 import com.intellij.psi.PsiAnnotation;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
@@ -131,7 +132,9 @@ public class AnnotationData {
         if (Objects.nonNull(value) && AnnotationValueType.ARRAY.equals(value.getValueType())) {
             return (AnnotationArrayValueData) value;
         }
-        return new AnnotationArrayValueData(AnnotationValueType.ARRAY);
+        AnnotationArrayValueData annotationArrayValueData = new AnnotationArrayValueData(AnnotationValueType.ARRAY);
+        annotationArrayValueData.setValues(Lists.newArrayList(value));
+        return annotationArrayValueData;
     }
 
     public AnnotationArrayValueData array() {

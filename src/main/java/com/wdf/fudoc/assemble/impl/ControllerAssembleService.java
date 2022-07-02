@@ -81,8 +81,8 @@ public class ControllerAssembleService extends AbstractAssembleService {
                     fuDocItemData.setRequestType(requestType.getRequestType());
                 }
                 fuDocItemData.setUrlList(joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
+                return true;
             }
-            return true;
         }
         return false;
     }
