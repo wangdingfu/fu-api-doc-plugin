@@ -43,7 +43,7 @@ public class ParamRequireValueHandler extends BaseParamFieldValueHandler {
         }
         Optional<AnnotationData> annotation = rootInfoDesc.getAnnotation(AnnotationConstants.VALIDATED);
         if (annotation.isPresent()) {
-            Integer referenceParamId = objectInfoDesc.getValue("referenceDescId", Integer.class);
+            Integer referenceParamId = objectInfoDesc.getValue(FuDocConstants.ExtInfo.REFERENCE_DESC_ID, Integer.class);
             //获取父级参数是否使用了“@Valid”注解标识
             ObjectInfoDesc parentInfoDesc = fuDocContext.getByDescId(referenceParamId);
             if (Objects.nonNull(parentInfoDesc) && parentInfoDesc.getAnnotation(AnnotationConstants.VALID).isEmpty()) {
