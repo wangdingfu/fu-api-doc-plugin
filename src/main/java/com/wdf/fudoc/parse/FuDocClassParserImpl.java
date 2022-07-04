@@ -3,6 +3,7 @@ package com.wdf.fudoc.parse;
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.parse.field.FuDocPsiClass;
@@ -89,10 +90,31 @@ public class FuDocClassParserImpl implements FuDocClassParser {
             parseObjectBO.setFuDocContext(fuDocContext);
             ObjectInfoDesc objectInfoDesc = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
             if (Objects.nonNull(objectInfoDesc)) {
+                //填充referenceDescId
+                paddingReferenceDescId(objectInfoDesc, null);
                 requestList.add(objectInfoDesc);
             }
         }
         return requestList;
+    }
+
+
+    /**
+     * 递归填充referenceDescId
+     *
+     * @param objectInfoDesc  参数描述对象
+     * @param referenceDescId 当前参数引用的descId
+     */
+    private void paddingReferenceDescId(ObjectInfoDesc objectInfoDesc, Integer referenceDescId) {
+        List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
+        if (CollectionUtils.isNotEmpty(childList)) {
+            for (ObjectInfoDesc infoDesc : childList) {
+                if (Objects.nonNull(referenceDescId) && infoDesc.getBooleanValue(FuDocConstants.ExtInfo.IS_ATTR)) {
+                    infoDesc.addExtInfo(FuDocConstants.ExtInfo.REFERENCE_DESC_ID, referenceDescId);
+                }
+                paddingReferenceDescId(infoDesc, infoDesc.getDescId());
+            }
+        }
     }
 
 
