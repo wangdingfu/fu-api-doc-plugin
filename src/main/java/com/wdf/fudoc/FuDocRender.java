@@ -22,7 +22,7 @@ public class FuDocRender {
     public static String markdownRender(List<FuDocItemData> dataList) {
         StringBuilder sb = new StringBuilder();
         for (FuDocItemData fuDocItemData : dataList) {
-            sb.append(markdownRender(fuDocItemData)).append("\r\n\r\n\r\n");
+            sb.append(markdownRender(fuDocItemData)).append("\r\n");
         }
         return sb.toString();
     }

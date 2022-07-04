@@ -16,18 +16,17 @@ public class FuDocNoGenHelper {
     private static final Map<String, Integer> PARAM_NO_MAP = new ConcurrentHashMap<>();
 
 
-    public static Integer genNo(String methodId) {
+    public synchronized static Integer genNo(String methodId) {
         if (StringUtils.isBlank(methodId)) {
             return 0;
         }
-        if (PARAM_NO_MAP.containsKey(methodId)) {
-            Integer value = PARAM_NO_MAP.get(methodId);
-            if (Objects.isNull(value)) {
-                value = 0;
-            }
-            PARAM_NO_MAP.put(methodId, value + 1);
+        Integer value = PARAM_NO_MAP.get(methodId);
+        if (Objects.isNull(value)) {
+            value = 0;
         }
-        return PARAM_NO_MAP.get(methodId);
+        value = value + 1;
+        PARAM_NO_MAP.put(methodId, value);
+        return value;
     }
 
 }
