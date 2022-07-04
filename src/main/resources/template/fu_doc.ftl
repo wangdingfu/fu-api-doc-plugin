@@ -1,5 +1,5 @@
 
-# ${apiDocNo!1}、 ${title!''}
+# ${docNo!1}、 ${title!''}
 
 <#if detailInfo??>
 ##### 接口描述

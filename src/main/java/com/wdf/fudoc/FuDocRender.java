@@ -35,7 +35,7 @@ public class FuDocRender {
      * @return 渲染完毕后markdown接口文档内容
      */
     public static String markdownRender(FuDocItemData fuDocItemData) {
-        return FreeMarkerConfig.generateContent(fuDocItemData, "api_doc.ftl");
+        return FreeMarkerConfig.generateContent(fuDocItemData, "fu_doc.ftl");
     }
 
 }
