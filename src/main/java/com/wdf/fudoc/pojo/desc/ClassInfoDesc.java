@@ -14,6 +14,10 @@ import java.util.List;
 @Setter
 public class ClassInfoDesc extends BaseInfoDesc {
 
+    /**
+     * 类ID
+     */
+    private String classId;
 
     /**
      * 方法集合

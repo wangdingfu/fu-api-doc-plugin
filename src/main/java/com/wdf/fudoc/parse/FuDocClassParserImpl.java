@@ -71,6 +71,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
                 }
             }
         }
+        classInfoDesc.setClassId(psiClass.getQualifiedName());
         return classInfoDesc;
     }
 

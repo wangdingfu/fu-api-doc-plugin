@@ -2,8 +2,10 @@ package com.wdf.fudoc.helper;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -13,20 +15,35 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FuDocNoGenHelper {
 
-    private static final Map<String, Integer> PARAM_NO_MAP = new ConcurrentHashMap<>();
+    /**
+     * 维护每一个类或接口生成的接口文档序号（编号的范围仅在一个java类中）
+     * <p>
+     * key:classId value:接口编号
+     */
+    private static final Map<String, Integer> DOC_NO_MAP = new ConcurrentHashMap<>();
 
+    private static final Set<String> CLASS_ID_SET = new HashSet<>();
 
-    public synchronized static Integer genNo(String methodId) {
-        if (StringUtils.isBlank(methodId)) {
-            return 0;
+    public synchronized static String genNo(String classId) {
+        if (StringUtils.isBlank(classId)) {
+            return "0";
         }
-        Integer value = PARAM_NO_MAP.get(methodId);
+        return getClassNo(classId) + "." + getDocNo(classId);
+    }
+
+    private synchronized static Integer getClassNo(String classId) {
+        CLASS_ID_SET.add(classId);
+        return CLASS_ID_SET.size();
+    }
+
+
+    private synchronized static Integer getDocNo(String classId) {
+        Integer value = DOC_NO_MAP.get(classId);
         if (Objects.isNull(value)) {
             value = 0;
         }
         value = value + 1;
-        PARAM_NO_MAP.put(methodId, value);
+        DOC_NO_MAP.put(classId, value);
         return value;
     }
-
 }

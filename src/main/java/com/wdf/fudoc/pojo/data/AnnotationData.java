@@ -133,7 +133,9 @@ public class AnnotationData {
             return (AnnotationArrayValueData) value;
         }
         AnnotationArrayValueData annotationArrayValueData = new AnnotationArrayValueData(AnnotationValueType.ARRAY);
-        annotationArrayValueData.setValues(Lists.newArrayList(value));
+        if (Objects.nonNull(value)) {
+            annotationArrayValueData.setValues(Lists.newArrayList(value));
+        }
         return annotationArrayValueData;
     }
 
