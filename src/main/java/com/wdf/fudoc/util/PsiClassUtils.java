@@ -116,6 +116,10 @@ public class PsiClassUtils {
         if (Objects.isNull(psiType)) {
             return false;
         }
-        return psiType instanceof PsiPrimitiveType && FuDocConstants.ModifierProperty.VOID.equals(psiType.getCanonicalText());
+        String canonicalText = psiType.getCanonicalText();
+        if (CommonClassNames.JAVA_LANG_VOID.equals(canonicalText)) {
+            return true;
+        }
+        return psiType instanceof PsiPrimitiveType && FuDocConstants.ModifierProperty.VOID.equals(canonicalText);
     }
 }

@@ -15,6 +15,7 @@ public enum FuDocObjectType {
     ARRAY,
     MULTIPART_FILE,
     OBJECT,
+    VOID,
 
 
     ;

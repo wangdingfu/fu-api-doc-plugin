@@ -17,7 +17,6 @@ import com.wdf.fudoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.FuDocUtils;
-import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
@@ -128,10 +127,6 @@ public class FuDocClassParserImpl implements FuDocClassParser {
     protected ObjectInfoDesc responseParse(FuDocContext fuDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
         ParseObjectBO parseObjectBO = new ParseObjectBO(fuDocContext);
         PsiType returnType = psiMethod.getReturnType();
-        if (PsiClassUtils.isVoid(returnType)) {
-            //响应类型为void  则不解析
-            return null;
-        }
         PsiClass psiClass = PsiUtil.resolveClassInType(returnType);
         if (Objects.nonNull(psiClass)) {
             parseObjectBO.setFuDocField(new FuDocPsiClass(psiClass, apiDocCommentData));

@@ -31,6 +31,7 @@ public class ObjectParserExecutor {
         OBJECT_PARSER_LIST.add(new FuDocObjectParser());
         OBJECT_PARSER_LIST.add(new FuDocMultipartFileParser());
         OBJECT_PARSER_LIST.add(new FuDocDefaultParser());
+        OBJECT_PARSER_LIST.add(new FuDocVoidParser());
         //根据各自实现类的优先加载顺序来排序
         OBJECT_PARSER_LIST.sort(Comparator.comparing(ApiDocObjectParser::sort));
     }
