@@ -86,9 +86,8 @@ public class FuDocClassParserImpl implements FuDocClassParser {
         PsiParameterList parameterList = psiMethod.getParameterList();
         List<ObjectInfoDesc> requestList = Lists.newArrayList();
         for (PsiParameter parameter : parameterList.getParameters()) {
-            ParseObjectBO parseObjectBO = new ParseObjectBO();
+            ParseObjectBO parseObjectBO = new ParseObjectBO(fuDocContext);
             parseObjectBO.setFuDocField(new FuDocPsiParameter(parameter, apiDocCommentData));
-            parseObjectBO.setFuDocContext(fuDocContext);
             ObjectInfoDesc objectInfoDesc = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
             if (Objects.nonNull(objectInfoDesc)) {
                 //填充referenceDescId
@@ -127,8 +126,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
      * @return 解析后的响应参数对象
      */
     protected ObjectInfoDesc responseParse(FuDocContext fuDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData) {
-        ParseObjectBO parseObjectBO = new ParseObjectBO();
-        parseObjectBO.setFuDocContext(fuDocContext);
+        ParseObjectBO parseObjectBO = new ParseObjectBO(fuDocContext);
         PsiType returnType = psiMethod.getReturnType();
         if (PsiClassUtils.isVoid(returnType)) {
             //响应类型为void  则不解析

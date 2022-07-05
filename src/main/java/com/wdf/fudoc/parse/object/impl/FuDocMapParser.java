@@ -57,8 +57,7 @@ public class FuDocMapParser extends AbstractApiDocObjectParser {
         if (Objects.isNull(psiType)) {
             return ObjectInfoDescFactory.build(name, typeView, comment);
         }
-        ParseObjectBO genericParseObjectBO = new ParseObjectBO();
-        genericParseObjectBO.setFuDocContext(parseObjectBO.getFuDocContext());
+        ParseObjectBO genericParseObjectBO = new ParseObjectBO(parseObjectBO.getFuDocContext());
         genericParseObjectBO.setFuDocField(new FuDocCustomerField(name, comment));
         genericParseObjectBO.setRootId(parseObjectBO.getRootId());
         return ObjectParserExecutor.execute(psiType, genericParseObjectBO);

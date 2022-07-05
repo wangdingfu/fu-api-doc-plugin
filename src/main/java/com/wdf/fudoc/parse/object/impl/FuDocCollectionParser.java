@@ -70,16 +70,15 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
         String canonicalText = genericsType.getCanonicalText();
         CommonObjectType commonObjectType = CommonObjectType.getEnum(canonicalText);
         ObjectInfoDesc genericsInfoDesc;
+        ParseObjectBO genericsParseObjectBO = new ParseObjectBO(parseObjectBO.getFuDocContext());
         if (commonObjectType.isPrimitiveOrCommon()) {
             //基本数据类型和公共数据类型 可以直接解析返回
-            genericsInfoDesc = buildDefault(genericsType, commonObjectType.getName(), new ParseObjectBO());
+            genericsInfoDesc = buildDefault(genericsType, commonObjectType.getName(), genericsParseObjectBO);
             objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.GENERICS_TYPE, commonObjectType.getFuDocObjectType());
             genericsInfoDesc.setValue(mockCommonType(genericsInfoDesc));
             objectInfoDesc.setChildList(Lists.newArrayList(genericsInfoDesc));
         } else {
             //非基本数据类型和常用对象类型 需要深度解析
-            ParseObjectBO genericsParseObjectBO = new ParseObjectBO();
-            genericsParseObjectBO.setFuDocContext(parseObjectBO.getFuDocContext());
             genericsParseObjectBO.setGenericsMap(parseObjectBO.getGenericsMap());
             genericsParseObjectBO.setRootId(parseObjectBO.getRootId());
             genericsInfoDesc = ObjectParserExecutor.execute(genericsType, genericsParseObjectBO);

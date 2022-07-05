@@ -46,4 +46,8 @@ public class ParseObjectBO {
         }
         return null;
     }
+
+    public ParseObjectBO(FuDocContext fuDocContext) {
+        this.fuDocContext = fuDocContext;
+    }
 }
