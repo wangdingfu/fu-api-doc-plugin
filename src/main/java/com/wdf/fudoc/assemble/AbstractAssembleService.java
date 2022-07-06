@@ -5,7 +5,6 @@ import com.wdf.fudoc.assemble.handler.ParamValueExecutor;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.helper.AssembleHelper;
-import com.wdf.fudoc.helper.FuDocNoGenHelper;
 import com.wdf.fudoc.helper.MockDataHelper;
 import com.wdf.fudoc.pojo.bo.AssembleBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
@@ -54,11 +53,12 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         List<MethodInfoDesc> methodList = classInfoDesc.getMethodList();
         AssembleBO assembleBO = doAssembleInfoByClass(fuDocContext, classInfoDesc);
         if (CollectionUtils.isNotEmpty(methodList)) {
-            String classId = classInfoDesc.getClassId();
+            int classNo = fuDocContext.getClassNo(classInfoDesc.getClassId());
+            int docNo = 0;
             for (MethodInfoDesc methodInfoDesc : methodList) {
                 FuDocItemData fuDocItemData = new FuDocItemData();
                 if (doAssembleInfoMethod(fuDocContext, methodInfoDesc, fuDocItemData, assembleBO)) {
-                    fuDocItemData.setDocNo(FuDocNoGenHelper.genNo(classId));
+                    fuDocItemData.setDocNo(classNo + "." + (docNo++));
                     //组装公共信息
                     assembleCommonInfo(fuDocContext, methodInfoDesc, fuDocItemData);
                     resultList.add(fuDocItemData);

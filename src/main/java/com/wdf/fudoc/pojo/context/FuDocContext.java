@@ -3,15 +3,12 @@ package com.wdf.fudoc.pojo.context;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.factory.ObjectInfoDescFactory;
-import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author wangdingfu
@@ -36,6 +33,7 @@ public class FuDocContext {
      */
     private boolean enableValidMessage = true;
 
+    private Set<String> classIdSet = new HashSet<>();
 
     /**
      * key:节点ID value:节点描述对象
@@ -63,6 +61,12 @@ public class FuDocContext {
         return ++descId;
     }
 
+    public int getClassNo(String classId) {
+        if (StringUtils.isNotBlank(classId)) {
+            classIdSet.add(classId);
+        }
+        return classIdSet.size();
+    }
 
     public ObjectInfoDesc getByDescId(Integer descId) {
         if (Objects.nonNull(this.descInfoMap) && Objects.nonNull(descId)) {
