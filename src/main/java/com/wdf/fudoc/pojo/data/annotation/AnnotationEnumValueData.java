@@ -14,6 +14,8 @@ import lombok.Setter;
 @Setter
 public class AnnotationEnumValueData extends AnnotationValueData {
 
+    private String value;
+
     public AnnotationEnumValueData(AnnotationValueType valueType) {
         super(valueType);
     }

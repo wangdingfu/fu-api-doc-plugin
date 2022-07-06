@@ -11,10 +11,10 @@ import lombok.Getter;
 @Getter
 public enum RequestType {
 
-    GET("GET", new String[]{AnnotationConstants.GET_MAPPING, AnnotationConstants.REQUEST_MAPPING}),
-    POST("POST", new String[]{AnnotationConstants.POST_MAPPING, AnnotationConstants.REQUEST_MAPPING}),
-    PUT("PUT", new String[]{AnnotationConstants.PUT_MAPPING, AnnotationConstants.PATCH_MAPPING, AnnotationConstants.REQUEST_MAPPING}),
-    DELETE("DELETE", new String[]{AnnotationConstants.DELETE_MAPPING, AnnotationConstants.REQUEST_MAPPING});
+    GET("GET", new String[]{AnnotationConstants.GET_MAPPING}),
+    POST("POST", new String[]{AnnotationConstants.POST_MAPPING}),
+    PUT("PUT", new String[]{AnnotationConstants.PUT_MAPPING, AnnotationConstants.PATCH_MAPPING}),
+    DELETE("DELETE", new String[]{AnnotationConstants.DELETE_MAPPING});
 
 
     private final String requestType;
@@ -27,12 +27,12 @@ public enum RequestType {
         this.annotations = annotations;
     }
 
-    public static RequestType getByAnnotationName(String annotationName) {
+    public static String getByAnnotationName(String annotationName) {
         for (RequestType value : RequestType.values()) {
             String[] annotations = value.getAnnotations();
             for (String annotation : annotations) {
                 if (annotation.equals(annotationName)) {
-                    return value;
+                    return value.getRequestType();
                 }
             }
         }

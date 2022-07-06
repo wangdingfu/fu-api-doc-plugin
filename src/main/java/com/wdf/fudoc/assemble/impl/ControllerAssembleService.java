@@ -3,6 +3,7 @@ package com.wdf.fudoc.assemble.impl;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.assemble.AbstractAssembleService;
 import com.wdf.fudoc.constant.AnnotationConstants;
+import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.pojo.bo.AssembleBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
@@ -12,6 +13,7 @@ import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.util.PathUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -76,10 +78,18 @@ public class ControllerAssembleService extends AbstractAssembleService {
             Optional<AnnotationData> annotationOptional = methodInfoDesc.getAnnotation(annotationName);
             if (annotationOptional.isPresent()) {
                 AnnotationData annotationData = annotationOptional.get();
-                RequestType requestType = RequestType.getByAnnotationName(annotationData.getQualifiedName());
-                if (Objects.nonNull(requestType)) {
-                    fuDocItemData.setRequestType(requestType.getRequestType());
+                String qualifiedName = annotationData.getQualifiedName();
+                String requestType = "";
+                if (AnnotationConstants.REQUEST_MAPPING.equals(qualifiedName)) {
+                    //requestMapping
+                    requestType = annotationData.enumValue(FuDocConstants.AnnotationAttr.METHOD).getValue();
+                    if (StringUtils.isBlank(requestType)) {
+                        requestType = RequestType.GET.getRequestType();
+                    }
+                } else {
+                    requestType = RequestType.getByAnnotationName(qualifiedName);
                 }
+                fuDocItemData.setRequestType(requestType);
                 fuDocItemData.setUrlList(joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
                 return true;
             }

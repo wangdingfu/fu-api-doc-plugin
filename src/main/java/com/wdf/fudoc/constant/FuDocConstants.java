@@ -16,6 +16,7 @@ public interface FuDocConstants {
         String NAME = "name";
         String DESCRIPTION = "description";
         String GROUPS = "groups";
+        String METHOD = "method";
     }
 
     interface ModifierProperty {
