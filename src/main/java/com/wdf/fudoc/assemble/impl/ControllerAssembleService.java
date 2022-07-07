@@ -79,7 +79,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
             if (annotationOptional.isPresent()) {
                 AnnotationData annotationData = annotationOptional.get();
                 String qualifiedName = annotationData.getQualifiedName();
-                String requestType = "";
+                String requestType;
                 if (AnnotationConstants.REQUEST_MAPPING.equals(qualifiedName)) {
                     //requestMapping
                     requestType = annotationData.enumValue(FuDocConstants.AnnotationAttr.METHOD).getValue();
