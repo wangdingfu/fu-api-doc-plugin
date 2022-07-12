@@ -79,9 +79,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             fuDocContext.parseFinish(canonicalText);
         } else {
             //将缓存中之前解析的设置到当前对象中 直接返回 避免重复解析(此处直接返回也是为了避免循环引用)
-            List<ObjectInfoDesc> childList = Lists.newArrayList(objectInfoDescCache.getChildList());
-            paddingRootId(objectInfoDesc.getRootId(), childList);
-            paddingChildList(objectInfoDesc, childList);
+            paddingChildList(objectInfoDesc, objectInfoDescCache.getChildList());
         }
         return objectInfoDesc;
     }
