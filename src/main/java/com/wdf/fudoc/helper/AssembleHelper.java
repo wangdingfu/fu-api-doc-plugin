@@ -20,7 +20,6 @@ import java.util.Objects;
  */
 public class AssembleHelper {
 
-
     /**
      * 组装接口文档参数【请求参数|响应参数】 用于渲染到markdown文本上
      *

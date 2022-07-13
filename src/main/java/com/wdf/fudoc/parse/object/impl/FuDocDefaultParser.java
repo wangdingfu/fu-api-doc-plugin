@@ -122,16 +122,4 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             objectInfoDesc.setValue(buildValue(childList));
         }
     }
-
-    private void paddingRootId(Integer rootId, List<ObjectInfoDesc> childList) {
-        if (CollectionUtils.isNotEmpty(childList)) {
-            for (ObjectInfoDesc objectInfoDesc : childList) {
-                objectInfoDesc.setRootId(rootId);
-                List<ObjectInfoDesc> children = objectInfoDesc.getChildList();
-                if (CollectionUtils.isNotEmpty(children)) {
-                    paddingRootId(rootId, children);
-                }
-            }
-        }
-    }
 }
