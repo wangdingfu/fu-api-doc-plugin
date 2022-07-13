@@ -35,6 +35,7 @@ public interface FuDocConstants {
         String GENERICS_TYPE = "genericsType";
 
         String REFERENCE_DESC_ID = "referenceDescId";
+        String ROOT = "root";
     }
 
     interface ClassPkg {

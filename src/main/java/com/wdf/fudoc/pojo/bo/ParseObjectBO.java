@@ -20,11 +20,6 @@ import java.util.Map;
 public class ParseObjectBO {
 
     /**
-     * 根节点ID
-     */
-    private Integer rootId;
-
-    /**
      * 上下文对象
      */
     private FuDocContext fuDocContext;

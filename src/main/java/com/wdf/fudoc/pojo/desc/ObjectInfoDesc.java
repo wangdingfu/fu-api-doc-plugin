@@ -17,16 +17,6 @@ import java.util.Objects;
 @Setter
 public class ObjectInfoDesc extends BaseInfoDesc {
     /**
-     * 描述ID（当前参数的唯一标识）
-     */
-    private int descId;
-
-    /**
-     * 根节点参数ID
-     */
-    private int rootId;
-
-    /**
      * 对象类型枚举
      */
     private FuDocObjectType fuDocObjectType;

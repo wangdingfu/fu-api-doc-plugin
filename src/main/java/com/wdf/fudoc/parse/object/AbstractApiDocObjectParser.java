@@ -6,16 +6,15 @@ import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
 import com.wdf.fudoc.constant.FuDocConstants;
+import com.wdf.fudoc.constant.enumtype.CommonObjectType;
 import com.wdf.fudoc.constant.enumtype.FuDocArrayType;
 import com.wdf.fudoc.constant.enumtype.FuDocObjectType;
-import com.wdf.fudoc.constant.enumtype.CommonObjectType;
 import com.wdf.fudoc.mock.FuDocObjectJMockData;
 import com.wdf.fudoc.mock.FuDocObjectMock;
 import com.wdf.fudoc.parse.field.FuDocField;
 import com.wdf.fudoc.parse.field.FuDocPsiClass;
 import com.wdf.fudoc.parse.field.FuDocPsiParameter;
 import com.wdf.fudoc.pojo.bo.ParseObjectBO;
-import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -50,14 +49,11 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
      */
     protected ObjectInfoDesc buildDefault(PsiType psiType, String typeView, ParseObjectBO parseObjectBO) {
         ObjectInfoDesc objectInfoDesc = new ObjectInfoDesc();
-        FuDocContext fuDocContext = parseObjectBO.getFuDocContext();
-        objectInfoDesc.setDescId(fuDocContext.genDescId());
         FuDocField fuDocField = parseObjectBO.getFuDocField();
         if (Objects.nonNull(fuDocField)) {
             if (fuDocField instanceof FuDocPsiParameter || fuDocField instanceof FuDocPsiClass) {
-                //根节点参数
-                objectInfoDesc.setRootId(objectInfoDesc.getDescId());
-                parseObjectBO.setRootId(objectInfoDesc.getRootId());
+                //标识根节点
+                objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.ROOT, true);
             }
             objectInfoDesc.setDocText(fuDocField.getComment());
             objectInfoDesc.setName(fuDocField.getName());
@@ -70,11 +66,6 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         objectInfoDesc.setType(psiType.getCanonicalText());
         objectInfoDesc.setFuDocObjectType(getObjectType());
         objectInfoDesc.setValue(mockCommonType(objectInfoDesc));
-        Integer rootId = parseObjectBO.getRootId();
-        if (Objects.nonNull(rootId)) {
-            objectInfoDesc.setRootId(rootId);
-        }
-        fuDocContext.add(objectInfoDesc.getDescId(), objectInfoDesc);
         return objectInfoDesc;
     }
 
