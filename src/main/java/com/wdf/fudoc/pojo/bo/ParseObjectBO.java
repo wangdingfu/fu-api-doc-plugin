@@ -19,6 +19,7 @@ import java.util.Map;
 @Setter
 public class ParseObjectBO {
 
+    private Integer rootId;
     /**
      * 上下文对象
      */

@@ -16,6 +16,17 @@ import java.util.Objects;
 @Getter
 @Setter
 public class ObjectInfoDesc extends BaseInfoDesc {
+
+    /**
+     * 根节点ID
+     */
+    private Integer rootId;
+
+    /**
+     * 当前节点ID
+     */
+    private Integer descId;
+
     /**
      * 对象类型枚举
      */

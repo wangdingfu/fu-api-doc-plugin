@@ -1,5 +1,6 @@
 package com.wdf.fudoc.parse.object.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
@@ -12,6 +13,7 @@ import com.wdf.fudoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.fudoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -79,7 +81,10 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             fuDocContext.parseFinish(canonicalText);
         } else {
             //将缓存中之前解析的设置到当前对象中 直接返回 避免重复解析(此处直接返回也是为了避免循环引用)
-            paddingChildList(objectInfoDesc, objectInfoDescCache.getChildList());
+            List<ObjectInfoDesc> childList = ObjectUtils.listToList(objectInfoDescCache.getChildList(),
+                    data -> BeanUtil.copyProperties(data, ObjectInfoDesc.class));
+            paddingRootId(objectInfoDesc.getRootId(), childList);
+            paddingChildList(objectInfoDesc, childList);
         }
         return objectInfoDesc;
     }
@@ -120,6 +125,20 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
         if (CollectionUtils.isNotEmpty(childList)) {
             objectInfoDesc.setChildList(childList);
             objectInfoDesc.setValue(buildValue(childList));
+        }
+    }
+
+
+
+    private void paddingRootId(Integer rootId, List<ObjectInfoDesc> childList) {
+        if (CollectionUtils.isNotEmpty(childList)) {
+            for (ObjectInfoDesc objectInfoDesc : childList) {
+                objectInfoDesc.setRootId(rootId);
+                List<ObjectInfoDesc> children = objectInfoDesc.getChildList();
+                if (CollectionUtils.isNotEmpty(children)) {
+                    paddingRootId(rootId, children);
+                }
+            }
         }
     }
 }
