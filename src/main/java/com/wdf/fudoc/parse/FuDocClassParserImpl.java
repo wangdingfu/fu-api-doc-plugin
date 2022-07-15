@@ -89,6 +89,8 @@ public class FuDocClassParserImpl implements FuDocClassParser {
             parseObjectBO.setFuDocField(new FuDocPsiParameter(parameter, apiDocCommentData));
             ObjectInfoDesc objectInfoDesc = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
             if (Objects.nonNull(objectInfoDesc)) {
+                //标识根节点
+                objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.ROOT, true);
                 //填充referenceDescId
                 paddingReferenceDescId(objectInfoDesc, null);
                 requestList.add(objectInfoDesc);

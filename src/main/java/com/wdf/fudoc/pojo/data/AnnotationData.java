@@ -2,6 +2,7 @@ package com.wdf.fudoc.pojo.data;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiAnnotationMemberValue;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.pojo.data.annotation.*;

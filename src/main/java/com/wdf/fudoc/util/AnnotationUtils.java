@@ -48,6 +48,7 @@ public class AnnotationUtils {
                 String qualifiedName = psiAnnotation.getQualifiedName();
                 AnnotationData annotationData = new AnnotationData();
                 annotationData.setQualifiedName(qualifiedName);
+                annotationData.setPsiAnnotation(psiAnnotation);
                 List<JvmAnnotationAttribute> attributes = psiAnnotation.getAttributes();
                 if (CollectionUtils.isNotEmpty(attributes)) {
                     for (JvmAnnotationAttribute attribute : attributes) {
@@ -66,7 +67,7 @@ public class AnnotationUtils {
 
     private static AnnotationValueData convert(JvmAnnotationAttributeValue attributeValue) {
         if (attributeValue instanceof JvmAnnotationConstantValue) {
-            return convertConstant((JvmAnnotationConstantValue) attributeValue);
+            return convertConstant(((JvmAnnotationConstantValue) attributeValue).getConstantValue());
         }
         if (attributeValue instanceof JvmAnnotationClassValue) {
             return convertClass((JvmAnnotationClassValue) attributeValue);
@@ -84,8 +85,8 @@ public class AnnotationUtils {
     }
 
 
-    private static AnnotationConstantValueData convertConstant(JvmAnnotationConstantValue constantValue) {
-        return new AnnotationConstantValueData(AnnotationValueType.CONSTANT, constantValue.getConstantValue());
+    private static AnnotationConstantValueData convertConstant(Object constantValue) {
+        return new AnnotationConstantValueData(AnnotationValueType.CONSTANT, constantValue);
     }
 
 

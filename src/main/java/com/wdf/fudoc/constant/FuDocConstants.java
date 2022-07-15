@@ -17,6 +17,7 @@ public interface FuDocConstants {
         String DESCRIPTION = "description";
         String GROUPS = "groups";
         String METHOD = "method";
+        String REQUIRE = "require";
     }
 
     interface ModifierProperty {

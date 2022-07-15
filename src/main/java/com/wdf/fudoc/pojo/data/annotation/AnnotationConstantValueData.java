@@ -1,6 +1,8 @@
 package com.wdf.fudoc.pojo.data.annotation;
 
 import com.alibaba.fastjson.util.TypeUtils;
+import com.intellij.lang.jvm.annotation.JvmAnnotationConstantValue;
+import com.intellij.psi.PsiAnnotationMemberValue;
 import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.pojo.data.AnnotationValueData;
 import lombok.Getter;
@@ -19,6 +21,11 @@ public class AnnotationConstantValueData extends AnnotationValueData {
      * 常量值
      */
     private Object value;
+
+
+    public Boolean booleanValue(){
+        return TypeUtils.castToBoolean(this.value);
+    }
 
 
     /**

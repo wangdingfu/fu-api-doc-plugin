@@ -1,5 +1,6 @@
 package com.wdf.fudoc.pojo.data;
 
+import com.intellij.psi.PsiAnnotation;
 import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
 import lombok.Getter;
 import lombok.Setter;

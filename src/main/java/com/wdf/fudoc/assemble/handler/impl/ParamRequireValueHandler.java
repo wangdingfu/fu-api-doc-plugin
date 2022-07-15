@@ -63,6 +63,19 @@ public class ParamRequireValueHandler extends BaseParamFieldValueHandler {
                 return new HashSet<>(groups).containsAll(groupClassNameList) ? YesOrNo.YES.getDesc() : YesOrNo.NO.getDesc();
             }
         }
+        //从@RequestParam注解中获取
+        if (objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.ROOT) && objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.IS_ATTR)) {
+            Optional<AnnotationData> requestParamAnnotation = objectInfoDesc.getAnnotation(AnnotationConstants.REQUEST_PARAM);
+            if (requestParamAnnotation.isPresent()) {
+                AnnotationData annotationData = requestParamAnnotation.get();
+                Boolean required = annotationData.constant(FuDocConstants.AnnotationAttr.REQUIRE).booleanValue();
+                //requestParam 如果为空 则取默认值为true
+                if (Objects.isNull(required) || required) {
+                    return YesOrNo.YES.getDesc();
+                }
+            }
+        }
+
         //请求入参中没有表示“@Validated()”注解 则直接返回不必填
         return YesOrNo.NO.getDesc();
     }
