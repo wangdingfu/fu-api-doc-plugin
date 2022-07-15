@@ -1,11 +1,11 @@
 package com.wdf.fudoc.parse;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.intellij.psi.PsiType;
 import com.wdf.fudoc.parse.object.ApiDocObjectParser;
 import com.wdf.fudoc.parse.object.impl.*;
 import com.wdf.fudoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Comparator;
@@ -49,7 +49,7 @@ public class ObjectParserExecutor {
             psiType = formatPsiType(psiType, parseObjectBO);
             for (ApiDocObjectParser apiDocObjectParser : ObjectParserExecutor.OBJECT_PARSER_LIST) {
                 if (apiDocObjectParser.isParse(psiType)) {
-                    return apiDocObjectParser.parse(psiType, parseObjectBO);
+                    return apiDocObjectParser.parse(psiType, BeanUtil.copyProperties(parseObjectBO, ParseObjectBO.class));
                 }
             }
         }

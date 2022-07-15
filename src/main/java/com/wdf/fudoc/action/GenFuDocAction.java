@@ -63,6 +63,7 @@ public class GenFuDocAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
+        long start = System.currentTimeMillis();
         PsiElement targetElement = PsiClassUtils.getTargetElement(e);
         if (Objects.isNull(targetElement)) {
             FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.NOTIFY_NOT_FUND_CLASS));
@@ -90,6 +91,7 @@ public class GenFuDocAction extends AnAction {
             //将接口文档内容拷贝至剪贴板
             ClipboardUtil.copyToClipboard(content);
 
+            log.info("生成接口文档【{}】完成. 共计耗时{}ms", psiClass.getName(), System.currentTimeMillis() - start);
             //通知接口文档已经拷贝至剪贴板
             FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, psiClass.getName()));
         } catch (Throwable exception) {

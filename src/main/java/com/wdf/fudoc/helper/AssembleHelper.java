@@ -34,7 +34,10 @@ public class AssembleHelper {
             for (int i = 0; i < objectInfoDescList.size(); i++) {
                 ObjectInfoDesc objectInfoDesc = objectInfoDescList.get(i);
                 FuDocParamData fuDocParamData = null;
-                if (filter(objectInfoDesc)) {
+                if (exclude(objectInfoDesc)) {
+                    continue;
+                }
+                if (objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.IS_ATTR)) {
                     fuDocParamData = new FuDocParamData();
                     String parentParamNo = Objects.nonNull(parent) ? parent.getParamNo() : StringUtils.EMPTY;
                     fuDocParamData.setParentParamNo(parentParamNo);
@@ -60,24 +63,14 @@ public class AssembleHelper {
 
 
     /**
-     * 过滤哪些参数是不需要渲染的
+     * 排除参数（过滤不需要渲染到接口文档的参数）
      *
-     * @param objectInfoDesc 参数描述信息
-     * @return true 需要渲染出去  false 直接过滤该参数
+     * @param objectInfoDesc 参数描述对象
+     * @return true 该参数需要排除 无需渲染到接口文档
      */
-    private static boolean filter(ObjectInfoDesc objectInfoDesc) {
-        if (StringUtils.isBlank(objectInfoDesc.getName())) {
-            return false;
-        }
-        if (objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.FINAL)) {
-            return false;
-        }
-        if (objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.STATIC)) {
-            return false;
-        }
-        if (objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.IS_ATTR)) {
-            return true;
-        }
-        return false;
+    private static boolean exclude(ObjectInfoDesc objectInfoDesc) {
+        return StringUtils.isBlank(objectInfoDesc.getName())
+                || objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.FINAL)
+                || objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.STATIC);
     }
 }
