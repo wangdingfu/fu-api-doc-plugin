@@ -2,8 +2,11 @@ package com.wdf.fudoc;
 
 import com.wdf.fudoc.config.FreeMarkerConfig;
 import com.wdf.fudoc.pojo.data.FuDocItemData;
+import com.wdf.fudoc.pojo.data.FuDocParamData;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wangdingfu
@@ -35,7 +38,20 @@ public class FuDocRender {
      * @return 渲染完毕后markdown接口文档内容
      */
     public static String markdownRender(FuDocItemData fuDocItemData) {
-        return FreeMarkerConfig.generateContent(fuDocItemData, "fu_doc.ftl");
+        return render(fuDocItemData, "fu_doc.ftl");
     }
+
+
+    public static String paramRender(List<FuDocParamData> fuDocParamDataList) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("requestParams", fuDocParamDataList);
+        return render(map, "fu_doc_object.ftl");
+    }
+
+
+    public static String render(Object data, String templateName) {
+        return FreeMarkerConfig.generateContent(data, templateName);
+    }
+
 
 }

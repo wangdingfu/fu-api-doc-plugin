@@ -56,7 +56,7 @@ public class FuDocUtils {
      * @return true 是一个Controller
      */
     public static boolean isDubbo(PsiClass psiClass) {
-        return true;
+        return psiClass.isInterface();
     }
 
     /**
