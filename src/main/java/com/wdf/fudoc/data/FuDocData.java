@@ -1,6 +1,7 @@
 package com.wdf.fudoc.data;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
 public class FuDocData {
 
     /**

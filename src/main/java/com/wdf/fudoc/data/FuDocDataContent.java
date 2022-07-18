@@ -21,21 +21,17 @@ public class FuDocDataContent {
     private static final ThreadLocal<FuDocData> FU_DOC_DATA_THREAD_LOCAL = new ThreadLocal<>();
 
 
+    public static void remove() {
+        FU_DOC_DATA_THREAD_LOCAL.remove();
+    }
+
     /**
      * 向全局上下文中 新增|获取 数据内容
      *
-     * @param consumer 消费者
+     * @param fuDocData 全局数据对象
      */
-    public static void consumerData(Consumer<FuDocData> consumer) {
-        if (Objects.isNull(consumer)) {
-            return;
-        }
-        FuDocData fuDocData = FU_DOC_DATA_THREAD_LOCAL.get();
-        if (Objects.isNull(fuDocData)) {
-            fuDocData = new FuDocData();
-            FU_DOC_DATA_THREAD_LOCAL.set(fuDocData);
-        }
-        consumer.accept(fuDocData);
+    public static void setData(FuDocData fuDocData) {
+        FU_DOC_DATA_THREAD_LOCAL.set(fuDocData);
     }
 
 

@@ -29,6 +29,11 @@ public enum JavaClassType {
     FEIGN,
 
     /**
+     * 普通java类
+     */
+    OBJECT,
+
+    /**
      * 其他类型
      */
     NONE;
@@ -45,6 +50,7 @@ public enum JavaClassType {
             if (FuDocUtils.isFeign(psiClass)) {
                 return FEIGN;
             }
+            return OBJECT;
         }
         return NONE;
     }
@@ -53,15 +59,15 @@ public enum JavaClassType {
         return Objects.isNull(javaClassType) || NONE.equals(javaClassType);
     }
 
-    public static boolean isController(JavaClassType javaClassType){
+    public static boolean isController(JavaClassType javaClassType) {
         return Objects.nonNull(javaClassType) && CONTROLLER.equals(javaClassType);
     }
 
-    public static boolean isDubbo(JavaClassType javaClassType){
+    public static boolean isDubbo(JavaClassType javaClassType) {
         return Objects.nonNull(javaClassType) && DUBBO.equals(javaClassType);
     }
 
-    public static boolean isFeign(JavaClassType javaClassType){
+    public static boolean isFeign(JavaClassType javaClassType) {
         return Objects.nonNull(javaClassType) && FEIGN.equals(javaClassType);
     }
 }

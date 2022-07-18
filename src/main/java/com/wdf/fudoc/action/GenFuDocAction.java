@@ -12,13 +12,16 @@ import com.wdf.fudoc.FuDocRender;
 import com.wdf.fudoc.assemble.AssembleServiceExecutor;
 import com.wdf.fudoc.constant.MessageConstants;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
+import com.wdf.fudoc.data.FuDocData;
 import com.wdf.fudoc.data.FuDocDataContent;
+import com.wdf.fudoc.factory.FuDocServiceFactory;
 import com.wdf.fudoc.helper.ServiceHelper;
 import com.wdf.fudoc.parse.FuDocClassParser;
 import com.wdf.fudoc.parse.FuDocClassParserImpl;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
+import com.wdf.fudoc.service.FuDocService;
 import com.wdf.fudoc.util.ClipboardUtil;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -71,33 +74,29 @@ public class GenFuDocAction extends AnAction {
         }
         //获取当前操作的类
         PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
-        FuDocContext fuDocContext = new FuDocContext();
         //向全局上下文中添加Project内容
-        FuDocDataContent.consumerData(fuDocData -> fuDocData.setEvent(e));
+        FuDocDataContent.setData(FuDocData.builder().event(e).build());
 
         try {
-            //获取当前操作的方法
-            PsiMethod targetMethod = PsiClassUtils.getTargetMethod(targetElement);
-            //解析java类
-            FuDocClassParser fuDocClassParser = ServiceHelper.getService(FuDocClassParserImpl.class);
-            ClassInfoDesc classInfoDesc = fuDocClassParser.parse(fuDocContext, psiClass, ObjectUtils.newArrayList(targetMethod));
+            FuDocContext fuDocContext = new FuDocContext();
+            fuDocContext.setTargetElement(targetElement);
 
-            //组装ApiDocData对象
-            List<FuDocItemData> resultList = AssembleServiceExecutor.execute(fuDocContext, classInfoDesc);
+            FuDocService fuDocService = FuDocServiceFactory.getFuDocService(JavaClassType.get(psiClass));
+            if (Objects.nonNull(fuDocService)) {
+                String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
+                //将接口文档内容拷贝至剪贴板
+                ClipboardUtil.copyToClipboard(content);
 
-            //将接口文档数据渲染成markdown格式接口文档
-            String content = FuDocRender.markdownRender(resultList);
-
-            //将接口文档内容拷贝至剪贴板
-            ClipboardUtil.copyToClipboard(content);
-
-            log.info("生成接口文档【{}】完成. 共计耗时{}ms", psiClass.getName(), System.currentTimeMillis() - start);
-            //通知接口文档已经拷贝至剪贴板
-            FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, psiClass.getName()));
+                log.info("生成接口文档【{}】完成. 共计耗时{}ms", psiClass.getName(), System.currentTimeMillis() - start);
+                //通知接口文档已经拷贝至剪贴板
+                FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, psiClass.getName()));
+            }
         } catch (Throwable exception) {
             //发送失败通知
             log.error("【Fu Doc】解析生成接口文档失败", exception);
             FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.NOTIFY_GEN_FAIL));
+        } finally {
+            FuDocDataContent.remove();
         }
 
     }

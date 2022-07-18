@@ -1,6 +1,8 @@
 package com.wdf.fudoc.pojo.context;
 
 import com.google.common.collect.Lists;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.factory.ObjectInfoDescFactory;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
@@ -32,6 +34,9 @@ public class FuDocContext {
      * 校验注解message解析成字段说明是否启用（默认启用）
      */
     private boolean enableValidMessage = true;
+
+
+    private PsiElement targetElement;
 
     private Set<String> classIdSet = new HashSet<>();
 
