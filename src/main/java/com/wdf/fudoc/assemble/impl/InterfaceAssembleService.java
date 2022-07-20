@@ -1,35 +1,28 @@
 package com.wdf.fudoc.assemble.impl;
 
 import com.wdf.fudoc.assemble.AbstractAssembleService;
+import com.wdf.fudoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.pojo.bo.AssembleBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.pojo.desc.MethodInfoDesc;
 
-import java.util.List;
-
 /**
  * @author wangdingfu
- * @descption: 组装dubbo接口文档
- * @date 2022-05-09 23:34:55
+ * @date 2022-07-20 16:50:28
  */
-public class DubboAssembleService extends AbstractAssembleService {
-
+public class InterfaceAssembleService extends AbstractAssembleService {
 
     @Override
     public boolean isAssemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
-        return false;
+        return classInfoDesc.getPsiClass().isInterface();
     }
 
-    @Override
-    protected AssembleBO doAssembleInfoByClass(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
-        return null;
-    }
 
     @Override
     protected boolean doAssembleInfoMethod(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, FuDocItemData fuDocItemData, AssembleBO assembleBO) {
-        return false;
+        return true;
     }
 
 }

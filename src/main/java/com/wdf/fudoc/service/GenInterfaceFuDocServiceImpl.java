@@ -4,7 +4,6 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.FuDocRender;
 import com.wdf.fudoc.assemble.AssembleServiceExecutor;
-import com.wdf.fudoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.helper.ServiceHelper;
 import com.wdf.fudoc.parse.FuDocClassParser;
 import com.wdf.fudoc.parse.FuDocClassParserImpl;
@@ -17,10 +16,12 @@ import com.wdf.fudoc.util.PsiClassUtils;
 import java.util.List;
 
 /**
+ * 将java接口生成接口文档
+ *
  * @author wangdingfu
- * @date 2022-07-18 20:48:21
+ * @date 2022-07-20 16:59:34
  */
-public class GenControllerFuDocServiceImpl implements FuDocService {
+public class GenInterfaceFuDocServiceImpl implements FuDocService {
 
     @Override
     public String genFuDocContent(FuDocContext fuDocContext, PsiClass psiClass) {

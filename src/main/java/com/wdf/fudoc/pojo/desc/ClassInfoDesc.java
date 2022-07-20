@@ -1,5 +1,6 @@
 package com.wdf.fudoc.pojo.desc;
 
+import com.intellij.psi.PsiClass;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,8 @@ public class ClassInfoDesc extends BaseInfoDesc {
      * 类ID
      */
     private String classId;
+
+    private PsiClass psiClass;
 
     /**
      * 方法集合

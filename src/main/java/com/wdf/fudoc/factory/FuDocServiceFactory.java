@@ -3,6 +3,7 @@ package com.wdf.fudoc.factory;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.service.FuDocService;
 import com.wdf.fudoc.service.GenControllerFuDocServiceImpl;
+import com.wdf.fudoc.service.GenInterfaceFuDocServiceImpl;
 import com.wdf.fudoc.service.GenObjectFuDocServiceImpl;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class FuDocServiceFactory {
     static {
         fuDocServiceMap.put(JavaClassType.CONTROLLER, new GenControllerFuDocServiceImpl());
         fuDocServiceMap.put(JavaClassType.OBJECT, new GenObjectFuDocServiceImpl());
+        fuDocServiceMap.put(JavaClassType.INTERFACE, new GenInterfaceFuDocServiceImpl());
     }
 
     public static FuDocService getFuDocService(JavaClassType javaClassType) {

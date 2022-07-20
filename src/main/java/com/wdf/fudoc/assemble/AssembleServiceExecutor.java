@@ -2,8 +2,8 @@ package com.wdf.fudoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.assemble.impl.ControllerAssembleService;
-import com.wdf.fudoc.assemble.impl.DubboAssembleService;
 import com.wdf.fudoc.assemble.impl.FeignAssembleService;
+import com.wdf.fudoc.assemble.impl.InterfaceAssembleService;
 import com.wdf.fudoc.helper.ServiceHelper;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.FuDocItemData;
@@ -21,7 +21,7 @@ public class AssembleServiceExecutor {
     private static final List<FuDocAssembleService> SERVICE_LIST = Lists.newArrayList(
             ServiceHelper.getService(ControllerAssembleService.class),
             ServiceHelper.getService(FeignAssembleService.class),
-            ServiceHelper.getService(DubboAssembleService.class)
+            ServiceHelper.getService(InterfaceAssembleService.class)
     );
 
 

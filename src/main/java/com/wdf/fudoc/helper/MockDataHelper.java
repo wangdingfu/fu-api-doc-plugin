@@ -32,7 +32,7 @@ public class MockDataHelper {
      * @return 请求参数mock数据字符串
      */
     public static String mockRequestData(RequestType requestType, List<ObjectInfoDesc> requestParamList) {
-        return mock(requestType, groupByRequestAnnotation(requestParamList));
+        return Objects.isNull(requestType) ? mockJsonData(requestParamList) : mock(requestType, groupByRequestAnnotation(requestParamList));
     }
 
 
@@ -108,25 +108,28 @@ public class MockDataHelper {
 
 
     private static String mock(RequestType requestType, MapListUtil<String, ObjectInfoDesc> instance) {
-        switch (requestType) {
-            case GET:
-                //只mock RequestParam注解标识的请求参数
-                return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM));
-            case DELETE:
-                List<ObjectInfoDesc> getList = instance.get(AnnotationConstants.REQUEST_PARAM);
-                if (CollectionUtils.isNotEmpty(getList)) {
-                    return mockGetData(getList);
-                }
-                return mockJsonData(instance.get(AnnotationConstants.REQUEST_BODY));
-            case POST:
-            case PUT:
-                List<ObjectInfoDesc> postList = instance.get(AnnotationConstants.REQUEST_BODY);
-                if (CollectionUtils.isNotEmpty(postList)) {
-                    return mockJsonData(postList);
-                }
-                return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM));
-            default:
+        if (Objects.nonNull(requestType)) {
+            switch (requestType) {
+                case GET:
+                    //只mock RequestParam注解标识的请求参数
+                    return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM));
+                case DELETE:
+                    List<ObjectInfoDesc> getList = instance.get(AnnotationConstants.REQUEST_PARAM);
+                    if (CollectionUtils.isNotEmpty(getList)) {
+                        return mockGetData(getList);
+                    }
+                    return mockJsonData(instance.get(AnnotationConstants.REQUEST_BODY));
+                case POST:
+                case PUT:
+                default:
+                    List<ObjectInfoDesc> postList = instance.get(AnnotationConstants.REQUEST_BODY);
+                    if (CollectionUtils.isNotEmpty(postList)) {
+                        return mockJsonData(postList);
+                    }
+                    return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM));
+            }
         }
+
         return StringUtils.EMPTY;
     }
 

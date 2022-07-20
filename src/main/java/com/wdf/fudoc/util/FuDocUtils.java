@@ -87,8 +87,9 @@ public class FuDocUtils {
         switch (javaClassType) {
             case CONTROLLER:
                 return isControllerMethod(psiMethod);
-            case DUBBO:
+            case INTERFACE:
             case FEIGN:
+                //TODO 过滤default方法
                 return true;
             case NONE:
             default:

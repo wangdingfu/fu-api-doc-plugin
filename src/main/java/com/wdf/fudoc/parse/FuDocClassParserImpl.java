@@ -45,6 +45,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
         if (Objects.nonNull(fuDocContext) && Objects.nonNull(psiClass)) {
             JavaClassType javaClassType = JavaClassType.get(psiClass);
             List<MethodInfoDesc> methodInfoDescList = Lists.newArrayList();
+            classInfoDesc.setPsiClass(psiClass);
             //注解解析
             classInfoDesc.setAnnotationDataMap(annotationParse(psiClass));
             classInfoDesc.setMethodList(methodInfoDescList);

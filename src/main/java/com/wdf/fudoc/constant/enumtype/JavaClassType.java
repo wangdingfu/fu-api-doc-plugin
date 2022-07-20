@@ -19,14 +19,14 @@ public enum JavaClassType {
     CONTROLLER,
 
     /**
-     * Dubbo接口
-     */
-    DUBBO,
-
-    /**
      * Spring Cloud feign接口
      */
     FEIGN,
+
+    /**
+     * 接口
+     */
+    INTERFACE,
 
     /**
      * 普通java类
@@ -45,7 +45,7 @@ public enum JavaClassType {
                 return CONTROLLER;
             }
             if (FuDocUtils.isDubbo(psiClass)) {
-                return DUBBO;
+                return INTERFACE;
             }
             if (FuDocUtils.isFeign(psiClass)) {
                 return FEIGN;
@@ -63,8 +63,8 @@ public enum JavaClassType {
         return Objects.nonNull(javaClassType) && CONTROLLER.equals(javaClassType);
     }
 
-    public static boolean isDubbo(JavaClassType javaClassType) {
-        return Objects.nonNull(javaClassType) && DUBBO.equals(javaClassType);
+    public static boolean isInterface(JavaClassType javaClassType) {
+        return Objects.nonNull(javaClassType) && INTERFACE.equals(javaClassType);
     }
 
     public static boolean isFeign(JavaClassType javaClassType) {

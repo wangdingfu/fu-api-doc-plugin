@@ -32,7 +32,9 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
      * @param classInfoDesc 类描述信息
      * @return 组装产生的一些参数信息
      */
-    protected abstract AssembleBO doAssembleInfoByClass(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc);
+    protected AssembleBO doAssembleInfoByClass(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
+        return new AssembleBO();
+    }
 
 
     /**

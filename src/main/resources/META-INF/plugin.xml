@@ -27,7 +27,7 @@
 
         <!-- assemble service -->
         <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.ControllerAssembleService"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.DubboAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.InterfaceAssembleService"/>
         <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.FeignAssembleService"/>
 
 

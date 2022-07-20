@@ -20,10 +20,6 @@ import java.util.List;
  * @date 2022-07-18 20:52:37
  */
 public class GenObjectFuDocServiceImpl implements FuDocService {
-    @Override
-    public JavaClassType getJavaClassType() {
-        return JavaClassType.OBJECT;
-    }
 
 
     @Override
