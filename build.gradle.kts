@@ -39,7 +39,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.20")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
     implementation("com.alibaba:fastjson:1.2.58")
-    implementation("org.freemarker:freemarker:2.3.29")
+    implementation("org.freemarker:freemarker:2.3.31")
     implementation("cn.hutool:hutool-all:5.4.2")
 }
 
