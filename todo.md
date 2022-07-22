@@ -1,3 +1,7 @@
+# 官网文档
+
+[插件文档地址](https://plugins.jetbrains.com/docs/intellij/welcome.html)
+
 # 20220705
 
 - 参数是否必填支持从`@RequestParam`注解`required`中获取(`已完成`)
@@ -10,4 +14,8 @@
 
 # 20220718
 
-- 支持针对一个普通java类解析字段
+- 支持针对一个普通java类解析字段(`已完成`)
+
+# 20220722
+
+- 支持对枚举生成接口文档
