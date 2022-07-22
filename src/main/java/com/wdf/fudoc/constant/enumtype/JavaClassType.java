@@ -34,6 +34,16 @@ public enum JavaClassType {
     OBJECT,
 
     /**
+     * 枚举类
+     */
+    ENUM,
+
+    /**
+     * 注解类
+     */
+    ANNOTATION,
+
+    /**
      * 其他类型
      */
     NONE;
@@ -49,6 +59,13 @@ public enum JavaClassType {
             }
             if (FuDocUtils.isFeign(psiClass)) {
                 return FEIGN;
+            }
+            if(psiClass.isEnum()){
+                return ENUM;
+            }
+            if(psiClass.isAnnotationType()){
+                //注解不支持解析
+                return NONE;
             }
             return OBJECT;
         }

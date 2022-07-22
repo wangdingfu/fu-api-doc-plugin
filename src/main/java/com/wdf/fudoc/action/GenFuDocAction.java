@@ -5,30 +5,20 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.FuDocMessageBundle;
 import com.wdf.fudoc.FuDocNotification;
-import com.wdf.fudoc.FuDocRender;
-import com.wdf.fudoc.assemble.AssembleServiceExecutor;
 import com.wdf.fudoc.constant.MessageConstants;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.data.FuDocData;
 import com.wdf.fudoc.data.FuDocDataContent;
 import com.wdf.fudoc.factory.FuDocServiceFactory;
-import com.wdf.fudoc.helper.ServiceHelper;
-import com.wdf.fudoc.parse.FuDocClassParser;
-import com.wdf.fudoc.parse.FuDocClassParserImpl;
 import com.wdf.fudoc.pojo.context.FuDocContext;
-import com.wdf.fudoc.pojo.data.FuDocItemData;
-import com.wdf.fudoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.service.FuDocService;
 import com.wdf.fudoc.util.ClipboardUtil;
-import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -86,7 +76,6 @@ public class GenFuDocAction extends AnAction {
                 String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
                 //将接口文档内容拷贝至剪贴板
                 ClipboardUtil.copyToClipboard(content);
-
                 log.info("生成接口文档【{}】完成. 共计耗时{}ms", psiClass.getName(), System.currentTimeMillis() - start);
                 //通知接口文档已经拷贝至剪贴板
                 FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, psiClass.getName()));

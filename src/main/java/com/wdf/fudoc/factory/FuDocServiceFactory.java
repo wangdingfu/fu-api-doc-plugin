@@ -23,6 +23,7 @@ public class FuDocServiceFactory {
         fuDocServiceMap.put(JavaClassType.CONTROLLER, new GenControllerFuDocServiceImpl());
         fuDocServiceMap.put(JavaClassType.OBJECT, new GenObjectFuDocServiceImpl());
         fuDocServiceMap.put(JavaClassType.INTERFACE, new GenInterfaceFuDocServiceImpl());
+        fuDocServiceMap.put(JavaClassType.ENUM, new GenInterfaceFuDocServiceImpl());
     }
 
     public static FuDocService getFuDocService(JavaClassType javaClassType) {
