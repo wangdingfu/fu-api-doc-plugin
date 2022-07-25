@@ -19,3 +19,9 @@
 # 20220722
 
 - 支持对枚举生成接口文档
+```
+((PsiFieldImpl)((PsiEnumConstantImpl)psiClass.getFields()[0]).getArgumentList().getExpressions()[0].getReference().resolve()).getText()
+
+
+((PsiBinaryExpressionImpl)((PsiEnumConstantImpl)psiClass.getFields()[0]).getArgumentList().getExpressions()[0]).getOperands()
+```
