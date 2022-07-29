@@ -17,6 +17,7 @@ import com.wdf.fudoc.service.FuDocService;
 import com.wdf.fudoc.util.ClipboardUtil;
 import com.wdf.fudoc.util.PsiClassUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -74,6 +75,11 @@ public class GenFuDocAction extends AnAction {
             FuDocService fuDocService = FuDocServiceFactory.getFuDocService(JavaClassType.get(psiClass));
             if (Objects.nonNull(fuDocService)) {
                 String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
+                if (StringUtils.isBlank(content)) {
+                    //通知没有可以生成接口文档的内容
+                    FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.NOTIFY_GEN_NO_CONTENT, psiClass.getName()));
+                    return;
+                }
                 //将接口文档内容拷贝至剪贴板
                 ClipboardUtil.copyToClipboard(content);
                 log.info("生成接口文档【{}】完成. 共计耗时{}ms", psiClass.getName(), System.currentTimeMillis() - start);
