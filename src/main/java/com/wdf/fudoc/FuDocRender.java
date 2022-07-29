@@ -1,6 +1,9 @@
 package com.wdf.fudoc;
 
 import com.wdf.fudoc.config.FreeMarkerConfig;
+import com.wdf.fudoc.data.FuDocDataContent;
+import com.wdf.fudoc.pojo.data.FuDocEnumData;
+import com.wdf.fudoc.pojo.data.FuDocEnumItemData;
 import com.wdf.fudoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.pojo.data.FuDocParamData;
 
@@ -48,6 +51,13 @@ public class FuDocRender {
         return render(map, "fu_doc_object.ftl");
     }
 
+
+    public static String enumRender(FuDocEnumData fuDocEnumData) {
+        String selectedText = FuDocDataContent.getSelectedText();
+        String enumName = fuDocEnumData.getEnumName();
+        String template = enumName.equals(selectedText) ? "fu_doc_enum.ftl" : "fu_doc_enum_table.ftl";
+        return render(fuDocEnumData, template);
+    }
 
     public static String render(Object data, String templateName) {
         return FreeMarkerConfig.generateContent(data, templateName);

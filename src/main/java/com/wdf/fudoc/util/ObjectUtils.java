@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -17,6 +19,16 @@ import java.util.stream.Collectors;
 public class ObjectUtils {
 
 
+    public static <K, V> Map<K, V> listToMap(List<V> list, Function<V, K> function) {
+        if (CollectionUtils.isNotEmpty(list)) {
+            Map<K, V> map = new HashMap<>(list.size());
+            for (V v : list) {
+                map.put(function.apply(v), v);
+            }
+            return map;
+        }
+        return new HashMap<>();
+    }
 
 
     @SafeVarargs

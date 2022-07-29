@@ -3,6 +3,7 @@ package com.wdf.fudoc.pojo.context;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.wdf.fudoc.config.EnumSettingConfig;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.factory.ObjectInfoDescFactory;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
@@ -20,6 +21,11 @@ import java.util.*;
 @Getter
 @Setter
 public class FuDocContext {
+
+    /**
+     * 枚举参数设置类
+     */
+    private EnumSettingConfig enumSettingConfig = new EnumSettingConfig();
     /**
      * desc自增ID
      */

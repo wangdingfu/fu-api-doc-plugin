@@ -78,4 +78,15 @@ public interface FuDocConstants {
         String COMMENT_X = "*";
     }
 
+    interface Enum{
+        String CODE = "code";
+        String CODE_INDEX = "index";
+
+
+        String MSG = "msg";
+        String MSG_MESSAGE = "message";
+        String MSG_VIEW = "view";
+        String MSG_DESC = "desc";
+    }
+
 }
