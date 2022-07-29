@@ -3,9 +3,11 @@ package com.wdf.fudoc.service;
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiEnumConstantImpl;
+import com.intellij.psi.impl.source.PsiFieldImpl;
 import com.intellij.psi.impl.source.PsiMethodImpl;
 import com.intellij.psi.impl.source.tree.java.PsiBinaryExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
+import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.wdf.fudoc.FuDocRender;
 import com.wdf.fudoc.config.EnumSettingConfig;
 import com.wdf.fudoc.helper.DocCommentParseHelper;
@@ -115,6 +117,13 @@ public class GenEnumFuDocServiceImpl implements FuDocService {
             Object value = expression.getValue();
             if (Objects.nonNull(value)) {
                 return value.toString();
+            }
+        } else if (psiExpression instanceof PsiReferenceExpressionImpl) {
+            PsiReference reference = psiExpression.getReference();
+            PsiElement psiElement;
+            if (Objects.nonNull(reference) && Objects.nonNull(psiElement = reference.resolve()) && psiElement instanceof PsiFieldImpl) {
+                PsiFieldImpl psiField = (PsiFieldImpl) psiElement;
+                return parseExpression(psiField.getInitializer());
             }
         }
         return StringUtils.EMPTY;
