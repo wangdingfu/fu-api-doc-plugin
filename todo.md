@@ -24,4 +24,7 @@
 
 
 ((PsiBinaryExpressionImpl)((PsiEnumConstantImpl)psiClass.getFields()[0]).getArgumentList().getExpressions()[0]).getOperands()
+
+#解析@link
+((PsiJavaCodeReferenceElementImpl)((PsiInlineDocTagImpl)psiDocComment.getDescriptionElements()[4]).getDataElements()[1].getChildren()[0]).getReference().resolve()
 ```
