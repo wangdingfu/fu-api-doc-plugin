@@ -27,4 +27,6 @@
 
 #解析@link
 ((PsiJavaCodeReferenceElementImpl)((PsiInlineDocTagImpl)psiDocComment.getDescriptionElements()[4]).getDataElements()[1].getChildren()[0]).getReference().resolve()
+
+psiDocComment.findTagByName("see").getDataElements()[0].getChildren()[0].getReference().resolve()
 ```
