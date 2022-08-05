@@ -1,6 +1,7 @@
 package com.wdf.fudoc;
 
 import com.wdf.fudoc.config.FreeMarkerConfig;
+import com.wdf.fudoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.data.FuDocDataContent;
 import com.wdf.fudoc.pojo.data.FuDocEnumData;
 import com.wdf.fudoc.pojo.data.FuDocEnumItemData;
@@ -52,10 +53,8 @@ public class FuDocRender {
     }
 
 
-    public static String enumRender(FuDocEnumData fuDocEnumData) {
-        String selectedText = FuDocDataContent.getSelectedText();
-        String enumName = fuDocEnumData.getEnumName();
-        String template = enumName.equals(selectedText) ? "fu_doc_enum.ftl" : "fu_doc_enum_table.ftl";
+    public static String enumRender(FuDocEnumData fuDocEnumData,Integer type) {
+        String template = YesOrNo.YES.getCode() == type ? "fu_doc_enum.ftl" : "fu_doc_enum_table.ftl";
         return render(fuDocEnumData, template);
     }
 

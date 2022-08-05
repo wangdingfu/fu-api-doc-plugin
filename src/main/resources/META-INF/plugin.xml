@@ -44,6 +44,12 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
         </action>
+
+
+        <action id="gen-api-doc-test" class="com.wdf.fudoc.action.TestAction" text="Fu Test">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt T"/>
+        </action>
     </actions>
 
 </idea-plugin>
