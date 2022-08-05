@@ -2,11 +2,13 @@ package com.wdf.fudoc.parse.field;
 
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
+import com.wdf.fudoc.config.EnumSettingConfig;
 import com.wdf.fudoc.constant.enumtype.CommentTagType;
+import com.wdf.fudoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.helper.DocCommentParseHelper;
+import com.wdf.fudoc.helper.EnumParseHelper;
 import com.wdf.fudoc.pojo.data.ApiDocCommentData;
-import com.wdf.fudoc.pojo.data.CommentTagData;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -46,9 +48,10 @@ public class FuDocPsiField extends AbstractFuDocField {
             ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(docComment);
             PsiElement psiElement = apiDocCommentData.getTagComment(CommentTagType.SEE.getName()).getPsiElement();
             PsiClass psiClass;
-            if(Objects.nonNull(psiElement) && psiElement instanceof PsiClass && (psiClass = (PsiClass)psiElement).isEnum()){
+            if (Objects.nonNull(psiElement) && psiElement instanceof PsiClass && (psiClass = (PsiClass) psiElement).isEnum()) {
                 //如果是枚举 则解析枚举
-
+                String enumContent = EnumParseHelper.parseEnum(new EnumSettingConfig(), psiClass, YesOrNo.YES.getCode());
+                return apiDocCommentData.getCommentTitle() + " " + StringUtils.replace(enumContent, "\r\n", "");
             }
             return apiDocCommentData.getCommentTitle();
         }
