@@ -1,8 +1,10 @@
 package com.wdf.fudoc;
 
 import com.wdf.fudoc.config.FreeMarkerConfig;
+import com.wdf.fudoc.config.state.FuDocSetting;
 import com.wdf.fudoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.data.FuDocDataContent;
+import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.pojo.data.FuDocEnumData;
 import com.wdf.fudoc.pojo.data.FuDocEnumItemData;
 import com.wdf.fudoc.pojo.data.FuDocItemData;
@@ -11,6 +13,7 @@ import com.wdf.fudoc.pojo.data.FuDocParamData;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -26,10 +29,10 @@ public class FuDocRender {
      * @param dataList 接口文档数据集合
      * @return markdown格式的接口文档内容
      */
-    public static String markdownRender(List<FuDocItemData> dataList) {
+    public static String markdownRender(SettingData settingData, List<FuDocItemData> dataList) {
         StringBuilder sb = new StringBuilder();
         for (FuDocItemData fuDocItemData : dataList) {
-            sb.append(markdownRender(fuDocItemData)).append("\r\n");
+            sb.append(markdownRender(fuDocItemData, settingData)).append("\r\n");
         }
         return sb.toString();
     }
@@ -41,26 +44,31 @@ public class FuDocRender {
      * @param fuDocItemData 组装完毕的接口文档数据
      * @return 渲染完毕后markdown接口文档内容
      */
-    public static String markdownRender(FuDocItemData fuDocItemData) {
-        return render(fuDocItemData, "fu_doc.ftl");
+    public static String markdownRender(FuDocItemData fuDocItemData, SettingData settingData) {
+        return render(fuDocItemData, "fu_doc.ftl", settingData.getFuDocTemplateValue());
     }
 
 
-    public static String paramRender(List<FuDocParamData> fuDocParamDataList) {
+    public static String paramRender(List<FuDocParamData> fuDocParamDataList, SettingData settingData) {
         Map<String, Object> map = new HashMap<>();
         map.put("requestParams", fuDocParamDataList);
-        return render(map, "fu_doc_object.ftl");
+        return render(map, "fu_doc_object.ftl", settingData.getObjectTemplateValue());
     }
 
 
-    public static String enumRender(FuDocEnumData fuDocEnumData,Integer type) {
+    public static String enumRender(FuDocEnumData fuDocEnumData, Integer type) {
+        FuDocSetting instance = FuDocSetting.getInstance(Objects.requireNonNull(FuDocDataContent.getProject()));
+        SettingData settingData = instance.getSettingData();
         String template = YesOrNo.YES.getCode() == type ? "fu_doc_enum.ftl" : "fu_doc_enum_table.ftl";
-        return render(fuDocEnumData, template);
+        String templateContent = YesOrNo.YES.getCode() == type ? settingData.getEnumTemplateValue1() : settingData.getEnumTemplateValue2();
+        return render(fuDocEnumData, template, templateContent);
     }
 
     public static String render(Object data, String templateName) {
         return FreeMarkerConfig.generateContent(data, templateName);
     }
 
-
+    public static String render(Object data, String templateName, String templateContent) {
+        return FreeMarkerConfig.generateContent(templateName, templateContent, data);
+    }
 }

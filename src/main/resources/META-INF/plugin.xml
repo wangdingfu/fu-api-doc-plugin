@@ -21,7 +21,7 @@
         <notificationGroup id="fu_doc_notify_group" displayType="BALLOON"/>
 
         <!-- service -->
-
+        <projectService serviceImplementation="com.wdf.fudoc.config.state.FuDocSetting"/>
         <!-- parse service -->
         <applicationService serviceImplementation="com.wdf.fudoc.parse.FuDocClassParserImpl"/>
 
@@ -34,6 +34,15 @@
 
         <!-- mock service -->
         <applicationService serviceImplementation="com.wdf.fudoc.mock.FuDocObjectJMockData"/>
+
+
+
+        <!-- 配置为项目等级 全局为 applicationConfigurable -->
+        <projectConfigurable instance="com.wdf.fudoc.config.configurable.FuDocSettingConfigurable"
+                             id="fu.doc.setting"
+                             displayName="Fu Doc"
+                             nonDefaultProject="true"/>
+
 
 
     </extensions>

@@ -36,6 +36,6 @@ public class GenObjectFuDocServiceImpl implements FuDocService {
         List<FuDocParamData> fuDocParamData = AssembleHelper.assembleParamData(fuDocContext, fieldList, null);
 
         //将接口文档数据渲染成markdown格式接口文档
-        return FuDocRender.paramRender(fuDocParamData);
+        return FuDocRender.paramRender(fuDocParamData,fuDocContext.getSettingData());
     }
 }

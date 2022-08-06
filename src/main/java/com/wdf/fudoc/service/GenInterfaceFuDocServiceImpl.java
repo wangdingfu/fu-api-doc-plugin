@@ -35,6 +35,6 @@ public class GenInterfaceFuDocServiceImpl implements FuDocService {
         List<FuDocItemData> resultList = AssembleServiceExecutor.execute(fuDocContext, classInfoDesc);
 
         //将接口文档数据渲染成markdown格式接口文档
-        return FuDocRender.markdownRender(resultList);
+        return FuDocRender.markdownRender(fuDocContext.getSettingData(), resultList);
     }
 }

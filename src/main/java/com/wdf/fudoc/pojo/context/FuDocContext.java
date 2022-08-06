@@ -5,6 +5,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.config.EnumSettingConfig;
 import com.wdf.fudoc.constant.FuDocConstants;
+import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.factory.ObjectInfoDescFactory;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
@@ -26,6 +27,11 @@ public class FuDocContext {
      * 枚举参数设置类
      */
     private EnumSettingConfig enumSettingConfig = new EnumSettingConfig();
+
+    /**
+     * 配置参数
+     */
+    private SettingData settingData;
     /**
      * desc自增ID
      */

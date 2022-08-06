@@ -7,10 +7,12 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.FuDocMessageBundle;
 import com.wdf.fudoc.FuDocNotification;
+import com.wdf.fudoc.config.state.FuDocSetting;
 import com.wdf.fudoc.constant.MessageConstants;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.data.FuDocData;
 import com.wdf.fudoc.data.FuDocDataContent;
+import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.factory.FuDocServiceFactory;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.service.FuDocService;
@@ -70,6 +72,7 @@ public class GenFuDocAction extends AnAction {
 
         try {
             FuDocContext fuDocContext = new FuDocContext();
+            fuDocContext.setSettingData(FuDocSetting.getInstance(Objects.requireNonNull(FuDocDataContent.getProject())).getSettingData());
             fuDocContext.setTargetElement(targetElement);
 
             FuDocService fuDocService = FuDocServiceFactory.getFuDocService(JavaClassType.get(psiClass));
