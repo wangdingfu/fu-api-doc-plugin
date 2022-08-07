@@ -53,10 +53,22 @@ public class FuDocSettingForm {
         SettingData settingData = fuDocSetting.getSettingData();
         if (Objects.nonNull(settingData)) {
             this.settings.setText(FastJsonUtils.toJsonString(settingData.getCustomerSettingData()));
-            this.fuDocTemplate.setText(settingData.getFuDocTemplateValue());
-            this.objectTemplate.setText(settingData.getObjectTemplateValue());
-            this.enumTemplate1.setText(settingData.getEnumTemplateValue1());
-            this.enumTemplate2.setText(settingData.getEnumTemplateValue2());
+            String fuDocTemplateValue = settingData.getFuDocTemplateValue();
+            String objectTemplateValue = settingData.getObjectTemplateValue();
+            String enumTemplateValue1 = settingData.getEnumTemplateValue1();
+            String enumTemplateValue2 = settingData.getEnumTemplateValue2();
+            if (StringUtils.isNotBlank(fuDocTemplateValue)) {
+                this.fuDocTemplate.setText(fuDocTemplateValue);
+            }
+            if (StringUtils.isNotBlank(objectTemplateValue)) {
+                this.objectTemplate.setText(objectTemplateValue);
+            }
+            if (StringUtils.isNotBlank(enumTemplateValue1)) {
+                this.enumTemplate1.setText(enumTemplateValue1);
+            }
+            if (StringUtils.isNotBlank(enumTemplateValue2)) {
+                this.enumTemplate2.setText(enumTemplateValue2);
+            }
         }
     }
 
