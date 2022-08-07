@@ -30,7 +30,7 @@
 
 - **手动安装:**
     - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
-  - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/b0dy2hktg) 密码：`8vec`
+    - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/b0dy2hktg) 密码：`8vec`
     - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins`
       -> `Install Plugin from Disk...`
       
