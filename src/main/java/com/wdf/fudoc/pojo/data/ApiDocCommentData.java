@@ -4,13 +4,11 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.constant.enumtype.CommentTagType;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author wangdingfu
@@ -34,7 +32,7 @@ public class ApiDocCommentData {
     /**
      * tag注释内容
      */
-    private Map<String, Map<String, CommentTagData>> tagMap;
+    private Map<String, List<CommentTagData>> tagMap;
 
 
     /**
@@ -45,29 +43,55 @@ public class ApiDocCommentData {
     }
 
 
+    /**
+     * 根据指定tag名称获取第一条tag注释内容
+     *
+     * @param tag tag名称
+     * @return 该tag的第一条注释内容
+     */
     public CommentTagData getTagComment(String tag) {
-        if (MapUtils.isNotEmpty(tagMap)) {
-            Map<String, CommentTagData> paramCommentMap = tagMap.get(tag);
-            if (MapUtils.isNotEmpty(paramCommentMap)) {
-                return Lists.newArrayList(paramCommentMap.values()).get(0);
-            }
+        List<CommentTagData> tagComments = getTagComments(tag);
+        return CollectionUtils.isNotEmpty(tagComments) ? tagComments.get(0) : new CommentTagData();
+    }
+
+    /**
+     * 根据指定tag名称获取注释内容集合
+     *
+     * @param tag tag名称
+     * @return 指定tag的注释内容集合
+     */
+    public List<CommentTagData> getTagComments(String tag) {
+        List<CommentTagData> commentTagDataList;
+        if (StringUtils.isNotBlank(tag) && MapUtils.isNotEmpty(tagMap) && CollectionUtils.isNotEmpty(commentTagDataList = tagMap.get(tag))) {
+            return commentTagDataList;
         }
-        return new CommentTagData();
+        return Lists.newArrayList();
+    }
+
+    /**
+     * 获取@param注释的value
+     *
+     * @param paramName 当前行中的“paramName”
+     * @return 上一行的 “当前行中的“paramName””
+     */
+    public String getCommentByParam(String paramName) {
+        return getCommentTagValue(CommentTagType.PARAM.getName(), paramName);
     }
 
     /**
      * 根据参数名称获取对应注释
      *
-     * @param param 参数名
+     * @param tagName tag名称（例如当前行注释中的“tagName”）
+     * @param key     tag的key（例如当前行注释中的“tag的key”）
      * @return 对应的注释内容
      */
-    public String getCommentByParam(String param) {
-        if (StringUtils.isNotBlank(param) && MapUtils.isNotEmpty(tagMap)) {
-            Map<String, CommentTagData> paramCommentMap = tagMap.get(CommentTagType.PARAM.getName());
-            CommentTagData commentTagData;
-            if (MapUtils.isNotEmpty(paramCommentMap) && Objects.nonNull(commentTagData = paramCommentMap.get(param))) {
-                return commentTagData.getValue();
-            }
+    public String getCommentTagValue(String tagName, String key) {
+        if (StringUtils.isBlank(tagName) || StringUtils.isBlank(key)) {
+            return StringUtils.EMPTY;
+        }
+        List<CommentTagData> tagComments = getTagComments(tagName);
+        if (CollectionUtils.isNotEmpty(tagComments)) {
+            return tagComments.stream().filter(f -> key.equals(f.getName())).findFirst().orElse(new CommentTagData()).getValue();
         }
         return StringUtils.EMPTY;
     }

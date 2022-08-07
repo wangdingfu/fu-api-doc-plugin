@@ -45,7 +45,7 @@ public class AssembleHelper {
                     fuDocParamData.setParamName(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_NAME, objectInfoDesc));
                     fuDocParamData.setParamDesc(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_COMMENT, objectInfoDesc));
                     fuDocParamData.setParamType(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_TYPE_VIEW, objectInfoDesc));
-                    fuDocParamData.setExtInfo(CustomerValueHelper.customerValue(objectInfoDesc, fuDocContext));
+                    fuDocParamData.setFudoc(CustomerValueHelper.customerValue(objectInfoDesc, fuDocContext));
                     if (Objects.nonNull(parent)) {
                         String paramPrefix = parent.getParamPrefix();
                         fuDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);

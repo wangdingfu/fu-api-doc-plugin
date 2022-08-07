@@ -69,6 +69,7 @@ public interface FuDocConstants {
          * psi中描述注释内容的类型
          */
         String PSI_COMMENT_DATA = "DOC_COMMENT_DATA";
+        String PSI_COMMENT_TAG_VALUE = "DOC_TAG_VALUE_ELEMENT";
 
 
         String COMMENT_START_1 = "/*";

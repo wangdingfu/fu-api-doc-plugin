@@ -100,7 +100,7 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         }
 
         //组装扩展数据
-        fuDocItemData.setExtInfo(CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext));
+        fuDocItemData.setFudoc(CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext));
 
     }
 
