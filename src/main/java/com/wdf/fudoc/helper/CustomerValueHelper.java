@@ -31,28 +31,30 @@ public class CustomerValueHelper {
             }
         }
         ApiDocCommentData commentData = baseInfoDesc.getCommentData();
-        Map<String, List<CommentTagData>> tagMap = commentData.getTagMap();
-        if (MapUtils.isNotEmpty(tagMap)) {
+
+        Map<String, List<CommentTagData>> tagMap;
+        if (Objects.nonNull(commentData) && MapUtils.isNotEmpty(tagMap = commentData.getTagMap())) {
             tagMap.forEach((key, value) -> {
-                if (CollectionUtils.isNotEmpty(value)) {
-                    CommentTagType commentTagType = CommentTagType.getEnum(key);
-                    for (CommentTagData tagData : value) {
-                        if (Objects.isNull(commentTagType)) {
-                            autoPaddingComment(key, tagData, fuDocMap);
-                            continue;
-                        }
-                        String tagDataName = tagData.getName();
-                        String tagDataValue = tagData.getValue();
-                        int type = commentTagType.getType();
-                        if(CommentTagType.hasKey(type)){
-                            fuDocMap.put(name(tagDataName, 0, fuDocMap), tagDataValue);
-                        }
-                        if(CommentTagType.hasValue(type)){
-                            fuDocMap.put(name(key, 0, fuDocMap), tagDataValue);
-                        }
-                        if(CommentTagType.hasReference(type)){
-                            fuDocMap.put(name(key, 0, fuDocMap), tagDataValue);
-                        }
+                if (CollectionUtils.isEmpty(value)) {
+                    return;
+                }
+                CommentTagType commentTagType = CommentTagType.getEnum(key);
+                for (CommentTagData tagData : value) {
+                    if (Objects.isNull(commentTagType)) {
+                        autoPaddingComment(key, tagData, fuDocMap);
+                        continue;
+                    }
+                    String tagDataName = tagData.getName();
+                    String tagDataValue = tagData.getValue();
+                    int type = commentTagType.getType();
+                    if (CommentTagType.hasKey(type)) {
+                        fuDocMap.put(name(tagDataName, 0, fuDocMap), tagDataValue);
+                    }
+                    if (CommentTagType.hasValue(type)) {
+                        fuDocMap.put(name(key, 0, fuDocMap), tagDataValue);
+                    }
+                    if (CommentTagType.hasReference(type)) {
+                        fuDocMap.put(name(key, 0, fuDocMap), tagDataValue);
                     }
                 }
             });
@@ -64,16 +66,14 @@ public class CustomerValueHelper {
     private static void autoPaddingComment(String tagName, CommentTagData tagData, Map<String, Object> fuDocMap) {
         if (StringUtils.isNotBlank(tagName) && Objects.nonNull(tagData) && Objects.nonNull(fuDocMap)) {
             String name = tagData.getName();
-            if (StringUtils.isBlank(name)) {
-                return;
-            }
             String value = tagData.getValue();
-            if (StringUtils.isBlank(value)) {
-                //值为空 则不获取值
-                fuDocMap.put(name(tagName, 0, fuDocMap), name);
-            } else {
+            if (StringUtils.isNotBlank(name)) {
                 fuDocMap.put(name(name, 0, fuDocMap), value);
+            } else {
+                //值为空 则不获取值
+                fuDocMap.put(name(tagName, 0, fuDocMap), value);
             }
+
         }
     }
 

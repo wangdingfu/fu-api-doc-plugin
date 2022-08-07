@@ -51,7 +51,6 @@ public class DocCommentParseHelper {
             apiDocCommentData.setCommentTitle(getCommentContent(psiDocComment));
         }
         return apiDocCommentData;
-
     }
 
 
@@ -73,13 +72,13 @@ public class DocCommentParseHelper {
         PsiElement[] dataElements = psiDocTag.getDataElements();
         for (PsiElement dataElement : dataElements) {
             String elementType = getElementType(dataElement);
-            if (FuDocConstants.Comment.PSI_COMMENT_TAG_VALUE.equals(elementType)) {
-                commentTagData.setName(getComment(elementType, dataElement));
-            }
-            if (FuDocConstants.Comment.PSI_COMMENT_DATA.equals(elementType)) {
-                String value = commentTagData.getValue();
+            if (FuDocConstants.Comment.PSI_PARAMETER_REF.equals(elementType)) {
+                //设置param的key
+                commentTagData.setName(formatText(dataElement));
+            } else {
+                String tagDataValue = commentTagData.getValue();
                 String comment = getComment(elementType, dataElement);
-                commentTagData.setValue(StringUtils.isBlank(value) ? comment : value + " " + comment);
+                commentTagData.setValue(StringUtils.isBlank(tagDataValue) ? comment : tagDataValue + " " + comment);
             }
         }
         return commentTagData;
@@ -130,7 +129,7 @@ public class DocCommentParseHelper {
     private static String formatText(PsiElement psiElement) {
         String text = psiElement.getText();
         if (StringUtils.isNotBlank(text)) {
-            return text.replace("\n", "");
+            return text.replace("*", "").replace("\n", "");
         }
         return StringUtils.EMPTY;
     }

@@ -70,6 +70,7 @@ public interface FuDocConstants {
          */
         String PSI_COMMENT_DATA = "DOC_COMMENT_DATA";
         String PSI_COMMENT_TAG_VALUE = "DOC_TAG_VALUE_ELEMENT";
+        String PSI_PARAMETER_REF = "DOC_PARAMETER_REF";
 
 
         String COMMENT_START_1 = "/*";
