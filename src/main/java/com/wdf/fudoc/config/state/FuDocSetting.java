@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.wdf.fudoc.FuDocMessageBundle;
 import com.wdf.fudoc.data.SettingData;
+import com.wdf.fudoc.util.ResourceUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -38,16 +39,16 @@ public class FuDocSetting implements PersistentStateComponent<FuDocSetting> {
             this.settingData = new SettingData();
         }
         if(StringUtils.isBlank(this.settingData.getFuDocTemplateValue())){
-            this.settingData.setFuDocTemplateValue(FuDocMessageBundle.message("template"));
+            this.settingData.setFuDocTemplateValue(ResourceUtils.readResource("template/fu_doc.ftl"));
         }
         if(StringUtils.isBlank(this.settingData.getObjectTemplateValue())){
-            this.settingData.setObjectTemplateValue(FuDocMessageBundle.message("template.object"));
+            this.settingData.setObjectTemplateValue(ResourceUtils.readResource("template/fu_doc_object.ftl"));
         }
         if(StringUtils.isBlank(this.settingData.getEnumTemplateValue1())){
-            this.settingData.setEnumTemplateValue1(FuDocMessageBundle.message("template.enum1"));
+            this.settingData.setEnumTemplateValue1(ResourceUtils.readResource("template/fu_doc_enum.ftl"));
         }
         if(StringUtils.isBlank(this.settingData.getEnumTemplateValue2())){
-            this.settingData.setEnumTemplateValue1(FuDocMessageBundle.message("template.enum2"));
+            this.settingData.setEnumTemplateValue2(ResourceUtils.readResource("template/fu_doc_enum_table.ftl"));
         }
         return this.settingData;
     }
