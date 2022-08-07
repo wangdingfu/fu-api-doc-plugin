@@ -42,7 +42,11 @@
                              id="fu.doc.setting"
                              displayName="Fu Doc"
                              nonDefaultProject="true"/>
-
+        <projectConfigurable instance="com.wdf.fudoc.config.configurable.FuDocGeneralSettingConfigurable"
+                             id="fu.doc.setting.general"
+                             groupId="fu.doc.setting"
+                             displayName="General"
+                             nonDefaultProject="true"/>
 
 
     </extensions>
