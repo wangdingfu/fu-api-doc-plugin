@@ -26,11 +26,12 @@
 ---
 
 - **在线安装:**
-    - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu-Doc`
+    - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu Doc`
 
 - **手动安装:**
     - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
     - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/b0dy2hktg) 密码：`8vec`
+    - [下载插件（百度云下载）](https://pan.baidu.com/s/1cC7thCMMdcRjh24sqU59tA?pwd=8888) 密码：`8888`
     - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins`
       -> `Install Plugin from Disk...`
       
