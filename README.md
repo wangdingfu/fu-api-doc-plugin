@@ -26,6 +26,7 @@
 ---
 
 - **在线安装:**
+![img.png](img.png)
     - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu Doc`
 
 - **手动安装:**
