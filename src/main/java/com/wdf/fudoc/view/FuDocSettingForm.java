@@ -52,7 +52,10 @@ public class FuDocSettingForm {
         FuDocSetting fuDocSetting = FuDocSetting.getInstance(project);
         SettingData settingData = fuDocSetting.getSettingData();
         if (Objects.nonNull(settingData)) {
-            this.settings.setText(FastJsonUtils.toJsonString(settingData.getCustomerSettingData()));
+            CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
+            if(Objects.nonNull(customerSettingData)){
+                this.settings.setText(FastJsonUtils.toJsonString(customerSettingData));
+            }
             String fuDocTemplateValue = settingData.getFuDocTemplateValue();
             String objectTemplateValue = settingData.getObjectTemplateValue();
             String enumTemplateValue1 = settingData.getEnumTemplateValue1();

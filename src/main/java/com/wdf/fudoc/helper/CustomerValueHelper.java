@@ -1,6 +1,7 @@
 package com.wdf.fudoc.helper;
 
 import com.wdf.fudoc.constant.enumtype.CommentTagType;
+import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.pojo.context.FuDocContext;
@@ -24,8 +25,9 @@ public class CustomerValueHelper {
     public static Map<String, Object> customerValue(BaseInfoDesc baseInfoDesc, FuDocContext fuDocContext) {
         Map<String, Object> fuDocMap = new HashMap<>();
         SettingData settingData = fuDocContext.getSettingData();
-        List<SettingDynamicValueData> customerValueList = settingData.getCustomerSettingData().getSetting_customer_value();
-        if (CollectionUtils.isNotEmpty(customerValueList)) {
+        CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
+        List<SettingDynamicValueData> customerValueList;
+        if(Objects.nonNull(customerSettingData) && CollectionUtils.isNotEmpty((customerValueList = customerSettingData.getSetting_customer_value()))){
             for (SettingDynamicValueData dynamicValueData : customerValueList) {
                 fuDocMap.put(dynamicValueData.getAlias(), getValue(baseInfoDesc, dynamicValueData));
             }
