@@ -22,9 +22,9 @@ public class GenEnumFuDocServiceImpl implements FuDocService {
     @Override
     public String genFuDocContent(FuDocContext fuDocContext, PsiClass psiClass) {
         String selectedText = FuDocDataContent.getSelectedText();
-        String qualifiedName = psiClass.getQualifiedName();
+        String name = psiClass.getName();
         int type = YesOrNo.NO.getCode();
-        if (StringUtils.isNotBlank(qualifiedName) && qualifiedName.equals(selectedText)) {
+        if (StringUtils.isNotBlank(name) && name.equals(selectedText)) {
             type = YesOrNo.YES.getCode();
         }
         return EnumParseHelper.parseEnum(fuDocContext.getEnumSettingConfig(), psiClass, type);
