@@ -3,7 +3,7 @@
 
 
 [&emsp; GitHub   &emsp;|](https://github.com/wangdingfu/fu-api-doc-plugin)
-[&emsp; Wiki     &emsp;|](https://github.com/wangdingfu/fu-api-doc-plugin/wiki)
+[&emsp; Document     &emsp;|](https://wangdingfu.github.io/)
 [&emsp; Issues   &emsp;|](https://github.com/wangdingfu/fu-api-doc-plugin/issues)
 [&emsp; Releases &emsp;|](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
 

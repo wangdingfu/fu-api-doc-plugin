@@ -26,11 +26,13 @@
 ---
 
 - **在线安装:**
-    - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu-Doc`
+![img.png](img.png)
+    - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu Doc`
 
 - **手动安装:**
     - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
     - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/b0dy2hktg) 密码：`8vec`
+    - [下载插件（百度云下载）](https://pan.baidu.com/s/1cC7thCMMdcRjh24sqU59tA?pwd=8888) 密码：`8888`
     - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins`
       -> `Install Plugin from Disk...`
       
@@ -42,12 +44,12 @@
 - 右键菜单选择 `Fu Doc`
 - 去接口文档系统直接将内容粘贴即可（例如ShowDoc或者YApi等）
 
-未来版本计划
+未来目标
 ----
 
+- 支持拖拽方式对多个类生成接口文档
 - 一键将接口文档同步至ShowDoc、YApi、第三方文档系统（提供统一对外api）
-- 支持自定义高级扩展配置（例如解析自定义注解在接口文档中展示等扩展功能）
-- 支持接口模板动态配置
+- 开发Fu Doc专属文档系统. 与Fu Doc插件无缝对接
 
 其他
 ---
