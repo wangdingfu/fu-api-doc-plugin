@@ -60,6 +60,6 @@ public class FuDocSetting implements PersistentStateComponent<SettingData> {
 
     @Override
     public void loadState(@NotNull SettingData state) {
-        XmlSerializerUtil.copyBean(state, this);
+        XmlSerializerUtil.copyBean(state, Objects.requireNonNull(getState()));
     }
 }
