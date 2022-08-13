@@ -14,6 +14,8 @@ public interface CommonObjectNames {
     String HTTP_REQUEST = "javax.servlet.http.HttpServletRequest";
     String HTTP_RESPONSE = "javax.servlet.http.HttpServletResponse";
 
+    String MYBATIS_PLUS_PAGE = "com.baomidou.mybatisplus.plugins.Page";
+
 
     String MULTIPART_FILE = "org.springframework.web.multipart.MultipartFile";
 

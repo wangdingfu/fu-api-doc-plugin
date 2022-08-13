@@ -1,5 +1,9 @@
 package com.wdf.fudoc.constant;
 
+import com.google.common.collect.Lists;
+
+import java.util.Vector;
+
 /**
  * @author wangdingfu
  * @descption: 类型常量
@@ -89,6 +93,11 @@ public interface FuDocConstants {
         String MSG_MESSAGE = "message";
         String MSG_VIEW = "view";
         String MSG_DESC = "desc";
+    }
+
+
+    interface SettingForm{
+
     }
 
 }

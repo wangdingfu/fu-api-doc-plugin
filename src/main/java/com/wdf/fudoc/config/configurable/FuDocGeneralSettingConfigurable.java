@@ -1,8 +1,9 @@
 package com.wdf.fudoc.config.configurable;
 
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.config.state.FuDocSetting;
+import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.view.FuDocGeneralSettingForm;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -37,7 +38,10 @@ public class FuDocGeneralSettingConfigurable implements SearchableConfigurable {
 
     @Override
     public @Nullable JComponent createComponent() {
-        return new FuDocGeneralSettingForm(project).getRoot();
+        FuDocSetting fuDocSetting = FuDocSetting.getInstance(this.project);
+        SettingData settingData = fuDocSetting.getSettingData();
+        fuDocGeneralSettingForm = new FuDocGeneralSettingForm(project, settingData.getCustomerSettingData());
+        return fuDocGeneralSettingForm.getRoot();
     }
 
     @Override
@@ -46,7 +50,7 @@ public class FuDocGeneralSettingConfigurable implements SearchableConfigurable {
     }
 
     @Override
-    public void apply() throws ConfigurationException {
-
+    public void apply() {
+        fuDocGeneralSettingForm.apply();
     }
 }

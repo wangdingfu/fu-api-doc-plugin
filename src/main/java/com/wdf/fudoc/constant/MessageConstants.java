@@ -29,4 +29,9 @@ public interface MessageConstants {
      * 通知无法获取到类
      */
     String NOTIFY_NOT_FUND_CLASS = "notify.not.fund.class";
+
+
+
+    String VIEW_SETTINGS_FILTER_TITLE1 = "view.settings.general.filter.table.title1";
+    String VIEW_SETTINGS_FILTER_TITLE2 = "view.settings.general.filter.table.title2";
 }
