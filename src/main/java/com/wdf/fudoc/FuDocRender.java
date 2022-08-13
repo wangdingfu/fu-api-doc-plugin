@@ -57,8 +57,7 @@ public class FuDocRender {
 
 
     public static String enumRender(FuDocEnumData fuDocEnumData, Integer type) {
-        FuDocSetting instance = FuDocSetting.getInstance(Objects.requireNonNull(FuDocDataContent.getProject()));
-        SettingData settingData = instance.getSettingData();
+        SettingData settingData = FuDocSetting.getInstance(Objects.requireNonNull(FuDocDataContent.getProject())).getState();
         String template = YesOrNo.YES.getCode() == type ? "fu_doc_enum.ftl" : "fu_doc_enum_table.ftl";
         String templateContent = YesOrNo.YES.getCode() == type ? settingData.getEnumTemplateValue1() : settingData.getEnumTemplateValue2();
         return render(fuDocEnumData, template, templateContent);

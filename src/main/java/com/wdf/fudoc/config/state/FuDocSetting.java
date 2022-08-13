@@ -26,7 +26,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @State(name = "fuDocSetting", storages = {@Storage("FuDocSettings.xml")})
-public class FuDocSetting implements PersistentStateComponent<FuDocSetting> {
+public class FuDocSetting implements PersistentStateComponent<SettingData> {
 
     /**
      * 动态值
@@ -34,36 +34,32 @@ public class FuDocSetting implements PersistentStateComponent<FuDocSetting> {
     private SettingData settingData;
 
 
-    public SettingData getSettingData() {
-        if (Objects.isNull(this.settingData)) {
-            this.settingData = new SettingData();
-        }
-        if(StringUtils.isBlank(this.settingData.getFuDocTemplateValue())){
-            this.settingData.setFuDocTemplateValue(ResourceUtils.readResource("template/fu_doc.ftl"));
-        }
-        if(StringUtils.isBlank(this.settingData.getObjectTemplateValue())){
-            this.settingData.setObjectTemplateValue(ResourceUtils.readResource("template/fu_doc_object.ftl"));
-        }
-        if(StringUtils.isBlank(this.settingData.getEnumTemplateValue1())){
-            this.settingData.setEnumTemplateValue1(ResourceUtils.readResource("template/fu_doc_enum.ftl"));
-        }
-        if(StringUtils.isBlank(this.settingData.getEnumTemplateValue2())){
-            this.settingData.setEnumTemplateValue2(ResourceUtils.readResource("template/fu_doc_enum_table.ftl"));
-        }
-        return this.settingData;
-    }
-
     public static FuDocSetting getInstance(@NotNull Project project) {
         return ServiceManager.getService(project, FuDocSetting.class);
     }
 
     @Override
-    public @Nullable FuDocSetting getState() {
-        return this;
+    public @Nullable SettingData getState() {
+        if (Objects.isNull(this.settingData)) {
+            this.settingData = new SettingData();
+        }
+        if (StringUtils.isBlank(this.settingData.getFuDocTemplateValue())) {
+            this.settingData.setFuDocTemplateValue(ResourceUtils.readResource("template/fu_doc.ftl"));
+        }
+        if (StringUtils.isBlank(this.settingData.getObjectTemplateValue())) {
+            this.settingData.setObjectTemplateValue(ResourceUtils.readResource("template/fu_doc_object.ftl"));
+        }
+        if (StringUtils.isBlank(this.settingData.getEnumTemplateValue1())) {
+            this.settingData.setEnumTemplateValue1(ResourceUtils.readResource("template/fu_doc_enum.ftl"));
+        }
+        if (StringUtils.isBlank(this.settingData.getEnumTemplateValue2())) {
+            this.settingData.setEnumTemplateValue2(ResourceUtils.readResource("template/fu_doc_enum_table.ftl"));
+        }
+        return this.settingData;
     }
 
     @Override
-    public void loadState(@NotNull FuDocSetting state) {
+    public void loadState(@NotNull SettingData state) {
         XmlSerializerUtil.copyBean(state, this);
     }
 }

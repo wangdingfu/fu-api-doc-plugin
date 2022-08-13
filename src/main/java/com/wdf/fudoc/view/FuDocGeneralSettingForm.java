@@ -6,8 +6,10 @@ import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.table.JBTable;
 import com.wdf.fudoc.FuDocMessageBundle;
+import com.wdf.fudoc.config.state.FuDocSetting;
 import com.wdf.fudoc.constant.MessageConstants;
 import com.wdf.fudoc.data.CustomerSettingData;
+import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.helper.FuTableHelper;
 import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import lombok.Getter;
@@ -32,14 +34,12 @@ public class FuDocGeneralSettingForm {
     private JBList<FilterFieldBO> filterList;
     private Project project;
     private JTable customTable;
-    private CustomerSettingData customerSettingData;
 
     private static final Vector<String> CUSTOM_TITLE = new Vector<>(Lists.newArrayList(FuDocMessageBundle.message(MessageConstants.VIEW_SETTINGS_FILTER_TITLE1), FuDocMessageBundle.message(MessageConstants.VIEW_SETTINGS_FILTER_TITLE2)));
 
 
-    public FuDocGeneralSettingForm(Project project, CustomerSettingData customerSettingData) {
+    public FuDocGeneralSettingForm(Project project) {
         this.project = project;
-        this.customerSettingData = customerSettingData;
     }
 
 
@@ -48,6 +48,9 @@ public class FuDocGeneralSettingForm {
      * 在idea表单设置页面对label1勾选 Custom create
      */
     private void createUIComponents() {
+        FuDocSetting fuDocSetting = FuDocSetting.getInstance(this.project);
+        SettingData settingData = fuDocSetting.getSettingData();
+        CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
         List<FilterFieldBO> filterFieldList = customerSettingData.getSettings_filter_field();
         DefaultTableModel defaultTableModel = new DefaultTableModel(convertTableData(filterFieldList), CUSTOM_TITLE);
         customTable = new JBTable(defaultTableModel);
@@ -80,9 +83,19 @@ public class FuDocGeneralSettingForm {
     }
 
 
+    /**
+     * 点击设置页面应用或则完成时会调用该方法
+     */
     public void apply() {
     }
 
+
+    /**
+     * 进入该设置页面时会调用该方法
+     */
+    public void reset() {
+        createUIComponents();
+    }
 
     /**
      * 将变更后的值设置到持久化数据对象中

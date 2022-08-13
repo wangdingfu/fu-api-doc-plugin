@@ -33,14 +33,12 @@ public class FuDocGeneralSettingConfigurable implements SearchableConfigurable {
 
     @Override
     public @Nls(capitalization = Nls.Capitalization.Title) String getDisplayName() {
-        return null;
+        return "General";
     }
 
     @Override
     public @Nullable JComponent createComponent() {
-        FuDocSetting fuDocSetting = FuDocSetting.getInstance(this.project);
-        SettingData settingData = fuDocSetting.getSettingData();
-        fuDocGeneralSettingForm = new FuDocGeneralSettingForm(project, settingData.getCustomerSettingData());
+        fuDocGeneralSettingForm = new FuDocGeneralSettingForm(project);
         return fuDocGeneralSettingForm.getRoot();
     }
 
@@ -52,5 +50,10 @@ public class FuDocGeneralSettingConfigurable implements SearchableConfigurable {
     @Override
     public void apply() {
         fuDocGeneralSettingForm.apply();
+    }
+
+    @Override
+    public void reset() {
+        fuDocGeneralSettingForm.reset();
     }
 }
