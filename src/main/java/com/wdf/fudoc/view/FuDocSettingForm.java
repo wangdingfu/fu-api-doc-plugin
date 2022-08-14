@@ -13,9 +13,8 @@ import javax.swing.*;
 import java.util.Objects;
 
 /**
- * @Author wangdingfu
- * @Description
- * @Date 2022-08-06 00:51:36
+ * @author wangdingfu
+ * @date 2022-08-06 00:51:36
  */
 @Getter
 public class FuDocSettingForm {

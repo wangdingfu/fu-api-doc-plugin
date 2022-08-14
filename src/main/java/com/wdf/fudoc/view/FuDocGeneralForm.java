@@ -1,135 +1,129 @@
 package com.wdf.fudoc.view;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.google.common.collect.Lists;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
-import com.wdf.fudoc.FuDocMessageBundle;
-import com.wdf.fudoc.config.DefaultConfig;
-import com.wdf.fudoc.config.state.FuDocSetting;
-import com.wdf.fudoc.constant.MessageConstants;
 import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.helper.FuTableHelper;
 import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import lombok.Getter;
-import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.util.*;
 import java.util.List;
+import java.util.Objects;
+import java.util.Vector;
 
 /**
+ * Fu Doc 基础设置页面
+ *
  * @author wangdingfu
- * @date 2022-08-07 23:33:30
+ * @date 2022-08-14 21:31:11
  */
-@Getter
-@Setter
-public class FuDocGeneralSettingForm {
-    private JPanel root;
-    private JLabel label1;
-    private JPanel panel1;
-    private JTable table1;
-    private Project project;
-    private JTable customTable;
-
-    private static final Vector<String> CUSTOM_TITLE = new Vector<>(Lists.newArrayList(FuDocMessageBundle.message(MessageConstants.VIEW_SETTINGS_FILTER_TITLE1), FuDocMessageBundle.message(MessageConstants.VIEW_SETTINGS_FILTER_TITLE2)));
-
-
-    public FuDocGeneralSettingForm(Project project) {
-        this.project = project;
-    }
-
+public class FuDocGeneralForm {
+    private static final Logger LOGGER = Logger.getInstance(FuDocGeneralForm.class);
 
     /**
-     * 当前页面被初始化之前就会被自动调用的方法
-     * 在idea表单设置页面对label1勾选 Custom create
+     * 根面板(当前配置页面所有的东西都会挂在这个根面板下)
+     */
+    @Getter
+    private JPanel rootPanel;
+
+    /**
+     * 过滤java类和java类属性的panel
+     */
+    private JPanel filterPanel;
+    private JPanel validPanel;
+    private JPanel enumPanel;
+
+    /**
+     * 存放过滤数据的table
+     */
+    private JTable filterTable;
+
+    /**
+     * 项目
+     */
+    private final Project project;
+
+    /**
+     * 持久化数据
+     */
+    private final SettingData settingData;
+
+
+    private static final Vector<String> CUSTOM_TITLE = new Vector<>(Lists.newArrayList("类路径", "属性"));
+
+
+    public FuDocGeneralForm(Project project, SettingData settingData) {
+        this.project = project;
+        this.settingData = settingData;
+    }
+
+    /**
+     * 系统会自动调用该方法来完成filterPanel的创建
      */
     private void createUIComponents() {
-        List<FilterFieldBO> filterFieldList = getFilterFromConfig();
+        List<FilterFieldBO> filterFieldList = getFilterFieldList();
         DefaultTableModel defaultTableModel = new DefaultTableModel(convertTableData(filterFieldList), CUSTOM_TITLE);
-        customTable = new JBTable(defaultTableModel);
-        customTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        ToolbarDecorator toolbarDecorator = ToolbarDecorator.createDecorator(customTable);
+        //初始化table
+        filterTable = new JBTable(defaultTableModel);
+        filterTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        ToolbarDecorator toolbarDecorator = ToolbarDecorator.createDecorator(filterTable);
         //添加一行
         toolbarDecorator.setAddAction(button -> {
             //添加一行
             defaultTableModel.addRow(new Vector[]{});
+            int maxRow = defaultTableModel.getRowCount() - 1;
+            //设置选中刚新增的那一行
+            filterTable.setRowSelectionInterval(maxRow, maxRow);
             filterFieldList.add(new FilterFieldBO());
         });
         //移除一行
         toolbarDecorator.setRemoveAction(anActionButton -> {
             //移除一行
-            int[] selectedRows = customTable.getSelectedRows();
-            if (Objects.nonNull(selectedRows) && selectedRows.length > 0) {
-                for (int selectedRow : selectedRows) {
-                    if (selectedRow >= 0) {
+            int[] selectedRows = ArrayUtil.reverse(filterTable.getSelectedRows());
+            for (int selectedRow : selectedRows) {
+                if (selectedRow >= 0) {
+                    try {
                         defaultTableModel.removeRow(selectedRow);
                         filterFieldList.remove(selectedRow);
+                    } catch (Exception e) {
+                        LOGGER.error("从属性过滤表中移除【" + selectedRow + "】行数据失败", e);
                     }
                 }
             }
         });
-        FuTableHelper.addChangeListener(customTable, (row, column, beforeValue, afterValue) -> {
+        FuTableHelper.addChangeListener(filterTable, (row, column, beforeValue, afterValue) -> {
             //当单元格的属性被改变后 会调用该方法
             //对过滤数据扩容
             FilterFieldBO filterFieldBO = resize(filterFieldList, row);
             //将table中编辑后的数据设置到持久化数据对象中
             setValue(filterFieldBO, column, afterValue);
         });
-        panel1 = toolbarDecorator.createPanel();
+        this.filterPanel = toolbarDecorator.createPanel();
     }
 
 
     /**
-     * 从配置中获取需要过滤的属性
+     * 获取需要过滤的属性集合
      */
-    private List<FilterFieldBO> getFilterFromConfig() {
-        FuDocSetting fuDocSetting = FuDocSetting.getInstance(this.project);
-        List<FilterFieldBO> filterFieldBOList = fuDocSetting.getFilterFieldBOList();
-        if(Objects.isNull(filterFieldBOList)){
-            filterFieldBOList = Lists.newArrayList(DefaultConfig.DEFAULT_FILTER_FIELD_LIST);
-            fuDocSetting.setFilterFieldBOList(filterFieldBOList);
-        }
-//        SettingData settingData = fuDocSetting.getSettingData();
-//        CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
-//        if (Objects.isNull(customerSettingData)) {
-//            customerSettingData = new CustomerSettingData();
-//        }
-//        List<FilterFieldBO> settings_filter_field = customerSettingData.getSettings_filter_field();
-//        if (Objects.isNull(settings_filter_field)) {
-//            settings_filter_field = Lists.newArrayList();
-//            customerSettingData.setSettings_filter_field(settings_filter_field);
-//        }
-        return filterFieldBOList;
-    }
-
-
-    /**
-     * 点击设置页面应用或则完成时会调用该方法
-     */
-    public void apply() {
-        FuDocSetting fuDocSetting = FuDocSetting.getInstance(this.project);
-        SettingData settingData = fuDocSetting.getSettingData();
-        int rowCount = this.customTable.getRowCount();
-        int columnCount = this.customTable.getColumnCount();
-        List<FilterFieldBO> filterFieldBOList = Lists.newArrayList();
-        for (int i = 0; i < rowCount; i++) {
-            FilterFieldBO filterFieldBO = new FilterFieldBO();
-            for (int j = 0; j < columnCount; j++) {
-                Object valueAt = customTable.getValueAt(i, j);
-                setValue(filterFieldBO, j, Objects.isNull(valueAt) ? StringUtils.EMPTY : valueAt.toString());
-            }
-            filterFieldBOList.add(filterFieldBO);
-        }
-        fuDocSetting.setFilterFieldBOList(filterFieldBOList);
+    private List<FilterFieldBO> getFilterFieldList() {
         CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
         if (Objects.isNull(customerSettingData)) {
             customerSettingData = new CustomerSettingData();
+            settingData.setCustomerSettingData(customerSettingData);
         }
-        customerSettingData.setSettings_filter_field(filterFieldBOList);
+        List<FilterFieldBO> filterFieldBOList = customerSettingData.getSettings_filter_field();
+        if (Objects.isNull(filterFieldBOList)) {
+            filterFieldBOList = Lists.newArrayList();
+            customerSettingData.setSettings_filter_field(filterFieldBOList);
+        }
+        return filterFieldBOList;
     }
 
 
@@ -196,5 +190,4 @@ public class FuDocGeneralSettingForm {
         }
         return filterFieldBO;
     }
-
 }

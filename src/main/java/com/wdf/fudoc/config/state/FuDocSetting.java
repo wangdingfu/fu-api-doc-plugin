@@ -31,30 +31,36 @@ import java.util.Objects;
 public class FuDocSetting implements PersistentStateComponent<FuDocSetting> {
 
     /**
-     * 动态值
+     * 持久化数据
      */
     private SettingData settingData;
 
-
-    private List<FilterFieldBO> filterFieldBOList;
 
     public SettingData getSettingData() {
         if (Objects.isNull(this.settingData)) {
             this.settingData = new SettingData();
         }
-        if(StringUtils.isBlank(this.settingData.getFuDocTemplateValue())){
+        if (StringUtils.isBlank(this.settingData.getFuDocTemplateValue())) {
             this.settingData.setFuDocTemplateValue(ResourceUtils.readResource("template/fu_doc.ftl"));
         }
-        if(StringUtils.isBlank(this.settingData.getObjectTemplateValue())){
+        if (StringUtils.isBlank(this.settingData.getObjectTemplateValue())) {
             this.settingData.setObjectTemplateValue(ResourceUtils.readResource("template/fu_doc_object.ftl"));
         }
-        if(StringUtils.isBlank(this.settingData.getEnumTemplateValue1())){
+        if (StringUtils.isBlank(this.settingData.getEnumTemplateValue1())) {
             this.settingData.setEnumTemplateValue1(ResourceUtils.readResource("template/fu_doc_enum.ftl"));
         }
-        if(StringUtils.isBlank(this.settingData.getEnumTemplateValue2())){
+        if (StringUtils.isBlank(this.settingData.getEnumTemplateValue2())) {
             this.settingData.setEnumTemplateValue2(ResourceUtils.readResource("template/fu_doc_enum_table.ftl"));
         }
         return this.settingData;
+    }
+
+    public static SettingData getSettingData(Project project) {
+        FuDocSetting fuDocSetting = getInstance(project);
+        if (Objects.isNull(fuDocSetting)) {
+            return new SettingData();
+        }
+        return fuDocSetting.getSettingData();
     }
 
     public static FuDocSetting getInstance(@NotNull Project project) {

@@ -30,3 +30,7 @@
 
 psiDocComment.findTagByName("see").getDataElements()[0].getChildren()[0].getReference().resolve()
 ```
+
+
+# 1.3.0
+1、支持多controller生成
