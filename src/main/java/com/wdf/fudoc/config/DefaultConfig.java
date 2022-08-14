@@ -15,7 +15,8 @@ public class DefaultConfig {
     /**
      * 默认需要过滤的字段
      */
-    public static final List<FilterFieldBO> DEFAULT_FILTER_FIELD_LIST = Lists.newArrayList(
+    public static final List<FilterFieldBO>
+            DEFAULT_FILTER_FIELD_LIST = Lists.newArrayList(
             new FilterFieldBO(CommonObjectNames.HTTP_REQUEST, ""),
             new FilterFieldBO(CommonObjectNames.HTTP_RESPONSE, ""),
             new FilterFieldBO(CommonObjectNames.MYBATIS_PLUS_PAGE, "orders,optimizeCountSql,searchCount,optimizeJoinOfCountSql,countId,maxLimit"));

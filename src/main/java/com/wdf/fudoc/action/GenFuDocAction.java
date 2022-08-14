@@ -72,7 +72,7 @@ public class GenFuDocAction extends AnAction {
 
         try {
             FuDocContext fuDocContext = new FuDocContext();
-            fuDocContext.setSettingData(FuDocSetting.getInstance(Objects.requireNonNull(FuDocDataContent.getProject())).getState());
+            fuDocContext.setSettingData(FuDocSetting.getInstance(Objects.requireNonNull(FuDocDataContent.getProject())).getSettingData());
             fuDocContext.setTargetElement(targetElement);
 
             FuDocService fuDocService = FuDocServiceFactory.getFuDocService(JavaClassType.get(psiClass));

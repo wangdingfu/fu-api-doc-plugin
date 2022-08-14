@@ -1,6 +1,5 @@
 package com.wdf.fudoc.data;
 
-import com.wdf.fudoc.config.DefaultConfig;
 import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +26,4 @@ public class CustomerSettingData {
      */
     private List<FilterFieldBO> settings_filter_field;
 
-
-    public CustomerSettingData() {
-        this.settings_filter_field = DefaultConfig.DEFAULT_FILTER_FIELD_LIST;
-    }
 }
