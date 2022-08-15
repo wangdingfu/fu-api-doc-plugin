@@ -6,19 +6,24 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.FuDocObjectType;
+import com.wdf.fudoc.data.CustomerSettingData;
+import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.parse.ObjectParserExecutor;
 import com.wdf.fudoc.parse.field.FuDocField;
 import com.wdf.fudoc.parse.field.FuDocPsiField;
 import com.wdf.fudoc.parse.object.AbstractApiDocObjectParser;
+import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -81,8 +86,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             fuDocContext.parseFinish(canonicalText);
         } else {
             //将缓存中之前解析的设置到当前对象中 直接返回 避免重复解析(此处直接返回也是为了避免循环引用)
-            List<ObjectInfoDesc> childList = ObjectUtils.listToList(objectInfoDescCache.getChildList(),
-                    data -> BeanUtil.copyProperties(data, ObjectInfoDesc.class));
+            List<ObjectInfoDesc> childList = ObjectUtils.listToList(objectInfoDescCache.getChildList(), data -> BeanUtil.copyProperties(data, ObjectInfoDesc.class));
             paddingRootId(objectInfoDesc.getRootId(), childList);
             paddingChildList(objectInfoDesc, childList);
         }
@@ -99,11 +103,21 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
      */
     private List<ObjectInfoDesc> doParseDefaultObject(ParseObjectBO parseObjectBO, PsiType psiType, PsiClass psiClass) {
         List<ObjectInfoDesc> childList = Lists.newArrayList();
-        if (Objects.nonNull(psiType) && psiType.isValid()
-                && PsiClassUtils.isClass(psiClass)
-                && !CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
+        if (Objects.nonNull(psiType) && psiType.isValid() && PsiClassUtils.isClass(psiClass) && !CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
+            FuDocContext fuDocContext = parseObjectBO.getFuDocContext();
+            Map<String, String> filterMap = fuDocContext.getFilterMap();
+            String fields = filterMap.get(psiClass.getQualifiedName());
+            if (Objects.nonNull(fields) && StringUtils.EMPTY.equals(fields)) {
+                //没有配置属性 则代表不解析当前类
+                return childList;
+            }
+            List<String> fieldNameList = Lists.newArrayList(Objects.isNull(fields) ? new String[]{} : StringUtils.split(fields, ","));
             //遍历当前类的所有字段（包含父类）
             for (PsiField psiField : psiClass.getAllFields()) {
+                if (fieldNameList.contains(psiField.getName())) {
+                    //如果属性在过滤列表里 则标识该属性呗过滤掉了
+                    continue;
+                }
                 parseObjectBO.setFuDocField(new FuDocPsiField(psiField));
                 childList.add(ObjectParserExecutor.execute(psiField.getType(), parseObjectBO));
             }
@@ -111,6 +125,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
         }
         return childList;
     }
+
 
     private ObjectInfoDesc buildDefaultObjectInfoDesc(PsiType psiType, ParseObjectBO parseObjectBO) {
         ObjectInfoDesc objectInfoDesc = buildDefault(psiType, "object", parseObjectBO);
@@ -127,7 +142,6 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             objectInfoDesc.setValue(buildValue(childList));
         }
     }
-
 
 
     private void paddingRootId(Integer rootId, List<ObjectInfoDesc> childList) {

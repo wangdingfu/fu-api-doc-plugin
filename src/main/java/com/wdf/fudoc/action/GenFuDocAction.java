@@ -12,7 +12,6 @@ import com.wdf.fudoc.constant.MessageConstants;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.data.FuDocData;
 import com.wdf.fudoc.data.FuDocDataContent;
-import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.factory.FuDocServiceFactory;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.service.FuDocService;
@@ -72,7 +71,7 @@ public class GenFuDocAction extends AnAction {
 
         try {
             FuDocContext fuDocContext = new FuDocContext();
-            fuDocContext.setSettingData(FuDocSetting.getInstance(Objects.requireNonNull(FuDocDataContent.getProject())).getSettingData());
+            fuDocContext.setSettingData(FuDocSetting.getSettingData(Objects.requireNonNull(e.getProject())));
             fuDocContext.setTargetElement(targetElement);
 
             FuDocService fuDocService = FuDocServiceFactory.getFuDocService(JavaClassType.get(psiClass));

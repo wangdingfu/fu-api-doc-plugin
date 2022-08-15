@@ -10,7 +10,12 @@ import com.intellij.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.wdf.fudoc.FuDocRender;
 import com.wdf.fudoc.config.EnumSettingConfig;
+import com.wdf.fudoc.config.state.FuDocSetting;
+import com.wdf.fudoc.data.CustomerSettingData;
+import com.wdf.fudoc.data.FuDocDataContent;
+import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.pojo.bo.EnumParseBO;
+import com.wdf.fudoc.pojo.bo.SettingEnumBO;
 import com.wdf.fudoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.pojo.data.FuDocEnumData;
 import com.wdf.fudoc.pojo.data.FuDocEnumItemData;
@@ -21,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * 枚举解析
@@ -32,8 +38,9 @@ import java.util.Optional;
 public class EnumParseHelper {
 
 
-    public static String parseEnum(EnumSettingConfig enumSettingConfig, PsiClass psiClass, Integer type) {
+    public static String parseEnum(PsiClass psiClass, Integer type) {
         List<FuDocEnumItemData> fuDocEnumItemDataList = Lists.newArrayList();
+        EnumSettingConfig enumSetting = getEnumSetting();
         for (PsiField field : psiClass.getFields()) {
             PsiElement resolve;
             if (field instanceof PsiEnumConstantImpl && Objects.nonNull(field.getReference()) && (resolve = field.getReference().resolve()) instanceof PsiMethodImpl) {
@@ -51,9 +58,9 @@ public class EnumParseHelper {
                     }
                     MapListUtil<String, EnumParseBO> instance = MapListUtil.getInstance(enumParseBOList, EnumParseBO::getType);
                     //获取code 优先选取Integer类型
-                    String code = selectValue(instance, enumSettingConfig.getCodeNameList(), enumSettingConfig.getCodeTypeList());
+                    String code = selectValue(instance, enumSetting.getCodeNameList(), EnumSettingConfig.codeTypeList);
                     //获取msg 优先选取String类型
-                    String msg = selectValue(instance, enumSettingConfig.getValueNameList(), enumSettingConfig.getValueTypeList());
+                    String msg = selectValue(instance, enumSetting.getValueNameList(), EnumSettingConfig.valueTypeList);
                     fuDocEnumItemDataList.add(new FuDocEnumItemData(code, msg));
                 }
             }
@@ -74,7 +81,7 @@ public class EnumParseHelper {
     }
 
 
-    private static String selectValue(MapListUtil<String, EnumParseBO> instance, List<String> codeList, List<String> keys) {
+    private static String selectValue(MapListUtil<String, EnumParseBO> instance, Set<String> codeList, Set<String> keys) {
         //精准选取
         for (String key : keys) {
             String value = selectValue(codeList, instance.get(key), false);
@@ -93,7 +100,7 @@ public class EnumParseHelper {
     }
 
 
-    private static String selectValue(List<String> codeList, List<EnumParseBO> enumParseBOList, boolean random) {
+    private static String selectValue(Set<String> codeList, List<EnumParseBO> enumParseBOList, boolean random) {
         Optional<EnumParseBO> first = random ? enumParseBOList.stream().findFirst()
                 : enumParseBOList.stream().filter(f -> codeList.contains(f.getName())).findFirst();
         return first.map(EnumParseBO::getValue).orElse(null);
@@ -124,5 +131,25 @@ public class EnumParseHelper {
             }
         }
         return StringUtils.EMPTY;
+    }
+
+
+    private static EnumSettingConfig getEnumSetting() {
+        EnumSettingConfig enumSettingConfig = new EnumSettingConfig();
+        SettingData settingData = FuDocSetting.getSettingData(FuDocDataContent.getProject());
+        CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
+        if (Objects.isNull(customerSettingData)) {
+            return enumSettingConfig;
+        }
+        SettingEnumBO settingEnumBO = customerSettingData.getSetting_enum();
+        String code = settingEnumBO.getCode();
+        String msg = settingEnumBO.getMsg();
+        if (StringUtils.isNotBlank(code)) {
+            enumSettingConfig.addCode(Lists.newArrayList(StringUtils.split(code, ",")));
+        }
+        if (StringUtils.isNotBlank(code)) {
+            enumSettingConfig.addMsg(Lists.newArrayList(StringUtils.split(msg, ",")));
+        }
+        return enumSettingConfig;
     }
 }

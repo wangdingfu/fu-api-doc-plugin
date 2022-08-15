@@ -27,6 +27,6 @@ public class GenEnumFuDocServiceImpl implements FuDocService {
         if (StringUtils.isNotBlank(name) && name.equals(selectedText)) {
             type = YesOrNo.YES.getCode();
         }
-        return EnumParseHelper.parseEnum(fuDocContext.getEnumSettingConfig(), psiClass, type);
+        return EnumParseHelper.parseEnum(psiClass, type);
     }
 }

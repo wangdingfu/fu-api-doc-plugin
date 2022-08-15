@@ -1,15 +1,18 @@
 package com.wdf.fudoc.pojo.context;
 
 import com.google.common.collect.Lists;
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.config.EnumSettingConfig;
 import com.wdf.fudoc.constant.FuDocConstants;
+import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.factory.ObjectInfoDescFactory;
+import com.wdf.fudoc.pojo.bo.FilterFieldBO;
+import com.wdf.fudoc.pojo.bo.SettingValidBO;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -32,6 +35,14 @@ public class FuDocContext {
      * 配置参数
      */
     private SettingData settingData;
+
+    /**
+     * 过滤参数map
+     */
+    private Map<String, String> filterMap;
+
+    private CustomerSettingData customerSettingData;
+
     /**
      * desc自增ID
      */
@@ -71,6 +82,30 @@ public class FuDocContext {
      */
     private Map<String, ObjectInfoDesc> earlyObjectInfoDescMap;
 
+
+    public void setSettingData(SettingData settingData) {
+        this.settingData = settingData;
+        initSettingData();
+    }
+
+    public void initSettingData() {
+        Map<String, String> filterMap = new HashMap<>();
+        CustomerSettingData customerSettingData;
+        if (Objects.isNull(this.settingData) || Objects.isNull(customerSettingData = this.settingData.getCustomerSettingData())) {
+            this.settingData = new SettingData();
+            customerSettingData = new CustomerSettingData();
+        }
+        List<FilterFieldBO> filterField = customerSettingData.getSettings_filter_field();
+        if (CollectionUtils.isNotEmpty(filterField)) {
+            for (FilterFieldBO filterFieldBO : filterField) {
+                String fieldNames = filterFieldBO.getFieldNames();
+                filterMap.put(filterFieldBO.getClassName(), Objects.isNull(fieldNames) ? StringUtils.EMPTY : fieldNames);
+            }
+        }
+        this.customerSettingData = customerSettingData;
+        this.filterMap = filterMap;
+    }
+
     /**
      * 生成descId
      */
@@ -84,6 +119,7 @@ public class FuDocContext {
         }
         return classIdSet.size();
     }
+
 
     public ObjectInfoDesc getByDescId(Integer descId) {
         if (Objects.nonNull(this.descInfoMap) && Objects.nonNull(descId)) {

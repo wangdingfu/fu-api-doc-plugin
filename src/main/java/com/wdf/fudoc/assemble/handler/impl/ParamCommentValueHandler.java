@@ -4,13 +4,19 @@ import com.wdf.fudoc.assemble.handler.BaseParamFieldValueHandler;
 import com.wdf.fudoc.constant.AnnotationConstants;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
+import com.wdf.fudoc.constant.enumtype.ValidMessageType;
+import com.wdf.fudoc.data.CustomerSettingData;
+import com.wdf.fudoc.pojo.bo.SettingValidBO;
+import com.wdf.fudoc.pojo.bo.SettingValidMessageBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.ValidateAnnotationUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -52,11 +58,30 @@ public class ParamCommentValueHandler extends BaseParamFieldValueHandler {
             //获取校验注解信息截取出字段名
             String validMessage = ValidateAnnotationUtils.getValidMessage(objectInfoDesc);
             if (StringUtils.isNotBlank(validMessage)) {
-                return validMessage.replace("不能为空", "").replace("not null", "");
+                //替换指定内容
+                return replaceContent(fuDocContext, validMessage);
             }
         }
         return StringUtils.EMPTY;
     }
 
+
+    private String replaceContent(FuDocContext fuDocContext, String validMessage) {
+        CustomerSettingData customerSettingData = fuDocContext.getCustomerSettingData();
+        SettingValidBO settingValidBO = customerSettingData.getSetting_valid();
+        List<SettingValidMessageBO> message = settingValidBO.getMessage();
+        if (CollectionUtils.isEmpty(message)) {
+            return validMessage;
+        }
+        for (SettingValidMessageBO messageBO : message) {
+            if (ValidMessageType.REPLACE.getMsg().equals(messageBO.getType()) && StringUtils.isNotBlank(messageBO.getValue())) {
+                String[] split = StringUtils.split(messageBO.getValue(), ",");
+                for (String replace : split) {
+                    validMessage = validMessage.replace(replace, "");
+                }
+            }
+        }
+        return validMessage;
+    }
 
 }
