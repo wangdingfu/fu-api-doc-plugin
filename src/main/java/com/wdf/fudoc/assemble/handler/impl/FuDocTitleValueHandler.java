@@ -15,9 +15,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description 接口标题获取接口实现
- * @Date 2022-06-19 22:25:18
+ * @date 2022-06-19 22:25:18
  */
 public class FuDocTitleValueHandler implements ParamValueHandler {
     @Override

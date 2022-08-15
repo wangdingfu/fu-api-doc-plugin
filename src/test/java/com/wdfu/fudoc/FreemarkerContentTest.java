@@ -1,6 +1,6 @@
 package com.wdfu.fudoc;
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 import com.wdf.fudoc.data.TemplateData;
 
 /**
@@ -11,6 +11,6 @@ public class FreemarkerContentTest {
 
     public static void main(String[] args) {
         TemplateData templateData = new TemplateData();
-        System.out.println(JSON.toJSON(templateData));
+        System.out.println(JSONUtil.toJsonStr(templateData));
     }
 }

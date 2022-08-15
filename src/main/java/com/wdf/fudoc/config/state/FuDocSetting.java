@@ -6,25 +6,21 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.wdf.fudoc.FuDocMessageBundle;
+import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
-import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.util.ResourceUtils;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
  * Fu Doc 存储配置内容
  *
  * @author wangdingfu
- * @Date 2022-08-06 01:17:22
+ * @date 2022-08-06 01:17:22
  */
 @Data
 @State(name = "fuDocSetting", storages = {@Storage("FuDocSettings.xml")})
@@ -60,7 +56,13 @@ public class FuDocSetting implements PersistentStateComponent<FuDocSetting> {
         if (Objects.isNull(fuDocSetting)) {
             return new SettingData();
         }
-        return fuDocSetting.getSettingData();
+        SettingData settingData = fuDocSetting.getSettingData();
+        CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
+        if (Objects.isNull(customerSettingData)) {
+            customerSettingData = new CustomerSettingData();
+            settingData.setCustomerSettingData(customerSettingData);
+        }
+        return settingData;
     }
 
     public static FuDocSetting getInstance(@NotNull Project project) {

@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @Descption java类 类型
- * @Date 2022-06-08 20:23:08
+ * @date 2022-06-08 20:23:08
  */
 public enum JavaClassType {
 

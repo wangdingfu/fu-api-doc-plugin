@@ -8,7 +8,7 @@ import lombok.Setter;
 /**
  * @author wangdingfu
  * @Descption 注解类型值（即值的类型为注解）
- * @Date 2022-06-27 20:17:39
+ * @date 2022-06-27 20:17:39
  */
 @Getter
 @Setter

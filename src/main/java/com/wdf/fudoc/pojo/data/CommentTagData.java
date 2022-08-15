@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description 注释tag内容对象
- * @Date 2022-08-05 22:16:06
+ * @date 2022-08-05 22:16:06
  */
 @Getter
 @Setter

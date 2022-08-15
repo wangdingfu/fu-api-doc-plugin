@@ -1,6 +1,6 @@
 package com.wdf.fudoc.view;
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.config.state.FuDocSetting;
 import com.wdf.fudoc.data.CustomerSettingData;
@@ -27,50 +27,52 @@ public class FuDocSettingForm {
     private JTextArea enumTemplate1;
     private JTextArea enumTemplate2;
     private final Project project;
+    private final SettingData settingData;
 
     public FuDocSettingForm(Project project) {
         this.project = project;
+        this.settingData = FuDocSetting.getSettingData(this.project);
     }
 
 
+    /**
+     * 当在配置页面点击apply或者OK时 会调用该方法 将页面编辑的内容持久化到文件中
+     */
     public void apply() {
-        FuDocSetting fuDocSetting = FuDocSetting.getInstance(this.project);
-        SettingData settingData = fuDocSetting.getSettingData();
         String text = this.settings.getText();
         if (StringUtils.isNotBlank(text)) {
-            settingData.setCustomerSettingData(JSON.parseObject(text, CustomerSettingData.class));
+            this.settingData.setCustomerSettingData(JSONUtil.toBean(text, CustomerSettingData.class));
         }
-        settingData.setFuDocTemplateValue(this.fuDocTemplate.getText());
-        settingData.setObjectTemplateValue(this.objectTemplate.getText());
-        settingData.setEnumTemplateValue1(this.enumTemplate1.getText());
-        settingData.setEnumTemplateValue2(this.enumTemplate2.getText());
+        this.settingData.setFuDocTemplateValue(this.fuDocTemplate.getText());
+        this.settingData.setObjectTemplateValue(this.objectTemplate.getText());
+        this.settingData.setEnumTemplateValue1(this.enumTemplate1.getText());
+        this.settingData.setEnumTemplateValue2(this.enumTemplate2.getText());
     }
 
 
+    /**
+     * 当进入页面或者点击reset按钮时 会调用该方法  重置设置页面内容
+     */
     public void reset() {
-        FuDocSetting fuDocSetting = FuDocSetting.getInstance(project);
-        SettingData settingData = fuDocSetting.getSettingData();
-        if (Objects.nonNull(settingData)) {
-            CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
-            if(Objects.nonNull(customerSettingData)){
-                this.settings.setText(FastJsonUtils.toJsonString(customerSettingData));
-            }
-            String fuDocTemplateValue = settingData.getFuDocTemplateValue();
-            String objectTemplateValue = settingData.getObjectTemplateValue();
-            String enumTemplateValue1 = settingData.getEnumTemplateValue1();
-            String enumTemplateValue2 = settingData.getEnumTemplateValue2();
-            if (StringUtils.isNotBlank(fuDocTemplateValue)) {
-                this.fuDocTemplate.setText(fuDocTemplateValue);
-            }
-            if (StringUtils.isNotBlank(objectTemplateValue)) {
-                this.objectTemplate.setText(objectTemplateValue);
-            }
-            if (StringUtils.isNotBlank(enumTemplateValue1)) {
-                this.enumTemplate1.setText(enumTemplateValue1);
-            }
-            if (StringUtils.isNotBlank(enumTemplateValue2)) {
-                this.enumTemplate2.setText(enumTemplateValue2);
-            }
+        CustomerSettingData customerSettingData = this.settingData.getCustomerSettingData();
+        if (Objects.nonNull(customerSettingData)) {
+            this.settings.setText(FastJsonUtils.toJsonString(customerSettingData));
+        }
+        String fuDocTemplateValue = settingData.getFuDocTemplateValue();
+        String objectTemplateValue = settingData.getObjectTemplateValue();
+        String enumTemplateValue1 = settingData.getEnumTemplateValue1();
+        String enumTemplateValue2 = settingData.getEnumTemplateValue2();
+        if (StringUtils.isNotBlank(fuDocTemplateValue)) {
+            this.fuDocTemplate.setText(fuDocTemplateValue);
+        }
+        if (StringUtils.isNotBlank(objectTemplateValue)) {
+            this.objectTemplate.setText(objectTemplateValue);
+        }
+        if (StringUtils.isNotBlank(enumTemplateValue1)) {
+            this.enumTemplate1.setText(enumTemplateValue1);
+        }
+        if (StringUtils.isNotBlank(enumTemplateValue2)) {
+            this.enumTemplate2.setText(enumTemplateValue2);
         }
     }
 

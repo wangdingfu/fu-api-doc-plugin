@@ -6,9 +6,9 @@ import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 
 /**
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description 参数显示的类型值获取
- * @Date 2022-06-24 22:32:38
+ * @date 2022-06-24 22:32:38
  */
 public class ParamTypeViewValueHandler extends BaseParamFieldValueHandler {
     @Override

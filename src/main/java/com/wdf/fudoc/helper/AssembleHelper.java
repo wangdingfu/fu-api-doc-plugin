@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @Descption 组装接口文档帮助类
- * @Date 2022-06-23 21:23:01
+ * @date 2022-06-23 21:23:01
  */
 public class AssembleHelper {
 

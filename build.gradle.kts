@@ -34,13 +34,12 @@ dependencies {
     //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    implementation("org.projectlombok:lombok:1.18.20")
     compileOnly("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
-    implementation("com.alibaba:fastjson:1.2.58")
     implementation("org.freemarker:freemarker:2.3.31")
-    implementation("cn.hutool:hutool-all:5.4.2")
+    implementation("cn.hutool:hutool-json:5.8.5")
+    implementation("cn.hutool:hutool-http:5.8.5")
 }
 
 

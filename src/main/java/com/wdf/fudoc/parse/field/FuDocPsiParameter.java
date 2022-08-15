@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @Descption
- * @Date 2022-04-28 22:25:06
+ * @date 2022-04-28 22:25:06
  */
 public class FuDocPsiParameter extends AbstractFuDocField {
 

@@ -14,9 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Optional;
 
 /**
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description 参数注释说明内容值获取
- * @Date 2022-06-24 22:27:15
+ * @date 2022-06-24 22:27:15
  */
 public class ParamCommentValueHandler extends BaseParamFieldValueHandler {
     @Override

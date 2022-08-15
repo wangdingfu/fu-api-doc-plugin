@@ -7,9 +7,9 @@ import lombok.Setter;
 import java.util.Map;
 
 /**
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description 根节点参数数据对象
- * @Date 2022-06-26 21:33:33
+ * @date 2022-06-26 21:33:33
  */
 @Getter
 @Setter

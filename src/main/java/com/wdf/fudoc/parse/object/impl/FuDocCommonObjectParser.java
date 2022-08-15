@@ -10,7 +10,7 @@ import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 /**
  * @author wangdingfu
  * @description java 公共常用对象解析器
- * @Date 2022-04-18 21:26:53
+ * @date 2022-04-18 21:26:53
  */
 public class FuDocCommonObjectParser extends AbstractApiDocObjectParser {
 

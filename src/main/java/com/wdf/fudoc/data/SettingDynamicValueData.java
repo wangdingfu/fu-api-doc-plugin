@@ -6,7 +6,7 @@ import lombok.Setter;
 /**
  * 配置动态取值参数对象
  * @author wangdingfu
- * @Date 2022-08-06 22:45:21
+ * @date 2022-08-06 22:45:21
  */
 @Getter
 @Setter

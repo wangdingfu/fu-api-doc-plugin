@@ -10,7 +10,7 @@ import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 /**
  * @author wangdingfu
  * @description 其他对象解析器(一些框架里不适合解析的对象 例如HttpServletRequest等对象)
- * @Date 2022-04-18 21:30:15
+ * @date 2022-04-18 21:30:15
  */
 public class FuDocFilterObjectParser extends AbstractApiDocObjectParser {
 

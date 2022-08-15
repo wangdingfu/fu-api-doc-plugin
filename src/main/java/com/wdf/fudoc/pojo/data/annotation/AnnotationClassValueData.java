@@ -10,7 +10,7 @@ import lombok.Setter;
 /**
  * @author wangdingfu
  * @Descption 注解class类型值（注解值为class）
- * @Date 2022-06-27 20:07:36
+ * @date 2022-06-27 20:07:36
  */
 @Getter
 @Setter

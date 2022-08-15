@@ -13,9 +13,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description 描述对象抽象类
- * @Date 2022-06-18 22:01:58
+ * @date 2022-06-18 22:01:58
  */
 @Getter
 @Setter

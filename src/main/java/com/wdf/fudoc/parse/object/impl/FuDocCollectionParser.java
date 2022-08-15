@@ -20,7 +20,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @description 集合解析器
- * @Date 2022-04-18 21:33:19
+ * @date 2022-04-18 21:33:19
  */
 public class FuDocCollectionParser extends AbstractApiDocObjectParser {
 

@@ -20,8 +20,7 @@ public class CustomerSettingData {
     /**
      * 自定义取值逻辑配置
      */
-    private List<SettingDynamicValueData> setting_customer_value;
-
+    private List<SettingDynamicValueData> setting_customer_value = Lists.newArrayList();
 
     /**
      * 自定义过滤字段

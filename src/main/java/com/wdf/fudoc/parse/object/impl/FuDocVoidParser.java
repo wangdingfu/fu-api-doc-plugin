@@ -10,7 +10,7 @@ import com.wdf.fudoc.util.PsiClassUtils;
 /**
  * @author wangdingfu
  * @Descption Void类型解析器
- * @Date 2022-07-05 16:34:39
+ * @date 2022-07-05 16:34:39
  */
 public class FuDocVoidParser  extends AbstractApiDocObjectParser {
     @Override

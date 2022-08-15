@@ -9,9 +9,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Optional;
 
 /**
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description 校验注解工具类
- * @Date 2022-06-18 22:55:28
+ * @date 2022-06-18 22:55:28
  */
 public class ValidateAnnotationUtils {
 

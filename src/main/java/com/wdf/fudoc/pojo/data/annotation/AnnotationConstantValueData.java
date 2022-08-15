@@ -1,17 +1,17 @@
 package com.wdf.fudoc.pojo.data.annotation;
 
-import com.alibaba.fastjson.util.TypeUtils;
-import com.intellij.lang.jvm.annotation.JvmAnnotationConstantValue;
-import com.intellij.psi.PsiAnnotationMemberValue;
 import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.pojo.data.AnnotationValueData;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 /**
  * @author wangdingfu
  * @Descption 注解常量值（注解值为常量）
- * @Date 2022-06-27 20:06:55
+ * @date 2022-06-27 20:06:55
  */
 @Getter
 @Setter
@@ -23,8 +23,8 @@ public class AnnotationConstantValueData extends AnnotationValueData {
     private Object value;
 
 
-    public Boolean booleanValue(){
-        return TypeUtils.castToBoolean(this.value);
+    public Boolean booleanValue() {
+        return (Boolean) this.value;
     }
 
 
@@ -32,7 +32,7 @@ public class AnnotationConstantValueData extends AnnotationValueData {
      * 获取String类型的值
      */
     public String stringValue() {
-        return TypeUtils.castToString(this.value);
+        return Objects.isNull(this.value) ? StringUtils.EMPTY : this.value.toString();
     }
 
 

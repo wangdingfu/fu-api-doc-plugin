@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author wangdingfu
  * @Descption 公共类常量
- * @Date 2022-04-27 21:32:42
+ * @date 2022-04-27 21:32:42
  */
 public interface CommonObjectNames {
 

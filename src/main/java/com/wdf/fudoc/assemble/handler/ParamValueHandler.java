@@ -5,9 +5,10 @@ import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
 
 /**
- * @Author wangdingfu
- * @Description 参数值获取接口
- * @Date 2022-06-18 22:36:11
+ * 参数值获取接口
+ *
+ * @author wangdingfu
+ * @date 2022-06-18 22:36:11
  */
 public interface ParamValueHandler {
 

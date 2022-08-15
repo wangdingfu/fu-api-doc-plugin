@@ -8,7 +8,7 @@ import lombok.Setter;
 /**
  * @author wangdingfu
  * @Descption 注解值
- * @Date 2022-05-11 21:30:13
+ * @date 2022-05-11 21:30:13
  */
 @Getter
 @Setter

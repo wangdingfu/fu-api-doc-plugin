@@ -1,6 +1,6 @@
 package com.wdf.fudoc.parse.object;
 
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.json.JSONObject;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
@@ -29,7 +29,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @description 解析java对象成ApiDoc对象抽象类
- * @Date 2022-04-18 20:49:48
+ * @date 2022-04-18 20:49:48
  */
 public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
 
@@ -145,7 +145,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
                 if (objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.STATIC) || objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.FINAL)) {
                     continue;
                 }
-                jsonObject.put(objectInfoDesc.getName(), objectInfoDesc.getValue());
+                jsonObject.putIfAbsent(objectInfoDesc.getName(), objectInfoDesc.getValue());
             }
             return jsonObject;
         }

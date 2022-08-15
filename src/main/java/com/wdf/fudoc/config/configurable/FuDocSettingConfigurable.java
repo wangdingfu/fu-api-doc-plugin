@@ -11,9 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description fu-doc 设置页面
- * @Date 2022-08-06 00:42:46
+ * @date 2022-08-06 00:42:46
  */
 public class FuDocSettingConfigurable implements SearchableConfigurable {
 

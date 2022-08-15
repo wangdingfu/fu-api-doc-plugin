@@ -25,9 +25,9 @@ import java.util.Optional;
 /**
  * 枚举解析
  *
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description
- * @Date 2022-08-05 23:41:11
+ * @date 2022-08-05 23:41:11
  */
 public class EnumParseHelper {
 

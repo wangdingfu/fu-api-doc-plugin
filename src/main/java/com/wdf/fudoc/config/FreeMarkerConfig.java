@@ -11,7 +11,7 @@ import java.util.Locale;
 /**
  * @author wangdingfu
  * @Descption
- * @Date 2022-05-26 19:51:23
+ * @date 2022-05-26 19:51:23
  */
 @Slf4j
 public class FreeMarkerConfig {

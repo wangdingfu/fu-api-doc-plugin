@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @Descption Fu Doc工具类
- * @Date 2022-06-08 20:16:46
+ * @date 2022-06-08 20:16:46
  */
 public class FuDocUtils {
 

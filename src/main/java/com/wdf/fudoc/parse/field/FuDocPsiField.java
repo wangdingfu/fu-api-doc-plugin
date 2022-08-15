@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @Descption psiField字段
- * @Date 2022-04-28 22:20:47
+ * @date 2022-04-28 22:20:47
  */
 public class FuDocPsiField extends AbstractFuDocField {
 

@@ -7,7 +7,7 @@ import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 /**
  * @author wangdingfu
  * @description 对象解析器
- * @Date 2022-04-18 20:44:18
+ * @date 2022-04-18 20:44:18
  */
 public interface ApiDocObjectParser {
 

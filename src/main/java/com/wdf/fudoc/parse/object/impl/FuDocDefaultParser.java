@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @description 默认对象解析器(用户自定义对象)
- * @Date 2022-04-18 21:34:42
+ * @date 2022-04-18 21:34:42
  */
 public class FuDocDefaultParser extends AbstractApiDocObjectParser {
 
