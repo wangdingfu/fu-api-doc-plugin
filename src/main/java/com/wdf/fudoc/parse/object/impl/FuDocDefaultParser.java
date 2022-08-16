@@ -4,18 +4,19 @@ import cn.hutool.core.bean.BeanUtil;
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.fudoc.constant.CommonObjectNames;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.FuDocObjectType;
-import com.wdf.fudoc.data.CustomerSettingData;
-import com.wdf.fudoc.data.SettingData;
+import com.wdf.fudoc.constant.enumtype.ParamType;
 import com.wdf.fudoc.parse.ObjectParserExecutor;
 import com.wdf.fudoc.parse.field.FuDocField;
 import com.wdf.fudoc.parse.field.FuDocPsiField;
 import com.wdf.fudoc.parse.object.AbstractApiDocObjectParser;
-import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
+import com.wdf.fudoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -114,7 +115,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             List<String> fieldNameList = Lists.newArrayList(Objects.isNull(fields) ? new String[]{} : StringUtils.split(fields, ","));
             //遍历当前类的所有字段（包含父类）
             for (PsiField psiField : psiClass.getAllFields()) {
-                if (fieldNameList.contains(psiField.getName())) {
+                if (fieldNameList.contains(psiField.getName()) || fieldIsIgnore(psiField, parseObjectBO)) {
                     //如果属性在过滤列表里 则标识该属性呗过滤掉了
                     continue;
                 }
@@ -124,6 +125,40 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             childList.removeAll(Collections.singleton(null));
         }
         return childList;
+    }
+
+
+    /**
+     * 判断当前字段是否标识Ignore注解被忽略了
+     * <p>
+     * 1、被"@JsonIgnore"注解标识了会被忽略
+     * 2、被“@JsonProperty”注解标识
+     * 2.1、access属性的值为READ_ONLY 则只会解析请求参数
+     * 2.2、access属性的值为WRITE_ONLY 则只会解析响应参数
+     * 2.3、其他情况都会解析
+     *
+     * @param psiField      字段
+     * @param parseObjectBO 解析字段的参数
+     * @return true: 需要忽略该字段
+     */
+    private boolean fieldIsIgnore(PsiField psiField, ParseObjectBO parseObjectBO) {
+        PsiAnnotation annotation = psiField.getAnnotation(CommonObjectNames.JSON_IGNORE);
+        if (Objects.nonNull(annotation)) {
+            //被JsonIgnore注解标识 需要忽略改属性
+            return true;
+        }
+        AnnotationData annotationData = AnnotationUtils.parse(psiField.getAnnotation(CommonObjectNames.JSON_PROPERTY));
+        String enumValue;
+        if (Objects.nonNull(annotationData) && StringUtils.isNotBlank(enumValue = annotationData.enumValue("access").getEnumValue())) {
+            ParamType paramType = parseObjectBO.getParamType();
+            if (ParamType.REQUEST_PARAM.equals(paramType) && "WRITE_ONLY".equals(enumValue)) {
+                //请求参数 标识了只写 说明不读取该参数 则返回忽略
+                return true;
+            }
+            //响应参数 标识了只读 说明不会将该参数返回出去 则返回忽略
+            return ParamType.RESPONSE_PARAM.equals(paramType) && "READ_ONLY".equals(enumValue);
+        }
+        return false;
     }
 
 

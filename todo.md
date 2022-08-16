@@ -31,6 +31,11 @@
 psiDocComment.findTagByName("see").getDataElements()[0].getChildren()[0].getReference().resolve()
 ```
 
+# 1.2.5
+1、新增基础配置页面. 支持配置需要过滤的类和属性 支持配置自定义数据
+2、工程瘦身. 移除fastJson依赖和HuTools不需要的依赖
+3、支持枚举相关配置、校验注解相关配置
+
 
 # 1.3.0
 1、支持多controller生成

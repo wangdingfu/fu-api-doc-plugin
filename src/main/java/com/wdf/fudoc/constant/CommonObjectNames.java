@@ -5,8 +5,9 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 /**
+ * java类路径
+ *
  * @author wangdingfu
- * @Descption 公共类常量
  * @date 2022-04-27 21:32:42
  */
 public interface CommonObjectNames {
@@ -20,12 +21,15 @@ public interface CommonObjectNames {
     String MULTIPART_FILE = "org.springframework.web.multipart.MultipartFile";
 
 
+    String JSON_IGNORE = "com.fasterxml.jackson.annotation.JsonIgnore";
+
+    String JSON_PROPERTY = "com.fasterxml.jackson.annotation.JsonProperty";
+
+
     List<String> filterList = Lists.newArrayList(
             HTTP_REQUEST,
             HTTP_RESPONSE
     );
-
-
 
 
 }

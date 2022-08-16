@@ -60,6 +60,7 @@ public class FuDocMapParser extends AbstractApiDocObjectParser {
         ParseObjectBO genericParseObjectBO = new ParseObjectBO(parseObjectBO.getFuDocContext());
         genericParseObjectBO.setFuDocField(new FuDocCustomerField(name, comment));
         genericParseObjectBO.setRootId(parseObjectBO.getRootId());
+        genericParseObjectBO.setParamType(parseObjectBO.getParamType());
         return ObjectParserExecutor.execute(psiType, genericParseObjectBO);
     }
 

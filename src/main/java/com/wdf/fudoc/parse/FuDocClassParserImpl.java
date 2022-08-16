@@ -5,6 +5,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
+import com.wdf.fudoc.constant.enumtype.ParamType;
 import com.wdf.fudoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.parse.field.FuDocPsiClass;
 import com.wdf.fudoc.parse.field.FuDocPsiParameter;
@@ -88,6 +89,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
         for (PsiParameter parameter : parameterList.getParameters()) {
             ParseObjectBO parseObjectBO = new ParseObjectBO(fuDocContext);
             parseObjectBO.setFuDocField(new FuDocPsiParameter(parameter, apiDocCommentData));
+            parseObjectBO.setParamType(ParamType.REQUEST_PARAM);
             ObjectInfoDesc objectInfoDesc = ObjectParserExecutor.execute(parameter.getType(), parseObjectBO);
             if (Objects.nonNull(objectInfoDesc)) {
                 //标识根节点
@@ -134,6 +136,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
         if (Objects.nonNull(psiClass)) {
             parseObjectBO.setFuDocField(new FuDocPsiClass(psiClass, apiDocCommentData));
         }
+        parseObjectBO.setParamType(ParamType.RESPONSE_PARAM);
         return ObjectParserExecutor.execute(returnType, parseObjectBO);
     }
 

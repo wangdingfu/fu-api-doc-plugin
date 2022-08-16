@@ -2,7 +2,6 @@ package com.wdf.fudoc.components;
 
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.ui.ToolbarDecorator;
