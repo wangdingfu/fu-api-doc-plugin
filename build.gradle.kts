@@ -49,6 +49,12 @@ intellij {
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
 
+    version.set("2021.2.2")
+    type.set("IU") // Target IDE Platform
+
+    //沙箱目录位置，用于保存IDEA的设置，默认在build文件下面，防止clean，放在根目录下。
+    sandboxDir.set("${rootProject.rootDir}/idea-sandbox")
+
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
 }

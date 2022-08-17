@@ -37,10 +37,13 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="f5709" class="javax.swing.JTextArea" binding="settings">
+              <grid id="2048c" binding="settingPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints/>
                 <properties/>
-              </component>
+                <border type="none"/>
+                <children/>
+              </grid>
             </children>
           </scrollpane>
           <scrollpane id="c04fb">
@@ -50,10 +53,13 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="d79c1" class="javax.swing.JTextArea" binding="fuDocTemplate">
+              <grid id="5adf3" binding="mainTemplatePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints/>
                 <properties/>
-              </component>
+                <border type="none"/>
+                <children/>
+              </grid>
             </children>
           </scrollpane>
           <scrollpane id="9cd26">
@@ -63,10 +69,13 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="db64a" class="javax.swing.JTextArea" binding="objectTemplate">
+              <grid id="2d3f9" binding="objectTemplatePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints/>
                 <properties/>
-              </component>
+                <border type="none"/>
+                <children/>
+              </grid>
             </children>
           </scrollpane>
           <scrollpane id="5469f">
@@ -76,10 +85,13 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="62125" class="javax.swing.JTextArea" binding="enumTemplate1">
+              <grid id="43eef" binding="enum1TemplatePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints/>
                 <properties/>
-              </component>
+                <border type="none"/>
+                <children/>
+              </grid>
             </children>
           </scrollpane>
           <scrollpane id="6e207">
@@ -89,10 +101,13 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="e878c" class="javax.swing.JTextArea" binding="enumTemplate2">
+              <grid id="e6855" binding="enum2TemplatePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints/>
                 <properties/>
-              </component>
+                <border type="none"/>
+                <children/>
+              </grid>
             </children>
           </scrollpane>
         </children>

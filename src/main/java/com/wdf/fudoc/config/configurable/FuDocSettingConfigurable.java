@@ -2,6 +2,7 @@ package com.wdf.fudoc.config.configurable;
 
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.config.state.FuDocSetting;
 import com.wdf.fudoc.view.FuDocSettingForm;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -41,7 +42,7 @@ public class FuDocSettingConfigurable implements SearchableConfigurable {
      */
     @Override
     public @Nullable JComponent createComponent() {
-        fuDocSettingForm = new FuDocSettingForm(project);
+        fuDocSettingForm = new FuDocSettingForm(project, FuDocSetting.getSettingData(this.project));
         return fuDocSettingForm.getRoot();
     }
 
@@ -53,7 +54,6 @@ public class FuDocSettingConfigurable implements SearchableConfigurable {
     /**
      * 当点击配置完成时会粗发该方法
      * 一般主要用于将配置的信息实例化保存下来
-     *
      */
     @Override
     public void apply() {

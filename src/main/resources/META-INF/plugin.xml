@@ -50,7 +50,6 @@
                              displayName="General"
                              nonDefaultProject="true"/>
 
-
     </extensions>
 
     <actions>
@@ -59,7 +58,6 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
         </action>
-
     </actions>
 
 </idea-plugin>
