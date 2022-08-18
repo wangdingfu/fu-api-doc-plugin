@@ -77,7 +77,7 @@ public class FuDocAppStartUpListener implements StartupActivity, DumbAware {
                 instance.setTime(newTime);
                 instance.loadState(instance);
                 if (StringUtils.isNotBlank(message)) {
-                    FuDocNotification.notifyInfo("【Fu Doc】更新", message, project);
+                    FuDocNotification.notifyInfo(message, project);
                 }
             }
             LOGGER.info(result);

@@ -34,7 +34,7 @@ public class FuDocNotification {
         NOTIFICATION_GROUP.createNotification(message, NotificationType.ERROR).notify(FuDocDataContent.getProject());
     }
 
-    public static void notifyInfo(String title, String message, Project project) {
-        NOTIFICATION_GROUP.createNotification(title, message, NotificationType.INFORMATION).notify(project);
+    public static void notifyInfo( String message, Project project) {
+        NOTIFICATION_GROUP.createNotification( message, NotificationType.INFORMATION).notify(project);
     }
 }
