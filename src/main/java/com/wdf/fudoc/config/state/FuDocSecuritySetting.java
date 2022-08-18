@@ -4,17 +4,11 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.wdf.fudoc.data.CustomerSettingData;
-import com.wdf.fudoc.data.SettingData;
-import com.wdf.fudoc.util.ResourceUtils;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 
 /**
  * Fu Doc 存储配置内容
@@ -38,8 +32,8 @@ public class FuDocSecuritySetting implements PersistentStateComponent<FuDocSecur
 
 
 
-    public static FuDocSecuritySetting getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, FuDocSecuritySetting.class);
+    public static FuDocSecuritySetting getInstance() {
+        return ServiceManager.getService(FuDocSecuritySetting.class);
     }
 
 
