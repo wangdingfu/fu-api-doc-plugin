@@ -1,7 +1,10 @@
 package com.wdf.fudoc.view;
 
 import cn.hutool.json.JSONUtil;
+import com.intellij.ide.highlighter.XmlFileType;
+import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.common.FtlFileType;
 import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.util.FastJsonUtils;
@@ -88,14 +91,14 @@ public class FuDocSettingForm {
      * 当在配置页面点击apply或者OK时 会调用该方法 将页面编辑的内容持久化到文件中
      */
     public void apply() {
-//        String text = this.settings.getText();
-//        if (StringUtils.isNotBlank(text)) {
-//            this.settingData.setCustomerSettingData(JSONUtil.toBean(text, CustomerSettingData.class));
-//        }
-//        this.settingData.setFuDocTemplateValue();
-//        this.settingData.setObjectTemplateValue(this.objectTemplate.getText());
-//        this.settingData.setEnumTemplateValue1(this.enumTemplate1.getText());
-//        this.settingData.setEnumTemplateValue2(this.enumTemplate2.getText());
+        String content = this.settingEditorComponent.getContent();
+        if (StringUtils.isNotBlank(content)) {
+            this.settingData.setCustomerSettingData(JSONUtil.toBean(content, CustomerSettingData.class));
+        }
+        this.settingData.setFuDocTemplateValue(this.mainEditorComponent.getContent());
+        this.settingData.setObjectTemplateValue(this.objectEditorComponent.getContent());
+        this.settingData.setEnumTemplateValue1(this.enum1EditorComponent.getContent());
+        this.settingData.setEnumTemplateValue2(this.enum2EditorComponent.getContent());
     }
 
 
@@ -128,11 +131,11 @@ public class FuDocSettingForm {
 
     private void createUIComponents() {
         //初始化编辑器组件
-        this.mainEditorComponent = FuEditorComponent.create(this.project, null);
-        this.objectEditorComponent = FuEditorComponent.create(this.project, null);
-        this.enum1EditorComponent = FuEditorComponent.create(this.project, null);
-        this.enum2EditorComponent = FuEditorComponent.create(this.project, null);
-        this.settingEditorComponent = FuEditorComponent.create(this.project, null);
+        this.mainEditorComponent = FuEditorComponent.create(this.project, FtlFileType.INSTANCE, null);
+        this.objectEditorComponent = FuEditorComponent.create(this.project, FtlFileType.INSTANCE, null);
+        this.enum1EditorComponent = FuEditorComponent.create(this.project, FtlFileType.INSTANCE, null);
+        this.enum2EditorComponent = FuEditorComponent.create(this.project, FtlFileType.INSTANCE, null);
+        this.settingEditorComponent = FuEditorComponent.create(this.project, JsonFileType.INSTANCE, null);
 
         //初始化面板
         this.mainTemplatePanel = new JPanel(new BorderLayout());

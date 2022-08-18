@@ -3,19 +3,14 @@ package com.wdf.fudoc.view.components;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.editor.ex.EditorEx;
-import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.editor.impl.EditorImpl;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.ScrollPaneFactory;
@@ -23,8 +18,7 @@ import com.intellij.ui.SeparatorFactory;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.common.FuEditorSettings;
-import com.wdf.fudoc.data.FuDocDataContent;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.fudoc.factory.LightVirtualFileFactory;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -73,15 +67,25 @@ public class FuEditorComponent {
      */
     private boolean showDescription;
 
+    /**
+     * 当前项目
+     */
     private final Project project;
 
-    public FuEditorComponent(Project project, String content) {
-        this(project, content, null);
+    /**
+     * 指定当前编辑器显示那种类型的语言
+     */
+    private final LightVirtualFile lightVirtualFile;
+
+
+    public FuEditorComponent(Project project, FileType fileType, String content) {
+        this(project, fileType, content, null);
     }
 
-    public FuEditorComponent(Project project, String content, String description) {
+    public FuEditorComponent(Project project, FileType fileType, String content, String description) {
         this.project = project;
         this.content = content;
+        this.lightVirtualFile = LightVirtualFileFactory.create(fileType);
         if (Objects.nonNull(description)) {
             this.description = description;
             this.showDescription = true;
@@ -101,8 +105,8 @@ public class FuEditorComponent {
      * @param description 描述信息
      * @return 编辑器组件
      */
-    public static FuEditorComponent create(Project project, String content, String description) {
-        return new FuEditorComponent(project, content, description);
+    public static FuEditorComponent create(Project project, String content, FileType fileType, String description) {
+        return new FuEditorComponent(project, fileType, content, description);
     }
 
     /**
@@ -111,8 +115,8 @@ public class FuEditorComponent {
      * @param content 编辑器显示的内容
      * @return 编辑器组件
      */
-    public static FuEditorComponent create(Project project, String content) {
-        return new FuEditorComponent(project, content);
+    public static FuEditorComponent create(Project project, FileType fileType, String content) {
+        return new FuEditorComponent(project, fileType, content);
     }
 
 
@@ -122,7 +126,7 @@ public class FuEditorComponent {
     private void initEditor() {
         EditorFactory editorFactory = EditorFactory.getInstance();
         Document document = editorFactory.createDocument("");
-        this.editor = (EditorImpl)editorFactory.createEditor(document);
+        this.editor = (EditorImpl) editorFactory.createEditor(document);
         this.refreshUI();
         FuEditorSettings.defaultSetting(this.editor);
         // 添加监控事件
@@ -133,7 +137,8 @@ public class FuEditorComponent {
 
             @Override
             public void documentChanged(@NotNull DocumentEvent event) {
-                //修改了编辑器内容 editor.getDocument().getText()
+                //修改了编辑器内容
+                content = editor.getDocument().getText();
             }
         });
     }
@@ -189,13 +194,13 @@ public class FuEditorComponent {
             this.editor.setViewer(true);
             // 重置文本内容
             WriteCommandAction.runWriteCommandAction(this.project, () -> this.editor.getDocument().setText(""));
-            this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(this.project,new LightVirtualFile("aaa.ftl")));
+            this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(this.project, lightVirtualFile));
         } else {
             this.content = this.content.replaceAll("\r", "");
             this.editor.setViewer(false);
             // 重置文本内容
             WriteCommandAction.runWriteCommandAction(this.project, () -> this.editor.getDocument().setText(this.content));
-            this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(this.project, new LightVirtualFile("a.json")));
+            this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(this.project, lightVirtualFile));
         }
     }
 
