@@ -4,6 +4,7 @@ package com.wdf.fudoc.listener;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
@@ -34,8 +35,8 @@ public class FuDocAppStartUpListener implements StartupActivity, DumbAware {
 
     private static final String PRIMARY_KEY = "dfe68b77d54943fc8d481c6ae80a2a9d";
 
-    private static final String URL = "http://150.158.164.160:9090/fu_doc/version_info";
-//    private static final String URL = "http://localhost:9090/fu_doc/version_info";
+    //    private static final String URL = "http://150.158.164.160:9090/fu_doc_plugin/version";
+    private static final String URL = "http://localhost:9090/fu_doc_plugin/version";
 
     private static final int DAYS = 60 * 60 * 24 * 7;
     private static final int ONE_DAY = 60 * 60 * 24;
@@ -61,7 +62,7 @@ public class FuDocAppStartUpListener implements StartupActivity, DumbAware {
         //请求参数
         byte[] request = SecureUtil.aes(PRIMARY_KEY.getBytes()).encrypt(JSONUtil.toJsonStr(versionInfoDTO));
         try {
-            String result = HttpUtil.createPost(URL).body(request).timeout(3000).execute().body();
+            String result = HttpRequest.post(URL).timeout(3000).body(request).execute().body();
             if (StringUtils.isNotBlank(result)) {
                 CommonResult<VersionInfoVO> commonResult = JSONUtil.toBean(result, new TypeReference<>() {
                 }, true);
@@ -72,7 +73,7 @@ public class FuDocAppStartUpListener implements StartupActivity, DumbAware {
                     message = data.getMessage();
                     newTime = data.getTime();
                 }
-                instance.setUniqId(data.getUniqId());
+                instance.setUniqId(Objects.nonNull(data) ? data.getUniqId() : "");
                 instance.setTime(newTime);
                 instance.loadState(instance);
                 if (StringUtils.isNotBlank(message)) {
