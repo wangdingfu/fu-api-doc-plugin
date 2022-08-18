@@ -27,8 +27,6 @@ public class FuDocSettingForm {
     private JPanel root;
 
 
-    private JLabel title;
-
     /**
      * tab面板 用于挂载多个tab
      */
