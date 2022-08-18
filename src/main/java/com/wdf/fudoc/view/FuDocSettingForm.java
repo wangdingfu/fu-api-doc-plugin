@@ -4,7 +4,6 @@ import cn.hutool.json.JSONUtil;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.common.FtlFileType;
 import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.util.FastJsonUtils;
@@ -131,10 +130,10 @@ public class FuDocSettingForm {
 
     private void createUIComponents() {
         //初始化编辑器组件
-        this.mainEditorComponent = FuEditorComponent.create(this.project, FtlFileType.INSTANCE, null);
-        this.objectEditorComponent = FuEditorComponent.create(this.project, FtlFileType.INSTANCE, null);
-        this.enum1EditorComponent = FuEditorComponent.create(this.project, FtlFileType.INSTANCE, null);
-        this.enum2EditorComponent = FuEditorComponent.create(this.project, FtlFileType.INSTANCE, null);
+        this.mainEditorComponent = FuEditorComponent.create(this.project, XmlFileType.INSTANCE, null);
+        this.objectEditorComponent = FuEditorComponent.create(this.project, XmlFileType.INSTANCE, null);
+        this.enum1EditorComponent = FuEditorComponent.create(this.project, XmlFileType.INSTANCE, null);
+        this.enum2EditorComponent = FuEditorComponent.create(this.project, XmlFileType.INSTANCE, null);
         this.settingEditorComponent = FuEditorComponent.create(this.project, JsonFileType.INSTANCE, null);
 
         //初始化面板

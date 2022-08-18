@@ -5,7 +5,6 @@ import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.testFramework.LightVirtualFile;
-import com.wdf.fudoc.common.FtlFileType;
 
 import java.util.Objects;
 
@@ -28,16 +27,13 @@ public class LightVirtualFileFactory {
 
         if (Objects.nonNull(fileType)) {
             if (fileType instanceof XmlFileType) {
-                return new LightVirtualFile(FILE_NAME + XML_SUFFIX);
+                return new LightVirtualFile(FILE_NAME + FTL_SUFFIX);
             }
             if (fileType instanceof JavaFileType) {
                 return new LightVirtualFile(FILE_NAME + JAVA_SUFFIX);
             }
             if (fileType instanceof JsonFileType) {
                 return new LightVirtualFile(FILE_NAME + JSON_SUFFIX);
-            }
-            if (fileType instanceof FtlFileType) {
-                return new LightVirtualFile(FILE_NAME + FTL_SUFFIX);
             }
         }
         //默认返回vm类型

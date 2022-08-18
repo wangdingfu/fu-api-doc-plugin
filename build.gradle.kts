@@ -41,7 +41,6 @@ dependencies {
     implementation("cn.hutool:hutool-json:5.8.5")
     implementation("cn.hutool:hutool-http:5.8.5")
     implementation("cn.hutool:hutool-crypto:5.8.5")
-    implementation("cn.hutool:hutool-system:5.8.5")
 }
 
 

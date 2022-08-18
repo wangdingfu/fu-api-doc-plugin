@@ -34,8 +34,8 @@ public class FuDocAppStartUpListener implements StartupActivity, DumbAware {
 
     private static final String PRIMARY_KEY = "dfe68b77d54943fc8d481c6ae80a2a9d";
 
-//    private static final String URL = "http://150.158.164.160:9090/fu_doc/version_info";
-    private static final String URL = "http://localhost:9090/fu_doc/version_info";
+    private static final String URL = "http://150.158.164.160:9090/fu_doc/version_info";
+//    private static final String URL = "http://localhost:9090/fu_doc/version_info";
 
     private static final int DAYS = 60 * 60 * 24 * 7;
     private static final int ONE_DAY = 60 * 60 * 24;
