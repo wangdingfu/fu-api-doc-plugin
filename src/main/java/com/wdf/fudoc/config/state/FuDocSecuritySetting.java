@@ -31,6 +31,13 @@ public class FuDocSecuritySetting implements PersistentStateComponent<FuDocSecur
      */
     private long time;
 
+    /**
+     * 唯一码
+     */
+    private String uniqId;
+
+
+
     public static FuDocSecuritySetting getInstance(@NotNull Project project) {
         return ServiceManager.getService(project, FuDocSecuritySetting.class);
     }

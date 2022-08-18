@@ -22,8 +22,10 @@ public class LightVirtualFileFactory {
     private static final String FTL_SUFFIX = ".ftl";
     private static final String JSON_SUFFIX = ".json";
     private static final String VM_SUFFIX = ".java.vm";
+    private static final String MARKDOWN_SUFFIX = ".md";
 
     public static LightVirtualFile create(FileType fileType) {
+
         if (Objects.nonNull(fileType)) {
             if (fileType instanceof XmlFileType) {
                 return new LightVirtualFile(FILE_NAME + XML_SUFFIX);

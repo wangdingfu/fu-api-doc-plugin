@@ -11,6 +11,12 @@ import lombok.Setter;
 @Setter
 public class VersionInfoVO {
 
+
+    /**
+     * 唯一ID
+     */
+    private String uniqId;
+
     /**
      * 0:不通知
      * 1:通知

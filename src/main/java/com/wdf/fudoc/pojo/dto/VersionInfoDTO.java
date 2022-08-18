@@ -11,7 +11,14 @@ import lombok.Setter;
 @Setter
 public class VersionInfoDTO {
 
-    private String uid;
+    /**
+     * 唯一id
+     */
+    private String uniqId;
 
+    /**
+     * 插件版本
+     */
+    private String pluginVersion;
 
 }
