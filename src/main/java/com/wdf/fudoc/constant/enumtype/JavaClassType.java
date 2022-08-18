@@ -54,7 +54,10 @@ public enum JavaClassType {
             if (FuDocUtils.isController(psiClass)) {
                 return CONTROLLER;
             }
-            if (FuDocUtils.isDubbo(psiClass)) {
+            if(psiClass.isAnnotationType()){
+                return ANNOTATION;
+            }
+            if (psiClass.isInterface()) {
                 return INTERFACE;
             }
             if (FuDocUtils.isFeign(psiClass)) {

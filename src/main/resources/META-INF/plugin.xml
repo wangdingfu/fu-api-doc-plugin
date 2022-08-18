@@ -54,11 +54,19 @@
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
-        <action id="gen-api-doc" class="com.wdf.fudoc.action.GenFuDocAction" text="Fu Doc">
+
+        <group id="wdf.fudoc" popup="false" compact="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
-        </action>
+            <action id="gen-api-doc" class="com.wdf.fudoc.action.GenFuDocAction" text="Fu Doc">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
+            </action>
+
+            <action id="com.fudoc.toJson" class="com.wdf.fudoc.action.BeanToJsonAction" text="Bean to Json" description="Bean to json">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
+            </action>
+        </group>
+
+
     </actions>
 
 </idea-plugin>

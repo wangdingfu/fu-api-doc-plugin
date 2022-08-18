@@ -13,6 +13,7 @@ import com.wdf.fudoc.data.FuDocDataContent;
 import com.wdf.fudoc.factory.FuDocServiceFactory;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.service.FuDocService;
+import com.wdf.fudoc.service.GenObjectJsonServiceImpl;
 import com.wdf.fudoc.util.ClipboardUtil;
 import com.wdf.fudoc.util.PsiClassUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -21,24 +22,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/**
- * @author wangdingfu
- * @descption: 一键生成API接口文档入口类
- * @date 2022-04-16 18:53:05
- */
 @Slf4j
-public class GenFuDocAction extends AbstractClassAction {
+public class BeanToJsonAction extends AbstractClassAction {
+
 
     @Override
     protected boolean isShow(JavaClassType javaClassType) {
-        return !JavaClassType.ANNOTATION.equals(javaClassType);
+        return JavaClassType.OBJECT.equals(javaClassType);
     }
 
-    /**
-     * 点击按钮或按下快捷键触发生成API接口文档方法
-     *
-     * @param e 点击事件
-     */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         long start = System.currentTimeMillis();
@@ -57,27 +49,22 @@ public class GenFuDocAction extends AbstractClassAction {
             fuDocContext.setSettingData(FuDocSetting.getSettingData(Objects.requireNonNull(e.getProject())));
             fuDocContext.setTargetElement(targetElement);
 
-            FuDocService fuDocService = FuDocServiceFactory.getFuDocService(JavaClassType.get(psiClass));
-            if (Objects.nonNull(fuDocService)) {
-                String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
-                if (StringUtils.isBlank(content)) {
-                    //通知没有可以生成接口文档的内容
-                    FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.NOTIFY_GEN_NO_CONTENT, psiClass.getName()));
-                    return;
-                }
-                //将接口文档内容拷贝至剪贴板
-                ClipboardUtil.copyToClipboard(content);
-                log.info("生成接口文档【{}】完成. 共计耗时{}ms", psiClass.getName(), System.currentTimeMillis() - start);
-                //通知接口文档已经拷贝至剪贴板
-                FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_COPY_OK, psiClass.getName()));
+            FuDocService fuDocService = new GenObjectJsonServiceImpl();
+            String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
+            if (StringUtils.isBlank(content)) {
+                content = "{\n}";
             }
+            //将接口文档内容拷贝至剪贴板
+            ClipboardUtil.copyToClipboard(content);
+            log.info("【{}】--->【bean to json】完成. 共计耗时{}ms", psiClass.getName(), System.currentTimeMillis() - start);
+            //通知接口文档已经拷贝至剪贴板
+            FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_TO_JSON_OK, psiClass.getName()));
         } catch (Throwable exception) {
             //发送失败通知
-            log.error("【Fu Doc】解析生成接口文档失败", exception);
-            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.NOTIFY_GEN_FAIL));
+            log.error("【Fu Doc】--->【bean to json】失败", exception);
+            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.NOTIFY_TO_JSON_FAIL));
         } finally {
             FuDocDataContent.remove();
         }
-
     }
 }

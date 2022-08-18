@@ -23,7 +23,7 @@ import java.util.Objects;
  * @date 2022-08-06 01:17:22
  */
 @Data
-@State(name = "fuDocSetting", storages = {@Storage("fsp.xml")})
+@State(name = "fuDocSecuritySetting", storages = {@Storage("fsp.xml")})
 public class FuDocSecuritySetting implements PersistentStateComponent<FuDocSecuritySetting> {
 
     /**

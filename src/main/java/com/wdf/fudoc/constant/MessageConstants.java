@@ -14,11 +14,14 @@ public interface MessageConstants {
      */
     String NOTIFY_COPY_OK = "notify.copy.ok";
 
+    String NOTIFY_TO_JSON_OK = "notify.toJson.ok";
+
 
     /**
      * 通知生成接口文档失败
      */
     String NOTIFY_GEN_FAIL = "notify.gen.fail";
+    String NOTIFY_TO_JSON_FAIL = "notify.toJson.fail";
     /**
      * 没有内容可以生成
      */

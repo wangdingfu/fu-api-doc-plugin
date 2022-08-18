@@ -34,6 +34,7 @@ public class FuDocAppStartUpListener implements StartupActivity, DumbAware {
     private static final String URL = "http://localhost:9090/fu_doc/version_info";
 
     private static final int DAYS = 60 * 60 * 24 * 7;
+    private static final int ONE_DAY = 60 * 60 * 24;
 
     @Override
     public void runActivity(@NotNull Project project) {
@@ -55,18 +56,22 @@ public class FuDocAppStartUpListener implements StartupActivity, DumbAware {
                 CommonResult<VersionInfoVO> commonResult = JSONUtil.toBean(result, new TypeReference<>() {
                 }, true);
                 VersionInfoVO data = commonResult.getData();
-                if (Objects.nonNull(data) && data.getCode() == 1) {
-                    String message = data.getMessage();
-                    long newTime = data.getTime() == 0 ? (currentSeconds + DAYS) : data.getTime();
-                    instance.setTime(newTime);
-                    instance.loadState(instance);
-                    if (StringUtils.isNotBlank(message)) {
-                        FuDocNotification.notifyInfo(message);
-                    }
+                String message = null;
+                long newTime = currentSeconds + DAYS;
+                if (Objects.nonNull(data) && data.getCode() == 1 && data.getTime() > 0) {
+                    message = data.getMessage();
+                    newTime = data.getTime();
+                }
+                instance.setTime(newTime);
+                instance.loadState(instance);
+                if (StringUtils.isNotBlank(message)) {
+                    FuDocNotification.notifyInfo(message);
                 }
             }
             LOGGER.info(result);
         } catch (Exception e) {
+            instance.setTime(currentSeconds + ONE_DAY);
+            instance.loadState(instance);
             LOGGER.error("请求获取版本信息失败", e);
         }
     }
