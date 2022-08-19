@@ -24,7 +24,7 @@
 
         <!-- service -->
         <projectService serviceImplementation="com.wdf.fudoc.config.state.FuDocSetting"/>
-        <projectService serviceImplementation="com.wdf.fudoc.config.state.FuDocSecuritySetting"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.config.state.FuDocSecuritySetting"/>
         <!-- parse service -->
         <applicationService serviceImplementation="com.wdf.fudoc.parse.FuDocClassParserImpl"/>
 
