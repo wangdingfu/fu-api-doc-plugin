@@ -22,9 +22,6 @@ public class FuDocNotification {
         NOTIFICATION_GROUP.createNotification(message, NotificationType.WARNING).notify(FuDocDataContent.getProject());
     }
 
-    public static void notifyInfo(String title, String message) {
-        NOTIFICATION_GROUP.createNotification(title, message, NotificationType.INFORMATION).notify(FuDocDataContent.getProject());
-    }
 
     public static void notifyInfo(String message) {
         NOTIFICATION_GROUP.createNotification(message, NotificationType.INFORMATION).notify(FuDocDataContent.getProject());
