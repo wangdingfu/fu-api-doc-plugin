@@ -21,4 +21,15 @@ public class VersionInfoDTO {
      */
     private String pluginVersion;
 
+    /**
+     * 用户终端主机名
+     */
+    private String hostName;
+
+
+    /**
+     * 用户内网ip
+     */
+    private String hostAddress;
+
 }
