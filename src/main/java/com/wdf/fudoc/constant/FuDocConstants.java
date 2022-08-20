@@ -54,6 +54,7 @@ public interface FuDocConstants {
 
     interface Notify {
         String NOTIFY_GROUP = "com.wdf.fudoc.notification.group";
+        String NOTIFY_START_GROUP = "com.wdf.fudoc.notification.start.group";
     }
 
 
