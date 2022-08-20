@@ -23,17 +23,11 @@ public class FuDocGeneralConfigurable implements SearchableConfigurable {
      */
     private FuDocGeneralForm fuDocGeneralForm;
 
-    /**
-     * 标识项目
-     */
-    private final Project project;
-
 
     /**
      * 在xml中配置了ProjectConfigurable 系统会调用该方法
      */
-    public FuDocGeneralConfigurable(Project project) {
-        this.project = project;
+    public FuDocGeneralConfigurable() {
     }
 
     @Override
@@ -49,8 +43,8 @@ public class FuDocGeneralConfigurable implements SearchableConfigurable {
 
     @Override
     public @Nullable JComponent createComponent() {
-        CustomerSettingData customerSettingData = FuDocSetting.getSettingData(project).getCustomerSettingData();
-        fuDocGeneralForm = new FuDocGeneralForm(project, customerSettingData);
+        CustomerSettingData customerSettingData = FuDocSetting.getSettingData().getCustomerSettingData();
+        fuDocGeneralForm = new FuDocGeneralForm( customerSettingData);
         return fuDocGeneralForm.getRootPanel();
     }
 

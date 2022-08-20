@@ -19,6 +19,7 @@ import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.common.FuEditorSettings;
 import com.wdf.fudoc.factory.LightVirtualFileFactory;
+import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -68,22 +69,16 @@ public class FuEditorComponent {
     private boolean showDescription;
 
     /**
-     * 当前项目
-     */
-    private final Project project;
-
-    /**
      * 指定当前编辑器显示那种类型的语言
      */
     private final LightVirtualFile lightVirtualFile;
 
 
-    public FuEditorComponent(Project project, FileType fileType, String content) {
-        this(project, fileType, content, null);
+    public FuEditorComponent(FileType fileType, String content) {
+        this(fileType, content, null);
     }
 
-    public FuEditorComponent(Project project, FileType fileType, String content, String description) {
-        this.project = project;
+    public FuEditorComponent(FileType fileType, String content, String description) {
         this.content = content;
         this.lightVirtualFile = LightVirtualFileFactory.create(fileType);
         if (Objects.nonNull(description)) {
@@ -105,8 +100,8 @@ public class FuEditorComponent {
      * @param description 描述信息
      * @return 编辑器组件
      */
-    public static FuEditorComponent create(Project project, String content, FileType fileType, String description) {
-        return new FuEditorComponent(project, fileType, content, description);
+    public static FuEditorComponent create(String content, FileType fileType, String description) {
+        return new FuEditorComponent(fileType, content, description);
     }
 
     /**
@@ -115,8 +110,8 @@ public class FuEditorComponent {
      * @param content 编辑器显示的内容
      * @return 编辑器组件
      */
-    public static FuEditorComponent create(Project project, FileType fileType, String content) {
-        return new FuEditorComponent(project, fileType, content);
+    public static FuEditorComponent create(FileType fileType, String content) {
+        return new FuEditorComponent(fileType, content);
     }
 
 
@@ -189,18 +184,19 @@ public class FuEditorComponent {
 
 
     private void refreshUI() {
+        Project currProject = ProjectUtils.getCurrProject();
         EditorHighlighterFactory highlighterFactory = EditorHighlighterFactory.getInstance();
         if (StringUtils.isBlank(this.content)) {
             this.editor.setViewer(true);
             // 重置文本内容
-            WriteCommandAction.runWriteCommandAction(this.project, () -> this.editor.getDocument().setText(""));
-            this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(this.project, lightVirtualFile));
+            WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().setText(""));
+            this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(currProject, lightVirtualFile));
         } else {
             this.content = this.content.replaceAll("\r", "");
             this.editor.setViewer(false);
             // 重置文本内容
-            WriteCommandAction.runWriteCommandAction(this.project, () -> this.editor.getDocument().setText(this.content));
-            this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(this.project, lightVirtualFile));
+            WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().setText(this.content));
+            this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(currProject, lightVirtualFile));
         }
     }
 

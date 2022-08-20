@@ -1,6 +1,5 @@
 package com.wdf.fudoc.view;
 
-import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
@@ -40,7 +39,7 @@ public class FuDocGeneralForm {
     private final CustomerSettingData customerSettingData;
 
 
-    public FuDocGeneralForm(Project project, CustomerSettingData customerSettingData) {
+    public FuDocGeneralForm(CustomerSettingData customerSettingData) {
         this.customerSettingData = customerSettingData;
     }
 

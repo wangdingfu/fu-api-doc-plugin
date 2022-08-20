@@ -3,7 +3,6 @@ package com.wdf.fudoc.view;
 import cn.hutool.json.JSONUtil;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.json.JsonFileType;
-import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.util.FastJsonUtils;
@@ -31,12 +30,6 @@ public class FuDocSettingForm {
      * tab面板 用于挂载多个tab
      */
     private JTabbedPane tabPanel;
-
-
-    /**
-     * 当前项目
-     */
-    private final Project project;
 
     /**
      * 当前项目的配置信息
@@ -78,8 +71,7 @@ public class FuDocSettingForm {
     private FuEditorComponent enum2EditorComponent;
     private FuEditorComponent settingEditorComponent;
 
-    public FuDocSettingForm(Project project, SettingData settingData) {
-        this.project = project;
+    public FuDocSettingForm(SettingData settingData) {
         this.settingData = settingData;
     }
 
@@ -128,11 +120,11 @@ public class FuDocSettingForm {
 
     private void createUIComponents() {
         //初始化编辑器组件
-        this.mainEditorComponent = FuEditorComponent.create(this.project, XmlFileType.INSTANCE, null);
-        this.objectEditorComponent = FuEditorComponent.create(this.project, XmlFileType.INSTANCE, null);
-        this.enum1EditorComponent = FuEditorComponent.create(this.project, XmlFileType.INSTANCE, null);
-        this.enum2EditorComponent = FuEditorComponent.create(this.project, XmlFileType.INSTANCE, null);
-        this.settingEditorComponent = FuEditorComponent.create(this.project, JsonFileType.INSTANCE, null);
+        this.mainEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
+        this.objectEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
+        this.enum1EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
+        this.enum2EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
+        this.settingEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, null);
 
         //初始化面板
         this.mainTemplatePanel = new JPanel(new BorderLayout());

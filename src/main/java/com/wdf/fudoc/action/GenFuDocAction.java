@@ -54,7 +54,7 @@ public class GenFuDocAction extends AbstractClassAction {
 
         try {
             FuDocContext fuDocContext = new FuDocContext();
-            fuDocContext.setSettingData(FuDocSetting.getSettingData(Objects.requireNonNull(e.getProject())));
+            fuDocContext.setSettingData(FuDocSetting.getSettingData());
             fuDocContext.setTargetElement(targetElement);
 
             FuDocService fuDocService = FuDocServiceFactory.getFuDocService(JavaClassType.get(psiClass));

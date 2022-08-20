@@ -4,7 +4,6 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
@@ -32,31 +31,27 @@ public class FuDocSetting implements PersistentStateComponent<FuDocSetting> {
     private SettingData settingData;
 
 
-    public SettingData getSettingData() {
-        if (Objects.isNull(this.settingData)) {
-            this.settingData = new SettingData();
-        }
-        if (StringUtils.isBlank(this.settingData.getFuDocTemplateValue())) {
-            this.settingData.setFuDocTemplateValue(ResourceUtils.readResource("template/fu_doc.ftl"));
-        }
-        if (StringUtils.isBlank(this.settingData.getObjectTemplateValue())) {
-            this.settingData.setObjectTemplateValue(ResourceUtils.readResource("template/fu_doc_object.ftl"));
-        }
-        if (StringUtils.isBlank(this.settingData.getEnumTemplateValue1())) {
-            this.settingData.setEnumTemplateValue1(ResourceUtils.readResource("template/fu_doc_enum.ftl"));
-        }
-        if (StringUtils.isBlank(this.settingData.getEnumTemplateValue2())) {
-            this.settingData.setEnumTemplateValue2(ResourceUtils.readResource("template/fu_doc_enum_table.ftl"));
-        }
-        return this.settingData;
-    }
-
-    public static SettingData getSettingData(Project project) {
-        FuDocSetting fuDocSetting = getInstance(project);
+    public static SettingData getSettingData() {
+        FuDocSetting fuDocSetting = ServiceManager.getService(FuDocSetting.class);
         if (Objects.isNull(fuDocSetting)) {
             return new SettingData();
         }
-        SettingData settingData = fuDocSetting.getSettingData();
+        SettingData settingData = fuDocSetting.settingData;
+        if (Objects.isNull(settingData)) {
+            settingData = new SettingData();
+        }
+        if (StringUtils.isBlank(settingData.getFuDocTemplateValue())) {
+            settingData.setFuDocTemplateValue(ResourceUtils.readResource("template/fu_doc.ftl"));
+        }
+        if (StringUtils.isBlank(settingData.getObjectTemplateValue())) {
+            settingData.setObjectTemplateValue(ResourceUtils.readResource("template/fu_doc_object.ftl"));
+        }
+        if (StringUtils.isBlank(settingData.getEnumTemplateValue1())) {
+            settingData.setEnumTemplateValue1(ResourceUtils.readResource("template/fu_doc_enum.ftl"));
+        }
+        if (StringUtils.isBlank(settingData.getEnumTemplateValue2())) {
+            settingData.setEnumTemplateValue2(ResourceUtils.readResource("template/fu_doc_enum_table.ftl"));
+        }
         CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
         if (Objects.isNull(customerSettingData)) {
             customerSettingData = new CustomerSettingData();
@@ -64,11 +59,6 @@ public class FuDocSetting implements PersistentStateComponent<FuDocSetting> {
         }
         return settingData;
     }
-
-    public static FuDocSetting getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, FuDocSetting.class);
-    }
-
 
     @Override
     public @Nullable FuDocSetting getState() {

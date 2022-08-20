@@ -6,7 +6,6 @@ import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.StringWriter;
-import java.util.Locale;
 
 /**
  * @author wangdingfu

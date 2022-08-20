@@ -136,7 +136,7 @@ public class EnumParseHelper {
 
     private static EnumSettingConfig getEnumSetting() {
         EnumSettingConfig enumSettingConfig = new EnumSettingConfig();
-        SettingData settingData = FuDocSetting.getSettingData(FuDocDataContent.getProject());
+        SettingData settingData = FuDocSetting.getSettingData();
         CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
         if (Objects.isNull(customerSettingData)) {
             return enumSettingConfig;
