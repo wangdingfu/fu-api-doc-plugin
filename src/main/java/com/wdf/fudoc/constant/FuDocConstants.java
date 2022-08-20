@@ -1,8 +1,6 @@
 package com.wdf.fudoc.constant;
 
-import com.google.common.collect.Lists;
 
-import java.util.Vector;
 
 /**
  * @author wangdingfu
@@ -14,6 +12,8 @@ public interface FuDocConstants {
 
     String KEY = "key";
     String VALUE = "value";
+
+    String FU_DOC = "Fu Doc";
 
     interface AnnotationAttr {
         String MESSAGE = "message";
@@ -53,7 +53,7 @@ public interface FuDocConstants {
     }
 
     interface Notify {
-        String NOTIFY_GROUP = "fu_doc_notify_group";
+        String NOTIFY_GROUP = "com.wdf.fudoc.notification.group";
     }
 
 

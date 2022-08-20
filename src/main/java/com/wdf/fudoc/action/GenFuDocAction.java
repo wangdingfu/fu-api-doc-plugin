@@ -4,7 +4,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.FuDocMessageBundle;
-import com.wdf.fudoc.FuDocNotification;
+import com.wdf.fudoc.notification.FuDocNotification;
 import com.wdf.fudoc.config.state.FuDocSetting;
 import com.wdf.fudoc.constant.MessageConstants;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;

@@ -1,8 +1,12 @@
 package com.wdf.fudoc.view;
 
+import com.wdf.fudoc.common.CallbackAction;
+import com.wdf.fudoc.config.state.FuDocSetting;
 import com.wdf.fudoc.data.CustomerSettingData;
+import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
+import com.wdf.fudoc.helper.ServiceHelper;
 import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.view.components.FuTableComponent;
 import lombok.Getter;
@@ -16,6 +20,13 @@ import javax.swing.*;
  * @date 2022-08-14 21:31:11
  */
 public class FuDocGeneralForm {
+
+    private SettingData settingData;
+
+    /**
+     * 自定义持久化数据
+     */
+    private CustomerSettingData customerSettingData;
 
     /**
      * 根面板(当前配置页面所有的东西都会挂在这个根面板下)
@@ -33,34 +44,38 @@ public class FuDocGeneralForm {
      */
     private JPanel customDataPanel;
 
-    /**
-     * 自定义持久化数据
-     */
-    private final CustomerSettingData customerSettingData;
+    private FuTableComponent<FilterFieldBO> filterFuTableComponent;
+    private FuTableComponent<SettingDynamicValueData> customDataFuTableComponent;
 
 
-    public FuDocGeneralForm(CustomerSettingData customerSettingData) {
-        this.customerSettingData = customerSettingData;
+    public FuDocGeneralForm() {
     }
-
 
     /**
      * 系统会自动调用该方法来完成自定义panel的创建
      */
     private void createUIComponents() {
+        this.settingData = FuDocSetting.getSettingData();
+        //持久化数据对象
+        this.customerSettingData = this.settingData.getCustomerSettingData();
         //创建过滤属性面板
-        this.filterPanel = FuTableComponent.create(FuTableColumnFactory.filterColumns(), customerSettingData.getSettings_filter_field(), FilterFieldBO.class);
+        this.filterFuTableComponent = FuTableComponent.create(FuTableColumnFactory.filterColumns(), customerSettingData.getSettings_filter_field(), FilterFieldBO.class);
+        this.filterPanel = this.filterFuTableComponent.createPanel();
+
         //创建自定义数据面板
-        this.customDataPanel = FuTableComponent.create(FuTableColumnFactory.dynamicColumns(), customerSettingData.getSetting_customer_value(), SettingDynamicValueData.class);
+        this.customDataFuTableComponent = FuTableComponent.create(FuTableColumnFactory.dynamicColumns(), customerSettingData.getSetting_customer_value(), SettingDynamicValueData.class);
+        this.customDataPanel = this.customDataFuTableComponent.createPanel();
     }
-
-
 
 
     /**
      * 当在配置页面点击apply或者OK时 会调用该方法 将页面编辑的内容持久化到文件中
      */
     public void apply() {
+        this.customerSettingData.setSettings_filter_field(this.filterFuTableComponent.getDataList());
+        this.customerSettingData.setSetting_customer_value(this.customDataFuTableComponent.getDataList());
+        this.settingData.setCustomerSettingData(this.customerSettingData);
+        FuDocSetting.getInstance().loadState(this.settingData);
     }
 
 

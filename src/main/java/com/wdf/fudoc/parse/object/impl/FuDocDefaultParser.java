@@ -2,6 +2,7 @@ package com.wdf.fudoc.parse.object.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.fudoc.constant.CommonObjectNames;
@@ -22,10 +23,7 @@ import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author wangdingfu
@@ -106,16 +104,10 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
         List<ObjectInfoDesc> childList = Lists.newArrayList();
         if (Objects.nonNull(psiType) && psiType.isValid() && PsiClassUtils.isClass(psiClass) && !CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
             FuDocContext fuDocContext = parseObjectBO.getFuDocContext();
-            Map<String, String> filterMap = fuDocContext.getFilterMap();
-            String fields = filterMap.get(psiClass.getQualifiedName());
-            if (Objects.nonNull(fields) && StringUtils.EMPTY.equals(fields)) {
-                //没有配置属性 则代表不解析当前类
-                return childList;
-            }
-            List<String> fieldNameList = Lists.newArrayList(Objects.isNull(fields) ? new String[]{} : StringUtils.split(fields, ","));
+            Set<String> filterFieldNames = getNeedFilterFieldNames(fuDocContext.getFilterMap(), psiClass);
             //遍历当前类的所有字段（包含父类）
             for (PsiField psiField : psiClass.getAllFields()) {
-                if (fieldNameList.contains(psiField.getName()) || fieldIsIgnore(psiField, parseObjectBO)) {
+                if (filterFieldNames.contains(psiField.getName()) || fieldIsIgnore(psiField, parseObjectBO)) {
                     //如果属性在过滤列表里 则标识该属性呗过滤掉了
                     continue;
                 }
@@ -125,6 +117,26 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             childList.removeAll(Collections.singleton(null));
         }
         return childList;
+    }
+
+
+    /**
+     * 获取当前类中需要排除的字段集合（会遍历父类去查找父类需要过滤的字段）
+     *
+     * @param filterMap 配置页面配置的需要过滤的属性集合
+     * @param psiClass  当前解析的类
+     * @return 当前解析的类需要过滤的字段集合
+     */
+    private Set<String> getNeedFilterFieldNames(Map<String, String> filterMap, PsiClass psiClass) {
+        Set<String> filterFieldNames = new HashSet<>();
+        if (Objects.isNull(psiClass) || CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
+            return filterFieldNames;
+        }
+        String qualifiedName = psiClass.getQualifiedName();
+        String fieldNames = filterMap.get(qualifiedName);
+        filterFieldNames.addAll(Sets.newHashSet(Objects.isNull(fieldNames) ? new String[]{} : StringUtils.split(fieldNames, ",")));
+        filterFieldNames.addAll(getNeedFilterFieldNames(filterMap, psiClass.getSuperClass()));
+        return filterFieldNames;
     }
 
 

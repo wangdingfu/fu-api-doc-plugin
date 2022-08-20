@@ -1,7 +1,9 @@
-package com.wdf.fudoc.pojo.dto;
+package com.wdf.fudoc.start.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * @author wangdingfu
@@ -32,5 +34,22 @@ public class VersionInfoVO {
      * 通知消息
      */
     private String message;
+
+
+    /**
+     * 提示标题
+     */
+    private String tipTitle;
+
+    /**
+     * 提示内容
+     */
+    private String tipContent;
+
+    /**
+     * 行为集合
+     */
+    private List<NotificationActionDTO> actionList;
+
 
 }

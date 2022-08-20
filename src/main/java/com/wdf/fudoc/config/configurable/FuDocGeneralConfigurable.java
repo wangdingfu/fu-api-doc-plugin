@@ -43,8 +43,7 @@ public class FuDocGeneralConfigurable implements SearchableConfigurable {
 
     @Override
     public @Nullable JComponent createComponent() {
-        CustomerSettingData customerSettingData = FuDocSetting.getSettingData().getCustomerSettingData();
-        fuDocGeneralForm = new FuDocGeneralForm( customerSettingData);
+        fuDocGeneralForm = new FuDocGeneralForm();
         return fuDocGeneralForm.getRootPanel();
     }
 

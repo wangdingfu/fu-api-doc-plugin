@@ -1,4 +1,4 @@
-package com.wdf.fudoc.pojo.dto;
+package com.wdf.fudoc.start.dto;
 
 import lombok.Getter;
 import lombok.Setter;

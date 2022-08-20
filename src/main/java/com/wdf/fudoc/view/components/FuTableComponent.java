@@ -5,6 +5,7 @@ import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
 import com.wdf.fudoc.view.bo.Column;
+import lombok.Getter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +27,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * table数据集合
      */
+    @Getter
     private List<T> dataList;
 
     /**
@@ -125,8 +127,8 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      * @param clazz      table数据class
      * @return 一个已经渲染好了table数据面板 可用于挂在在根面板上直接显示
      */
-    public static <T> JPanel create(List<Column<T>> columnList, List<T> dataList, Class<T> clazz) {
-        return new FuTableComponent<>(columnList, dataList, clazz).createPanel();
+    public static <T> FuTableComponent<T> create(List<Column<T>> columnList, List<T> dataList, Class<T> clazz) {
+        return new FuTableComponent<>(columnList, dataList, clazz);
     }
 
     /**

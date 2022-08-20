@@ -7,8 +7,10 @@ import com.wdf.fudoc.pojo.bo.SettingEnumBO;
 import com.wdf.fudoc.pojo.bo.SettingValidBO;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 自定义配置数据
@@ -38,5 +40,13 @@ public class CustomerSettingData {
      * 枚举相关配置
      */
     private SettingEnumBO setting_enum = new SettingEnumBO();
+
+
+    public CustomerSettingData defaultValue() {
+        if (Objects.isNull(this.settings_filter_field)) {
+            this.settings_filter_field = Lists.newArrayList(DefaultConfig.DEFAULT_FILTER_FIELD_LIST);
+        }
+        return this;
+    }
 
 }

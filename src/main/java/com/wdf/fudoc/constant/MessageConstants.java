@@ -9,6 +9,14 @@ public interface MessageConstants {
 
     String MESSAGE_BUNDLE = "messages.MyBundle";
 
+
+    String FU_DOC = "fudoc";
+
+
+    String READ_DOC_ACTION = "fudoc.document.action";
+    String FAQ_ACTION = "fudoc.faq.action";
+    String STAR_ACTION = "fudoc.star.action";
+
     /**
      * 通知拷贝消息至剪贴板成功的key
      */
