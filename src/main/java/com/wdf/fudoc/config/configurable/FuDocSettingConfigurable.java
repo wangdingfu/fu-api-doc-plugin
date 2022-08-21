@@ -1,6 +1,7 @@
 package com.wdf.fudoc.config.configurable;
 
 import com.intellij.openapi.options.SearchableConfigurable;
+import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.config.state.FuDocSetting;
 import com.wdf.fudoc.view.FuDocSettingForm;
 import org.jetbrains.annotations.Nls;
@@ -19,8 +20,10 @@ public class FuDocSettingConfigurable implements SearchableConfigurable {
 
     private FuDocSettingForm fuDocSettingForm;
 
-    public FuDocSettingConfigurable() {
+    private final Project project;
 
+    public FuDocSettingConfigurable(Project project) {
+        this.project = project;
     }
 
     @Override
@@ -39,8 +42,8 @@ public class FuDocSettingConfigurable implements SearchableConfigurable {
      */
     @Override
     public @Nullable JComponent createComponent() {
-        fuDocSettingForm = new FuDocSettingForm(FuDocSetting.getSettingData());
-        return fuDocSettingForm.getRoot();
+        fuDocSettingForm = new FuDocSettingForm(this.project, FuDocSetting.getSettingData());
+        return fuDocSettingForm.createCenterPanel();
     }
 
     @Override

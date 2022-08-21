@@ -3,12 +3,15 @@ package com.wdf.fudoc.view;
 import cn.hutool.json.JSONUtil;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.json.JsonFileType;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.util.FastJsonUtils;
 import com.wdf.fudoc.view.components.FuEditorComponent;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +22,7 @@ import java.util.Objects;
  * @date 2022-08-06 00:51:36
  */
 @Getter
-public class FuDocSettingForm {
+public class FuDocSettingForm extends DialogWrapper {
     /**
      * 根节点面板
      */
@@ -71,10 +74,15 @@ public class FuDocSettingForm {
     private FuEditorComponent enum2EditorComponent;
     private FuEditorComponent settingEditorComponent;
 
-    public FuDocSettingForm(SettingData settingData) {
+    public FuDocSettingForm(Project project, SettingData settingData) {
+        super(project, true, IdeModalityType.PROJECT);
         this.settingData = settingData;
     }
 
+    @Override
+    public @Nullable JComponent createCenterPanel() {
+        return this.root;
+    }
 
     /**
      * 当在配置页面点击apply或者OK时 会调用该方法 将页面编辑的内容持久化到文件中
@@ -140,4 +148,5 @@ public class FuDocSettingForm {
         this.enum2TemplatePanel.add(this.enum2EditorComponent.getMainPanel());
         this.settingPanel.add(this.settingEditorComponent.getMainPanel());
     }
+
 }
