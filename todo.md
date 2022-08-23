@@ -16,17 +16,19 @@
 
 - 支持针对一个普通java类解析字段(`已完成`)
 
-# 20220722
-
-- 支持对枚举生成接口文档
-```
-((PsiFieldImpl)((PsiEnumConstantImpl)psiClass.getFields()[0]).getArgumentList().getExpressions()[0].getReference().resolve()).getText()
 
 
-((PsiBinaryExpressionImpl)((PsiEnumConstantImpl)psiClass.getFields()[0]).getArgumentList().getExpressions()[0]).getOperands()
+# 1.2.5
+1、新增基础配置页面. 支持配置需要过滤的类和属性 支持配置自定义数据
+2、工程瘦身. 移除fastJson依赖和HuTools不需要的依赖
+3、支持自定义枚举相关配置、校验注解相关配置
+4、支持@JsonIgnore注解、支持@JsonProperty注解
+5、支持新版本消息提示
+6、新增编辑器组件 支持模板、json内容语法高亮展示
+7、新增bean转换为json对象
+8、支持配置内容为应用级别. 不用每一个项目配置一遍
+9、相关bug修复
 
-#解析@link
-((PsiJavaCodeReferenceElementImpl)((PsiInlineDocTagImpl)psiDocComment.getDescriptionElements()[4]).getDataElements()[1].getChildren()[0]).getReference().resolve()
 
-psiDocComment.findTagByName("see").getDataElements()[0].getChildren()[0].getReference().resolve()
-```
+# 1.3.0
+1、支持多controller生成

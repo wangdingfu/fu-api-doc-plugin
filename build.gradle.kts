@@ -34,13 +34,14 @@ dependencies {
     //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    implementation("org.projectlombok:lombok:1.18.20")
     compileOnly("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
-    implementation("com.alibaba:fastjson:1.2.58")
     implementation("org.freemarker:freemarker:2.3.31")
-    implementation("cn.hutool:hutool-all:5.4.2")
+    implementation("cn.hutool:hutool-json:5.8.5")
+    implementation("cn.hutool:hutool-http:5.8.5")
+    implementation("cn.hutool:hutool-crypto:5.8.5")
+    implementation("cn.hutool:hutool-system:5.8.5")
 }
 
 
@@ -49,6 +50,9 @@ intellij {
     pluginName.set(properties("pluginName"))
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
+
+    //沙箱目录位置，用于保存IDEA的设置，默认在build文件下面，防止clean，放在根目录下。
+    sandboxDir.set("${rootProject.rootDir}/idea-sandbox")
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))

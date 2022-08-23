@@ -1,6 +1,7 @@
 package com.wdf.fudoc.pojo.bo;
 
 import com.intellij.psi.PsiType;
+import com.wdf.fudoc.constant.enumtype.ParamType;
 import com.wdf.fudoc.parse.field.FuDocField;
 import com.wdf.fudoc.pojo.context.FuDocContext;
 import lombok.Getter;
@@ -13,12 +14,15 @@ import java.util.Map;
 /**
  * @author wangdingfu
  * @description 解析对象的父级对象信息bo
- * @Date 2022-04-18 20:58:23
+ * @date 2022-04-18 20:58:23
  */
 @Getter
 @Setter
 public class ParseObjectBO {
 
+    /**
+     * 根节点ID
+     */
     private Integer rootId;
     /**
      * 上下文对象
@@ -34,6 +38,11 @@ public class ParseObjectBO {
      * 泛型map
      */
     private Map<String, PsiType> genericsMap;
+
+    /**
+     * 参数类型 标识当前解析的参数是请求参数还是响应参数
+     */
+    private ParamType paramType;
 
 
     public PsiType getPsiType(String generics) {

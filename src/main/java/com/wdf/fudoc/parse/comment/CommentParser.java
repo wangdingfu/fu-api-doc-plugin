@@ -6,7 +6,7 @@ import com.wdf.fudoc.pojo.data.ApiDocCommentData;
 /**
  * @author wangdingfu
  * @Descption java注释解析器
- * @Date 2022-04-21 21:06:33
+ * @date 2022-04-21 21:06:33
  */
 public interface CommentParser {
 

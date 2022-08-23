@@ -4,7 +4,10 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.assemble.handler.ParamValueExecutor;
 import com.wdf.fudoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.constant.enumtype.RequestType;
+import com.wdf.fudoc.data.SettingData;
+import com.wdf.fudoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.helper.AssembleHelper;
+import com.wdf.fudoc.helper.CustomerValueHelper;
 import com.wdf.fudoc.helper.MockDataHelper;
 import com.wdf.fudoc.pojo.bo.AssembleBO;
 import com.wdf.fudoc.pojo.context.FuDocContext;
@@ -95,6 +98,10 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
             //mock返回结果数据
             fuDocItemData.setResponseExample(MockDataHelper.mockJsonData(Lists.newArrayList(response)));
         }
+
+        //组装扩展数据
+        fuDocItemData.setFudoc(CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext));
+
     }
 
 }

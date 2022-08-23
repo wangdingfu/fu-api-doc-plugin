@@ -9,16 +9,27 @@ public interface MessageConstants {
 
     String MESSAGE_BUNDLE = "messages.MyBundle";
 
+
+    String FU_DOC = "fudoc";
+
+
+    String READ_DOC_ACTION = "fudoc.document.action";
+    String FAQ_ACTION = "fudoc.faq.action";
+    String STAR_ACTION = "fudoc.star.action";
+
     /**
      * 通知拷贝消息至剪贴板成功的key
      */
     String NOTIFY_COPY_OK = "notify.copy.ok";
+
+    String NOTIFY_TO_JSON_OK = "notify.toJson.ok";
 
 
     /**
      * 通知生成接口文档失败
      */
     String NOTIFY_GEN_FAIL = "notify.gen.fail";
+    String NOTIFY_TO_JSON_FAIL = "notify.toJson.fail";
     /**
      * 没有内容可以生成
      */
@@ -29,4 +40,5 @@ public interface MessageConstants {
      * 通知无法获取到类
      */
     String NOTIFY_NOT_FUND_CLASS = "notify.not.fund.class";
+
 }

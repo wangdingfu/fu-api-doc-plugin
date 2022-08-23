@@ -5,7 +5,7 @@ import com.intellij.psi.PsiAnnotation;
 /**
  * @author wangdingfu
  * @Descption
- * @Date 2022-04-28 22:18:28
+ * @date 2022-04-28 22:18:28
  */
 public interface FuDocField {
 

@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * @author wangdingfu
  * @Descption 请求类型
- * @Date 2022-04-27 21:50:46
+ * @date 2022-04-27 21:50:46
  */
 @Getter
 public enum RequestType {

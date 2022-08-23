@@ -17,7 +17,7 @@ import java.util.Date;
 /**
  * @author wangdingfu
  * @Descption 数组类型
- * @Date 2022-05-24 22:45:59
+ * @date 2022-05-24 22:45:59
  */
 @Getter
 public enum FuDocArrayType {

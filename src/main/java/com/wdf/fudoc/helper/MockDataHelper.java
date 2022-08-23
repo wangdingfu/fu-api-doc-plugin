@@ -1,6 +1,6 @@
 package com.wdf.fudoc.helper;
 
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.json.JSONObject;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.constant.AnnotationConstants;
 import com.wdf.fudoc.constant.enumtype.FuDocObjectType;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * @author wangdingfu
  * @Descption mock数据帮助类
- * @Date 2022-06-13 10:13:54
+ * @date 2022-06-13 10:13:54
  */
 public class MockDataHelper {
 

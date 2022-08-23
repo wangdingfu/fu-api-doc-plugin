@@ -52,7 +52,7 @@ public class FuDocParamData {
     /**
      * 扩展信息
      */
-    private Map<String, Object> extInfo;
+    private Map<String, Object> fudoc;
 
 
 }

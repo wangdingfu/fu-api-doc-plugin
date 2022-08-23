@@ -3,7 +3,7 @@ package com.wdf.fudoc.constant;
 /**
  * @author wangdingfu
  * @Descption 注解常量
- * @Date 2022-05-10 21:23:58
+ * @date 2022-05-10 21:23:58
  */
 public interface AnnotationConstants {
 

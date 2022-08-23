@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * @author wangdingfu
  * @Descption 注解工具类
- * @Date 2022-05-10 21:20:12
+ * @date 2022-05-10 21:20:12
  */
 public class AnnotationUtils {
 
@@ -45,23 +45,31 @@ public class AnnotationUtils {
         Map<String, AnnotationData> annotationDataMap = new HashMap<>();
         if (Objects.nonNull(psiAnnotations)) {
             for (PsiAnnotation psiAnnotation : psiAnnotations) {
-                String qualifiedName = psiAnnotation.getQualifiedName();
-                AnnotationData annotationData = new AnnotationData();
-                annotationData.setQualifiedName(qualifiedName);
-                annotationData.setPsiAnnotation(psiAnnotation);
-                List<JvmAnnotationAttribute> attributes = psiAnnotation.getAttributes();
-                if (CollectionUtils.isNotEmpty(attributes)) {
-                    for (JvmAnnotationAttribute attribute : attributes) {
-                        AnnotationValueData annotationValueData = convert(attribute.getAttributeValue());
-                        if (Objects.nonNull(annotationValueData)) {
-                            annotationData.addAttr(attribute.getAttributeName(), annotationValueData);
-                        }
-                    }
-                }
-                annotationDataMap.put(qualifiedName, annotationData);
+                annotationDataMap.put(psiAnnotation.getQualifiedName(), parse(psiAnnotation));
             }
         }
         return annotationDataMap;
+    }
+
+
+    public static AnnotationData parse(PsiAnnotation psiAnnotation) {
+        if (Objects.isNull(psiAnnotation)) {
+            return null;
+        }
+        String qualifiedName = psiAnnotation.getQualifiedName();
+        AnnotationData annotationData = new AnnotationData();
+        annotationData.setQualifiedName(qualifiedName);
+        annotationData.setPsiAnnotation(psiAnnotation);
+        List<JvmAnnotationAttribute> attributes = psiAnnotation.getAttributes();
+        if (CollectionUtils.isNotEmpty(attributes)) {
+            for (JvmAnnotationAttribute attribute : attributes) {
+                AnnotationValueData annotationValueData = convert(attribute.getAttributeValue());
+                if (Objects.nonNull(annotationValueData)) {
+                    annotationData.addAttr(attribute.getAttributeName(), annotationValueData);
+                }
+            }
+        }
+        return annotationData;
     }
 
 
@@ -91,7 +99,7 @@ public class AnnotationUtils {
 
 
     private static AnnotationEnumValueData convertEnum(JvmAnnotationEnumFieldValue enumFieldValue) {
-        return new AnnotationEnumValueData(AnnotationValueType.ENUM);
+        return new AnnotationEnumValueData(AnnotationValueType.ENUM, enumFieldValue);
     }
 
     private static AnnotationClassValueData convertClass(JvmAnnotationClassValue classValue) {

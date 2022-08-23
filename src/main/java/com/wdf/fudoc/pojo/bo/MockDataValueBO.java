@@ -8,7 +8,7 @@ import lombok.Setter;
 /**
  * @author wangdingfu
  * @Descption mock 数据值对象
- * @Date 2022-05-18 21:46:58
+ * @date 2022-05-18 21:46:58
  */
 @Getter
 @Setter

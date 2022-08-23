@@ -1,5 +1,7 @@
 package com.wdf.fudoc.constant;
 
+
+
 /**
  * @author wangdingfu
  * @descption: 类型常量
@@ -10,6 +12,8 @@ public interface FuDocConstants {
 
     String KEY = "key";
     String VALUE = "value";
+
+    String FU_DOC = "Fu Doc";
 
     interface AnnotationAttr {
         String MESSAGE = "message";
@@ -49,7 +53,8 @@ public interface FuDocConstants {
     }
 
     interface Notify {
-        String NOTIFY_GROUP = "fu_doc_notify_group";
+        String NOTIFY_GROUP = "com.wdf.fudoc.notification.group";
+        String NOTIFY_START_GROUP = "com.wdf.fudoc.notification.start.group";
     }
 
 
@@ -69,6 +74,8 @@ public interface FuDocConstants {
          * psi中描述注释内容的类型
          */
         String PSI_COMMENT_DATA = "DOC_COMMENT_DATA";
+        String PSI_COMMENT_TAG_VALUE = "DOC_TAG_VALUE_ELEMENT";
+        String PSI_PARAMETER_REF = "DOC_PARAMETER_REF";
 
 
         String COMMENT_START_1 = "/*";
@@ -87,6 +94,11 @@ public interface FuDocConstants {
         String MSG_MESSAGE = "message";
         String MSG_VIEW = "view";
         String MSG_DESC = "desc";
+    }
+
+
+    interface SettingForm{
+
     }
 
 }

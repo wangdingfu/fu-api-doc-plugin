@@ -1,9 +1,10 @@
 package com.wdf.fudoc.constant.enumtype;
 
 /**
- * @Author wangdingfu
- * @Description 参数值类型
- * @Date 2022-06-17 21:16:19
+ * 参数值类型
+ *
+ * @author wangdingfu
+ * @date 2022-06-17 21:16:19
  */
 public enum ParamValueType {
 
@@ -16,8 +17,6 @@ public enum ParamValueType {
 
     PARAM_REQUIRE,
     PARAM_TYPE_VIEW,
-
-
 
 
 }

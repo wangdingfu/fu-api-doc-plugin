@@ -5,9 +5,8 @@ import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 
 /**
- * @Author wangdingfu
- * @Description
- * @Date 2022-06-18 22:45:30
+ * @author wangdingfu
+ * @date 2022-06-18 22:45:30
  */
 public abstract class BaseParamFieldValueHandler implements ParamValueHandler {
 

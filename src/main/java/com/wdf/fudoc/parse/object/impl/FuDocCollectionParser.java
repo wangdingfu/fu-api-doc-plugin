@@ -20,7 +20,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @description 集合解析器
- * @Date 2022-04-18 21:33:19
+ * @date 2022-04-18 21:33:19
  */
 public class FuDocCollectionParser extends AbstractApiDocObjectParser {
 
@@ -81,6 +81,7 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
             //非基本数据类型和常用对象类型 需要深度解析
             genericsParseObjectBO.setGenericsMap(parseObjectBO.getGenericsMap());
             genericsParseObjectBO.setRootId(parseObjectBO.getRootId());
+            genericsParseObjectBO.setParamType(parseObjectBO.getParamType());
             genericsInfoDesc = ObjectParserExecutor.execute(genericsType, genericsParseObjectBO);
             if (Objects.nonNull(genericsInfoDesc)) {
                 //将泛型对象的字段集合设置到当前apiDoc中

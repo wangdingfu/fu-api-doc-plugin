@@ -6,9 +6,9 @@ import com.wdf.fudoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 
 /**
- * @Author wangdingfu
+ * @author wangdingfu
  * @Description 参数名称获取接口实现
- * @Date 2022-06-18 22:37:09
+ * @date 2022-06-18 22:37:09
  */
 public class ParamNameValueHandler extends BaseParamFieldValueHandler {
 

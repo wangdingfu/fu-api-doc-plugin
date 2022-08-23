@@ -1,6 +1,6 @@
 package com.wdf.fudoc.pojo.desc;
 
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.json.JSONObject;
 import com.wdf.fudoc.constant.enumtype.FuDocObjectType;
 import lombok.Getter;
 import lombok.Setter;
@@ -71,7 +71,7 @@ public class ObjectInfoDesc extends BaseInfoDesc {
         if (Objects.isNull(this.extInfo)) {
             this.extInfo = new JSONObject();
         }
-        this.extInfo.put(name, value);
+        this.extInfo.putOpt(name, value);
     }
 
 
@@ -79,7 +79,7 @@ public class ObjectInfoDesc extends BaseInfoDesc {
         if (Objects.isNull(this.extInfo)) {
             return null;
         }
-        return this.extInfo.getObject(name, clazz);
+        return this.extInfo.get(name, clazz);
     }
 
     public boolean getBooleanValue(String name) {

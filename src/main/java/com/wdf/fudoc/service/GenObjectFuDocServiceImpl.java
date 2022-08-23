@@ -5,6 +5,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.wdf.fudoc.FuDocRender;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
+import com.wdf.fudoc.constant.enumtype.ParamType;
 import com.wdf.fudoc.helper.AssembleHelper;
 import com.wdf.fudoc.parse.ObjectParserExecutor;
 import com.wdf.fudoc.parse.field.FuDocPsiField;
@@ -29,6 +30,7 @@ public class GenObjectFuDocServiceImpl implements FuDocService {
         //解析对象参数
         for (PsiField psiField : psiClass.getAllFields()) {
             parseObjectBO.setFuDocField(new FuDocPsiField(psiField));
+            parseObjectBO.setParamType(ParamType.NONE);
             fieldList.add(ObjectParserExecutor.execute(psiField.getType(), parseObjectBO));
         }
 
@@ -36,6 +38,6 @@ public class GenObjectFuDocServiceImpl implements FuDocService {
         List<FuDocParamData> fuDocParamData = AssembleHelper.assembleParamData(fuDocContext, fieldList, null);
 
         //将接口文档数据渲染成markdown格式接口文档
-        return FuDocRender.paramRender(fuDocParamData);
+        return FuDocRender.paramRender(fuDocParamData,fuDocContext.getSettingData());
     }
 }

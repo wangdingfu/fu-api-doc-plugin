@@ -7,7 +7,7 @@ import com.wdf.fudoc.pojo.desc.ObjectInfoDesc;
 /**
  * @author wangdingfu
  * @Descption 构建ObjectInfoDesc的工厂类
- * @Date 2022-06-07 15:52:42
+ * @date 2022-06-07 15:52:42
  */
 public class ObjectInfoDescFactory {
 

@@ -22,7 +22,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @description map对象解析器
- * @Date 2022-04-18 21:33:58
+ * @date 2022-04-18 21:33:58
  */
 public class FuDocMapParser extends AbstractApiDocObjectParser {
     @Override
@@ -60,6 +60,7 @@ public class FuDocMapParser extends AbstractApiDocObjectParser {
         ParseObjectBO genericParseObjectBO = new ParseObjectBO(parseObjectBO.getFuDocContext());
         genericParseObjectBO.setFuDocField(new FuDocCustomerField(name, comment));
         genericParseObjectBO.setRootId(parseObjectBO.getRootId());
+        genericParseObjectBO.setParamType(parseObjectBO.getParamType());
         return ObjectParserExecutor.execute(psiType, genericParseObjectBO);
     }
 

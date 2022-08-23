@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * @author wangdingfu
  * @Descption 注解数组类型值对象
- * @Date 2022-06-27 20:46:04
+ * @date 2022-06-27 20:46:04
  */
 @Getter
 @Setter

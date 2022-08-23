@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * @author wangdingfu
  * @Descption 对象工具类
- * @Date 2022-05-31 11:10:26
+ * @date 2022-05-31 11:10:26
  */
 public class ObjectUtils {
 

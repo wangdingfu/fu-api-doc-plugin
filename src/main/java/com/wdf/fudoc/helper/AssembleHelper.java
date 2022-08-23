@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * @author wangdingfu
  * @Descption 组装接口文档帮助类
- * @Date 2022-06-23 21:23:01
+ * @date 2022-06-23 21:23:01
  */
 public class AssembleHelper {
 
@@ -45,6 +45,7 @@ public class AssembleHelper {
                     fuDocParamData.setParamName(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_NAME, objectInfoDesc));
                     fuDocParamData.setParamDesc(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_COMMENT, objectInfoDesc));
                     fuDocParamData.setParamType(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_TYPE_VIEW, objectInfoDesc));
+                    fuDocParamData.setFudoc(CustomerValueHelper.customerValue(objectInfoDesc, fuDocContext));
                     if (Objects.nonNull(parent)) {
                         String paramPrefix = parent.getParamPrefix();
                         fuDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);

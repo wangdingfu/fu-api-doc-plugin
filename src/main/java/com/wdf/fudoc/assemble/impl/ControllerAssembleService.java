@@ -82,7 +82,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 String requestType;
                 if (AnnotationConstants.REQUEST_MAPPING.equals(qualifiedName)) {
                     //requestMapping
-                    requestType = annotationData.enumValue(FuDocConstants.AnnotationAttr.METHOD).getValue();
+                    requestType = annotationData.enumValue(FuDocConstants.AnnotationAttr.METHOD).getEnumValue();
                     if (StringUtils.isBlank(requestType)) {
                         requestType = RequestType.GET.getRequestType();
                     }

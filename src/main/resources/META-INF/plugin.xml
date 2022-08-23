@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>Fu Doc</name>
-    <version>1.1.0</version>
+    <version>1.2.8</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -9,7 +9,8 @@
     </description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="173.0"/>
+    <!-- idea版本需要大于2021.1 -->
+    <idea-version since-build="212.4746.92"/>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
@@ -17,39 +18,54 @@
     <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- 应用启动时通知类 -->
+        <backgroundPostStartupActivity implementation="com.wdf.fudoc.start.FuDocAppStartUpListener"/>
+
         <!-- Add your extensions here -->
-        <notificationGroup id="fu_doc_notify_group" displayType="BALLOON"/>
+        <notificationGroup id="com.wdf.fudoc.notification.group" displayType="BALLOON"/>
+        <notificationGroup id="com.wdf.fudoc.notification.start.group" displayType="BALLOON"/>
 
-        <!-- service -->
 
-        <!-- parse service -->
+        <!-- 应用级别的service（所有项目都是这一个实例 不跟项目隔离） 项目级别的service则使用projectService标签 -->
+        <applicationService serviceImplementation="com.wdf.fudoc.config.state.FuDocSetting"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.config.state.FuDocSecuritySetting"/>
         <applicationService serviceImplementation="com.wdf.fudoc.parse.FuDocClassParserImpl"/>
 
-        <!-- assemble service -->
         <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.ControllerAssembleService"/>
         <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.InterfaceAssembleService"/>
         <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.FeignAssembleService"/>
 
-
-
-        <!-- mock service -->
         <applicationService serviceImplementation="com.wdf.fudoc.mock.FuDocObjectJMockData"/>
+
+
+        <projectConfigurable instance="com.wdf.fudoc.config.configurable.FuDocSettingConfigurable"
+                             id="fu.doc.setting"
+                             displayName="Fu Doc"
+                             nonDefaultProject="true"/>
+
+        <projectConfigurable instance="com.wdf.fudoc.config.configurable.FuDocGeneralConfigurable"
+                             id="fu.doc.setting.general"
+                             groupId="fu.doc.setting"
+                             displayName="General"
+                             nonDefaultProject="true"/>
 
 
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
-        <action id="gen-api-doc" class="com.wdf.fudoc.action.GenFuDocAction" text="Fu Doc">
+
+        <group id="wdf.fudoc" popup="false" compact="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
-        </action>
+            <action id="gen-api-doc" class="com.wdf.fudoc.action.GenFuDocAction" text="Fu Doc">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
+            </action>
+
+            <action id="com.fudoc.toJson" class="com.wdf.fudoc.action.BeanToJsonAction" text="Bean to Json" description="Bean to json">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
+            </action>
+        </group>
 
 
-        <action id="gen-api-doc-test" class="com.wdf.fudoc.action.TestAction" text="Fu Test">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="alt T"/>
-        </action>
     </actions>
 
 </idea-plugin>
