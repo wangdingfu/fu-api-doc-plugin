@@ -2,6 +2,7 @@ package com.wdf.fudoc.util;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 
 
 import java.util.HashMap;
@@ -50,5 +51,18 @@ public class ObjectUtils {
             return tList.stream().map(function).collect(Collectors.toList());
         }
         return Lists.newArrayList();
+    }
+
+
+    public static <T, R> R getValue(Map<T, R> map, T... keys) {
+        if (MapUtils.isNotEmpty(map) && Objects.nonNull(keys)) {
+            for (T key : keys) {
+                R result = map.get(key);
+                if (Objects.nonNull(result)) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 }
