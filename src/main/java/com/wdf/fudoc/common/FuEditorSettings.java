@@ -23,7 +23,7 @@ public class FuEditorSettings {
         // 关闭缩减指南
         editorSettings.setIndentGuidesShown(false);
         // 显示行号
-        editorSettings.setLineNumbersShown(true);
+        editorSettings.setLineNumbersShown(false);
         // 支持代码折叠
         editorSettings.setFoldingOutlineShown(true);
         // 附加行，附加列（提高视野）

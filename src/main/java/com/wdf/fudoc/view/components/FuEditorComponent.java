@@ -187,7 +187,7 @@ public class FuEditorComponent {
         Project currProject = ProjectUtils.getCurrProject();
         EditorHighlighterFactory highlighterFactory = EditorHighlighterFactory.getInstance();
         if (StringUtils.isBlank(this.content)) {
-            this.editor.setViewer(true);
+            this.editor.setViewer(false);
             // 重置文本内容
             WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().setText(""));
             this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(currProject, lightVirtualFile));

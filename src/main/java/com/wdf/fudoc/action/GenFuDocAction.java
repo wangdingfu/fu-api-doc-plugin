@@ -3,6 +3,7 @@ package com.wdf.fudoc.action;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
 import com.wdf.fudoc.FuDocMessageBundle;
 import com.wdf.fudoc.notification.FuDocNotification;
 import com.wdf.fudoc.config.state.FuDocSetting;

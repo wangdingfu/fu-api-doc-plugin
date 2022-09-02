@@ -1,20 +1,12 @@
 package com.wdf.fudoc.notification;
 
 import com.intellij.notification.*;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.FuDocMessageBundle;
-import com.wdf.fudoc.common.FuDocIcons;
 import com.wdf.fudoc.constant.FuDocConstants;
 import com.wdf.fudoc.constant.MessageConstants;
 import com.wdf.fudoc.constant.UrlConstants;
 import com.wdf.fudoc.data.FuDocDataContent;
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.util.Objects;
 
 /**
  * FuDoc通知消息类 (2021.1.3版本之前)

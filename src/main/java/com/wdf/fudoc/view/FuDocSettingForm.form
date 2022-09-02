@@ -14,7 +14,9 @@
             <preferred-size width="200" height="200"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <toolTipText value=""/>
+        </properties>
         <border type="none"/>
         <children>
           <scrollpane id="c04fb">

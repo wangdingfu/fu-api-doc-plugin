@@ -5,6 +5,7 @@ import com.wdf.fudoc.constant.enumtype.DynamicDataType;
 import com.wdf.fudoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.view.bo.Column;
+import com.wdf.fudoc.view.bo.KeyValueBO;
 
 import javax.swing.table.TableCellEditor;
 import java.util.List;
@@ -40,5 +41,19 @@ public class FuTableColumnFactory {
         columns.add(new Column<>("值", SettingDynamicValueData::getValue, SettingDynamicValueData::setValue));
         return columns;
     }
+
+
+    /**
+     * 过滤属性table列
+     */
+    public static List<Column<KeyValueBO>> keyValueColumns() {
+//        TableCellEditor booleanEditor = TableCellEditorFactory.createBooleanEditor();
+        List<Column<KeyValueBO>> columns = Lists.newArrayList();
+//        columns.add(new Column<>("    ", KeyValueBO::getSelect, KeyValueBO::setSelect, booleanEditor));
+        columns.add(new Column<>("key", KeyValueBO::getKey, KeyValueBO::setKey));
+        columns.add(new Column<>("Value", KeyValueBO::getValue, KeyValueBO::setValue));
+        return columns;
+    }
+
 
 }

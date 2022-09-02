@@ -49,7 +49,13 @@
                              displayName="General"
                              nonDefaultProject="true"/>
 
-
+        <toolWindow id="Fu Request"
+                    icon="FuDocIcons.FU_DOC"
+                    anchor="right"
+                    secondary="false"
+                    doNotActivateOnStart="true"
+                    order="last"
+                    factoryClass="com.wdf.fudoc.view.toolwindow.FuDocToolWindowFactory"/>
     </extensions>
 
     <actions>
@@ -65,7 +71,12 @@
             </action>
         </group>
 
-
+        <!-- ToolWindow 的工具栏  -->
+        <group id="fu.doc.request.tool.window.action">
+            <action id="fu.doc.request.tool.window.action.refresh"
+                    class="com.wdf.fudoc.action.windows.FuRequestRefreshAction"
+                    text="Refresh" description="Refresh" icon="AllIcons.Actions.Refresh"/>
+        </group>
     </actions>
 
 </idea-plugin>
