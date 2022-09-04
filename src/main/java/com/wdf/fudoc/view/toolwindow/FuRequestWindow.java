@@ -17,6 +17,7 @@ import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.FuDocMessageBundle;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
 import com.wdf.fudoc.view.TestRequestFrom;
+import com.wdf.fudoc.view.TestView1;
 import com.wdf.fudoc.view.bo.KeyValueBO;
 import com.wdf.fudoc.view.components.FuEditorComponent;
 import com.wdf.fudoc.view.components.FuTableComponent;
@@ -48,7 +49,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         super(Boolean.TRUE, Boolean.TRUE);
         this.project = project;
         initToolbar();
-        this.rootPanel = new TestRequestFrom().getRootPanel();
+        this.rootPanel = new TestRequestFrom(project).getRootPanel();
         setContent(this.rootPanel);
     }
 

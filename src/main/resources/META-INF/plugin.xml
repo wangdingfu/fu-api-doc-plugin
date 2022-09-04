@@ -69,6 +69,9 @@
             <action id="com.fudoc.toJson" class="com.wdf.fudoc.action.BeanToJsonAction" text="Bean to Json" description="Bean to json">
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
             </action>
+
+            <action id="com.fudoc.test" class="com.wdf.fudoc.action.TestAction" text="Test" description="Test">
+            </action>
         </group>
 
         <!-- ToolWindow 的工具栏  -->
