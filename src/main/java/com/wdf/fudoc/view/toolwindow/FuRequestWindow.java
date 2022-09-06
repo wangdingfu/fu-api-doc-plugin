@@ -26,17 +26,8 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     public FuRequestWindow(@NotNull Project project) {
         super(Boolean.TRUE, Boolean.TRUE);
         this.project = project;
-        initToolbar();
         this.rootPanel = new TestRequestFrom(project).getRootPanel();
         setContent(this.rootPanel);
-    }
-
-    private void initToolbar() {
-        final ActionManager actionManager = ActionManager.getInstance();
-        ActionToolbar actionToolbar = actionManager.createActionToolbar(ActionPlaces.TOOLWINDOW_TOOLBAR_BAR,
-                (DefaultActionGroup) actionManager.getAction("fu.doc.request.tool.window.action"), true);
-        actionToolbar.setTargetComponent(getToolbar());
-        setToolbar(actionToolbar.getComponent());
     }
 
 //    private void initRootPanel() {
