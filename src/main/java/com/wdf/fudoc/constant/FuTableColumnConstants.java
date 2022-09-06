@@ -1,16 +1,5 @@
 package com.wdf.fudoc.constant;
 
-import cn.hutool.core.lang.Dict;
-import com.google.common.collect.Lists;
-import com.wdf.fudoc.data.SettingDynamicValueData;
-import com.wdf.fudoc.pojo.bo.FilterFieldBO;
-import com.wdf.fudoc.view.bo.Column;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * 定义FuTable的列
  *

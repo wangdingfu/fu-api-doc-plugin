@@ -7,13 +7,12 @@ import com.intellij.json.JsonFileType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.ui.JBColor;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
-import com.wdf.fudoc.view.bo.KeyValueBO;
+import com.wdf.fudoc.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.view.components.FuEditorComponent;
 import com.wdf.fudoc.view.components.FuTableComponent;
 import icons.FuDocIcons;
@@ -94,7 +93,7 @@ public class ToolBarTestForm {
 
 
     private void createUIComponents() {
-        this.tablePanel = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueBO.class).createPanel();
+        this.tablePanel = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
         this.editPanel = FuEditorComponent.create(JsonFileType.INSTANCE, "").getMainPanel();
         this.bulkEditPanel = createBulkEditBar();
         this.toolBarPanel = new BorderLayoutPanel();

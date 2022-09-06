@@ -6,22 +6,12 @@ import com.intellij.icons.AllIcons;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.tabs.JBTabsPosition;
 import com.intellij.ui.tabs.TabInfo;
-import com.intellij.ui.tabs.TabsListener;
-import com.intellij.ui.tabs.UiDecorator;
-import com.intellij.ui.tabs.impl.JBTabsImpl;
-import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.factory.FuTabBuilder;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
 import com.wdf.fudoc.util.PopupUtils;
-import com.wdf.fudoc.view.TestRequestFrom;
-import com.wdf.fudoc.view.TestView1;
-import com.wdf.fudoc.view.bo.KeyValueBO;
+import com.wdf.fudoc.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.view.components.FuEditorComponent;
 import com.wdf.fudoc.view.components.FuTabComponent;
 import com.wdf.fudoc.view.components.FuTableComponent;
@@ -29,21 +19,14 @@ import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class TestAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
 
-        JPanel tablePanel1 = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueBO.class).createPanel();
-        JPanel tablePanel2 = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueBO.class).createPanel();
+        JPanel tablePanel1 = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
+        JPanel tablePanel2 = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
         JPanel editorPanel1 = FuEditorComponent.create(JsonFileType.INSTANCE,"").getMainPanel();
         JPanel editorPanel2 = FuEditorComponent.create(JsonFileType.INSTANCE,"").getMainPanel();
         JPanel editorPanel3 = FuEditorComponent.create(JsonFileType.INSTANCE,"").getMainPanel();

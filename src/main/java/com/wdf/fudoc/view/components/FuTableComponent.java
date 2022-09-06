@@ -4,8 +4,11 @@ import cn.hutool.core.util.ReflectUtil;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
+import com.wdf.fudoc.factory.FuTableColumnFactory;
+import com.wdf.fudoc.util.JTableUtils;
 import com.wdf.fudoc.view.bo.Column;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,7 +25,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * table列集合
      */
-    private final List<Column<T>> columnList;
+    private final List<Column> columnList;
 
     /**
      * table数据集合
@@ -41,11 +44,16 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     private final Class<T> clazz;
 
 
-    public FuTableComponent(List<Column<T>> columnList, List<T> dataList, Class<T> clazz) {
+    public FuTableComponent(List<Column> columnList, List<T> dataList, Class<T> clazz) {
         this.columnList = columnList;
         this.dataList = dataList;
         this.clazz = clazz;
         this.initTable();
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return this.columnList.get(columnIndex).getColumnClass();
     }
 
     /**
@@ -114,8 +122,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
             //修改table中的值
             super.setValueAt(value, row, column);
             //修改持久化数据集合中的值
-            T obj = this.dataList.get(row);
-            this.columnList.get(column).getSetFun().accept(obj, (String) value);
+            FuTableColumnFactory.setValue(this.dataList.get(row), value, this.columnList.get(column));
         }
     }
 
@@ -127,7 +134,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      * @param clazz      table数据class
      * @return 一个已经渲染好了table数据面板 可用于挂在在根面板上直接显示
      */
-    public static <T> FuTableComponent<T> create(List<Column<T>> columnList, List<T> dataList, Class<T> clazz) {
+    public static <T> FuTableComponent<T> create(List<Column> columnList, List<T> dataList, Class<T> clazz) {
         return new FuTableComponent<>(columnList, dataList, clazz);
     }
 
@@ -148,12 +155,27 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         this.jbTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //将列初始化到table
         this.columnList.forEach(f -> addColumn(f.getName()));
+        //格式化第一列
+        formatFirstColumn();
         //设置table单元格编辑器
-        this.columnList.stream().filter(f -> Objects.nonNull(f.getEditor()))
-                .forEach(f -> this.jbTable.getColumn(f.getName()).setCellEditor(f.getEditor()));
+        this.columnList.stream().filter(f -> Objects.nonNull(f.getEditor())).forEach(f -> this.jbTable.getColumn(f.getName()).setCellEditor(f.getEditor()));
         //将数据添加到table
         setDataList(this.dataList);
     }
+
+
+    /**
+     * 第一列如果是复选框 则重置该列的宽度
+     */
+    private void formatFirstColumn() {
+        Column firstColumn = this.columnList.get(0);
+        Class<?> columnClass = firstColumn.getColumnClass();
+        if (Objects.nonNull(columnClass) && columnClass == Boolean.class && StringUtils.isBlank(firstColumn.getName())) {
+            JTableUtils.setupCheckboxColumn(this.jbTable.getColumnModel().getColumn(0), 30);
+            JBTable.setupCheckboxShortcut(this.jbTable, 0);
+        }
+    }
+
 
     /**
      * 设置table数据
@@ -196,9 +218,9 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      * @param data 数据对象
      * @return table中的一行数据
      */
-    private Vector<String> toTableData(T data) {
-        Vector<String> vector = new Vector<>();
-        this.columnList.stream().map(item -> item.getGetFun().apply(data)).forEach(vector::add);
+    private Vector<Object> toTableData(T data) {
+        Vector<Object> vector = new Vector<>();
+        this.columnList.stream().map(item -> FuTableColumnFactory.getValue(data, item)).forEach(vector::add);
         return vector;
     }
 

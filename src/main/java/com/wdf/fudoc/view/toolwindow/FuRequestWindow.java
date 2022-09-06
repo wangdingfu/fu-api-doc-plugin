@@ -1,37 +1,15 @@
 package com.wdf.fudoc.view.toolwindow;
 
-import com.google.common.collect.Lists;
-import com.intellij.ide.IdeBundle;
-import com.intellij.json.JsonFileType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
-import com.intellij.openapi.ui.Splitter;
-import com.intellij.ui.*;
-import com.intellij.ui.components.JBList;
-import com.intellij.ui.components.JBPanel;
-import com.intellij.ui.components.JBTabbedPane;
-import com.intellij.ui.components.JBTextField;
-import com.intellij.util.ui.JBUI;
-import com.wdf.fudoc.FuDocMessageBundle;
-import com.wdf.fudoc.factory.FuTableColumnFactory;
 import com.wdf.fudoc.view.TestRequestFrom;
-import com.wdf.fudoc.view.TestView1;
-import com.wdf.fudoc.view.bo.KeyValueBO;
-import com.wdf.fudoc.view.components.FuEditorComponent;
-import com.wdf.fudoc.view.components.FuTableComponent;
-import icons.FuDocIcons;
 import lombok.Getter;
-import org.jdesktop.swingx.table.ColumnFactory;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.plaf.ButtonUI;
-import java.awt.*;
 
 /**
  * @author wangdingfu

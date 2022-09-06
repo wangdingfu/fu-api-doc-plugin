@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.BooleanTableCellEditor;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBTextField;
+import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;

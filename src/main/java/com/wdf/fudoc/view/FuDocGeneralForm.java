@@ -1,12 +1,10 @@
 package com.wdf.fudoc.view;
 
-import com.wdf.fudoc.common.CallbackAction;
 import com.wdf.fudoc.config.state.FuDocSetting;
 import com.wdf.fudoc.data.CustomerSettingData;
 import com.wdf.fudoc.data.SettingData;
 import com.wdf.fudoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
-import com.wdf.fudoc.helper.ServiceHelper;
 import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.view.components.FuTableComponent;
 import lombok.Getter;

@@ -9,7 +9,7 @@ import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.factory.FuTabBuilder;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
-import com.wdf.fudoc.view.bo.KeyValueBO;
+import com.wdf.fudoc.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.view.components.FuEditorComponent;
 import com.wdf.fudoc.view.components.FuTabComponent;
 import com.wdf.fudoc.view.components.FuTableComponent;
@@ -69,28 +69,43 @@ public class TestRequestFrom {
 
     private void createUIComponents() {
         this.requestTabPanel = FuTabBuilder.getInstance().addTab(createHeaderTab()).addTab(createParamsTab()).addTab(createBodyTab()).build();
-        this.responseTabPanel = FuTabBuilder.getInstance().addTab(createBodyTab()).addTab(createRowTab()).build();
+        this.responseTabPanel = FuTabBuilder.getInstance().addTab(createResponseTab()).build();
     }
 
 
-    private TabInfo createHeaderTab(){
-        return FuTabComponent.getInstance("Header", FuDocIcons.FU_REQUEST_HEADER, createTablePanel()).addBar("Bulk Edit", AllIcons.Actions.Edit, createEditorPanel()).builder();
+    private TabInfo createHeaderTab() {
+        return FuTabComponent.getInstance("Header", null, createTablePanel()).addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, createEditorPanel()).builder();
     }
 
-    private TabInfo createParamsTab(){
-        return FuTabComponent.getInstance("Params", FuDocIcons.FU_REQUEST_PARAMS, createTablePanel()).addBar("Bulk Edit", AllIcons.Actions.Edit, createEditorPanel()).builder();
+    private TabInfo createParamsTab() {
+        return FuTabComponent.getInstance("Params", null, createTablePanel()).addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, createEditorPanel()).builder();
     }
 
-    private TabInfo createBodyTab(){
-        return FuTabComponent.getInstance("Body", FuDocIcons.FU_REQUEST_BODY, createEditorPanel()).builder();
+    private TabInfo createBodyTab() {
+        return FuTabComponent.getInstance("Body", null, createEditorPanel())
+                .addBar("none", FuDocIcons.FU_REQUEST_IGNORE, createTablePanel())
+                .addBar("form-data", FuDocIcons.FU_REQUEST_FORM, createTablePanel())
+                .addBar("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, createTablePanel())
+                .addBar("raw", FuDocIcons.FU_REQUEST_RAW, createEditorPanel())
+                .addBar("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
+                .addBar("binary", FuDocIcons.FU_REQUEST_FILE_BINARY, createTablePanel())
+                .builder();
     }
 
-    private TabInfo createRowTab(){
-        return FuTabComponent.getInstance("Row", FuDocIcons.FU_REQUEST_BODY, createEditorPanel()).builder();
+
+    private TabInfo createResponseTab() {
+        return FuTabComponent.getInstance("Response", null, createEditorPanel())
+                .addBar("raw", FuDocIcons.FU_REQUEST_RAW, createEditorPanel())
+                .addBar("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
+                .builder();
+    }
+
+    private TabInfo createRowTab() {
+        return FuTabComponent.getInstance("Raw", null, createEditorPanel()).builder();
     }
 
     private JPanel createTablePanel() {
-        return FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueBO.class).createPanel();
+        return FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
     }
 
     private JPanel createEditorPanel() {

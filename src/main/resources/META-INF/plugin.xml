@@ -70,9 +70,11 @@
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
             </action>
 
-            <action id="com.fudoc.test" class="com.wdf.fudoc.action.TestAction" text="Test" description="Test">
-            </action>
+            <action id="com.fudoc.test" class="com.wdf.fudoc.action.TestAction" text="Test" description="Test"/>
+            <action id="com.fudoc.test.table" class="com.wdf.fudoc.action.TestTableAction" text="Test Table" description="Test table"/>
+            <action id="com.fudoc.dto.gen" class="com.wdf.fudoc.dtoconvert.action.Vo2DtoGenerateAction" text="Gen ObjectSet" description="Gen objectSet"/>
         </group>
+
 
         <!-- ToolWindow 的工具栏  -->
         <group id="fu.doc.request.tool.window.action">

@@ -10,14 +10,11 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.ui.components.JBTabbedPane;
-import com.intellij.ui.components.TwoSideComponent;
-import com.intellij.ui.tabs.JBTabs;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
-import com.wdf.fudoc.view.bo.KeyValueBO;
+import com.wdf.fudoc.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.view.components.FuEditorComponent;
 import com.wdf.fudoc.view.components.FuTableComponent;
 import lombok.Getter;
@@ -79,7 +76,7 @@ public class TestView1 {
         tabs.addTab(new TabInfo(FuEditorComponent.create(JsonFileType.INSTANCE,"").getMainPanel()).setText("Header").setSideComponent(this.toolBarPanel));
         this.topPanel = new BorderLayoutPanel();
         this.topPanel.add(tabs.getComponent(),BorderLayout.CENTER);
-        this.centerPanel = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueBO.class).createPanel();
+        this.centerPanel = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
     }
 
 

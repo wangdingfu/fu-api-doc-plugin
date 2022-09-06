@@ -15,10 +15,10 @@ public class PopupUtils {
 
     public static final String FU_REQUEST_POPUP = "fudoc.request.popup";
 
-    public static JBPopup popup(JPanel mainPanel) {
+    public static JBPopup popup(JComponent component) {
         Project currProject = ProjectUtils.getCurrProject();
         // dialog 改成 popup, 第一个为根面板，第二个为焦点面板
-        JBPopup popup = JBPopupFactory.getInstance().createComponentPopupBuilder(mainPanel, null)
+        JBPopup popup = JBPopupFactory.getInstance().createComponentPopupBuilder(component, null)
                 .setProject(currProject)
                 .setResizable(true)
                 .setMovable(true)

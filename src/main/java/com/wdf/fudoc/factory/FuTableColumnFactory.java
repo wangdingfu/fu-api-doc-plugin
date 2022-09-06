@@ -4,8 +4,7 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.constant.enumtype.DynamicDataType;
 import com.wdf.fudoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.pojo.bo.FilterFieldBO;
-import com.wdf.fudoc.view.bo.Column;
-import com.wdf.fudoc.view.bo.KeyValueBO;
+import com.wdf.fudoc.view.bo.*;
 
 import javax.swing.table.TableCellEditor;
 import java.util.List;
@@ -21,10 +20,10 @@ public class FuTableColumnFactory {
     /**
      * 过滤属性table列
      */
-    public static List<Column<FilterFieldBO>> filterColumns() {
-        List<Column<FilterFieldBO>> columns = Lists.newArrayList();
-        columns.add(new Column<>("类路径", FilterFieldBO::getClassName, FilterFieldBO::setClassName));
-        columns.add(new Column<>("字段名(多个用\",\"拼接. 为空则过滤该类所有属性)", FilterFieldBO::getFieldNames, FilterFieldBO::setFieldNames));
+    public static List<Column> filterColumns() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new StringColumn<>("类路径", FilterFieldBO::getClassName, FilterFieldBO::setClassName));
+        columns.add(new StringColumn<>("字段名(多个用\",\"拼接. 为空则过滤该类所有属性)", FilterFieldBO::getFieldNames, FilterFieldBO::setFieldNames));
         return columns;
     }
 
@@ -32,13 +31,12 @@ public class FuTableColumnFactory {
     /**
      * 动态自定义数据table列
      */
-    public static List<Column<SettingDynamicValueData>> dynamicColumns() {
+    public static List<Column> dynamicColumns() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new StringColumn<>("别名", SettingDynamicValueData::getAlias, SettingDynamicValueData::setAlias));
         //类型列为下拉框编辑器
-        TableCellEditor comboBoxEditor = TableCellEditorFactory.createComboBoxEditor(false, DynamicDataType.getCodes());
-        List<Column<SettingDynamicValueData>> columns = Lists.newArrayList();
-        columns.add(new Column<>("别名", SettingDynamicValueData::getAlias, SettingDynamicValueData::setAlias));
-        columns.add(new Column<>("类型", SettingDynamicValueData::getType, SettingDynamicValueData::setType, comboBoxEditor));
-        columns.add(new Column<>("值", SettingDynamicValueData::getValue, SettingDynamicValueData::setValue));
+        columns.add(new ComboBoxColumn<>("类型", SettingDynamicValueData::getType, SettingDynamicValueData::setType, DynamicDataType.getCodes()));
+        columns.add(new StringColumn<>("值", SettingDynamicValueData::getValue, SettingDynamicValueData::setValue));
         return columns;
     }
 
@@ -46,14 +44,34 @@ public class FuTableColumnFactory {
     /**
      * 过滤属性table列
      */
-    public static List<Column<KeyValueBO>> keyValueColumns() {
-//        TableCellEditor booleanEditor = TableCellEditorFactory.createBooleanEditor();
-        List<Column<KeyValueBO>> columns = Lists.newArrayList();
-//        columns.add(new Column<>("    ", KeyValueBO::getSelect, KeyValueBO::setSelect, booleanEditor));
-        columns.add(new Column<>("key", KeyValueBO::getKey, KeyValueBO::setKey));
-        columns.add(new Column<>("Value", KeyValueBO::getValue, KeyValueBO::setValue));
+    public static List<Column> keyValueColumns() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", KeyValueTableBO::getSelect, KeyValueTableBO::setSelect));
+        columns.add(new StringColumn<>("KEY", KeyValueTableBO::getKey, KeyValueTableBO::setKey));
+        columns.add(new StringColumn<>("VALUE", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
+        columns.add(new StringColumn<>("DESCRIPTION", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
         return columns;
     }
 
 
+    @SuppressWarnings("all")
+    public static <T, R> R getValue(T data, Column column) {
+        if (column instanceof StringColumn) {
+            return (R) ((StringColumn) column).getGetFun().apply(data);
+        }
+        if (column instanceof BooleanColumn) {
+            return (R) ((BooleanColumn) column).getGetFun().apply(data);
+        }
+        return null;
+    }
+
+    @SuppressWarnings("all")
+    public static <T, R> void setValue(T data, R value, Column column) {
+        if (column instanceof StringColumn) {
+            ((StringColumn) column).getSetFun().accept(data, (String) value);
+        }
+        if (column instanceof BooleanColumn) {
+            ((BooleanColumn) column).getSetFun().accept(data, (Boolean) value);
+        }
+    }
 }

@@ -13,9 +13,25 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class KeyValueBO {
+public class KeyValueTableBO {
 
+    /**
+     * 默认选中
+     */
+    private Boolean select = true;
+
+    /**
+     * key
+     */
     private String key;
 
+    /**
+     * value
+     */
     private String value;
+
+    /**
+     * 描述信息
+     */
+    private String description;
 }

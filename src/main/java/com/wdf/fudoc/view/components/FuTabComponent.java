@@ -45,10 +45,7 @@ public class FuTabComponent {
      */
     private JPanel defaultPanel;
 
-    /**
-     * tab栏上的工具按钮面板
-     */
-    private JPanel toolBarPanel;
+    private DefaultActionGroup actionGroup;
 
     /**
      * 点击工具栏按钮后切换的面板
@@ -88,9 +85,12 @@ public class FuTabComponent {
      */
     public TabInfo builder() {
         TabInfo tabInfo = new TabInfo(this.rootPanel);
-        tabInfo.setIcon(this.icon).setText(this.title);
-        if (Objects.nonNull(this.toolBarPanel)) {
-            tabInfo.setSideComponent(this.toolBarPanel);
+        if(Objects.nonNull(this.icon)){
+            tabInfo.setIcon(this.icon);
+        }
+        tabInfo.setText(this.title);
+        if (Objects.nonNull(this.actionGroup)) {
+            tabInfo.setSideComponent(genToolBarPanel());
         }
         return tabInfo;
     }
@@ -102,10 +102,9 @@ public class FuTabComponent {
      * @param icon bar显示的图标
      */
     private void addBarAction(String text, Icon icon) {
-        if (Objects.isNull(this.toolBarPanel)) {
-            this.toolBarPanel = new BorderLayoutPanel();
+        if (Objects.isNull(actionGroup)) {
+            actionGroup = new DefaultActionGroup();
         }
-        DefaultActionGroup actionGroup = new DefaultActionGroup();
         actionGroup.add(new AnAction(text, text, icon) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
@@ -117,12 +116,17 @@ public class FuTabComponent {
                 }
             }
         });
-        ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar("FuRequestToolBar", actionGroup, true);
-        toolbar.setTargetComponent(this.toolBarPanel);
+    }
+
+    public JPanel genToolBarPanel() {
+        JPanel toolBarPanel = new BorderLayoutPanel();
+        ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar("FuTabToolBar", actionGroup, true);
+        toolbar.setTargetComponent(toolBarPanel);
         toolbar.setForceMinimumSize(true);
         toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
         Utils.setSmallerFontForChildren(toolbar);
-        this.toolBarPanel.add(toolbar.getComponent(), BorderLayout.EAST);
+        toolBarPanel.add(toolbar.getComponent(), BorderLayout.EAST);
+        return toolBarPanel;
     }
 
     /**
