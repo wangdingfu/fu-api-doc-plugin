@@ -6,11 +6,17 @@ import com.intellij.icons.AllIcons;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
+import com.intellij.openapi.wm.IdeGlassPane;
+import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
+import com.intellij.ui.Gray;
+import com.intellij.ui.JBColor;
+import com.intellij.ui.WindowMoveListener;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.factory.FuTabBuilder;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
 import com.wdf.fudoc.util.PopupUtils;
+import com.wdf.fudoc.view.TestRequestFrom;
 import com.wdf.fudoc.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.view.components.FuEditorComponent;
 import com.wdf.fudoc.view.components.FuTabComponent;
@@ -20,30 +26,26 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TestAction extends AnAction {
+
+
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
+        AtomicBoolean myIsPinned = new AtomicBoolean(false);
+        JRootPane rootPane = new JRootPane();
+        TestRequestFrom testRequestFrom = new TestRequestFrom(e.getProject());
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
-        JPanel tablePanel1 = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
-        JPanel tablePanel2 = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
-        JPanel editorPanel1 = FuEditorComponent.create(JsonFileType.INSTANCE,"").getMainPanel();
-        JPanel editorPanel2 = FuEditorComponent.create(JsonFileType.INSTANCE,"").getMainPanel();
-        JPanel editorPanel3 = FuEditorComponent.create(JsonFileType.INSTANCE,"").getMainPanel();
-        TabInfo headerTab = FuTabComponent.getInstance("Header", FuDocIcons.FU_REQUEST_HEADER, tablePanel1).addBar("Bulk Edit", AllIcons.Actions.Edit, editorPanel1).builder();
-        TabInfo ParamsTab = FuTabComponent.getInstance("Params", FuDocIcons.FU_REQUEST_PARAMS, tablePanel2).addBar("Bulk Edit", AllIcons.Actions.Edit, editorPanel2).builder();
-        TabInfo bodyTab = FuTabComponent.getInstance("Body", FuDocIcons.FU_REQUEST_BODY, editorPanel3).builder();
-        JPanel popupPanel = FuTabBuilder.getInstance().addTab(headerTab).addTab(ParamsTab).addTab(bodyTab).build();
-        PopupUtils.popup(popupPanel);
-    }
-
-
-    private JPanel initToolbar() {
-        JPanel toolBarPanel = new BorderLayoutPanel();
-        DefaultActionGroup actionGroup = new DefaultActionGroup();
-
-        actionGroup.add(new ToggleAction("批量编辑", "Bulk edit", AllIcons.Actions.Edit) {
-
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
+        JLabel titleLabel = new JLabel("  查看目标详情");
+        headerPanel.add(titleLabel, BorderLayout.WEST);
+        final ActionManager actionManager = ActionManager.getInstance();
+        DefaultActionGroup defaultActionGroup = (DefaultActionGroup) actionManager.getAction("fu.doc.request.tool.window.action");
+        defaultActionGroup.addSeparator();
+        defaultActionGroup.add(new ToggleAction("Pin", "Pin window", AllIcons.General.Pin_tab) {
             @Override
             public boolean isDumbAware() {
                 return true;
@@ -51,32 +53,46 @@ public class TestAction extends AnAction {
 
             @Override
             public boolean isSelected(@NotNull AnActionEvent e) {
-                return false;
+                return myIsPinned.get();
             }
 
             @Override
             public void setSelected(@NotNull AnActionEvent e, boolean state) {
-
+                myIsPinned.set(state);
             }
         });
+        genToolBarPanel(headerPanel, "fudoc.request.test", defaultActionGroup, BorderLayout.EAST);
+        FuTabComponent request = FuTabComponent.getInstance("Request", null, testRequestFrom.getRequestPanel());
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        mainPanel.add(FuTabBuilder.getInstance().addTab(request.builder()).addTab(testRequestFrom.createResponseTab()).build(), BorderLayout.CENTER);
+        final IdeGlassPaneImpl glass = new IdeGlassPaneImpl(rootPane);
+        rootPane.setGlassPane(glass);
+        glass.setVisible(true);
+        rootPane.setContentPane(mainPanel);
+        rootPane.setDefaultButton(testRequestFrom.getSendBtn());
+        addMouseListeners(rootPane, headerPanel);
+        PopupUtils.popup(rootPane, headerPanel, myIsPinned);
+    }
 
 
-        actionGroup.addSeparator();
-
-        actionGroup.add(new AnAction("Editor", "Editor doc", AllIcons.Actions.Edit) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                System.out.println("123");
-            }
-        });
-
-        ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance()
-                .createActionToolbar("FuRequestToolBar", actionGroup, true);
+    public void genToolBarPanel(JPanel toolBarPanel, String place, ActionGroup actionGroup, String layout) {
+        ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
         toolbar.setTargetComponent(toolBarPanel);
         toolbar.setForceMinimumSize(true);
         toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
         Utils.setSmallerFontForChildren(toolbar);
-        toolBarPanel.add(toolbar.getComponent(), BorderLayout.WEST);
-        return toolBarPanel;
+        toolbar.getComponent().setBackground(toolBarPanel.getBackground());
+        toolBarPanel.add(toolbar.getComponent(), layout);
     }
+
+
+    private void addMouseListeners(JComponent rootPanel, JPanel headerPanel) {
+        WindowMoveListener windowMoveListener = new WindowMoveListener(rootPanel);
+        rootPanel.addMouseListener(windowMoveListener);
+        rootPanel.addMouseMotionListener(windowMoveListener);
+        headerPanel.addMouseListener(windowMoveListener);
+        headerPanel.addMouseMotionListener(windowMoveListener);
+
+    }
+
 }

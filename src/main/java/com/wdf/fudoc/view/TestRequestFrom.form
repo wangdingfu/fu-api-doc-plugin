@@ -47,7 +47,6 @@
                   <component id="fdb5f" class="javax.swing.JButton" binding="sendBtn">
                     <constraints border-constraint="East"/>
                     <properties>
-                      <icon value="icon/send.png"/>
                       <text value="Send"/>
                       <toolTipText value="发送请求"/>
                     </properties>

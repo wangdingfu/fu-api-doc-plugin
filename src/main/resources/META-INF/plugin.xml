@@ -56,6 +56,14 @@
                     doNotActivateOnStart="true"
                     order="last"
                     factoryClass="com.wdf.fudoc.view.toolwindow.FuDocToolWindowFactory"/>
+
+
+                <iw.actionProvider implementation="com.wdf.fudoc.action.editor.FormatActionProvider"/>
+
+                <editorFloatingToolbarProvider
+                        order="after DefaultFloatingToolbarProvider"
+                        implementation="com.wdf.fudoc.action.editor.FuDocEditorFloatingToolbarProvider"
+                        id="FuDocEditorFloatingToolbarProvider"/>
     </extensions>
 
     <actions>
@@ -90,6 +98,14 @@
             <action id="fu.doc.request.tool.window.action.setting"
                     class="com.wdf.fudoc.action.windows.FuRequestSettingAction"
                     text="Setting" description="Setting" icon="AllIcons.General.Settings"/>
+        </group>
+
+
+        <group id="fu.doc.editor.format">
+            <action id="fu.doc.format" class="com.wdf.fudoc.action.editor.FuEditorFormatAction">
+                <add-to-group group-id="EditorContextBarMenu" anchor="last"/>
+            </action>
+
         </group>
     </actions>
 

@@ -4,7 +4,10 @@ import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.GuiUtils;
+import com.intellij.ui.JBColor;
+import com.intellij.ui.components.JBOptionButton;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.constant.enumtype.RequestParamType;
@@ -18,7 +21,12 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import javax.swing.plaf.ButtonUI;
 import javax.swing.table.TableCellEditor;
+import java.awt.*;
+import java.util.Objects;
+
+import static com.intellij.openapi.vcs.VcsBundle.message;
 
 /**
  * @author wangdingfu
@@ -32,11 +40,13 @@ public class TestRequestFrom {
     /**
      * 请求面板
      */
+    @Getter
     private JPanel requestPanel;
     //发送面板
     private JPanel sendPanel;
     private JComboBox<String> requestType;
     private JTextField requestUrl;
+    @Getter
     private JButton sendBtn;
     //发送tab面板
     private JPanel requestTabPanel;
@@ -47,6 +57,7 @@ public class TestRequestFrom {
      */
     private JPanel responsePanel;
     //响应tab面板
+    @Getter
     private JPanel responseTabPanel;
 
     private final Project project;
@@ -61,8 +72,6 @@ public class TestRequestFrom {
         GuiUtils.replaceJSplitPaneWithIDEASplitter(rootPanel, true);
         splitPane.setBorder(JBUI.Borders.empty());
         splitPane.setDividerLocation(0.5);
-
-        this.sendBtn.setEnabled(true);
 
         this.requestPanel.setBorder(JBUI.Borders.empty());
         this.responsePanel.setBorder(JBUI.Borders.empty());
@@ -98,11 +107,8 @@ public class TestRequestFrom {
     }
 
 
-    private TabInfo createResponseTab() {
-        return FuTabComponent.getInstance("Response", null, createEditorPanel())
-                .addToggleBar("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
-                .addToggleBar("raw", FuDocIcons.FU_REQUEST_RAW, createEditorPanel())
-                .setDefaultTab("json").builder();
+    public TabInfo createResponseTab() {
+        return FuTabComponent.getInstance("Response", null, createEditorPanel()).builder();
     }
 
     private TabInfo createRowTab() {
