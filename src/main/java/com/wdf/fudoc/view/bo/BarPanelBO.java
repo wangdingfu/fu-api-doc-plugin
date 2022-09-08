@@ -1,5 +1,6 @@
 package com.wdf.fudoc.view.bo;
 
+import com.wdf.fudoc.constant.enumtype.ActionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,5 +37,18 @@ public class BarPanelBO {
      * 选中后显示的目标面板
      */
     private JPanel targetPanel;
+
+
+    public BarPanelBO(String text, Icon icon, boolean isSelect, JPanel targetPanel) {
+        this.text = text;
+        this.icon = icon;
+        this.isSelect = isSelect;
+        this.targetPanel = targetPanel;
+    }
+
+    /**
+     * 点击bar的动作类型
+     */
+    private ActionType actionType;
 
 }

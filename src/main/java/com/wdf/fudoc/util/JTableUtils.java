@@ -21,4 +21,6 @@ public class JTableUtils {
         column.setMaxWidth(checkboxWidth);
         column.setMinWidth(columnWidth);
     }
+
+
 }

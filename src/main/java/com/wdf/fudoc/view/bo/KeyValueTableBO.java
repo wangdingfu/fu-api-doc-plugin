@@ -1,8 +1,8 @@
 package com.wdf.fudoc.view.bo;
 
+import com.wdf.fudoc.constant.enumtype.RequestParamType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -11,14 +11,18 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class KeyValueTableBO {
 
     /**
      * 默认选中
      */
-    private Boolean select = true;
+    private Boolean select;
+
+    /**
+     * 请求参数类型 默认文本
+     */
+    private String requestParamType;
 
     /**
      * key
@@ -34,4 +38,9 @@ public class KeyValueTableBO {
      * 描述信息
      */
     private String description;
+
+    public KeyValueTableBO() {
+        this.select = true;
+        this.requestParamType = RequestParamType.TEXT.getCode();
+    }
 }

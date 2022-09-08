@@ -1,11 +1,9 @@
 package com.wdf.fudoc.view.bo;
 
-import com.wdf.fudoc.constant.enumtype.DynamicDataType;
 import com.wdf.fudoc.factory.TableCellEditorFactory;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.swing.table.TableCellEditor;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;

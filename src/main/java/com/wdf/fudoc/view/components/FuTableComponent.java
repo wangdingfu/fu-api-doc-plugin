@@ -36,19 +36,23 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * table对象
      */
-    private JBTable jbTable;
+    private FuTableView fuTableView;
 
     /**
      * table数据的class对象
      */
     private final Class<T> clazz;
 
-
     public FuTableComponent(List<Column> columnList, List<T> dataList, Class<T> clazz) {
         this.columnList = columnList;
         this.dataList = dataList;
         this.clazz = clazz;
         this.initTable();
+    }
+
+
+    public void addListener(FuTableCellEditorListener fuTableCellEditorListener) {
+        this.fuTableView.setFuTableCellEditorListener(fuTableCellEditorListener);
     }
 
     @Override
@@ -142,23 +146,22 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      * 创建面板
      */
     public JPanel createPanel() {
-        return ToolbarDecorator.createDecorator(this.jbTable).createPanel();
+        return ToolbarDecorator.createDecorator(this.fuTableView).createPanel();
     }
-
 
     /**
      * 初始化table
      */
     private void initTable() {
-        this.jbTable = new JBTable(this);
+        this.fuTableView = new FuTableView(this);
         //只支持单选
-        this.jbTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.fuTableView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //将列初始化到table
         this.columnList.forEach(f -> addColumn(f.getName()));
         //格式化第一列
         formatFirstColumn();
         //设置table单元格编辑器
-        this.columnList.stream().filter(f -> Objects.nonNull(f.getEditor())).forEach(f -> this.jbTable.getColumn(f.getName()).setCellEditor(f.getEditor()));
+        this.columnList.stream().filter(f -> Objects.nonNull(f.getEditor())).forEach(f -> this.fuTableView.getColumn(f.getName()).setCellEditor(f.getEditor()));
         //将数据添加到table
         setDataList(this.dataList);
     }
@@ -171,8 +174,8 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         Column firstColumn = this.columnList.get(0);
         Class<?> columnClass = firstColumn.getColumnClass();
         if (Objects.nonNull(columnClass) && columnClass == Boolean.class && StringUtils.isBlank(firstColumn.getName())) {
-            JTableUtils.setupCheckboxColumn(this.jbTable.getColumnModel().getColumn(0), 30);
-            JBTable.setupCheckboxShortcut(this.jbTable, 0);
+            JTableUtils.setupCheckboxColumn(this.fuTableView.getColumnModel().getColumn(0), 30);
+            JBTable.setupCheckboxShortcut(this.fuTableView, 0);
         }
     }
 

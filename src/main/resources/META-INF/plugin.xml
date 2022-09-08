@@ -81,6 +81,15 @@
             <action id="fu.doc.request.tool.window.action.refresh"
                     class="com.wdf.fudoc.action.windows.FuRequestRefreshAction"
                     text="Refresh" description="Refresh" icon="AllIcons.Actions.Refresh"/>
+            <action id="fu.doc.request.tool.window.action.send"
+                    class="com.wdf.fudoc.action.windows.FuRequestSendAction"
+                    text="Stop Request" description="Stop request" icon="AllIcons.Actions.Suspend"/>
+            <action id="fu.doc.request.tool.window.action.stop"
+                    class="com.wdf.fudoc.action.windows.FuRequestStopAction"
+                    text="Send Request" description="Send request" icon="AllIcons.Actions.Suspend"/>
+            <action id="fu.doc.request.tool.window.action.setting"
+                    class="com.wdf.fudoc.action.windows.FuRequestSettingAction"
+                    text="Setting" description="Setting" icon="AllIcons.General.Settings"/>
         </group>
     </actions>
 

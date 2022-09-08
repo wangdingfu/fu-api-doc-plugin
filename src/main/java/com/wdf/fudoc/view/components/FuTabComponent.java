@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.components.BorderLayoutPanel;
+import com.wdf.fudoc.constant.enumtype.ActionType;
 import com.wdf.fudoc.view.bo.BarPanelBO;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,10 @@ public class FuTabComponent {
      */
     private JPanel defaultPanel;
 
+    private JPanel toolBarPanel;
+
+
+    private DefaultActionGroup toggleActionGroup;
     private DefaultActionGroup actionGroup;
 
     /**
@@ -52,7 +57,9 @@ public class FuTabComponent {
      */
     private Map<String, BarPanelBO> barPanelMap = new ConcurrentHashMap<>();
 
-    private Map<String, Boolean> barSelectMap = new ConcurrentHashMap<>();
+
+    private String currentTab;
+
 
     public FuTabComponent(String title, Icon icon, JPanel mainPanel) {
         this.title = title;
@@ -74,23 +81,50 @@ public class FuTabComponent {
      * @param targetPanel 点击扩展bar会被切换的目标面板
      */
     public FuTabComponent addBar(String text, Icon icon, JPanel targetPanel) {
-        barPanelMap.put(text, new BarPanelBO(text, icon, false, targetPanel));
-        addBarAction(text, icon);
+        addBar(text, icon, targetPanel, ActionType.AN_ACTION);
         return this;
     }
 
+    public FuTabComponent addToggleBar(String text, Icon icon, JPanel targetPanel) {
+        addBar(text, icon, targetPanel, ActionType.TOGGLE_ACTION);
+        return this;
+    }
+
+    public void addBar(String text, Icon icon, JPanel targetPanel, ActionType actionType) {
+        barPanelMap.put(text, new BarPanelBO(text, icon, false, targetPanel, actionType));
+        addAction(text, icon, actionType);
+    }
+
+    /**
+     * 设置默认tab
+     *
+     * @param tab tab名称
+     * @return 当前组件
+     */
+    public FuTabComponent setDefaultTab(String tab) {
+        this.currentTab = tab;
+        switchPanelByTab(tab);
+        return this;
+    }
 
     /**
      * 构建成TabInfo对象
      */
     public TabInfo builder() {
         TabInfo tabInfo = new TabInfo(this.rootPanel);
-        if(Objects.nonNull(this.icon)){
+        if (Objects.nonNull(this.icon)) {
             tabInfo.setIcon(this.icon);
         }
         tabInfo.setText(this.title);
-        if (Objects.nonNull(this.actionGroup)) {
-            tabInfo.setSideComponent(genToolBarPanel());
+        if (Objects.nonNull(this.toggleActionGroup) || Objects.nonNull(this.actionGroup)) {
+            this.toolBarPanel = new BorderLayoutPanel();
+            if (Objects.nonNull(this.toggleActionGroup)) {
+                genToolBarPanel("fudoc.request.toggle.bar", toggleActionGroup, BorderLayout.WEST);
+            }
+            if (Objects.nonNull(this.actionGroup)) {
+                genToolBarPanel("fudoc.request.toggle.bar", actionGroup, BorderLayout.EAST);
+            }
+            tabInfo.setSideComponent(toolBarPanel);
         }
         return tabInfo;
     }
@@ -118,16 +152,58 @@ public class FuTabComponent {
         });
     }
 
-    public JPanel genToolBarPanel() {
-        JPanel toolBarPanel = new BorderLayoutPanel();
-        ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar("FuTabToolBar", actionGroup, true);
-        toolbar.setTargetComponent(toolBarPanel);
+    private void addToggleAction(String text, Icon icon) {
+        if (Objects.isNull(toggleActionGroup)) {
+            toggleActionGroup = new DefaultActionGroup();
+        }
+        toggleActionGroup.add(new ToggleAction(text, text, icon) {
+            @Override
+            public boolean isDumbAware() {
+                return true;
+            }
+
+            @Override
+            public boolean isSelected(@NotNull AnActionEvent e) {
+                return text.equals(currentTab);
+            }
+
+            @Override
+            public void setSelected(@NotNull AnActionEvent e, boolean state) {
+                if (!text.equals(currentTab)) {
+                    //切换新tab时才切换面板
+                    switchPanelByTab(text);
+                }
+                currentTab = text;
+            }
+        });
+    }
+
+
+    private void switchPanelByTab(String tab) {
+        //切换新tab时才切换面板
+        BarPanelBO barPanelBO = barPanelMap.get(tab);
+        switchPanel(barPanelBO.getTargetPanel());
+    }
+
+    private void addAction(String text, Icon icon, ActionType actionType) {
+        if (ActionType.AN_ACTION.equals(actionType)) {
+            addBarAction(text, icon);
+        }
+        if (ActionType.TOGGLE_ACTION.equals(actionType)) {
+            addToggleAction(text, icon);
+        }
+    }
+
+
+    public void genToolBarPanel(String place, ActionGroup actionGroup, String layout) {
+        ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
+        toolbar.setTargetComponent(this.toolBarPanel);
         toolbar.setForceMinimumSize(true);
         toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
         Utils.setSmallerFontForChildren(toolbar);
-        toolBarPanel.add(toolbar.getComponent(), BorderLayout.EAST);
-        return toolBarPanel;
+        this.toolBarPanel.add(toolbar.getComponent(), layout);
     }
+
 
     /**
      * 切换面板

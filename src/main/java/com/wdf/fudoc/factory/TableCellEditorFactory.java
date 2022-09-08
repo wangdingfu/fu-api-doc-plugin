@@ -1,10 +1,13 @@
 package com.wdf.fudoc.factory;
 
 import cn.hutool.core.util.EnumUtil;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.BooleanTableCellEditor;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.util.ui.LocalPathCellEditor;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
@@ -22,6 +25,13 @@ import java.util.stream.Stream;
  * @date 2022-08-16 22:30:08
  */
 public class TableCellEditorFactory {
+
+    private static final FileChooserDescriptor APP_FILE_CHOOSER_DESCRIPTOR = FileChooserDescriptorFactory.createSingleFileOrExecutableAppDescriptor();
+
+
+    public static TableCellEditor createLocalPathCellEditor() {
+        return new LocalPathCellEditor().fileChooserDescriptor(APP_FILE_CHOOSER_DESCRIPTOR).normalizePath(true);
+    }
 
     /**
      * 创建下拉框编辑器

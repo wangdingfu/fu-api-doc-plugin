@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class DefaultConfig {
 
+    public static boolean sendStatus = false;
+
     /**
      * 默认需要过滤的字段
      */

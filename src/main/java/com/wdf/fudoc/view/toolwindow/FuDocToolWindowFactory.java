@@ -48,12 +48,6 @@ public class FuDocToolWindowFactory implements ToolWindowFactory, DumbAware {
                 System.out.println("点击了下一个按钮");
             }
         });
-        actionList.add(new AnAction("配置", "设置请求相关参数", AllIcons.General.Settings) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                System.out.println("点击了设置按钮");
-            }
-        });
         actionList.add(new AnAction("帮助文档", "查看帮助文档", FuDocIcons.FU_DOC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {

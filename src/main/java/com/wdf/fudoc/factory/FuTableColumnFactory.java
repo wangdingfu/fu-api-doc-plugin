@@ -2,11 +2,11 @@ package com.wdf.fudoc.factory;
 
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.constant.enumtype.DynamicDataType;
+import com.wdf.fudoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.view.bo.*;
 
-import javax.swing.table.TableCellEditor;
 import java.util.List;
 
 /**
@@ -54,6 +54,20 @@ public class FuTableColumnFactory {
     }
 
 
+    /**
+     * 过滤属性table列
+     */
+    public static List<Column> keyValueColumns1() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", KeyValueTableBO::getSelect, KeyValueTableBO::setSelect));
+        columns.add(new StringColumn<>("KEY", KeyValueTableBO::getKey, KeyValueTableBO::setKey));
+        columns.add(new ComboBoxColumn<>("TYPE", KeyValueTableBO::getRequestParamType, KeyValueTableBO::setRequestParamType, RequestParamType.getCodes()));
+        columns.add(new StringColumn<>("VALUE", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
+        columns.add(new StringColumn<>("DESCRIPTION", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
+        return columns;
+    }
+
+
     @SuppressWarnings("all")
     public static <T, R> R getValue(T data, Column column) {
         if (column instanceof StringColumn) {
@@ -61,6 +75,9 @@ public class FuTableColumnFactory {
         }
         if (column instanceof BooleanColumn) {
             return (R) ((BooleanColumn) column).getGetFun().apply(data);
+        }
+        if (column instanceof ComboBoxColumn) {
+            return (R) ((ComboBoxColumn) column).getGetFun().apply(data);
         }
         return null;
     }
@@ -72,6 +89,9 @@ public class FuTableColumnFactory {
         }
         if (column instanceof BooleanColumn) {
             ((BooleanColumn) column).getSetFun().accept(data, (Boolean) value);
+        }
+        if (column instanceof ComboBoxColumn) {
+            ((ComboBoxColumn) column).getSetFun().accept(data, (String) value);
         }
     }
 }

@@ -7,16 +7,18 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.GuiUtils;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
+import com.wdf.fudoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.factory.FuTabBuilder;
 import com.wdf.fudoc.factory.FuTableColumnFactory;
+import com.wdf.fudoc.factory.TableCellEditorFactory;
 import com.wdf.fudoc.view.bo.KeyValueTableBO;
-import com.wdf.fudoc.view.components.FuEditorComponent;
-import com.wdf.fudoc.view.components.FuTabComponent;
-import com.wdf.fudoc.view.components.FuTableComponent;
+import com.wdf.fudoc.view.components.*;
 import icons.FuDocIcons;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import javax.swing.table.TableCellEditor;
 
 /**
  * @author wangdingfu
@@ -60,6 +62,8 @@ public class TestRequestFrom {
         splitPane.setBorder(JBUI.Borders.empty());
         splitPane.setDividerLocation(0.5);
 
+        this.sendBtn.setEnabled(true);
+
         this.requestPanel.setBorder(JBUI.Borders.empty());
         this.responsePanel.setBorder(JBUI.Borders.empty());
         this.responseTabPanel.setBorder(JBUI.Borders.empty());
@@ -83,21 +87,22 @@ public class TestRequestFrom {
 
     private TabInfo createBodyTab() {
         return FuTabComponent.getInstance("Body", null, createEditorPanel())
-                .addBar("none", FuDocIcons.FU_REQUEST_IGNORE, createTablePanel())
-                .addBar("form-data", FuDocIcons.FU_REQUEST_FORM, createTablePanel())
-                .addBar("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, createTablePanel())
-                .addBar("raw", FuDocIcons.FU_REQUEST_RAW, createEditorPanel())
-                .addBar("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
-                .addBar("binary", FuDocIcons.FU_REQUEST_FILE_BINARY, createTablePanel())
-                .builder();
+                .addToggleBar("none", FuDocIcons.FU_REQUEST_IGNORE, createTablePanel())
+                .addToggleBar("form-data", FuDocIcons.FU_REQUEST_FORM, createTable1Panel())
+                .addToggleBar("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, createTablePanel())
+                .addToggleBar("raw", FuDocIcons.FU_REQUEST_RAW, createEditorPanel())
+                .addToggleBar("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
+                .addToggleBar("binary", FuDocIcons.FU_REQUEST_FILE_BINARY, createTablePanel())
+                .addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, createEditorPanel())
+                .setDefaultTab("json").builder();
     }
 
 
     private TabInfo createResponseTab() {
         return FuTabComponent.getInstance("Response", null, createEditorPanel())
-                .addBar("raw", FuDocIcons.FU_REQUEST_RAW, createEditorPanel())
-                .addBar("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
-                .builder();
+                .addToggleBar("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
+                .addToggleBar("raw", FuDocIcons.FU_REQUEST_RAW, createEditorPanel())
+                .setDefaultTab("json").builder();
     }
 
     private TabInfo createRowTab() {
@@ -106,6 +111,21 @@ public class TestRequestFrom {
 
     private JPanel createTablePanel() {
         return FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
+    }
+
+
+    private JPanel createTable1Panel() {
+        FuTableComponent<KeyValueTableBO> component = FuTableComponent.create(FuTableColumnFactory.keyValueColumns1(), Lists.newArrayList(), KeyValueTableBO.class);
+        component.addListener((fuTableView, row, column) -> {
+            if (column == 3) {
+                Object valueAt = fuTableView.getValueAt(row, column - 1);
+                if (RequestParamType.FILE.getCode().equals(valueAt)) {
+                    return TableCellEditorFactory.createLocalPathCellEditor();
+                }
+            }
+            return null;
+        });
+        return component.createPanel();
     }
 
     private JPanel createEditorPanel() {
