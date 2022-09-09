@@ -78,6 +78,7 @@
 
         <!-- 测试功能点相关动作 -->
         <group id="wdf.fudoc.test" popup="false" compact="true">
+            <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.request.action.TestAction" text="Test" description="Test"/>
             <action id="com.fudoc.test.table" class="com.wdf.fudoc.request.action.TestTableAction" text="Test Table"
                     description="Test table"/>
@@ -86,14 +87,12 @@
 
 
         <!-- 工具相关动作 -->
-        <group id="wdf.fudoc.futool" text="Fu Tool" popup="true" compact="true">
+        <group id="wdf.fudoc.futool" text="Fu Tool" popup="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
-            <action id="com.fudoc.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json"
-                    description="Bean to json">
+            <action id="com.fudoc.futool.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json">
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
             </action>
-            <action id="com.fudoc.dto.gen" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction" text="Bean Copy"
-                    description="Bean copy">
+            <action id="com.fudoc.futool.beancopy" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction" text="Bean Copy">
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift G"/>
             </action>
         </group>
