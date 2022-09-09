@@ -1,20 +1,15 @@
 package com.wdf.fudoc.util;
 
 import com.intellij.json.JsonFileType;
-import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
-import com.intellij.ui.LanguageTextField;
 import com.intellij.util.LocalTimeCounter;
-import com.wdf.fudoc.constant.FuDocConstants;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 
 import java.util.Objects;
 

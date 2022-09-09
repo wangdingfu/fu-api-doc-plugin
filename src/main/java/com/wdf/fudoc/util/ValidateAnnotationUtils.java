@@ -1,9 +1,9 @@
 package com.wdf.fudoc.util;
 
-import com.wdf.fudoc.constant.AnnotationConstants;
-import com.wdf.fudoc.constant.FuDocConstants;
-import com.wdf.fudoc.pojo.data.AnnotationData;
-import com.wdf.fudoc.pojo.desc.BaseInfoDesc;
+import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
+import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
+import com.wdf.fudoc.apidoc.pojo.desc.BaseInfoDesc;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;

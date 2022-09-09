@@ -7,11 +7,10 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
-import com.wdf.fudoc.constant.AnnotationConstants;
-import com.wdf.fudoc.constant.enumtype.JavaClassType;
+import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
+import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @author wangdingfu

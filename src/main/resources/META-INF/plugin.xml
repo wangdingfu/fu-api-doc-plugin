@@ -27,23 +27,23 @@
 
 
         <!-- 应用级别的service（所有项目都是这一个实例 不跟项目隔离） 项目级别的service则使用projectService标签 -->
-        <applicationService serviceImplementation="com.wdf.fudoc.config.state.FuDocSetting"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.config.state.FuDocSecuritySetting"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.parse.FuDocClassParserImpl"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSetting"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSecuritySetting"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.parse.FuDocClassParserImpl"/>
 
-        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.ControllerAssembleService"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.InterfaceAssembleService"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.FeignAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.ControllerAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.InterfaceAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.FeignAssembleService"/>
 
-        <applicationService serviceImplementation="com.wdf.fudoc.mock.FuDocObjectJMockData"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.mock.FuDocObjectJMockData"/>
 
 
-        <projectConfigurable instance="com.wdf.fudoc.config.configurable.FuDocSettingConfigurable"
+        <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSettingConfigurable"
                              id="fu.doc.setting"
                              displayName="Fu Doc"
                              nonDefaultProject="true"/>
 
-        <projectConfigurable instance="com.wdf.fudoc.config.configurable.FuDocGeneralConfigurable"
+        <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocGeneralConfigurable"
                              id="fu.doc.setting.general"
                              groupId="fu.doc.setting"
                              displayName="General"
@@ -55,14 +55,14 @@
                     secondary="false"
                     doNotActivateOnStart="true"
                     order="last"
-                    factoryClass="com.wdf.fudoc.view.toolwindow.FuDocToolWindowFactory"/>
+                    factoryClass="com.wdf.fudoc.request.view.toolwindow.FuDocToolWindowFactory"/>
 
 
-<!--        <iw.actionProvider implementation="com.wdf.fudoc.action.editor.FormatActionProvider"/>-->
+<!--        <iw.actionProvider implementation="com.wdf.fudoc.request.action.editor.FormatActionProvider"/>-->
 
         <editorFloatingToolbarProvider
                 order="after DefaultFloatingToolbarProvider"
-                implementation="com.wdf.fudoc.action.editor.FuDocEditorFloatingToolbarProvider"
+                implementation="com.wdf.fudoc.request.action.editor.FuDocEditorFloatingToolbarProvider"
                 id="FuDocEditorFloatingToolbarProvider"/>
     </extensions>
 
@@ -70,19 +70,19 @@
 
         <group id="wdf.fudoc" popup="false" compact="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="gen-api-doc" class="com.wdf.fudoc.action.GenFuDocAction" text="Fu Doc">
+            <action id="gen-api-doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Fu Doc">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
             </action>
 
-            <action id="com.fudoc.toJson" class="com.wdf.fudoc.action.BeanToJsonAction" text="Bean to Json"
+            <action id="com.fudoc.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json"
                     description="Bean to json">
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
             </action>
 
-            <action id="com.fudoc.test" class="com.wdf.fudoc.action.TestAction" text="Test" description="Test"/>
-            <action id="com.fudoc.test.table" class="com.wdf.fudoc.action.TestTableAction" text="Test Table"
+            <action id="com.fudoc.test" class="com.wdf.fudoc.request.action.TestAction" text="Test" description="Test"/>
+            <action id="com.fudoc.test.table" class="com.wdf.fudoc.request.action.TestTableAction" text="Test Table"
                     description="Test table"/>
-            <action id="com.fudoc.dto.gen" class="com.wdf.fudoc.dtoconvert.action.Vo2DtoGenerateAction"
+            <action id="com.fudoc.dto.gen" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction"
                     text="Gen ObjectSet" description="Gen objectSet"/>
         </group>
 
@@ -90,22 +90,22 @@
         <!-- ToolWindow 的工具栏  -->
         <group id="fu.doc.request.tool.window.action">
             <action id="fu.doc.request.tool.window.action.refresh"
-                    class="com.wdf.fudoc.action.windows.FuRequestRefreshAction"
+                    class="com.wdf.fudoc.request.action.windows.FuRequestRefreshAction"
                     text="Refresh" description="Refresh" icon="AllIcons.Actions.Refresh"/>
             <action id="fu.doc.request.tool.window.action.send"
-                    class="com.wdf.fudoc.action.windows.FuRequestSendAction"
+                    class="com.wdf.fudoc.request.action.windows.FuRequestSendAction"
                     text="Stop Request" description="Stop request" icon="AllIcons.Actions.Suspend"/>
             <action id="fu.doc.request.tool.window.action.stop"
-                    class="com.wdf.fudoc.action.windows.FuRequestStopAction"
+                    class="com.wdf.fudoc.request.action.windows.FuRequestStopAction"
                     text="Send Request" description="Send request" icon="AllIcons.Actions.Suspend"/>
             <action id="fu.doc.request.tool.window.action.setting"
-                    class="com.wdf.fudoc.action.windows.FuRequestSettingAction"
+                    class="com.wdf.fudoc.request.action.windows.FuRequestSettingAction"
                     text="Setting" description="Setting" icon="AllIcons.General.Settings"/>
         </group>
 
 
         <group id="fu.doc.editor.format">
-            <action id="fu.doc.format" class="com.wdf.fudoc.action.editor.FuEditorFormatAction">
+            <action id="fu.doc.format" class="com.wdf.fudoc.request.action.editor.FuEditorFormatAction">
             </action>
 
         </group>

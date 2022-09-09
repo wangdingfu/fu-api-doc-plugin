@@ -1,7 +1,7 @@
 package com.wdfu.fudoc;
 
 import cn.hutool.json.JSONUtil;
-import com.wdf.fudoc.data.TemplateData;
+import com.wdf.fudoc.apidoc.data.TemplateData;
 
 /**
  * @author wangdingfu
