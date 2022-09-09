@@ -14,13 +14,11 @@ import com.wdf.fudoc.request.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.common.components.FuEditorComponent;
 import com.wdf.fudoc.common.components.FuTabComponent;
 import com.wdf.fudoc.common.components.FuTableComponent;
-import com.wdf.fudoc.view.components.*;
 import icons.FuDocIcons;
 import lombok.Getter;
 
 import javax.swing.*;
 
-import static com.intellij.openapi.vcs.VcsBundle.message;
 
 /**
  * @author wangdingfu

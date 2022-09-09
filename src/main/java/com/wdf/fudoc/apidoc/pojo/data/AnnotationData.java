@@ -5,7 +5,6 @@ import com.intellij.psi.PsiAnnotation;
 import com.wdf.fudoc.apidoc.pojo.data.annotation.*;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
-import com.wdf.fudoc.pojo.data.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;

@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import com.intellij.psi.PsiType;
 import com.wdf.fudoc.apidoc.parse.object.ApiDocObjectParser;
 import com.wdf.fudoc.apidoc.parse.object.impl.*;
-import com.wdf.fudoc.parse.object.impl.*;
 import com.wdf.fudoc.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.compress.utils.Lists;

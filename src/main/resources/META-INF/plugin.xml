@@ -68,26 +68,38 @@
 
     <actions>
 
-        <group id="wdf.fudoc" popup="false" compact="true">
+        <!-- 接口文档相关动作 -->
+        <group id="wdf.fudoc.apidoc" popup="false" compact="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <action id="gen-api-doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Fu Doc">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
             </action>
+        </group>
 
+        <!-- 测试功能点相关动作 -->
+        <group id="wdf.fudoc.test" popup="false" compact="true">
+            <action id="com.fudoc.test.request" class="com.wdf.fudoc.request.action.TestAction" text="Test" description="Test"/>
+            <action id="com.fudoc.test.table" class="com.wdf.fudoc.request.action.TestTableAction" text="Test Table"
+                    description="Test table"/>
+        </group>
+
+
+
+        <!-- 工具相关动作 -->
+        <group id="wdf.fudoc.futool" text="Fu Tool" popup="true" compact="true">
+            <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json"
                     description="Bean to json">
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
             </action>
-
-            <action id="com.fudoc.test" class="com.wdf.fudoc.request.action.TestAction" text="Test" description="Test"/>
-            <action id="com.fudoc.test.table" class="com.wdf.fudoc.request.action.TestTableAction" text="Test Table"
-                    description="Test table"/>
-            <action id="com.fudoc.dto.gen" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction"
-                    text="Gen ObjectSet" description="Gen objectSet"/>
+            <action id="com.fudoc.dto.gen" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction" text="Bean Copy"
+                    description="Bean copy">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift G"/>
+            </action>
         </group>
 
 
-        <!-- ToolWindow 的工具栏  -->
+        <!-- 接口请求工具栏相关动作  -->
         <group id="fu.doc.request.tool.window.action">
             <action id="fu.doc.request.tool.window.action.refresh"
                     class="com.wdf.fudoc.request.action.windows.FuRequestRefreshAction"
@@ -103,11 +115,9 @@
                     text="Setting" description="Setting" icon="AllIcons.General.Settings"/>
         </group>
 
-
+        <!-- 魔法棒格式化json动作  -->
         <group id="fu.doc.editor.format">
-            <action id="fu.doc.format" class="com.wdf.fudoc.request.action.editor.FuEditorFormatAction">
-            </action>
-
+            <action id="fu.doc.format" class="com.wdf.fudoc.request.action.editor.FuEditorFormatAction"/>
         </group>
     </actions>
 

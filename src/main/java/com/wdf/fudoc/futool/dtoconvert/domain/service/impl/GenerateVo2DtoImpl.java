@@ -16,7 +16,7 @@ import com.wdf.fudoc.futool.dtoconvert.domain.model.GenerateContext;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.SetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.service.AbstractGenerateVo2Dto;
-import com.wdf.fudoc.futool.dtoconvert.Utils;
+import com.wdf.fudoc.futool.dtoconvert.infrastructure.Utils;
 
 import java.util.*;
 import java.util.regex.Pattern;
