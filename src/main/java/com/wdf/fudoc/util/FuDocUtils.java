@@ -1,5 +1,9 @@
 package com.wdf.fudoc.util;
 
+import com.google.common.collect.Sets;
+import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -7,6 +11,7 @@ import com.wdf.fudoc.constant.AnnotationConstants;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author wangdingfu
@@ -38,15 +43,7 @@ public class FuDocUtils {
      * @return true 是一个Controller
      */
     public static boolean isController(PsiClass psiClass) {
-        if (Objects.nonNull(psiClass)) {
-            for (PsiAnnotation annotation : psiClass.getAnnotations()) {
-                if (AnnotationConstants.CONTROLLER.equals(annotation.getQualifiedName())
-                        || AnnotationConstants.REST_CONTROLLER.equals(annotation.getQualifiedName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return existsAnnotation(psiClass, AnnotationConstants.CONTROLLER, AnnotationConstants.REST_CONTROLLER);
     }
 
     /**
@@ -66,21 +63,24 @@ public class FuDocUtils {
      * @return true 是一个Controller
      */
     public static boolean isFeign(PsiClass psiClass) {
-        if (Objects.nonNull(psiClass)) {
-            for (PsiAnnotation annotation : psiClass.getAnnotations()) {
-                if (AnnotationConstants.FEIGN_CLIENT.equals(annotation.getQualifiedName())) {
-                    return true;
-                }
-            }
+        return existsAnnotation(psiClass, AnnotationConstants.FEIGN_CLIENT);
+    }
+
+
+    private static boolean existsAnnotation(PsiClass psiClass, String... annotationNames) {
+        if (Objects.isNull(psiClass) || Objects.isNull(annotationNames) || annotationNames.length <= 0) {
+            return false;
         }
-        return false;
+        return ApplicationManager.getApplication().runReadAction((Computable<Boolean>) () ->
+                AnnotationUtil.isAnnotated(psiClass, Sets.newHashSet(annotationNames), 0));
     }
 
 
     /**
      * 是否为有效的方法(即需要被解析的方法)
+     *
      * @param javaClassType 该方法所处的java类 类型
-     * @param psiMethod 方法对象
+     * @param psiMethod     方法对象
      * @return true 是有效的方法 需要被解析
      */
     public static boolean isValidMethod(JavaClassType javaClassType, PsiMethod psiMethod) {

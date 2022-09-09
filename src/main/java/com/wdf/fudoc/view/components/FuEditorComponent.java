@@ -4,23 +4,24 @@ import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.EditorKind;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.editor.impl.EditorImpl;
-import com.intellij.openapi.editor.toolbar.floating.EditorFloatingToolbar;
-import com.intellij.openapi.editor.toolbar.floating.FloatingToolbarComponentImpl;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.ui.BrowserHyperlinkListener;
+import com.intellij.ui.ErrorStripeEditorCustomization;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SeparatorFactory;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.common.FuEditorSettings;
 import com.wdf.fudoc.factory.LightVirtualFileFactory;
+import com.wdf.fudoc.util.EditorUtils;
 import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -73,7 +74,9 @@ public class FuEditorComponent {
     /**
      * 指定当前编辑器显示那种类型的语言
      */
-    private final LightVirtualFile lightVirtualFile;
+    private LightVirtualFile lightVirtualFile;
+
+    private FileType fileType;
 
 
     public FuEditorComponent(FileType fileType, String content) {
@@ -82,7 +85,7 @@ public class FuEditorComponent {
 
     public FuEditorComponent(FileType fileType, String content, String description) {
         this.content = content;
-        this.lightVirtualFile = LightVirtualFileFactory.create(fileType);
+        setFileType(fileType);
         if (Objects.nonNull(description)) {
             this.description = description;
             this.showDescription = true;
@@ -94,6 +97,7 @@ public class FuEditorComponent {
         //创建主面板
         createMainPanel();
     }
+
 
     /**
      * 创建一个带描述信息的编辑器组件
@@ -122,8 +126,10 @@ public class FuEditorComponent {
      */
     private void initEditor() {
         EditorFactory editorFactory = EditorFactory.getInstance();
-        Document document = editorFactory.createDocument("");
-        this.editor = (EditorImpl) editorFactory.createEditor(document);
+        Document document = EditorUtils.createDocument("", this.fileType);
+        this.editor = (EditorImpl) editorFactory.createEditor(document,ProjectUtils.getCurrProject(), EditorKind.UNTYPED);
+        //开启右侧的错误条纹
+        ErrorStripeEditorCustomization.ENABLED.customize(editor);
         this.refreshUI();
         FuEditorSettings.defaultSetting(this.editor);
         // 添加监控事件
@@ -203,4 +209,8 @@ public class FuEditorComponent {
     }
 
 
+    private void setFileType(FileType fileType) {
+        this.fileType = fileType;
+        this.lightVirtualFile = LightVirtualFileFactory.create(fileType);
+    }
 }

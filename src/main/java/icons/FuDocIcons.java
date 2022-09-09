@@ -24,4 +24,5 @@ public interface FuDocIcons {
     Icon FU_REQUEST_JSON = IconLoader.getIcon("icon/json.svg", FuDocIcons.class);
     Icon FU_REQUEST_IGNORE = IconLoader.getIcon("icon/ignore.svg", FuDocIcons.class);
     Icon FU_REQUEST_RAW = IconLoader.getIcon("icon/raw.svg", FuDocIcons.class);
+    Icon FU_REQUEST_MAGIC = IconLoader.getIcon("icon/magic-wand.svg", FuDocIcons.class);
 }

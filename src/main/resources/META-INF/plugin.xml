@@ -58,12 +58,12 @@
                     factoryClass="com.wdf.fudoc.view.toolwindow.FuDocToolWindowFactory"/>
 
 
-                <iw.actionProvider implementation="com.wdf.fudoc.action.editor.FormatActionProvider"/>
+<!--        <iw.actionProvider implementation="com.wdf.fudoc.action.editor.FormatActionProvider"/>-->
 
-                <editorFloatingToolbarProvider
-                        order="after DefaultFloatingToolbarProvider"
-                        implementation="com.wdf.fudoc.action.editor.FuDocEditorFloatingToolbarProvider"
-                        id="FuDocEditorFloatingToolbarProvider"/>
+        <editorFloatingToolbarProvider
+                order="after DefaultFloatingToolbarProvider"
+                implementation="com.wdf.fudoc.action.editor.FuDocEditorFloatingToolbarProvider"
+                id="FuDocEditorFloatingToolbarProvider"/>
     </extensions>
 
     <actions>
@@ -74,13 +74,16 @@
                 <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
             </action>
 
-            <action id="com.fudoc.toJson" class="com.wdf.fudoc.action.BeanToJsonAction" text="Bean to Json" description="Bean to json">
+            <action id="com.fudoc.toJson" class="com.wdf.fudoc.action.BeanToJsonAction" text="Bean to Json"
+                    description="Bean to json">
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
             </action>
 
             <action id="com.fudoc.test" class="com.wdf.fudoc.action.TestAction" text="Test" description="Test"/>
-            <action id="com.fudoc.test.table" class="com.wdf.fudoc.action.TestTableAction" text="Test Table" description="Test table"/>
-            <action id="com.fudoc.dto.gen" class="com.wdf.fudoc.dtoconvert.action.Vo2DtoGenerateAction" text="Gen ObjectSet" description="Gen objectSet"/>
+            <action id="com.fudoc.test.table" class="com.wdf.fudoc.action.TestTableAction" text="Test Table"
+                    description="Test table"/>
+            <action id="com.fudoc.dto.gen" class="com.wdf.fudoc.dtoconvert.action.Vo2DtoGenerateAction"
+                    text="Gen ObjectSet" description="Gen objectSet"/>
         </group>
 
 
@@ -103,7 +106,6 @@
 
         <group id="fu.doc.editor.format">
             <action id="fu.doc.format" class="com.wdf.fudoc.action.editor.FuEditorFormatAction">
-                <add-to-group group-id="EditorContextBarMenu" anchor="last"/>
             </action>
 
         </group>

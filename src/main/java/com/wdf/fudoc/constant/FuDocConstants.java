@@ -1,7 +1,6 @@
 package com.wdf.fudoc.constant;
 
 
-
 /**
  * @author wangdingfu
  * @descption: 类型常量
@@ -14,6 +13,8 @@ public interface FuDocConstants {
     String VALUE = "value";
 
     String FU_DOC = "Fu Doc";
+
+    String FU_DOC_FILE = "FuDocFile.";
 
     interface AnnotationAttr {
         String MESSAGE = "message";
@@ -85,7 +86,7 @@ public interface FuDocConstants {
         String COMMENT_X = "*";
     }
 
-    interface Enum{
+    interface Enum {
         String CODE = "code";
         String CODE_INDEX = "index";
 
@@ -97,8 +98,9 @@ public interface FuDocConstants {
     }
 
 
-    interface SettingForm{
+    interface SettingForm {
 
     }
+
 
 }

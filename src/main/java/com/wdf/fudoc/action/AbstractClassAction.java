@@ -3,6 +3,7 @@ package com.wdf.fudoc.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.UpdateInBackground;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.constant.enumtype.JavaClassType;
@@ -15,7 +16,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-08-18 16:13:45
  */
-public abstract class AbstractClassAction extends AnAction {
+public abstract class AbstractClassAction extends AnAction implements UpdateInBackground {
 
     protected boolean isShow(JavaClassType javaClassType) {
         return true;
@@ -34,9 +35,11 @@ public abstract class AbstractClassAction extends AnAction {
         PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
         JavaClassType javaClassType = JavaClassType.get(psiClass);
         if (JavaClassType.isNone(javaClassType)) {
+            presentation.setEnabledAndVisible(false);
             return;
         }
         presentation.setEnabledAndVisible(Objects.nonNull(javaClassType) && isShow(javaClassType));
+        super.update(e);
     }
 
 
