@@ -10,7 +10,7 @@ import com.intellij.ui.WindowMoveListener;
 import com.wdf.fudoc.request.factory.FuTabBuilder;
 import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.request.view.TestRequestFrom;
-import com.wdf.fudoc.common.components.FuTabComponent;
+import com.wdf.fudoc.components.FuTabComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package com.wdf.fudoc.common.components;
+package com.wdf.fudoc.components;
 
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.util.NlsActions;

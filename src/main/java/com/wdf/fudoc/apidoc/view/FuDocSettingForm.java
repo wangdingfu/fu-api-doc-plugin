@@ -8,7 +8,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.apidoc.data.CustomerSettingData;
 import com.wdf.fudoc.apidoc.data.SettingData;
 import com.wdf.fudoc.util.FastJsonUtils;
-import com.wdf.fudoc.common.components.FuEditorComponent;
+import com.wdf.fudoc.components.FuEditorComponent;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;

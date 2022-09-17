@@ -3,7 +3,7 @@ package com.wdf.fudoc.request.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.wdf.fudoc.util.PopupUtils;
-import com.wdf.fudoc.common.components.FuTableEditorComponent;
+import com.wdf.fudoc.components.FuTableEditorComponent;
 import org.jetbrains.annotations.NotNull;
 
 /**

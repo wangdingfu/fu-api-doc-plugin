@@ -1,4 +1,4 @@
-package com.wdf.fudoc.common.components;
+package com.wdf.fudoc.components;
 
 import com.intellij.ui.table.JBTable;
 import lombok.Setter;

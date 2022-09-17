@@ -1,4 +1,4 @@
-package com.wdf.fudoc.common.components;
+package com.wdf.fudoc.components;
 
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.command.WriteCommandAction;

@@ -11,9 +11,9 @@ import com.wdf.fudoc.request.factory.FuTabBuilder;
 import com.wdf.fudoc.request.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.factory.TableCellEditorFactory;
 import com.wdf.fudoc.request.view.bo.KeyValueTableBO;
-import com.wdf.fudoc.common.components.FuEditorComponent;
-import com.wdf.fudoc.common.components.FuTabComponent;
-import com.wdf.fudoc.common.components.FuTableComponent;
+import com.wdf.fudoc.components.FuEditorComponent;
+import com.wdf.fudoc.components.FuTabComponent;
+import com.wdf.fudoc.components.FuTableComponent;
 import icons.FuDocIcons;
 import lombok.Getter;
 

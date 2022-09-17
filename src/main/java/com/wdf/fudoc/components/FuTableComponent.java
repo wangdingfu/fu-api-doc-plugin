@@ -1,4 +1,4 @@
-package com.wdf.fudoc.common.components;
+package com.wdf.fudoc.components;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.intellij.ui.ToolbarDecorator;

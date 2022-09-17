@@ -1,4 +1,4 @@
-package com.wdf.fudoc.common.components;
+package com.wdf.fudoc.components;
 
 import javax.swing.table.TableCellEditor;
 
