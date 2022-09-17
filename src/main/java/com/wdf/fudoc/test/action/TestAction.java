@@ -32,7 +32,7 @@ public class TestAction extends AnAction {
         JLabel titleLabel = new JLabel("  查看目标详情");
         headerPanel.add(titleLabel, BorderLayout.WEST);
         final ActionManager actionManager = ActionManager.getInstance();
-        DefaultActionGroup defaultActionGroup = (DefaultActionGroup) actionManager.getAction("fu.doc.request.tool.window.action");
+        DefaultActionGroup defaultActionGroup = (DefaultActionGroup) actionManager.getAction("fudoc.request.toolbar.action");
         defaultActionGroup.addSeparator();
         defaultActionGroup.add(new ToggleAction("Pin", "Pin window", AllIcons.General.Pin_tab) {
             @Override
@@ -59,8 +59,7 @@ public class TestAction extends AnAction {
         glass.setVisible(true);
         rootPane.setContentPane(mainPanel);
         rootPane.setDefaultButton(testRequestFrom.getSendBtn());
-        addMouseListeners(rootPane, headerPanel);
-        PopupUtils.popup(rootPane, headerPanel, myIsPinned);
+        PopupUtils.create(rootPane, headerPanel, myIsPinned);
     }
 
 
@@ -75,13 +74,6 @@ public class TestAction extends AnAction {
     }
 
 
-    private void addMouseListeners(JComponent rootPanel, JPanel headerPanel) {
-        WindowMoveListener windowMoveListener = new WindowMoveListener(rootPanel);
-        rootPanel.addMouseListener(windowMoveListener);
-        rootPanel.addMouseMotionListener(windowMoveListener);
-        headerPanel.addMouseListener(windowMoveListener);
-        headerPanel.addMouseMotionListener(windowMoveListener);
 
-    }
 
 }

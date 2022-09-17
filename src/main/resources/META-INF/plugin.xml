@@ -71,10 +71,20 @@
         <!-- 接口文档相关动作 -->
         <group id="wdf.fudoc.apidoc" popup="false" compact="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="gen-api-doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Fu Doc">
+            <action id="fudoc.gen.api.doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Fu Doc">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
             </action>
         </group>
+
+
+        <!-- http请求相关动作 -->
+        <group id="wdf.fudoc.request" popup="false" compact="true">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Fu Request">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
+            </action>
+        </group>
+
 
         <!-- 测试功能点相关动作 -->
         <group id="wdf.fudoc.test" popup="false" compact="true">
@@ -99,19 +109,38 @@
 
 
         <!-- 接口请求工具栏相关动作  -->
-        <group id="fu.doc.request.tool.window.action">
-            <action id="fu.doc.request.tool.window.action.refresh"
+        <group id="fudoc.request.toolbar.action">
+            <action id="fudoc.request.toolbar.action.save"
+                    class="com.wdf.fudoc.request.action.toolbar.SaveAction"
+                    text="Save" description="Save" icon="AllIcons.Actions.MenuSaveall"/>
+            <action id="fudoc.request.toolbar.action.last"
+                    class="com.wdf.fudoc.request.action.toolbar.LastRequestAction"
+                    text="上一条请求" icon="AllIcons.Actions.Back"/>
+            <action id="fudoc.request.toolbar.action.next"
+                    class="com.wdf.fudoc.request.action.toolbar.NextRequestAction"
+                    text="下一条请求" icon="AllIcons.Actions.Forward"/>
+
+
+            <separator/>
+
+            <action id="fudoc.request.toolbar.action.refresh"
                     class="com.wdf.fudoc.test.action.windows.FuRequestRefreshAction"
                     text="Refresh" description="Refresh" icon="AllIcons.Actions.Refresh"/>
-            <action id="fu.doc.request.tool.window.action.send"
+            <action id="fudoc.request.toolbar.action.send"
                     class="com.wdf.fudoc.test.action.windows.FuRequestSendAction"
                     text="Stop Request" description="Stop request" icon="AllIcons.Actions.Suspend"/>
-            <action id="fu.doc.request.tool.window.action.stop"
+            <action id="fudoc.request.toolbar.action.stop"
                     class="com.wdf.fudoc.test.action.windows.FuRequestStopAction"
                     text="Send Request" description="Send request" icon="AllIcons.Actions.Suspend"/>
-            <action id="fu.doc.request.tool.window.action.setting"
+            <action id="fudoc.request.toolbar.action.setting"
                     class="com.wdf.fudoc.test.action.windows.FuRequestSettingAction"
                     text="Setting" description="Setting" icon="AllIcons.General.Settings"/>
+            <separator/>
+            <action id="fudoc.request.toolbar.action.help" class="com.wdf.fudoc.request.action.toolbar.FuDocHelpAction" text="帮助文档" icon="FuDocIcons.FU_DOC"/>
+            <separator/>
+            <action id="fudoc.http.toolbar.action.pin" class="com.wdf.fudoc.components.toolbar.PinToolBarAction" text="Pin" icon="AllIcons.General.Pin_tab">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt P"/>
+            </action>
         </group>
 
         <!-- 魔法棒格式化json动作  -->

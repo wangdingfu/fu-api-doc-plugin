@@ -13,6 +13,6 @@ import org.jetbrains.annotations.NotNull;
 public class TestTableAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        PopupUtils.popup(FuTableEditorComponent.createUIComponents());
+        PopupUtils.create(FuTableEditorComponent.createUIComponents(),null,null);
     }
 }

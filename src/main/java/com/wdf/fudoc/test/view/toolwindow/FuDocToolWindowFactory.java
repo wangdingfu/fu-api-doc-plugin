@@ -28,7 +28,7 @@ public class FuDocToolWindowFactory implements ToolWindowFactory, DumbAware {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(new FuRequestWindow(project), "", false);
         final ActionManager actionManager = ActionManager.getInstance();
-        DefaultActionGroup defaultActionGroup = (DefaultActionGroup) actionManager.getAction("fu.doc.request.tool.window.action");
+        DefaultActionGroup defaultActionGroup = (DefaultActionGroup) actionManager.getAction("fudoc.request.toolbar.action");
         List<AnAction> actionList = Lists.newArrayList(defaultActionGroup.getChildActionsOrStubs());
         actionList.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
             @Override

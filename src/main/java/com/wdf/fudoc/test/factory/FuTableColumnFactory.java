@@ -5,7 +5,6 @@ import com.wdf.fudoc.apidoc.constant.enumtype.DynamicDataType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.apidoc.pojo.bo.FilterFieldBO;
-import com.wdf.fudoc.request.view.bo.*;
 import com.wdf.fudoc.test.view.bo.*;
 
 import java.util.List;

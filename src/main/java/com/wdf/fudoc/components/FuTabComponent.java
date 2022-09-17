@@ -44,7 +44,7 @@ public class FuTabComponent {
     /**
      * 当前tab下默认面板
      */
-    private JPanel defaultPanel;
+    private JComponent defaultPanel;
 
     private JPanel toolBarPanel;
 
@@ -61,7 +61,7 @@ public class FuTabComponent {
     private String currentTab;
 
 
-    public FuTabComponent(String title, Icon icon, JPanel mainPanel) {
+    public FuTabComponent(String title, Icon icon, JComponent mainPanel) {
         this.title = title;
         this.icon = icon;
         this.defaultPanel = mainPanel;
@@ -69,7 +69,7 @@ public class FuTabComponent {
         switchPanel(mainPanel);
     }
 
-    public static FuTabComponent getInstance(String title, Icon icon, JPanel mainPanel) {
+    public static FuTabComponent getInstance(String title, Icon icon, JComponent mainPanel) {
         return new FuTabComponent(title, icon, mainPanel);
     }
 
@@ -210,7 +210,7 @@ public class FuTabComponent {
      *
      * @param switchPanel 需要切换的面板
      */
-    private void switchPanel(JPanel switchPanel) {
+    private void switchPanel(JComponent switchPanel) {
         this.rootPanel.removeAll();
         this.rootPanel.repaint();
         this.rootPanel.add(switchPanel, BorderLayout.CENTER);

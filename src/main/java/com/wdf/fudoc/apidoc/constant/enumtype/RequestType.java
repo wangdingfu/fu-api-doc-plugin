@@ -3,6 +3,9 @@ package com.wdf.fudoc.apidoc.constant.enumtype;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * @author wangdingfu
  * @Descption 请求类型
@@ -46,5 +49,10 @@ public enum RequestType {
             }
         }
         return null;
+    }
+
+
+    public static String[] getItems(){
+        return Arrays.stream(RequestType.values()).map(RequestType::getRequestType).collect(Collectors.toList()).toArray(new String[]{});
     }
 }
