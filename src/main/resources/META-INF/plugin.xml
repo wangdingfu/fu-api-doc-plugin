@@ -55,14 +55,14 @@
                     secondary="false"
                     doNotActivateOnStart="true"
                     order="last"
-                    factoryClass="com.wdf.fudoc.request.view.toolwindow.FuDocToolWindowFactory"/>
+                    factoryClass="com.wdf.fudoc.test.view.toolwindow.FuDocToolWindowFactory"/>
 
 
 <!--        <iw.actionProvider implementation="com.wdf.fudoc.request.action.editor.FormatActionProvider"/>-->
 
         <editorFloatingToolbarProvider
                 order="after DefaultFloatingToolbarProvider"
-                implementation="com.wdf.fudoc.request.action.editor.FuDocEditorFloatingToolbarProvider"
+                implementation="com.wdf.fudoc.test.action.editor.FuDocEditorFloatingToolbarProvider"
                 id="FuDocEditorFloatingToolbarProvider"/>
     </extensions>
 
@@ -79,8 +79,8 @@
         <!-- 测试功能点相关动作 -->
         <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
-            <action id="com.fudoc.test.request" class="com.wdf.fudoc.request.action.TestAction" text="Test" description="Test"/>
-            <action id="com.fudoc.test.table" class="com.wdf.fudoc.request.action.TestTableAction" text="Test Table"
+            <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test" description="Test"/>
+            <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
                     description="Test table"/>
         </group>
 
@@ -101,22 +101,22 @@
         <!-- 接口请求工具栏相关动作  -->
         <group id="fu.doc.request.tool.window.action">
             <action id="fu.doc.request.tool.window.action.refresh"
-                    class="com.wdf.fudoc.request.action.windows.FuRequestRefreshAction"
+                    class="com.wdf.fudoc.test.action.windows.FuRequestRefreshAction"
                     text="Refresh" description="Refresh" icon="AllIcons.Actions.Refresh"/>
             <action id="fu.doc.request.tool.window.action.send"
-                    class="com.wdf.fudoc.request.action.windows.FuRequestSendAction"
+                    class="com.wdf.fudoc.test.action.windows.FuRequestSendAction"
                     text="Stop Request" description="Stop request" icon="AllIcons.Actions.Suspend"/>
             <action id="fu.doc.request.tool.window.action.stop"
-                    class="com.wdf.fudoc.request.action.windows.FuRequestStopAction"
+                    class="com.wdf.fudoc.test.action.windows.FuRequestStopAction"
                     text="Send Request" description="Send request" icon="AllIcons.Actions.Suspend"/>
             <action id="fu.doc.request.tool.window.action.setting"
-                    class="com.wdf.fudoc.request.action.windows.FuRequestSettingAction"
+                    class="com.wdf.fudoc.test.action.windows.FuRequestSettingAction"
                     text="Setting" description="Setting" icon="AllIcons.General.Settings"/>
         </group>
 
         <!-- 魔法棒格式化json动作  -->
         <group id="fu.doc.editor.format">
-            <action id="fu.doc.format" class="com.wdf.fudoc.request.action.editor.FuEditorFormatAction"/>
+            <action id="fu.doc.format" class="com.wdf.fudoc.test.action.editor.FuEditorFormatAction"/>
         </group>
     </actions>
 

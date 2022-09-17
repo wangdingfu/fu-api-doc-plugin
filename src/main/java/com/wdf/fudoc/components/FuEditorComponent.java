@@ -20,7 +20,7 @@ import com.intellij.ui.SeparatorFactory;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.util.FuEditorSettings;
-import com.wdf.fudoc.request.factory.LightVirtualFileFactory;
+import com.wdf.fudoc.test.factory.LightVirtualFileFactory;
 import com.wdf.fudoc.util.EditorUtils;
 import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;

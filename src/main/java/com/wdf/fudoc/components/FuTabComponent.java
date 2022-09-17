@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.apidoc.constant.enumtype.ActionType;
-import com.wdf.fudoc.request.view.bo.BarPanelBO;
+import com.wdf.fudoc.test.view.bo.BarPanelBO;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;

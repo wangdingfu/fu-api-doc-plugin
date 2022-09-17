@@ -4,7 +4,7 @@ import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
 import com.wdf.fudoc.apidoc.data.CustomerSettingData;
 import com.wdf.fudoc.apidoc.data.SettingData;
 import com.wdf.fudoc.apidoc.data.SettingDynamicValueData;
-import com.wdf.fudoc.request.factory.FuTableColumnFactory;
+import com.wdf.fudoc.test.factory.FuTableColumnFactory;
 import com.wdf.fudoc.apidoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.components.FuTableComponent;
 import lombok.Getter;
