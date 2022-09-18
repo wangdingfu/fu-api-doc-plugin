@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.config;
+package com.wdf.fudoc.spring;
 
 import com.google.common.collect.Sets;
 

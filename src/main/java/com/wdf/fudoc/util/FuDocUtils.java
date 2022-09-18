@@ -3,13 +3,17 @@ package com.wdf.fudoc.util;
 import com.google.common.collect.Sets;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Computable;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -118,4 +122,20 @@ public class FuDocUtils {
         }
         return false;
     }
+
+    /**
+     * 获取项目中module的唯一标识
+     *
+     * @param module 项目中的module
+     * @return module的绝对路径
+     */
+    public static String getModuleId(Module module) {
+        VirtualFile[] contentRoots = ModuleRootManager.getInstance(module).getContentRoots();
+        if (contentRoots.length > 0) {
+            return contentRoots[0].getPath();
+        }
+        return module.getName();
+    }
+
+
 }

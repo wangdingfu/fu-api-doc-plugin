@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.config.handler;
+package com.wdf.fudoc.spring.handler;
 
 /**
  * @author wangdingfu

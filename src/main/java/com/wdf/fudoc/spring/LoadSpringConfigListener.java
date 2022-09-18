@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.config;
+package com.wdf.fudoc.spring;
 
 import cn.hutool.core.thread.ThreadUtil;
 import com.intellij.openapi.project.Project;

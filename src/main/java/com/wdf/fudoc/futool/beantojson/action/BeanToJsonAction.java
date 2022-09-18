@@ -3,7 +3,7 @@ package com.wdf.fudoc.futool.beantojson.action;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.wdf.fudoc.apidoc.action.AbstractClassAction;
+import com.wdf.fudoc.common.AbstractClassAction;
 import com.wdf.fudoc.common.FuDocMessageBundle;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
@@ -32,39 +32,22 @@ public class BeanToJsonAction extends AbstractClassAction {
     }
 
     @Override
-    public void actionPerformed(@NotNull AnActionEvent e) {
+    protected String exceptionMsg() {
+        return MessageConstants.NOTIFY_TO_JSON_FAIL;
+    }
+
+    @Override
+    protected void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext) {
         long start = System.currentTimeMillis();
-        PsiElement targetElement = PsiClassUtils.getTargetElement(e);
-        if (Objects.isNull(targetElement)) {
-            FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.NOTIFY_NOT_FUND_CLASS));
-            return;
+        FuDocService fuDocService = new GenObjectJsonServiceImpl();
+        String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
+        if (StringUtils.isBlank(content)) {
+            content = "{\n}";
         }
-        //获取当前操作的类
-        PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
-        //向全局上下文中添加Project内容
-        FuDocDataContent.setData(FuDocData.builder().event(e).build());
-
-        try {
-            FuDocContext fuDocContext = new FuDocContext();
-            fuDocContext.setSettingData(FuDocSetting.getSettingData());
-            fuDocContext.setTargetElement(targetElement);
-
-            FuDocService fuDocService = new GenObjectJsonServiceImpl();
-            String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
-            if (StringUtils.isBlank(content)) {
-                content = "{\n}";
-            }
-            //将接口文档内容拷贝至剪贴板
-            ClipboardUtil.copyToClipboard(content);
-            log.info("【{}】--->【bean to json】完成. 共计耗时{}ms", psiClass.getName(), System.currentTimeMillis() - start);
-            //通知接口文档已经拷贝至剪贴板
-            FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_TO_JSON_OK, psiClass.getName()));
-        } catch (Throwable exception) {
-            //发送失败通知
-            log.error("【Fu Doc】--->【bean to json】失败", exception);
-            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.NOTIFY_TO_JSON_FAIL));
-        } finally {
-            FuDocDataContent.remove();
-        }
+        //将接口文档内容拷贝至剪贴板
+        ClipboardUtil.copyToClipboard(content);
+        log.info("【{}】--->【bean to json】完成. 共计耗时{}ms", psiClass.getName(), System.currentTimeMillis() - start);
+        //通知接口文档已经拷贝至剪贴板
+        FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.NOTIFY_TO_JSON_OK, psiClass.getName()));
     }
 }

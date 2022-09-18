@@ -2,10 +2,11 @@ package com.wdf.fudoc.request.view;
 
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
 import com.intellij.ui.JBColor;
+import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.toolbar.PinToolBarAction;
 import com.wdf.fudoc.request.constants.RequestConstants;
+import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.RequestTabView;
 import com.wdf.fudoc.request.tab.ResponseTabView;
 import com.wdf.fudoc.test.factory.FuTabBuilder;
@@ -15,6 +16,7 @@ import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * 发起http请求的窗口
@@ -67,6 +69,7 @@ public class HttpDialogView {
         this.project = project;
         this.requestTabView = new RequestTabView(this.project);
         this.responseTabView = new ResponseTabView(this.project);
+
         initToolBarUI();
         initRequestUI();
         initResponseUI();
@@ -91,14 +94,14 @@ public class HttpDialogView {
      * 初始化请求部分面板
      */
     private void initRequestUI() {
-        fuTabBuilder.addTab(this.requestTabView.getTabInfo());
+        fuTabBuilder.addTab(this.requestTabView);
     }
 
     /**
      * 初始化响应部分面板
      */
     private void initResponseUI() {
-        fuTabBuilder.addTab(this.responseTabView.getTabInfo());
+        fuTabBuilder.addTab(this.responseTabView);
     }
 
 
@@ -107,18 +110,36 @@ public class HttpDialogView {
      */
     private void initUI() {
         this.rootPanel = new JPanel(new BorderLayout());
+        this.rootPanel.setMinimumSize(new Dimension(700, 440));
+        this.rootPanel.setPreferredSize(new Dimension(700, 440));
+        // 边框
+        this.rootPanel.setBorder(JBUI.Borders.empty());
         this.rootPanel.add(this.toolBarPanel, BorderLayout.NORTH);
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
     }
 
+    /**
+     * 初始化请求数据
+     *
+     * @param fuHttpRequestData http请求数据
+     */
+    public void initData(FuHttpRequestData fuHttpRequestData) {
+        if (Objects.isNull(fuHttpRequestData)) {
+            return;
+        }
+        this.titleLabel.setText(fuHttpRequestData.getApiName());
+        this.requestTabView.initData(fuHttpRequestData.getRequest());
+        this.responseTabView.initData(fuHttpRequestData.getResponse());
+    }
 
     /**
      * 弹出当前页面
      *
      * @param project 当前项目
      */
-    public static void popup(Project project) {
+    public static void popup(Project project, FuHttpRequestData fuHttpRequestData) {
         HttpDialogView httpDialogView = new HttpDialogView(project);
+        httpDialogView.initData(fuHttpRequestData);
         PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), PinToolBarAction.getPinStatus());
     }
 }

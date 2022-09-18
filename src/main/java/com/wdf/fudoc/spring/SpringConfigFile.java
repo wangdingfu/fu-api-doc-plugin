@@ -1,6 +1,6 @@
-package com.wdf.fudoc.test.config;
+package com.wdf.fudoc.spring;
 
-import com.wdf.fudoc.test.config.handler.ReadSpringConfigFileHandler;
+import com.wdf.fudoc.spring.handler.ReadSpringConfigFileHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -16,6 +16,9 @@ public interface FuDocConstants {
 
     String FU_DOC_FILE = "FuDocFile.";
 
+
+    String DEFAULT_HOST = "http://localhost";
+
     interface AnnotationAttr {
         String MESSAGE = "message";
         String NAME = "name";

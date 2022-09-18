@@ -7,6 +7,7 @@ import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.apidoc.constant.enumtype.ActionType;
 import com.wdf.fudoc.test.view.bo.BarPanelBO;
+import icons.FuDocIcons;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -65,13 +66,15 @@ public class FuTabComponent {
         this.title = title;
         this.icon = icon;
         this.defaultPanel = mainPanel;
-        this.rootPanel = new BorderLayoutPanel();
+        this.rootPanel = new JPanel(new BorderLayout());
         switchPanel(mainPanel);
     }
 
     public static FuTabComponent getInstance(String title, Icon icon, JComponent mainPanel) {
         return new FuTabComponent(title, icon, mainPanel);
     }
+
+
 
     /**
      * 为当前tab新增扩展功能 支持通过点击扩展的bar按钮来切换不同面板
@@ -93,6 +96,11 @@ public class FuTabComponent {
     public void addBar(String text, Icon icon, JPanel targetPanel, ActionType actionType) {
         barPanelMap.put(text, new BarPanelBO(text, icon, false, targetPanel, actionType));
         addAction(text, icon, actionType);
+    }
+
+    public FuTabComponent addBulkEditBar(JPanel bulkEditPanel) {
+        this.addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, bulkEditPanel);
+        return this;
     }
 
     /**

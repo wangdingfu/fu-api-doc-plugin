@@ -10,6 +10,7 @@ import com.wdf.fudoc.apidoc.parse.FuDocClassParserImpl;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
+import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 
@@ -23,14 +24,8 @@ public class GenControllerFuDocServiceImpl implements FuDocService {
 
     @Override
     public String genFuDocContent(FuDocContext fuDocContext, PsiClass psiClass) {
-        //获取当前操作的方法
-        PsiMethod targetMethod = PsiClassUtils.getTargetMethod(fuDocContext.getTargetElement());
-        //解析java类
-        FuDocClassParser fuDocClassParser = ServiceHelper.getService(FuDocClassParserImpl.class);
-        ClassInfoDesc classInfoDesc = fuDocClassParser.parse(fuDocContext, psiClass, ObjectUtils.newArrayList(targetMethod));
-
         //组装ApiDocData对象
-        List<FuDocItemData> resultList = AssembleServiceExecutor.execute(fuDocContext, classInfoDesc);
+        List<FuDocItemData> resultList = GenFuDocUtils.gen(fuDocContext, psiClass);
 
         //将接口文档数据渲染成markdown格式接口文档
         return FuDocRender.markdownRender(fuDocContext.getSettingData(), resultList);

@@ -45,7 +45,6 @@ public class PopupUtils {
                 .setBelongsToGlobalPopupStack(true)
                 .setDimensionServiceKey(currProject, FU_REQUEST_POPUP, true)
                 .setLocateWithinScreenBounds(false)
-                .setMinSize(new Dimension(700,400))
                 // 单击外部时取消弹窗
                 .setCancelOnClickOutside(false)
                 // 在其他窗口打开时取消

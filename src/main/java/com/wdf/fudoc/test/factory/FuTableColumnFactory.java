@@ -57,7 +57,7 @@ public class FuTableColumnFactory {
     /**
      * 过滤属性table列
      */
-    public static List<Column> keyValueColumns1() {
+    public static List<Column> formDataColumns() {
         List<Column> columns = Lists.newArrayList();
         columns.add(new BooleanColumn<>("", KeyValueTableBO::getSelect, KeyValueTableBO::setSelect));
         columns.add(new StringColumn<>("KEY", KeyValueTableBO::getKey, KeyValueTableBO::setKey));

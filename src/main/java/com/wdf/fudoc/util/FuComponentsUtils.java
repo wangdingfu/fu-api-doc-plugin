@@ -23,7 +23,7 @@ public class FuComponentsUtils {
 
 
     public static JPanel createEmptyTable1() {
-        FuTableComponent<KeyValueTableBO> component = FuTableComponent.create(FuTableColumnFactory.keyValueColumns1(), Lists.newArrayList(), KeyValueTableBO.class);
+        FuTableComponent<KeyValueTableBO> component = FuTableComponent.create(FuTableColumnFactory.formDataColumns(), Lists.newArrayList(), KeyValueTableBO.class);
         component.addListener((fuTableView, row, column) -> {
             if (column == 3) {
                 Object valueAt = fuTableView.getValueAt(row, column - 1);

@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.config;
+package com.wdf.fudoc.spring;
 
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.JavaModuleType;
@@ -7,9 +7,10 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.wdf.fudoc.test.config.handler.ReadPropertiesConfigFileHandler;
-import com.wdf.fudoc.test.config.handler.ReadSpringConfigFileHandler;
-import com.wdf.fudoc.test.config.handler.ReadYmlConfigFileHandler;
+import com.wdf.fudoc.spring.handler.ReadPropertiesConfigFileHandler;
+import com.wdf.fudoc.spring.handler.ReadSpringConfigFileHandler;
+import com.wdf.fudoc.spring.handler.ReadYmlConfigFileHandler;
+import com.wdf.fudoc.util.FuDocUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SpringConfigFileManager {
 
-    private static final Map<Module, ModuleSpringConfig> MODULE_SPRING_CONFIG_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, ModuleSpringConfig> MODULE_SPRING_CONFIG_MAP = new ConcurrentHashMap<>();
 
 
     /**
@@ -40,7 +41,7 @@ public class SpringConfigFileManager {
         for (Module module : modules) {
             ModuleSpringConfig moduleSpringConfig = initModuleConfig(module);
             if (Objects.nonNull(moduleSpringConfig)) {
-                MODULE_SPRING_CONFIG_MAP.put(module, moduleSpringConfig);
+                MODULE_SPRING_CONFIG_MAP.put(FuDocUtils.getModuleId(module), moduleSpringConfig);
             }
         }
     }
@@ -53,8 +54,13 @@ public class SpringConfigFileManager {
      * @return 配置的值
      */
     public static String getConfig(Module module, String key) {
-        if (Objects.nonNull(module) && StringUtils.isNotBlank(key)) {
-            ModuleSpringConfig moduleSpringConfig = MODULE_SPRING_CONFIG_MAP.get(module);
+        return getConfig(FuDocUtils.getModuleId(module), key);
+    }
+
+
+    public static String getConfig(String moduleId, String key) {
+        if (StringUtils.isNotBlank(moduleId) && StringUtils.isNotBlank(key)) {
+            ModuleSpringConfig moduleSpringConfig = MODULE_SPRING_CONFIG_MAP.get(moduleId);
             if (Objects.nonNull(moduleSpringConfig)) {
                 return moduleSpringConfig.getAttr(key);
             }
@@ -70,7 +76,12 @@ public class SpringConfigFileManager {
      * @return 当前module下项目启动的端口号
      */
     public static Integer getServerPort(Module module) {
-        String config = getConfig(module, SpringConfigFileConstants.SERVER_PORT_KEY);
+        return getServerPort(FuDocUtils.getModuleId(module));
+    }
+
+
+    public static Integer getServerPort(String moduleId) {
+        String config = getConfig(moduleId, SpringConfigFileConstants.SERVER_PORT_KEY);
         if (StringUtils.isNotBlank(config) && StringUtils.isNumeric(config)) {
             return Integer.parseInt(config);
         }

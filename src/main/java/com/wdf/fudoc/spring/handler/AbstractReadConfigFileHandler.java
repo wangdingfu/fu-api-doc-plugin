@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.config.handler;
+package com.wdf.fudoc.spring.handler;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import lombok.extern.slf4j.Slf4j;
