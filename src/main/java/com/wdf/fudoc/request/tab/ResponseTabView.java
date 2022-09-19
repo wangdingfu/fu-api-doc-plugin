@@ -22,6 +22,8 @@ import java.util.Objects;
  */
 public class ResponseTabView implements FuTab, InitRequestData {
 
+    public static final String RESPONSE = "Response";
+
     private final Project project;
 
     private final FuEditorComponent fuEditorComponent;

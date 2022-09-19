@@ -38,22 +38,21 @@ public class FuHttpRequestImpl implements FuHttpRequest {
     public void doSend() {
         this.requestStatus = true;
         //发起请求
-        ThreadUtil.execAsync(() -> {
-            //填充请求结果
-            FuResponseData response = this.fuHttpRequestData.getResponse();
-            if (Objects.isNull(response)) {
-                response = new FuResponseData();
-                this.fuHttpRequestData.setResponse(response);
-            }
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            //设置响应结果
-            response.setContent(JSONUtil.toJsonStr(CommonResult.ok()));
-            finished();
-        });
+
+        //填充请求结果
+        FuResponseData response = this.fuHttpRequestData.getResponse();
+        if (Objects.isNull(response)) {
+            response = new FuResponseData();
+            this.fuHttpRequestData.setResponse(response);
+        }
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        //设置响应结果
+        response.setContent(JSONUtil.toJsonStr(CommonResult.ok()));
+        finished();
     }
 
     @Override

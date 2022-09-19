@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.tab;
 
+import cn.hutool.core.thread.ThreadUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
@@ -93,12 +94,12 @@ public class RequestTabView implements FuTab, InitRequestData {
         this.rootPane = new JRootPane();
         initRootPane();
         initUI();
-        this.sendBtn.addActionListener(e -> {
+        this.sendBtn.addActionListener(e -> ThreadUtil.execAsync(() -> {
             //发送请求
             HttpApiExecutor.doSendRequest(project, fuHttpRequestData);
             //填充响应结果
-            httpDialogView.initResponseData(fuHttpRequestData);
-        });
+            httpDialogView.sendAfter(fuHttpRequestData);
+        }));
     }
 
 
