@@ -226,6 +226,17 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         super.addRow(toTableData(data));
     }
 
+
+    /**
+     * 添加一行数据到table组件中
+     *
+     * @param data table中的一条数据
+     */
+    public void addRowData(T data) {
+        this.dataList.add(data);
+        addRow(data);
+    }
+
     /**
      * 将数据转换为table数据格式
      *
