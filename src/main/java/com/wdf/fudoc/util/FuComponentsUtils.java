@@ -24,15 +24,6 @@ public class FuComponentsUtils {
 
     public static JPanel createEmptyTable1() {
         FuTableComponent<KeyValueTableBO> component = FuTableComponent.create(FuTableColumnFactory.formDataColumns(), Lists.newArrayList(), KeyValueTableBO.class);
-        component.addListener((fuTableView, row, column) -> {
-            if (column == 3) {
-                Object valueAt = fuTableView.getValueAt(row, column - 1);
-                if (RequestParamType.FILE.getCode().equals(valueAt)) {
-                    return TableCellEditorFactory.createLocalPathCellEditor();
-                }
-            }
-            return null;
-        });
         return component.createPanel();
     }
 

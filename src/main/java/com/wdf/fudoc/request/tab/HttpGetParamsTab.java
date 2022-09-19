@@ -8,6 +8,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
@@ -54,21 +55,32 @@ public class HttpGetParamsTab implements FuTab, InitRequestData {
      */
     private FuHttpRequestData httpRequestData;
 
+    /**
+     * 请求地址 不携带请求参数
+     */
+    private String requestBaseUrl;
 
+
+    /**
+     * 初始化GET请求的table组件和批量编辑组件
+     *
+     * @param requestTabView 父容器对象
+     */
     public HttpGetParamsTab(RequestTabView requestTabView) {
         this.requestTabView = requestTabView;
         //请求参数表格组件初始化
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class);
+        this.fuTableComponent.addListener(new HttpGetParamsTableListener(this));
         //文本编辑器
         this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
     }
 
-
+    /**
+     * 将当前容器作为一个tab返回出去
+     */
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Params", null, fuTableComponent.createPanel())
-                .addBulkEditBar(fuEditorComponent.getMainPanel())
-                .builder();
+        return FuTabComponent.getInstance("Params", null, fuTableComponent.createPanel()).addBulkEditBar(fuEditorComponent.getMainPanel()).builder();
     }
 
 
@@ -87,22 +99,70 @@ public class HttpGetParamsTab implements FuTab, InitRequestData {
             this.fuEditorComponent.setContent(buildBulkEditContent(params));
             this.params = params;
         }
+        //生成请求地址
+        genRequestBaseUrl(httpRequestData);
         //重置接口请求地址
         resetRequestUrl();
+    }
+
+    /**
+     * table组件监听器
+     */
+    static class HttpGetParamsTableListener implements FuTableListener<KeyValueTableBO> {
+
+        private final HttpGetParamsTab httpGetParamsTab;
+
+        public HttpGetParamsTableListener(HttpGetParamsTab httpGetParamsTab) {
+            this.httpGetParamsTab = httpGetParamsTab;
+        }
+
+        @Override
+        public void propertyChange(KeyValueTableBO data, int row, int column, Object value) {
+            //table属性发生了变更 需要重新生成请求地址 且同步数据到批量编辑组件
+            httpGetParamsTab.reset(true);
+        }
+    }
+
+
+    /**
+     * 重置且同步table组件和批量编辑组件内容
+     *
+     * @param isTable true 从table组件同步到批量编辑组件 false 从批量编辑组件同步到table组件
+     */
+    public void reset(boolean isTable) {
+        if (isTable) {
+            //从table组件同步内容到编辑器组件
+            this.fuEditorComponent.setContent(buildBulkEditContent(this.params));
+        } else {
+            // TODO 从编辑器组件同步到table组件
+        }
+        //重置请求地址
+        resetRequestUrl();
+    }
+
+
+    /**
+     * 生成不携带请求参数的请求地址
+     *
+     * @param httpRequestData http请求数据对象
+     */
+    private void genRequestBaseUrl(FuHttpRequestData httpRequestData) {
+        String moduleId = httpRequestData.getModuleId();
+        Integer serverPort = SpringConfigFileManager.getServerPort(moduleId);
+        FuRequestData request = httpRequestData.getRequest();
+        String apiUrl = request.getApiUrl();
+        this.requestBaseUrl = PathUtils.urlJoin(FuDocConstants.DEFAULT_HOST + ":" + serverPort, apiUrl);
     }
 
 
     /**
      * 重置请求地址
      */
-    private void resetRequestUrl() {
+    public void resetRequestUrl() {
         if (Objects.nonNull(this.httpRequestData)) {
-            String moduleId = this.httpRequestData.getModuleId();
-            Integer serverPort = SpringConfigFileManager.getServerPort(moduleId);
-            FuRequestData request = this.httpRequestData.getRequest();
-            String apiUrl = request.getApiUrl();
             //完整请求地址=域名+apiUrl+请求参数
-            String requestUrl = PathUtils.urlJoin(FuDocConstants.DEFAULT_HOST + ":" + serverPort, apiUrl, joinParams());
+            String requestUrl = PathUtils.urlJoin(this.requestBaseUrl, joinParams());
+            FuRequestData request = this.httpRequestData.getRequest();
             request.setRequestUrl(requestUrl);
             this.requestTabView.setRequestUrl(requestUrl);
         }

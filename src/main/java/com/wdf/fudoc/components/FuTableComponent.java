@@ -4,6 +4,7 @@ import cn.hutool.core.util.ReflectUtil;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
+import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.view.bo.Column;
 import com.wdf.fudoc.util.JTableUtils;
@@ -36,12 +37,18 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * table对象
      */
-    private FuTableView fuTableView;
+    private FuTableView<T> fuTableView;
 
     /**
      * table数据的class对象
      */
     private final Class<T> clazz;
+
+    /**
+     * table组件监听器
+     */
+    @Getter
+    private FuTableListener<T> fuTableListener;
 
     public FuTableComponent(List<Column> columnList, List<T> dataList, Class<T> clazz) {
         this.columnList = columnList;
@@ -51,8 +58,8 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     }
 
 
-    public void addListener(FuTableCellEditorListener fuTableCellEditorListener) {
-        this.fuTableView.setFuTableCellEditorListener(fuTableCellEditorListener);
+    public void addListener(FuTableListener<T> fuTableListener) {
+        this.fuTableListener = fuTableListener;
     }
 
     @Override
@@ -126,7 +133,11 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
             //修改table中的值
             super.setValueAt(value, row, column);
             //修改持久化数据集合中的值
-            FuTableColumnFactory.setValue(this.dataList.get(row), value, this.columnList.get(column));
+            T data = this.dataList.get(row);
+            FuTableColumnFactory.setValue(data, value, this.columnList.get(column));
+            if (Objects.nonNull(this.fuTableListener)) {
+                this.fuTableListener.propertyChange(data, row, column, value);
+            }
         }
     }
 
@@ -153,7 +164,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      * 初始化table
      */
     private void initTable() {
-        this.fuTableView = new FuTableView(this);
+        this.fuTableView = new FuTableView<>(this);
         //只支持单选
         this.fuTableView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //将列初始化到table

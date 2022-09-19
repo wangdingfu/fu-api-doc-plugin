@@ -26,12 +26,13 @@
         <notificationGroup id="com.wdf.fudoc.notification.group" displayType="BALLOON"/>
         <notificationGroup id="com.wdf.fudoc.notification.start.group" displayType="BALLOON"/>
 
+        <projectService serviceImplementation="com.wdf.fudoc.request.state.FuRequestState"/>
 
         <!-- 应用级别的service（所有项目都是这一个实例 不跟项目隔离） 项目级别的service则使用projectService标签 -->
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSetting"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSecuritySetting"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.parse.FuDocClassParserImpl"/>
 
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.parse.FuDocClassParserImpl"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.ControllerAssembleService"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.InterfaceAssembleService"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.FeignAssembleService"/>

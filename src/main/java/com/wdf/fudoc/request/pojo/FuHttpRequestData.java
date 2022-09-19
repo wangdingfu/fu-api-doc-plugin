@@ -14,12 +14,12 @@ import lombok.Setter;
 public class FuHttpRequestData {
 
     /**
-     * 接口ID
+     * 接口唯一标识
      */
-    private String apiId;
+    private String apiKey;
 
     /**
-     * 请求id
+     * 请求id 标识唯一一次请求
      */
     private Integer requestId;
 

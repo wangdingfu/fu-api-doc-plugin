@@ -128,8 +128,8 @@ public class HttpDialogView {
             return;
         }
         this.titleLabel.setText(fuHttpRequestData.getApiName());
-        this.requestTabView.initData(fuHttpRequestData.getRequest());
-        this.responseTabView.initData(fuHttpRequestData.getResponse());
+        this.requestTabView.initData(fuHttpRequestData);
+        this.responseTabView.initData(fuHttpRequestData);
     }
 
     /**

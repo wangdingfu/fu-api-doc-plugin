@@ -3,6 +3,7 @@ package com.wdf.fudoc.request.state;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.wdf.fudoc.apidoc.config.state.FuDocSecuritySetting;
 import com.wdf.fudoc.common.ServiceHelper;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 【Fu Request】持久化数据对象
@@ -24,15 +26,25 @@ import java.util.Map;
 public class FuRequestState implements PersistentStateComponent<FuRequestState> {
 
     /**
-     * 每一个项目的接口请求数据集合
-     * key:projectId
-     * value:当前项目下所有的请求记录
+     * 接口请求数据全局对象 项目级别
      */
-    private Map<String, GlobalRequestData> moduleRequestDataMap;
+    private GlobalRequestData globalRequestData;
 
-    public static FuRequestState getInstance() {
-        return ServiceHelper.getService(FuRequestState.class);
+
+    public static FuRequestState getInstance(Project project) {
+        return project.getService(FuRequestState.class);
     }
+
+    public static GlobalRequestData getRequestData(Project project) {
+        if (Objects.nonNull(project)) {
+            FuRequestState instance = getInstance(project);
+            if (Objects.nonNull(instance)) {
+                return instance.getGlobalRequestData();
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public @Nullable FuRequestState getState() {
