@@ -27,6 +27,8 @@ public class FuTabBuilder {
 
     private final Map<String, FuTab> fuTabMap = new ConcurrentHashMap<>();
 
+    private final Map<String, TabInfo> tabInfoMap = new ConcurrentHashMap<>();
+
     public FuTabBuilder() {
         this.rootPanel = new BorderLayoutPanel();
         this.tabs = new JBTabsImpl(null, null, ApplicationManager.getApplication());
@@ -39,6 +41,7 @@ public class FuTabBuilder {
 
     public FuTabBuilder addTab(TabInfo tabInfo) {
         this.tabs.addTab(tabInfo);
+        tabInfoMap.put(tabInfo.getText(), tabInfo);
         return this;
     }
 
@@ -52,6 +55,18 @@ public class FuTabBuilder {
         addListener();
         this.rootPanel.add(tabs.getComponent());
         return this.rootPanel;
+    }
+
+    /**
+     * 选中指定tab
+     *
+     * @param text tab标题
+     */
+    public void select(String text) {
+        TabInfo tabInfo = tabInfoMap.get(text);
+        if (Objects.nonNull(tabInfo)) {
+            tabs.select(tabInfo, true);
+        }
     }
 
     public void addListener() {

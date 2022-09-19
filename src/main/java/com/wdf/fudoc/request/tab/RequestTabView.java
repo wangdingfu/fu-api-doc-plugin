@@ -59,7 +59,10 @@ public class RequestTabView implements FuTab, InitRequestData {
      * POST请求参数tab页
      */
     private final HttpRequestBodyTab httpRequestBodyTab;
-
+    /**
+     * tab页构建器
+     */
+    private final FuTabBuilder fuTabBuilder = FuTabBuilder.getInstance();
     /**
      * api接口url
      */
@@ -80,6 +83,7 @@ public class RequestTabView implements FuTab, InitRequestData {
         this.sendBtn.addActionListener(e -> {
             //发送请求
         });
+
     }
 
 
@@ -87,11 +91,7 @@ public class RequestTabView implements FuTab, InitRequestData {
         //send区域
         this.mainPanel.add(initSendPanel(), BorderLayout.NORTH);
         //请求参数区域
-        this.mainPanel.add(FuTabBuilder.getInstance()
-                .addTab(this.httpHeaderTab.getTabInfo())
-                .addTab(this.httpGetParamsTab.getTabInfo())
-                .addTab(this.httpRequestBodyTab.getTabInfo())
-                .build(), BorderLayout.CENTER);
+        this.mainPanel.add(fuTabBuilder.addTab(this.httpHeaderTab.getTabInfo()).addTab(this.httpGetParamsTab.getTabInfo()).addTab(this.httpRequestBodyTab.getTabInfo()).build(), BorderLayout.CENTER);
     }
 
     private JPanel initSendPanel() {
@@ -128,7 +128,6 @@ public class RequestTabView implements FuTab, InitRequestData {
     }
 
 
-
     public void initRootPane() {
         final IdeGlassPaneImpl glass = new IdeGlassPaneImpl(rootPane);
         rootPane.setGlassPane(glass);
@@ -150,5 +149,25 @@ public class RequestTabView implements FuTab, InitRequestData {
         this.httpHeaderTab.initData(httpRequestData);
         this.httpGetParamsTab.initData(httpRequestData);
         this.httpRequestBodyTab.initData(httpRequestData);
+        //自动选中tab页
+        autoSelectTab(httpRequestData);
     }
+
+
+    /**
+     * 自动定位tab页
+     */
+    private void autoSelectTab(FuHttpRequestData httpRequestData) {
+        FuRequestData request = httpRequestData.getRequest();
+        RequestType requestType = request.getRequestType();
+        if (RequestType.GET.equals(requestType)) {
+            //定位到GET params tab页
+            this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
+        } else if (RequestType.POST.equals(requestType)) {
+            //定位到body tab页
+            this.fuTabBuilder.select(HttpRequestBodyTab.BODY);
+        }
+    }
+
+
 }

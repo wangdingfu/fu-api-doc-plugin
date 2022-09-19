@@ -4,9 +4,11 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
+import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.components.toolbar.PinToolBarAction;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.tab.RequestTabView;
 import com.wdf.fudoc.request.tab.ResponseTabView;
 import com.wdf.fudoc.test.factory.FuTabBuilder;
@@ -131,6 +133,7 @@ public class HttpDialogView {
         this.requestTabView.initData(fuHttpRequestData);
         this.responseTabView.initData(fuHttpRequestData);
     }
+
 
     /**
      * 弹出当前页面

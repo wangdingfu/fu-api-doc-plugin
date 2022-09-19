@@ -17,6 +17,7 @@ import icons.FuDocIcons;
  */
 public class HttpRequestBodyTab implements FuTab, InitRequestData {
 
+    public static final String BODY = "Body";
 
     @Override
     public TabInfo getTabInfo() {

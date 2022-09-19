@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.tab;
 
+import cn.hutool.core.util.URLUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
@@ -19,7 +20,6 @@ import com.wdf.fudoc.test.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.view.bo.BarPanelBO;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.ObjectUtils;
-import com.wdf.fudoc.util.PathUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
  * @date 2022-09-17 21:31:31
  */
 public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener {
+
+    public static final String PARAMS = "Params";
     /**
      * 请求参数table组件
      */
@@ -81,7 +83,7 @@ public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener 
      */
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Params", null, fuTableComponent.createPanel()).addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
+        return FuTabComponent.getInstance(PARAMS, null, fuTableComponent.createPanel()).addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
     }
 
 
@@ -218,10 +220,10 @@ public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener 
         if (CollectionUtils.isNotEmpty(pathVariables)) {
             for (KeyValueTableBO pathVariable : pathVariables) {
                 String key = pathVariable.getKey();
-                StringUtils.replace(apiUrl, "{" + key + "}", pathVariable.getValue());
+                apiUrl = StringUtils.replace(apiUrl, "{" + key + "}", pathVariable.getValue());
             }
         }
-        this.requestBaseUrl = PathUtils.joinUrl(FuDocConstants.DEFAULT_HOST + ":" + serverPort, apiUrl);
+        this.requestBaseUrl = URLUtil.completeUrl(FuDocConstants.DEFAULT_HOST + ":" + serverPort, apiUrl);
     }
 
 
@@ -277,7 +279,7 @@ public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener 
     public void resetRequestUrl(String paramUrl) {
         if (Objects.nonNull(this.httpRequestData)) {
             //完整请求地址=域名+apiUrl+请求参数
-            String requestUrl = PathUtils.joinUrl(this.requestBaseUrl, paramUrl);
+            String requestUrl = URLUtil.normalize(this.requestBaseUrl + paramUrl, true, true);
             FuRequestData request = this.httpRequestData.getRequest();
             request.setRequestUrl(requestUrl);
             this.requestTabView.setRequestUrl(requestUrl);
