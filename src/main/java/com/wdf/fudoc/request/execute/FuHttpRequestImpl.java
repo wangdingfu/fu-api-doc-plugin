@@ -54,8 +54,7 @@ public class FuHttpRequestImpl implements FuHttpRequest {
         //设置响应结果
         response.setContent(JSONUtil.toJsonStr(CommonResult.ok()));
 
-        //执行回调
-        httpCallback.callback(fuHttpRequestData);
+        httpCallback.callback(this.fuHttpRequestData);
 
         finished();
     }
@@ -63,7 +62,6 @@ public class FuHttpRequestImpl implements FuHttpRequest {
     @Override
     public void finished() {
         this.requestStatus = false;
-        FuRequest.remove(this.project);
     }
 
     @Override
