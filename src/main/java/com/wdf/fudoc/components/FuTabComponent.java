@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.apidoc.constant.enumtype.ActionType;
+import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.test.view.bo.BarPanelBO;
 import icons.FuDocIcons;
 import lombok.Getter;
@@ -58,6 +59,11 @@ public class FuTabComponent {
      */
     private Map<String, BarPanelBO> barPanelMap = new ConcurrentHashMap<>();
 
+    /**
+     * 工具栏按钮对应的监听器
+     */
+    private Map<String, TabBarListener> listenerMap = new ConcurrentHashMap<>();
+
 
     private String currentTab;
 
@@ -73,7 +79,6 @@ public class FuTabComponent {
     public static FuTabComponent getInstance(String title, Icon icon, JComponent mainPanel) {
         return new FuTabComponent(title, icon, mainPanel);
     }
-
 
 
     /**
@@ -100,6 +105,12 @@ public class FuTabComponent {
 
     public FuTabComponent addBulkEditBar(JPanel bulkEditPanel) {
         this.addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, bulkEditPanel);
+        return this;
+    }
+
+    public FuTabComponent addBulkEditBar(JPanel bulkEditPanel, TabBarListener tabBarListener) {
+        this.addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, bulkEditPanel);
+        listenerMap.put("Bulk Edit", tabBarListener);
         return this;
     }
 
@@ -156,6 +167,11 @@ public class FuTabComponent {
                     barPanelBO.setSelect(!barPanelBO.isSelect());
                     switchPanel(barPanelBO.isSelect() ? barPanelBO.getTargetPanel() : defaultPanel);
                 }
+                //发出事件通知
+                TabBarListener tabBarListener = listenerMap.get(text);
+                if (Objects.nonNull(tabBarListener)) {
+                    tabBarListener.click(barPanelBO);
+                }
             }
         });
     }
@@ -182,6 +198,10 @@ public class FuTabComponent {
                     switchPanelByTab(text);
                 }
                 currentTab = text;
+                TabBarListener tabBarListener = listenerMap.get(text);
+                if (Objects.nonNull(tabBarListener)) {
+                    tabBarListener.select(state);
+                }
             }
         });
     }

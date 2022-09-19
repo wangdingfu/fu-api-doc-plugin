@@ -35,9 +35,8 @@ public class RequestAction extends AbstractClassAction {
             return;
         }
         FuDocItemData fuDocItemData = fuDocItemDataList.get(0);
-
         //获取当前所属模块
-        FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(fuDocItemData);
+        FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(fuDocItemData, psiClass);
 
         HttpDialogView.popup(e.getProject(), fuHttpRequestData);
 

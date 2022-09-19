@@ -18,6 +18,7 @@ import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.FuDocUtils;
+import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
@@ -59,7 +60,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
                 if (CollectionUtils.isEmpty(methodList) || methodList.contains(method)) {
                     ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
                     MethodInfoDesc methodInfoDesc = new MethodInfoDesc();
-                    methodInfoDesc.setMethodId(psiClass.getQualifiedName() + "#" + method.getName());
+                    methodInfoDesc.setMethodId(PsiClassUtils.getMethodId(method));
                     //设置方法上的注释
                     methodInfoDesc.setCommentData(apiDocCommentData);
                     //设置方法上注解

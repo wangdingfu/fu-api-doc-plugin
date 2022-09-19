@@ -9,9 +9,7 @@ import lombok.Getter;
  */
 @Getter
 public enum YesOrNo {
-    NO(0,"否"),
-    YES(1,"是")
-    ;
+    NO(0, "否"), YES(1, "是");
 
     private final int code;
 
@@ -20,5 +18,10 @@ public enum YesOrNo {
     YesOrNo(int code, String desc) {
         this.code = code;
         this.desc = desc;
+    }
+
+
+    public static boolean getByDesc(String desc) {
+        return YES.getDesc().equals(desc);
     }
 }

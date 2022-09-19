@@ -14,9 +14,11 @@ import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -96,9 +98,10 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
             //mock返回结果数据
             fuDocItemData.setResponseExample(MockDataHelper.mockJsonData(Lists.newArrayList(response)));
         }
-
+        Map<String, Object> fuDoc = CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext);
+        fuDoc.put(FuDocConstants.API_ID, methodInfoDesc.getMethodId());
         //组装扩展数据
-        fuDocItemData.setFudoc(CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext));
+        fuDocItemData.setFudoc(fuDoc);
 
     }
 

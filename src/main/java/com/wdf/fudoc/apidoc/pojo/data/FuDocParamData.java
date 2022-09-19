@@ -50,6 +50,11 @@ public class FuDocParamData {
     private String paramDesc;
 
     /**
+     * mock的值
+     */
+    private String paramValue;
+
+    /**
      * 扩展信息
      */
     private Map<String, Object> fudoc;

@@ -1,16 +1,20 @@
 package com.wdf.fudoc.util;
 
+import com.google.common.collect.Lists;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.pojo.bo.PsiClassTypeBO;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -121,5 +125,23 @@ public class PsiClassUtils {
             return true;
         }
         return psiType instanceof PsiPrimitiveType && FuDocConstants.ModifierProperty.VOID.equals(canonicalText);
+    }
+
+
+    /**
+     * 获取method的唯一标识
+     *
+     * @param psiMethod 方法对象
+     * @return 定位该方法的唯一标识
+     */
+    public static String getMethodId(PsiMethod psiMethod) {
+        String psiClassName = ((PsiClassImpl) psiMethod.getParent()).getQualifiedName();
+        String name = psiMethod.getName();
+        List<String> paramTypes = Lists.newArrayList();
+        PsiParameterList parameterList = psiMethod.getParameterList();
+        for (PsiParameter parameter : parameterList.getParameters()) {
+            paramTypes.add(parameter.getType().getCanonicalText());
+        }
+        return psiClassName + "#" + name + "(" + StringUtils.join(paramTypes, ",") + ")";
     }
 }

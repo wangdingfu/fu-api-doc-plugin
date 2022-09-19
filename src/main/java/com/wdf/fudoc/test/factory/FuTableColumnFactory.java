@@ -49,7 +49,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", KeyValueTableBO::getSelect, KeyValueTableBO::setSelect));
         columns.add(new StringColumn<>("KEY", KeyValueTableBO::getKey, KeyValueTableBO::setKey));
         columns.add(new StringColumn<>("VALUE", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
-        columns.add(new StringColumn<>("DESCRIPTION", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
+        columns.add(new StringColumn<>("DESCRIPTION", KeyValueTableBO::getDescription, KeyValueTableBO::setDescription));
         return columns;
     }
 

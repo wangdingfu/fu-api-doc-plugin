@@ -3,18 +3,20 @@ package com.wdf.fudoc.request.tab;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
-import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.components.listener.FuTableListener;
+import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.spring.SpringConfigFileManager;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
+import com.wdf.fudoc.test.view.bo.BarPanelBO;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PathUtils;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-09-17 21:31:31
  */
-public class HttpGetParamsTab implements FuTab, InitRequestData {
+public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener {
     /**
      * 请求参数table组件
      */
@@ -71,6 +73,7 @@ public class HttpGetParamsTab implements FuTab, InitRequestData {
         this.fuTableComponent.addListener(new HttpGetParamsTableListener(this));
         //文本编辑器
         this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
+        this.fuEditorComponent.addListener(new HttpGetEditorListener(this));
     }
 
     /**
@@ -78,7 +81,7 @@ public class HttpGetParamsTab implements FuTab, InitRequestData {
      */
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Params", null, fuTableComponent.createPanel()).addBulkEditBar(fuEditorComponent.getMainPanel()).builder();
+        return FuTabComponent.getInstance("Params", null, fuTableComponent.createPanel()).addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
     }
 
 
@@ -99,11 +102,28 @@ public class HttpGetParamsTab implements FuTab, InitRequestData {
         //生成请求地址
         genRequestBaseUrl(httpRequestData);
         //重置接口请求地址
-        resetRequestUrl();
+        resetRequestUrlFromTable();
     }
 
+
     /**
-     * table组件监听器
+     * 切换组件
+     * true:  table--->editor
+     * false: editor--->table
+     *
+     * @param barPanelBO 批量编辑按钮对象
+     */
+    @Override
+    public void click(BarPanelBO barPanelBO) {
+        if (Objects.nonNull(barPanelBO)) {
+            reset(barPanelBO.isSelect());
+        }
+
+    }
+
+
+    /**
+     * table组件监听器 当table组件中的数据发生变化时 需要更新url
      */
     static class HttpGetParamsTableListener implements FuTableListener<KeyValueTableBO> {
 
@@ -115,11 +135,38 @@ public class HttpGetParamsTab implements FuTab, InitRequestData {
 
         @Override
         public void propertyChange(KeyValueTableBO data, int row, int column, Object value) {
-            //table属性发生了变更 需要重新生成请求地址 且同步数据到批量编辑组件
-            httpGetParamsTab.reset(true);
+            //table属性发生了变更 需要重新生成请求地址
+            this.httpGetParamsTab.resetRequestUrlFromTable();
+        }
+
+        @Override
+        public void deleteRow(int row) {
+            this.httpGetParamsTab.resetRequestUrlFromTable();
+        }
+
+        @Override
+        public void exchangeRows(int oldIndex, int newIndex) {
+            this.httpGetParamsTab.resetRequestUrlFromTable();
         }
     }
 
+
+    /**
+     * 编辑器监听器 当编辑器中的文本内容发生变化时 需要更新请求url
+     */
+    static class HttpGetEditorListener implements FuEditorListener {
+        private final HttpGetParamsTab httpGetParamsTab;
+
+        public HttpGetEditorListener(HttpGetParamsTab httpGetParamsTab) {
+            this.httpGetParamsTab = httpGetParamsTab;
+        }
+
+        @Override
+        public void contentChange(String content) {
+            //重置请求地址
+            httpGetParamsTab.resetRequestUrlFromEditor();
+        }
+    }
 
     /**
      * 重置且同步table组件和批量编辑组件内容
@@ -135,30 +182,23 @@ public class HttpGetParamsTab implements FuTab, InitRequestData {
             bulkEditToTableData();
         }
         //重置请求地址
-        resetRequestUrl();
+        resetRequestUrlFromTable();
     }
 
 
     /**
-     * 将编辑器中的数据同步到table中
+     * 格式化编辑器中的key
+     *
+     * @param key             key
+     * @param keyValueTableBO key value对象
      */
-    private void bulkEditToTableData() {
-        Map<String, KeyValueTableBO> keyValueTableBOMap = ObjectUtils.listToMap(this.fuTableComponent.getDataList(), KeyValueTableBO::getKey);
-        String content = this.fuEditorComponent.getContent();
-        if (StringUtils.isNotBlank(content)) {
-            for (String line : content.split("\n")) {
-                String[] keyValues;
-                if (StringUtils.isNotBlank(line) && Objects.nonNull(keyValues = StringUtils.split(line, ":")) && keyValues.length == 2) {
-                    String key = StringUtils.trim(keyValues[0]);
-                    String value = StringUtils.trim(keyValues[1]);
-                    KeyValueTableBO keyValueTableBO = keyValueTableBOMap.get(key);
-                    if (Objects.nonNull(keyValueTableBO)) {
-                        keyValueTableBO.setSelect(true);
-                    } else {
-                        this.fuTableComponent.addRowData(new KeyValueTableBO(true, RequestParamType.TEXT.getCode(), key, value, ""));
-                    }
-                }
-            }
+    private static void formatKey(String key, KeyValueTableBO keyValueTableBO) {
+        if (key.startsWith("//")) {
+            keyValueTableBO.setSelect(false);
+            keyValueTableBO.setKey(StringUtils.replace(key, "//", "").trim());
+        } else {
+            keyValueTableBO.setSelect(true);
+            keyValueTableBO.setKey(key);
         }
     }
 
@@ -173,17 +213,71 @@ public class HttpGetParamsTab implements FuTab, InitRequestData {
         Integer serverPort = SpringConfigFileManager.getServerPort(moduleId);
         FuRequestData request = httpRequestData.getRequest();
         String apiUrl = request.getApiUrl();
-        this.requestBaseUrl = PathUtils.urlJoin(FuDocConstants.DEFAULT_HOST + ":" + serverPort, apiUrl);
+        //接口地址中参数替换
+        List<KeyValueTableBO> pathVariables = request.getPathVariables();
+        if (CollectionUtils.isNotEmpty(pathVariables)) {
+            for (KeyValueTableBO pathVariable : pathVariables) {
+                String key = pathVariable.getKey();
+                StringUtils.replace(apiUrl, "{" + key + "}", pathVariable.getValue());
+            }
+        }
+        this.requestBaseUrl = PathUtils.joinUrl(FuDocConstants.DEFAULT_HOST + ":" + serverPort, apiUrl);
     }
 
 
     /**
+     * 依据table组件的数据来重置请求地址
+     */
+    public void resetRequestUrlFromTable() {
+        resetRequestUrl(joinParamsFromTable());
+    }
+
+    /**
+     * 依据编辑器组件的数据来重置请求地址
+     */
+    public void resetRequestUrlFromEditor() {
+        resetRequestUrl(joinParamsFromEditor());
+    }
+
+
+    /**
+     * 根据表格组件的请求参数拼接成请求url追加的参数
+     */
+    public String joinParamsFromTable() {
+        return joinParams(this.fuTableComponent.getDataList());
+    }
+
+    /**
+     * 根据编辑器组件的请求参数拼接成请求url追加的参数
+     */
+    private String joinParamsFromEditor() {
+        return joinParams(editorToTableData());
+    }
+
+
+    /**
+     * 拼接请求参数为GET请求参数格式
+     *
+     * @param dataList 请求参数集合
+     * @return url后追加的参数
+     */
+    private String joinParams(List<KeyValueTableBO> dataList) {
+        if (CollectionUtils.isNotEmpty(dataList)) {
+            String paramUrl = dataList.stream().filter(KeyValueTableBO::getSelect).map(this::buildKeyValue).collect(Collectors.joining("&"));
+            if (StringUtils.isNotBlank(paramUrl)) {
+                return "?" + paramUrl;
+            }
+        }
+        return StringUtils.EMPTY;
+    }
+
+    /**
      * 重置请求地址
      */
-    public void resetRequestUrl() {
+    public void resetRequestUrl(String paramUrl) {
         if (Objects.nonNull(this.httpRequestData)) {
             //完整请求地址=域名+apiUrl+请求参数
-            String requestUrl = PathUtils.urlJoin(this.requestBaseUrl, joinParams());
+            String requestUrl = PathUtils.joinUrl(this.requestBaseUrl, paramUrl);
             FuRequestData request = this.httpRequestData.getRequest();
             request.setRequestUrl(requestUrl);
             this.requestTabView.setRequestUrl(requestUrl);
@@ -191,19 +285,57 @@ public class HttpGetParamsTab implements FuTab, InitRequestData {
     }
 
 
-    private String joinParams() {
-        List<KeyValueTableBO> dataList = this.fuTableComponent.getDataList();
-        if (CollectionUtils.isNotEmpty(dataList)) {
-            return "?" + dataList.stream().filter(KeyValueTableBO::getSelect).map(this::buildKeyValue).collect(Collectors.joining("&"));
+    /**
+     * 将编辑器中的数据同步到table中
+     */
+    private void bulkEditToTableData() {
+        Map<String, KeyValueTableBO> keyValueTableBOMap = ObjectUtils.listToMap(this.fuTableComponent.getDataList(), KeyValueTableBO::getKey);
+        List<KeyValueTableBO> tableDataList = editorToTableData();
+        if (CollectionUtils.isNotEmpty(tableDataList)) {
+            for (KeyValueTableBO keyValueTableBO : tableDataList) {
+                KeyValueTableBO tableBO = keyValueTableBOMap.get(keyValueTableBO.getKey());
+                if (Objects.nonNull(tableBO)) {
+                    keyValueTableBO.setDescription(tableBO.getDescription());
+                }
+            }
+        }
+        this.fuTableComponent.setDataList(tableDataList);
+    }
+
+
+    /**
+     * 将编辑器组件的内容转换成表格的数据
+     */
+    private List<KeyValueTableBO> editorToTableData() {
+        String content = this.fuEditorComponent.getContent();
+        List<KeyValueTableBO> dataList = Lists.newArrayList();
+        if (StringUtils.isNotBlank(content)) {
+            for (String line : content.split("\n")) {
+                if (StringUtils.isBlank(line)) {
+                    continue;
+                }
+                String key = StringUtils.contains(line, ":") ? StringUtils.substringBefore(line, ":") : line;
+                String value = StringUtils.substringAfter(line, ":");
+                KeyValueTableBO keyValueTableBO = new KeyValueTableBO();
+                formatKey(key, keyValueTableBO);
+                keyValueTableBO.setValue(value);
+                dataList.add(keyValueTableBO);
+            }
+        }
+        return dataList;
+    }
+
+
+    private String buildBulkEditContent(List<KeyValueTableBO> params) {
+        if (CollectionUtils.isNotEmpty(params)) {
+            return params.stream().map(this::toBulkEdit).collect(Collectors.joining("\n"));
         }
         return StringUtils.EMPTY;
     }
 
-    private String buildBulkEditContent(List<KeyValueTableBO> params) {
-        if (CollectionUtils.isNotEmpty(params)) {
-            return params.stream().filter(KeyValueTableBO::getSelect).map(this::buildKeyValue).collect(Collectors.joining("\n"));
-        }
-        return StringUtils.EMPTY;
+    private String toBulkEdit(KeyValueTableBO keyValueTableBO) {
+        String prefix = keyValueTableBO.getSelect() ? StringUtils.EMPTY : "//";
+        return prefix + keyValueTableBO.getKey() + ":" + keyValueTableBO.getValue();
     }
 
     private String buildKeyValue(KeyValueTableBO keyValueTableBO) {

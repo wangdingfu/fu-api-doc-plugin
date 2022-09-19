@@ -32,7 +32,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      * table数据集合
      */
     @Getter
-    private List<T> dataList;
+    private final List<T> dataList;
 
     /**
      * table对象
@@ -87,6 +87,14 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      */
     @Override
     public void removeRow(int row) {
+        removeRowByIndex(row);
+        if (Objects.nonNull(fuTableListener)) {
+            fuTableListener.deleteRow(row);
+        }
+    }
+
+
+    private void removeRowByIndex(int row) {
         //从持久化数据对象中移除
         this.dataList.remove(row);
         //从table中移除
@@ -105,6 +113,9 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         super.moveRow(oldIndex, oldIndex, newIndex);
         //持久化数据集合中移动
         this.dataList.add(newIndex, this.dataList.remove(oldIndex));
+        if (Objects.nonNull(this.fuTableListener)) {
+            this.fuTableListener.exchangeRows(oldIndex, newIndex);
+        }
     }
 
     /**
@@ -197,11 +208,11 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      * @param dataList 数据集合
      */
     public void setDataList(List<T> dataList) {
-        this.dataList = dataList;
         // 清空数据
         removeAllRow();
-        for (T entity : this.dataList) {
-            addRow(entity);
+        //填充数据
+        for (T entity : dataList) {
+            addRowData(entity);
         }
     }
 
@@ -210,9 +221,10 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      */
     private void removeAllRow() {
         //获取总条数
-        int rowCount = getRowCount();
-        for (int i = 0; i < rowCount; i++) {
-            removeRow(i);
+        int rowCount = getRowCount() - 1;
+        //逆向移除
+        for (int i = rowCount; i >= 0; i--) {
+            removeRowByIndex(i);
         }
     }
 

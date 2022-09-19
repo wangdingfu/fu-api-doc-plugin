@@ -43,4 +43,19 @@ public class KeyValueTableBO {
         this.select = true;
         this.requestParamType = RequestParamType.TEXT.getCode();
     }
+
+
+    public KeyValueTableBO(Boolean select, String key, String value) {
+        this.select = select;
+        this.requestParamType = RequestParamType.TEXT.getCode();
+        this.key = key;
+        this.value = value;
+    }
+
+    public KeyValueTableBO(Boolean select, String key, String value, String description) {
+        this.select = select;
+        this.key = key;
+        this.value = value;
+        this.description = description;
+    }
 }

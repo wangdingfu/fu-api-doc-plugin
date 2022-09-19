@@ -19,6 +19,7 @@ import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SeparatorFactory;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.util.FuEditorSettings;
 import com.wdf.fudoc.test.factory.LightVirtualFileFactory;
 import com.wdf.fudoc.util.EditorUtils;
@@ -78,6 +79,11 @@ public class FuEditorComponent {
 
     private FileType fileType;
 
+    /**
+     * 监听器
+     */
+    private FuEditorListener fuEditorListener;
+
 
     public FuEditorComponent(FileType fileType, String content) {
         this(fileType, content, null);
@@ -120,6 +126,15 @@ public class FuEditorComponent {
         return new FuEditorComponent(fileType, content);
     }
 
+    /**
+     * 添加编辑器监听器
+     *
+     * @param fuEditorListener 编辑器监听器
+     */
+    public void addListener(FuEditorListener fuEditorListener) {
+        this.fuEditorListener = fuEditorListener;
+    }
+
 
     /**
      * 初始化编辑器组件
@@ -127,7 +142,7 @@ public class FuEditorComponent {
     private void initEditor() {
         EditorFactory editorFactory = EditorFactory.getInstance();
         Document document = EditorUtils.createDocument("", this.fileType);
-        this.editor = (EditorImpl) editorFactory.createEditor(document,ProjectUtils.getCurrProject(), EditorKind.UNTYPED);
+        this.editor = (EditorImpl) editorFactory.createEditor(document, ProjectUtils.getCurrProject(), EditorKind.UNTYPED);
         //开启右侧的错误条纹
         ErrorStripeEditorCustomization.ENABLED.customize(editor);
         this.refreshUI();
@@ -142,6 +157,9 @@ public class FuEditorComponent {
             public void documentChanged(@NotNull DocumentEvent event) {
                 //修改了编辑器内容
                 content = editor.getDocument().getText();
+                if (Objects.nonNull(fuEditorListener)) {
+                    fuEditorListener.contentChange(content);
+                }
             }
         });
     }
@@ -191,7 +209,7 @@ public class FuEditorComponent {
     }
 
 
-    private void refreshUI() {
+    private synchronized void refreshUI() {
         Project currProject = ProjectUtils.getCurrProject();
         EditorHighlighterFactory highlighterFactory = EditorHighlighterFactory.getInstance();
         if (StringUtils.isBlank(this.content)) {

@@ -17,6 +17,12 @@ public interface FuDocConstants {
     String FU_DOC_FILE = "FuDocFile.";
 
 
+    String API_ID = "apiId";
+
+
+    String SPRING_PARAM = "springParam";
+
+
     String DEFAULT_HOST = "http://localhost";
 
     interface AnnotationAttr {

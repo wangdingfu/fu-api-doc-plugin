@@ -37,5 +37,33 @@ public interface FuTableListener<T> {
 
     }
 
+    /**
+     * 添加一行
+     *
+     * @param data 添加的数据
+     */
+    default void addRow(T data) {
+
+    }
+
+    /**
+     * 删除一行
+     *
+     * @param row 删除的行数
+     */
+    default void deleteRow(int row) {
+
+    }
+
+    /**
+     * row移动
+     *
+     * @param oldIndex 原来的索引
+     * @param newIndex 移动后的索引
+     */
+    default void exchangeRows(int oldIndex, int newIndex) {
+
+    }
+
 
 }

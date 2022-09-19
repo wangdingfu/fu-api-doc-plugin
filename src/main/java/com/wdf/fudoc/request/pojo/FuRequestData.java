@@ -42,6 +42,10 @@ public class FuRequestData {
      */
     private List<KeyValueTableBO> params;
 
+    /**
+     * 接口路径上的请求参数（GET请求 POST请求都可能有值）
+     */
+    private List<KeyValueTableBO> pathVariables;
 
     /**
      * 请求body内容(POST请求参数)
