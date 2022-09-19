@@ -1,6 +1,8 @@
 package com.wdf.fudoc.request.execute;
 
+import cn.hutool.core.thread.ThreadUtil;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.global.FuRequest;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 
@@ -11,11 +13,11 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 public class HttpApiExecutor {
 
 
-    public static void doSendRequest(Project project, FuHttpRequestData fuHttpRequestData) {
+    public static void doSendRequest(Project project, FuHttpRequestData fuHttpRequestData, HttpCallback httpCallback) {
         FuHttpRequest fuHttpRequest = new FuHttpRequestImpl(project, fuHttpRequestData);
         //将当前请求添加到全局对象中
         FuRequest.addRequest(project, fuHttpRequest);
         //发起请求
-        fuHttpRequest.doSend();
+        ThreadUtil.execAsync(() -> fuHttpRequest.doSend(httpCallback));
     }
 }

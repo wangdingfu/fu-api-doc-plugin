@@ -65,7 +65,7 @@ public class FuTabBuilder {
     public void select(String text) {
         TabInfo tabInfo = tabInfoMap.get(text);
         if (Objects.nonNull(tabInfo)) {
-            tabs.select(tabInfo, true);
+            tabs.select(tabInfo, false);
         }
     }
 

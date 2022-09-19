@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.toolbar.PinToolBarAction;
+import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.RequestTabView;
@@ -24,7 +25,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 18:06:24
  */
-public class HttpDialogView {
+public class HttpDialogView implements HttpCallback {
 
     /**
      * 根面板
@@ -139,10 +140,6 @@ public class HttpDialogView {
     }
 
 
-    public void sendAfter(FuHttpRequestData fuHttpRequestData) {
-        initResponseData(fuHttpRequestData);
-        this.fuTabBuilder.select(ResponseTabView.RESPONSE);
-    }
     /**
      * 弹出当前页面
      *
@@ -152,5 +149,11 @@ public class HttpDialogView {
         HttpDialogView httpDialogView = new HttpDialogView(project);
         httpDialogView.initData(fuHttpRequestData);
         PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), PinToolBarAction.getPinStatus());
+    }
+
+    @Override
+    public void callback(FuHttpRequestData fuHttpRequestData) {
+        this.fuTabBuilder.select(ResponseTabView.RESPONSE);
+        this.responseTabView.initData(fuHttpRequestData);
     }
 }

@@ -1,6 +1,8 @@
 package com.wdf.fudoc.request.execute;
 
 
+import com.wdf.fudoc.request.HttpCallback;
+
 /**
  * @author wangdingfu
  * @date 2022-09-19 20:23:30
@@ -15,7 +17,7 @@ public interface FuHttpRequest {
     /**
      * 发起请求
      */
-    void doSend();
+    void doSend(HttpCallback httpCallback);
 
     /**
      * 请求完毕

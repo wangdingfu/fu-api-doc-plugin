@@ -4,6 +4,7 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.json.JSONUtil;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.common.CommonResult;
+import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.global.FuRequest;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
@@ -35,7 +36,7 @@ public class FuHttpRequestImpl implements FuHttpRequest {
     }
 
     @Override
-    public void doSend() {
+    public void doSend(HttpCallback httpCallback) {
         this.requestStatus = true;
         //发起请求
 
@@ -52,6 +53,10 @@ public class FuHttpRequestImpl implements FuHttpRequest {
         }
         //设置响应结果
         response.setContent(JSONUtil.toJsonStr(CommonResult.ok()));
+
+        //执行回调
+        httpCallback.callback(fuHttpRequestData);
+
         finished();
     }
 
@@ -59,7 +64,6 @@ public class FuHttpRequestImpl implements FuHttpRequest {
     public void finished() {
         this.requestStatus = false;
         FuRequest.remove(this.project);
-
     }
 
     @Override

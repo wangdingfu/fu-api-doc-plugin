@@ -79,7 +79,7 @@ public class RequestTabView implements FuTab, InitRequestData {
     /**
      * 父级容器
      */
-    private HttpDialogView httpDialogView;
+    private final HttpDialogView httpDialogView;
 
     public RequestTabView(Project project, HttpDialogView httpDialogView) {
         this.project = project;
@@ -94,12 +94,7 @@ public class RequestTabView implements FuTab, InitRequestData {
         this.rootPane = new JRootPane();
         initRootPane();
         initUI();
-        this.sendBtn.addActionListener(e -> ThreadUtil.execAsync(() -> {
-            //发送请求
-            HttpApiExecutor.doSendRequest(project, fuHttpRequestData);
-            //填充响应结果
-            httpDialogView.sendAfter(fuHttpRequestData);
-        }));
+        this.sendBtn.addActionListener(e -> HttpApiExecutor.doSendRequest(project, fuHttpRequestData,httpDialogView));
     }
 
 
