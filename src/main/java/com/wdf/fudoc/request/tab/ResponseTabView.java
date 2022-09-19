@@ -1,15 +1,18 @@
 package com.wdf.fudoc.request.tab;
 
+import cn.hutool.json.JSONUtil;
+import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
+import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
-import com.wdf.fudoc.util.FuComponentsUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.*;
+import java.util.Objects;
 
 /**
  * http响应部分内容
@@ -21,21 +24,17 @@ public class ResponseTabView implements FuTab, InitRequestData {
 
     private final Project project;
 
-    private final JPanel rootPanel;
+    private final FuEditorComponent fuEditorComponent;
 
     public ResponseTabView(Project project) {
         this.project = project;
-        this.rootPanel = FuComponentsUtils.createEmptyEditor();
-        initUI();
+        this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "");
     }
 
-
-    private void initUI() {
-    }
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Response", null, this.rootPanel).builder();
+        return FuTabComponent.getInstance("Response", null, fuEditorComponent.getMainPanel()).builder();
     }
 
 
@@ -46,6 +45,10 @@ public class ResponseTabView implements FuTab, InitRequestData {
      */
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
-
+        FuResponseData response = httpRequestData.getResponse();
+        String content;
+        if (Objects.nonNull(response) && StringUtils.isNoneBlank(content = response.getContent())) {
+            fuEditorComponent.setContent(JSONUtil.formatJsonStr(content));
+        }
     }
 }

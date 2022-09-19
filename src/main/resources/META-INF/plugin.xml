@@ -126,16 +126,13 @@
             <separator/>
 
             <action id="fudoc.request.toolbar.action.refresh"
-                    class="com.wdf.fudoc.test.action.windows.FuRequestRefreshAction"
+                    class="com.wdf.fudoc.request.action.toolbar.FuRequestRefreshAction"
                     text="Refresh" description="Refresh" icon="AllIcons.Actions.Refresh"/>
-            <action id="fudoc.request.toolbar.action.send"
-                    class="com.wdf.fudoc.test.action.windows.FuRequestSendAction"
-                    text="Stop Request" description="Stop request" icon="AllIcons.Actions.Suspend"/>
             <action id="fudoc.request.toolbar.action.stop"
-                    class="com.wdf.fudoc.test.action.windows.FuRequestStopAction"
-                    text="Send Request" description="Send request" icon="AllIcons.Actions.Suspend"/>
+                    class="com.wdf.fudoc.request.action.toolbar.FuRequestStopAction"
+                    text="Stop Request" description="Stop request" icon="AllIcons.Actions.Suspend"/>
             <action id="fudoc.request.toolbar.action.setting"
-                    class="com.wdf.fudoc.test.action.windows.FuRequestSettingAction"
+                    class="com.wdf.fudoc.request.action.toolbar.FuRequestSettingAction"
                     text="Setting" description="Setting" icon="AllIcons.General.Settings"/>
             <separator/>
             <action id="fudoc.request.toolbar.action.help" class="com.wdf.fudoc.request.action.toolbar.FuDocHelpAction" text="帮助文档" icon="FuDocIcons.FU_DOC"/>

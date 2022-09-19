@@ -42,4 +42,9 @@ public class FuHttpRequestData {
      * 响应数据
      */
     private FuResponseData response;
+
+    /**
+     * 请求状态 true 正在请求中
+     */
+    private boolean requestStatus;
 }

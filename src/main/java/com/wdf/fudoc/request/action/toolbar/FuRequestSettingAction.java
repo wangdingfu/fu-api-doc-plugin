@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.action.windows;
+package com.wdf.fudoc.request.action.toolbar;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;

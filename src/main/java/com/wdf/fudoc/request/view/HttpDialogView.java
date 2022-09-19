@@ -69,7 +69,7 @@ public class HttpDialogView {
 
     public HttpDialogView(Project project) {
         this.project = project;
-        this.requestTabView = new RequestTabView(this.project);
+        this.requestTabView = new RequestTabView(this.project, this);
         this.responseTabView = new ResponseTabView(this.project);
 
         initToolBarUI();
@@ -131,6 +131,10 @@ public class HttpDialogView {
         }
         this.titleLabel.setText(fuHttpRequestData.getApiName());
         this.requestTabView.initData(fuHttpRequestData);
+        initResponseData(fuHttpRequestData);
+    }
+
+    public void initResponseData(FuHttpRequestData fuHttpRequestData) {
         this.responseTabView.initData(fuHttpRequestData);
     }
 

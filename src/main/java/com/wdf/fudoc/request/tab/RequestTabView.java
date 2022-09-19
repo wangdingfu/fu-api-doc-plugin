@@ -9,8 +9,10 @@ import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.request.InitRequestData;
+import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
+import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.test.factory.FuTabBuilder;
 import lombok.Getter;
 
@@ -68,8 +70,19 @@ public class RequestTabView implements FuTab, InitRequestData {
      */
     private String apiUrl;
 
-    public RequestTabView(Project project) {
+    /**
+     * 发起http请求的数据对象
+     */
+    private FuHttpRequestData fuHttpRequestData;
+
+    /**
+     * 父级容器
+     */
+    private HttpDialogView httpDialogView;
+
+    public RequestTabView(Project project, HttpDialogView httpDialogView) {
         this.project = project;
+        this.httpDialogView = httpDialogView;
         this.mainPanel = new JPanel(new BorderLayout());
         this.requestTypeComponent = new ComboBox<>(RequestType.getItems());
         this.requestUrlComponent = new JTextField();
@@ -82,8 +95,10 @@ public class RequestTabView implements FuTab, InitRequestData {
         initUI();
         this.sendBtn.addActionListener(e -> {
             //发送请求
+            HttpApiExecutor.doSendRequest(project, fuHttpRequestData);
+            //填充响应结果
+            httpDialogView.initResponseData(fuHttpRequestData);
         });
-
     }
 
 
@@ -143,6 +158,7 @@ public class RequestTabView implements FuTab, InitRequestData {
      */
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
+        this.fuHttpRequestData = httpRequestData;
         FuRequestData request = httpRequestData.getRequest();
         this.requestTypeComponent.setSelectedItem(request.getRequestType().getRequestType());
         this.apiUrl = request.getRequestUrl();
