@@ -47,4 +47,9 @@ public class FuHttpRequestData {
      * 请求状态 true 正在请求中
      */
     private boolean requestStatus;
+
+    /**
+     * 请求的时间 单位:ms
+     */
+    private long time;
 }

@@ -1,15 +1,8 @@
 package com.wdf.fudoc.request.execute;
 
-import cn.hutool.core.thread.ThreadUtil;
-import cn.hutool.json.JSONUtil;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.common.CommonResult;
 import com.wdf.fudoc.request.HttpCallback;
-import com.wdf.fudoc.request.global.FuRequest;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.pojo.FuResponseData;
-
-import java.util.Objects;
 
 /**
  * 发起http请求实现类
@@ -19,10 +12,19 @@ import java.util.Objects;
  */
 public class FuHttpRequestImpl implements FuHttpRequest {
 
+    /**
+     * 请求状态 用于控制按钮显示正在请求中
+     */
     private boolean requestStatus;
 
+    /**
+     * 请求所需数据
+     */
     private final FuHttpRequestData fuHttpRequestData;
 
+    /**
+     * 当前项目
+     */
     private final Project project;
 
     public FuHttpRequestImpl(Project project, FuHttpRequestData fuHttpRequestData) {
@@ -30,40 +32,45 @@ public class FuHttpRequestImpl implements FuHttpRequest {
         this.fuHttpRequestData = fuHttpRequestData;
     }
 
+    /**
+     * 获取当前请求状态
+     *
+     * @return true 正在请求中 false 请求完成
+     */
     @Override
     public boolean getStatus() {
         return this.requestStatus;
     }
 
+    /**
+     * 发起请求
+     *
+     * @param httpCallback 请求完成回调业务逻辑
+     */
     @Override
     public void doSend(HttpCallback httpCallback) {
+        //设置当前正在请求中
         this.requestStatus = true;
         //发起请求
-
-        //填充请求结果
-        FuResponseData response = this.fuHttpRequestData.getResponse();
-        if (Objects.isNull(response)) {
-            response = new FuResponseData();
-            this.fuHttpRequestData.setResponse(response);
-        }
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        //设置响应结果
-        response.setContent(JSONUtil.toJsonStr(CommonResult.ok()));
-
+        HttpExecutor.execute(this.fuHttpRequestData);
+        //回调业务通知请求完成
         httpCallback.callback(this.fuHttpRequestData);
-
+        //结束请求 释放相关资源
         finished();
     }
 
+    /**
+     * 请求完毕 需要释放相关资源等操作
+     */
     @Override
     public void finished() {
         this.requestStatus = false;
     }
 
+
+    /**
+     * 中断请求
+     */
     @Override
     public void doStop() {
         //中断请求的线程

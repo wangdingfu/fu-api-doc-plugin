@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.view;
 
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
@@ -153,7 +154,9 @@ public class HttpDialogView implements HttpCallback {
 
     @Override
     public void callback(FuHttpRequestData fuHttpRequestData) {
-        this.fuTabBuilder.select(ResponseTabView.RESPONSE);
-        this.responseTabView.initData(fuHttpRequestData);
+        ApplicationManager.getApplication().invokeLater(()->{
+            this.fuTabBuilder.select(ResponseTabView.RESPONSE);
+            this.responseTabView.initData(fuHttpRequestData);
+        });
     }
 }
