@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.PsiClass;
+import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.constant.enumtype.SpringParamAnnotation;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
@@ -69,14 +70,25 @@ public class FuHttpRequestDataFactory {
             SpringParamAnnotation springParam = getSpringParam(requestParam);
             String paramName = requestParam.getParamName();
             boolean isSelect = YesOrNo.getByDesc(requestParam.getParamRequire());
-            KeyValueTableBO keyValueTableBO = new KeyValueTableBO(isSelect, paramName, requestParam.getParamValue(), requestParam.getParamDesc());
+            RequestParamType requestParamType = "file".equals(requestParam.getParamType()) ? RequestParamType.FILE : RequestParamType.TEXT;
+            KeyValueTableBO keyValueTableBO = new KeyValueTableBO(isSelect, requestParamType.getCode(), paramName, requestParam.getParamValue(), requestParam.getParamDesc());
             switch (springParam) {
                 case PATH_VARIABLE:
                     pathVariableList.add(keyValueTableBO);
                     break;
                 case REQUEST_BODY:
+                    FuRequestBodyData body = request.getBody();
+                    if (Objects.isNull(body)) {
+                        body = new FuRequestBodyData();
+                        request.setBody(body);
+                    }
                     //body 参数
-
+                    String paramValue = requestParam.getParamValue();
+                    if (JSONUtil.isTypeJSON(paramValue)) {
+                        body.setJson(paramValue);
+                    } else {
+                        body.setRaw(paramValue);
+                    }
                     break;
                 case REQUEST_PARAM:
                 case NONE:

@@ -29,9 +29,14 @@ public class FuHttpRequestBuilder {
 
     public FuHttpRequestBuilder(FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest) {
         this.httpRequest = httpRequest;
+        FuRequestData request = fuHttpRequestData.getRequest();
         //添加请求头
-        this.addHeader(this.httpRequest, fuHttpRequestData.getRequest().getHeaders());
-        FuRequestBodyData body = fuHttpRequestData.getRequest().getBody();
+        this.addHeader(this.httpRequest, request.getHeaders());
+        FuRequestBodyData body = request.getBody();
+        if (Objects.isNull(body)) {
+            body = new FuRequestBodyData();
+            request.setBody(body);
+        }
         //添加form-data
         addForm(body.getFormDataList(), true);
         //添加x-www-form-urlencoded
