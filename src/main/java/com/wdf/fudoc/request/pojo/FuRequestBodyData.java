@@ -19,12 +19,12 @@ public class FuRequestBodyData {
     /**
      * 请求参数
      */
-    private List<KeyValueTableBO> params;
+    private List<KeyValueTableBO> formDataList;
 
     /**
      * 请求参数
      */
-    private List<KeyValueTableBO> formData;
+    private List<KeyValueTableBO> formUrlEncodedList;
 
     /**
      * json内容

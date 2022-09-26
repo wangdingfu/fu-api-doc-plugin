@@ -73,7 +73,7 @@ public class ResponseTabView implements FuTab, InitRequestData {
                 break;
             case ERR_CONNECTION_REFUSED:
                 //请求连接被拒绝
-                responseErrorView.setErrorDetail("错误：connect ECONNREFUSED 127.0.0.1:8013");
+                responseErrorView.setErrorDetail(response.getErrorDetail());
                 switchPanel(2, responseErrorView.getRootPanel());
                 break;
         }

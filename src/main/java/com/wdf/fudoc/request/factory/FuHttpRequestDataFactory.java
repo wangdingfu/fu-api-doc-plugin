@@ -14,6 +14,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
+import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.FuDocUtils;
 
@@ -49,6 +50,9 @@ public class FuHttpRequestDataFactory {
         fuHttpRequestData.setRequest(fuRequestData);
         //构建请求参数
         buildRequestParamsData(fuHttpRequestData, fuDocItemData);
+
+        //初始化response
+        fuHttpRequestData.setResponse(new FuResponseData());
         return fuHttpRequestData;
     }
 
@@ -71,7 +75,8 @@ public class FuHttpRequestDataFactory {
                     pathVariableList.add(keyValueTableBO);
                     break;
                 case REQUEST_BODY:
-                    //TODO body 参数
+                    //body 参数
+
                     break;
                 case REQUEST_PARAM:
                 case NONE:
@@ -90,8 +95,8 @@ public class FuHttpRequestDataFactory {
         if (Objects.isNull(body)) {
             body = new FuRequestBodyData();
         }
-        body.setParams(postParamList);
-        body.setFormData(postFormDataList);
+        body.setFormDataList(postParamList);
+        body.setFormUrlEncodedList(postFormDataList);
     }
 
 

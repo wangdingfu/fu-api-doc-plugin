@@ -3,7 +3,9 @@ package com.wdf.fudoc.request.execute;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.wdf.fudoc.request.constants.enumtype.RequestStatus;
+import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.pojo.FuResponseData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.ConnectException;
@@ -23,6 +25,7 @@ public class HttpExecutor {
      */
     public static void execute(FuHttpRequestData fuHttpRequestData) {
         long start = System.currentTimeMillis();
+        //将【Fu Request】请求数据对象转换为http请求数据
         HttpRequest httpRequest = FuHttpRequestBuilder.getInstance(fuHttpRequestData).builder();
         RequestStatus requestStatus = RequestStatus.FAIL;
         String requestUrl = fuHttpRequestData.getRequest().getRequestUrl();
@@ -31,11 +34,14 @@ public class HttpExecutor {
             requestStatus = RequestStatus.SUCCESS;
             FuHttpResponseBuilder.buildSuccessResponse(fuHttpRequestData, httpResponse);
         } catch (Exception e) {
+            FuResponseData fuResponseData = FuHttpResponseBuilder.ifNecessaryCreateResponse(fuHttpRequestData);
             log.info("请求接口【{}】异常", requestUrl, e);
             if (e.getCause() instanceof ConnectException) {
-                FuHttpResponseBuilder.buildRefusedConnection(fuHttpRequestData);
+                fuResponseData.setErrorDetail("错误：connect ECONNREFUSED " + httpRequest.getConnection().getUrl().getAuthority());
+                fuResponseData.setResponseType(ResponseType.ERR_CONNECTION_REFUSED);
             } else {
-                FuHttpResponseBuilder.buildErrorResponse(fuHttpRequestData);
+                fuResponseData.setErrorDetail(e.getCause().getMessage());
+                fuResponseData.setResponseType(ResponseType.ERR_UNKNOWN);
             }
         } finally {
             long time = System.currentTimeMillis() - start;

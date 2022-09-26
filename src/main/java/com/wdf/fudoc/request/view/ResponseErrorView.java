@@ -24,10 +24,9 @@ public class ResponseErrorView {
     private FuEditorComponent fuEditorComponent;
 
     public ResponseErrorView() {
-        imgPanel.setBorder(JBUI.Borders.empty(10,0,20,0));
+        iconLabel.setBorder(JBUI.Borders.empty(10,0,20,0));
         tipLabel.setBorder(JBUI.Borders.emptyBottom(20));
         iconLabel.setIcon(FuDocIcons.FU_REQUEST);
-        setErrorDetail("错误：connect ECONNREFUSED 127.0.0.1:8012");
     }
 
     private void createUIComponents() {

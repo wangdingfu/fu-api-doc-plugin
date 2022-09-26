@@ -30,6 +30,7 @@ public class FuHttpResponseBuilder {
         response.setStatus(httpResponse.getStatus());
         response.setHeaders(httpResponse.headers());
         response.setContentLength(httpResponse.contentLength());
+        response.setResponseType(ResponseType.SUCCESS);
     }
 
 
@@ -52,7 +53,7 @@ public class FuHttpResponseBuilder {
     }
 
 
-    private static FuResponseData ifNecessaryCreateResponse(FuHttpRequestData fuHttpRequestData) {
+    public static FuResponseData ifNecessaryCreateResponse(FuHttpRequestData fuHttpRequestData) {
         FuResponseData response = fuHttpRequestData.getResponse();
         if (Objects.isNull(response)) {
             response = new FuResponseData();

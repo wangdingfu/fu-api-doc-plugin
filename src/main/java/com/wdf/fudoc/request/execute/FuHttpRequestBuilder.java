@@ -1,15 +1,18 @@
 package com.wdf.fudoc.request.execute;
 
-import cn.hutool.core.lang.Assert;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
+import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,23 +23,53 @@ import java.util.Objects;
 public class FuHttpRequestBuilder {
 
     /**
-     * http请求数据对象
-     */
-    private final FuHttpRequestData fuHttpRequestData;
-
-    /**
      * http请求对象
      */
     private final HttpRequest httpRequest;
 
     public FuHttpRequestBuilder(FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest) {
-        this.fuHttpRequestData = fuHttpRequestData;
         this.httpRequest = httpRequest;
         //添加请求头
-        this.addHeader(this.httpRequest, this.fuHttpRequestData.getRequest().getHeaders());
-        //添加form
+        this.addHeader(this.httpRequest, fuHttpRequestData.getRequest().getHeaders());
+        FuRequestBodyData body = fuHttpRequestData.getRequest().getBody();
+        //添加form-data
+        addForm(body.getFormDataList(), true);
+        //添加x-www-form-urlencoded
+        addForm(body.getFormUrlEncodedList(), false);
+        //添加raw
+        addBody(body.getRaw());
+        //添加json
+        addBody(body.getJson());
+        //添加binary
+        addBody(body.getBinary());
+    }
 
-        //添加body
+
+    private void addForm(List<KeyValueTableBO> formDataList, boolean isMultiFile) {
+        if (CollectionUtils.isNotEmpty(formDataList)) {
+            for (KeyValueTableBO keyValueTableBO : formDataList) {
+                String requestParamType = keyValueTableBO.getRequestParamType();
+                if (isMultiFile && RequestParamType.FILE.getCode().equals(requestParamType)) {
+                    this.httpRequest.form(keyValueTableBO.getKey(), new File(keyValueTableBO.getValue()));
+                } else {
+                    this.httpRequest.form(keyValueTableBO.getKey(), keyValueTableBO.getValue());
+                }
+            }
+        }
+    }
+
+
+    private void addBody(String content) {
+        if (StringUtils.isNotBlank(content)) {
+            this.httpRequest.body(content);
+        }
+    }
+
+
+    private void addBody(byte[] body) {
+        if (Objects.nonNull(body) && body.length > 0) {
+            this.httpRequest.body(body);
+        }
     }
 
     public static FuHttpRequestBuilder getInstance(FuHttpRequestData fuHttpRequestData) {
