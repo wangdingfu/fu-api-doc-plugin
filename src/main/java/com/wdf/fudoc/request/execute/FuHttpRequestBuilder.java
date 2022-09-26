@@ -34,6 +34,9 @@ public class FuHttpRequestBuilder {
         this.httpRequest = httpRequest;
         //添加请求头
         this.addHeader(this.httpRequest, this.fuHttpRequestData.getRequest().getHeaders());
+        //添加form
+
+        //添加body
     }
 
     public static FuHttpRequestBuilder getInstance(FuHttpRequestData fuHttpRequestData) {

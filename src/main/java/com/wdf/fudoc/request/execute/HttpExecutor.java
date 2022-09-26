@@ -6,6 +6,8 @@ import com.wdf.fudoc.request.constants.enumtype.RequestStatus;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.ConnectException;
+
 
 /**
  * @author wangdingfu
@@ -27,9 +29,14 @@ public class HttpExecutor {
         try {
             HttpResponse httpResponse = httpRequest.execute();
             requestStatus = RequestStatus.SUCCESS;
-            FuHttpResponseBuilder.buildResponse(fuHttpRequestData, httpResponse);
+            FuHttpResponseBuilder.buildSuccessResponse(fuHttpRequestData, httpResponse);
         } catch (Exception e) {
             log.info("请求接口【{}】异常", requestUrl, e);
+            if (e.getCause() instanceof ConnectException) {
+                FuHttpResponseBuilder.buildRefusedConnection(fuHttpRequestData);
+            } else {
+                FuHttpResponseBuilder.buildErrorResponse(fuHttpRequestData);
+            }
         } finally {
             long time = System.currentTimeMillis() - start;
             log.info("请求接口【{}】完成. 请求状态码：{}. 共计耗时:{}ms", requestUrl, requestStatus, time);

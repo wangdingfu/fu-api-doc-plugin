@@ -1,15 +1,9 @@
 package com.wdf.fudoc.request.pojo;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.map.CaseInsensitiveMap;
 import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.URLUtil;
-import cn.hutool.http.Header;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,8 +25,13 @@ public class FuResponseData {
      * http响应对象
      */
     private HttpResponse httpResponse;
+
     /**
-     * 相应内容
+     * 响应类型
+     */
+    private ResponseType responseType;
+    /**
+     * 响应内容
      */
     private String content;
 
