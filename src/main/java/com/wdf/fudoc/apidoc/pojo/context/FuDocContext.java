@@ -81,6 +81,11 @@ public class FuDocContext {
      */
     private Map<String, ObjectInfoDesc> earlyObjectInfoDescMap;
 
+    /**
+     * 是否为【Fu Request】模块流程
+     */
+    private boolean isFuRequest;
+
 
     public void setSettingData(SettingData settingData) {
         this.settingData = settingData;

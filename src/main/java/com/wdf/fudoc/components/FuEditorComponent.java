@@ -116,6 +116,10 @@ public class FuEditorComponent {
         return new FuEditorComponent(fileType, content, description);
     }
 
+    public static FuEditorComponent create(FileType fileType) {
+        return new FuEditorComponent(fileType, StringUtils.EMPTY);
+    }
+
     /**
      * 创建一个没有描述信息面板的编辑器组件
      *

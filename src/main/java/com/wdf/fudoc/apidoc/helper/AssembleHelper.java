@@ -62,11 +62,6 @@ public class AssembleHelper {
                     fuDocParamData.setParamRequire(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_REQUIRE, objectInfoDesc));
                     resultList.add(fuDocParamData);
                 }
-                Map<String, Object> fuDoc = fuDocParamData.getFudoc();
-                if (Objects.isNull(fuDoc)) {
-                    fuDoc = new HashMap<>();
-                }
-                fuDoc.put(FuDocConstants.SPRING_PARAM, extractParamAnnotation(objectInfoDesc, parent));
                 List<ObjectInfoDesc> childList = objectInfoDesc.getChildList();
                 if (CollectionUtils.isNotEmpty(childList)) {
                     resultList.addAll(assembleParamData(fuDocContext, childList, fuDocParamData));
@@ -75,37 +70,6 @@ public class AssembleHelper {
         }
         return resultList;
     }
-
-
-    private static SpringParamAnnotation extractParamAnnotation(ObjectInfoDesc objectInfoDesc, FuDocParamData parent) {
-        if (Objects.equals(objectInfoDesc.getDescId(), objectInfoDesc.getRootId())) {
-            //根节点
-            return extractParamAnnotation(objectInfoDesc);
-        }
-        Map<String, Object> fuDoc;
-        if (Objects.nonNull(parent) && Objects.nonNull(fuDoc = parent.getFudoc())) {
-            Object springParam = fuDoc.get(FuDocConstants.SPRING_PARAM);
-            if (Objects.nonNull(springParam) && springParam instanceof SpringParamAnnotation) {
-                return (SpringParamAnnotation) springParam;
-            }
-        }
-        return SpringParamAnnotation.NONE;
-    }
-
-
-    private static SpringParamAnnotation extractParamAnnotation(ObjectInfoDesc objectInfoDesc) {
-        if (objectInfoDesc.exists(AnnotationConstants.REQUEST_BODY)) {
-            return SpringParamAnnotation.REQUEST_BODY;
-        }
-        if (objectInfoDesc.exists(AnnotationConstants.PATH_VARIABLE)) {
-            return SpringParamAnnotation.PATH_VARIABLE;
-        }
-        if (objectInfoDesc.exists(AnnotationConstants.REQUEST_PARAM)) {
-            return SpringParamAnnotation.REQUEST_PARAM;
-        }
-        return SpringParamAnnotation.NONE;
-    }
-
 
     /**
      * 排除参数（过滤不需要渲染到接口文档的参数）

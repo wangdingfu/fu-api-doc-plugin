@@ -48,6 +48,11 @@ public class BaseInfoDesc {
     }
 
 
+    public AnnotationData get(String annotationName){
+        return this.annotationDataMap.get(annotationName);
+    }
+
+
     /**
      * 根据多个注解名称遍历查询 查询到注解则消费该注解的数据 并退出
      *

@@ -95,7 +95,7 @@ public class TestRequestFrom {
                 .addToggleBar("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
                 .addToggleBar("binary", FuDocIcons.FU_REQUEST_FILE_BINARY, createTablePanel())
                 .addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, createEditorPanel())
-                .setDefaultTab("json").builder();
+                .switchTab("json").builder();
     }
 
 

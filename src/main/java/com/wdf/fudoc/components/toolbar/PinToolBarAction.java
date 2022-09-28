@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PinToolBarAction extends ToggleAction {
 
     @Getter
-    public static final AtomicBoolean pinStatus = new AtomicBoolean(false);
+    public static final AtomicBoolean pinStatus = new AtomicBoolean(true);
 
     @Override
     public boolean isDumbAware() {

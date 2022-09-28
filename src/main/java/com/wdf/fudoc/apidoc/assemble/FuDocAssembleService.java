@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.assemble;
 
+import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
@@ -32,5 +33,15 @@ public interface FuDocAssembleService {
      * @return 接口文档页面需要渲染的数据
      */
     List<FuDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc);
+
+
+    /**
+     * 【Fu Request】模块组装请求数据
+     *
+     * @param fuDocContext  【FU DOC】全局上下文对象
+     * @param classInfoDesc java类描述信息(包含注解、注释、字段等信息)
+     * @return 发起http请求需要的参数
+     */
+    List<FuDocRootParamData> requestAssemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc);
 
 }

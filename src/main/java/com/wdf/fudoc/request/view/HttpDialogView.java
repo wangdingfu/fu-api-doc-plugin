@@ -1,13 +1,16 @@
 package com.wdf.fudoc.request.view;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.toolbar.PinToolBarAction;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
+import com.wdf.fudoc.request.global.GlobalHttpRequestView;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.RequestTabView;
 import com.wdf.fudoc.request.tab.ResponseTabView;
@@ -15,6 +18,8 @@ import com.wdf.fudoc.test.factory.FuTabBuilder;
 import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,6 +71,9 @@ public class HttpDialogView implements HttpCallback {
      */
     private final ResponseTabView responseTabView;
 
+    @Setter
+    private JBPopup jbPopup;
+
 
     public HttpDialogView(Project project) {
         this.project = project;
@@ -76,6 +84,10 @@ public class HttpDialogView implements HttpCallback {
         initRequestUI();
         initResponseUI();
         initUI();
+    }
+
+    public void close() {
+        this.jbPopup.cancel();
     }
 
     /**
@@ -135,7 +147,6 @@ public class HttpDialogView implements HttpCallback {
     }
 
 
-
     public void initResponseData(FuHttpRequestData fuHttpRequestData) {
         this.responseTabView.initData(fuHttpRequestData);
     }
@@ -149,12 +160,13 @@ public class HttpDialogView implements HttpCallback {
     public static void popup(Project project, FuHttpRequestData fuHttpRequestData) {
         HttpDialogView httpDialogView = new HttpDialogView(project);
         httpDialogView.initData(fuHttpRequestData);
-        PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), PinToolBarAction.getPinStatus());
+        httpDialogView.setJbPopup(PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), PinToolBarAction.getPinStatus()));
+        GlobalHttpRequestView.addHttpDialogView(project, httpDialogView);
     }
 
     @Override
     public void callback(FuHttpRequestData fuHttpRequestData) {
-        ApplicationManager.getApplication().invokeLater(()->{
+        ApplicationManager.getApplication().invokeLater(() -> {
             this.fuTabBuilder.select(ResponseTabView.RESPONSE);
             this.responseTabView.initData(fuHttpRequestData);
         });

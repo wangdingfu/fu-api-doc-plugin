@@ -120,7 +120,7 @@ public class FuTabComponent {
      * @param tab tab名称
      * @return 当前组件
      */
-    public FuTabComponent setDefaultTab(String tab) {
+    public FuTabComponent switchTab(String tab) {
         this.currentTab = tab;
         switchPanelByTab(tab);
         return this;

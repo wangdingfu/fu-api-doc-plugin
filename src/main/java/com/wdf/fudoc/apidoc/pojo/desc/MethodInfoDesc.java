@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.pojo.desc;
 
+import com.intellij.psi.PsiMethod;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,11 @@ public class MethodInfoDesc extends BaseInfoDesc {
      * 方法唯一标识
      */
     private String methodId;
+
+    /**
+     * 用于导航该方法
+     */
+    private PsiMethod psiMethod;
 
     /**
      * 请求参数集合

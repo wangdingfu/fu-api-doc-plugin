@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.assemble.impl.ControllerAssembleService;
 import com.wdf.fudoc.apidoc.assemble.impl.FeignAssembleService;
 import com.wdf.fudoc.apidoc.assemble.impl.InterfaceAssembleService;
+import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
@@ -29,6 +30,16 @@ public class AssembleServiceExecutor {
         for (FuDocAssembleService fuDocAssembleService : SERVICE_LIST) {
             if (fuDocAssembleService.isAssemble(fuDocContext, classInfoDesc)) {
                 return fuDocAssembleService.assemble(fuDocContext, classInfoDesc);
+            }
+        }
+        return Lists.newArrayList();
+    }
+
+
+    public static List<FuDocRootParamData> executeByRequest(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
+        for (FuDocAssembleService fuDocAssembleService : SERVICE_LIST) {
+            if (fuDocAssembleService.isAssemble(fuDocContext, classInfoDesc)) {
+                return fuDocAssembleService.requestAssemble(fuDocContext, classInfoDesc);
             }
         }
         return Lists.newArrayList();

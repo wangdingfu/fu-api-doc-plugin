@@ -2,24 +2,25 @@ package com.wdf.fudoc.apidoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.assemble.handler.ParamValueExecutor;
+import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
+import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.apidoc.helper.AssembleHelper;
 import com.wdf.fudoc.apidoc.helper.CustomerValueHelper;
 import com.wdf.fudoc.apidoc.helper.MockDataHelper;
+import com.wdf.fudoc.apidoc.pojo.annotation.*;
 import com.wdf.fudoc.apidoc.pojo.bo.AssembleBO;
+import com.wdf.fudoc.apidoc.pojo.bo.RootParamBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
-import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
-import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
+import com.wdf.fudoc.apidoc.pojo.data.*;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.apache.commons.collections.CollectionUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author wangdingfu
@@ -45,13 +46,20 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
      *
      * @param fuDocContext   【FU DOC】全局上下文对象
      * @param methodInfoDesc 方法描述信息
-     * @param fuDocItemData  具体每一个接口渲染的数据对象
+     * @param commonItemData 具体每一个接口渲染的数据对象
      * @param assembleBO     组装参数信息
      * @return true 该方法需要组装成接口文档  false 不组装该方法
      */
-    protected abstract boolean doAssembleInfoMethod(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, FuDocItemData fuDocItemData, AssembleBO assembleBO);
+    protected abstract boolean doAssembleInfoMethod(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, CommonItemData commonItemData, AssembleBO assembleBO);
 
 
+    /**
+     * 根据java类描述信息组装生成接口文档的数据
+     *
+     * @param fuDocContext  【FU DOC】全局上下文对象
+     * @param classInfoDesc java类描述信息(包含注解、注释、字段等信息)
+     * @return 接口文档页面需要渲染的数据
+     */
     @Override
     public List<FuDocItemData> assemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
         List<FuDocItemData> resultList = Lists.newArrayList();
@@ -66,6 +74,8 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                     fuDocItemData.setDocNo(classNo + "." + (docNo++));
                     //组装公共信息
                     assembleCommonInfo(fuDocContext, methodInfoDesc, fuDocItemData);
+                    //组装接口文档相关信息
+                    assembleItemInfo(fuDocContext, methodInfoDesc, fuDocItemData);
                     resultList.add(fuDocItemData);
                 }
             }
@@ -74,14 +84,36 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
     }
 
 
-    protected void assembleCommonInfo(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, FuDocItemData fuDocItemData) {
-        //组装接口标题等参数
-        ApiDocCommentData commentData = methodInfoDesc.getCommentData();
-        if (Objects.nonNull(commentData)) {
-            fuDocItemData.setTitle(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_TITLE, methodInfoDesc));
-            fuDocItemData.setDetailInfo(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_DETAIL_INFO, methodInfoDesc));
+    /**
+     * 【Fu Request】模块组装请求数据
+     *
+     * @param fuDocContext  【FU DOC】全局上下文对象
+     * @param classInfoDesc java类描述信息(包含注解、注释、字段等信息)
+     * @return 发起http请求需要的参数
+     */
+    @Override
+    public List<FuDocRootParamData> requestAssemble(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
+        List<FuDocRootParamData> resultList = Lists.newArrayList();
+        List<MethodInfoDesc> methodList = classInfoDesc.getMethodList();
+        AssembleBO assembleBO = doAssembleInfoByClass(fuDocContext, classInfoDesc);
+        if (CollectionUtils.isNotEmpty(methodList)) {
+            for (MethodInfoDesc methodInfoDesc : methodList) {
+                FuDocRootParamData rootParamData = new FuDocRootParamData();
+                if (doAssembleInfoMethod(fuDocContext, methodInfoDesc, rootParamData, assembleBO)) {
+                    //组装公共信息
+                    assembleCommonInfo(fuDocContext, methodInfoDesc, rootParamData);
+                    assembleFuRequest(fuDocContext, methodInfoDesc, rootParamData);
+                    resultList.add(rootParamData);
+                }
+            }
         }
+        return resultList;
+    }
 
+    /**
+     * 组装接口文档相关信息
+     */
+    protected void assembleItemInfo(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, FuDocItemData fuDocItemData) {
         //组装请求参数
         List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
         if (CollectionUtils.isNotEmpty(requestList)) {
@@ -98,11 +130,63 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
             //mock返回结果数据
             fuDocItemData.setResponseExample(MockDataHelper.mockJsonData(Lists.newArrayList(response)));
         }
-        Map<String, Object> fuDoc = CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext);
-        fuDoc.put(FuDocConstants.API_ID, methodInfoDesc.getMethodId());
         //组装扩展数据
-        fuDocItemData.setFudoc(fuDoc);
-
+        fuDocItemData.setFudoc(CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext));
     }
+
+    /**
+     * 组装公共参数
+     */
+    protected void assembleCommonInfo(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, CommonItemData commonItemData) {
+        //组装接口标题等参数
+        ApiDocCommentData commentData = methodInfoDesc.getCommentData();
+        if (Objects.nonNull(commentData)) {
+            commonItemData.setTitle(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_TITLE, methodInfoDesc));
+            commonItemData.setDetailInfo(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_DETAIL_INFO, methodInfoDesc));
+        }
+    }
+
+
+    /**
+     * 组装【Fu Request】数据
+     */
+    private void assembleFuRequest(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, FuDocRootParamData fuDocRootParamData) {
+        //设置api唯一标识
+        fuDocRootParamData.setApiId(methodInfoDesc.getMethodId());
+        fuDocRootParamData.setPsiMethod(methodInfoDesc.getPsiMethod());
+        List<RootParamBO> rootParamBOList = Lists.newArrayList();
+        fuDocRootParamData.setRootParamBOList(rootParamBOList);
+        List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
+        if (CollectionUtils.isNotEmpty(requestList)) {
+            RequestType requestType = RequestType.getRequestType(fuDocRootParamData.getRequestType());
+            //查找根节点请求参数
+            for (ObjectInfoDesc objectInfoDesc : requestList) {
+                if (!objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.ROOT)) {
+                    continue;
+                }
+                RootParamBO rootParamBO = new RootParamBO();
+                rootParamBO.setSpringAnnotationData(findRootParamSpringAnnotation(objectInfoDesc));
+                rootParamBO.setFuDocParamDataList(AssembleHelper.assembleParamData(fuDocContext, Lists.newArrayList(objectInfoDesc), null));
+                rootParamBO.setMockData(MockDataHelper.mockRequestData(requestType, Lists.newArrayList(objectInfoDesc)));
+                rootParamBOList.add(rootParamBO);
+            }
+        }
+    }
+
+
+    private SpringAnnotationData findRootParamSpringAnnotation(ObjectInfoDesc objectInfoDesc) {
+        //根节点
+        if (objectInfoDesc.exists(AnnotationConstants.REQUEST_BODY)) {
+            return new RequestBodyData();
+        }
+        if (objectInfoDesc.exists(AnnotationConstants.PATH_VARIABLE)) {
+            return new PathVariableData(objectInfoDesc.get(AnnotationConstants.PATH_VARIABLE));
+        }
+        if (objectInfoDesc.exists(AnnotationConstants.REQUEST_PARAM)) {
+            return new RequestParamData(objectInfoDesc.get(AnnotationConstants.REQUEST_PARAM));
+        }
+        return new DefaultAnnotationData();
+    }
+
 
 }

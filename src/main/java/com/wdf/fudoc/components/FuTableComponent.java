@@ -1,12 +1,14 @@
 package com.wdf.fudoc.components;
 
 import cn.hutool.core.util.ReflectUtil;
+import com.google.common.collect.Lists;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.view.bo.Column;
+import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.JTableUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -150,6 +152,20 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
                 this.fuTableListener.propertyChange(data, row, column, value);
             }
         }
+    }
+
+
+
+    public static FuTableComponent<KeyValueTableBO> createKeyValue() {
+        return create(FuTableColumnFactory.keyValueColumns(), KeyValueTableBO.class);
+    }
+
+    public static FuTableComponent<KeyValueTableBO> createKeyValueFile() {
+        return create(FuTableColumnFactory.formDataColumns(), KeyValueTableBO.class);
+    }
+
+    public static <T> FuTableComponent<T> create(List<Column> columnList, Class<T> clazz) {
+        return new FuTableComponent<>(columnList, Lists.newArrayList(), clazz);
     }
 
     /**

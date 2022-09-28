@@ -13,33 +13,12 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class FuDocItemData {
+public class FuDocItemData extends CommonItemData {
 
     /**
      * 接口序号
      */
     private String docNo;
-
-    /**
-     * 接口标题
-     */
-    private String title;
-
-    /**
-     * 接口详情信息
-     */
-    private String detailInfo;
-
-    /**
-     * 接口请求地址
-     */
-    private List<String> urlList;
-
-    /**
-     * 接口请求类型
-     */
-    private String requestType;
-
 
     /**
      * 请求示例
@@ -63,6 +42,7 @@ public class FuDocItemData {
      * 响应参数
      */
     private List<FuDocParamData> responseParams;
+
 
     /**
      * 扩展信息

@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.action;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
+import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.common.AbstractClassAction;
@@ -29,14 +30,14 @@ public class RequestAction extends AbstractClassAction {
 
     @Override
     protected void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext) {
-        List<FuDocItemData> fuDocItemDataList = GenFuDocUtils.gen(fuDocContext, psiClass);
-        if (CollectionUtils.isEmpty(fuDocItemDataList)) {
+        List<FuDocRootParamData> fuDocRootParamDataList = GenFuDocUtils.genRootParam(fuDocContext, psiClass);
+        if (CollectionUtils.isEmpty(fuDocRootParamDataList)) {
             //没有可以请求的方法
             return;
         }
-        FuDocItemData fuDocItemData = fuDocItemDataList.get(0);
+        FuDocRootParamData fuDocRootParamData = fuDocRootParamDataList.get(0);
         //获取当前所属模块
-        FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(fuDocItemData, psiClass);
+        FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(fuDocRootParamData, psiClass);
 
         HttpDialogView.popup(e.getProject(), fuHttpRequestData);
 
