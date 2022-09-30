@@ -1,12 +1,13 @@
 package com.wdf.fudoc.request.view;
 
-import com.intellij.icons.AllIcons;
+import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
+import com.wdf.fudoc.components.FuStatusBarComponent;
 import com.wdf.fudoc.components.toolbar.PinToolBarAction;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
@@ -19,7 +20,6 @@ import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,6 +71,12 @@ public class HttpDialogView implements HttpCallback {
      */
     private final ResponseTabView responseTabView;
 
+    /**
+     * 状态信息面板
+     */
+    private final FuStatusBarComponent fuStatusBarComponent;
+    private final JPanel statusInfoPanel;
+
     @Setter
     private JBPopup jbPopup;
 
@@ -79,11 +85,13 @@ public class HttpDialogView implements HttpCallback {
         this.project = project;
         this.requestTabView = new RequestTabView(this.project, this);
         this.responseTabView = new ResponseTabView(this.project);
-
+        this.fuStatusBarComponent = new FuStatusBarComponent();
+        this.statusInfoPanel = this.fuStatusBarComponent.getRootPanel();
         initToolBarUI();
         initRequestUI();
         initResponseUI();
         initUI();
+        fuStatusBarComponent.setInfo("您可以按下esc键来退出当前窗口");
     }
 
     public void close() {
@@ -95,6 +103,7 @@ public class HttpDialogView implements HttpCallback {
      */
     private void initToolBarUI() {
         this.toolBarPanel = new JPanel(new BorderLayout());
+        Utils.setSmallerFontForChildren(this.toolBarPanel);
         this.toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
         this.toolBarPanel.add(this.titleLabel, BorderLayout.WEST);
         final ActionManager actionManager = ActionManager.getInstance();
@@ -126,10 +135,14 @@ public class HttpDialogView implements HttpCallback {
         this.rootPanel = new JPanel(new BorderLayout());
         this.rootPanel.setMinimumSize(new Dimension(700, 440));
         this.rootPanel.setPreferredSize(new Dimension(700, 440));
-        // 边框
+        // 设置边框
         this.rootPanel.setBorder(JBUI.Borders.empty());
+        //添加工具栏面板到跟面板上
         this.rootPanel.add(this.toolBarPanel, BorderLayout.NORTH);
+        //添加请求相应主面板到跟面板上
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
+        //添加状态信息展示面板到跟面板上
+        this.rootPanel.add(this.statusInfoPanel, BorderLayout.SOUTH);
     }
 
     /**
@@ -169,6 +182,7 @@ public class HttpDialogView implements HttpCallback {
         ApplicationManager.getApplication().invokeLater(() -> {
             this.fuTabBuilder.select(ResponseTabView.RESPONSE);
             this.responseTabView.initData(fuHttpRequestData);
+            fuStatusBarComponent.setInfo("请求失败. 连接被拒绝!!!");
         });
     }
 }

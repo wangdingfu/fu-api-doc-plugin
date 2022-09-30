@@ -1,9 +1,12 @@
 package com.wdf.fudoc.test.factory;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.TabsListener;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
+import com.intellij.util.ui.JBFont;
+import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.common.FuTab;
 import lombok.Getter;
@@ -54,6 +57,7 @@ public class FuTabBuilder {
     public JPanel build() {
         addListener();
         this.rootPanel.add(tabs.getComponent());
+        this.rootPanel.setFont(JBUI.Fonts.label(11));
         return this.rootPanel;
     }
 
