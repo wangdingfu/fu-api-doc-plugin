@@ -1,9 +1,12 @@
 package com.wdf.fudoc.request.pojo;
 
+import cn.hutool.core.util.URLUtil;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -23,14 +26,14 @@ public class FuRequestData {
     private RequestType requestType;
 
     /**
-     * 完整的请求地址 包括域名
-     */
-    private String requestUrl;
-
-    /**
      * 接口请求地址
      */
-    private String apiUrl;
+    private String baseUrl;
+
+    /**
+     * 请求路径上的参数拼接
+     */
+    private String paramUrl;
 
     /**
      * 请求头
@@ -51,5 +54,14 @@ public class FuRequestData {
      * 请求body内容(POST请求参数)
      */
     private FuRequestBodyData body;
+
+
+    /**
+     * 获取一个完整的请求地址
+     */
+    public String getRequestUrl() {
+        String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
+        return URLUtil.normalize(this.baseUrl + params, true, true);
+    }
 
 }

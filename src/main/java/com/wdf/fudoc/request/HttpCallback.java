@@ -1,6 +1,5 @@
 package com.wdf.fudoc.request;
 
-import com.wdf.fudoc.request.execute.FuHttpRequest;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 
 /**
@@ -9,6 +8,27 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
  */
 public interface HttpCallback {
 
+    /**
+     * 初始化数据
+     *
+     * @param httpRequestData 发起http请求的数据
+     */
+    void initData(FuHttpRequestData httpRequestData);
 
-    void callback(FuHttpRequestData fuHttpRequestData);
+    /**
+     * 发起请求前置方法
+     *
+     * @param fuHttpRequestData 请求数据对象
+     */
+    default void doSendBefore(FuHttpRequestData fuHttpRequestData) {
+    }
+
+
+    /**
+     * 发起请求后置方法
+     *
+     * @param fuHttpRequestData 请求数据对象
+     */
+    default void doSendAfter(FuHttpRequestData fuHttpRequestData) {
+    }
 }

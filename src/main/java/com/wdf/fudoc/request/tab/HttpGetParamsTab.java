@@ -1,21 +1,19 @@
 package com.wdf.fudoc.request.tab;
 
-import cn.hutool.core.util.URLUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.components.listener.TabBarListener;
+import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.spring.SpringConfigFileManager;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.view.bo.BarPanelBO;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
@@ -34,7 +32,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-09-17 21:31:31
  */
-public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener {
+public class HttpGetParamsTab implements FuTab, HttpCallback, TabBarListener {
 
     public static final String PARAMS = "Params";
     /**
@@ -56,11 +54,6 @@ public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener 
      * http请求数据对象
      */
     private FuHttpRequestData httpRequestData;
-
-    /**
-     * 请求地址 不携带请求参数
-     */
-    private String requestBaseUrl;
 
 
     /**
@@ -101,10 +94,15 @@ public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener 
             this.fuTableComponent.setDataList(params);
             this.fuEditorComponent.setContent(buildBulkEditContent(params));
         }
-        //生成请求地址
-        genRequestBaseUrl(httpRequestData);
+        //初始化请求地址
+        initRequestUrl(httpRequestData);
         //重置接口请求地址
         resetRequestUrlFromTable();
+    }
+
+    @Override
+    public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
+        //do nothing
     }
 
 
@@ -210,20 +208,21 @@ public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener 
      *
      * @param httpRequestData http请求数据对象
      */
-    private void genRequestBaseUrl(FuHttpRequestData httpRequestData) {
-        String moduleId = httpRequestData.getModuleId();
-        Integer serverPort = SpringConfigFileManager.getServerPort(moduleId);
+    private void initRequestUrl(FuHttpRequestData httpRequestData) {
         FuRequestData request = httpRequestData.getRequest();
-        String apiUrl = request.getApiUrl();
-        //接口地址中参数替换
-        List<KeyValueTableBO> pathVariables = request.getPathVariables();
-        if (CollectionUtils.isNotEmpty(pathVariables)) {
-            for (KeyValueTableBO pathVariable : pathVariables) {
-                String key = pathVariable.getKey();
-                apiUrl = StringUtils.replace(apiUrl, "{" + key + "}", pathVariable.getValue());
+        String requestUrl = request.getRequestUrl();
+        if (StringUtils.isBlank(requestUrl)) {
+            String baseUrl = request.getBaseUrl();
+            //接口地址中参数替换
+            List<KeyValueTableBO> pathVariables = request.getPathVariables();
+            if (CollectionUtils.isNotEmpty(pathVariables)) {
+                for (KeyValueTableBO pathVariable : pathVariables) {
+                    String key = pathVariable.getKey();
+                    baseUrl = StringUtils.replace(baseUrl, "{" + key + "}", pathVariable.getValue());
+                }
             }
+            request.setBaseUrl(baseUrl);
         }
-        this.requestBaseUrl = URLUtil.completeUrl(FuDocConstants.DEFAULT_HOST + ":" + serverPort, apiUrl);
     }
 
 
@@ -265,10 +264,7 @@ public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener 
      */
     private String joinParams(List<KeyValueTableBO> dataList) {
         if (CollectionUtils.isNotEmpty(dataList)) {
-            String paramUrl = dataList.stream().filter(KeyValueTableBO::getSelect).map(this::buildKeyValue).collect(Collectors.joining("&"));
-            if (StringUtils.isNotBlank(paramUrl)) {
-                return "?" + paramUrl;
-            }
+            return dataList.stream().filter(KeyValueTableBO::getSelect).map(this::buildKeyValue).collect(Collectors.joining("&"));
         }
         return StringUtils.EMPTY;
     }
@@ -278,11 +274,9 @@ public class HttpGetParamsTab implements FuTab, InitRequestData, TabBarListener 
      */
     public void resetRequestUrl(String paramUrl) {
         if (Objects.nonNull(this.httpRequestData)) {
-            //完整请求地址=域名+apiUrl+请求参数
-            String requestUrl = URLUtil.normalize(this.requestBaseUrl + paramUrl, true, true);
             FuRequestData request = this.httpRequestData.getRequest();
-            request.setRequestUrl(requestUrl);
-            this.requestTabView.setRequestUrl(requestUrl);
+            request.setParamUrl(paramUrl);
+            this.requestTabView.setRequestUrl(request.getRequestUrl());
         }
     }
 

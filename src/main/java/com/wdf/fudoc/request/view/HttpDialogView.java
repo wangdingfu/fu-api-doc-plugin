@@ -178,7 +178,12 @@ public class HttpDialogView implements HttpCallback {
     }
 
     @Override
-    public void callback(FuHttpRequestData fuHttpRequestData) {
+    public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
+        this.requestTabView.doSendBefore(fuHttpRequestData);
+    }
+
+    @Override
+    public void doSendAfter(FuHttpRequestData fuHttpRequestData) {
         ApplicationManager.getApplication().invokeLater(() -> {
             this.fuTabBuilder.select(ResponseTabView.RESPONSE);
             this.responseTabView.initData(fuHttpRequestData);

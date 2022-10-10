@@ -8,6 +8,7 @@ import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
@@ -28,7 +29,7 @@ import java.util.List;
  * @author wangdingfu
  * @date 2022-09-17 21:32:03
  */
-public class HttpRequestBodyTab implements FuTab, InitRequestData {
+public class HttpRequestBodyTab implements FuTab, HttpCallback {
 
     public static final String BODY = "Body";
 
@@ -105,5 +106,10 @@ public class HttpRequestBodyTab implements FuTab, InitRequestData {
             this.jsonComponent.setContent(json);
             this.fuTabComponent.switchTab("json");
         }
+    }
+
+    @Override
+    public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
+        //do nothing
     }
 }

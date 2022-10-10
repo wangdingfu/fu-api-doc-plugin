@@ -10,6 +10,7 @@ import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.FuTableView;
 import com.wdf.fudoc.components.listener.FuTableListener;
+import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
@@ -22,7 +23,7 @@ import javax.swing.table.TableCellEditor;
  * @author wangdingfu
  * @date 2022-09-18 22:54:51
  */
-public class HttpBodyFormDataTab implements FuTab, InitRequestData {
+public class HttpBodyFormDataTab implements FuTab, HttpCallback {
 
     /**
      * 请求参数table组件
@@ -49,6 +50,11 @@ public class HttpBodyFormDataTab implements FuTab, InitRequestData {
 
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
+
+    }
+
+    @Override
+    public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
 
     }
 

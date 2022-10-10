@@ -8,18 +8,19 @@ import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuTabComponent;
-import com.wdf.fudoc.request.InitRequestData;
+import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.test.factory.FuTabBuilder;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * http请求部分内容
@@ -28,7 +29,7 @@ import java.awt.event.ActionListener;
  * @date 2022-09-17 18:05:36
  */
 @Getter
-public class RequestTabView implements FuTab, InitRequestData {
+public class RequestTabView implements FuTab, HttpCallback {
 
     private final Project project;
 
@@ -95,10 +96,8 @@ public class RequestTabView implements FuTab, InitRequestData {
         this.rootPane = new JRootPane();
         initRootPane();
         initUI();
-        this.sendBtn.addActionListener(e -> {
-            fuHttpRequestData.getRequest().setRequestUrl(requestUrlComponent.getText());
-            HttpApiExecutor.doSendRequest(project, fuHttpRequestData, httpDialogView);
-        });
+        //初始化相关组件的事件监听器
+        initComponentEventListener();
     }
 
 
@@ -134,10 +133,6 @@ public class RequestTabView implements FuTab, InitRequestData {
     }
 
 
-    public String getRequestUrl() {
-        return this.requestUrlComponent.getText();
-    }
-
     public void setRequestUrl(String requestUrl) {
         this.requestUrlComponent.setText(requestUrl);
     }
@@ -169,6 +164,13 @@ public class RequestTabView implements FuTab, InitRequestData {
         autoSelectTab(httpRequestData);
     }
 
+    @Override
+    public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
+        httpHeaderTab.doSendBefore(fuHttpRequestData);
+        httpGetParamsTab.doSendBefore(fuHttpRequestData);
+        httpRequestBodyTab.doSendBefore(fuHttpRequestData);
+    }
+
 
     /**
      * 自动定位tab页
@@ -185,5 +187,59 @@ public class RequestTabView implements FuTab, InitRequestData {
         }
     }
 
+
+    /**
+     * 初始化组件事件监听器
+     */
+    private void initComponentEventListener() {
+
+        //对发送按钮添加发起http请求事件
+        this.sendBtn.addActionListener(e -> HttpApiExecutor.doSendRequest(project, fuHttpRequestData, httpDialogView));
+
+        //对请求类型按钮添加选项选中事件
+        this.requestTypeComponent.addItemListener(e -> setRequestType(e.getItem() + ""));
+
+        //对请求地址添加属性内容变更事件
+        this.requestUrlComponent.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                resetRequestUrl();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                resetRequestUrl();
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                resetRequestUrl();
+            }
+        });
+    }
+
+
+    private void resetRequestUrl() {
+        String requestUrl = this.requestUrlComponent.getText();
+        FuRequestData request = fuHttpRequestData.getRequest();
+        if (StringUtils.isBlank(requestUrl)) {
+            request.setParamUrl(null);
+            return;
+        }
+        request.setBaseUrl(StringUtils.substringBefore(requestUrl,"?"));
+        request.setParamUrl(StringUtils.substringAfter(requestUrl,"?"));
+    }
+
+
+    /**
+     * 设置请求类型
+     *
+     * @param requestType 请求类型
+     */
+    private void setRequestType(String requestType) {
+        FuRequestData request = fuHttpRequestData.getRequest();
+        request.setRequestType(RequestType.getRequestType(requestType));
+    }
 
 }

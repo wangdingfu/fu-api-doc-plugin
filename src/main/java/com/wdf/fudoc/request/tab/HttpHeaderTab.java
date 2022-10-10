@@ -5,6 +5,7 @@ import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
@@ -15,6 +16,7 @@ import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * http请求头tab页
@@ -22,7 +24,7 @@ import java.util.List;
  * @author wangdingfu
  * @date 2022-09-17 21:30:58
  */
-public class HttpHeaderTab implements FuTab, InitRequestData {
+public class HttpHeaderTab implements FuTab, HttpCallback {
 
     /**
      * table组件
@@ -52,6 +54,14 @@ public class HttpHeaderTab implements FuTab, InitRequestData {
         List<KeyValueTableBO> headers = request.getHeaders();
         if (CollectionUtils.isNotEmpty(headers)) {
             this.fuTableComponent.setDataList(headers);
+        }
+    }
+
+    @Override
+    public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
+        FuRequestData request = fuHttpRequestData.getRequest();
+        if(Objects.nonNull(request)){
+            request.setHeaders(fuTableComponent.getDataList());
         }
     }
 }

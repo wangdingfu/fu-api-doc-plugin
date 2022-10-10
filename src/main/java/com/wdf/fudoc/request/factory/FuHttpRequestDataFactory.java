@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.factory;
 
+import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.ModuleUtil;
@@ -11,10 +12,12 @@ import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.apidoc.pojo.annotation.*;
 import com.wdf.fudoc.apidoc.pojo.bo.RootParamBO;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.spring.SpringConfigFileManager;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.FuDocUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -30,11 +33,14 @@ import java.util.Objects;
  */
 public class FuHttpRequestDataFactory {
 
-
     public static FuHttpRequestData build(FuDocRootParamData fuDocRootParamData, PsiClass psiClass) {
+        return build(FuDocUtils.getModuleId(ModuleUtil.findModuleForPsiElement(psiClass)), fuDocRootParamData);
+    }
+
+
+    public static FuHttpRequestData build(String moduleId, FuDocRootParamData fuDocRootParamData) {
         FuHttpRequestData fuHttpRequestData = new FuHttpRequestData();
         //moduleId
-        String moduleId = FuDocUtils.getModuleId(ModuleUtil.findModuleForPsiElement(psiClass));
         fuHttpRequestData.setModuleId(moduleId);
         //接口唯一标识
         fuHttpRequestData.setApiKey(moduleId + ":" + fuDocRootParamData.getApiId());
@@ -44,7 +50,8 @@ public class FuHttpRequestDataFactory {
         //接口请求类型
         fuRequestData.setRequestType(RequestType.getRequestType(fuDocRootParamData.getRequestType()));
         //设置接口url
-        fuRequestData.setApiUrl(fuDocRootParamData.getUrlList().get(0));
+        String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigFileManager.getServerPort(moduleId);
+        fuRequestData.setBaseUrl(URLUtil.completeUrl(domainUrl, fuDocRootParamData.getUrlList().get(0)));
         //设置body内容
         fuRequestData.setBody(new FuRequestBodyData());
         fuHttpRequestData.setRequest(fuRequestData);
@@ -77,8 +84,7 @@ public class FuHttpRequestDataFactory {
                 List<KeyValueTableBO> tableBOList = paramConvertToTableData(rootParamBO.getFuDocParamDataList());
                 if (springAnnotationData instanceof PathVariableData) {
                     pathVariableList.addAll(tableBOList);
-                } else if (springAnnotationData instanceof RequestParamData
-                        || springAnnotationData instanceof DefaultAnnotationData) {
+                } else if (springAnnotationData instanceof RequestParamData || springAnnotationData instanceof DefaultAnnotationData) {
                     if (RequestType.GET.equals(requestType)) {
                         getParamList.addAll(tableBOList);
                     } else if (RequestType.POST.equals(requestType)) {

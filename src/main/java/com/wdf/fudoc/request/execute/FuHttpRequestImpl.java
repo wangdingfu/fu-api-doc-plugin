@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.execute;
 
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.HttpCallback;
+import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 
 /**
@@ -51,10 +52,12 @@ public class FuHttpRequestImpl implements FuHttpRequest {
     public void doSend(HttpCallback httpCallback) {
         //设置当前正在请求中
         this.requestStatus = true;
+        //执行发起请求前置逻辑
+        httpCallback.doSendBefore(this.fuHttpRequestData);
         //发起请求
         HttpExecutor.execute(this.fuHttpRequestData);
-        //回调业务通知请求完成
-        httpCallback.callback(this.fuHttpRequestData);
+        //执行请求后置逻辑
+        httpCallback.doSendAfter(this.fuHttpRequestData);
         //结束请求 释放相关资源
         finished();
     }
@@ -64,6 +67,8 @@ public class FuHttpRequestImpl implements FuHttpRequest {
      */
     @Override
     public void finished() {
+        //保存当前请求
+        FuRequestManager.saveRequest(project, fuHttpRequestData);
         this.requestStatus = false;
     }
 

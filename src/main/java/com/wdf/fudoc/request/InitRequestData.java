@@ -8,10 +8,4 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
  */
 public interface InitRequestData {
 
-    /**
-     * 初始化数据
-     *
-     * @param httpRequestData 发起http请求的数据
-     */
-    void initData(FuHttpRequestData httpRequestData);
 }

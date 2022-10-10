@@ -7,6 +7,7 @@ import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
+import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -23,7 +24,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 18:05:45
  */
-public class ResponseTabView implements FuTab, InitRequestData {
+public class ResponseTabView implements FuTab, HttpCallback {
 
     public static final String RESPONSE = "Response";
 
@@ -77,6 +78,11 @@ public class ResponseTabView implements FuTab, InitRequestData {
                 switchPanel(2, responseErrorView.getRootPanel());
                 break;
         }
+    }
+
+    @Override
+    public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
+        //do nothing
     }
 
 
