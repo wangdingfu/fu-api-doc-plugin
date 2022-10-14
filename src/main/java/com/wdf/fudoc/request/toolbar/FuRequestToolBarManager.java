@@ -1,16 +1,15 @@
 package com.wdf.fudoc.request.toolbar;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.*;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import icons.FuDocIcons;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 【Fu Request】模块工具类管理类
@@ -30,11 +29,15 @@ public class FuRequestToolBarManager {
      */
     private final DefaultActionGroup defaultActionGroup;
 
-    private final ActionManager actionManager;
+    /**
+     * pin 状态 默认pin住
+     */
+    @Getter
+    public final AtomicBoolean pinStatus = new AtomicBoolean(true);
+
 
     public FuRequestToolBarManager(HttpDialogView httpDialogView) {
         this.httpDialogView = httpDialogView;
-        this.actionManager = ActionManager.getInstance();
         this.defaultActionGroup = new DefaultActionGroup();
     }
 
@@ -47,6 +50,8 @@ public class FuRequestToolBarManager {
      * 初始化工具栏
      */
     public DefaultActionGroup initToolBar() {
+        ActionManager actionManager = ActionManager.getInstance();
+
         //添加保存事件
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
             @Override
@@ -93,10 +98,17 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
         //添加pin
-        AnAction action = actionManager.getAction(RequestConstants.ACTION_REQUEST_TOOLBAR_PIN);
-        if (Objects.nonNull(action)) {
-            defaultActionGroup.add(action);
-        }
+        defaultActionGroup.add(new ToggleAction() {
+            @Override
+            public boolean isSelected(@NotNull AnActionEvent e) {
+                return pinStatus.get();
+            }
+
+            @Override
+            public void setSelected(@NotNull AnActionEvent e, boolean state) {
+                pinStatus.set(state);
+            }
+        });
 
         //添加关闭窗口事件
         defaultActionGroup.addAction(new AnAction("Close", "Close", AllIcons.Actions.Cancel) {

@@ -1,14 +1,12 @@
 package com.wdf.fudoc.request.view;
 
 import com.intellij.find.editorHeaderActions.Utils;
-import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.FuStatusBarComponent;
-import com.wdf.fudoc.components.toolbar.PinToolBarAction;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.global.GlobalHttpRequestView;
@@ -81,6 +79,9 @@ public class HttpDialogView implements HttpCallback {
     @Setter
     private JBPopup jbPopup;
 
+    @Getter
+    private FuRequestToolBarManager fuRequestToolBarManager;
+
 
     public HttpDialogView(Project project) {
         this.project = project;
@@ -108,8 +109,8 @@ public class HttpDialogView implements HttpCallback {
         this.toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
         this.toolBarPanel.add(this.titleLabel, BorderLayout.WEST);
         //创建及初始化工具栏
-        DefaultActionGroup defaultActionGroup = FuRequestToolBarManager.getInstance(this).initToolBar();
-        ToolBarUtils.genToolBarPanel(this.toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, defaultActionGroup, BorderLayout.EAST);
+        this.fuRequestToolBarManager = FuRequestToolBarManager.getInstance(this);
+        ToolBarUtils.genToolBarPanel(this.toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, this.fuRequestToolBarManager.initToolBar(), BorderLayout.EAST);
     }
 
 
@@ -173,7 +174,8 @@ public class HttpDialogView implements HttpCallback {
     public static void popup(Project project, FuHttpRequestData fuHttpRequestData) {
         HttpDialogView httpDialogView = new HttpDialogView(project);
         httpDialogView.initData(fuHttpRequestData);
-        httpDialogView.setJbPopup(PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), PinToolBarAction.getPinStatus()));
+        FuRequestToolBarManager fuRequestToolBarManager = httpDialogView.getFuRequestToolBarManager();
+        httpDialogView.setJbPopup(PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), fuRequestToolBarManager.getPinStatus()));
         GlobalHttpRequestView.addHttpDialogView(project, httpDialogView);
     }
 

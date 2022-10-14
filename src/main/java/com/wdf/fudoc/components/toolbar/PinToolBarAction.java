@@ -13,8 +13,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class PinToolBarAction extends ToggleAction {
 
-    @Getter
-    public static final AtomicBoolean pinStatus = new AtomicBoolean(true);
+    private final AtomicBoolean pinStatus;
+
+    public PinToolBarAction(AtomicBoolean pinStatus) {
+        this.pinStatus = pinStatus;
+    }
 
     @Override
     public boolean isDumbAware() {
