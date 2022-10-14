@@ -11,7 +11,6 @@ import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.request.HttpCallback;
-import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;

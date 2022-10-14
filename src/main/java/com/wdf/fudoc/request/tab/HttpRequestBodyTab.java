@@ -3,19 +3,15 @@ package com.wdf.fudoc.request.tab;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
-import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.request.HttpCallback;
-import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.test.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
-import com.wdf.fudoc.util.FuComponentsUtils;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +62,7 @@ public class HttpRequestBodyTab implements FuTab, HttpCallback {
 
     @Override
     public TabInfo getTabInfo() {
-        this.fuTabComponent = FuTabComponent.getInstance("Body", null, this.noneComponent);
+        this.fuTabComponent = FuTabComponent.getInstance(BODY, null, this.noneComponent);
         return fuTabComponent.addToggleBar("form-data", FuDocIcons.FU_REQUEST_FORM, this.formDataPanel)
                 .addToggleBar("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, this.urlencodedPanel)
                 .addToggleBar("raw", FuDocIcons.FU_REQUEST_RAW, this.rawPanel)

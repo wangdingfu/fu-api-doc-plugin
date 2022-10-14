@@ -6,7 +6,6 @@ import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.request.HttpCallback;
-import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;

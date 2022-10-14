@@ -11,7 +11,6 @@ import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.FuTableView;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.HttpCallback;
-import com.wdf.fudoc.request.InitRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.factory.TableCellEditorFactory;

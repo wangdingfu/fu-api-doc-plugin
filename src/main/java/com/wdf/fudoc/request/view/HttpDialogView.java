@@ -31,7 +31,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 18:06:24
  */
-public class HttpDialogView implements HttpCallback {
+public class HttpDialogView implements HttpCallback{
 
     /**
      * 根面板
@@ -190,4 +190,5 @@ public class HttpDialogView implements HttpCallback {
             fuStatusBarComponent.setInfo("请求失败. 连接被拒绝!!!");
         });
     }
+
 }
