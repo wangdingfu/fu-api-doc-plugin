@@ -109,10 +109,6 @@
             </action>
         </group>
 
-        <action id="fudoc.http.toolbar.action.pin" class="com.wdf.fudoc.components.toolbar.PinToolBarAction" text="Pin" icon="AllIcons.General.Pin_tab">
-            <keyboard-shortcut keymap="$default" first-keystroke="alt P"/>
-        </action>
-
         <action id="fudoc.request.toolbar.action.stop"
                 class="com.wdf.fudoc.request.action.toolbar.FuRequestStopAction"
                 text="Stop Request" description="Stop request" icon="AllIcons.Actions.Suspend"/>

@@ -98,7 +98,7 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
         //添加pin
-        defaultActionGroup.add(new ToggleAction() {
+        defaultActionGroup.add(new ToggleAction("Pin", "Pin", AllIcons.General.Pin_tab) {
             @Override
             public boolean isSelected(@NotNull AnActionEvent e) {
                 return pinStatus.get();
