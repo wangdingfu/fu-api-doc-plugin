@@ -15,6 +15,7 @@ import com.wdf.fudoc.request.global.GlobalHttpRequestView;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.RequestTabView;
 import com.wdf.fudoc.request.tab.ResponseTabView;
+import com.wdf.fudoc.request.toolbar.FuRequestToolBarManager;
 import com.wdf.fudoc.test.factory.FuTabBuilder;
 import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
@@ -31,7 +32,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 18:06:24
  */
-public class HttpDialogView implements HttpCallback{
+public class HttpDialogView implements HttpCallback {
 
     /**
      * 根面板
@@ -106,9 +107,8 @@ public class HttpDialogView implements HttpCallback{
         Utils.setSmallerFontForChildren(this.toolBarPanel);
         this.toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
         this.toolBarPanel.add(this.titleLabel, BorderLayout.WEST);
-        final ActionManager actionManager = ActionManager.getInstance();
-        DefaultActionGroup defaultActionGroup = (DefaultActionGroup) actionManager.getAction(RequestConstants.ACTION_REQUEST_TOOLBAR);
-        defaultActionGroup.addSeparator();
+        //创建及初始化工具栏
+        DefaultActionGroup defaultActionGroup = FuRequestToolBarManager.getInstance(this).initToolBar();
         ToolBarUtils.genToolBarPanel(this.toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, defaultActionGroup, BorderLayout.EAST);
     }
 

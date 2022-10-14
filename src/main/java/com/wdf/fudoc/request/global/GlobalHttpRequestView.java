@@ -20,6 +20,7 @@ public class GlobalHttpRequestView {
     }
 
     public static void addHttpDialogView(Project project, HttpDialogView httpDialogView) {
+
         httpDialogViewMap.put(project, httpDialogView);
     }
 
