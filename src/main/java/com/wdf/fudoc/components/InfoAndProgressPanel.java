@@ -24,7 +24,7 @@ public final class InfoAndProgressPanel extends JPanel implements CustomStatusBa
     private final List<ProgressIndicatorEx> myOriginals = new ArrayList<>();
     private final Map<InlineProgressIndicator, ProgressIndicatorEx> myInlineToOriginal = new HashMap<>();
 
-    private final JLabel myRefreshIcon = new JLabel(new AnimatedIcon.FS());
+    private final JLabel myRefreshIcon = new JLabel(new AnimatedIcon.Default());
 
 
 
@@ -37,7 +37,6 @@ public final class InfoAndProgressPanel extends JPanel implements CustomStatusBa
         myRefreshAndInfoPanel.setLayout(new BorderLayout());
         myRefreshAndInfoPanel.setOpaque(false);
         myRefreshAndInfoPanel.add(myRefreshIcon, BorderLayout.WEST);
-        myRefreshAndInfoPanel.add(myInfoPanel, BorderLayout.CENTER);
         myRefreshAndInfoPanel.add(myInfoPanel, BorderLayout.CENTER);
 
         setRefreshVisible(true);

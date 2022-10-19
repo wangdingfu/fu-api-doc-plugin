@@ -3,8 +3,8 @@ package com.wdf.fudoc.components;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 import com.intellij.util.ui.JBUI;
+import com.wdf.fudoc.common.constant.TipInfoConstants;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,6 +42,12 @@ public class FuStatusBarComponent {
         initLeftPanel();
         initCenterPanel();
         initRightPanel();
+        switchInfo();
+    }
+
+    public void switchInfo() {
+        //随机展示一条消息
+        setInfo(TipInfoConstants.get());
     }
 
 

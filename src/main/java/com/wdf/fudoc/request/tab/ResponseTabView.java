@@ -75,6 +75,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
                 //请求连接被拒绝
                 responseErrorView.setErrorDetail(response.getErrorDetail());
                 switchPanel(2, responseErrorView.getRootPanel());
+                //发送消息
                 break;
         }
     }

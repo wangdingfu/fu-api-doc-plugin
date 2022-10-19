@@ -1,11 +1,15 @@
 package com.wdf.fudoc.request.view;
 
+import com.intellij.find.FindBundle;
 import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.ui.JBColor;
+import com.intellij.ui.RelativeFont;
+import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.components.FuStatusBarComponent;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
@@ -52,7 +56,7 @@ public class HttpDialogView implements HttpCallback {
     /**
      * 请求接口标题
      */
-    private final JLabel titleLabel = new JLabel("  测试http接口请求");
+    private final JLabel titleLabel;
 
     /**
      * tab页构建器
@@ -89,11 +93,13 @@ public class HttpDialogView implements HttpCallback {
         this.responseTabView = new ResponseTabView(this.project);
         this.fuStatusBarComponent = new FuStatusBarComponent();
         this.statusInfoPanel = this.fuStatusBarComponent.getRootPanel();
+        this.titleLabel = new JBLabel("", UIUtil.ComponentStyle.REGULAR);
+        this.titleLabel.setBorder(JBUI.Borders.emptyLeft(5));
+        RelativeFont.BOLD.install(this.titleLabel);
         initToolBarUI();
         initRequestUI();
         initResponseUI();
         initUI();
-        fuStatusBarComponent.setInfo("您可以按下esc键来退出当前窗口");
     }
 
     public void close() {
@@ -156,6 +162,7 @@ public class HttpDialogView implements HttpCallback {
             return;
         }
         this.titleLabel.setText(fuHttpRequestData.getApiName());
+        this.titleLabel.setToolTipText(fuHttpRequestData.getApiName());
         this.requestTabView.initData(fuHttpRequestData);
         initResponseData(fuHttpRequestData);
     }
@@ -189,7 +196,8 @@ public class HttpDialogView implements HttpCallback {
         ApplicationManager.getApplication().invokeLater(() -> {
             this.fuTabBuilder.select(ResponseTabView.RESPONSE);
             this.responseTabView.initData(fuHttpRequestData);
-            fuStatusBarComponent.setInfo("请求失败. 连接被拒绝!!!");
+            //切换消息展示
+            fuStatusBarComponent.switchInfo();
         });
     }
 
