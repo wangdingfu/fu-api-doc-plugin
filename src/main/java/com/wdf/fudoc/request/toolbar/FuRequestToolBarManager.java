@@ -3,6 +3,8 @@ package com.wdf.fudoc.request.toolbar;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.wdf.fudoc.request.constants.RequestConstants;
+import com.wdf.fudoc.request.manager.FuRequestManager;
+import com.wdf.fudoc.request.tab.RequestTabView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import icons.FuDocIcons;
 import lombok.Getter;
@@ -51,12 +53,13 @@ public class FuRequestToolBarManager {
      */
     public DefaultActionGroup initToolBar() {
         ActionManager actionManager = ActionManager.getInstance();
-
+        RequestTabView requestTabView = httpDialogView.getRequestTabView();
         //添加保存事件
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                System.out.println("点击了保存按钮");
+                //保存当前请求
+                FuRequestManager.saveRequest(requestTabView.getProject(), requestTabView.getFuHttpRequestData());
             }
         });
 

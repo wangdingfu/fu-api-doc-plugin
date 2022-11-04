@@ -9,19 +9,15 @@ import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.components.listener.FuTableListener;
-import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
-import com.wdf.fudoc.test.view.bo.BarPanelBO;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
-import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -31,7 +27,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-09-17 21:31:31
  */
-public class HttpGetParamsTab implements FuTab, HttpCallback, TabBarListener {
+public class HttpGetParamsTab extends AbstractBulkEditTabLinkage implements FuTab, HttpCallback {
 
     public static final String PARAMS = "Params";
     /**
@@ -75,7 +71,8 @@ public class HttpGetParamsTab implements FuTab, HttpCallback, TabBarListener {
      */
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance(PARAMS, null, fuTableComponent.createPanel()).addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
+        return FuTabComponent.getInstance(PARAMS, null, fuTableComponent.createPanel())
+                .addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
     }
 
 
@@ -105,20 +102,16 @@ public class HttpGetParamsTab implements FuTab, HttpCallback, TabBarListener {
     }
 
 
-    /**
-     * 切换组件
-     * true:  table--->editor
-     * false: editor--->table
-     *
-     * @param barPanelBO 批量编辑按钮对象
-     */
     @Override
-    public void click(BarPanelBO barPanelBO) {
-        if (Objects.nonNull(barPanelBO)) {
-            reset(barPanelBO.isSelect());
-        }
-
+    protected FuTableComponent<KeyValueTableBO> getTableComponent() {
+        return this.fuTableComponent;
     }
+
+    @Override
+    protected FuEditorComponent getEditorComponent() {
+        return this.fuEditorComponent;
+    }
+
 
 
     /**
@@ -164,40 +157,6 @@ public class HttpGetParamsTab implements FuTab, HttpCallback, TabBarListener {
         public void contentChange(String content) {
             //重置请求地址
             httpGetParamsTab.resetRequestUrlFromEditor();
-        }
-    }
-
-    /**
-     * 重置且同步table组件和批量编辑组件内容
-     *
-     * @param isTable true 从table组件同步到批量编辑组件 false 从批量编辑组件同步到table组件
-     */
-    public void reset(boolean isTable) {
-        if (isTable) {
-            //从table组件同步内容到编辑器组件
-            this.fuEditorComponent.setContent(buildBulkEditContent(this.fuTableComponent.getDataList()));
-        } else {
-            // 从编辑器组件同步到table组件
-            bulkEditToTableData();
-        }
-        //重置请求地址
-        resetRequestUrlFromTable();
-    }
-
-
-    /**
-     * 格式化编辑器中的key
-     *
-     * @param key             key
-     * @param keyValueTableBO key value对象
-     */
-    private static void formatKey(String key, KeyValueTableBO keyValueTableBO) {
-        if (key.startsWith("//")) {
-            keyValueTableBO.setSelect(false);
-            keyValueTableBO.setKey(StringUtils.replace(key, "//", "").trim());
-        } else {
-            keyValueTableBO.setSelect(true);
-            keyValueTableBO.setKey(key);
         }
     }
 
@@ -280,58 +239,6 @@ public class HttpGetParamsTab implements FuTab, HttpCallback, TabBarListener {
     }
 
 
-    /**
-     * 将编辑器中的数据同步到table中
-     */
-    private void bulkEditToTableData() {
-        Map<String, KeyValueTableBO> keyValueTableBOMap = ObjectUtils.listToMap(this.fuTableComponent.getDataList(), KeyValueTableBO::getKey);
-        List<KeyValueTableBO> tableDataList = editorToTableData();
-        if (CollectionUtils.isNotEmpty(tableDataList)) {
-            for (KeyValueTableBO keyValueTableBO : tableDataList) {
-                KeyValueTableBO tableBO = keyValueTableBOMap.get(keyValueTableBO.getKey());
-                if (Objects.nonNull(tableBO)) {
-                    keyValueTableBO.setDescription(tableBO.getDescription());
-                }
-            }
-        }
-        this.fuTableComponent.setDataList(tableDataList);
-    }
-
-
-    /**
-     * 将编辑器组件的内容转换成表格的数据
-     */
-    private List<KeyValueTableBO> editorToTableData() {
-        String content = this.fuEditorComponent.getContent();
-        List<KeyValueTableBO> dataList = Lists.newArrayList();
-        if (StringUtils.isNotBlank(content)) {
-            for (String line : content.split("\n")) {
-                if (StringUtils.isBlank(line)) {
-                    continue;
-                }
-                String key = StringUtils.contains(line, ":") ? StringUtils.substringBefore(line, ":") : line;
-                String value = StringUtils.substringAfter(line, ":");
-                KeyValueTableBO keyValueTableBO = new KeyValueTableBO();
-                formatKey(key, keyValueTableBO);
-                keyValueTableBO.setValue(value);
-                dataList.add(keyValueTableBO);
-            }
-        }
-        return dataList;
-    }
-
-
-    private String buildBulkEditContent(List<KeyValueTableBO> params) {
-        if (CollectionUtils.isNotEmpty(params)) {
-            return params.stream().map(this::toBulkEdit).collect(Collectors.joining("\n"));
-        }
-        return StringUtils.EMPTY;
-    }
-
-    private String toBulkEdit(KeyValueTableBO keyValueTableBO) {
-        String prefix = keyValueTableBO.getSelect() ? StringUtils.EMPTY : "//";
-        return prefix + keyValueTableBO.getKey() + ":" + keyValueTableBO.getValue();
-    }
 
     private String buildKeyValue(KeyValueTableBO keyValueTableBO) {
         return keyValueTableBO.getKey() + "=" + keyValueTableBO.getValue();

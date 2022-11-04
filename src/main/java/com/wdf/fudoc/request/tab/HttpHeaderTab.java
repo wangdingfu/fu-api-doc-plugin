@@ -1,8 +1,10 @@
 package com.wdf.fudoc.request.tab;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
+import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.request.HttpCallback;
@@ -10,8 +12,6 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
-import com.wdf.fudoc.util.FuComponentsUtils;
-import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -23,21 +23,27 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 21:30:58
  */
-public class HttpHeaderTab implements FuTab, HttpCallback {
+public class HttpHeaderTab extends AbstractBulkEditTabLinkage implements FuTab, HttpCallback {
 
     /**
      * table组件
      */
     private final FuTableComponent<KeyValueTableBO> fuTableComponent;
+    /**
+     * 批量编辑请求参数组件
+     */
+    private final FuEditorComponent fuEditorComponent;
 
     public HttpHeaderTab() {
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class);
+        //文本编辑器
+        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
     }
 
     @Override
     public TabInfo getTabInfo() {
         return FuTabComponent.getInstance("Header", null, fuTableComponent.createPanel())
-                .addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, FuComponentsUtils.createEmptyEditor())
+                .addBulkEditBar(this.fuEditorComponent.getMainPanel(), this)
                 .builder();
     }
 
@@ -59,8 +65,18 @@ public class HttpHeaderTab implements FuTab, HttpCallback {
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         FuRequestData request = fuHttpRequestData.getRequest();
-        if(Objects.nonNull(request)){
+        if (Objects.nonNull(request)) {
             request.setHeaders(fuTableComponent.getDataList());
         }
+    }
+
+    @Override
+    protected FuTableComponent<KeyValueTableBO> getTableComponent() {
+        return this.fuTableComponent;
+    }
+
+    @Override
+    protected FuEditorComponent getEditorComponent() {
+        return this.fuEditorComponent;
     }
 }
