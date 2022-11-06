@@ -52,6 +52,9 @@ public class FuTabComponent {
 
 
     private DefaultActionGroup toggleActionGroup;
+
+
+    private Map<String, DefaultActionGroup> actionGroupMap;
     private DefaultActionGroup actionGroup;
 
     /**
@@ -109,6 +112,12 @@ public class FuTabComponent {
     }
 
     public FuTabComponent addBulkEditBar(JPanel bulkEditPanel, TabBarListener tabBarListener) {
+        this.addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, bulkEditPanel);
+        listenerMap.put("Bulk Edit", tabBarListener);
+        return this;
+    }
+
+    public FuTabComponent addBulkEditBar(String parent, JPanel bulkEditPanel, TabBarListener tabBarListener) {
         this.addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, bulkEditPanel);
         listenerMap.put("Bulk Edit", tabBarListener);
         return this;

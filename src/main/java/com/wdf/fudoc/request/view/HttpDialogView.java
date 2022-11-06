@@ -116,7 +116,7 @@ public class HttpDialogView implements HttpCallback {
         this.toolBarPanel.add(this.titleLabel, BorderLayout.WEST);
         //创建及初始化工具栏
         this.fuRequestToolBarManager = FuRequestToolBarManager.getInstance(this);
-        ToolBarUtils.genToolBarPanel(this.toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, this.fuRequestToolBarManager.initToolBar(), BorderLayout.EAST);
+        ToolBarUtils.addActionToToolBar(this.toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, this.fuRequestToolBarManager.initToolBar(), BorderLayout.EAST);
     }
 
 

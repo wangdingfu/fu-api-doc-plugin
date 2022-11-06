@@ -3,6 +3,7 @@ package com.wdf.fudoc.request.tab;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.test.view.bo.BarPanelBO;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
@@ -45,7 +46,18 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
         }
     }
 
-
+    @Override
+    public void onClick(TabActionBO tabActionBO) {
+        if (Objects.nonNull(tabActionBO)) {
+            if (tabActionBO.isSelect()) {
+                //从table组件同步内容到编辑器组件
+                getEditorComponent().setContent(buildBulkEditContent(getTableComponent().getDataList()));
+            } else {
+                // 从编辑器组件同步到table组件
+                bulkEditToTableData();
+            }
+        }
+    }
 
     /**
      * 将编辑器中的数据同步到table中
@@ -63,8 +75,6 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
         }
         getTableComponent().setDataList(tableDataList);
     }
-
-
 
 
     /**
@@ -98,7 +108,6 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
     }
 
 
-
     /**
      * 格式化编辑器中的key
      *
@@ -114,7 +123,6 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
             keyValueTableBO.setKey(key);
         }
     }
-
 
 
     private String toBulkEdit(KeyValueTableBO keyValueTableBO) {

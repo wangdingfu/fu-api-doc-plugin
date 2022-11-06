@@ -6,13 +6,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.GuiUtils;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
-import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
+import com.wdf.fudoc.components.FuDocTabComponent;
 import com.wdf.fudoc.test.factory.FuTabBuilder;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
-import com.wdf.fudoc.test.factory.TableCellEditorFactory;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.FuEditorComponent;
-import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import icons.FuDocIcons;
 import lombok.Getter;
@@ -79,32 +77,31 @@ public class TestRequestFrom {
 
 
     private TabInfo createHeaderTab() {
-        return FuTabComponent.getInstance("Header", null, createTablePanel()).addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, createEditorPanel()).builder();
+        return FuDocTabComponent.getInstance("Header", null, createTablePanel()).addBulkEditBar(createEditorPanel()).builder();
     }
 
     private TabInfo createParamsTab() {
-        return FuTabComponent.getInstance("Params", null, createTablePanel()).addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, createEditorPanel()).builder();
+        return FuDocTabComponent.getInstance("Params", null, createTablePanel()).addBulkEditBar(createEditorPanel()).builder();
     }
 
     private TabInfo createBodyTab() {
-        return FuTabComponent.getInstance("Body", null, createEditorPanel())
-                .addToggleBar("none", FuDocIcons.FU_REQUEST_IGNORE, createTablePanel())
-                .addToggleBar("form-data", FuDocIcons.FU_REQUEST_FORM, createTable1Panel())
-                .addToggleBar("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, createTablePanel())
-                .addToggleBar("raw", FuDocIcons.FU_REQUEST_RAW, createEditorPanel())
-                .addToggleBar("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
-                .addToggleBar("binary", FuDocIcons.FU_REQUEST_FILE_BINARY, createTablePanel())
-                .addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, createEditorPanel())
+        return FuDocTabComponent.getInstance("Body", null, createEditorPanel())
+                .addAction("none", FuDocIcons.FU_REQUEST_IGNORE, createTablePanel())
+                .addAction("form-data", FuDocIcons.FU_REQUEST_FORM, createTable1Panel(), createEditorPanel(), null)
+                .addAction("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, createTablePanel())
+                .addAction("raw", FuDocIcons.FU_REQUEST_RAW, createEditorPanel())
+                .addAction("json", FuDocIcons.FU_REQUEST_JSON, createEditorPanel())
+                .addAction("binary", FuDocIcons.FU_REQUEST_FILE_BINARY, createTablePanel())
                 .switchTab("json").builder();
     }
 
 
     public TabInfo createResponseTab() {
-        return FuTabComponent.getInstance("Response", null, createEditorPanel()).builder();
+        return FuDocTabComponent.getInstance("Response", null, createEditorPanel()).builder();
     }
 
     private TabInfo createRowTab() {
-        return FuTabComponent.getInstance("Raw", null, createEditorPanel()).builder();
+        return FuDocTabComponent.getInstance("Raw", null, createEditorPanel()).builder();
     }
 
     private JPanel createTablePanel() {

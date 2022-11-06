@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * http请求body tab
@@ -107,5 +108,26 @@ public class HttpRequestBodyTab implements FuTab, HttpCallback {
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         //do nothing
+        FuRequestData request = fuHttpRequestData.getRequest();
+        FuRequestBodyData body = request.getBody();
+        if (Objects.isNull(body)) {
+            body = new FuRequestBodyData();
+        }
+        List<KeyValueTableBO> dataList = this.formDataComponent.getDataList();
+        if (CollectionUtils.isNotEmpty(dataList)) {
+            body.setFormDataList(dataList);
+        }
+        List<KeyValueTableBO> urlencodedComponentDataList = this.urlencodedComponent.getDataList();
+        if(CollectionUtils.isNotEmpty(urlencodedComponentDataList)){
+            body.setFormUrlEncodedList(urlencodedComponentDataList);
+        }
+        String content = this.rawComponent.getContent();
+        if(StringUtils.isNotBlank(content)){
+            body.setRaw(content);
+        }
+        String json = this.jsonComponent.getContent();
+        if(StringUtils.isNotBlank(json)){
+            body.setJson(json);
+        }
     }
 }

@@ -98,7 +98,7 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage implements FuTa
 
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
-        //do nothing
+        //do nothing 当前tab页的请求地址已经实时更新到request对象中
     }
 
 

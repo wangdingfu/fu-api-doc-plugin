@@ -4,6 +4,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.manager.FuRequestManager;
+import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.RequestTabView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import icons.FuDocIcons;
@@ -58,8 +59,10 @@ public class FuRequestToolBarManager {
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
+                FuHttpRequestData fuHttpRequestData = requestTabView.getFuHttpRequestData();
+                requestTabView.doSendBefore(fuHttpRequestData);
                 //保存当前请求
-                FuRequestManager.saveRequest(requestTabView.getProject(), requestTabView.getFuHttpRequestData());
+                FuRequestManager.saveRequest(requestTabView.getProject(), fuHttpRequestData);
             }
         });
 
