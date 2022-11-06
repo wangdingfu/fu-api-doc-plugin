@@ -232,6 +232,9 @@ public class FuDocTabComponent {
         return this;
     }
 
+    public void switchTab(String parentTab, TabActionBO tabActionBO) {
+        switchTab(parentTab, tabActionBO, true);
+    }
 
     /**
      * 切换二级tab
@@ -239,9 +242,9 @@ public class FuDocTabComponent {
      * @param parentTab   一级tab的title
      * @param tabActionBO 二级tab参数
      */
-    public void switchTab(String parentTab, TabActionBO tabActionBO) {
+    public void switchTab(String parentTab, TabActionBO tabActionBO, boolean isSelect) {
         currentTabMap.put(parentTab, tabActionBO.getTitle());
-        tabActionBO.setSelect(true);
+        tabActionBO.setSelect(isSelect);
         JComponent switchComponent = tabActionBO.getMainComponent();
         if (ActionType.AN_ACTION.equals(tabActionBO.getActionType()) && !tabActionBO.isSelect()) {
             //切换tab主面板 没有选中时需要切换到未选中时的面板
@@ -317,7 +320,7 @@ public class FuDocTabComponent {
         public void actionPerformed(@NotNull AnActionEvent e) {
             tabActionBO.setSelect(!tabActionBO.isSelect());
             //选中时 切换到当前动作的主面板
-            switchTab(parentTitle, tabActionBO);
+            switchTab(parentTitle, tabActionBO, tabActionBO.isSelect());
         }
     }
 
