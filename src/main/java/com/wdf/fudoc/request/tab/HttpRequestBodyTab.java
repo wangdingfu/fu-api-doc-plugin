@@ -36,15 +36,11 @@ public class HttpRequestBodyTab implements FuTab, HttpCallback {
     private final FuTableComponent<KeyValueTableBO> urlencodedComponent;
     private final JPanel urlencodedPanel;
     private final FuEditorComponent rawComponent;
-    private final JPanel rawPanel;
     private final FuEditorComponent jsonComponent;
-    private final JPanel jsonPanel;
     private final JPanel binaryComponent;
-    private final FuEditorComponent editorComponent;
-    private final JPanel bulkEditPanel;
-
+    private final FuEditorComponent formDataEditorComponent;
+    private final FuEditorComponent urlencodedEditorComponent;
     private FuTabComponent fuTabComponent;
-
 
     public HttpRequestBodyTab() {
         this.noneComponent = new JPanel();
@@ -53,23 +49,20 @@ public class HttpRequestBodyTab implements FuTab, HttpCallback {
         this.urlencodedComponent = FuTableComponent.createKeyValue();
         this.urlencodedPanel = this.urlencodedComponent.createPanel();
         this.rawComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
-        this.rawPanel = this.rawComponent.getMainPanel();
         this.jsonComponent = FuEditorComponent.create(JsonFileType.INSTANCE);
-        this.jsonPanel = this.jsonComponent.getMainPanel();
         this.binaryComponent = new JPanel();
-        this.editorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
-        this.bulkEditPanel = this.editorComponent.getMainPanel();
+        this.formDataEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
+        this.urlencodedEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
     }
 
     @Override
     public TabInfo getTabInfo() {
         this.fuTabComponent = FuTabComponent.getInstance(BODY, null, this.noneComponent);
-        return fuTabComponent.addToggleBar("form-data", FuDocIcons.FU_REQUEST_FORM, this.formDataPanel)
-                .addToggleBar("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, this.urlencodedPanel)
-                .addToggleBar("raw", FuDocIcons.FU_REQUEST_RAW, this.rawPanel)
-                .addToggleBar("json", FuDocIcons.FU_REQUEST_JSON, this.jsonPanel)
-                .addToggleBar("binary", FuDocIcons.FU_REQUEST_FILE_BINARY, this.binaryComponent)
-                .addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, this.bulkEditPanel)
+        return this.fuTabComponent.addAction("form-data", FuDocIcons.FU_REQUEST_FORM, this.formDataPanel, this.formDataEditorComponent.getMainPanel())
+                .addAction("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, this.urlencodedPanel, this.urlencodedEditorComponent.getMainPanel())
+                .addAction("raw", FuDocIcons.FU_REQUEST_RAW, this.rawComponent.getMainPanel())
+                .addAction("json", FuDocIcons.FU_REQUEST_JSON, this.jsonComponent.getMainPanel())
+                .addAction("binary", FuDocIcons.FU_REQUEST_FILE_BINARY, this.binaryComponent)
                 .switchTab("json").builder();
     }
 
@@ -118,15 +111,15 @@ public class HttpRequestBodyTab implements FuTab, HttpCallback {
             body.setFormDataList(dataList);
         }
         List<KeyValueTableBO> urlencodedComponentDataList = this.urlencodedComponent.getDataList();
-        if(CollectionUtils.isNotEmpty(urlencodedComponentDataList)){
+        if (CollectionUtils.isNotEmpty(urlencodedComponentDataList)) {
             body.setFormUrlEncodedList(urlencodedComponentDataList);
         }
         String content = this.rawComponent.getContent();
-        if(StringUtils.isNotBlank(content)){
+        if (StringUtils.isNotBlank(content)) {
             body.setRaw(content);
         }
         String json = this.jsonComponent.getContent();
-        if(StringUtils.isNotBlank(json)){
+        if (StringUtils.isNotBlank(json)) {
             body.setJson(json);
         }
     }

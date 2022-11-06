@@ -1,33 +1,43 @@
 package com.wdf.fudoc.components;
 
-import com.intellij.find.editorHeaderActions.Utils;
+import cn.hutool.core.map.MapUtil;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
 import com.intellij.ui.tabs.TabInfo;
-import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.apidoc.constant.enumtype.ActionType;
+import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
-import com.wdf.fudoc.test.view.bo.BarPanelBO;
+import com.wdf.fudoc.util.ToolBarUtils;
 import icons.FuDocIcons;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 【Fu Tab】组件 类似JTabbedPane功能 在此功能基础上新增了toolbar工具栏 支持通过点击bar来切换不同的面板
+ * tab编辑器组件
+ * 支持tab右侧添加工具栏
  *
  * @author wangdingfu
- * @date 2022-09-04 20:49:54
+ * @date 2022-11-06 10:22:26
  */
 @Getter
 @Setter
 public class FuTabComponent {
+    private static final String DEFAULT = "DEFAULT";
+    private static final String BULK_EDIT = "BULK_EDIT";
+    private static final String TOOLBAR_LEFT_PLACE = "fudoc.request.toolbar.left";
+    private static final String TOOLBAR_RIGHT_PLACE = "fudoc.request.toolbar.right";
+    /**
+     * 根面板 最终展示内容的面板
+     */
+    private final JPanel rootPanel = new JPanel(new BorderLayout());
 
     /**
      * tab标题
@@ -39,206 +49,242 @@ public class FuTabComponent {
     private Icon icon;
 
     /**
-     * 根面板 最终展示内容的面板
+     * 当前tab页面展示的组件
      */
-    private JPanel rootPanel;
+    private JComponent mainComponent;
 
     /**
-     * 当前tab下默认面板
+     * 工具栏动作分组集合
      */
-    private JComponent defaultPanel;
-
-    private JPanel toolBarPanel;
-
-
-    private DefaultActionGroup toggleActionGroup;
-
-
-    private Map<String, DefaultActionGroup> actionGroupMap;
-    private DefaultActionGroup actionGroup;
+    private Map<String, DefaultActionGroup> actionGroupMap = new ConcurrentHashMap<>();
 
     /**
-     * 点击工具栏按钮后切换的面板
+     * tab动作参数
+     * key:tab的title value:当前tab的参数对象
      */
-    private Map<String, BarPanelBO> barPanelMap = new ConcurrentHashMap<>();
+    private final Map<String, TabActionBO> tabActionMap = new ConcurrentHashMap<>();
 
     /**
-     * 工具栏按钮对应的监听器
+     * 工具栏当前展示的tab
      */
-    private Map<String, TabBarListener> listenerMap = new ConcurrentHashMap<>();
+    private final Map<String, String> currentTabMap = new ConcurrentHashMap<>();
+
+    /**
+     * 工具栏面板
+     */
+    private final JPanel toolBarPanel;
+
+    /**
+     * 一级工具栏面板
+     */
+    private final JPanel toolBarLeftPanel;
+    /**
+     * 二级工具栏面板
+     */
+    private final JPanel toolBarRightPanel;
 
 
-    private String currentTab;
-
-
-    public FuTabComponent(String title, Icon icon, JComponent mainPanel) {
+    public FuTabComponent(String title, Icon icon, JComponent mainComponent) {
         this.title = title;
         this.icon = icon;
-        this.defaultPanel = mainPanel;
-        this.rootPanel = new JPanel(new BorderLayout());
-        switchPanel(mainPanel);
+        this.mainComponent = mainComponent;
+        this.toolBarPanel = new JPanel(new BorderLayout());
+        this.toolBarLeftPanel = new JPanel(new BorderLayout());
+        this.toolBarRightPanel = new JPanel(new BorderLayout());
+        this.toolBarPanel.add(this.toolBarLeftPanel, BorderLayout.WEST);
+        this.toolBarPanel.add(this.toolBarRightPanel, BorderLayout.EAST);
+        switchPanel(mainComponent);
     }
+
 
     public static FuTabComponent getInstance(String title, Icon icon, JComponent mainPanel) {
         return new FuTabComponent(title, icon, mainPanel);
     }
 
 
-    /**
-     * 为当前tab新增扩展功能 支持通过点击扩展的bar按钮来切换不同面板
-     *
-     * @param text        新增扩展bar的标题
-     * @param icon        扩展bar的图标
-     * @param targetPanel 点击扩展bar会被切换的目标面板
-     */
-    public FuTabComponent addBar(String text, Icon icon, JPanel targetPanel) {
-        addBar(text, icon, targetPanel, ActionType.AN_ACTION);
-        return this;
-    }
-
-    public FuTabComponent addToggleBar(String text, Icon icon, JPanel targetPanel) {
-        addBar(text, icon, targetPanel, ActionType.TOGGLE_ACTION);
-        return this;
-    }
-
-    public void addBar(String text, Icon icon, JPanel targetPanel, ActionType actionType) {
-        barPanelMap.put(text, new BarPanelBO(text, icon, false, targetPanel, actionType));
-        addAction(text, icon, actionType);
-    }
-
-    public FuTabComponent addBulkEditBar(JPanel bulkEditPanel) {
-        this.addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, bulkEditPanel);
-        return this;
-    }
-
-    public FuTabComponent addBulkEditBar(JPanel bulkEditPanel, TabBarListener tabBarListener) {
-        this.addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, bulkEditPanel);
-        listenerMap.put("Bulk Edit", tabBarListener);
-        return this;
-    }
-
-    public FuTabComponent addBulkEditBar(String parent, JPanel bulkEditPanel, TabBarListener tabBarListener) {
-        this.addBar("Bulk Edit", FuDocIcons.FU_REQUEST_BULK_EDIT, bulkEditPanel);
-        listenerMap.put("Bulk Edit", tabBarListener);
-        return this;
-    }
-
-    /**
-     * 设置默认tab
-     *
-     * @param tab tab名称
-     * @return 当前组件
-     */
-    public FuTabComponent switchTab(String tab) {
-        this.currentTab = tab;
-        switchPanelByTab(tab);
-        return this;
-    }
-
-    /**
-     * 构建成TabInfo对象
-     */
     public TabInfo builder() {
         TabInfo tabInfo = new TabInfo(this.rootPanel);
         if (Objects.nonNull(this.icon)) {
             tabInfo.setIcon(this.icon);
         }
         tabInfo.setText(this.title);
-        if (Objects.nonNull(this.toggleActionGroup) || Objects.nonNull(this.actionGroup)) {
-            this.toolBarPanel = new BorderLayoutPanel();
-            if (Objects.nonNull(this.toggleActionGroup)) {
-                genToolBarPanel("fudoc.request.toggle.bar", toggleActionGroup, BorderLayout.WEST);
-            }
-            if (Objects.nonNull(this.actionGroup)) {
-                genToolBarPanel("fudoc.request.toggle.bar", actionGroup, BorderLayout.EAST);
-            }
+        DefaultActionGroup actionGroup;
+        if (MapUtil.isNotEmpty(actionGroupMap) && Objects.nonNull(actionGroup = actionGroupMap.get(DEFAULT))) {
+            //构建一级工具栏
+            ToolBarUtils.addActionToToolBar(this.toolBarLeftPanel, TOOLBAR_LEFT_PLACE, actionGroup, BorderLayout.WEST);
+            //构建二级工具栏
+            tabActionMap.forEach((key, value) -> {
+                DefaultActionGroup defaultActionGroup;
+                if (CollectionUtils.isNotEmpty(value.getChildList()) && Objects.nonNull(defaultActionGroup = actionGroupMap.get(key))) {
+                    //生成二级工具栏面板
+                    value.setChildPanel(ToolBarUtils.genToolBarPanel(TOOLBAR_RIGHT_PLACE, defaultActionGroup, BorderLayout.EAST));
+                }
+            });
             tabInfo.setSideComponent(toolBarPanel);
         }
         return tabInfo;
     }
 
     /**
-     * 添加一个bar 点击bar默认动作为切换面板
+     * 往tab右侧的工具栏中添加一个动作
      *
-     * @param text bar显示的文本
-     * @param icon bar显示的图标
+     * @param title       动作名称
+     * @param icon        动作图标
+     * @param actionPanel 当前动作触发后切换到指定的面板
+     * @return tab组件对象
      */
-    private void addBarAction(String text, Icon icon) {
-        if (Objects.isNull(actionGroup)) {
-            actionGroup = new DefaultActionGroup();
-        }
-        actionGroup.add(new AnAction(text, text, icon) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                BarPanelBO barPanelBO = barPanelMap.get(text);
-                if (Objects.nonNull(barPanelBO)) {
-                    //切换面板
-                    barPanelBO.setSelect(!barPanelBO.isSelect());
-                    switchPanel(barPanelBO.isSelect() ? barPanelBO.getTargetPanel() : defaultPanel);
-                }
-                //发出事件通知
-                TabBarListener tabBarListener = listenerMap.get(text);
-                if (Objects.nonNull(tabBarListener)) {
-                    tabBarListener.click(barPanelBO);
-                }
-            }
-        });
+    public FuTabComponent addAction(String title, Icon icon, JPanel actionPanel) {
+        return addAction(title, icon, actionPanel, null, null);
     }
 
-    private void addToggleAction(String text, Icon icon) {
-        if (Objects.isNull(toggleActionGroup)) {
-            toggleActionGroup = new DefaultActionGroup();
+    /**
+     * 往tab右侧的工具栏中添加批量编辑按钮
+     *
+     * @param actionPanel 点击批量编辑按钮切换的面板
+     * @return tab组件对象
+     */
+    public FuTabComponent addBulkEditBar(JPanel actionPanel) {
+        return addBulkEditBar(actionPanel, null);
+    }
+
+    public FuTabComponent addBulkEditBar(JPanel actionPanel, TabBarListener tabBarListener) {
+        return initAction(DEFAULT, buildBulkEditTab(actionPanel, tabBarListener));
+    }
+
+    public FuTabComponent addAction(String title, Icon icon, JPanel actionPanel, JPanel bulkEditPanel) {
+        return addAction(title, icon, actionPanel, bulkEditPanel, null);
+    }
+
+    /**
+     * 往tab右侧的工具栏中添加一个按钮 并且针对该按钮添加一个批量编辑按钮
+     *
+     * @param title          按钮名称
+     * @param icon           按钮图标
+     * @param actionPanel    点击按钮切换到指定的面板
+     * @param bulkEditPanel  批量编辑面板(将批量编辑面板挂在当前工具栏下 点击当前工具栏会出现对应批量编辑按钮进入批量编辑面板 类似二级菜单效果)
+     * @param tabBarListener 批量编辑面板按钮监听器 当点击批量编辑按钮时触发 告诉调用者当前点击了编辑按钮
+     * @return tab组件对象
+     */
+    public FuTabComponent addAction(String title, Icon icon, JPanel actionPanel, JPanel bulkEditPanel, TabBarListener tabBarListener) {
+        TabActionBO tabActionBO = new TabActionBO(title, icon, actionPanel, ActionType.TOGGLE_ACTION);
+        if (Objects.nonNull(bulkEditPanel)) {
+            tabActionBO.addChild(buildBulkEditTab(bulkEditPanel, tabBarListener));
         }
-        toggleActionGroup.add(new ToggleAction(text, text, icon) {
-            @Override
-            public boolean isDumbAware() {
-                return true;
-            }
-
-            @Override
-            public boolean isSelected(@NotNull AnActionEvent e) {
-                return text.equals(currentTab);
-            }
-
-            @Override
-            public void setSelected(@NotNull AnActionEvent e, boolean state) {
-                if (!text.equals(currentTab)) {
-                    //切换新tab时才切换面板
-                    switchPanelByTab(text);
-                }
-                currentTab = text;
-                TabBarListener tabBarListener = listenerMap.get(text);
-                if (Objects.nonNull(tabBarListener)) {
-                    tabBarListener.select(state);
-                }
-            }
-        });
+        //初始化动作
+        return initAction(DEFAULT, tabActionBO);
     }
 
 
-    private void switchPanelByTab(String tab) {
-        //切换新tab时才切换面板
-        BarPanelBO barPanelBO = barPanelMap.get(tab);
-        switchPanel(barPanelBO.getTargetPanel());
+    public FuTabComponent initAction(String parentTab, TabActionBO tabActionBO) {
+        DefaultActionGroup defaultActionGroup = actionGroupMap.get(parentTab);
+        if (Objects.isNull(defaultActionGroup)) {
+            defaultActionGroup = new DefaultActionGroup();
+            actionGroupMap.put(parentTab, defaultActionGroup);
+        }
+        if (DEFAULT.equals(parentTab)) {
+            tabActionMap.put(tabActionBO.getTitle(), tabActionBO);
+        }
+        ActionType actionType = tabActionBO.getActionType();
+        defaultActionGroup.add(ActionType.AN_ACTION.equals(actionType) ? new TabAnAction(parentTab, tabActionBO) : new TabToggleAction(parentTab, tabActionBO));
+        List<TabActionBO> childList = tabActionBO.getChildList();
+        if (CollectionUtils.isNotEmpty(childList)) {
+            childList.forEach(f -> initAction(tabActionBO.getTitle(), f));
+        }
+        return this;
     }
 
-    private void addAction(String text, Icon icon, ActionType actionType) {
-        if (ActionType.AN_ACTION.equals(actionType)) {
-            addBarAction(text, icon);
+
+    /**
+     * 构建一个批量编辑的动作参数
+     *
+     * @param bulkEditPanel  批量编辑主面板
+     * @param tabBarListener 批量编辑动作监听器
+     * @return 批量编辑动作参数对象
+     */
+    private TabActionBO buildBulkEditTab(JPanel bulkEditPanel, TabBarListener tabBarListener) {
+        return new TabActionBO(BULK_EDIT, FuDocIcons.FU_REQUEST_BULK_EDIT, bulkEditPanel, tabBarListener, ActionType.AN_ACTION);
+    }
+
+
+    /**
+     * 切换当前展示的tab
+     *
+     * @param tab tab名称
+     * @return 当前组件
+     */
+    public FuTabComponent switchTab(String tab) {
+        TabActionBO tabActionBO = tabActionMap.get(tab);
+        if (Objects.nonNull(tabActionBO)) {
+            switchTab(DEFAULT, tabActionBO);
         }
-        if (ActionType.TOGGLE_ACTION.equals(actionType)) {
-            addToggleAction(text, icon);
+        return this;
+    }
+
+
+    /**
+     * 切换当前展示的子tab
+     *
+     * @param parentTab 父tab title
+     * @param tab       当前子tab title
+     * @return 当前组件
+     */
+    public FuTabComponent switchTab(String parentTab, String tab) {
+        TabActionBO tabActionBO = tabActionMap.get(parentTab);
+        if (Objects.nonNull(tabActionBO)) {
+            List<TabActionBO> childList = tabActionBO.getChildList();
+            if (CollectionUtils.isNotEmpty(childList)) {
+                childList.stream().filter(f -> f.getTitle().equals(tab)).findFirst().ifPresent(f -> switchTab(parentTab, f));
+            }
+        }
+        return this;
+    }
+
+    public void switchTab(String parentTab, TabActionBO tabActionBO) {
+        switchTab(parentTab, tabActionBO, true);
+    }
+
+    /**
+     * 切换二级tab
+     *
+     * @param parentTab   一级tab的title
+     * @param tabActionBO 二级tab参数
+     */
+    public void switchTab(String parentTab, TabActionBO tabActionBO, boolean isSelect) {
+        currentTabMap.put(parentTab, tabActionBO.getTitle());
+        tabActionBO.setSelect(isSelect);
+        JComponent switchComponent = tabActionBO.getMainComponent();
+        if (ActionType.AN_ACTION.equals(tabActionBO.getActionType()) && !tabActionBO.isSelect()) {
+            //切换tab主面板 没有选中时需要切换到未选中时的面板
+            switchComponent = getDefaultComponent(parentTab);
+        }
+        //切换主面板
+        switchPanel(switchComponent);
+        //通知监听器
+        TabBarListener tabBarListener = tabActionBO.getTabBarListener();
+        if (Objects.nonNull(tabBarListener)) {
+            if (ActionType.AN_ACTION.equals(tabActionBO.getActionType())) {
+                tabBarListener.onClick(tabActionBO);
+            } else {
+                tabBarListener.onSelect(tabActionBO);
+            }
+        }
+        //切换二级工具栏
+        if (DEFAULT.equals(parentTab)) {
+            //如果是一级工具栏 则还需要切换右侧二级工具栏
+            switchToolBarPanel(tabActionBO.getChildPanel());
         }
     }
 
 
-    public void genToolBarPanel(String place, ActionGroup actionGroup, String layout) {
-        ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
-        toolbar.setTargetComponent(this.toolBarPanel);
-        toolbar.setForceMinimumSize(true);
-        toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
-        Utils.setSmallerFontForChildren(toolbar);
-        this.toolBarPanel.add(toolbar.getComponent(), layout);
+    private JComponent getDefaultComponent(String tab) {
+        if (DEFAULT.equals(tab)) {
+            return this.mainComponent;
+        }
+        TabActionBO tabActionBO = tabActionMap.get(tab);
+        if (Objects.nonNull(tabActionBO)) {
+            return tabActionBO.getMainComponent();
+        }
+        return new JPanel(new BorderLayout());
     }
 
 
@@ -252,6 +298,75 @@ public class FuTabComponent {
         this.rootPanel.repaint();
         this.rootPanel.add(switchPanel, BorderLayout.CENTER);
         this.rootPanel.revalidate();
+    }
+
+    /**
+     * 切换面板
+     *
+     * @param switchPanel 需要切换的面板
+     */
+    private void switchToolBarPanel(JComponent switchPanel) {
+        this.toolBarRightPanel.removeAll();
+        this.toolBarRightPanel.repaint();
+        if (Objects.nonNull(switchPanel)) {
+            this.toolBarRightPanel.add(switchPanel, BorderLayout.CENTER);
+        }
+        this.toolBarRightPanel.revalidate();
+    }
+
+
+    class TabAnAction extends AnAction {
+        private final String parentTitle;
+
+        private final TabActionBO tabActionBO;
+
+        public TabAnAction(String parentTitle, TabActionBO tabActionBO) {
+            super(tabActionBO.getTitle(), tabActionBO.getTitle(), tabActionBO.getIcon());
+            this.parentTitle = parentTitle;
+            this.tabActionBO = tabActionBO;
+        }
+
+        @Override
+        public void actionPerformed(@NotNull AnActionEvent e) {
+            tabActionBO.setSelect(!tabActionBO.isSelect());
+            //选中时 切换到当前动作的主面板
+            switchTab(parentTitle, tabActionBO, tabActionBO.isSelect());
+        }
+    }
+
+
+    class TabToggleAction extends ToggleAction {
+        private final String parentTitle;
+
+        private final TabActionBO tabActionBO;
+
+        public TabToggleAction(String parentTitle, TabActionBO tabActionBO) {
+            super(tabActionBO.getTitle(), tabActionBO.getTitle(), tabActionBO.getIcon());
+            this.parentTitle = parentTitle;
+            this.tabActionBO = tabActionBO;
+        }
+
+        @Override
+        public boolean isDumbAware() {
+            return true;
+        }
+
+        @Override
+        public boolean isSelected(@NotNull AnActionEvent e) {
+            String currentTab = currentTabMap.get(parentTitle);
+            return tabActionBO.getTitle().equals(currentTab);
+        }
+
+        @Override
+        public void setSelected(@NotNull AnActionEvent e, boolean state) {
+            String currentTab = currentTabMap.get(parentTitle);
+            String clickTab = tabActionBO.getTitle();
+            if (!clickTab.equals(currentTab)) {
+                //选中时 切换到当前动作的主面板
+                switchTab(parentTitle, tabActionBO);
+            }
+
+        }
     }
 
 }

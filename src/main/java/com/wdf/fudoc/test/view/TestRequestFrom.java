@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.GuiUtils;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
-import com.wdf.fudoc.components.FuDocTabComponent;
+import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.test.factory.FuTabBuilder;
 import com.wdf.fudoc.test.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
@@ -77,15 +77,15 @@ public class TestRequestFrom {
 
 
     private TabInfo createHeaderTab() {
-        return FuDocTabComponent.getInstance("Header", null, createTablePanel()).addBulkEditBar(createEditorPanel()).builder();
+        return FuTabComponent.getInstance("Header", null, createTablePanel()).addBulkEditBar(createEditorPanel()).builder();
     }
 
     private TabInfo createParamsTab() {
-        return FuDocTabComponent.getInstance("Params", null, createTablePanel()).addBulkEditBar(createEditorPanel()).builder();
+        return FuTabComponent.getInstance("Params", null, createTablePanel()).addBulkEditBar(createEditorPanel()).builder();
     }
 
     private TabInfo createBodyTab() {
-        return FuDocTabComponent.getInstance("Body", null, createEditorPanel())
+        return FuTabComponent.getInstance("Body", null, createEditorPanel())
                 .addAction("none", FuDocIcons.FU_REQUEST_IGNORE, createTablePanel())
                 .addAction("form-data", FuDocIcons.FU_REQUEST_FORM, createTable1Panel(), createEditorPanel(), null)
                 .addAction("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, createTablePanel())
@@ -97,11 +97,11 @@ public class TestRequestFrom {
 
 
     public TabInfo createResponseTab() {
-        return FuDocTabComponent.getInstance("Response", null, createEditorPanel()).builder();
+        return FuTabComponent.getInstance("Response", null, createEditorPanel()).builder();
     }
 
     private TabInfo createRowTab() {
-        return FuDocTabComponent.getInstance("Raw", null, createEditorPanel()).builder();
+        return FuTabComponent.getInstance("Raw", null, createEditorPanel()).builder();
     }
 
     private JPanel createTablePanel() {

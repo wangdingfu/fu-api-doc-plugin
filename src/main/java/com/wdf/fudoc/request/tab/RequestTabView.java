@@ -209,7 +209,6 @@ public class RequestTabView implements FuTab, HttpCallback {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 resetRequestUrl();
-
             }
 
             @Override
