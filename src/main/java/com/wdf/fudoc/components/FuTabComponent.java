@@ -11,6 +11,7 @@ import icons.FuDocIcons;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * tab编辑器组件
@@ -31,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Setter
 public class FuTabComponent {
     private static final String DEFAULT = "DEFAULT";
-    private static final String BULK_EDIT = "BULK_EDIT";
+    public static final String BULK_EDIT = "Bulk Edit";
     private static final String TOOLBAR_LEFT_PLACE = "fudoc.request.toolbar.left";
     private static final String TOOLBAR_RIGHT_PLACE = "fudoc.request.toolbar.right";
     /**
@@ -77,11 +79,11 @@ public class FuTabComponent {
     /**
      * 一级工具栏面板
      */
-    private final JPanel toolBarLeftPanel;
+    private JPanel toolBarLeftPanel;
     /**
      * 二级工具栏面板
      */
-    private final JPanel toolBarRightPanel;
+    private JPanel toolBarRightPanel;
 
 
     public FuTabComponent(String title, Icon icon, JComponent mainComponent) {
@@ -89,10 +91,6 @@ public class FuTabComponent {
         this.icon = icon;
         this.mainComponent = mainComponent;
         this.toolBarPanel = new JPanel(new BorderLayout());
-        this.toolBarLeftPanel = new JPanel(new BorderLayout());
-        this.toolBarRightPanel = new JPanel(new BorderLayout());
-        this.toolBarPanel.add(this.toolBarLeftPanel, BorderLayout.WEST);
-        this.toolBarPanel.add(this.toolBarRightPanel, BorderLayout.EAST);
         switchPanel(mainComponent);
     }
 
@@ -108,22 +106,42 @@ public class FuTabComponent {
             tabInfo.setIcon(this.icon);
         }
         tabInfo.setText(this.title);
+        AtomicBoolean isChilePanel = new AtomicBoolean(false);
+        //构建二级工具栏
+        tabActionMap.forEach((key, value) -> {
+            DefaultActionGroup defaultActionGroup;
+            if (CollectionUtils.isNotEmpty(value.getChildList()) && Objects.nonNull(defaultActionGroup = actionGroupMap.get(key))) {
+                //生成二级工具栏面板
+                value.setChildPanel(ToolBarUtils.genToolBarPanel(TOOLBAR_RIGHT_PLACE, defaultActionGroup, BorderLayout.EAST));
+                isChilePanel.set(true);
+            }
+        });
         DefaultActionGroup actionGroup;
         if (MapUtil.isNotEmpty(actionGroupMap) && Objects.nonNull(actionGroup = actionGroupMap.get(DEFAULT))) {
-            //构建一级工具栏
-            ToolBarUtils.addActionToToolBar(this.toolBarLeftPanel, TOOLBAR_LEFT_PLACE, actionGroup, BorderLayout.WEST);
-            //构建二级工具栏
-            tabActionMap.forEach((key, value) -> {
-                DefaultActionGroup defaultActionGroup;
-                if (CollectionUtils.isNotEmpty(value.getChildList()) && Objects.nonNull(defaultActionGroup = actionGroupMap.get(key))) {
-                    //生成二级工具栏面板
-                    value.setChildPanel(ToolBarUtils.genToolBarPanel(TOOLBAR_RIGHT_PLACE, defaultActionGroup, BorderLayout.EAST));
-                }
-            });
+            if (isChilePanel.get()) {
+                //存在二级工具栏 则一级工具栏在左侧 二级工具栏在右侧
+                initToolBarPanel();
+                ToolBarUtils.addActionToToolBar(this.toolBarLeftPanel, TOOLBAR_LEFT_PLACE, actionGroup, BorderLayout.WEST);
+            } else {
+                //只有一级工具栏 则直接将一级工具栏放在右侧
+                ToolBarUtils.addActionToToolBar(this.toolBarPanel, TOOLBAR_LEFT_PLACE, actionGroup, BorderLayout.EAST);
+            }
             tabInfo.setSideComponent(toolBarPanel);
         }
         return tabInfo;
     }
+
+
+    /**
+     * 初始化一级 二级工具栏
+     */
+    private void initToolBarPanel() {
+        this.toolBarLeftPanel = new JPanel(new BorderLayout());
+        this.toolBarRightPanel = new JPanel(new BorderLayout());
+        this.toolBarPanel.add(this.toolBarLeftPanel, BorderLayout.WEST);
+        this.toolBarPanel.add(this.toolBarRightPanel, BorderLayout.EAST);
+    }
+
 
     /**
      * 往tab右侧的工具栏中添加一个动作
@@ -263,7 +281,7 @@ public class FuTabComponent {
         TabBarListener tabBarListener = tabActionBO.getTabBarListener();
         if (Objects.nonNull(tabBarListener)) {
             if (ActionType.AN_ACTION.equals(tabActionBO.getActionType())) {
-                tabBarListener.onClick(tabActionBO);
+                tabBarListener.onClick(DEFAULT.equals(parentTab) ? StringUtils.EMPTY : parentTab, tabActionBO);
             } else {
                 tabBarListener.onSelect(tabActionBO);
             }
@@ -306,12 +324,14 @@ public class FuTabComponent {
      * @param switchPanel 需要切换的面板
      */
     private void switchToolBarPanel(JComponent switchPanel) {
-        this.toolBarRightPanel.removeAll();
-        this.toolBarRightPanel.repaint();
-        if (Objects.nonNull(switchPanel)) {
-            this.toolBarRightPanel.add(switchPanel, BorderLayout.CENTER);
+        if (Objects.nonNull(this.toolBarRightPanel)) {
+            this.toolBarRightPanel.removeAll();
+            this.toolBarRightPanel.repaint();
+            if (Objects.nonNull(switchPanel)) {
+                this.toolBarRightPanel.add(switchPanel, BorderLayout.CENTER);
+            }
+            this.toolBarRightPanel.revalidate();
         }
-        this.toolBarRightPanel.revalidate();
     }
 
 

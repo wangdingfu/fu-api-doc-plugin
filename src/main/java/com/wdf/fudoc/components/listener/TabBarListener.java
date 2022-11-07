@@ -23,7 +23,7 @@ public interface TabBarListener {
      *
      * @param tabActionBO 工具栏面板对象
      */
-    default void onClick(TabActionBO tabActionBO) {
+    default void onClick(String parentTab, TabActionBO tabActionBO) {
 
     }
 

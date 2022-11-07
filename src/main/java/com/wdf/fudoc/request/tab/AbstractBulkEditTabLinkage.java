@@ -5,7 +5,6 @@ import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
-import com.wdf.fudoc.test.view.bo.BarPanelBO;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -21,9 +20,22 @@ import java.util.stream.Collectors;
  * @date 2022-11-05 07:19:12
  */
 public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
-    protected abstract FuTableComponent<KeyValueTableBO> getTableComponent();
 
-    protected abstract FuEditorComponent getEditorComponent();
+    /**
+     * 获取table组件
+     *
+     * @param title table所在的tab
+     * @return table组件
+     */
+    protected abstract FuTableComponent<KeyValueTableBO> getTableComponent(String title);
+
+    /**
+     * 获取编辑器组件
+     *
+     * @param title 编辑器组件所在的tab
+     * @return 编辑器组件
+     */
+    protected abstract FuEditorComponent getEditorComponent(String title);
 
 
     /**
@@ -31,30 +43,17 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
      * true:  table--->editor
      * false: editor--->table
      *
-     * @param barPanelBO 批量编辑按钮对象
+     * @param tabActionBO tab参数对象
      */
     @Override
-    public void click(BarPanelBO barPanelBO) {
-        if (Objects.nonNull(barPanelBO)) {
-            if (barPanelBO.isSelect()) {
-                //从table组件同步内容到编辑器组件
-                getEditorComponent().setContent(buildBulkEditContent(getTableComponent().getDataList()));
-            } else {
-                // 从编辑器组件同步到table组件
-                bulkEditToTableData();
-            }
-        }
-    }
-
-    @Override
-    public void onClick(TabActionBO tabActionBO) {
+    public void onClick(String parentTab, TabActionBO tabActionBO) {
         if (Objects.nonNull(tabActionBO)) {
             if (tabActionBO.isSelect()) {
                 //从table组件同步内容到编辑器组件
-                getEditorComponent().setContent(buildBulkEditContent(getTableComponent().getDataList()));
+                getEditorComponent(parentTab).setContent(buildBulkEditContent(getTableComponent(parentTab).getDataList()));
             } else {
                 // 从编辑器组件同步到table组件
-                bulkEditToTableData();
+                bulkEditToTableData(parentTab);
             }
         }
     }
@@ -62,9 +61,9 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
     /**
      * 将编辑器中的数据同步到table中
      */
-    private void bulkEditToTableData() {
-        Map<String, KeyValueTableBO> keyValueTableBOMap = ObjectUtils.listToMap(getTableComponent().getDataList(), KeyValueTableBO::getKey);
-        List<KeyValueTableBO> tableDataList = editorToTableData();
+    private void bulkEditToTableData(String tab) {
+        Map<String, KeyValueTableBO> keyValueTableBOMap = ObjectUtils.listToMap(getTableComponent(tab).getDataList(), KeyValueTableBO::getKey);
+        List<KeyValueTableBO> tableDataList = editorToTableData(tab);
         if (CollectionUtils.isNotEmpty(tableDataList)) {
             for (KeyValueTableBO keyValueTableBO : tableDataList) {
                 KeyValueTableBO tableBO = keyValueTableBOMap.get(keyValueTableBO.getKey());
@@ -73,15 +72,18 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
                 }
             }
         }
-        getTableComponent().setDataList(tableDataList);
+        getTableComponent(tab).setDataList(tableDataList);
     }
 
+    protected List<KeyValueTableBO> editorToTableData() {
+        return editorToTableData(StringUtils.EMPTY);
+    }
 
     /**
      * 将编辑器组件的内容转换成表格的数据
      */
-    protected List<KeyValueTableBO> editorToTableData() {
-        String content = getEditorComponent().getContent();
+    protected List<KeyValueTableBO> editorToTableData(String tab) {
+        String content = getEditorComponent(tab).getContent();
         List<KeyValueTableBO> dataList = Lists.newArrayList();
         if (StringUtils.isNotBlank(content)) {
             for (String line : content.split("\n")) {

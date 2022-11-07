@@ -103,15 +103,14 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage implements FuTa
 
 
     @Override
-    protected FuTableComponent<KeyValueTableBO> getTableComponent() {
+    protected FuTableComponent<KeyValueTableBO> getTableComponent(String tab) {
         return this.fuTableComponent;
     }
 
     @Override
-    protected FuEditorComponent getEditorComponent() {
+    protected FuEditorComponent getEditorComponent(String tab) {
         return this.fuEditorComponent;
     }
-
 
 
     /**
@@ -237,7 +236,6 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage implements FuTa
             this.requestTabView.setRequestUrl(request.getRequestUrl());
         }
     }
-
 
 
     private String buildKeyValue(KeyValueTableBO keyValueTableBO) {

@@ -26,9 +26,14 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 21:32:03
  */
-public class HttpRequestBodyTab implements FuTab, HttpCallback {
+public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage implements FuTab, HttpCallback {
 
     public static final String BODY = "Body";
+    public static final String FORM_DATA = "form-data";
+    public static final String FORM_URLENCODED = "x-www-form-urlencoded";
+    public static final String RAW = "raw";
+    public static final String JSON = "json";
+    public static final String BINARY = "binary";
 
     private final JPanel noneComponent;
     private final FuTableComponent<KeyValueTableBO> formDataComponent;
@@ -58,12 +63,12 @@ public class HttpRequestBodyTab implements FuTab, HttpCallback {
     @Override
     public TabInfo getTabInfo() {
         this.fuTabComponent = FuTabComponent.getInstance(BODY, null, this.noneComponent);
-        return this.fuTabComponent.addAction("form-data", FuDocIcons.FU_REQUEST_FORM, this.formDataPanel, this.formDataEditorComponent.getMainPanel())
-                .addAction("x-www-form-urlencoded", FuDocIcons.FU_REQUEST_URLENCODED, this.urlencodedPanel, this.urlencodedEditorComponent.getMainPanel())
-                .addAction("raw", FuDocIcons.FU_REQUEST_RAW, this.rawComponent.getMainPanel())
-                .addAction("json", FuDocIcons.FU_REQUEST_JSON, this.jsonComponent.getMainPanel())
-                .addAction("binary", FuDocIcons.FU_REQUEST_FILE_BINARY, this.binaryComponent)
-                .switchTab("json").builder();
+        return this.fuTabComponent.addAction(FORM_DATA, FuDocIcons.FU_REQUEST_FORM, this.formDataPanel, this.formDataEditorComponent.getMainPanel(), this)
+                .addAction(FORM_URLENCODED, FuDocIcons.FU_REQUEST_URLENCODED, this.urlencodedPanel, this.urlencodedEditorComponent.getMainPanel(), this)
+                .addAction(RAW, FuDocIcons.FU_REQUEST_RAW, this.rawComponent.getMainPanel())
+                .addAction(JSON, FuDocIcons.FU_REQUEST_JSON, this.jsonComponent.getMainPanel())
+                .addAction(BINARY, FuDocIcons.FU_REQUEST_FILE_BINARY, this.binaryComponent)
+                .switchTab(JSON).builder();
     }
 
 
@@ -79,22 +84,22 @@ public class HttpRequestBodyTab implements FuTab, HttpCallback {
         List<KeyValueTableBO> formDataList = body.getFormDataList();
         if (CollectionUtils.isNotEmpty(formDataList)) {
             this.formDataComponent.setDataList(formDataList);
-            this.fuTabComponent.switchTab("form-data");
+            this.fuTabComponent.switchTab(FORM_DATA);
         }
         List<KeyValueTableBO> formUrlEncodedList = body.getFormUrlEncodedList();
         if (CollectionUtils.isNotEmpty(formUrlEncodedList)) {
             this.urlencodedComponent.setDataList(formUrlEncodedList);
-            this.fuTabComponent.switchTab("x-www-form-urlencoded");
+            this.fuTabComponent.switchTab(FORM_URLENCODED);
         }
         String raw = body.getRaw();
         if (StringUtils.isNotBlank(raw)) {
             this.rawComponent.setContent(raw);
-            this.fuTabComponent.switchTab("raw");
+            this.fuTabComponent.switchTab(RAW);
         }
         String json = body.getJson();
         if (StringUtils.isNotBlank(json)) {
             this.jsonComponent.setContent(json);
-            this.fuTabComponent.switchTab("json");
+            this.fuTabComponent.switchTab(JSON);
         }
     }
 
@@ -122,5 +127,27 @@ public class HttpRequestBodyTab implements FuTab, HttpCallback {
         if (StringUtils.isNotBlank(json)) {
             body.setJson(json);
         }
+    }
+
+    @Override
+    protected FuTableComponent<KeyValueTableBO> getTableComponent(String title) {
+        if (FORM_DATA.equals(title)) {
+            return this.formDataComponent;
+        }
+        if (FORM_URLENCODED.equals(title)) {
+            return this.urlencodedComponent;
+        }
+        return null;
+    }
+
+    @Override
+    protected FuEditorComponent getEditorComponent(String title) {
+        if (FORM_DATA.equals(title)) {
+            return this.formDataEditorComponent;
+        }
+        if (FORM_URLENCODED.equals(title)) {
+            return this.urlencodedEditorComponent;
+        }
+        return null;
     }
 }

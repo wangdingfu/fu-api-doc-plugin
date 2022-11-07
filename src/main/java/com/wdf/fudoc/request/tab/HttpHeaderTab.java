@@ -71,12 +71,12 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage implements FuTab, 
     }
 
     @Override
-    protected FuTableComponent<KeyValueTableBO> getTableComponent() {
+    protected FuTableComponent<KeyValueTableBO> getTableComponent(String tab) {
         return this.fuTableComponent;
     }
 
     @Override
-    protected FuEditorComponent getEditorComponent() {
+    protected FuEditorComponent getEditorComponent(String tab) {
         return this.fuEditorComponent;
     }
 }
