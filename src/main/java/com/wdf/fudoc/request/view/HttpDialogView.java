@@ -1,6 +1,5 @@
 package com.wdf.fudoc.request.view;
 
-import com.intellij.find.FindBundle;
 import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -13,7 +12,6 @@ import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.components.FuStatusBarComponent;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
-import com.wdf.fudoc.request.global.GlobalHttpRequestView;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.RequestTabView;
 import com.wdf.fudoc.request.tab.ResponseTabView;
@@ -183,7 +181,6 @@ public class HttpDialogView implements HttpCallback {
         httpDialogView.initData(fuHttpRequestData);
         FuRequestToolBarManager fuRequestToolBarManager = httpDialogView.getFuRequestToolBarManager();
         httpDialogView.setJbPopup(PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), fuRequestToolBarManager.getPinStatus()));
-        GlobalHttpRequestView.addHttpDialogView(project, httpDialogView);
     }
 
     @Override

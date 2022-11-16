@@ -41,7 +41,7 @@
 <#if requestExample??>
 **请求示例**
 
-```
+```${requestExampleType!''}
 ${requestExample!''}
 ```
 </#if>
@@ -62,7 +62,7 @@ ${requestExample!''}
 <#if responseExample??>
 **返回示例**
 
-```
+```json
 ${responseExample!''}
 ```
 </#if>

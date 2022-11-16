@@ -48,7 +48,7 @@ public class RequestAction extends AbstractClassAction {
         }
         String methodId = PsiClassUtils.getMethodId(targetMethod);
         //当前接口的唯一标识
-        String apiKey = moduleId + ":" + methodId;
+        String apiKey = FuDocUtils.genApiKey(moduleId, methodId);
         FuHttpRequestData request = FuRequestManager.getRequest(e.getProject(), apiKey);
         if (Objects.isNull(request)) {
             List<FuDocRootParamData> fuDocRootParamDataList = GenFuDocUtils.genRootParam(fuDocContext, psiClass);

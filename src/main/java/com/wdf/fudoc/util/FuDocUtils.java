@@ -74,8 +74,7 @@ public class FuDocUtils {
         if (Objects.isNull(psiClass) || Objects.isNull(annotationNames) || annotationNames.length <= 0) {
             return false;
         }
-        return ApplicationManager.getApplication().runReadAction((Computable<Boolean>) () ->
-                AnnotationUtil.isAnnotated(psiClass, Sets.newHashSet(annotationNames), 0));
+        return ApplicationManager.getApplication().runReadAction((Computable<Boolean>) () -> AnnotationUtil.isAnnotated(psiClass, Sets.newHashSet(annotationNames), 0));
     }
 
 
@@ -135,6 +134,11 @@ public class FuDocUtils {
             return contentRoots[0].getPath();
         }
         return module.getName();
+    }
+
+
+    public static String genApiKey(String moduleId, String methodId) {
+        return moduleId + ":" + methodId;
     }
 
 

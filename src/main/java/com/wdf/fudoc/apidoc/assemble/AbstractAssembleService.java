@@ -9,14 +9,18 @@ import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.apidoc.helper.AssembleHelper;
 import com.wdf.fudoc.apidoc.helper.CustomerValueHelper;
 import com.wdf.fudoc.apidoc.helper.MockDataHelper;
+import com.wdf.fudoc.apidoc.mock.AutoMockDataServiceImpl;
+import com.wdf.fudoc.apidoc.mock.MockDataService;
 import com.wdf.fudoc.apidoc.pojo.annotation.*;
 import com.wdf.fudoc.apidoc.pojo.bo.AssembleBO;
+import com.wdf.fudoc.apidoc.pojo.bo.MockResultBo;
 import com.wdf.fudoc.apidoc.pojo.bo.RootParamBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.*;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -118,18 +122,20 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
         if (CollectionUtils.isNotEmpty(requestList)) {
             fuDocItemData.setRequestParams(AssembleHelper.assembleParamData(fuDocContext, requestList, null));
-            //mock请求参数数据
-            RequestType requestType = RequestType.getRequestType(fuDocItemData.getRequestType());
-            fuDocItemData.setRequestExample(MockDataHelper.mockRequestData(requestType, requestList));
         }
-
         //组装返回参数
         ObjectInfoDesc response = methodInfoDesc.getResponse();
         if (Objects.nonNull(response)) {
             fuDocItemData.setResponseParams(AssembleHelper.assembleParamData(fuDocContext, Lists.newArrayList(response), null));
-            //mock返回结果数据
-            fuDocItemData.setResponseExample(MockDataHelper.mockJsonData(Lists.newArrayList(response)));
         }
+        //mock数据
+        MockDataService mockDataService = ServiceHelper.getService(MockDataService.class);
+        MockResultBo mockResultBo = mockDataService.mockData(methodInfoDesc, fuDocItemData);
+        fuDocItemData.setRequestExample(mockResultBo.getRequestExample());
+        fuDocItemData.setRequestExampleType(mockResultBo.getRequestExampleType());
+        fuDocItemData.setResponseExample(mockResultBo.getResponseExample());
+        fuDocItemData.setResponseExampleType(mockResultBo.getResponseExampleType());
+
         //组装扩展数据
         fuDocItemData.setFudoc(CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext));
     }

@@ -60,6 +60,7 @@ public class FuDocClassParserImpl implements FuDocClassParser {
                 if (CollectionUtils.isEmpty(methodList) || methodList.contains(method)) {
                     ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
                     MethodInfoDesc methodInfoDesc = new MethodInfoDesc();
+                    methodInfoDesc.setPsiMethod(method);
                     methodInfoDesc.setMethodId(PsiClassUtils.getMethodId(method));
                     //设置方法上的注释
                     methodInfoDesc.setCommentData(apiDocCommentData);

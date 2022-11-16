@@ -2,8 +2,6 @@ package com.wdf.fudoc.apidoc.helper;
 
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.assemble.handler.ParamValueExecutor;
-import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
-import com.wdf.fudoc.apidoc.constant.enumtype.SpringParamAnnotation;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
@@ -12,9 +10,7 @@ import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -33,9 +29,6 @@ public class AssembleHelper {
      * @return 返回已经组装完毕可以用于渲染到markdown文本上的数据
      */
     public static List<FuDocParamData> assembleParamData(FuDocContext fuDocContext, List<ObjectInfoDesc> objectInfoDescList, FuDocParamData parent) {
-        if (Objects.isNull(parent)) {
-            parent = new FuDocParamData();
-        }
         List<FuDocParamData> resultList = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(objectInfoDescList)) {
             for (int i = 0; i < objectInfoDescList.size(); i++) {
@@ -45,8 +38,7 @@ public class AssembleHelper {
                     continue;
                 }
                 if (objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.IS_ATTR)) {
-                    String paramNo = parent.getParamNo();
-                    String parentParamNo = StringUtils.isBlank(paramNo) ? StringUtils.EMPTY : parent.getParamNo();
+                    String parentParamNo = Objects.isNull(parent) ? StringUtils.EMPTY : parent.getParamNo();
                     fuDocParamData.setParentParamNo(parentParamNo);
                     fuDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
                     fuDocParamData.setParamName(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_NAME, objectInfoDesc));
@@ -55,8 +47,8 @@ public class AssembleHelper {
                     Object value = objectInfoDesc.getValue();
                     fuDocParamData.setParamValue(Objects.nonNull(value) ? value.toString() : StringUtils.EMPTY);
                     fuDocParamData.setFudoc(CustomerValueHelper.customerValue(objectInfoDesc, fuDocContext));
-                    String paramPrefix = parent.getParamPrefix();
-                    if (StringUtils.isNotBlank(paramPrefix)) {
+                    if (Objects.nonNull(parent) && StringUtils.isNotBlank(parent.getParamNo())) {
+                        String paramPrefix = parent.getParamPrefix();
                         fuDocParamData.setParamPrefix(StringUtils.isBlank(paramPrefix) ? "└─" : "&emsp;&ensp;" + paramPrefix);
                     }
                     fuDocParamData.setParamRequire(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_REQUIRE, objectInfoDesc));

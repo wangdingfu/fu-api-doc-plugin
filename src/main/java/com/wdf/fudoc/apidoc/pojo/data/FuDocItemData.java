@@ -25,6 +25,10 @@ public class FuDocItemData extends CommonItemData {
      */
     private String requestExample;
 
+    /**
+     * 请求示例数据类型
+     */
+    private String requestExampleType;
 
     /**
      * 请求参数
@@ -36,7 +40,10 @@ public class FuDocItemData extends CommonItemData {
      * 响应示例
      */
     private String responseExample;
-
+    /**
+     * 响应示例数据类型
+     */
+    private String responseExampleType;
 
     /**
      * 响应参数
