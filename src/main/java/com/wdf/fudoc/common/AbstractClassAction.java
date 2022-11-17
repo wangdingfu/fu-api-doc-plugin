@@ -84,7 +84,7 @@ public abstract class AbstractClassAction extends AnAction implements UpdateInBa
             execute(e, psiClass, fuDocContext);
         } catch (Exception exception) {
             //发送失败通知
-            log.error("【Fu Doc】执行动作失败", exception);
+            log.info("【Fu Doc】执行动作失败", exception);
             FuDocNotification.notifyError(FuDocMessageBundle.message(exceptionMsg()));
         } finally {
             log.info("【Fu Doc】执行动作完成. 耗时:{}ms", System.currentTimeMillis() - start);

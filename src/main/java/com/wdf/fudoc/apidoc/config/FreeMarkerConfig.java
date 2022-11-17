@@ -63,7 +63,7 @@ public class FreeMarkerConfig {
             template.process(data, writer);
             return writer.toString();
         } catch (Exception e) {
-            log.error("{}生成模板文件失败", templateName, e);
+            log.info("{}生成模板文件失败", templateName, e);
             return null;
         }
     }

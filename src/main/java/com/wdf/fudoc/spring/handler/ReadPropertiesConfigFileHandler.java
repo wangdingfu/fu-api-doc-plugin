@@ -20,7 +20,7 @@ public class ReadPropertiesConfigFileHandler extends AbstractReadConfigFileHandl
         try {
             this.properties.load(readFile(virtualFile));
         } catch (IOException e) {
-            log.error("加载properties配置文件失败", e);
+            log.info("加载properties配置文件失败", e);
         }
     }
 

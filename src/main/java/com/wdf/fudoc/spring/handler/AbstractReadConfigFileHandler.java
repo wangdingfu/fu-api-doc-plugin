@@ -17,7 +17,7 @@ public abstract class AbstractReadConfigFileHandler implements ReadSpringConfigF
         try {
             return virtualFile.getInputStream();
         } catch (Exception e) {
-            log.error("从项目中读取端口号失败", e);
+            log.info("从项目中读取端口号失败", e);
         }
         return null;
     }

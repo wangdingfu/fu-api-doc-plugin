@@ -28,6 +28,7 @@ public interface SpringConfigFileConstants {
     String SPLIT = "-";
 
     String ENV_KEY = "spring.profiles.active";
+    String PROFILES = "spring.profiles";
     String SERVER_PORT_KEY = "server.port";
 
 
