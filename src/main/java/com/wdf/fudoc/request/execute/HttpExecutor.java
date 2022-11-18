@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.execute;
 
+import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.wdf.fudoc.request.constants.enumtype.RequestStatus;
@@ -29,6 +30,7 @@ public class HttpExecutor {
         HttpRequest httpRequest = FuHttpRequestBuilder.getInstance(fuHttpRequestData).builder();
         RequestStatus requestStatus = RequestStatus.FAIL;
         String requestUrl = fuHttpRequestData.getRequest().getRequestUrl();
+        httpRequest.setUrl(URLUtil.encode(requestUrl));
         try {
             HttpResponse httpResponse = httpRequest.execute();
             requestStatus = RequestStatus.SUCCESS;
