@@ -52,7 +52,7 @@ public class SpringConfigFile {
 
     private String getConfig(JSON json, String key) {
         Object value;
-        if (Objects.nonNull(json) && Objects.nonNull(value = json.getByPath(key)) && value instanceof String) {
+        if (Objects.nonNull(json) && Objects.nonNull(value = json.getByPath(key))) {
             return value.toString();
         }
         return StringUtils.EMPTY;
