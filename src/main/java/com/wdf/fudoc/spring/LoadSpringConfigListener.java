@@ -24,7 +24,7 @@ public class LoadSpringConfigListener implements StartupActivity.Background {
      */
     @Override
     public void runActivity(@NotNull Project project) {
-        ThreadUtil.execAsync(() -> SpringConfigFileManager.initProjectSpringConfig(project));
+        ThreadUtil.execAsync(() -> SpringConfigManager.initProjectSpringConfig(project));
     }
 
 

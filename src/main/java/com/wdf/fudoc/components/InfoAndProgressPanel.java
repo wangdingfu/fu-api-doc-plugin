@@ -32,7 +32,7 @@ public final class InfoAndProgressPanel extends JPanel implements CustomStatusBa
         setOpaque(false);
         setBorder(JBUI.Borders.empty());
 
-        myRefreshIcon.setVisible(true);
+        myRefreshIcon.setVisible(false);
 
         myRefreshAndInfoPanel.setLayout(new BorderLayout());
         myRefreshAndInfoPanel.setOpaque(false);

@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.action;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -36,7 +37,8 @@ public class RequestAction extends AbstractClassAction {
     @Override
     protected void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext) {
         //获取当前接口的唯一标识
-        String moduleId = FuDocUtils.getModuleId(ModuleUtil.findModuleForPsiElement(psiClass));
+        Module module = ModuleUtil.findModuleForPsiElement(psiClass);
+        String moduleId = FuDocUtils.getModuleId(module);
         //获取当前操作的方法
         PsiMethod targetMethod = PsiClassUtils.getTargetMethod(fuDocContext.getTargetElement());
         if (Objects.isNull(targetMethod)) {
@@ -58,7 +60,7 @@ public class RequestAction extends AbstractClassAction {
             }
             FuDocRootParamData fuDocRootParamData = fuDocRootParamDataList.get(0);
             //获取当前所属模块
-            request = FuHttpRequestDataFactory.build(moduleId, fuDocRootParamData);
+            request = FuHttpRequestDataFactory.build(module, fuDocRootParamData);
         }
         HttpDialogView.popup(e.getProject(), request);
     }

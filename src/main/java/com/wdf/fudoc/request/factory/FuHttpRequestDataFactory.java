@@ -3,6 +3,7 @@ package com.wdf.fudoc.request.factory;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
@@ -17,7 +18,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
-import com.wdf.fudoc.spring.SpringConfigFileManager;
+import com.wdf.fudoc.spring.SpringConfigManager;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.FuDocUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -33,13 +34,9 @@ import java.util.Objects;
  */
 public class FuHttpRequestDataFactory {
 
-    public static FuHttpRequestData build(FuDocRootParamData fuDocRootParamData, PsiClass psiClass) {
-        return build(FuDocUtils.getModuleId(ModuleUtil.findModuleForPsiElement(psiClass)), fuDocRootParamData);
-    }
-
-
-    public static FuHttpRequestData build(String moduleId, FuDocRootParamData fuDocRootParamData) {
+    public static FuHttpRequestData build(Module module, FuDocRootParamData fuDocRootParamData) {
         FuHttpRequestData fuHttpRequestData = new FuHttpRequestData();
+        String moduleId = FuDocUtils.getModuleId(module);
         //moduleId
         fuHttpRequestData.setModuleId(moduleId);
         //接口唯一标识
@@ -50,7 +47,7 @@ public class FuHttpRequestDataFactory {
         //接口请求类型
         fuRequestData.setRequestType(RequestType.getRequestType(fuDocRootParamData.getRequestType()));
         //设置接口url
-        String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigFileManager.getServerPort(moduleId);
+        String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
         fuRequestData.setBaseUrl(URLUtil.completeUrl(domainUrl, fuDocRootParamData.getUrlList().get(0)));
         //设置body内容
         fuRequestData.setBody(new FuRequestBodyData());

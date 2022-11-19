@@ -166,6 +166,8 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
+        //设置请求类型
+        setRequestType(requestTypeComponent.getSelectedItem() + "");
         httpHeaderTab.doSendBefore(fuHttpRequestData);
         httpGetParamsTab.doSendBefore(fuHttpRequestData);
         httpRequestBodyTab.doSendBefore(fuHttpRequestData);
@@ -226,8 +228,8 @@ public class RequestTabView implements FuTab, HttpCallback {
             request.setParamUrl(null);
             return;
         }
-        request.setBaseUrl(StringUtils.substringBefore(requestUrl,"?"));
-        request.setParamUrl(StringUtils.substringAfter(requestUrl,"?"));
+        request.setBaseUrl(StringUtils.substringBefore(requestUrl, "?"));
+        request.setParamUrl(StringUtils.substringAfter(requestUrl, "?"));
     }
 
 
