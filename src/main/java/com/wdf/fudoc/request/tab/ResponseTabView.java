@@ -1,5 +1,10 @@
 package com.wdf.fudoc.request.tab;
 
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
+import cn.hutool.http.Header;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
@@ -11,10 +16,15 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.request.view.ResponseDownloadFileVIew;
 import com.wdf.fudoc.request.view.ResponseErrorView;
+import com.wdf.fudoc.request.view.ResponseFileView;
+import com.wdf.fudoc.util.HttpResponseUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.charset.Charset;
 import java.util.Objects;
 
 /**
@@ -35,11 +45,14 @@ public class ResponseTabView implements FuTab, HttpCallback {
 
     private final ResponseErrorView responseErrorView;
 
+    private final ResponseDownloadFileVIew responseFileView;
+
     private Integer tab = 0;
 
     public ResponseTabView(Project project) {
         this.project = project;
         this.responseErrorView = new ResponseErrorView();
+        this.responseFileView = new ResponseDownloadFileVIew();
         this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "");
         this.rootPanel = new JPanel(new BorderLayout());
         switchPanel(1, this.fuEditorComponent.getMainPanel());
@@ -67,9 +80,19 @@ public class ResponseTabView implements FuTab, HttpCallback {
         //响应类型
         switch (responseType) {
             case SUCCESS:
-                //请求成功 渲染响应数据到编辑器中
-                fuEditorComponent.setContent(JSONUtil.formatJsonStr(response.getContent()));
-                switchPanel(1, fuEditorComponent.getMainPanel());
+                //判断返回结果是文件还是文本
+                String fileName = HttpResponseUtil.getFileNameFromDisposition(response.getHttpResponse());
+                if (StringUtils.isNotBlank(fileName)) {
+                    //下载文件
+                    fileName = URLUtil.decode(fileName, Charset.defaultCharset());
+                    responseFileView.setFileName(fileName);
+                    response.setFileName(fileName);
+                    switchPanel(3, responseFileView.getRootPanel());
+                } else {
+                    //请求成功 渲染响应数据到编辑器中
+                    fuEditorComponent.setContent(JSONUtil.formatJsonStr(response.getContent()));
+                    switchPanel(1, fuEditorComponent.getMainPanel());
+                }
                 break;
             case ERR_CONNECTION_REFUSED:
                 //请求连接被拒绝
