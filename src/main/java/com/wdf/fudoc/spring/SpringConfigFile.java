@@ -1,8 +1,10 @@
 package com.wdf.fudoc.spring;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.wdf.fudoc.spring.handler.ConfigFileHandler;
+import com.wdf.fudoc.spring.handler.PropertiesConfigFileHandler;
+import com.wdf.fudoc.spring.handler.YamlConfigFileHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -22,12 +24,12 @@ public class SpringConfigFile {
     /**
      * 当前激活的环境
      */
-    private String activeEnv;
+    private String activeEnv = SpringConfigFileConstants.DEFAULT_ENV;
 
     /**
      * 配置文件内容
      */
-    private final Map<String, JSON> configMap = new ConcurrentHashMap<>();
+    private final Map<String, ConfigFileHandler> configMap = new ConcurrentHashMap<>();
 
 
     /**
@@ -37,23 +39,19 @@ public class SpringConfigFile {
      * @return 配置的值
      */
     public String getConfig(String key) {
+        //第一步 优先从当前激活的环境中获取
         String config = getConfig(configMap.get(activeEnv), key);
         if (StringUtils.isEmpty(config)) {
-            for (JSON value : configMap.values()) {
-                config = getConfig(value, key);
-                if (StringUtils.isNotBlank(config)) {
-                    return config;
-                }
-            }
+            //第二步 从默认环境中获取
+            return getConfig(configMap.get(SpringConfigFileConstants.DEFAULT_ENV), key);
         }
         return config;
     }
 
 
-    private String getConfig(JSON json, String key) {
-        Object value;
-        if (Objects.nonNull(json) && Objects.nonNull(value = json.getByPath(key))) {
-            return value.toString();
+    private String getConfig(ConfigFileHandler configFileHandler, String key) {
+        if (Objects.nonNull(configFileHandler)) {
+            return configFileHandler.getConfig(key);
         }
         return StringUtils.EMPTY;
     }
@@ -80,27 +78,27 @@ public class SpringConfigFile {
         Yaml yaml = new Yaml();
         Iterable<Object> configIterable = yaml.loadAll(inputStream);
         for (Object object : configIterable) {
-            addConfig(fileName, JSONUtil.parse(object));
+            addConfig(fileName, new YamlConfigFileHandler(JSONUtil.parse(object)));
         }
     }
 
 
-    private void addConfig(String fileName, JSON config) {
+    private void addConfig(String fileName, ConfigFileHandler config) {
         String env = StringUtils.substringBetween(fileName, SpringConfigFileConstants.SPLIT, ".");
         if (StringUtils.isBlank(env)) {
-            Object active = config.getByPath(SpringConfigFileConstants.ENV_KEY);
+            Object active = config.getConfig(SpringConfigFileConstants.ENV_KEY);
             if (Objects.nonNull(active)) {
                 this.activeEnv = active.toString();
             } else {
-                Object profiles = config.getByPath(SpringConfigFileConstants.PROFILES);
+                Object profiles = config.getConfig(SpringConfigFileConstants.PROFILES);
                 if (Objects.nonNull(profiles)) {
                     env = profiles.toString();
                 }
             }
         }
         env = StringUtils.isBlank(env) ? SpringConfigFileConstants.DEFAULT_ENV : env;
-        JSON json = configMap.get(env);
-        if (Objects.isNull(json)) {
+        ConfigFileHandler configFile = configMap.get(env);
+        if (Objects.isNull(configFile)) {
             configMap.put(env, config);
         }
     }
@@ -110,7 +108,7 @@ public class SpringConfigFile {
         try {
             Properties properties = new Properties();
             properties.load(inputStream);
-            addConfig(fileName, JSONUtil.parse(properties));
+            addConfig(fileName, new PropertiesConfigFileHandler(properties));
         } catch (Exception e) {
             log.info("读取properties配置文件失败");
         }
