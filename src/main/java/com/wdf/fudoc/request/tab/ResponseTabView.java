@@ -83,7 +83,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
                     fileName = URLUtil.decode(fileName, Charset.defaultCharset());
                     responseFileView.setFileName(fileName);
                     response.setFileName(fileName);
-                    switchPanel(3, responseFileView.getRootPanel());
+                    switchPanel(3, responseFileView.getRootPane());
                 } else {
                     //请求成功 渲染响应数据到编辑器中
                     fuEditorComponent.setContent(JSONUtil.formatJsonStr(response.getContent()));
