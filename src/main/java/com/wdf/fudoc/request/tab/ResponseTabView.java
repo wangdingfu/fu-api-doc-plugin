@@ -82,6 +82,8 @@ public class ResponseTabView implements FuTab, HttpCallback {
                     //下载文件
                     fileName = URLUtil.decode(fileName, Charset.defaultCharset());
                     responseFileView.setFileName(fileName);
+                    responseFileView.setHttpResponse(response.getHttpResponse());
+                    responseFileView.setDownloadPath("C:\\Users\\wangdingfu\\Desktop\\spring");
                     response.setFileName(fileName);
                     switchPanel(3, responseFileView.getRootPane());
                 } else {

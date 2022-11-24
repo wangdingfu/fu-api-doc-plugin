@@ -64,3 +64,13 @@
 - 文件上传下载支持
 - 消息管理器完善（支持超链接展示）
 - 最近请求
+
+//                if (file.exists() && Messages.CANCEL == Messages.showOkCancelDialog(ProjectUtils.getCurrProject(), message, title, "覆盖", "取消", null)) {
+//                    return;
+//                }
+if (file.exists() && !MessageDialogBuilder.okCancel(title, message)
+.yesText("覆盖")
+.doNotAsk(option)
+.guessWindowAndAsk()) {
+return;
+}

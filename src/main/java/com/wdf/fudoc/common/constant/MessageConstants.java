@@ -36,6 +36,9 @@ public interface MessageConstants {
     String NOTIFY_GEN_NO_CONTENT = "notify.gen.no.content";
 
 
+    String FU_REQUEST_DOWNLOAD_FILE_FAIL = "fudoc.request.download.file.fail";
+
+
     /**
      * 通知无法获取到类
      */

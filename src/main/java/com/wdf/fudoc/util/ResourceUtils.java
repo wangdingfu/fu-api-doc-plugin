@@ -2,6 +2,7 @@ package com.wdf.fudoc.util;
 
 import cn.hutool.core.io.resource.ClassPathResource;
 
+
 /**
  * @author wangdingfu
  * @date 2022-08-07 12:42:49
@@ -18,4 +19,5 @@ public class ResourceUtils {
     public static String readResource(String path) {
         return new ClassPathResource(path, ResourceUtils.class.getClassLoader()).readUtf8Str();
     }
+
 }
