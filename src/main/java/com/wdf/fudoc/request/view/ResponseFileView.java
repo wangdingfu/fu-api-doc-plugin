@@ -61,34 +61,6 @@ public class ResponseFileView {
         this.saveOtherBtn.addActionListener(e -> downloadFile(this.downloadPath));
     }
 
-
-    DialogWrapper.DoNotAskOption option = new DialogWrapper.DoNotAskOption() {
-        @Override
-        public boolean isToBeShown() {
-            return GeneralSettings.getInstance().isConfirmExit() && ProjectManager.getInstance().getOpenProjects().length > 0;
-        }
-
-        @Override
-        public void setToBeShown(boolean value, int exitCode) {
-            GeneralSettings.getInstance().setConfirmExit(value);
-        }
-
-        @Override
-        public boolean canBeHidden() {
-            return false;
-        }
-
-        @Override
-        public boolean shouldSaveOptionsOnCancel() {
-            return false;
-        }
-
-        @Override
-        public @NotNull String getDoNotShowMessage() {
-            return IdeBundle.message("do.not.ask.me.again");
-        }
-    };
-
     private void downloadFile(String filePath) {
         if (StringUtils.isBlank(filePath)) {
             FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.FU_REQUEST_DOWNLOAD_FILE_FAIL));
@@ -104,17 +76,17 @@ public class ResponseFileView {
                 httpResponse.writeBody(FileUtil.getOutputStream(file), true, new StreamProgress() {
                     @Override
                     public void start() {
-                        indicator.start();
+                        indicator.setText("Start download....");
                     }
 
                     @Override
                     public void progress(long total, long progressSize) {
-                        indicator.setText("download..... " + NumberUtil.decimalFormat("#%", NumberUtil.div(progressSize, total)));
+                        indicator.setText("downloading..... " + NumberUtil.decimalFormat("#%", NumberUtil.div(progressSize, total)));
                     }
 
                     @Override
                     public void finish() {
-                        indicator.stop();
+                        indicator.setText("Download finished....");
                     }
                 });
             }
