@@ -18,10 +18,12 @@
         <children>
           <component id="542d8" class="javax.swing.JLabel" binding="fileNameLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="50"/>
+              </grid>
             </constraints>
             <properties>
-              <font name="Consolas" size="20" style="1"/>
+              <font name="Consolas" size="16" style="1"/>
               <text value="文件名:"/>
             </properties>
           </component>
@@ -37,18 +39,24 @@
         <children>
           <component id="3e100" class="javax.swing.JButton" binding="saveOtherBtn">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="100" height="30"/>
+              </grid>
             </constraints>
             <properties>
+              <font name="JetBrains Mono" size="12"/>
               <horizontalTextPosition value="11"/>
               <text value="保存至..."/>
             </properties>
           </component>
           <component id="a4711" class="javax.swing.JButton" binding="saveDesktopBtn">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="100" height="30"/>
+              </grid>
             </constraints>
             <properties>
+              <font name="JetBrains Mono" size="12"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="11"/>
               <text value="保存至桌面"/>
