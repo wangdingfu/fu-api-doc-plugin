@@ -14,6 +14,8 @@ public class ResponseFileView {
     private JButton saveDesktopBtn;
     private JButton saveOtherBtn;
     private JLabel fileNameLabel;
+    private JPanel leftPanel;
+    private JPanel rightPanel;
 
 
     public ResponseFileView() {
