@@ -1,10 +1,6 @@
 package com.wdf.fudoc.request.tab;
 
-import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.http.Header;
-import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
@@ -45,14 +41,14 @@ public class ResponseTabView implements FuTab, HttpCallback {
 
     private final ResponseErrorView responseErrorView;
 
-    private final ResponseDownloadFileVIew responseFileView;
+    private final ResponseFileView responseFileView;
 
     private Integer tab = 0;
 
     public ResponseTabView(Project project) {
         this.project = project;
         this.responseErrorView = new ResponseErrorView();
-        this.responseFileView = new ResponseDownloadFileVIew();
+        this.responseFileView = new ResponseFileView();
         this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "");
         this.rootPanel = new JPanel(new BorderLayout());
         switchPanel(1, this.fuEditorComponent.getMainPanel());
