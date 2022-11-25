@@ -37,6 +37,9 @@ public interface MessageConstants {
 
 
     String FU_REQUEST_DOWNLOAD_FILE_FAIL = "fudoc.request.download.file.fail";
+    String FU_REQUEST_SELECT_DIR_TITLE = "fudoc.request.response.select.dir.title";
+    String FU_REQUEST_DOWNLOAD_NOT_FILE = "fudoc.request.download.not.file";
+
 
 
     /**

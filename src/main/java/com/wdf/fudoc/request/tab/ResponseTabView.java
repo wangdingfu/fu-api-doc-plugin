@@ -77,13 +77,12 @@ public class ResponseTabView implements FuTab, HttpCallback {
         switch (responseType) {
             case SUCCESS:
                 //判断返回结果是文件还是文本
-                String fileName = HttpResponseUtil.getFileNameFromDisposition(response.getHttpResponse());
+                String fileName = getFileName(response);
                 if (StringUtils.isNotBlank(fileName)) {
                     //下载文件
                     fileName = URLUtil.decode(fileName, Charset.defaultCharset());
                     responseFileView.setFileName(fileName);
-                    responseFileView.setHttpResponse(response.getHttpResponse());
-                    responseFileView.setDownloadPath("C:\\Users\\wangdingfu\\Desktop\\spring");
+                    responseFileView.setFuResponseData(response);
                     response.setFileName(fileName);
                     switchPanel(3, responseFileView.getRootPane());
                 } else {
@@ -106,6 +105,22 @@ public class ResponseTabView implements FuTab, HttpCallback {
         //do nothing
     }
 
+    @Override
+    public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
+        if (tab == 3 && Objects.nonNull(responseFileView)) {
+            //是文件面板时
+            responseFileView.resetDefaultBtn();
+        }
+    }
+
+
+    private String getFileName(FuResponseData fuResponseData) {
+        String fileName = fuResponseData.getFileName();
+        if (StringUtils.isNotBlank(fileName)) {
+            return fileName;
+        }
+        return HttpResponseUtil.getFileNameFromDisposition(fuResponseData.getHttpResponse());
+    }
 
     /**
      * 切换面板

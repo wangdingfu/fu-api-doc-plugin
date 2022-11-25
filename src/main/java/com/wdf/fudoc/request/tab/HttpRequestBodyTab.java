@@ -12,6 +12,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.util.ChooseFileTableUtils;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +50,7 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage implements Fu
 
     public HttpRequestBodyTab() {
         this.noneComponent = new JPanel();
-        this.formDataComponent = FuTableComponent.createKeyValueFile();
+        this.formDataComponent = ChooseFileTableUtils.createTableComponents();
         this.formDataPanel = this.formDataComponent.createPanel();
         this.urlencodedComponent = FuTableComponent.createKeyValue();
         this.urlencodedPanel = this.urlencodedComponent.createPanel();
