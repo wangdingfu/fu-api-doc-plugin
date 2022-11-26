@@ -180,7 +180,8 @@ public class RequestTabView implements FuTab, HttpCallback {
     private void autoSelectTab(FuHttpRequestData httpRequestData) {
         FuRequestData request = httpRequestData.getRequest();
         RequestType requestType = request.getRequestType();
-        if (RequestType.GET.equals(requestType)) {
+        //没有文件上传 且请求类型是GET请求
+        if (!request.isFile() && RequestType.GET.equals(requestType)) {
             //定位到GET params tab页
             this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
         } else if (RequestType.POST.equals(requestType)) {

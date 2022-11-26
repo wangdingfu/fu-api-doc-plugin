@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.execute;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
@@ -55,7 +56,9 @@ public class FuHttpRequestBuilder {
             for (KeyValueTableBO keyValueTableBO : formDataList) {
                 String requestParamType = keyValueTableBO.getRequestParamType();
                 if (isMultiFile && RequestParamType.FILE.getCode().equals(requestParamType)) {
-                    this.httpRequest.form(keyValueTableBO.getKey(), new File(keyValueTableBO.getValue()));
+                    File file = new File(keyValueTableBO.getValue());
+                    byte[] bytes = FileUtil.readBytes(file);
+                    this.httpRequest.form(keyValueTableBO.getKey(), bytes, file.getName());
                 } else {
                     this.httpRequest.form(keyValueTableBO.getKey(), keyValueTableBO.getValue());
                 }

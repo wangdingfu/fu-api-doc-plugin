@@ -36,6 +36,11 @@ public class FuRequestData {
     private String paramUrl;
 
     /**
+     * 是否有文件上传
+     */
+    private boolean isFile;
+
+    /**
      * 请求头
      */
     private List<KeyValueTableBO> headers;
