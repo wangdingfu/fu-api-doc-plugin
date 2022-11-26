@@ -184,10 +184,10 @@ public class RequestTabView implements FuTab, HttpCallback {
         if (!request.isFile() && RequestType.GET.equals(requestType)) {
             //定位到GET params tab页
             this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
-        } else if (RequestType.POST.equals(requestType)) {
-            //定位到body tab页
-            this.fuTabBuilder.select(HttpRequestBodyTab.BODY);
+            return;
         }
+        //定位到body tab页
+        this.fuTabBuilder.select(HttpRequestBodyTab.BODY);
     }
 
 
