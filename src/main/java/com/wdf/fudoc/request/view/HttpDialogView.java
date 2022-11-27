@@ -10,6 +10,7 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.components.FuStatusBarComponent;
+import com.wdf.fudoc.components.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -76,6 +77,7 @@ public class HttpDialogView implements HttpCallback {
      * 状态信息面板
      */
     private final FuStatusBarComponent fuStatusBarComponent;
+    private final MessageComponent messageComponent;
     private final JPanel statusInfoPanel;
 
     @Setter
@@ -90,7 +92,9 @@ public class HttpDialogView implements HttpCallback {
         this.requestTabView = new RequestTabView(this.project, this);
         this.responseTabView = new ResponseTabView(this.project);
         this.fuStatusBarComponent = new FuStatusBarComponent();
-        this.statusInfoPanel = this.fuStatusBarComponent.getRootPanel();
+        this.messageComponent = new MessageComponent();
+//        this.statusInfoPanel = this.fuStatusBarComponent.getRootPanel();
+        this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.titleLabel = new JBLabel("", UIUtil.ComponentStyle.REGULAR);
         this.titleLabel.setBorder(JBUI.Borders.emptyLeft(5));
         RelativeFont.BOLD.install(this.titleLabel);
@@ -194,7 +198,8 @@ public class HttpDialogView implements HttpCallback {
             this.fuTabBuilder.select(ResponseTabView.RESPONSE);
             this.responseTabView.initData(fuHttpRequestData);
             //切换消息展示
-            fuStatusBarComponent.switchInfo();
+//            fuStatusBarComponent.switchInfo();
+            messageComponent.switchInfo();
         });
     }
 
