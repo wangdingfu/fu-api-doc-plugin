@@ -2,6 +2,8 @@ package com.wdf.fudoc.test.action;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.util.ui.HtmlPanel;
+import com.wdf.fudoc.test.view.TestHtmlPanel;
 import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.components.FuTableEditorComponent;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +15,6 @@ import org.jetbrains.annotations.NotNull;
 public class TestTableAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        PopupUtils.create(FuTableEditorComponent.createUIComponents(),null,null);
+        new TestHtmlPanel(e.getProject()).showAndGet();
     }
 }
