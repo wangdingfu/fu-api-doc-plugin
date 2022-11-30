@@ -290,8 +290,7 @@ public class FuMsgComponent extends HighlightableComponent {
             return new TextAttributes(color, UIUtil.getLabelBackground(), color, EffectType.LINE_UNDERSCORE, Font.PLAIN);
         }
         if(MessageStyle.GITHUB.equals(messageStyle)){
-            Color color = new JBColor(new Color(63, 68, 73), new Color(63, 68, 73));
-            return new TextAttributes(color, UIUtil.getLabelBackground(), color, EffectType.LINE_UNDERSCORE, Font.PLAIN);
+            return new TextAttributes(JBColor.WHITE, UIUtil.getLabelBackground(), JBColor.WHITE, EffectType.LINE_UNDERSCORE, Font.PLAIN);
         }
         return new CustomTextAttributes(UIUtil.getLabelBackground());
     }

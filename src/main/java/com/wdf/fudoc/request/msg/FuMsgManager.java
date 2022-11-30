@@ -41,7 +41,6 @@ public class FuMsgManager {
         addMsg(buildFuMsg("建议先请求接口在生成文档(这样你的接口文档实例数据会比较真实)"));
         addMsg(buildFuMsg("当响应结果是文件时 会自动切换到保存文件的页面"));
         addMsg(buildFuMsg("【Fu Doc】目前支持批量编辑请求参数(模仿PostMan的Bulk Edit)"));
-        addMsg(buildFuMsg("在使用过程中"));
         addMsg(buildShare());
         addMsg(buildQuestion());
     }
@@ -89,7 +88,7 @@ public class FuMsgManager {
         FuMsgBO fuMsgBO = new FuMsgBO();
         fuMsgBO.setMsgId(IdUtil.nanoId());
         fuMsgBO.setWeight(WEIGHT1);
-        fuMsgBO.setItemList(Lists.newArrayList(buildItem("非常希望您能把使用中出现的问题或者您建议提交给我"),
+        fuMsgBO.setItemList(Lists.newArrayList(buildItem("非常希望您能把使用中出现的问题或者您建议"),
                 buildLinkItem(" 提交到码云 ", UrlConstants.GITEE, MessageStyle.GITEE.getCode()),
                 buildItem("或"),
                 buildLinkItem(" 提交的Github ", UrlConstants.GITEE, MessageStyle.GITHUB.getCode())));
