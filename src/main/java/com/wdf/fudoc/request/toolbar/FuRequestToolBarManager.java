@@ -68,7 +68,7 @@ public class FuRequestToolBarManager {
 
         defaultActionGroup.addSeparator();
 
-        //添加刷新事件
+        //添加刷新事件 JbossJbpmIcons.Icons.Bpmn.Events.Start_16_Message
         defaultActionGroup.add(new AnAction("Refresh", "Refresh", AllIcons.Actions.Refresh) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {

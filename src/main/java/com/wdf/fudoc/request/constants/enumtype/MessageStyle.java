@@ -14,6 +14,7 @@ public enum MessageStyle {
      * 橙色样式
      */
     ORANGE("orange"),
+    GOLD("gold"),
 
 
     ;

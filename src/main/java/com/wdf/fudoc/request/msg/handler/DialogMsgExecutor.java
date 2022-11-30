@@ -15,6 +15,5 @@ public class DialogMsgExecutor implements FuMsgExecutor {
 
     @Override
     public void execute(String msgId, FuMsgItemBO fuMsgItemBO) {
-        System.out.println("123");
     }
 }

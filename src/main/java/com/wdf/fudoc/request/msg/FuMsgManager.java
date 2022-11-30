@@ -42,6 +42,7 @@ public class FuMsgManager {
         addMsg(buildFuMsg("我是一条假消息2"));
         addMsg(buildFuMsg("我是一条假消息3"));
         addMsg(buildFuMsg("我是一条假消息4"));
+        addMsg(buildFuMsg("点击左侧图标可以切换下一条消息"));
         addMsg(buildShare());
     }
 

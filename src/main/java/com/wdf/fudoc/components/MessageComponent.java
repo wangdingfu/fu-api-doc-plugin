@@ -11,6 +11,7 @@ import com.wdf.fudoc.request.constants.enumtype.MessageType;
 import com.wdf.fudoc.request.msg.FuMsgHandler;
 import com.wdf.fudoc.request.msg.FuMsgManager;
 import com.wdf.fudoc.request.msg.handler.FuMsgExecutor;
+import icons.FuDocIcons;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -36,7 +37,7 @@ public class MessageComponent {
 
     private FuMsgComponent fuMsgComponent;
 
-    private final JLabel myRefreshIcon = new JLabel(new AnimatedIcon.Default());
+    private final JLabel myRefreshIcon = new JLabel(FuDocIcons.FU_MESSAGE);
 
 
     public MessageComponent() {
@@ -83,7 +84,6 @@ public class MessageComponent {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     //点击之后 切换图标
-                    System.out.println("123");
                     switchInfo();
                 }
 
@@ -95,7 +95,6 @@ public class MessageComponent {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     //1s中后在切换图标
-                    System.out.println("456");
                 }
 
                 @Override
