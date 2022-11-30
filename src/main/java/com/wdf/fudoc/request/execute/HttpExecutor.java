@@ -29,7 +29,7 @@ public class HttpExecutor {
         //将【Fu Request】请求数据对象转换为http请求数据
         HttpRequest httpRequest = FuHttpRequestBuilder.getInstance(fuHttpRequestData).builder();
         RequestStatus requestStatus = RequestStatus.FAIL;
-        String requestUrl = fuHttpRequestData.getRequest().getRequestUrl();
+        String requestUrl = fuHttpRequestData.getRequest().getBaseUrl();
         httpRequest.setUrl(URLUtil.encode(requestUrl));
         try {
             HttpResponse httpResponse = httpRequest.execute();

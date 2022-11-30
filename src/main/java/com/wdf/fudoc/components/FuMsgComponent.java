@@ -1,17 +1,19 @@
 package com.wdf.fudoc.components;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.PlatformColors;
 import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
-import lombok.Getter;
+import com.wdf.fudoc.components.bo.FuMsgBO;
+import com.wdf.fudoc.components.bo.FuMsgItemBO;
+import com.wdf.fudoc.components.listener.FuMsgListener;
+import com.wdf.fudoc.request.constants.enumtype.MessageStyle;
+import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import com.wdf.fudoc.components.test.HighlightableComponent;
 import com.wdf.fudoc.components.test.HighlightedText;
@@ -21,13 +23,9 @@ import javax.accessibility.AccessibleAction;
 import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleRole;
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -36,12 +34,20 @@ import java.util.List;
 public class FuMsgComponent extends HighlightableComponent {
 
     private HighlightedText myHighlightedText;
-    private final List<HyperlinkListener> myListeners = ContainerUtil.createLockFreeCopyOnWriteList();
-    private boolean myUseIconAsLink;
-    private final TextAttributes myAnchorAttributes;
-    private HyperlinkListener myHyperlinkListener;
 
-    private String currentMsgId;
+    private final TextAttributes defaultAttributes;
+    /**
+     * 消息监听器
+     */
+    private FuMsgListener fuMsgListener;
+    /**
+     * 当前选中的子消息
+     */
+    private FuMsgItemBO currentMsg;
+    /**
+     * 当前显示的主消息
+     */
+    private FuMsgBO message;
 
     private boolean myMouseHover;
 
@@ -53,43 +59,72 @@ public class FuMsgComponent extends HighlightableComponent {
     }
 
     public FuMsgComponent() {
-        this("");
+        this(null);
     }
 
-    public FuMsgComponent(String text) {
-        this(text, UIUtil.getLabelBackground());
+    public FuMsgComponent(FuMsgBO fuMsgBO) {
+        this(fuMsgBO, UIUtil.getLabelBackground());
     }
 
-    public FuMsgComponent(String text, Color background) {
-        this(text, PlatformColors.BLUE, background, PlatformColors.BLUE);
+    public FuMsgComponent(FuMsgBO fuMsgBO, Color background) {
+        this(fuMsgBO, PlatformColors.BLUE, background, PlatformColors.BLUE);
     }
 
-    public FuMsgComponent(String text, final Color textForegroundColor, final Color textBackgroundColor, final Color textEffectColor) {
-        myAnchorAttributes = StartupUiUtil.isUnderDarcula() || UIUtil.isUnderIntelliJLaF() ? new CustomTextAttributes(textBackgroundColor) :
-                new TextAttributes(textForegroundColor, textBackgroundColor, textEffectColor, null, Font.PLAIN);
-
+    public FuMsgComponent(FuMsgBO fuMsgBO, final Color textForegroundColor, final Color textBackgroundColor, final Color textEffectColor) {
+        defaultAttributes = StartupUiUtil.isUnderDarcula() || UIUtil.isUnderIntelliJLaF() ? new CustomTextAttributes(textBackgroundColor) : new TextAttributes(textForegroundColor, textBackgroundColor, textEffectColor, null, Font.PLAIN);
         enforceBackgroundOutsideText(textBackgroundColor);
-        //设置链接文本
-        setLinkText(text);
+        //设置消息文本
+        setMsg(fuMsgBO);
         enableEvents(AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK);
         setOpaque(false);
     }
 
+    /**
+     * 设置消息
+     */
+    public void setMsg(FuMsgBO fuMsgBO) {
+        if (Objects.isNull(fuMsgBO)) {
+            return;
+        }
+        this.message = fuMsgBO;
+        initMessage();
 
-    public void setLinkText(String text) {
-        applyFont();
-        myHighlightedText = new HighlightedText();
-        myHighlightedText.appendText("1", " 这是一条消息", null);
-        myHighlightedText.appendText("2", " [给我点赞] ", myAnchorAttributes);
-        myHighlightedText.appendText("3", "或者", null);
-        myHighlightedText.appendText("4", " [加入我们] ", myAnchorAttributes);
-        myHighlightedText.applyToComponent(this);
-        updateOnTextChange();
+    }
+
+    /**
+     * 初始化消息
+     */
+    private void initMessage() {
+        if (Objects.nonNull(this.message)) {
+            applyFont();
+            myHighlightedText = new HighlightedText();
+            for (FuMsgItemBO fuMsgItemBO : this.message.getItemList()) {
+                TextAttributes textAttributes = null;
+                if (!MessageType.NORMAL.getCode().equals(fuMsgItemBO.getMsgType())) {
+                    String style = fuMsgItemBO.getStyle();
+                    MessageStyle messageStyle;
+                    if (StringUtils.isBlank(style) || Objects.isNull(messageStyle = MessageStyle.getEnum(style))) {
+                        textAttributes = defaultAttributes;
+                    } else {
+                        textAttributes = createAttribute(messageStyle);
+                    }
+                }
+                myHighlightedText.appendText(fuMsgItemBO, textAttributes);
+            }
+            myHighlightedText.applyToComponent(this);
+            updateOnTextChange();
+        }
     }
 
 
+    /**
+     * 获取当前点击的消息id
+     */
     public String getCurrentMsgId() {
-        return this.currentMsgId;
+        if (Objects.nonNull(currentMsg)) {
+            return currentMsg.getMsgId();
+        }
+        return null;
     }
 
     @Override
@@ -104,38 +139,54 @@ public class FuMsgComponent extends HighlightableComponent {
         final HighlightedRegion region = findRegionByX(e.getX());
         if (e.getID() == MouseEvent.MOUSE_ENTERED && isOnLink(region)) {
             myMouseHover = true;
-            currentMsgId = region.getMsgId();
+            currentMsg = region.fuMsgItemBO;
             repaint();
         } else if (e.getID() == MouseEvent.MOUSE_EXITED) {
             setCursor(null);
             myMouseHover = false;
             myMousePressed = false;
-            currentMsgId = null;
+            currentMsg = null;
             repaint();
         } else if (UIUtil.isActionClick(e, MouseEvent.MOUSE_PRESSED) && isOnLink(region)) {
             myMousePressed = true;
-            currentMsgId = region.getMsgId();
+            currentMsg = region.getFuMsgItemBO();
             repaint();
         } else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
             if (myMousePressed && isOnLink(region)) {
-                fireLinkEvent(e, currentMsgId);
+                doClick(currentMsg);
             }
             myMousePressed = false;
-            currentMsgId = null;
+            currentMsg = null;
             repaint();
         }
         super.processMouseEvent(e);
+    }
+
+    public void addMsgListener(FuMsgListener fuMsgListener) {
+        this.fuMsgListener = fuMsgListener;
+    }
+
+    public void doClick(FuMsgItemBO fuMsgItemBO) {
+        if (Objects.nonNull(this.fuMsgListener)) {
+            this.fuMsgListener.clickMsgEvent(message.getMsgId(), fuMsgItemBO);
+        }
     }
 
 
     @Override
     protected void processMouseMotionEvent(MouseEvent e) {
         if (e.getID() == MouseEvent.MOUSE_MOVED) {
-            boolean onLink = isOnLink(findRegionByX(e.getX()));
-            boolean needRepaint = myMouseHover != onLink;
-            myMouseHover = onLink;
+            HighlightedRegion regionByX = findRegionByX(e.getX());
+            boolean needRepaint = false;
+            FuMsgItemBO fuMsgItemBO;
+            if (Objects.nonNull(regionByX) && Objects.nonNull(fuMsgItemBO = regionByX.getFuMsgItemBO())) {
+                myMouseHover = MessageType.isUnNormal(fuMsgItemBO.getMsgType());
+                if (Objects.isNull(currentMsg) || !currentMsg.getMsgId().equals(fuMsgItemBO.getMsgId())) {
+                    currentMsg = fuMsgItemBO;
+                    needRepaint = true;
+                }
+            }
             setCursor(myMouseHover ? Cursor.getPredefinedCursor(Cursor.HAND_CURSOR) : null);
-
             if (needRepaint) {
                 repaint();
             }
@@ -145,66 +196,20 @@ public class FuMsgComponent extends HighlightableComponent {
 
 
     private boolean isOnLink(HighlightedRegion region) {
-        return region != null && region.textAttributes == myAnchorAttributes;
-    }
-
-    @Override
-    protected void processComponentKeyEvent(KeyEvent event) {
-        if (event.getModifiers() == 0 && event.getKeyCode() == KeyEvent.VK_SPACE) {
-            event.consume();
-            fireHyperlinkEvent(event);
-        }
+        return region != null && Objects.nonNull(region.textAttributes);
     }
 
 
     @Override
     public void setText(@Nullable @Nls String text) {
         applyFont();
-        myUseIconAsLink = false;
         super.setText(text);
         updateOnTextChange();
     }
 
-    public void setHyperlinkTarget(@NonNls @Nullable final String url) {
-        if (myHyperlinkListener != null) {
-            removeHyperlinkListener(myHyperlinkListener);
-        }
-        if (url != null) {
-            myHyperlinkListener = e -> BrowserUtil.browse(url);
-            addHyperlinkListener(myHyperlinkListener);
-            setIcon(AllIcons.Ide.External_link_arrow);
-            setIconAtRight(true);
-        }
-    }
-
-    public void addHyperlinkListener(HyperlinkListener listener) {
-        myListeners.add(listener);
-    }
-
-    public void removeHyperlinkListener(HyperlinkListener listener) {
-        myListeners.remove(listener);
-    }
 
     public String getText() {
         return myHighlightedText.getText();
-    }
-
-    protected void fireHyperlinkEvent(@Nullable InputEvent inputEvent) {
-        HyperlinkEvent e = new HyperlinkEvent(this, HyperlinkEvent.EventType.ACTIVATED, null, null, null, inputEvent);
-        for (HyperlinkListener listener : myListeners) {
-            listener.hyperlinkUpdate(e);
-        }
-    }
-
-    protected void fireLinkEvent(@Nullable InputEvent inputEvent, String msgId) {
-        HyperlinkEvent e = new HyperlinkEvent(this, HyperlinkEvent.EventType.ACTIVATED, null, msgId, null, inputEvent);
-        for (HyperlinkListener listener : myListeners) {
-            listener.hyperlinkUpdate(e);
-        }
-    }
-
-    public void doClick() {
-        fireHyperlinkEvent(null);
     }
 
 
@@ -262,13 +267,23 @@ public class FuMsgComponent extends HighlightableComponent {
         @Override
         public boolean doAccessibleAction(int i) {
             if (i == 0) {
-                doClick();
+                //触发消息
+                doClick(currentMsg);
                 return true;
             } else {
                 return false;
             }
         }
     }
+
+
+    public TextAttributes createAttribute(MessageStyle messageStyle) {
+        if (MessageStyle.ORANGE.equals(messageStyle)) {
+            return new TextAttributes(JBColor.ORANGE, UIUtil.getLabelBackground(), JBColor.ORANGE, EffectType.LINE_UNDERSCORE, Font.PLAIN);
+        }
+        return new CustomTextAttributes(UIUtil.getLabelBackground());
+    }
+
 
     private final class CustomTextAttributes extends TextAttributes {
         private CustomTextAttributes(Color textBackgroundColor) {
@@ -277,10 +292,7 @@ public class FuMsgComponent extends HighlightableComponent {
 
         @Override
         public Color getForegroundColor() {
-            return !isEnabled() ? UIManager.getColor("Label.disabledForeground") :
-                    myMousePressed ? JBUI.CurrentTheme.Link.Foreground.PRESSED :
-                            myMouseHover ? JBUI.CurrentTheme.Link.Foreground.HOVERED :
-                                    JBUI.CurrentTheme.Link.Foreground.ENABLED;
+            return !isEnabled() ? UIManager.getColor("Label.disabledForeground") : myMousePressed ? JBUI.CurrentTheme.Link.Foreground.PRESSED : myMouseHover ? JBUI.CurrentTheme.Link.Foreground.HOVERED : JBUI.CurrentTheme.Link.Foreground.ENABLED;
         }
 
         @Override

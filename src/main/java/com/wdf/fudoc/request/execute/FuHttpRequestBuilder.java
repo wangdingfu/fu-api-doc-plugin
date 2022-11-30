@@ -38,6 +38,8 @@ public class FuHttpRequestBuilder {
             body = new FuRequestBodyData();
             request.setBody(body);
         }
+        //添加GET请求
+        addForm(request.getParams(), false);
         //添加form-data
         addForm(body.getFormDataList(), true);
         //添加x-www-form-urlencoded

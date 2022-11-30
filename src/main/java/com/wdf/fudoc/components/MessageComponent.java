@@ -2,14 +2,22 @@ package com.wdf.fudoc.components;
 
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
-import com.intellij.ui.HyperlinkLabel;
+import com.intellij.ui.AnimatedIcon;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
-import com.wdf.fudoc.common.constant.TipInfoConstants;
+import com.wdf.fudoc.components.bo.FuMsgItemBO;
+import com.wdf.fudoc.components.listener.FuMsgListener;
+import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import com.wdf.fudoc.request.msg.FuMsgHandler;
+import com.wdf.fudoc.request.msg.FuMsgManager;
+import com.wdf.fudoc.request.msg.handler.FuMsgExecutor;
 import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Objects;
 
 /**
  * 【Fu Request】窗口底部消息组件
@@ -28,11 +36,13 @@ public class MessageComponent {
 
     private FuMsgComponent fuMsgComponent;
 
+    private final JLabel myRefreshIcon = new JLabel(new AnimatedIcon.Default());
+
 
     public MessageComponent() {
         this.rootPanel = new JPanel(new BorderLayout());
         this.rootPanel.setBorder(BorderFactory.createEmptyBorder(1, 0, 0, 6));
-        createReaderModeHyperLink();
+        initFuMsgComponent();
         initLeftPanel();
         initCenterPanel();
         initRightPanel();
@@ -42,20 +52,25 @@ public class MessageComponent {
 
     public void switchInfo() {
         //随机展示一条消息
-        fuMsgComponent.setLinkText(TipInfoConstants.get() + "<hyperlink>给我点赞</hyperlink>");
+        fuMsgComponent.setMsg(FuMsgManager.nextMsg());
     }
 
-
-    private void createReaderModeHyperLink() {
+    private void initFuMsgComponent() {
         this.fuMsgComponent = new FuMsgComponent();
-        fuMsgComponent.setLinkText("测试....<hyperlink>给我点赞</hyperlink>");
         fuMsgComponent.setForeground(UIUtil.getLabelFontColor(UIUtil.FontColor.BRIGHTER));
         UIUtil.applyStyle(UIUtil.ComponentStyle.SMALL, fuMsgComponent);
-        fuMsgComponent.addHyperlinkListener(e -> {
-            String msgId = e.getDescription();
-            System.out.println("123:" + msgId);
+        fuMsgComponent.addMsgListener((msgId, fuMsgItemBO) -> {
+            MessageType messageType;
+            if (Objects.nonNull(fuMsgItemBO) && Objects.nonNull(messageType = MessageType.getEnum(fuMsgItemBO.getMsgType()))) {
+                //调用业务逻辑
+                FuMsgExecutor fuMsgExecutor = FuMsgHandler.get(messageType);
+                if (Objects.nonNull(fuMsgExecutor)) {
+                    fuMsgExecutor.execute(msgId, fuMsgItemBO);
+                }
+            }
         });
     }
+
 
     private void initLeftPanel() {
         if (leftPanel == null) {
@@ -63,6 +78,37 @@ public class MessageComponent {
             leftPanel.setBorder(JBUI.Borders.empty(0, 4, 0, 1));
             leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.X_AXIS));
             leftPanel.setOpaque(false);
+            myRefreshIcon.setVisible(true);
+            myRefreshIcon.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    //点击之后 切换图标
+                    System.out.println("123");
+                    switchInfo();
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    //1s中后在切换图标
+                    System.out.println("456");
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+            leftPanel.add(myRefreshIcon);
             this.rootPanel.add(leftPanel, BorderLayout.WEST);
         }
     }

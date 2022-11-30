@@ -2,6 +2,7 @@ package com.wdf.fudoc.components.test;
 
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.util.text.StringUtil;
+import com.wdf.fudoc.components.bo.FuMsgItemBO;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,21 +17,14 @@ public final class HighlightedText {
         myBuffer = new StringBuilder();
     }
 
-    public void appendText(String msgId, @Nls String text, TextAttributes attributes) {
+    public void appendText(FuMsgItemBO fuMsgItemBO, TextAttributes attributes) {
         int startOffset = myBuffer.length();
-        myBuffer.append(text);
+        myBuffer.append(fuMsgItemBO.getText());
         if (attributes != null) {
-            myHighlightedRegions.add(new HighlightedRegion(msgId, startOffset, myBuffer.length(), attributes));
+            myHighlightedRegions.add(new HighlightedRegion(fuMsgItemBO, startOffset, myBuffer.length(), attributes));
         }
     }
 
-    public void appendText(String msgId, char[] text, TextAttributes attributes) {
-        int startOffset = myBuffer.length();
-        myBuffer.append(text);
-        if (attributes != null) {
-            myHighlightedRegions.add(new HighlightedRegion(msgId, startOffset, myBuffer.length(), attributes));
-        }
-    }
 
     public boolean equals(Object o) {
         if (!(o instanceof HighlightedText)) return false;
@@ -49,7 +43,7 @@ public final class HighlightedText {
     public void applyToComponent(HighlightableComponent renderer) {
         renderer.setText(myBuffer.toString());
         for (HighlightedRegion info : myHighlightedRegions) {
-            renderer.addHighlighter(info.getMsgId(), info.startOffset, info.endOffset, info.textAttributes);
+            renderer.addHighlighter(info.getFuMsgItemBO(), info.startOffset, info.endOffset, info.textAttributes);
         }
     }
 }

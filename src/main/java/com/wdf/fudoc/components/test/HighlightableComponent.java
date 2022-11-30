@@ -10,6 +10,7 @@ import com.intellij.ui.paint.LinePainter2D;
 import com.intellij.util.ui.GraphicsUtil;
 import com.intellij.util.ui.PlatformColors;
 import com.intellij.util.ui.UIUtil;
+import com.wdf.fudoc.components.bo.FuMsgItemBO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
@@ -77,32 +78,32 @@ public class HighlightableComponent extends JComponent implements Accessible {
         repaint();
     }
 
-    public void addHighlighter(String msgId, int startOffset, int endOffset, TextAttributes attributes) {
-        addHighlighter(msgId, 0, startOffset, endOffset, attributes);
+    public void addHighlighter(FuMsgItemBO fuMsgItemBO, int startOffset, int endOffset, TextAttributes attributes) {
+        addHighlighter(fuMsgItemBO, 0, startOffset, endOffset, attributes);
     }
 
-    private void addHighlighter(String msgId, int startIndex, int startOffset, int endOffset, TextAttributes attributes) {
+    private void addHighlighter(FuMsgItemBO fuMsgItemBO, int startIndex, int startOffset, int endOffset, TextAttributes attributes) {
         if (startOffset < 0) startOffset = 0;
         if (endOffset > myText.length()) endOffset = myText.length();
 
         if (startOffset >= endOffset) return;
 
         if (myHighlightedRegions.size() == 0) {
-            myHighlightedRegions.add(new HighlightedRegion(msgId, startOffset, endOffset, attributes));
+            myHighlightedRegions.add(new HighlightedRegion(fuMsgItemBO, startOffset, endOffset, attributes));
         } else {
             for (int i = startIndex; i < myHighlightedRegions.size(); i++) {
                 HighlightedRegion hRegion = myHighlightedRegions.get(i);
 
                 // must be before
                 if (startOffset < hRegion.startOffset && endOffset <= hRegion.startOffset) {
-                    myHighlightedRegions.add(i, new HighlightedRegion(msgId, startOffset, endOffset, attributes));
+                    myHighlightedRegions.add(i, new HighlightedRegion(fuMsgItemBO, startOffset, endOffset, attributes));
                     break;
                 }
 
                 // must be after
                 if (startOffset >= hRegion.endOffset) {
                     if (i == myHighlightedRegions.size() - 1) {
-                        myHighlightedRegions.add(new HighlightedRegion(msgId, startOffset, endOffset, attributes));
+                        myHighlightedRegions.add(new HighlightedRegion(fuMsgItemBO, startOffset, endOffset, attributes));
                         break;
                     }
                 }
@@ -111,28 +112,28 @@ public class HighlightableComponent extends JComponent implements Accessible {
                 if (startOffset < hRegion.startOffset) {
 
                     if (endOffset < hRegion.endOffset) {
-                        myHighlightedRegions.add(i, new HighlightedRegion(msgId, startOffset, hRegion.startOffset, attributes));
-                        myHighlightedRegions.add(i + 1, new HighlightedRegion(msgId, hRegion.startOffset, endOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
+                        myHighlightedRegions.add(i, new HighlightedRegion(fuMsgItemBO, startOffset, hRegion.startOffset, attributes));
+                        myHighlightedRegions.add(i + 1, new HighlightedRegion(fuMsgItemBO, hRegion.startOffset, endOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
                         hRegion.startOffset = endOffset;
                         break;
                     }
 
                     if (endOffset == hRegion.endOffset) {
                         myHighlightedRegions.remove(hRegion);
-                        myHighlightedRegions.add(i, new HighlightedRegion(msgId, startOffset, hRegion.startOffset, attributes));
-                        myHighlightedRegions.add(i + 1, new HighlightedRegion(msgId, hRegion.startOffset, endOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
+                        myHighlightedRegions.add(i, new HighlightedRegion(fuMsgItemBO, startOffset, hRegion.startOffset, attributes));
+                        myHighlightedRegions.add(i + 1, new HighlightedRegion(fuMsgItemBO, hRegion.startOffset, endOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
                         break;
                     }
 
                     if (endOffset > hRegion.endOffset) {
                         myHighlightedRegions.remove(hRegion);
-                        myHighlightedRegions.add(i, new HighlightedRegion(msgId, startOffset, hRegion.startOffset, attributes));
-                        myHighlightedRegions.add(i + 1, new HighlightedRegion(msgId, hRegion.startOffset, hRegion.endOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
+                        myHighlightedRegions.add(i, new HighlightedRegion(fuMsgItemBO, startOffset, hRegion.startOffset, attributes));
+                        myHighlightedRegions.add(i + 1, new HighlightedRegion(fuMsgItemBO, hRegion.startOffset, hRegion.endOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
 
                         if (i < myHighlightedRegions.size() - 1) {
-                            addHighlighter(msgId, i + 1, hRegion.endOffset, endOffset, attributes);
+                            addHighlighter(fuMsgItemBO, i + 1, hRegion.endOffset, endOffset, attributes);
                         } else {
-                            myHighlightedRegions.add(i + 2, new HighlightedRegion(msgId, hRegion.endOffset, endOffset, attributes));
+                            myHighlightedRegions.add(i + 2, new HighlightedRegion(fuMsgItemBO, hRegion.endOffset, endOffset, attributes));
                         }
                         break;
                     }
@@ -146,8 +147,8 @@ public class HighlightableComponent extends JComponent implements Accessible {
                     hRegion.endOffset = startOffset;
 
                     if (endOffset < oldEndOffset) {
-                        myHighlightedRegions.add(i + 1, new HighlightedRegion(msgId, startOffset, endOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
-                        myHighlightedRegions.add(i + 2, new HighlightedRegion(msgId, endOffset, oldEndOffset, hRegion.textAttributes));
+                        myHighlightedRegions.add(i + 1, new HighlightedRegion(fuMsgItemBO, startOffset, endOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
+                        myHighlightedRegions.add(i + 2, new HighlightedRegion(fuMsgItemBO, endOffset, oldEndOffset, hRegion.textAttributes));
 
                         if (startOffset == hRegion.startOffset) {
                             myHighlightedRegions.remove(hRegion);
@@ -157,7 +158,7 @@ public class HighlightableComponent extends JComponent implements Accessible {
                     }
 
                     if (endOffset == oldEndOffset) {
-                        myHighlightedRegions.add(i + 1, new HighlightedRegion(msgId, startOffset, oldEndOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
+                        myHighlightedRegions.add(i + 1, new HighlightedRegion(fuMsgItemBO, startOffset, oldEndOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
 
                         if (startOffset == hRegion.startOffset) {
                             myHighlightedRegions.remove(hRegion);
@@ -166,11 +167,11 @@ public class HighlightableComponent extends JComponent implements Accessible {
                         break;
                     }
 
-                    myHighlightedRegions.add(i + 1, new HighlightedRegion(msgId, startOffset, oldEndOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
+                    myHighlightedRegions.add(i + 1, new HighlightedRegion(fuMsgItemBO, startOffset, oldEndOffset, TextAttributes.merge(hRegion.textAttributes, attributes)));
                     if (i < myHighlightedRegions.size() - 1) {
-                        addHighlighter(msgId, i + 1, oldEndOffset, endOffset, attributes);
+                        addHighlighter(fuMsgItemBO, i + 1, oldEndOffset, endOffset, attributes);
                     } else {
-                        myHighlightedRegions.add(i + 2, new HighlightedRegion(msgId, hRegion.endOffset, endOffset, attributes));
+                        myHighlightedRegions.add(i + 2, new HighlightedRegion(fuMsgItemBO, hRegion.endOffset, endOffset, attributes));
                     }
 
                     if (startOffset == hRegion.startOffset) {
@@ -271,7 +272,7 @@ public class HighlightableComponent extends JComponent implements Accessible {
             String currentMsgId = getCurrentMsgId();
             boolean myMousePressed = getMyMousePressed();
             for (HighlightedRegion hRegion : myHighlightedRegions) {
-                boolean isCurrent = StringUtils.isNotBlank(currentMsgId) && currentMsgId.equals(hRegion.msgId);
+                boolean isCurrent = StringUtils.isNotBlank(currentMsgId) && currentMsgId.equals(hRegion.fuMsgItemBO.getMsgId());
                 String text = myText.substring(endIndex, hRegion.startOffset);
                 endIndex = hRegion.endOffset;
 

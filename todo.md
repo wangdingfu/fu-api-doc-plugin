@@ -76,3 +76,6 @@ if (file.exists() && !MessageDialogBuilder.okCancel(title, message)
 .guessWindowAndAsk()) {
 return;
 }
+
+
+BrowserUtil.browse(url)
