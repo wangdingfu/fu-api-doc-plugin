@@ -88,7 +88,7 @@ public class FuMsgManager {
         FuMsgBO fuMsgBO = new FuMsgBO();
         fuMsgBO.setMsgId(IdUtil.nanoId());
         fuMsgBO.setWeight(WEIGHT1);
-        fuMsgBO.setItemList(Lists.newArrayList(buildItem("非常希望您能把使用中出现的问题或者您建议"),
+        fuMsgBO.setItemList(Lists.newArrayList(buildItem("非常希望您能把使用中出现的问题或者建议"),
                 buildLinkItem(" 提交到码云 ", UrlConstants.GITEE, MessageStyle.GITEE.getCode()),
                 buildItem("或"),
                 buildLinkItem(" 提交的Github ", UrlConstants.GITHUB, MessageStyle.GITHUB.getCode())));
