@@ -15,6 +15,8 @@ public enum MessageStyle {
      */
     ORANGE("orange"),
     GOLD("gold"),
+    GITEE("gitee"),
+    GITHUB("github"),
 
 
     ;

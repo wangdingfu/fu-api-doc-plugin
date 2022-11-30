@@ -21,7 +21,7 @@ import java.util.Set;
 public class FuMsgManager {
 
     private static final double DEFAULT_WEIGHT = 1D;
-    private static final double WEIGHT1 = 5D;
+    private static final double WEIGHT1 = 3D;
 
     /**
      * 消息ID集合 用户防止消息被重复添加
@@ -37,13 +37,13 @@ public class FuMsgManager {
         //系统定义好的一些消息
         addMsg(buildFuMsg("按下esc键可以快速退出当前窗口"));
         addMsg(buildFuMsg("发送请求后会自动保存当前请求记录"));
-        addMsg(buildFuMsg("点击左侧刷新按钮可以切换消息"));
-        addMsg(buildFuMsg("我是一条假消息1"));
-        addMsg(buildFuMsg("我是一条假消息2"));
-        addMsg(buildFuMsg("我是一条假消息3"));
-        addMsg(buildFuMsg("我是一条假消息4"));
         addMsg(buildFuMsg("点击左侧图标可以切换下一条消息"));
+        addMsg(buildFuMsg("建议先请求接口在生成文档(这样你的接口文档实例数据会比较真实)"));
+        addMsg(buildFuMsg("当响应结果是文件时 会自动切换到保存文件的页面"));
+        addMsg(buildFuMsg("【Fu Doc】目前支持批量编辑请求参数(模仿PostMan的Bulk Edit)"));
+        addMsg(buildFuMsg("在使用过程中"));
         addMsg(buildShare());
+        addMsg(buildQuestion());
     }
 
 
@@ -85,13 +85,25 @@ public class FuMsgManager {
         return fuMsgBO;
     }
 
-    public static FuMsgBO buildShare() {
+    public static FuMsgBO buildQuestion() {
         FuMsgBO fuMsgBO = new FuMsgBO();
         fuMsgBO.setMsgId(IdUtil.nanoId());
         fuMsgBO.setWeight(WEIGHT1);
+        fuMsgBO.setItemList(Lists.newArrayList(buildItem("非常希望您能把使用中出现的问题或者您建议提交给我"),
+                buildLinkItem(" 提交到码云 ", UrlConstants.GITEE, MessageStyle.GITEE.getCode()),
+                buildItem("或"),
+                buildLinkItem(" 提交的Github ", UrlConstants.GITEE, MessageStyle.GITHUB.getCode())));
+        return fuMsgBO;
+    }
+
+
+    public static FuMsgBO buildShare(){
+        FuMsgBO fuMsgBO = new FuMsgBO();
+        fuMsgBO.setMsgId(IdUtil.nanoId());
+        fuMsgBO.setWeight(DEFAULT_WEIGHT);
         fuMsgBO.setItemList(Lists.newArrayList(buildItem("如果您觉得"),
                 buildLinkItem(" Fu Doc ", UrlConstants.DOCUMENT, MessageStyle.ORANGE.getCode()),
-                buildItem("还不错的话. 来"),
+                buildItem("还不错的话 来"),
                 buildLinkItem(" Gitee ", UrlConstants.GITEE, null),
                 buildItem("或"),
                 buildLinkItem(" Github ", UrlConstants.GITHUB, null),
