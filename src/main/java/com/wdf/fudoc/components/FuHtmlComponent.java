@@ -26,12 +26,19 @@ public class FuHtmlComponent extends DialogWrapper {
         this(project, title, "");
     }
 
-    protected FuHtmlComponent(@Nullable Project project, String title, String html) {
-        super(project, false);
+    public FuHtmlComponent(@Nullable Project project, String title, String html) {
+        super(project, true);
         this.html = html;
         setTitle(title);
         initPanel();
         init();
+    }
+
+    public JComponent getPanel(){
+        if (Objects.isNull(jScrollPane)) {
+            this.jScrollPane = ScrollPaneFactory.createScrollPane(editorPane);
+        }
+        return this.jScrollPane;
     }
 
     private void initPanel() {

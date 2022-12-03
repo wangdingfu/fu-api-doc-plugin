@@ -1,16 +1,11 @@
-package com.wdf.fudoc.components;
+package com.wdf.fudoc.components.message;
 
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
-import com.intellij.ui.AnimatedIcon;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
-import com.wdf.fudoc.components.bo.FuMsgItemBO;
-import com.wdf.fudoc.components.listener.FuMsgListener;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
-import com.wdf.fudoc.request.msg.FuMsgHandler;
-import com.wdf.fudoc.request.msg.FuMsgManager;
-import com.wdf.fudoc.request.msg.handler.FuMsgExecutor;
+import com.wdf.fudoc.components.message.handler.FuMsgExecutor;
 import icons.FuDocIcons;
 import lombok.Getter;
 
@@ -35,7 +30,7 @@ public class MessageComponent {
     private JPanel centerPanel;
     private JPanel rightPanel;
 
-    private FuMsgComponent fuMsgComponent;
+    private FuMessageComponent fuMessageComponent;
 
     private final JLabel myRefreshIcon = new JLabel(FuDocIcons.FU_MESSAGE);
 
@@ -53,14 +48,14 @@ public class MessageComponent {
 
     public void switchInfo() {
         //随机展示一条消息
-        fuMsgComponent.setMsg(FuMsgManager.nextMsg());
+        fuMessageComponent.switchMsg();
     }
 
     private void initFuMsgComponent() {
-        this.fuMsgComponent = new FuMsgComponent();
-        fuMsgComponent.setForeground(UIUtil.getLabelFontColor(UIUtil.FontColor.BRIGHTER));
-        UIUtil.applyStyle(UIUtil.ComponentStyle.SMALL, fuMsgComponent);
-        fuMsgComponent.addMsgListener((msgId, fuMsgItemBO) -> {
+        fuMessageComponent = new FuMessageComponent();
+        fuMessageComponent.setForeground(UIUtil.getLabelFontColor(UIUtil.FontColor.BRIGHTER));
+        UIUtil.applyStyle(UIUtil.ComponentStyle.SMALL, fuMessageComponent);
+        fuMessageComponent.addMsgListener((msgId, fuMsgItemBO) -> {
             MessageType messageType;
             if (Objects.nonNull(fuMsgItemBO) && Objects.nonNull(messageType = MessageType.getEnum(fuMsgItemBO.getMsgType()))) {
                 //调用业务逻辑
@@ -116,7 +111,7 @@ public class MessageComponent {
         if (centerPanel == null) {
             centerPanel = JBUI.Panels.simplePanel().andTransparent();
             centerPanel.setBorder(JBUI.Borders.empty(0, 1));
-            centerPanel.add(this.fuMsgComponent);
+            centerPanel.add(this.fuMessageComponent);
             this.rootPanel.add(centerPanel, BorderLayout.CENTER);
         }
     }

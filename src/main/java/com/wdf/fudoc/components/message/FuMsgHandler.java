@@ -1,10 +1,10 @@
-package com.wdf.fudoc.request.msg;
+package com.wdf.fudoc.components.message;
 
+import com.wdf.fudoc.components.message.handler.DialogMsgExecutor;
+import com.wdf.fudoc.components.message.handler.FuMsgExecutor;
+import com.wdf.fudoc.components.message.handler.LinkMsgExecutor;
+import com.wdf.fudoc.components.message.handler.NormalMsgExecutor;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
-import com.wdf.fudoc.request.msg.handler.DialogMsgExecutor;
-import com.wdf.fudoc.request.msg.handler.FuMsgExecutor;
-import com.wdf.fudoc.request.msg.handler.LinkMsgExecutor;
-import com.wdf.fudoc.request.msg.handler.NormalMsgExecutor;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

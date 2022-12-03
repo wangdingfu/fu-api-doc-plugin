@@ -1,4 +1,4 @@
-package com.wdf.fudoc.request.msg;
+package com.wdf.fudoc.components.message;
 
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.thread.ThreadUtil;

@@ -33,9 +33,12 @@ public class FuMsgItemBO {
     private String text;
 
     /**
-     * 消息样式(已经内置好的样式)
+     * 常规主题展示的颜色（白色主题）
      */
-    private String style;
+    private String regularColor;
 
-
+    /**
+     * 黑色主题展示的颜色
+     */
+    private String darkColor;
 }

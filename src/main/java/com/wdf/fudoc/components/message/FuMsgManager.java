@@ -1,13 +1,13 @@
-package com.wdf.fudoc.request.msg;
+package com.wdf.fudoc.components.message;
 
 import cn.hutool.core.lang.WeightRandom;
 import cn.hutool.core.util.IdUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.components.bo.FuMsgBO;
 import com.wdf.fudoc.components.bo.FuMsgItemBO;
-import com.wdf.fudoc.request.constants.enumtype.MessageStyle;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
 import org.apache.commons.lang.StringUtils;
 
@@ -72,15 +72,18 @@ public class FuMsgManager {
         return WEIGHT_RANDOM.next();
     }
 
+    public static FuMsgBO buildFuMsg(String message) {
+        return buildFuMsg(message, null);
+    }
 
     /**
      * 构建消息对象
      */
-    public static FuMsgBO buildFuMsg(String message) {
+    public static FuMsgBO buildFuMsg(String message, FuColor fuColor) {
         FuMsgBO fuMsgBO = new FuMsgBO();
         fuMsgBO.setMsgId(IdUtil.nanoId());
         fuMsgBO.setWeight(DEFAULT_WEIGHT);
-        fuMsgBO.setItemList(Lists.newArrayList(buildItem(message)));
+        fuMsgBO.setItemList(Lists.newArrayList(buildItem(message, fuColor)));
         return fuMsgBO;
     }
 
@@ -89,42 +92,50 @@ public class FuMsgManager {
         fuMsgBO.setMsgId(IdUtil.nanoId());
         fuMsgBO.setWeight(WEIGHT1);
         fuMsgBO.setItemList(Lists.newArrayList(buildItem("非常希望您能把使用中出现的问题或者建议"),
-                buildLinkItem(" 提交到码云 ", UrlConstants.GITEE, MessageStyle.GITEE.getCode()),
+                buildLinkItem(" 提交到码云 ", UrlConstants.GITEE, FuColor.GITEE),
                 buildItem("或"),
-                buildLinkItem(" 提交的Github ", UrlConstants.GITHUB, MessageStyle.GITHUB.getCode())));
+                buildLinkItem(" 提交的Github ", UrlConstants.GITHUB, FuColor.GITHUB)));
         return fuMsgBO;
     }
 
 
-    public static FuMsgBO buildShare(){
+    public static FuMsgBO buildShare() {
         FuMsgBO fuMsgBO = new FuMsgBO();
         fuMsgBO.setMsgId(IdUtil.nanoId());
         fuMsgBO.setWeight(DEFAULT_WEIGHT);
         fuMsgBO.setItemList(Lists.newArrayList(buildItem("如果您觉得"),
-                buildLinkItem(" Fu Doc ", UrlConstants.DOCUMENT, MessageStyle.ORANGE.getCode()),
+                buildLinkItem(" [Fu Doc] ", UrlConstants.DOCUMENT, FuColor.DOCUMENT),
                 buildItem("还不错的话 来"),
-                buildLinkItem(" Gitee ", UrlConstants.GITEE, null),
+                buildLinkItem(" 码云 ", UrlConstants.GITEE, FuColor.GITEE),
                 buildItem("或"),
-                buildLinkItem(" Github ", UrlConstants.GITHUB, null),
+                buildLinkItem(" Github ", UrlConstants.GITHUB, FuColor.GITHUB),
                 buildItem("上给我一颗小爱心吧")));
         return fuMsgBO;
     }
 
+
     private static FuMsgItemBO buildItem(String message) {
-        return buildItem(MessageType.NORMAL.getCode(), message, null, null);
+        return buildItem(message, null);
     }
 
-    private static FuMsgItemBO buildLinkItem(String message, String value, String style) {
-        return buildItem(MessageType.LINK.getCode(), message, value, style);
+    private static FuMsgItemBO buildItem(String message, FuColor fuColor) {
+        return buildItem(MessageType.NORMAL.getCode(), message, null, fuColor);
     }
 
-    private static FuMsgItemBO buildItem(String msgType, String message, String value, String style) {
+    private static FuMsgItemBO buildLinkItem(String message, String value, FuColor fuColor) {
+        return buildItem(MessageType.LINK.getCode(), message, value, fuColor);
+    }
+
+    private static FuMsgItemBO buildItem(String msgType, String message, String value, FuColor fuColor) {
         FuMsgItemBO fuMsgItemBO = new FuMsgItemBO();
         fuMsgItemBO.setMsgId(IdUtil.nanoId());
         fuMsgItemBO.setMsgType(msgType);
         fuMsgItemBO.setText(message);
         fuMsgItemBO.setValue(value);
-        fuMsgItemBO.setStyle(style);
+        if (Objects.nonNull(fuColor)) {
+            fuMsgItemBO.setRegularColor(fuColor.getRegularColor());
+            fuMsgItemBO.setDarkColor(fuColor.getDarkColor());
+        }
         return fuMsgItemBO;
     }
 }

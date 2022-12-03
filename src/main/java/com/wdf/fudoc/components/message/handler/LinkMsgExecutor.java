@@ -1,4 +1,4 @@
-package com.wdf.fudoc.request.msg.handler;
+package com.wdf.fudoc.components.message.handler;
 
 import com.intellij.ide.BrowserUtil;
 import com.wdf.fudoc.components.bo.FuMsgItemBO;
@@ -11,10 +11,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class LinkMsgExecutor implements FuMsgExecutor {
 
-    @Override
-    public MessageType getMessageType() {
-        return MessageType.LINK;
-    }
 
     @Override
     public void execute(String msgId, FuMsgItemBO fuMsgItemBO) {
