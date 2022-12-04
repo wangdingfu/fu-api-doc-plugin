@@ -72,7 +72,7 @@ public class FuHtmlComponent extends DialogWrapper {
             this.jScrollPane = ScrollPaneFactory.createScrollPane(editorPane);
         }
         if (Objects.nonNull(width) && Objects.nonNull(height)) {
-            this.jScrollPane.setMinimumSize(new Dimension(600, 800));
+            this.jScrollPane.setMinimumSize(new Dimension(width, height));
         }
         return this.jScrollPane;
     }

@@ -88,6 +88,6 @@ public class FuDocUpdateDialog implements StartupActivity {
 
     @Override
     public void runActivity(@NotNull Project project) {
-        new FuHtmlComponent(project, "【Fu Doc 更新公告】", html).showAndGet();
+        new FuHtmlComponent(project, "【Fu Doc 更新公告】", html,600,800).showAndGet();
     }
 }
