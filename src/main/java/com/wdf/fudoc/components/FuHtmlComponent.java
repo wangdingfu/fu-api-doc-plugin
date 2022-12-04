@@ -5,9 +5,12 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.ui.UIUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 /**
@@ -21,10 +24,9 @@ public class FuHtmlComponent extends DialogWrapper {
     private final JEditorPane editorPane = new JEditorPane();
     private JScrollPane jScrollPane;
     private final String html;
+    private Integer width;
+    private Integer height;
 
-    public FuHtmlComponent(@Nullable Project project, String title) {
-        this(project, title, "");
-    }
 
     public FuHtmlComponent(@Nullable Project project, String title, String html) {
         super(project, true);
@@ -34,12 +36,26 @@ public class FuHtmlComponent extends DialogWrapper {
         init();
     }
 
-    public JComponent getPanel(){
-        if (Objects.isNull(jScrollPane)) {
-            this.jScrollPane = ScrollPaneFactory.createScrollPane(editorPane);
-        }
-        return this.jScrollPane;
+    public FuHtmlComponent(@Nullable Project project, String title, String html, Integer width, Integer height) {
+        this(project, title, html);
+        this.width = width;
+        this.height = height;
     }
+
+
+    @Override
+    protected Action @NotNull [] createActions() {
+        DialogWrapperAction okAction = new DialogWrapperAction("我已查看") {
+            @Override
+            protected void doAction(ActionEvent e) {
+                close(OK_EXIT_CODE);
+            }
+        };
+        // 设置默认的焦点按钮
+        okAction.putValue(DialogWrapper.DEFAULT_ACTION, true);
+        return new Action[]{okAction, new DialogWrapperExitAction("下次再看", CANCEL_EXIT_CODE)};
+    }
+
 
     private void initPanel() {
         this.editorPane.setContentType("text/html");
@@ -54,6 +70,9 @@ public class FuHtmlComponent extends DialogWrapper {
     protected @Nullable JComponent createCenterPanel() {
         if (Objects.isNull(jScrollPane)) {
             this.jScrollPane = ScrollPaneFactory.createScrollPane(editorPane);
+        }
+        if (Objects.nonNull(width) && Objects.nonNull(height)) {
+            this.jScrollPane.setMinimumSize(new Dimension(600, 800));
         }
         return this.jScrollPane;
     }
