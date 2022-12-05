@@ -24,22 +24,22 @@ public class FuHtmlComponent extends DialogWrapper {
     private final JEditorPane editorPane = new JEditorPane();
     private JScrollPane jScrollPane;
     private final String html;
-    private Integer width;
-    private Integer height;
+    private final Integer width;
+    private final Integer height;
 
 
     public FuHtmlComponent(@Nullable Project project, String title, String html) {
-        super(project, true);
-        this.html = html;
-        setTitle(title);
-        initPanel();
-        init();
+        this(project, title, html, null, null);
     }
 
     public FuHtmlComponent(@Nullable Project project, String title, String html, Integer width, Integer height) {
-        this(project, title, html);
+        super(project, true);
+        this.html = html;
         this.width = width;
         this.height = height;
+        setTitle(title);
+        initPanel();
+        init();
     }
 
 

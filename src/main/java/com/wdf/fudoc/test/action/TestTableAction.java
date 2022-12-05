@@ -92,6 +92,6 @@ public class TestTableAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        new FuHtmlComponent(e.getProject(), "【Fu Doc】更新公告", html).showAndGet();
+        new FuHtmlComponent(e.getProject(), "【Fu Doc】更新公告", html,600,800).showAndGet();
     }
 }
