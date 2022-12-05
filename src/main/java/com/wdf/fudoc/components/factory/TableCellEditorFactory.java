@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.factory;
+package com.wdf.fudoc.components.factory;
 
 import cn.hutool.core.util.EnumUtil;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;

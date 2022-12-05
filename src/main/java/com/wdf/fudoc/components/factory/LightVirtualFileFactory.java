@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.factory;
+package com.wdf.fudoc.components.factory;
 
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.highlighter.XmlFileType;

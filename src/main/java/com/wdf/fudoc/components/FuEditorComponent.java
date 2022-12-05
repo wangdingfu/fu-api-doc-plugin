@@ -21,7 +21,7 @@ import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.util.FuEditorSettings;
-import com.wdf.fudoc.test.factory.LightVirtualFileFactory;
+import com.wdf.fudoc.components.factory.LightVirtualFileFactory;
 import com.wdf.fudoc.util.EditorUtils;
 import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;

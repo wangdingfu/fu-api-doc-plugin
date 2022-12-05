@@ -1,6 +1,6 @@
 package com.wdf.fudoc.test.view.bo;
 
-import com.wdf.fudoc.test.factory.TableCellEditorFactory;
+import com.wdf.fudoc.components.factory.TableCellEditorFactory;
 import lombok.Getter;
 import lombok.Setter;
 

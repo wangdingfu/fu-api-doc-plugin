@@ -12,7 +12,7 @@ import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.test.factory.FuTableColumnFactory;
+import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

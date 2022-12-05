@@ -8,6 +8,7 @@ import com.wdf.fudoc.request.state.FuRequestState;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -22,6 +23,9 @@ public class FuRequestManager {
      * @param fuHttpRequestData http请求数据对象
      */
     public static void saveRequest(Project project, FuHttpRequestData fuHttpRequestData) {
+        if (Objects.isNull(fuHttpRequestData)) {
+            return;
+        }
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> requestDataMap = data.getRequestDataMap();
         requestDataMap.put(fuHttpRequestData.getApiKey(), JSONUtil.toJsonStr(fuHttpRequestData));

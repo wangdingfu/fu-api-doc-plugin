@@ -9,10 +9,13 @@ import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.common.AbstractClassAction;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
+import com.wdf.fudoc.common.datakey.FuDocDataKey;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
+import com.wdf.fudoc.request.global.FuRequestWindowData;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.HttpDialogView;
+import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -61,6 +64,10 @@ public class RequestAction extends AbstractClassAction {
             FuDocRootParamData fuDocRootParamData = fuDocRootParamDataList.get(0);
             //获取当前所属模块
             request = FuHttpRequestDataFactory.build(module, fuDocRootParamData);
+        }
+        FuRequestWindow fuRequestWindow = FuRequestWindowData.get(e.getProject());
+        if (Objects.nonNull(fuRequestWindow)) {
+            fuRequestWindow.initData(request);
         }
         HttpDialogView.popup(e.getProject(), request);
     }

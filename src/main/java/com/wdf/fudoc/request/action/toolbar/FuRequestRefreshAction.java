@@ -8,7 +8,7 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.test.view.toolwindow.FuRequestWindow;
+import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import org.jetbrains.annotations.NotNull;
 
 /**

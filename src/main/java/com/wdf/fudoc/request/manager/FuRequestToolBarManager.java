@@ -1,12 +1,13 @@
-package com.wdf.fudoc.request.toolbar;
+package com.wdf.fudoc.request.manager;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.wdf.fudoc.request.constants.RequestConstants;
-import com.wdf.fudoc.request.manager.FuRequestManager;
+import com.wdf.fudoc.request.constants.enumtype.RequestDialog;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.RequestTabView;
 import com.wdf.fudoc.request.view.HttpDialogView;
+import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import icons.FuDocIcons;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -25,12 +26,17 @@ public class FuRequestToolBarManager {
     /**
      * 【Fu Request】弹窗
      */
-    private final HttpDialogView httpDialogView;
+    private HttpDialogView httpDialogView;
+
+    /**
+     * IDEA工具栏窗体
+     */
+    private FuRequestWindow fuRequestWindow;
 
     /**
      * 【Fu Request】工具类分组
      */
-    private final DefaultActionGroup defaultActionGroup;
+    private final DefaultActionGroup defaultActionGroup = new DefaultActionGroup();
 
     /**
      * pin 状态 默认pin住
@@ -38,23 +44,77 @@ public class FuRequestToolBarManager {
     @Getter
     public final AtomicBoolean pinStatus = new AtomicBoolean(true);
 
+    /**
+     * 请求窗体方式
+     */
+    private final RequestDialog requestDialog;
+
 
     public FuRequestToolBarManager(HttpDialogView httpDialogView) {
         this.httpDialogView = httpDialogView;
-        this.defaultActionGroup = new DefaultActionGroup();
+        this.requestDialog = RequestDialog.HTTP_DIALOG;
     }
 
+    public FuRequestToolBarManager(FuRequestWindow fuRequestWindow) {
+        this.fuRequestWindow = fuRequestWindow;
+        this.requestDialog = RequestDialog.TOOL_WINDOW;
+    }
 
     public static FuRequestToolBarManager getInstance(HttpDialogView httpDialogView) {
         return new FuRequestToolBarManager(httpDialogView);
+    }
+
+    public static FuRequestToolBarManager getInstance(FuRequestWindow fuRequestWindow) {
+        return new FuRequestToolBarManager(fuRequestWindow);
     }
 
     /**
      * 初始化工具栏
      */
     public DefaultActionGroup initToolBar() {
+        if (RequestDialog.HTTP_DIALOG.equals(this.requestDialog)) {
+            addActionByHttpDialog();
+        }
+        if (RequestDialog.TOOL_WINDOW.equals(this.requestDialog)) {
+            addCommonAction(fuRequestWindow.getRequestTabView());
+        }
+        return defaultActionGroup;
+    }
+
+
+    private void addActionByHttpDialog() {
+        //添加公共动作
+        addCommonAction(this.httpDialogView.getRequestTabView());
+
+
+        defaultActionGroup.addSeparator();
+
+        //添加pin
+        defaultActionGroup.add(new ToggleAction("Pin", "Pin", AllIcons.General.Pin_tab) {
+            @Override
+            public boolean isSelected(@NotNull AnActionEvent e) {
+                return pinStatus.get();
+            }
+
+            @Override
+            public void setSelected(@NotNull AnActionEvent e, boolean state) {
+                pinStatus.set(state);
+            }
+        });
+
+        //添加关闭窗口事件
+        defaultActionGroup.addAction(new AnAction("Close", "Close", AllIcons.Actions.Cancel) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                httpDialogView.close();
+            }
+        });
+
+    }
+
+
+    private void addCommonAction(RequestTabView requestTabView) {
         ActionManager actionManager = ActionManager.getInstance();
-        RequestTabView requestTabView = httpDialogView.getRequestTabView();
         //添加保存事件
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
             @Override
@@ -101,29 +161,6 @@ public class FuRequestToolBarManager {
             }
         });
 
-        defaultActionGroup.addSeparator();
-
-        //添加pin
-        defaultActionGroup.add(new ToggleAction("Pin", "Pin", AllIcons.General.Pin_tab) {
-            @Override
-            public boolean isSelected(@NotNull AnActionEvent e) {
-                return pinStatus.get();
-            }
-
-            @Override
-            public void setSelected(@NotNull AnActionEvent e, boolean state) {
-                pinStatus.set(state);
-            }
-        });
-
-        //添加关闭窗口事件
-        defaultActionGroup.addAction(new AnAction("Close", "Close", AllIcons.Actions.Cancel) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                httpDialogView.close();
-            }
-        });
-        return defaultActionGroup;
     }
 
 

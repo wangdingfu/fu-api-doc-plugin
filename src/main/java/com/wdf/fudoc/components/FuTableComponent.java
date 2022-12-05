@@ -6,7 +6,7 @@ import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
 import com.wdf.fudoc.components.listener.FuTableListener;
-import com.wdf.fudoc.test.factory.FuTableColumnFactory;
+import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.test.view.bo.Column;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.JTableUtils;

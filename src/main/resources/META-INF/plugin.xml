@@ -59,7 +59,10 @@
                     secondary="false"
                     doNotActivateOnStart="true"
                     order="last"
-                    factoryClass="com.wdf.fudoc.test.view.toolwindow.FuDocToolWindowFactory"/>
+                    factoryClass="com.wdf.fudoc.request.view.toolwindow.FuDocToolWindowFactory"/>
+
+        <!-- provider -->
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.wdf.fudoc.request.view.provider.FuDocLineMarkerProvider"/>
 
 
 <!--        <iw.actionProvider implementation="com.wdf.fudoc.request.action.editor.FormatActionProvider"/>-->

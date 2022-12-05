@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.factory;
+package com.wdf.fudoc.components.factory;
 
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.DynamicDataType;

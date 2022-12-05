@@ -12,8 +12,7 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.request.view.HttpDialogView;
-import com.wdf.fudoc.test.factory.FuTabBuilder;
+import com.wdf.fudoc.components.factory.FuTabBuilder;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -79,13 +78,13 @@ public class RequestTabView implements FuTab, HttpCallback {
     private FuHttpRequestData fuHttpRequestData;
 
     /**
-     * 父级容器
+     * 发送请求后回调逻辑
      */
-    private final HttpDialogView httpDialogView;
+    private final HttpCallback httpCallback;
 
-    public RequestTabView(Project project, HttpDialogView httpDialogView) {
+    public RequestTabView(Project project, HttpCallback httpCallback) {
         this.project = project;
-        this.httpDialogView = httpDialogView;
+        this.httpCallback = httpCallback;
         this.mainPanel = new JPanel(new BorderLayout());
         this.requestTypeComponent = new ComboBox<>(RequestType.getItems());
         this.requestUrlComponent = new JTextField();
@@ -197,7 +196,7 @@ public class RequestTabView implements FuTab, HttpCallback {
     private void initComponentEventListener() {
 
         //对发送按钮添加发起http请求事件
-        this.sendBtn.addActionListener(e -> HttpApiExecutor.doSendRequest(project, fuHttpRequestData, httpDialogView));
+        this.sendBtn.addActionListener(e -> HttpApiExecutor.doSendRequest(project, fuHttpRequestData, httpCallback));
 
         //对请求类型按钮添加选项选中事件
         this.requestTypeComponent.addItemListener(e -> setRequestType(e.getItem() + ""));

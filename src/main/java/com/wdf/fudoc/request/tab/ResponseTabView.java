@@ -16,6 +16,7 @@ import com.wdf.fudoc.request.view.ResponseDownloadFileVIew;
 import com.wdf.fudoc.request.view.ResponseErrorView;
 import com.wdf.fudoc.request.view.ResponseFileView;
 import com.wdf.fudoc.util.HttpResponseUtil;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -35,6 +36,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
 
     private final Project project;
 
+    @Getter
     private final JPanel rootPanel;
 
     private final FuEditorComponent fuEditorComponent;
@@ -85,6 +87,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
                     responseFileView.setFuResponseData(response);
                     response.setFileName(fileName);
                     switchPanel(3, responseFileView.getRootPane());
+                    responseFileView.initRootPane();
                 } else {
                     //请求成功 渲染响应数据到编辑器中
                     fuEditorComponent.setContent(JSONUtil.formatJsonStr(response.getContent()));
