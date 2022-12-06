@@ -19,6 +19,7 @@ public class FuDocObjectJMockData implements FuDocObjectMock {
      */
     @Override
     public  <T> T mock(Class<T> classType, String name) {
+        //TODO 优先从相关配置中mock常用数据
         return JMockData.mock(classType);
     }
 }

@@ -39,36 +39,9 @@ public class RequestAction extends AbstractClassAction {
 
     @Override
     protected void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext) {
-        //获取当前接口的唯一标识
-        Module module = ModuleUtil.findModuleForPsiElement(psiClass);
-        String moduleId = FuDocUtils.getModuleId(module);
-        //获取当前操作的方法
-        PsiMethod targetMethod = PsiClassUtils.getTargetMethod(fuDocContext.getTargetElement());
-        if (Objects.isNull(targetMethod)) {
-            PsiMethod[] methods = psiClass.getMethods();
-            if (methods.length <= 0) {
-                return;
-            }
-            targetMethod = methods[0];
+        FuHttpRequestData request = FuHttpRequestDataFactory.build(e.getProject(), psiClass, fuDocContext);
+        if (Objects.nonNull(request)) {
+            HttpDialogView.popup(e.getProject(), request);
         }
-        String methodId = PsiClassUtils.getMethodId(targetMethod);
-        //当前接口的唯一标识
-        String apiKey = FuDocUtils.genApiKey(moduleId, methodId);
-        FuHttpRequestData request = FuRequestManager.getRequest(e.getProject(), apiKey);
-        if (Objects.isNull(request)) {
-            List<FuDocRootParamData> fuDocRootParamDataList = GenFuDocUtils.genRootParam(fuDocContext, psiClass);
-            if (CollectionUtils.isEmpty(fuDocRootParamDataList)) {
-                //没有可以请求的方法
-                return;
-            }
-            FuDocRootParamData fuDocRootParamData = fuDocRootParamDataList.get(0);
-            //获取当前所属模块
-            request = FuHttpRequestDataFactory.build(module, fuDocRootParamData);
-        }
-        FuRequestWindow fuRequestWindow = FuRequestWindowData.get(e.getProject());
-        if (Objects.nonNull(fuRequestWindow)) {
-            fuRequestWindow.initData(request);
-        }
-        HttpDialogView.popup(e.getProject(), request);
     }
 }

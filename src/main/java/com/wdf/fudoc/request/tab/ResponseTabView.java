@@ -87,7 +87,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
                     responseFileView.setFuResponseData(response);
                     response.setFileName(fileName);
                     switchPanel(3, responseFileView.getRootPane());
-                    responseFileView.initRootPane();
+                    initRootPane();
                 } else {
                     //请求成功 渲染响应数据到编辑器中
                     fuEditorComponent.setContent(JSONUtil.formatJsonStr(response.getContent()));
@@ -139,6 +139,13 @@ public class ResponseTabView implements FuTab, HttpCallback {
         this.rootPanel.repaint();
         this.rootPanel.add(switchPanel, BorderLayout.CENTER);
         this.rootPanel.revalidate();
+    }
+
+
+    public void initRootPane(){
+        if(Objects.nonNull(responseFileView)){
+            responseFileView.initRootPane();
+        }
     }
 
 }

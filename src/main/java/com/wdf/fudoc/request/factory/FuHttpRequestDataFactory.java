@@ -4,21 +4,31 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.apidoc.pojo.annotation.*;
 import com.wdf.fudoc.apidoc.pojo.bo.RootParamBO;
+import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.request.global.FuRequestWindowData;
+import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.spring.SpringConfigManager;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.FuDocUtils;
+import com.wdf.fudoc.util.GenFuDocUtils;
+import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -31,6 +41,38 @@ import java.util.Objects;
  * @date 2022-09-18 19:24:15
  */
 public class FuHttpRequestDataFactory {
+
+
+    public static FuHttpRequestData build(Project project, PsiClass psiClass, FuDocContext fuDocContext) {
+        FuHttpRequestData request;
+        //获取当前接口的唯一标识
+        Module module = ModuleUtil.findModuleForPsiElement(psiClass);
+        String moduleId = FuDocUtils.getModuleId(module);
+        //获取当前操作的方法
+        PsiMethod targetMethod = PsiClassUtils.getTargetMethod(fuDocContext.getTargetElement());
+        if (Objects.isNull(targetMethod)) {
+            PsiMethod[] methods = psiClass.getMethods();
+            if (methods.length <= 0) {
+                return null;
+            }
+            targetMethod = methods[0];
+        }
+        String methodId = PsiClassUtils.getMethodId(targetMethod);
+        //当前接口的唯一标识
+        String apiKey = FuDocUtils.genApiKey(moduleId, methodId);
+        request = FuRequestManager.getRequest(project, apiKey);
+        if (Objects.isNull(request)) {
+            List<FuDocRootParamData> fuDocRootParamDataList = GenFuDocUtils.genRootParam(fuDocContext, psiClass);
+            if (CollectionUtils.isEmpty(fuDocRootParamDataList)) {
+                //没有可以请求的方法
+                return null;
+            }
+            FuDocRootParamData fuDocRootParamData = fuDocRootParamDataList.get(0);
+            //获取当前所属模块
+            request = FuHttpRequestDataFactory.build(module, fuDocRootParamData);
+        }
+        return request;
+    }
 
     public static FuHttpRequestData build(Module module, FuDocRootParamData fuDocRootParamData) {
         FuHttpRequestData fuHttpRequestData = new FuHttpRequestData();

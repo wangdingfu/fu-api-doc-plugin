@@ -6,7 +6,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentManager;
 import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.common.datakey.FuDocDataKey;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -20,6 +23,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -68,11 +73,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         setContent(this.rootPanel);
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        this.requestTabView.initRootPane();
-        super.paintComponent(g);
-    }
+
 
     @Override
     public @Nullable Object getData(@NotNull @NonNls String dataId) {
@@ -85,7 +86,6 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
         this.requestTabView.initData(httpRequestData);
-        this.requestTabView.initRootPane();
         this.responseTabView.initData(httpRequestData);
     }
 
@@ -99,5 +99,11 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         ApplicationManager.getApplication().invokeLater(() -> {
             this.responseTabView.initData(fuHttpRequestData);
         });
+    }
+
+
+    public void initRootPane(){
+        this.requestTabView.initRootPane();
+        this.responseTabView.initRootPane();
     }
 }
