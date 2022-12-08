@@ -13,8 +13,8 @@ import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.tab.RequestTabView;
-import com.wdf.fudoc.request.tab.ResponseTabView;
+import com.wdf.fudoc.request.tab.request.RequestTabView;
+import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.util.PopupUtils;
@@ -49,6 +49,7 @@ public class HttpDialogView implements HttpCallback {
     /**
      * 当前项目
      */
+    @Getter
     private final Project project;
 
     /**

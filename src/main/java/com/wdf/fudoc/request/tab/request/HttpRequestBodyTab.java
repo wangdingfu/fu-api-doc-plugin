@@ -1,4 +1,4 @@
-package com.wdf.fudoc.request.tab;
+package com.wdf.fudoc.request.tab.request;
 
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
@@ -11,6 +11,7 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
+import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.ChooseFileTableUtils;
 import icons.FuDocIcons;

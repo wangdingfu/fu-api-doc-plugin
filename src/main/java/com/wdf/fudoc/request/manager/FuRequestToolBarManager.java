@@ -5,7 +5,8 @@ import com.intellij.openapi.actionSystem.*;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.constants.enumtype.RequestDialog;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.tab.RequestTabView;
+import com.wdf.fudoc.request.tab.request.RequestTabView;
+import com.wdf.fudoc.request.view.FuRequestSettingView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import icons.FuDocIcons;
@@ -49,14 +50,21 @@ public class FuRequestToolBarManager {
      */
     private final RequestDialog requestDialog;
 
+    /**
+     * 配置面板
+     */
+    private final FuRequestSettingView fuRequestSettingView;
+
 
     public FuRequestToolBarManager(HttpDialogView httpDialogView) {
         this.httpDialogView = httpDialogView;
+        this.fuRequestSettingView = new FuRequestSettingView(httpDialogView.getProject());
         this.requestDialog = RequestDialog.HTTP_DIALOG;
     }
 
     public FuRequestToolBarManager(FuRequestWindow fuRequestWindow) {
         this.fuRequestWindow = fuRequestWindow;
+        this.fuRequestSettingView = new FuRequestSettingView(fuRequestWindow.getProject());
         this.requestDialog = RequestDialog.TOOL_WINDOW;
     }
 
@@ -146,7 +154,10 @@ public class FuRequestToolBarManager {
         defaultActionGroup.add(new AnAction("Setting", "Setting", AllIcons.General.Settings) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                System.out.println("点击了设置按钮");
+                if (fuRequestSettingView.showAndGet()) {
+                    //保存数据
+                    fuRequestSettingView.apply();
+                }
             }
         });
 

@@ -5,17 +5,12 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentManager;
 import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.common.datakey.FuDocDataKey;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.tab.RequestTabView;
-import com.wdf.fudoc.request.tab.ResponseTabView;
-import com.wdf.fudoc.test.view.TestRequestFrom;
+import com.wdf.fudoc.request.tab.request.RequestTabView;
+import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import lombok.Getter;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -23,8 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -41,6 +34,9 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     @Getter
     private final ToolWindow toolWindow;
 
+    @Getter
+    private final Project project;
+
     /**
      * 请求面板
      */
@@ -53,9 +49,9 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     private final ResponseTabView responseTabView;
 
 
-
     public FuRequestWindow(@NotNull Project project, ToolWindow toolWindow) {
         super(Boolean.TRUE, Boolean.TRUE);
+        this.project = project;
         this.toolWindow = toolWindow;
         this.rootPanel = new JPanel(new BorderLayout());
         JSplitPane splitPane = new JSplitPane();
@@ -72,7 +68,6 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.rootPanel.add(splitPane, BorderLayout.CENTER);
         setContent(this.rootPanel);
     }
-
 
 
     @Override
@@ -102,7 +97,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     }
 
 
-    public void initRootPane(){
+    public void initRootPane() {
         this.requestTabView.initRootPane();
         this.responseTabView.initRootPane();
     }

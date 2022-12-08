@@ -1,4 +1,4 @@
-package com.wdf.fudoc.request.tab;
+package com.wdf.fudoc.request.tab.request;
 
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONUtil;
