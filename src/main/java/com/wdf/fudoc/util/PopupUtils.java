@@ -49,7 +49,6 @@ public class PopupUtils {
                 .setCancelOnClickOutside(false)
                 // 在其他窗口打开时取消
                 .setCancelOnOtherWindowOpen(false)
-                .setNormalWindowLevel(true)
                 .setCancelOnWindowDeactivation(false);
         if (Objects.nonNull(focusComponent)) {
             addMouseListeners(mainComponent, focusComponent);

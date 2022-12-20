@@ -10,7 +10,7 @@
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
     <!-- idea版本需要大于2021.1 -->
-    <idea-version since-build="221" until-build="221.*"/>
+    <idea-version since-build="213" until-build="213.*"/>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
@@ -51,6 +51,13 @@
                              id="fu.doc.setting.general"
                              groupId="fu.doc.setting"
                              displayName="General"
+                             nonDefaultProject="true"/>
+
+
+        <projectConfigurable instance="com.wdf.fudoc.request.configurable.FuRequestSettingConfigurable"
+                             id="fu.request.setting"
+                             groupId="fu.doc.setting"
+                             displayName="Fu Request"
                              nonDefaultProject="true"/>
 
         <toolWindow id="Fu Request"

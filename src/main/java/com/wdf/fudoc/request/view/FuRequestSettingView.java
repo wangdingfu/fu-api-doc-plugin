@@ -38,7 +38,7 @@ public class FuRequestSettingView extends DialogWrapper {
     public FuRequestSettingView(@Nullable Project project) {
         super(project, true);
         this.rootPanel = new JPanel(new BorderLayout());
-        setTitle("【Fu Request】 Global Settings");
+        setTitle("【Fu Request】设置");
         initSettingPanel();
         init();
     }
