@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.tab;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
@@ -10,6 +11,7 @@ import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-11-05 07:19:12
  */
-public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
+public abstract class AbstractBulkEditTabLinkage<T extends KeyValueTableBO> implements TabBarListener {
 
     /**
      * 获取table组件
@@ -27,7 +29,7 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
      * @param title table所在的tab
      * @return table组件
      */
-    protected abstract FuTableComponent<KeyValueTableBO> getTableComponent(String title);
+    protected abstract FuTableComponent<T> getTableComponent(String title);
 
     /**
      * 获取编辑器组件
@@ -61,12 +63,12 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
     /**
      * 将编辑器中的数据同步到table中
      */
-    private void bulkEditToTableData(String tab) {
-        Map<String, KeyValueTableBO> keyValueTableBOMap = ObjectUtils.listToMap(getTableComponent(tab).getDataList(), KeyValueTableBO::getKey);
-        List<KeyValueTableBO> tableDataList = editorToTableData(tab);
+    protected void bulkEditToTableData(String tab) {
+        Map<String, T> keyValueTableBOMap = ObjectUtils.listToMap(getTableComponent(tab).getDataList(), KeyValueTableBO::getKey);
+        List<T> tableDataList = editorToTableData(tab);
         if (CollectionUtils.isNotEmpty(tableDataList)) {
-            for (KeyValueTableBO keyValueTableBO : tableDataList) {
-                KeyValueTableBO tableBO = keyValueTableBOMap.get(keyValueTableBO.getKey());
+            for (T keyValueTableBO : tableDataList) {
+                T tableBO = keyValueTableBOMap.get(keyValueTableBO.getKey());
                 if (Objects.nonNull(tableBO)) {
                     keyValueTableBO.setDescription(tableBO.getDescription());
                 }
@@ -75,16 +77,16 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
         getTableComponent(tab).setDataList(tableDataList);
     }
 
-    protected List<KeyValueTableBO> editorToTableData() {
+    protected List<T> editorToTableData() {
         return editorToTableData(StringUtils.EMPTY);
     }
 
     /**
      * 将编辑器组件的内容转换成表格的数据
      */
-    protected List<KeyValueTableBO> editorToTableData(String tab) {
+    protected List<T> editorToTableData(String tab) {
         String content = getEditorComponent(tab).getContent();
-        List<KeyValueTableBO> dataList = Lists.newArrayList();
+        List<T> dataList = Lists.newArrayList();
         if (StringUtils.isNotBlank(content)) {
             for (String line : content.split("\n")) {
                 if (StringUtils.isBlank(line)) {
@@ -92,7 +94,7 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
                 }
                 String key = StringUtils.contains(line, ":") ? StringUtils.substringBefore(line, ":") : line;
                 String value = StringUtils.substringAfter(line, ":");
-                KeyValueTableBO keyValueTableBO = new KeyValueTableBO();
+                T keyValueTableBO = newInstance();
                 formatKey(key, keyValueTableBO);
                 keyValueTableBO.setValue(value);
                 dataList.add(keyValueTableBO);
@@ -101,8 +103,13 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
         return dataList;
     }
 
+    @SuppressWarnings("all")
+    private T newInstance() {
+        return ReflectUtil.newInstance((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+    }
 
-    protected String buildBulkEditContent(List<KeyValueTableBO> params) {
+
+    protected String buildBulkEditContent(List<T> params) {
         if (CollectionUtils.isNotEmpty(params)) {
             return params.stream().map(this::toBulkEdit).collect(Collectors.joining("\n"));
         }
@@ -116,18 +123,23 @@ public abstract class AbstractBulkEditTabLinkage implements TabBarListener {
      * @param key             key
      * @param keyValueTableBO key value对象
      */
-    private static void formatKey(String key, KeyValueTableBO keyValueTableBO) {
+    private static <T extends KeyValueTableBO> void formatKey(String key, T keyValueTableBO) {
         if (key.startsWith("//")) {
             keyValueTableBO.setSelect(false);
             keyValueTableBO.setKey(StringUtils.replace(key, "//", "").trim());
         } else {
             keyValueTableBO.setSelect(true);
-            keyValueTableBO.setKey(key);
+            keyValueTableBO.setKey(key.trim());
         }
     }
 
 
-    private String toBulkEdit(KeyValueTableBO keyValueTableBO) {
+    private String toBulkEdit(T keyValueTableBO) {
+        String key = keyValueTableBO.getKey();
+        String value = keyValueTableBO.getValue();
+        if (StringUtils.isBlank(key) || StringUtils.isBlank(value)) {
+            return StringUtils.EMPTY;
+        }
         String prefix = keyValueTableBO.getSelect() ? StringUtils.EMPTY : "//";
         return prefix + keyValueTableBO.getKey() + ":" + keyValueTableBO.getValue();
     }

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-09-17 21:31:31
  */
-public class HttpGetParamsTab extends AbstractBulkEditTabLinkage implements FuTab, HttpCallback {
+public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback {
 
     public static final String PARAMS = "Params";
     /**
@@ -52,6 +52,9 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage implements FuTa
     private FuHttpRequestData httpRequestData;
 
 
+    private FuTabComponent fuTabComponent;
+
+
     /**
      * 初始化GET请求的table组件和批量编辑组件
      *
@@ -72,8 +75,8 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage implements FuTa
      */
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance(PARAMS, null, fuTableComponent.createPanel())
-                .addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
+        fuTabComponent = FuTabComponent.getInstance(PARAMS, null, fuTableComponent.createPanel());
+        return fuTabComponent.addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
     }
 
 
@@ -99,7 +102,11 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage implements FuTa
 
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
-        //do nothing 当前tab页的请求地址已经实时更新到request对象中
+        //将当前激活面板的数据同步到另一个面板 保证两个面板数据一致
+        onClick(null, fuTabComponent.getTabActionBO(PARAMS));
+        //设置最新数据到请求对象中
+        FuRequestData request = fuHttpRequestData.getRequest();
+        request.setParams(this.fuTableComponent.getDataList());
     }
 
 

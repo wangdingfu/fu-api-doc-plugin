@@ -24,7 +24,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 21:30:58
  */
-public class HttpHeaderTab extends AbstractBulkEditTabLinkage implements FuTab, HttpCallback {
+public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback {
 
     /**
      * table组件

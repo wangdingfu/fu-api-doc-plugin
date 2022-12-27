@@ -56,6 +56,9 @@ public class FuHttpRequestBuilder {
     private void addForm(List<KeyValueTableBO> formDataList, boolean isMultiFile) {
         if (CollectionUtils.isNotEmpty(formDataList)) {
             for (KeyValueTableBO keyValueTableBO : formDataList) {
+                if(Objects.isNull(keyValueTableBO.getSelect()) || !keyValueTableBO.getSelect()){
+                    continue;
+                }
                 String requestParamType = keyValueTableBO.getRequestParamType();
                 if (isMultiFile && RequestParamType.FILE.getCode().equals(requestParamType)) {
                     File file = new File(keyValueTableBO.getValue());

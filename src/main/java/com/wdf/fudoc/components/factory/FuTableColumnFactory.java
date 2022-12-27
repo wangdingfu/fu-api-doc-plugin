@@ -7,6 +7,8 @@ import com.wdf.fudoc.apidoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.apidoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.components.FuTableView;
 import com.wdf.fudoc.components.listener.FuTableListener;
+import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
+import com.wdf.fudoc.request.pojo.CommonHeader;
 import com.wdf.fudoc.test.view.bo.*;
 
 import javax.swing.table.TableCellEditor;
@@ -67,6 +69,19 @@ public class FuTableColumnFactory {
         columns.add(new ComboBoxColumn<>("TYPE", KeyValueTableBO::getRequestParamType, KeyValueTableBO::setRequestParamType, RequestParamType.getCodes()));
         columns.add(new StringColumn<>("VALUE", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
         columns.add(new StringColumn<>("DESCRIPTION", KeyValueTableBO::getDescription, KeyValueTableBO::setDescription));
+        return columns;
+    }
+
+
+    /**
+     * 过滤属性table列
+     */
+    public static List<Column> commonHeaders() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", CommonHeader::getSelect, CommonHeader::setSelect));
+        columns.add(new StringColumn<>("请求头KEY", CommonHeader::getKey, CommonHeader::setKey));
+        columns.add(new StringColumn<>("请求头VALUE", CommonHeader::getValue, CommonHeader::setValue));
+        columns.add(new ComboBoxColumn<>("作用范围", CommonHeader::getScope, CommonHeader::setScope, HeaderScope.scopeList()));
         return columns;
     }
 

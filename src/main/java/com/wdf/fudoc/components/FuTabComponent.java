@@ -99,6 +99,10 @@ public class FuTabComponent {
         return new FuTabComponent(title, icon, mainPanel);
     }
 
+    public TabActionBO getTabActionBO(String title) {
+        return tabActionMap.get(title);
+    }
+
 
     public TabInfo builder() {
         TabInfo tabInfo = new TabInfo(this.rootPanel);

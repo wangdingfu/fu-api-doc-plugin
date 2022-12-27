@@ -28,7 +28,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 21:32:03
  */
-public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage implements FuTab, HttpCallback {
+public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback {
 
     public static final String BODY = "Body";
     public static final String FORM_DATA = "form-data";

@@ -17,27 +17,27 @@ public class KeyValueTableBO {
     /**
      * 默认选中
      */
-    private Boolean select;
+    protected Boolean select;
 
     /**
      * 请求参数类型 默认文本
      */
-    private String requestParamType;
+    protected String requestParamType;
 
     /**
      * key
      */
-    private String key;
+    protected String key;
 
     /**
      * value
      */
-    private String value;
+    protected String value;
 
     /**
      * 描述信息
      */
-    private String description;
+    protected String description;
 
     public KeyValueTableBO() {
         this.select = true;

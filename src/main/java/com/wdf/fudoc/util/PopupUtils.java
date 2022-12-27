@@ -1,9 +1,8 @@
 package com.wdf.fudoc.util;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.ui.popup.*;
+import com.intellij.openapi.util.Computable;
 import com.intellij.ui.ActiveComponent;
 import com.intellij.ui.WindowMoveListener;
 import org.jetbrains.annotations.NotNull;
