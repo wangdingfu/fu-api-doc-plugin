@@ -4,6 +4,7 @@ import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
+import com.intellij.psi.PsiElement;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.RelativeFont;
 import com.intellij.ui.components.JBLabel;
@@ -85,9 +86,13 @@ public class HttpDialogView implements HttpCallback {
     @Getter
     private FuRequestToolBarManager fuRequestToolBarManager;
 
+    @Getter
+    private PsiElement psiElement;
 
-    public HttpDialogView(Project project) {
+
+    public HttpDialogView(Project project, PsiElement psiElement) {
         this.project = project;
+        this.psiElement = psiElement;
         this.requestTabView = new RequestTabView(this.project, this);
         this.responseTabView = new ResponseTabView(this.project);
         this.messageComponent = new MessageComponent();
@@ -177,8 +182,8 @@ public class HttpDialogView implements HttpCallback {
      *
      * @param project 当前项目
      */
-    public static void popup(Project project, FuHttpRequestData fuHttpRequestData) {
-        HttpDialogView httpDialogView = new HttpDialogView(project);
+    public static void popup(Project project, PsiElement psiElement, FuHttpRequestData fuHttpRequestData) {
+        HttpDialogView httpDialogView = new HttpDialogView(project, psiElement);
         httpDialogView.initData(fuHttpRequestData);
         FuRequestToolBarManager fuRequestToolBarManager = httpDialogView.getFuRequestToolBarManager();
         httpDialogView.setJbPopup(PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), fuRequestToolBarManager.getPinStatus()));

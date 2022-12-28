@@ -144,4 +144,10 @@ public class PsiClassUtils {
         }
         return psiClassName + "#" + name + "(" + StringUtils.join(paramTypes, ",") + ")";
     }
+
+    public static String getMethodName(PsiMethod psiMethod) {
+        String psiClassName = ((PsiClassImpl) psiMethod.getParent()).getQualifiedName();
+        String name = psiMethod.getName();
+        return psiClassName + "#" + name;
+    }
 }

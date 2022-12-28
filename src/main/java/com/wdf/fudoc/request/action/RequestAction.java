@@ -40,8 +40,14 @@ public class RequestAction extends AbstractClassAction {
     @Override
     protected void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext) {
         FuHttpRequestData request = FuHttpRequestDataFactory.build(e.getProject(), psiClass, fuDocContext);
-        if (Objects.nonNull(request)) {
-            HttpDialogView.popup(e.getProject(), request);
+        if (Objects.isNull(request)) {
+            //获取最近一次请求记录
+            request = FuRequestManager.getRecent(e.getProject(), FuDocUtils.getModuleId(ModuleUtil.findModuleForPsiElement(psiClass)));
+            if (Objects.isNull(request)) {
+                return;
+            }
         }
+        HttpDialogView.popup(e.getProject(), fuDocContext.getTargetElement(), request);
+
     }
 }

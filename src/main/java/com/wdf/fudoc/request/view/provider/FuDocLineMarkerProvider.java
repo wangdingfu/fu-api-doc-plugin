@@ -62,6 +62,7 @@ public class FuDocLineMarkerProvider implements LineMarkerProvider {
                 if (Objects.nonNull(content)) {
                     FuRequestWindow fuRequestWindow = (FuRequestWindow) content.getComponent();
                     fuRequestWindow.initData(request);
+                    fuRequestWindow.setPsiElement(fuDocContext.getTargetElement());
                     toolWindow.getContentManager().setSelectedContent(content);
                 }
             }

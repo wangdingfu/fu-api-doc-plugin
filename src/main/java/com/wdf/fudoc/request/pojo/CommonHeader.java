@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 /**
  * 公共请求头对象
  *
@@ -20,6 +22,11 @@ public class CommonHeader extends KeyValueTableBO {
      */
     private String scope;
 
+
+    /**
+     * 如果是当前项目 则为当前项目id 其他为空字符串
+     */
+    private List<String> projectIdList;
 
     /**
      * 判断当前请求头的值是否为变量(用{{}}括住为变量)

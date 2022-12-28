@@ -17,19 +17,18 @@ import com.wdf.fudoc.apidoc.pojo.bo.RootParamBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import com.wdf.fudoc.request.global.FuRequestWindowData;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
-import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.spring.SpringConfigManager;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -51,11 +50,7 @@ public class FuHttpRequestDataFactory {
         //获取当前操作的方法
         PsiMethod targetMethod = PsiClassUtils.getTargetMethod(fuDocContext.getTargetElement());
         if (Objects.isNull(targetMethod)) {
-            PsiMethod[] methods = psiClass.getMethods();
-            if (methods.length <= 0) {
-                return null;
-            }
-            targetMethod = methods[0];
+            return null;
         }
         String methodId = PsiClassUtils.getMethodId(targetMethod);
         //当前接口的唯一标识
@@ -83,7 +78,11 @@ public class FuHttpRequestDataFactory {
         fuHttpRequestData.setApiKey(moduleId + ":" + fuDocRootParamData.getApiId());
         FuRequestData fuRequestData = new FuRequestData();
         //接口名称
-        fuHttpRequestData.setApiName(fuDocRootParamData.getTitle());
+        String title = fuDocRootParamData.getTitle();
+        if (StringUtils.isBlank(title)) {
+            title = PsiClassUtils.getMethodName(fuDocRootParamData.getPsiMethod());
+        }
+        fuHttpRequestData.setApiName(title);
         //接口请求类型
         fuRequestData.setRequestType(RequestType.getRequestType(fuDocRootParamData.getRequestType()));
         //设置接口url

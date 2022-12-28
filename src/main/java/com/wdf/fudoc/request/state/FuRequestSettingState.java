@@ -4,10 +4,17 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
+import com.wdf.fudoc.common.ServiceHelper;
+import com.wdf.fudoc.request.data.FuRequestSettingData;
 import com.wdf.fudoc.request.global.GlobalRequestData;
+import com.wdf.fudoc.request.pojo.CommonHeader;
+import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Data;
+import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -18,34 +25,34 @@ import java.util.Objects;
  */
 @Data
 @State(name = "FuRequestSettingState", storages = {@Storage("fuRequestSetting.xml")})
-public class FuRequestSettingState implements PersistentStateComponent<GlobalRequestData> {
+public class FuRequestSettingState implements PersistentStateComponent<FuRequestSettingData> {
 
     /**
-     * 接口请求数据全局对象 项目级别
+     * 【Fu Request】配置数据
      */
-    private GlobalRequestData globalRequestData;
+    private FuRequestSettingData fuRequestSettingData;
 
 
-    public static FuRequestSettingState getInstance(Project project) {
-        return project.getService(FuRequestSettingState.class);
+    public static FuRequestSettingState getInstance() {
+        return ServiceHelper.getService(FuRequestSettingState.class);
     }
 
-    public static GlobalRequestData getData(Project project) {
-        FuRequestSettingState instance = getInstance(project);
-        return instance.getState();
+    public static FuRequestSettingData getData() {
+        return getInstance().getState();
     }
+
 
     @Override
-    public GlobalRequestData getState() {
-        if (Objects.isNull(this.globalRequestData)) {
-            this.globalRequestData = new GlobalRequestData();
+    public FuRequestSettingData getState() {
+        if (Objects.isNull(this.fuRequestSettingData)) {
+            this.fuRequestSettingData = new FuRequestSettingData();
         }
-        return this.globalRequestData;
+        return this.fuRequestSettingData;
     }
 
     @Override
-    public void loadState(@NotNull GlobalRequestData state) {
-        this.globalRequestData = state;
+    public void loadState(@NotNull FuRequestSettingData state) {
+        this.fuRequestSettingData = state;
     }
 
 }

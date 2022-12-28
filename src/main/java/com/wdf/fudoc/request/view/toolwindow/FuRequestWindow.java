@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.psi.PsiElement;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.common.datakey.FuDocDataKey;
 import com.wdf.fudoc.request.HttpCallback;
@@ -12,6 +13,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +49,11 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
      * 响应面板
      */
     private final ResponseTabView responseTabView;
+
+
+    @Setter
+    @Getter
+    private PsiElement psiElement;
 
 
     public FuRequestWindow(@NotNull Project project, ToolWindow toolWindow) {

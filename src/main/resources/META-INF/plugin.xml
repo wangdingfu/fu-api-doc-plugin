@@ -28,6 +28,8 @@
 
         <projectService serviceImplementation="com.wdf.fudoc.request.state.FuRequestState"/>
 
+        <applicationService serviceImplementation="com.wdf.fudoc.request.state.FuRequestSettingState"/>
+
         <!-- 应用级别的service（所有项目都是这一个实例 不跟项目隔离） 项目级别的service则使用projectService标签 -->
         <applicationService serviceInterface="com.wdf.fudoc.apidoc.mock.MockDataService" serviceImplementation="com.wdf.fudoc.apidoc.mock.AutoMockDataServiceImpl"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSetting"/>

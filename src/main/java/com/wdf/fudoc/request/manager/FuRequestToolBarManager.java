@@ -1,15 +1,25 @@
 package com.wdf.fudoc.request.manager;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
+import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
+import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.request.configurable.FuRequestSettingConfigurable;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.constants.enumtype.RequestDialog;
+import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
+import com.wdf.fudoc.util.FuDocUtils;
 import icons.FuDocIcons;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -51,16 +61,19 @@ public class FuRequestToolBarManager {
      */
     private final RequestDialog requestDialog;
 
+    private final PsiElement psiElement;
 
 
     public FuRequestToolBarManager(HttpDialogView httpDialogView) {
         this.httpDialogView = httpDialogView;
         this.requestDialog = RequestDialog.HTTP_DIALOG;
+        this.psiElement = httpDialogView.getPsiElement();
     }
 
     public FuRequestToolBarManager(FuRequestWindow fuRequestWindow) {
         this.fuRequestWindow = fuRequestWindow;
         this.requestDialog = RequestDialog.TOOL_WINDOW;
+        this.psiElement = fuRequestWindow.getPsiElement();
     }
 
     public static FuRequestToolBarManager getInstance(HttpDialogView httpDialogView) {
@@ -131,11 +144,24 @@ public class FuRequestToolBarManager {
 
         defaultActionGroup.addSeparator();
 
-        //添加刷新事件 JbossJbpmIcons.Icons.Bpmn.Events.Start_16_Message
+        //添加刷新事件
         defaultActionGroup.add(new AnAction("Refresh", "Refresh", AllIcons.Actions.Refresh) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                System.out.println("点击了刷新按钮");
+                if (Objects.nonNull(psiElement)) {
+                    PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
+                    PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class);
+                    if (Objects.isNull(psiClass) || !FuDocUtils.isController(psiClass) || !FuDocUtils.isControllerMethod(psiMethod)) {
+                        return;
+                    }
+                    FuDocContext fuDocContext = new FuDocContext();
+                    fuDocContext.setSettingData(FuDocSetting.getSettingData());
+                    fuDocContext.setTargetElement(psiElement);
+                    FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(e.getProject(), psiClass, fuDocContext);
+                    if (Objects.nonNull(fuHttpRequestData)) {
+                        initData(fuHttpRequestData);
+                    }
+                }
             }
         });
 
@@ -161,10 +187,19 @@ public class FuRequestToolBarManager {
         defaultActionGroup.add(new AnAction("帮助文档", "Help", FuDocIcons.FU_DOC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                System.out.println("点击了帮助文档按钮");
+                BrowserUtil.browse(UrlConstants.DOCUMENT);
             }
         });
 
+    }
+
+
+    private void initData(FuHttpRequestData fuHttpRequestData) {
+        if (RequestDialog.HTTP_DIALOG.equals(this.requestDialog) && Objects.nonNull(this.httpDialogView)) {
+            this.httpDialogView.initData(fuHttpRequestData);
+        } else if (RequestDialog.TOOL_WINDOW.equals(this.requestDialog) && Objects.nonNull(this.fuRequestWindow)) {
+            this.fuRequestWindow.initData(fuHttpRequestData);
+        }
     }
 
 

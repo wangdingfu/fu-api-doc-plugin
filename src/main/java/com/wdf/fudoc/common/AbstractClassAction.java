@@ -1,8 +1,6 @@
 package com.wdf.fudoc.common;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;

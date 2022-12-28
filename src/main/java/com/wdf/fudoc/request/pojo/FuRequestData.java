@@ -1,11 +1,16 @@
 package com.wdf.fudoc.request.pojo;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.URLUtil;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.request.data.FuRequestSettingData;
+import com.wdf.fudoc.request.state.FuRequestSettingState;
 import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -59,7 +64,6 @@ public class FuRequestData {
      * 请求body内容(POST请求参数)
      */
     private FuRequestBodyData body;
-
 
     /**
      * 获取一个完整的请求地址

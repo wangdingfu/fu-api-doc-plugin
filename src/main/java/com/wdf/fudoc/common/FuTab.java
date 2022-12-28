@@ -15,4 +15,5 @@ public interface FuTab extends TabsListener {
      * 获取tab
      */
     TabInfo getTabInfo();
+
 }

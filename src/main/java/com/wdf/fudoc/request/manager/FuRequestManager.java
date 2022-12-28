@@ -1,12 +1,15 @@
 package com.wdf.fudoc.request.manager;
 
 import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.global.GlobalRequestData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.state.FuRequestState;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,9 +29,41 @@ public class FuRequestManager {
         if (Objects.isNull(fuHttpRequestData)) {
             return;
         }
+        String apiKey = fuHttpRequestData.getApiKey();
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> requestDataMap = data.getRequestDataMap();
-        requestDataMap.put(fuHttpRequestData.getApiKey(), JSONUtil.toJsonStr(fuHttpRequestData));
+        requestDataMap.put(apiKey, JSONUtil.toJsonStr(fuHttpRequestData));
+        Map<String, List<String>> recentRequestKeyMap = data.getRecentRequestKeyMap();
+        String moduleId = fuHttpRequestData.getModuleId();
+        List<String> apiKeyList = recentRequestKeyMap.get(moduleId);
+        if (Objects.isNull(apiKeyList)) {
+            apiKeyList = Lists.newArrayList();
+            recentRequestKeyMap.put(moduleId, apiKeyList);
+        }
+        apiKeyList.remove(apiKey);
+        //控制每个module只缓存最近100个请求
+        if (apiKeyList.size() > 100) {
+            apiKeyList.remove(0);
+        }
+        apiKeyList.add(apiKey);
+    }
+
+
+    /**
+     * 获取最近一次请求记录
+     *
+     * @param project  当前项目
+     * @param moduleId 当前module标识
+     * @return 当前module最近一次请求记录
+     */
+    public static FuHttpRequestData getRecent(Project project, String moduleId) {
+        GlobalRequestData data = FuRequestState.getData(project);
+        Map<String, List<String>> recentRequestKeyMap = data.getRecentRequestKeyMap();
+        List<String> apiKeyList = recentRequestKeyMap.get(moduleId);
+        if (CollectionUtils.isNotEmpty(apiKeyList)) {
+            return getRequest(project, apiKeyList.get(apiKeyList.size() - 1));
+        }
+        return null;
     }
 
 
