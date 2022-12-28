@@ -10,7 +10,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.4.0"
+    id("org.jetbrains.intellij") version "1.11.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
 }
@@ -29,14 +29,14 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.20")
-    annotationProcessor("org.projectlombok:lombok:1.18.20")
+    compileOnly("org.projectlombok:lombok:1.18.24")
+    annotationProcessor("org.projectlombok:lombok:1.18.24")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
     implementation("org.freemarker:freemarker:2.3.31")
-    implementation("cn.hutool:hutool-json:5.8.5")
-    implementation("cn.hutool:hutool-http:5.8.5")
-    implementation("cn.hutool:hutool-crypto:5.8.5")
-    implementation("cn.hutool:hutool-system:5.8.5")
+    implementation("cn.hutool:hutool-json:5.8.10")
+    implementation("cn.hutool:hutool-http:5.8.10")
+    implementation("cn.hutool:hutool-crypto:5.8.10")
+    implementation("cn.hutool:hutool-system:5.8.10")
 }
 
 

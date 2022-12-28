@@ -1,6 +1,7 @@
 package com.wdf.fudoc.test.action.editor;
 
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.toolbar.floating.AbstractFloatingToolbarProvider;
 import com.intellij.openapi.editor.toolbar.floating.FloatingToolbarComponent;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +16,8 @@ public class FuDocEditorFloatingToolbarProvider extends AbstractFloatingToolbarP
     }
 
     @Override
-    public void register(@NotNull FloatingToolbarComponent component, @NotNull Disposable parentDisposable) {
-        super.register(component, parentDisposable);
+    public void register(@NotNull DataContext dataContext, @NotNull FloatingToolbarComponent component, @NotNull Disposable parentDisposable) {
+        super.register(dataContext, component, parentDisposable);
         component.scheduleShow();
     }
 

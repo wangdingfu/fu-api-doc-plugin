@@ -3,7 +3,6 @@ package com.wdf.fudoc.common;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.actionSystem.UpdateInBackground;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
@@ -24,7 +23,7 @@ import java.util.Objects;
  * @date 2022-08-18 16:13:45
  */
 @Slf4j
-public abstract class AbstractClassAction extends AnAction implements UpdateInBackground {
+public abstract class AbstractClassAction extends AnAction {
 
     protected boolean isShow(JavaClassType javaClassType) {
         return true;
