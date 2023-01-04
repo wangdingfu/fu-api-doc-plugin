@@ -37,6 +37,7 @@ dependencies {
     implementation("cn.hutool:hutool-http:5.8.10")
     implementation("cn.hutool:hutool-crypto:5.8.10")
     implementation("cn.hutool:hutool-system:5.8.10")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
 }
 
 
