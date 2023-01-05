@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 生成每一个接口文档所需的数据（渲染一个接口的标准对象）
  * @author wangdingfu
- * @descption: 生成每一个接口文档所需的数据（渲染一个接口的标准对象）
  * @date 2022-05-09 23:38:40
  */
 @Getter
@@ -30,10 +30,6 @@ public class FuDocItemData extends CommonItemData {
      */
     private String requestExampleType;
 
-    /**
-     * url上的请求参数
-     */
-    private List<FuDocParamData> urlParams;
 
     /**
      * 请求参数

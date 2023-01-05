@@ -17,11 +17,11 @@ public enum RequestParamType {
     /**
      * 文本
      */
-    TEXT("Text","文本"),
+    TEXT("text","文本"),
     /**
      * 文件
      */
-    FILE("File","文件"),
+    FILE("file","文件"),
 
 
     ;

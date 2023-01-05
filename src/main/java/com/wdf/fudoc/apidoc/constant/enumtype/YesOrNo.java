@@ -24,4 +24,13 @@ public enum YesOrNo {
     public static boolean getByDesc(String desc) {
         return YES.getDesc().equals(desc);
     }
+
+    public static int getCode(String desc) {
+        for (YesOrNo value : YesOrNo.values()) {
+            if (value.getDesc().equals(desc)) {
+                return value.getCode();
+            }
+        }
+        return 0;
+    }
 }

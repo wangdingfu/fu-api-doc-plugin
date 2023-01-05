@@ -27,6 +27,11 @@ public class BaseSyncConfigData {
     private String syncApiUrl;
 
     /**
+     * 添加接口分类接口地址
+     */
+    private String addCategoryUrl;
+
+    /**
      * 第三方接口文档系统项目配置
      */
     private Map<String, ApiSystemProjectConfigData> projectConfigDataMap;

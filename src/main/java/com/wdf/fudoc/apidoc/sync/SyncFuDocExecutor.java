@@ -6,7 +6,7 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncFuDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncShowDocStrategy;
-import com.wdf.fudoc.apidoc.sync.strategy.SyncToYapiStrategy;
+import com.wdf.fudoc.apidoc.sync.strategy.SyncToYApiStrategy;
 import com.wdf.fudoc.common.ServiceHelper;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ public class SyncFuDocExecutor {
     private static final Map<ApiDocSystem, SyncFuDocStrategy> syncFuDocMap = new ConcurrentHashMap<>();
 
     static {
-        syncFuDocMap.put(ApiDocSystem.YAPI, ServiceHelper.getService(SyncToYapiStrategy.class));
+        syncFuDocMap.put(ApiDocSystem.YAPI, ServiceHelper.getService(SyncToYApiStrategy.class));
         syncFuDocMap.put(ApiDocSystem.SHOW_DOC, ServiceHelper.getService(SyncShowDocStrategy.class));
     }
 

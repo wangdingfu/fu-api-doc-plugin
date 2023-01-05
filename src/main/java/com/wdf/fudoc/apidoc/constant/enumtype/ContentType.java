@@ -11,19 +11,14 @@ import lombok.Getter;
 @Getter
 public enum ContentType {
 
-
-    /**
-     * GET 请求 不存在content-type属性
-     */
-    GET("get", ""),
-    PATH_VARIABLE("path_variable", ""),
-
     /**
      * POST 请求
      */
     URLENCODED("application/x-www-form-urlencoded", ""),
-    FORM_DATA("multipart/form-data", ""),
-    JSON("content-type:application/json", "");
+    FORM_DATA("multipart/form-data", "form"),
+    JSON("content-type:application/json", "json"),
+    RAW("content-type:application/raw", "raw"),
+    ;
 
     private String type;
 

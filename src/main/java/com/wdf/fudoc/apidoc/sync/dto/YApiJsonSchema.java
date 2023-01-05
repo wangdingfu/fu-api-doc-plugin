@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class YApiJsonSchema {
 
     /**
@@ -40,4 +42,9 @@ public class YApiJsonSchema {
      * 当type为object时 properties有值
      */
     private Map<String, YApiJsonSchema> properties;
+
+    /**
+     * mock的数据
+     */
+    private YApiMock mock;
 }

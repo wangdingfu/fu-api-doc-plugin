@@ -63,9 +63,9 @@ public class FuDocContext {
     private PsiElement targetElement;
 
     /**
-     * 同步接口文档至第三方系统时 之前同步的接口不在开启弹框
+     * 默认不开启弹窗
      */
-    private boolean syncDialog = false;
+    private boolean syncDialog = true;
 
     private Set<String> classIdSet = new HashSet<>();
 

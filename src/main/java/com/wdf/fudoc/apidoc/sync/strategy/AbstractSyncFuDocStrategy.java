@@ -16,6 +16,8 @@ import com.wdf.fudoc.apidoc.sync.data.SyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.dto.*;
 import com.wdf.fudoc.apidoc.sync.view.SyncApiView;
+import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.ProjectUtils;
@@ -37,7 +39,7 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      *
      * @param baseSyncConfigData 第三方接口文档系统相关配置
      */
-    protected abstract void checkConfig(BaseSyncConfigData baseSyncConfigData);
+    protected abstract BaseSyncConfigData checkConfig(BaseSyncConfigData baseSyncConfigData);
 
 
     /**
@@ -54,13 +56,13 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      *
      * @param result 同步接口文档请求的结果
      */
-    protected abstract String checkSyncResult(String result);
+    protected abstract String checkSyncResult(SyncApiData syncApiData, String result);
 
 
     @Override
     public void syncFuDoc(FuDocContext fuDocContext, PsiClass psiClass, BaseSyncConfigData configData) {
         //1、检查三方接口文档配置
-        checkConfig(configData);
+        configData = checkConfig(configData);
 
         //2、检查三方接口文档系统是否能建立连接
 
@@ -76,6 +78,13 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
 
         //5、同步接口文档
         boolean syncResult = fuDocContext.isSyncDialog() ? syncApiForAuto(apiStructureTree, fuDocItemDataList, configData, psiClass) : syncApiForDialog(apiStructureTree, fuDocItemDataList, configData);
+
+        if(syncResult){
+            //发出成功通知
+            FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_SUCCESS));
+        }else {
+            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_FAIL));
+        }
 
     }
 
@@ -96,13 +105,21 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         //获取Controller上的标题
         ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
         String commentTitle = apiDocCommentData.getCommentTitle();
-        String category = StringUtils.isNotBlank(commentTitle) ? commentTitle : psiClass.getQualifiedName();
+        String category = StringUtils.isNotBlank(commentTitle) ? commentTitle : psiClass.getName();
         String categoryId = null;
         //需要判断当前分类是否存在 不存在则需要创建分类
         List<ApiCategoryDTO> apiCategoryList = current.getApiCategoryList();
         if (CollectionUtils.isNotEmpty(apiCategoryList)) {
             Optional<ApiCategoryDTO> first = apiCategoryList.stream().filter(f -> f.getCategoryName().equals(category)).findFirst();
-            categoryId = first.isPresent() ? first.get().getCategoryId() : createCategory(current).getCategoryId();
+            categoryId = first.map(ApiCategoryDTO::getCategoryId).orElse(null);
+        }
+        if(StringUtils.isBlank(categoryId)){
+            AddApiCategoryDTO addApiCategoryDTO = new AddApiCategoryDTO();
+            addApiCategoryDTO.setProjectId(current.getProjectId());
+            addApiCategoryDTO.setProjectName(current.getProjectName());
+            addApiCategoryDTO.setProjectToken(current.getProjectToken());
+            addApiCategoryDTO.setCategoryName(category);
+            categoryId = createCategory(baseSyncConfigData, addApiCategoryDTO).getCategoryId();
         }
         //无需开启弹框 直接加载之前同步记录的数据发起同步接口
         for (FuDocItemData fuDocItemData : fuDocItemDataList) {
@@ -110,7 +127,8 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             syncApiData.setCategoryName(category);
             syncApiData.setCategoryId(categoryId);
             //组装同步接口文档所需要的数据 同步接口
-            syncSingleApi(syncApiData, baseSyncConfigData);
+            boolean result = syncSingleApi(syncApiData, baseSyncConfigData);
+
         }
         return true;
     }
@@ -161,23 +179,11 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         String result = HttpUtil.post(configData.getBaseUrl() + configData.getSyncApiUrl(), syncDaJson, 6000);
 
         //7、校验返回结果
-        String errorMsg = checkSyncResult(result);
+        String errorMsg = checkSyncResult(syncApiData, result);
         if (StringUtils.isNotBlank(errorMsg)) {
             FuDocNotification.notifyError(errorMsg);
             return false;
         }
-
-        //8、新增同步记录
-        List<SyncApiRecordData> syncRecordList = configData.getSyncRecordList();
-        if (Objects.isNull(syncRecordList)) {
-            syncRecordList = Lists.newArrayList();
-            configData.setSyncRecordList(syncRecordList);
-        }
-        SyncApiRecordData recordData = new SyncApiRecordData();
-        BeanUtil.copyProperties(syncApiData, recordData);
-        recordData.setSyncTime(DatePattern.NORM_DATETIME_FORMAT.format(new Date()));
-        recordData.setApiKey(syncApiData.getFuDocItemData().getApiKey());
-        syncRecordList.add(recordData);
         return true;
     }
 

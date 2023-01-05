@@ -1,15 +1,17 @@
 package com.wdf.fudoc.apidoc.assemble;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.module.ModuleUtil;
 import com.wdf.fudoc.apidoc.assemble.handler.ParamValueExecutor;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
+import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
+import com.wdf.fudoc.apidoc.constant.enumtype.MockResultType;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.apidoc.helper.AssembleHelper;
 import com.wdf.fudoc.apidoc.helper.CustomerValueHelper;
 import com.wdf.fudoc.apidoc.helper.MockDataHelper;
-import com.wdf.fudoc.apidoc.mock.AutoMockDataServiceImpl;
 import com.wdf.fudoc.apidoc.mock.MockDataService;
 import com.wdf.fudoc.apidoc.pojo.annotation.*;
 import com.wdf.fudoc.apidoc.pojo.bo.AssembleBO;
@@ -22,6 +24,7 @@ import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.util.FuDocUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.*;
@@ -78,6 +81,8 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                     fuDocItemData.setDocNo(classNo + "." + (docNo++));
                     //组装公共信息
                     assembleCommonInfo(fuDocContext, methodInfoDesc, fuDocItemData);
+                    //设置接口全局唯一标识
+                    fuDocItemData.setApiKey(FuDocUtils.genApiKey(FuDocUtils.getModuleId(ModuleUtil.findModuleForPsiElement(classInfoDesc.getPsiClass())), methodInfoDesc.getMethodId()));
                     //组装接口文档相关信息
                     assembleItemInfo(fuDocContext, methodInfoDesc, fuDocItemData);
                     resultList.add(fuDocItemData);
@@ -135,7 +140,14 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         fuDocItemData.setRequestExampleType(mockResultBo.getRequestExampleType());
         fuDocItemData.setResponseExample(mockResultBo.getResponseExample());
         fuDocItemData.setResponseExampleType(mockResultBo.getResponseExampleType());
-
+        //POST (form-data)
+        if (RequestType.POST.getRequestType().equals(fuDocItemData.getRequestType())) {
+            if (MockResultType.JSON.getCode().equals(fuDocItemData.getRequestExampleType())) {
+                fuDocItemData.setContentType(ContentType.JSON.getDesc());
+            } else {
+                fuDocItemData.setContentType(ContentType.FORM_DATA.getDesc());
+            }
+        }
         //组装扩展数据
         fuDocItemData.setFudoc(CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext));
     }

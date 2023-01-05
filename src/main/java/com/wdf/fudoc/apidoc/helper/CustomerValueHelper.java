@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.helper;
 
+import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.CommentTagType;
 import com.wdf.fudoc.apidoc.data.CustomerSettingData;
 import com.wdf.fudoc.apidoc.data.SettingData;
@@ -9,6 +10,7 @@ import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.data.CommentTagData;
 import com.wdf.fudoc.apidoc.pojo.desc.BaseInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +29,7 @@ public class CustomerValueHelper {
         SettingData settingData = fuDocContext.getSettingData();
         CustomerSettingData customerSettingData = settingData.getCustomerSettingData();
         List<SettingDynamicValueData> customerValueList;
-        if(Objects.nonNull(customerSettingData) && CollectionUtils.isNotEmpty((customerValueList = customerSettingData.getSetting_customer_value()))){
+        if (Objects.nonNull(customerSettingData) && CollectionUtils.isNotEmpty((customerValueList = customerSettingData.getSetting_customer_value()))) {
             for (SettingDynamicValueData dynamicValueData : customerValueList) {
                 fuDocMap.put(dynamicValueData.getAlias(), getValue(baseInfoDesc, dynamicValueData));
             }
@@ -61,6 +63,12 @@ public class CustomerValueHelper {
                 }
             });
         }
+
+        //pathVariable标识
+        if (baseInfoDesc.exists(AnnotationConstants.PATH_VARIABLE)) {
+            fuDocMap.put(FuDocConstants.PATH_VARIABLE, true);
+        }
+
         return fuDocMap;
     }
 

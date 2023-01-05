@@ -77,6 +77,7 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
             objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.GENERICS_TYPE, commonObjectType.getFuDocObjectType());
             genericsInfoDesc.setValue(mockCommonType(genericsInfoDesc));
             objectInfoDesc.setChildList(Lists.newArrayList(genericsInfoDesc));
+            objectInfoDesc.setChildTypeView(commonObjectType.getName());
         } else {
             //非基本数据类型和常用对象类型 需要深度解析
             genericsParseObjectBO.setGenericsMap(parseObjectBO.getGenericsMap());
@@ -92,6 +93,7 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
                 }
                 objectInfoDesc.setChildList(childList);
                 objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.GENERICS_TYPE, fuDocObjectType);
+                objectInfoDesc.setChildTypeView(genericsInfoDesc.getTypeView());
             }
         }
         Object value;

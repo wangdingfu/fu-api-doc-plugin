@@ -25,6 +25,8 @@ public interface FuDocConstants {
     String SPRING_PARAM = "springParam";
     String ROOT_PARAM_TYPE = "rootParamType";
 
+    String PATH_VARIABLE = "path_variable";
+
 
     String DEFAULT_HOST = "http://localhost";
 

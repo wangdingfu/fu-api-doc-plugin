@@ -40,6 +40,11 @@ public class FuDocParamData {
     private String paramType;
 
     /**
+     * 当paramType为array时 childParamType为array下具体的参数类型
+     */
+    private String childParamType;
+
+    /**
      * 是否必填
      */
     private String paramRequire;

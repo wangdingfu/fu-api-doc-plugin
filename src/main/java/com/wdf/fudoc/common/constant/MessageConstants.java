@@ -47,4 +47,10 @@ public interface MessageConstants {
      */
     String NOTIFY_NOT_FUND_CLASS = "notify.not.fund.class";
 
+
+
+
+    String SYNC_YAPI_SUCCESS = "fudoc.sync.yapi.success";
+    String SYNC_YAPI_FAIL = "fudoc.sync.yapi.fail";
+
 }

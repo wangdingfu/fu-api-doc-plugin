@@ -3,6 +3,7 @@ package com.wdf.fudoc.apidoc.sync.strategy;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
+import com.wdf.fudoc.apidoc.sync.dto.AddApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiStructureTreeDTO;
@@ -36,10 +37,10 @@ public interface SyncFuDocStrategy {
     /**
      * 创建分类
      *
-     * @param apiProjectDTO 分类所属的项目信息
+     * @param addApiCategoryDTO 添加分类需要的信息
      * @return 分类对象
      */
-    ApiCategoryDTO createCategory(ApiProjectDTO apiProjectDTO);
+    ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, AddApiCategoryDTO addApiCategoryDTO);
 
 
 }

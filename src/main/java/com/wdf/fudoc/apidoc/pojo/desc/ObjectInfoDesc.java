@@ -42,6 +42,11 @@ public class ObjectInfoDesc extends BaseInfoDesc {
     private String typeView;
 
     /**
+     * 子对象类型
+     */
+    private String childTypeView;
+
+    /**
      * 字段名称
      */
     private String name;
