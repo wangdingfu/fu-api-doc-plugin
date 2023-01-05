@@ -25,6 +25,7 @@ public class FuResponseData {
     /**
      * http响应对象
      */
+    @JsonIgnore
     private HttpResponse httpResponse;
 
     /**
