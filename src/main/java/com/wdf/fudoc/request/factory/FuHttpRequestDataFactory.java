@@ -23,7 +23,7 @@ import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.spring.SpringConfigManager;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -57,17 +57,26 @@ public class FuHttpRequestDataFactory {
         String apiKey = FuDocUtils.genApiKey(moduleId, methodId);
         request = FuRequestManager.getRequest(project, apiKey);
         if (Objects.isNull(request)) {
-            List<FuDocRootParamData> fuDocRootParamDataList = GenFuDocUtils.genRootParam(fuDocContext, psiClass);
-            if (CollectionUtils.isEmpty(fuDocRootParamDataList)) {
-                //没有可以请求的方法
-                return null;
-            }
-            FuDocRootParamData fuDocRootParamData = fuDocRootParamDataList.get(0);
-            //获取当前所属模块
-            request = FuHttpRequestDataFactory.build(module, fuDocRootParamData);
+            request = build(fuDocContext, psiClass, module);
         }
         return request;
     }
+
+    public static FuHttpRequestData build(FuDocContext fuDocContext, PsiClass psiClass) {
+        return build(fuDocContext, psiClass, ModuleUtil.findModuleForPsiElement(psiClass));
+    }
+
+    public static FuHttpRequestData build(FuDocContext fuDocContext, PsiClass psiClass, Module module) {
+        List<FuDocRootParamData> fuDocRootParamDataList = GenFuDocUtils.genRootParam(fuDocContext, psiClass);
+        if (CollectionUtils.isEmpty(fuDocRootParamDataList)) {
+            //没有可以请求的方法
+            return null;
+        }
+        FuDocRootParamData fuDocRootParamData = fuDocRootParamDataList.get(0);
+        //获取当前所属模块
+        return FuHttpRequestDataFactory.build(module, fuDocRootParamData);
+    }
+
 
     public static FuHttpRequestData build(Module module, FuDocRootParamData fuDocRootParamData) {
         FuHttpRequestData fuHttpRequestData = new FuHttpRequestData();

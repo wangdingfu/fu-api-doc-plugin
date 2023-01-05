@@ -9,6 +9,8 @@ import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 
 /**
  * Fu Doc 存储配置内容
@@ -30,6 +32,10 @@ public class FuDocSecuritySetting implements PersistentStateComponent<FuDocSecur
      */
     private String uniqId;
 
+    /**
+     * 提示ID集合
+     */
+    private List<String> tipId;
 
 
     public static FuDocSecuritySetting getInstance() {

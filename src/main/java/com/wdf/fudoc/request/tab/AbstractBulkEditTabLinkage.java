@@ -6,7 +6,7 @@ import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

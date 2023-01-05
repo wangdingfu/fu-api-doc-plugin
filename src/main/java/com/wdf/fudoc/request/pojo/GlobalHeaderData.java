@@ -1,7 +1,7 @@
 package com.wdf.fudoc.request.pojo;
 
 import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import lombok.Getter;
 import lombok.Setter;
 

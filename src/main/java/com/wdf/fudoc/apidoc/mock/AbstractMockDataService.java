@@ -14,7 +14,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;

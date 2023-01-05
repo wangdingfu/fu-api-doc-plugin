@@ -1,7 +1,7 @@
 package com.wdf.fudoc.components.listener;
 
 import com.wdf.fudoc.components.bo.TabActionBO;
-import com.wdf.fudoc.test.view.bo.BarPanelBO;
+import com.wdf.fudoc.components.bo.BarPanelBO;
 
 /**
  * @author wangdingfu

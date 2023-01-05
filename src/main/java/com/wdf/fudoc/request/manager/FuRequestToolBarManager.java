@@ -157,7 +157,7 @@ public class FuRequestToolBarManager {
                     FuDocContext fuDocContext = new FuDocContext();
                     fuDocContext.setSettingData(FuDocSetting.getSettingData());
                     fuDocContext.setTargetElement(psiElement);
-                    FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(e.getProject(), psiClass, fuDocContext);
+                    FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(fuDocContext, psiClass);
                     if (Objects.nonNull(fuHttpRequestData)) {
                         initData(fuHttpRequestData);
                     }

@@ -14,6 +14,11 @@ import java.util.List;
 public class CommonItemData {
 
     /**
+     * 接口唯一标识
+     */
+    private String apiKey;
+
+    /**
      * 接口标题
      */
     private String title;

@@ -1,20 +1,20 @@
-package com.wdf.fudoc.test.view.bo;
+package com.wdf.fudoc.components.bo;
 
 import com.wdf.fudoc.components.factory.TableCellEditorFactory;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import javax.swing.table.TableCellEditor;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
  * @author wangdingfu
- * @date 2022-09-06 11:08:57
+ * @date 2022-08-16 22:40:37
  */
 @Getter
 @Setter
-public class ComboBoxColumn<T> extends Column{
+public class StringColumn<T> extends Column{
 
     /**
      * get方法
@@ -25,14 +25,14 @@ public class ComboBoxColumn<T> extends Column{
      */
     private BiConsumer<T, String> setFun;
 
-    public ComboBoxColumn(String name, Function<T, String> getFun, BiConsumer<T, String> setFun) {
+    public StringColumn(String name, Function<T, String> getFun, BiConsumer<T, String> setFun) {
         super(name, TableCellEditorFactory.createTextFieldEditor());
         this.getFun = getFun;
         this.setFun = setFun;
     }
 
-    public ComboBoxColumn(String name, Function<T, String> getFun, BiConsumer<T, String> setFun, Set<String> items) {
-        super(name, TableCellEditorFactory.createComboBoxEditor(false, items));
+    public StringColumn(String name, Function<T, String> getFun, BiConsumer<T, String> setFun, TableCellEditor editor) {
+        super(name, editor);
         this.getFun = getFun;
         this.setFun = setFun;
     }
@@ -40,6 +40,6 @@ public class ComboBoxColumn<T> extends Column{
 
     @Override
     public Class<?> getColumnClass() {
-        return Enum.class;
+        return String.class;
     }
 }

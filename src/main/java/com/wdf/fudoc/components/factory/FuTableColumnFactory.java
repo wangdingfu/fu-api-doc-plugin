@@ -5,13 +5,10 @@ import com.wdf.fudoc.apidoc.constant.enumtype.DynamicDataType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.apidoc.pojo.bo.FilterFieldBO;
-import com.wdf.fudoc.components.FuTableView;
-import com.wdf.fudoc.components.listener.FuTableListener;
+import com.wdf.fudoc.components.bo.*;
 import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
 import com.wdf.fudoc.request.pojo.CommonHeader;
-import com.wdf.fudoc.test.view.bo.*;
 
-import javax.swing.table.TableCellEditor;
 import java.util.List;
 
 /**

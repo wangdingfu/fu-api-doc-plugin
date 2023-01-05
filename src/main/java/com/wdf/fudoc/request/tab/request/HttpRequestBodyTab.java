@@ -12,7 +12,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.ChooseFileTableUtils;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;

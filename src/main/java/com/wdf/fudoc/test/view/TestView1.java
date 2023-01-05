@@ -14,7 +14,7 @@ import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import lombok.Getter;

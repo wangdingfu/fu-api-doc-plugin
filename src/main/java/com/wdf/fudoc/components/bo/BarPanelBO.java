@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.view.bo;
+package com.wdf.fudoc.components.bo;
 
 import com.wdf.fudoc.apidoc.constant.enumtype.ActionType;
 import lombok.AllArgsConstructor;

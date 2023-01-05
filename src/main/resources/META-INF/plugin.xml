@@ -100,14 +100,22 @@
             </action>
         </group>
 
+        <!-- http请求相关动作 -->
+        <group id="wdf.fudoc.sync" popup="false" compact="true">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Sync Fu DOc">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
+            </action>
+        </group>
 
-        <!-- 测试功能点相关动作 -->
+
+<!--        &lt;!&ndash; 测试功能点相关动作 &ndash;&gt;
         <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test" description="Test"/>
             <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
                     description="Test table"/>
-        </group>
+        </group>-->
 
 
 

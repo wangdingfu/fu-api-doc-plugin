@@ -8,15 +8,15 @@ import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.data.FuRequestSettingData;
 import com.wdf.fudoc.request.pojo.CommonHeader;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.state.FuRequestSettingState;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -47,9 +47,7 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> i
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Header", null, fuTableComponent.createPanel())
-                .addBulkEditBar(this.fuEditorComponent.getMainPanel(), this)
-                .builder();
+        return FuTabComponent.getInstance("Header", null, fuTableComponent.createPanel()).addBulkEditBar(this.fuEditorComponent.getMainPanel(), this).builder();
     }
 
 
@@ -70,7 +68,11 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> i
             headerList.addAll(BeanUtil.copyToList(commonHeaderList, KeyValueTableBO.class));
         }
         if (CollectionUtils.isNotEmpty(headers)) {
-            headerList.addAll(headers);
+            for (KeyValueTableBO header : headers) {
+                if (headerList.stream().noneMatch(a -> a.getKey().equals(header.getKey()))) {
+                    headerList.add(header);
+                }
+            }
         }
         this.fuTableComponent.setDataList(headerList);
     }

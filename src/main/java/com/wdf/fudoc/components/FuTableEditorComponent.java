@@ -3,7 +3,7 @@ package com.wdf.fudoc.components;
 import com.intellij.util.Function;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.table.TableModelEditor;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

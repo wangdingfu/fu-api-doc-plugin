@@ -57,8 +57,15 @@ public class FuDocContext {
      */
     private boolean enableValidMessage = true;
 
-
+    /**
+     * 触发当前事件时鼠标在java类中的节点
+     */
     private PsiElement targetElement;
+
+    /**
+     * 同步接口文档至第三方系统时 之前同步的接口不在开启弹框
+     */
+    private boolean syncDialog = false;
 
     private Set<String> classIdSet = new HashSet<>();
 

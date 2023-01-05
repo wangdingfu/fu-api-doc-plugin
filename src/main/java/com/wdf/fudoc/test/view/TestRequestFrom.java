@@ -9,7 +9,7 @@ import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
-import com.wdf.fudoc.test.view.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import icons.FuDocIcons;
