@@ -1,4 +1,4 @@
-package com.wdf.fudoc.apidoc.sync.dto;
+package com.wdf.fudoc.apidoc.sync.data;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,17 +6,22 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 接口文档项目对象（一个项目会有多个分类）
+ * Yapi项目配置
  *
  * @author wangdingfu
- * @date 2023-01-01 18:42:05
+ * @date 2023-01-05 13:33:11
  */
 @Getter
 @Setter
-public class ApiProjectDTO {
+public class YapiProjectConfigData {
 
     /**
-     * 分组ID
+     * 项目token
+     */
+    private String projectToken;
+
+    /**
+     * 分组id
      */
     private String groupId;
 
@@ -36,13 +41,7 @@ public class ApiProjectDTO {
     private String projectName;
 
     /**
-     * 项目token
+     * 对应代码中的module模块集合（表示将这些module的接口同步到Yapi的这个项目中）
      */
-    private String projectToken;
-
-
-    /**
-     * 分类集合
-     */
-    private List<ApiCategoryDTO> apiCategoryList;
+    private List<String> moduleIdList;
 }

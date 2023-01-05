@@ -38,9 +38,9 @@ public class AssembleHelper {
                     continue;
                 }
                 if (objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.IS_ATTR)) {
-                    String parentParamNo = Objects.isNull(parent) ? StringUtils.EMPTY : parent.getParamNo();
+                    String parentParamNo = Objects.isNull(parent) ? FuDocConstants.ROOT : parent.getParamNo();
                     fuDocParamData.setParentParamNo(parentParamNo);
-                    fuDocParamData.setParamNo(StringUtils.isNotBlank(parentParamNo) ? parentParamNo + i : i + "");
+                    fuDocParamData.setParamNo(FuDocConstants.ROOT.equals(parentParamNo) ? i + "" : parentParamNo + i);
                     fuDocParamData.setParamName(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_NAME, objectInfoDesc));
                     fuDocParamData.setParamDesc(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_COMMENT, objectInfoDesc));
                     fuDocParamData.setParamType(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_TYPE_VIEW, objectInfoDesc));

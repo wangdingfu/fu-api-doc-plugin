@@ -41,7 +41,7 @@ public class ApiSystemProjectConfigData {
      * 接口挂载的菜单和项目接口的映射关系
      * key:接口挂载的菜单全路径  value:接口所属的目录集合
      */
-    private Map<String, List<String>> apiMenuMapping;
+    private Map<String, List<String>> apiCategoryMapping;
 
 
 }

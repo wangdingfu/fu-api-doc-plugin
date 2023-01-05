@@ -38,4 +38,9 @@ public class CommonItemData {
      * 接口请求类型
      */
     private String requestType;
+
+    /**
+     * 请求内容类型
+     */
+    private String contentType;
 }

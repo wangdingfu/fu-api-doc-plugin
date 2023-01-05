@@ -31,6 +31,11 @@ public class FuDocItemData extends CommonItemData {
     private String requestExampleType;
 
     /**
+     * url上的请求参数
+     */
+    private List<FuDocParamData> urlParams;
+
+    /**
      * 请求参数
      */
     private List<FuDocParamData> requestParams;

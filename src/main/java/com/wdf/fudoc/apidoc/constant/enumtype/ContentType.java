@@ -1,24 +1,29 @@
 package com.wdf.fudoc.apidoc.constant.enumtype;
 
+import lombok.Getter;
+
 /**
+ * 请求数据类型
+ *
  * @author wangdingfu
- * @descption: 请求数据类型
  * @date 2022-05-17 23:33:21
  */
+@Getter
 public enum ContentType {
 
 
     /**
-     * 正常GET请求
+     * GET 请求 不存在content-type属性
      */
-    URLENCODED("application/x-www-form-urlencoded",""),
+    GET("get", ""),
+    PATH_VARIABLE("path_variable", ""),
+
     /**
-     * GET请求  参数需要替换url PathVariable
+     * POST 请求
      */
-    URLENCODED1("application/x-www-form-urlencoded",""),
-    FORM_DATA("multipart/form-data",""),
-    JSON("content-type:application/json","")
-    ;
+    URLENCODED("application/x-www-form-urlencoded", ""),
+    FORM_DATA("multipart/form-data", ""),
+    JSON("content-type:application/json", "");
 
     private String type;
 

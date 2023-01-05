@@ -20,4 +20,10 @@ public class ApiStructureTreeDTO {
      */
     private List<ApiGroupDTO> groupList;
 
+
+    /**
+     * 当前项目的配置
+     */
+    private ApiProjectDTO current;
+
 }

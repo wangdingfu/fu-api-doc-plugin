@@ -41,6 +41,11 @@ public class ApiTreeKeyDTO {
      */
     private String categoryName;
 
+    /**
+     * 项目token
+     */
+    private String projectToken;
+
 
     public String getApiTreeKey() {
         return this.groupName + ":" + this.projectName + "" + this.categoryName;

@@ -5,7 +5,10 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.http.HttpUtil;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
+import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
+import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
+import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiData;
@@ -15,7 +18,6 @@ import com.wdf.fudoc.apidoc.sync.dto.*;
 import com.wdf.fudoc.apidoc.sync.view.SyncApiView;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.util.GenFuDocUtils;
-import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -73,48 +75,65 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         ApiStructureTreeDTO apiStructureTree = getApiStructureTree(psiClass);
 
         //5、同步接口文档
-        syncApiList(apiStructureTree, fuDocItemDataList, configData, fuDocContext.isSyncDialog());
+        boolean syncResult = fuDocContext.isSyncDialog() ? syncApiForAuto(apiStructureTree, fuDocItemDataList, configData, psiClass) : syncApiForDialog(apiStructureTree, fuDocItemDataList, configData);
+
     }
 
 
     /**
-     * 同步接口文档
+     * 同步api到第三方接口文档系统-基于默认规则同步 不开启弹框让用户选择
      *
      * @param apiStructureTree   第三方接口文档系统层级结构
      * @param fuDocItemDataList  同步的接口集合
      * @param baseSyncConfigData 第三方接口文档配置
-     * @param enableDialog       同步接口文档至第三方系统时 之前同步的接口不在开启弹框
      */
-    protected void syncApiList(ApiStructureTreeDTO apiStructureTree, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData baseSyncConfigData, boolean enableDialog) {
-        if (enableDialog) {
-            //开启弹出开关（此处）
-            Map<String, ApiTreeKeyDTO> apiTreeKeyMap = ObjectUtils.listToMap(buildApiPositionKey(apiStructureTree), ApiTreeKeyDTO::getApiTreeKey);
-            //判断当前接口之前是否同步过 已经同步过的则不弹框
-            List<SyncApiRecordData> syncRecordList = baseSyncConfigData.getSyncRecordList();
-            Map<String, SyncApiRecordData> syncApiRecordDataMap = ObjectUtils.listToMap(syncRecordList, SyncApiRecordData::getApiKey);
-            if (CollectionUtils.isNotEmpty(syncRecordList) && fuDocItemDataList.stream().allMatch(a -> isCanSync(syncApiRecordDataMap.get(a.getApiKey()), apiTreeKeyMap.keySet()))) {
-                //无需开启弹框 直接加载之前同步记录的数据发起同步接口
-                for (FuDocItemData fuDocItemData : fuDocItemDataList) {
-                    //获取上一次同步的记录
-                    SyncApiRecordData syncApiRecordData = syncApiRecordDataMap.get(fuDocItemData.getApiKey());
-                    ApiTreeKeyDTO apiTreeKeyDTO = apiTreeKeyMap.get(buildApiTreeKey(syncApiRecordData));
-                    //组装同步接口文档所需要的数据 同步接口
-                    syncSingleApi(buildSyncApiData(apiTreeKeyDTO, fuDocItemData), baseSyncConfigData);
-                }
-                return;
-            }
+    private boolean syncApiForAuto(ApiStructureTreeDTO apiStructureTree, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData baseSyncConfigData, PsiClass psiClass) {
+        ApiProjectDTO current = apiStructureTree.getCurrent();
+        if (Objects.isNull(current)) {
+            FuDocNotification.notifyError("没有当前项目的配置 无法同步接口");
+            return false;
         }
+        //获取Controller上的标题
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
+        String commentTitle = apiDocCommentData.getCommentTitle();
+        String category = StringUtils.isNotBlank(commentTitle) ? commentTitle : psiClass.getQualifiedName();
+        String categoryId = null;
+        //需要判断当前分类是否存在 不存在则需要创建分类
+        List<ApiCategoryDTO> apiCategoryList = current.getApiCategoryList();
+        if (CollectionUtils.isNotEmpty(apiCategoryList)) {
+            Optional<ApiCategoryDTO> first = apiCategoryList.stream().filter(f -> f.getCategoryName().equals(category)).findFirst();
+            categoryId = first.isPresent() ? first.get().getCategoryId() : createCategory(current).getCategoryId();
+        }
+        //无需开启弹框 直接加载之前同步记录的数据发起同步接口
+        for (FuDocItemData fuDocItemData : fuDocItemDataList) {
+            SyncApiData syncApiData = buildSyncApiData(current, fuDocItemData);
+            syncApiData.setCategoryName(category);
+            syncApiData.setCategoryId(categoryId);
+            //组装同步接口文档所需要的数据 同步接口
+            syncSingleApi(syncApiData, baseSyncConfigData);
+        }
+        return true;
+    }
 
+
+    /**
+     * 同步api到第三方接口文档系统-基于弹框让用户选择同步到哪个分类规则
+     *
+     * @param apiStructureTree   第三方接口文档系统层级结构
+     * @param fuDocItemDataList  同步的接口集合
+     * @param baseSyncConfigData 第三方接口文档配置
+     */
+    private boolean syncApiForDialog(ApiStructureTreeDTO apiStructureTree, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData baseSyncConfigData) {
         //弹框让用户选择需要同步的目录
         SyncApiView syncApiView = new SyncApiView(ProjectUtils.getCurrProject());
         if (!syncApiView.showAndGet()) {
             //选择取消 则不同步接口
-            return;
+            return false;
         }
         List<SyncApiTableData> tableDataList = syncApiView.getTableDataList();
         if (CollectionUtils.isEmpty(tableDataList)) {
             //没有选择接口同步 直接返回
-            return;
+            return false;
         }
         //获取用户选择好的接口循环同步
         for (SyncApiTableData syncApiTableData : tableDataList) {
@@ -124,6 +143,7 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             //更新表格中每一条接口的同步结果
             syncApiTableData.setSyncStatus(syncResult ? "同步成功" : "同步失败");
         }
+        return tableDataList.stream().allMatch(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus()));
     }
 
 
@@ -156,7 +176,7 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         SyncApiRecordData recordData = new SyncApiRecordData();
         BeanUtil.copyProperties(syncApiData, recordData);
         recordData.setSyncTime(DatePattern.NORM_DATETIME_FORMAT.format(new Date()));
-        recordData.setApiKey(syncApiData.getSyncApiData().getApiKey());
+        recordData.setApiKey(syncApiData.getFuDocItemData().getApiKey());
         syncRecordList.add(recordData);
         return true;
     }
@@ -164,15 +184,14 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
     /**
      * 构建同步接口数据对象
      *
-     * @param apiTreeKeyDTO 能够标识接口唯一位置的对象
+     * @param data          能够标识接口唯一位置的对象
      * @param fuDocItemData 接口数据
-     * @param <T>           标识接口唯一位置的对象泛型
      * @return 同步接口文档的数据对象
      */
-    private <T extends ApiTreeKeyDTO> SyncApiData buildSyncApiData(T apiTreeKeyDTO, FuDocItemData fuDocItemData) {
+    private SyncApiData buildSyncApiData(Object data, FuDocItemData fuDocItemData) {
         SyncApiData syncApiData = new SyncApiData();
-        BeanUtil.copyProperties(apiTreeKeyDTO, syncApiData);
-        syncApiData.setSyncApiData(fuDocItemData);
+        BeanUtil.copyProperties(data, syncApiData);
+        syncApiData.setFuDocItemData(fuDocItemData);
         return syncApiData;
     }
 

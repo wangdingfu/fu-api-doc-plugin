@@ -16,10 +16,19 @@ import lombok.Setter;
 @Setter
 public class SyncApiTableData extends ApiTreeKeyDTO {
 
+    /**
+     * 接口唯一标识
+     */
     private String apiKey;
 
+    /**
+     * 接口名称
+     */
     private String apiName;
 
+    /**
+     * 接口地址
+     */
     private String apiUrl;
 
     /**

@@ -3,6 +3,8 @@ package com.wdf.fudoc.apidoc.sync.strategy;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
+import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
+import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiStructureTreeDTO;
 
 
@@ -30,6 +32,14 @@ public interface SyncFuDocStrategy {
      * @param psiClass     同步的接口所属的class对象
      */
     void syncFuDoc(FuDocContext fuDocContext, PsiClass psiClass, BaseSyncConfigData baseSyncConfigData);
+
+    /**
+     * 创建分类
+     *
+     * @param apiProjectDTO 分类所属的项目信息
+     * @return 分类对象
+     */
+    ApiCategoryDTO createCategory(ApiProjectDTO apiProjectDTO);
 
 
 }

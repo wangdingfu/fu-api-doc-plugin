@@ -23,6 +23,6 @@ public class SyncApiData extends ApiTreeKeyDTO {
     /**
      * 需要同步的接口
      */
-    private FuDocItemData syncApiData;
+    private FuDocItemData fuDocItemData;
 
 }
