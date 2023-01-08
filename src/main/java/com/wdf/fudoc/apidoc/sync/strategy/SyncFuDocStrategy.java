@@ -1,12 +1,18 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
 import com.intellij.psi.PsiClass;
+import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
+import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
+import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.AddApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiStructureTreeDTO;
+import com.wdf.fudoc.common.ServiceHelper;
+
+import java.util.List;
 
 
 /**
@@ -16,7 +22,6 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiStructureTreeDTO;
  * @date 2022-12-31 15:51:27
  */
 public interface SyncFuDocStrategy {
-
 
     /**
      * 获取三方接口文档系统接口结构树（分组-->项目--->分类）
@@ -41,6 +46,16 @@ public interface SyncFuDocStrategy {
      * @return 分类对象
      */
     ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, AddApiCategoryDTO addApiCategoryDTO);
+
+
+    /**
+     * 分类集合
+     *
+     * @param projectName        项目名称
+     * @param baseSyncConfigData 配置数据
+     * @return 第三方接口文档系统的接口分类集合
+     */
+    List<ApiCategoryDTO> categoryList(String projectName, BaseSyncConfigData baseSyncConfigData);
 
 
 }

@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,11 +21,13 @@ public class ApiCategoryDTO {
     /**
      * 分类ID
      */
+    @JsonProperty("_id")
     private String categoryId;
 
     /**
      * 分类名称
      */
+    @JsonProperty("name")
     private String categoryName;
 
     /**

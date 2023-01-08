@@ -17,12 +17,12 @@ import java.util.Map;
  */
 @Slf4j
 public final class JsonUtil {
- 
- 
+
+
     private static ObjectMapper MAPPER = new ObjectMapper();
     // 日起格式化
     private static final String STANDARD_FORMAT = "yyyy-MM-dd HH:mm:ss";
- 
+
     static {
         //对象的所有字段全部列入
         MAPPER.setSerializationInclusion(JsonInclude.Include.ALWAYS);
@@ -35,10 +35,10 @@ public final class JsonUtil {
         //忽略 在json字符串中存在，但是在java对象中不存在对应属性的情况。防止错误
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
- 
+
     private JsonUtil() {
     }
- 
+
     /**
      * 对象转Json格式字符串
      *
@@ -56,8 +56,8 @@ public final class JsonUtil {
             return null;
         }
     }
- 
- 
+
+
     /**
      * Object TO Json String 字符串输出(输出空字符)
      *
@@ -82,8 +82,8 @@ public final class JsonUtil {
         }
         return null;
     }
- 
- 
+
+
     /**
      * Json 转为 Jave Bean
      *
@@ -103,8 +103,8 @@ public final class JsonUtil {
         }
         return null;
     }
- 
- 
+
+
     /**
      * Json 转为 Map
      *
@@ -125,8 +125,8 @@ public final class JsonUtil {
         }
         return null;
     }
- 
- 
+
+
     /**
      * Json 转 List, Class 集合中泛型的类型，非集合本身
      *
@@ -134,19 +134,23 @@ public final class JsonUtil {
      * @param <T>  对象类型
      * @return List
      */
-    public static <T> List<T> toList(String text) {
+    public static <T> List<T> toList(String text, Class<T> clazz) {
         if (StringUtils.isEmpty(text)) {
             return null;
         }
         try {
-            return toObject(text, new TypeReference<List<T>>() {
-            });
+            return MAPPER.readValue(text, getCollectionType(MAPPER, List.class, clazz));
         } catch (Exception e) {
             log.error("method=toList() is convert error, errorMsg:{}", e.getMessage(), e);
         }
         return null;
     }
- 
+
+    public static JavaType getCollectionType(ObjectMapper mapper, Class<?> collectionClass, Class<?>... elementClasses) {
+        return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+    }
+
+
     /**
      * Json 转 Object
      */
@@ -170,6 +174,7 @@ public final class JsonUtil {
 
     /**
      * 字符串转对象
+     *
      * @param str
      * @param clazz
      * @param <T>

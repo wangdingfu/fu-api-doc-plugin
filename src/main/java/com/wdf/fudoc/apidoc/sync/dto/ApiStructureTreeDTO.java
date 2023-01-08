@@ -16,9 +16,9 @@ import java.util.List;
 public class ApiStructureTreeDTO {
 
     /**
-     * 分组集合
+     * 项目集合
      */
-    private List<ApiGroupDTO> groupList;
+    private List<ApiProjectDTO> apiProjectList;
 
 
     /**

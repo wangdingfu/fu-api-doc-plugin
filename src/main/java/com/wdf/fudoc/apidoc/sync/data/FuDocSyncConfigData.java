@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 【Fu Doc】接口同步配置数据
@@ -19,18 +20,19 @@ import java.util.Map;
 public class FuDocSyncConfigData {
 
     /**
-     * 当前开启的三方接口文档系统
+     * 当前开启的三方接口文档系统 默认开启yapi
      */
-    private String enable;
-
+    private String enable = ApiDocSystem.YAPI.getCode();
 
     /**
-     * 同步配置数据集合
+     * yapi配置数据
      */
-    private Map<String, BaseSyncConfigData> syncConfigDataMap = new HashMap<>();
+    private YapiConfigData yapi = new YapiConfigData();
 
-
-
+    /**
+     * showDoc配置数据
+     */
+    private ShowDocConfigData showDoc = new ShowDocConfigData();
 
 
     /**
@@ -42,11 +44,18 @@ public class FuDocSyncConfigData {
 
 
     public BaseSyncConfigData getEnableConfigData() {
-        if (StringUtils.isBlank(this.enable)) {
-            //获取默认的配置
-            this.enable = ApiDocSystem.YAPI.getCode();
+        ApiDocSystem instance;
+        if (Objects.nonNull(instance = ApiDocSystem.getInstance(this.enable))) {
+            switch (instance) {
+                case YAPI -> {
+                    return this.yapi;
+                }
+                case SHOW_DOC -> {
+                    return this.showDoc;
+                }
+            }
         }
-        return this.syncConfigDataMap.get(enable);
+        return this.yapi;
     }
 
 

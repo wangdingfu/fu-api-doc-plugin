@@ -17,7 +17,7 @@ import java.util.Map;
 public class ApiSystemProjectConfigData {
 
     /**
-     * 分组ID（showDoc系统的groupId默认为default）
+     * 分组ID
      */
     private String groupId;
 

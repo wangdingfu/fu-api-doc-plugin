@@ -41,16 +41,26 @@ public interface MessageConstants {
     String FU_REQUEST_DOWNLOAD_NOT_FILE = "fudoc.request.download.not.file";
 
 
-
     /**
      * 通知无法获取到类
      */
     String NOTIFY_NOT_FUND_CLASS = "notify.not.fund.class";
 
 
-
-
     String SYNC_YAPI_SUCCESS = "fudoc.sync.yapi.success";
     String SYNC_YAPI_FAIL = "fudoc.sync.yapi.fail";
+
+
+    String SYNC_YAPI_BASE_TITLE = "fudoc.sync.yapi.base.title";
+    String SYNC_YAPI_MAIN_TITLE = "fudoc.sync.yapi.main.title";
+
+
+    String SYNC_YAPI_TOKEN = "fodoc.sync.yapi.token";
+    String SYNC_YAPI_TOKEN_TITLE = "fodoc.sync.yapi.token.title";
+
+
+    String SYNC_YAPI_URL_TIP = "fodoc.sync.yapi.url.tip";
+
+    String SYNC_YAPI_GET_PROJECT_FAIL = "fudoc.sync.yapi.project.fail";
 
 }

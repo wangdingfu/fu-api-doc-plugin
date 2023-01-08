@@ -74,8 +74,10 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      */
     @Override
     public void addRow() {
-        //添加一条默认的空数据
-        T data = newInstance();
+        T data = (Objects.nonNull(fuTableListener) && fuTableListener.customerAddData()) ? fuTableListener.addData() : newInstance();
+        if (Objects.isNull(data)) {
+            return;
+        }
         //添加到数据集合中(用于持久化)
         this.dataList.add(data);
         //添加到table中
@@ -153,7 +155,6 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
             }
         }
     }
-
 
 
     public static FuTableComponent<KeyValueTableBO> createKeyValue() {

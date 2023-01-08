@@ -1,4 +1,4 @@
-package com.wdf.fudoc.apidoc.sync.view;
+package com.wdf.fudoc.apidoc.view;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;

@@ -1,14 +1,12 @@
 package com.wdf.fudoc.components.factory;
 
-import cn.hutool.core.util.EnumUtil;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.BooleanTableCellEditor;
-import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.LocalPathCellEditor;
-import org.jdesktop.swingx.JXTable;
+import com.wdf.fudoc.components.TreeTableCellEditor;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -16,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * table单元格编辑器工厂类
@@ -41,6 +38,16 @@ public class TableCellEditorFactory {
      */
     public static TableCellEditor createComboBoxEditor(boolean editable, Set<String> items) {
         return createComboBoxEditor(editable, items.toArray(new String[]{}));
+    }
+
+
+    /**
+     * 创建当前项目module树组件
+     *
+     * @return {@link TableCellEditor}
+     */
+    public static TableCellEditor createModuleTreeEditor() {
+        return new TreeTableCellEditor();
     }
 
     /**

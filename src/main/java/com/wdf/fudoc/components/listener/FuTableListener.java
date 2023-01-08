@@ -65,5 +65,17 @@ public interface FuTableListener<T> {
 
     }
 
+    default boolean customerAddData() {
+        return false;
+    }
+
+    /**
+     * 新增数据时调用 业务可以自己弹框输入内容后将数据返回到table中
+     *
+     * @return 默认返回null 新增一条空数据
+     */
+    default T addData() {
+        return null;
+    }
 
 }

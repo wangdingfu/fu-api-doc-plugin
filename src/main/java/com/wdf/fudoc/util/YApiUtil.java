@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.wdf.fudoc.apidoc.sync.dto.YApiBaseRes;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,6 +28,18 @@ public class YApiUtil {
             Object data = yApiBaseRes.getData();
             if (Objects.nonNull(data)) {
                 return JsonUtil.fromJSON(JSONUtil.toJsonStr(data), clazz);
+            }
+        }
+        return null;
+    }
+
+
+    public static <T> List<T> getDataList(String result, Class<T> clazz) {
+        YApiBaseRes yApiBaseRes = JsonUtil.fromJSON(result, YApiBaseRes.class);
+        if (Objects.nonNull(yApiBaseRes) && yApiBaseRes.success()) {
+            Object data = yApiBaseRes.getData();
+            if (Objects.nonNull(data)) {
+                return JsonUtil.toList(JSONUtil.toJsonStr(data), clazz);
             }
         }
         return null;

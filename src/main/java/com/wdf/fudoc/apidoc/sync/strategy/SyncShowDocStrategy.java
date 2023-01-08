@@ -8,6 +8,8 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiStructureTreeDTO;
 
+import java.util.List;
+
 /**
  * 同步接口文档到showDoc接口文档的实现
  *
@@ -39,6 +41,11 @@ public class SyncShowDocStrategy extends AbstractSyncFuDocStrategy {
 
     @Override
     public ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, AddApiCategoryDTO addApiCategoryDTO) {
+        return null;
+    }
+
+    @Override
+    public List<ApiCategoryDTO> categoryList(String projectName, BaseSyncConfigData baseSyncConfigData) {
         return null;
     }
 }

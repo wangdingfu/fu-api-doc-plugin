@@ -2,7 +2,6 @@ package com.wdf.fudoc.apidoc.sync.strategy;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.MockResultType;
@@ -13,8 +12,11 @@ import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiData;
+import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.YapiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.*;
+import com.wdf.fudoc.apidoc.sync.service.YApiService;
+import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.JsonUtil;
 import com.wdf.fudoc.util.MapListUtil;
@@ -45,7 +47,6 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
             baseSyncConfigData = new YapiConfigData();
         }
         //检查配置
-        baseSyncConfigData.setBaseUrl("http://150.158.164.160:3000");
         baseSyncConfigData.setSyncApiUrl("/api/interface/save");
         baseSyncConfigData.setAddCategoryUrl("/api/interface/add_cat");
         return baseSyncConfigData;
@@ -219,14 +220,25 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
         return new ApiCategoryDTO();
     }
 
+    @Override
+    public List<ApiCategoryDTO> categoryList(String projectName, BaseSyncConfigData baseSyncConfigData) {
+        YApiService service = ServiceHelper.getService(YApiService.class);
+        YapiConfigData yapiConfigData = (YapiConfigData) baseSyncConfigData;
+        YApiProjectTableData yApiProjectTableData = yapiConfigData.getByProjectName(projectName);
+        if (Objects.isNull(yApiProjectTableData)) {
+            return Lists.newArrayList();
+        }
+        return service.categoryList(baseSyncConfigData.getBaseUrl(), yApiProjectTableData.getProjectId() + "", yApiProjectTableData.getProjectToken());
+    }
+
 
     private ApiProjectDTO buildApiTreeKeyDTO() {
         ApiProjectDTO apiProjectDTO = new ApiProjectDTO();
         apiProjectDTO.setGroupId("11");
         apiProjectDTO.setGroupName("个人空间");
         apiProjectDTO.setProjectId("11");
-        apiProjectDTO.setProjectName("test2");
-        apiProjectDTO.setProjectToken("4fb217c42b162c2b250041cbc5edc76a66c3c3bd6c5896fbb7941ef8198f09b8");
+        apiProjectDTO.setProjectName("FuDoc测试");
+        apiProjectDTO.setProjectToken("c726bc0a87275e135fb39a8160131155a7d564a26af3a936efbc8ab4b8491c64");
         return apiProjectDTO;
     }
 }

@@ -37,7 +37,6 @@ public class ComboBoxColumn<T> extends Column{
         this.setFun = setFun;
     }
 
-
     @Override
     public Class<?> getColumnClass() {
         return Enum.class;

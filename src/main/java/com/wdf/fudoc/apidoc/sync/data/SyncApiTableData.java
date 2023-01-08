@@ -16,6 +16,8 @@ import lombok.Setter;
 @Setter
 public class SyncApiTableData extends ApiTreeKeyDTO {
 
+    private Boolean select;
+
     /**
      * 接口唯一标识
      */

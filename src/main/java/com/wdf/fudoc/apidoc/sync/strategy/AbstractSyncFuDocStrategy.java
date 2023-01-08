@@ -1,7 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DatePattern;
 import cn.hutool.http.HttpUtil;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
@@ -15,7 +14,7 @@ import com.wdf.fudoc.apidoc.sync.data.SyncApiData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.dto.*;
-import com.wdf.fudoc.apidoc.sync.view.SyncApiView;
+import com.wdf.fudoc.apidoc.view.SyncApiView;
 import com.wdf.fudoc.common.FuDocMessageBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.notification.FuDocNotification;
@@ -143,6 +142,8 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      */
     private boolean syncApiForDialog(ApiStructureTreeDTO apiStructureTree, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData baseSyncConfigData) {
         //弹框让用户选择需要同步的目录
+
+
         SyncApiView syncApiView = new SyncApiView(ProjectUtils.getCurrProject());
         if (!syncApiView.showAndGet()) {
             //选择取消 则不同步接口
@@ -222,7 +223,7 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      */
     private List<ApiTreeKeyDTO> buildApiPositionKey(ApiStructureTreeDTO apiStructureTree) {
         List<ApiTreeKeyDTO> resultList = Lists.newArrayList();
-        List<ApiGroupDTO> groupList = apiStructureTree.getGroupList();
+        List<ApiGroupDTO> groupList = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(groupList)) {
             for (ApiGroupDTO apiGroupDTO : groupList) {
                 List<ApiProjectDTO> apiProjectList = apiGroupDTO.getApiProjectList();

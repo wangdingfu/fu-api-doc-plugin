@@ -46,6 +46,7 @@
 
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.mock.FuDocObjectJMockData"/>
 
+        <applicationService serviceInterface="com.wdf.fudoc.apidoc.sync.service.YApiService" serviceImplementation="com.wdf.fudoc.apidoc.sync.service.YApiServiceImpl"/>
 
         <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSettingConfigurable"
                              id="fu.doc.setting"
@@ -63,6 +64,11 @@
                              id="fu.request.setting"
                              groupId="fu.doc.setting"
                              displayName="Fu Request"
+                             nonDefaultProject="true"/>
+        <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable"
+                             id="fu.doc.setting.sync"
+                             groupId="fu.doc.setting"
+                             displayName="Sync Settings"
                              nonDefaultProject="true"/>
 
         <toolWindow id="Fu Request"
@@ -113,13 +119,13 @@
         </group>
 
 
-<!--        &lt;!&ndash; 测试功能点相关动作 &ndash;&gt;
+        <!-- 测试功能点相关动作 -->
         <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test" description="Test"/>
             <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
                     description="Test table"/>
-        </group>-->
+        </group>
 
 
 

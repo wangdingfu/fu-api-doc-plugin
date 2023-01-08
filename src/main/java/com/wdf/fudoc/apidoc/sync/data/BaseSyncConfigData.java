@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class BaseSyncConfigData {
+public abstract class BaseSyncConfigData {
 
     /**
      * 三方接口文档系统地址
@@ -31,15 +31,19 @@ public class BaseSyncConfigData {
      */
     private String addCategoryUrl;
 
-    /**
-     * 第三方接口文档系统项目配置
-     */
-    private Map<String, ApiSystemProjectConfigData> projectConfigDataMap;
-
 
     /**
      * 已经同步过的接口文档记录
      */
     private List<SyncApiRecordData> syncRecordList;
+
+
+    /**
+     * 获取当前module对应到第三方接口文档的项目名称
+     *
+     * @param moduleName 代码中的java module名称
+     * @return 第三方接口文档系统的项目名称
+     */
+    public abstract List<String> getProjectNameList(String moduleName);
 
 }
