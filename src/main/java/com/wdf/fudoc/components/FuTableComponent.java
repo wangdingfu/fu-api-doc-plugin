@@ -11,6 +11,7 @@ import com.wdf.fudoc.components.bo.Column;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.JTableUtils;
 import lombok.Getter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -202,7 +203,9 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         //设置table单元格编辑器
         this.columnList.stream().filter(f -> Objects.nonNull(f.getEditor())).forEach(f -> this.fuTableView.getColumn(f.getName()).setCellEditor(f.getEditor()));
         //将数据添加到table
-        setDataList(this.dataList);
+        if(CollectionUtils.isNotEmpty(this.dataList)){
+            this.dataList.forEach(this::addRow);
+        }
     }
 
 
