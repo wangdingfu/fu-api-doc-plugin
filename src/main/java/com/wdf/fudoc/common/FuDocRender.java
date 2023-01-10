@@ -7,6 +7,7 @@ import com.wdf.fudoc.apidoc.data.SettingData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocEnumData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +47,17 @@ public class FuDocRender {
     }
 
 
+    /**
+     * 根据组装好的数据渲染成markdown接口文档内容
+     *
+     * @param fuDocItemData 组装完毕的接口文档数据
+     * @return 渲染完毕后markdown接口文档内容
+     */
+    public static String yapiMarkdown(FuDocItemData fuDocItemData, SettingData settingData) {
+        return render(fuDocItemData, "yapi.ftl", settingData.getYapiTemplateValue());
+    }
+
+
     public static String paramRender(List<FuDocParamData> fuDocParamDataList, SettingData settingData) {
         Map<String, Object> map = new HashMap<>();
         map.put("requestParams", fuDocParamDataList);
@@ -65,6 +77,9 @@ public class FuDocRender {
     }
 
     public static String render(Object data, String templateName, String templateContent) {
+        if (StringUtils.isBlank(templateContent)) {
+            return StringUtils.EMPTY;
+        }
         return FreeMarkerConfig.generateContent(templateName, templateContent, data);
     }
 }

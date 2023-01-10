@@ -24,14 +24,6 @@ import java.util.List;
 public interface SyncFuDocStrategy {
 
     /**
-     * 获取三方接口文档系统接口结构树（分组-->项目--->分类）
-     *
-     * @param psiClass 同步的接口所属的class对象
-     * @return 接口的层级结构
-     */
-    ApiStructureTreeDTO getApiStructureTree(PsiClass psiClass);
-
-    /**
      * 同步接口文档到第三方文档系统中
      *
      * @param fuDocContext 上下文对象
@@ -42,10 +34,9 @@ public interface SyncFuDocStrategy {
     /**
      * 创建分类
      *
-     * @param addApiCategoryDTO 添加分类需要的信息
      * @return 分类对象
      */
-    ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, AddApiCategoryDTO addApiCategoryDTO);
+    ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, ApiProjectDTO apiProjectDTO, String categoryName);
 
 
     /**
@@ -55,7 +46,7 @@ public interface SyncFuDocStrategy {
      * @param baseSyncConfigData 配置数据
      * @return 第三方接口文档系统的接口分类集合
      */
-    List<ApiCategoryDTO> categoryList(String projectName, BaseSyncConfigData baseSyncConfigData);
+    List<ApiCategoryDTO> categoryList(ApiProjectDTO apiProjectDTO, BaseSyncConfigData baseSyncConfigData);
 
 
 }

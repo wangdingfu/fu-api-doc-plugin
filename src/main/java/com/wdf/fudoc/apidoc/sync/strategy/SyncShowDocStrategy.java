@@ -1,6 +1,7 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
 import com.intellij.psi.PsiClass;
+import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiData;
 import com.wdf.fudoc.apidoc.sync.dto.AddApiCategoryDTO;
@@ -20,32 +21,28 @@ public class SyncShowDocStrategy extends AbstractSyncFuDocStrategy {
 
 
     @Override
-    protected BaseSyncConfigData checkConfig(BaseSyncConfigData baseSyncConfigData) {
+    protected boolean checkConfig(BaseSyncConfigData baseSyncConfigData) {
+        return false;
+    }
+
+    @Override
+    protected String doSync(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
         return null;
     }
 
     @Override
-    protected String assembleSyncData(SyncApiData syncApiData) {
+    protected ApiProjectDTO getSyncProjectConfig(BaseSyncConfigData configData, PsiClass psiClass) {
         return null;
     }
 
     @Override
-    protected String checkSyncResult(SyncApiData syncApiData, String result) {
+    public ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, ApiProjectDTO apiProjectDTO, String categoryName) {
         return null;
     }
 
     @Override
-    public ApiStructureTreeDTO getApiStructureTree(PsiClass psiClass) {
+    public List<ApiCategoryDTO> categoryList(ApiProjectDTO apiProjectDTO, BaseSyncConfigData baseSyncConfigData) {
         return null;
     }
 
-    @Override
-    public ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, AddApiCategoryDTO addApiCategoryDTO) {
-        return null;
-    }
-
-    @Override
-    public List<ApiCategoryDTO> categoryList(String projectName, BaseSyncConfigData baseSyncConfigData) {
-        return null;
-    }
 }

@@ -38,6 +38,7 @@ dependencies {
     implementation("cn.hutool:hutool-crypto:5.8.10")
     implementation("cn.hutool:hutool-system:5.8.10")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
+    implementation("com.atlassian.commonmark:commonmark:0.17.0")
 }
 
 

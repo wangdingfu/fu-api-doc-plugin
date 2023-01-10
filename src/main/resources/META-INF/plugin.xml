@@ -113,7 +113,7 @@
         <!-- http请求相关动作 -->
         <group id="wdf.fudoc.sync" popup="false" compact="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Sync Fu DOc">
+            <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Fu Doc Sync">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
             </action>
         </group>

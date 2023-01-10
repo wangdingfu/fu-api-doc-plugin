@@ -28,7 +28,7 @@ public class YApiProjectTableData {
     /**
      * 项目ID
      */
-    private Integer projectId;
+    private String projectId;
 
     /**
      * 项目名称

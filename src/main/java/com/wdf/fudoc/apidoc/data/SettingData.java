@@ -30,6 +30,7 @@ public class SettingData {
     private String objectTemplateValue;
     private String enumTemplateValue1;
     private String enumTemplateValue2;
+    private String yapiTemplateValue;
 
 
     public static SettingData defaultSettingData() {
@@ -51,6 +52,9 @@ public class SettingData {
         }
         if (StringUtils.isBlank(this.enumTemplateValue2)) {
             this.setEnumTemplateValue2(ResourceUtils.readResource("template/fu_doc_enum_table.ftl"));
+        }
+        if (StringUtils.isBlank(this.yapiTemplateValue)) {
+            this.setYapiTemplateValue(ResourceUtils.readResource("template/yapi.ftl"));
         }
         if (Objects.isNull(this.customerSettingData)) {
             this.customerSettingData = new CustomerSettingData();

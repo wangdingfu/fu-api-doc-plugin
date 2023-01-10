@@ -1,7 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.service;
 
-import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
-import com.wdf.fudoc.apidoc.sync.dto.YApiProjectInfoDTO;
+import com.wdf.fudoc.apidoc.sync.dto.*;
 
 import java.util.List;
 
@@ -19,6 +18,14 @@ public interface YApiService {
      */
     YApiProjectInfoDTO findProjectInfo(String baseUrl, String token);
 
+    /**
+     * 创建分类
+     *
+     * @param baseUrl               yapi域名
+     * @param yApiCreateCategoryDTO 创建分类需要的参数
+     * @return 创建成功的分类
+     */
+    ApiCategoryDTO createCategory(String baseUrl, YApiCreateCategoryDTO yApiCreateCategoryDTO);
 
     /**
      * 获取接口分类集合
@@ -29,4 +36,13 @@ public interface YApiService {
      * @return 分类集合
      */
     List<ApiCategoryDTO> categoryList(String baseUrl, String projectId, String token);
+
+
+    /**
+     * 保存或更新接口
+     *
+     * @param yApiSaveDTO 接口请求参数
+     * @return 响应结果
+     */
+    boolean saveOrUpdate(String baseUrl, YApiSaveDTO yApiSaveDTO);
 }

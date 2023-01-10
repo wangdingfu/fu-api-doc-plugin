@@ -4,15 +4,21 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
+import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
+import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncFuDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncStrategyFactory;
-import com.wdf.fudoc.common.ServiceHelper;
+import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.components.tree.ApiCategoryTreeNode;
 import com.wdf.fudoc.components.tree.FuTreeComponent;
+import com.wdf.fudoc.components.validator.InputExistsValidator;
 import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,13 +51,13 @@ public class SyncApiCategoryDialog extends DialogWrapper {
     /**
      * 项目名称下拉框
      */
-    private ComboBox<String> projectNameComboBox;
+    private ComboBox<ApiProjectDTO> projectNameComboBox;
 
 
     /**
      * 选定项目的接口分类下拉框
      */
-    private ComboBox<String> categoryNameComboBox;
+    private ComboBox<ApiCategoryDTO> categoryNameComboBox;
 
     /**
      * 选定项目的接口分类树
@@ -63,12 +69,16 @@ public class SyncApiCategoryDialog extends DialogWrapper {
      */
     private final String moduleName;
 
-    public SyncApiCategoryDialog(@Nullable Project project, boolean isCategoryTree, String moduleName) {
+    private ApiProjectDTO apiProjectDTO;
+
+    public SyncApiCategoryDialog(@Nullable Project project, boolean isCategoryTree, String moduleName, ApiProjectDTO apiProjectDTO) {
         super(project, true);
         this.project = project;
         this.isCategoryTree = isCategoryTree;
         this.moduleName = moduleName;
-        setTitle("请选择需要将接口同步到哪一个分类下");
+        this.apiProjectDTO = apiProjectDTO;
+        setTitle("为你的接口选择一个分类");
+        this.rootPanel.setPreferredSize(new Dimension(400, 100));
         initRoot();
         init();
     }
@@ -78,16 +88,34 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         //填充项目名称下拉框
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
         BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
-        List<String> projectNameList = enableConfigData.getProjectNameList(this.moduleName);
-        this.projectNameComboBox = new ComboBox<>(projectNameList.toArray(new String[0]));
-        String projectName = CollectionUtils.isNotEmpty(projectNameList) ? projectNameList.get(0) : StringUtils.EMPTY;
-        this.projectNameComboBox.setSelectedItem(projectName);
+        List<ApiProjectDTO> projectConfigList = enableConfigData.getProjectConfigList(this.moduleName);
+        this.projectNameComboBox = new ComboBox<>(projectConfigList.toArray(new ApiProjectDTO[0]));
+        if (Objects.isNull(this.apiProjectDTO)) {
+            this.apiProjectDTO = projectConfigList.get(0);
+        }
+        this.projectNameComboBox.setSelectedItem(this.apiProjectDTO);
         this.projectPanel.add(new JLabel("YApi项目名称:"), BorderLayout.WEST);
         this.projectPanel.add(this.projectNameComboBox, BorderLayout.CENTER);
+        LinkLabel<String> projectLinkLabel = new LinkLabel<>("创建一个项目", null, (aSource, aLinkData) -> {
+            List<String> projectNameList = ObjectUtils.listToList(projectConfigList, ApiProjectDTO::getProjectName);
+            String value = Messages.showInputDialog(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN), FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE), Messages.getQuestionIcon(), StringUtils.EMPTY, new InputExistsValidator(projectNameList));
+            //请求创建项目
+            this.projectNameComboBox.addItem(new ApiProjectDTO());
+        });
+        projectLinkLabel.setEnabled(false);
+        projectLinkLabel.setBorder(JBUI.Borders.emptyLeft(10));
+        this.projectPanel.add(this.projectNameComboBox, BorderLayout.CENTER);
+        this.projectPanel.add(projectLinkLabel, BorderLayout.EAST);
+        this.projectPanel.setBorder(JBUI.Borders.empty(10));
+        this.categoryPanel.setBorder(JBUI.Borders.empty(10, 10, 20, 10));
         //项目下拉框切换项目事件
-        this.projectNameComboBox.addItemListener(e -> resetCategory(e.getItem() + "", enableConfigData));
+        this.projectNameComboBox.addItemListener(e -> {
+            apiProjectDTO = (ApiProjectDTO) e.getItem();
+            //重置api分类下拉框
+            resetCategory(enableConfigData);
+        });
         //渲染接口分类
-        resetCategory(projectName, enableConfigData);
+        resetCategory(enableConfigData);
     }
 
 
@@ -98,15 +126,17 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         return this.projectNameComboBox.getSelectedItem() + "";
     }
 
-    private ApiCategoryDTO getSelectCategory() {
+    public ApiProjectDTO getSelectCategory() {
         if (isCategoryTree) {
             TreePath selectionPath = treeComponent.getCatalogTree().getSelectionPath();
             Object lastPathComponent;
             if (Objects.nonNull(selectionPath) && Objects.nonNull(lastPathComponent = selectionPath.getLastPathComponent())) {
-                return new ApiCategoryDTO("", lastPathComponent.toString());
+                apiProjectDTO.setSelectCategory(new ApiCategoryDTO("",lastPathComponent.toString()));
+                return apiProjectDTO;
             }
         } else {
-            return new ApiCategoryDTO("", categoryNameComboBox.getSelectedItem() + "");
+            apiProjectDTO.setSelectCategory((ApiCategoryDTO) categoryNameComboBox.getSelectedItem());
+            return apiProjectDTO;
         }
         return null;
     }
@@ -115,25 +145,42 @@ public class SyncApiCategoryDialog extends DialogWrapper {
     /**
      * 重置分类
      *
-     * @param projectName      项目名称
      * @param enableConfigData 第三方接口文档配置
      */
-    private void resetCategory(String projectName, BaseSyncConfigData enableConfigData) {
-        SyncFuDocStrategy service = SyncStrategyFactory.getInstance();
-        if (Objects.isNull(service)) {
-            return;
+    private void resetCategory(BaseSyncConfigData enableConfigData) {
+        List<ApiCategoryDTO> apiCategoryList = apiProjectDTO.getApiCategoryList();
+        if(CollectionUtils.isEmpty(apiCategoryList)){
+            apiCategoryList = listCategory(enableConfigData);
+            apiProjectDTO.setApiCategoryList(apiCategoryList);
         }
-        List<ApiCategoryDTO> categoryList = service.categoryList(projectName, enableConfigData);
         if (isCategoryTree) {
             //设置分类树
-            this.treeComponent = new FuTreeComponent<>(project, buildCategoryTree(null, projectName, null, categoryList));
+            this.treeComponent = new FuTreeComponent<>(project, buildCategoryTree(null, this.apiProjectDTO.getProjectName(), null, apiCategoryList));
         } else {
             //设置分类下拉框
-            this.categoryNameComboBox = new ComboBox<>(ObjectUtils.listToList(categoryList, ApiCategoryDTO::getCategoryName).toArray(new String[0]));
+            this.categoryNameComboBox = new ComboBox<>(apiCategoryList.toArray(new ApiCategoryDTO[0]));
         }
-        resetCategory();
+        this.categoryPanel.add(new JLabel("YApi接口分类:"), BorderLayout.WEST);
+        this.categoryPanel.add(isCategoryTree ? this.treeComponent.getCatalogTree() : this.categoryNameComboBox, BorderLayout.CENTER);
+        if (!isCategoryTree) {
+            List<String> categoryNameList = ObjectUtils.listToList(apiCategoryList, ApiCategoryDTO::getCategoryName);
+            LinkLabel<String> linkLabel = new LinkLabel<>("创建一个分类", null, (aSource, aLinkData) -> {
+                String value = Messages.showInputDialog(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN), FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE), Messages.getQuestionIcon(), StringUtils.EMPTY, new InputExistsValidator(categoryNameList));
+                categoryNameComboBox.addItem(new ApiCategoryDTO("",value));
+            });
+            linkLabel.setBorder(JBUI.Borders.emptyLeft(10));
+            this.categoryPanel.add(linkLabel, BorderLayout.EAST);
+        }
     }
 
+
+    private List<ApiCategoryDTO> listCategory(BaseSyncConfigData enableConfigData){
+        SyncFuDocStrategy service = SyncStrategyFactory.getInstance();
+        if (Objects.isNull(service)) {
+            return Lists.newArrayList();
+        }
+        return service.categoryList(this.apiProjectDTO, enableConfigData);
+    }
 
     private ApiCategoryTreeNode buildCategoryTree(String categoryId, String categoryName, ApiCategoryTreeNode parent, java.util.List<ApiCategoryDTO> categoryDTOList) {
         ApiCategoryTreeNode treeNode = new ApiCategoryTreeNode(categoryId, categoryName, parent);
@@ -145,15 +192,6 @@ public class SyncApiCategoryDialog extends DialogWrapper {
             treeNode.setChildList(childList);
         }
         return treeNode;
-    }
-
-
-    private void resetCategory() {
-        this.categoryPanel.removeAll();
-        this.categoryPanel.repaint();
-        this.categoryPanel.add(new JLabel("YApi接口分类:"), BorderLayout.WEST);
-        this.categoryPanel.add(isCategoryTree ? this.treeComponent.getCatalogTree() : this.categoryNameComboBox, BorderLayout.CENTER);
-        this.categoryPanel.revalidate();
     }
 
 

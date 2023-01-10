@@ -1,5 +1,7 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
+import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
+
 import java.util.List;
 
 /**
@@ -7,8 +9,9 @@ import java.util.List;
  * @date 2023-01-08 20:29:16
  */
 public class ShowDocConfigData extends BaseSyncConfigData{
+
     @Override
-    public List<String> getProjectNameList(String moduleName) {
+    public List<ApiProjectDTO> getProjectConfigList(String moduleName) {
         return null;
     }
 }

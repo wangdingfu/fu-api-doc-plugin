@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
+import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,24 +15,24 @@ import lombok.Setter;
 public class SyncApiRecordData {
 
     /**
-     * 分组名称
+     * 接口地址
      */
-    private String groupName;
+    private String apiUrl;
 
     /**
-     * 第三方系统项目名称
+     * 项目ID
+     */
+    private String projectId;
+
+    /**
+     * 项目名称
      */
     private String projectName;
 
     /**
-     * 第三方系统接口分类全路径名称(多级分类通过'/'拼接)
+     * 接口分类
      */
-    private String categoryName;
-
-    /**
-     * 接口api
-     */
-    private String apiKey;
+    private ApiCategoryDTO category;
 
     /**
      * 同步时间

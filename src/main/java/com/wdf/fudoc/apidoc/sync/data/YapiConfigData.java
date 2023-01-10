@@ -1,6 +1,7 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
 import com.google.common.collect.Lists;
+import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,16 +34,19 @@ public class YapiConfigData extends BaseSyncConfigData {
      */
     private List<YApiProjectTableData> projectConfigList = Lists.newArrayList();
 
-    @Override
-    public List<String> getProjectNameList(String moduleName) {
-        return ObjectUtils.listToList(projectConfigList, YApiProjectTableData::getProjectName);
+
+
+    private ApiProjectDTO convert(YApiProjectTableData tableData){
+        ApiProjectDTO apiProjectDTO = new ApiProjectDTO();
+        apiProjectDTO.setProjectToken(tableData.getProjectToken());
+        apiProjectDTO.setProjectId(tableData.getProjectId());
+        apiProjectDTO.setProjectName(tableData.getProjectName());
+        return apiProjectDTO;
     }
 
 
-    public YApiProjectTableData getByProjectName(String projectName) {
-        if (StringUtils.isBlank(projectName)) {
-            return null;
-        }
-        return projectConfigList.stream().filter(f -> f.getProjectName().equals(projectName)).findFirst().orElse(null);
+    @Override
+    public List<ApiProjectDTO> getProjectConfigList(String moduleName) {
+        return ObjectUtils.listToList(projectConfigList, this::convert);
     }
 }

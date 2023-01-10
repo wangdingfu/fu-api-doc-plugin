@@ -111,7 +111,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
             return null;
         }
         YApiProjectTableData tableData = new YApiProjectTableData();
-        tableData.setProjectId(projectInfo.getProjectId());
+        tableData.setProjectId(projectInfo.getProjectId() + "");
         tableData.setProjectName(projectInfo.getProjectName());
         tableData.setProjectToken(value);
         return tableData;

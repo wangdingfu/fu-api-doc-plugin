@@ -1,10 +1,12 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
+import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 同步到第三方接口文档系统抽象配置
@@ -22,20 +24,23 @@ public abstract class BaseSyncConfigData {
     private String baseUrl;
 
     /**
-     * 同步接口地址
+     * 自动生成分类
      */
-    private String syncApiUrl;
+    private boolean autoGenCategory;
 
     /**
-     * 添加接口分类接口地址
+     * 接口的同步记录
      */
-    private String addCategoryUrl;
+    private Map<String, SyncApiRecordData> syncApiRecordMap = new ConcurrentHashMap<>();
 
 
-    /**
-     * 已经同步过的接口文档记录
-     */
-    private List<SyncApiRecordData> syncRecordList;
+    public boolean isRecord(String url) {
+        return syncApiRecordMap.containsKey(url);
+    }
+
+    public SyncApiRecordData getRecord(String url) {
+        return syncApiRecordMap.get(url);
+    }
 
 
     /**
@@ -44,6 +49,6 @@ public abstract class BaseSyncConfigData {
      * @param moduleName 代码中的java module名称
      * @return 第三方接口文档系统的项目名称
      */
-    public abstract List<String> getProjectNameList(String moduleName);
+    public abstract List<ApiProjectDTO> getProjectConfigList(String moduleName);
 
 }

@@ -58,6 +58,10 @@ public class FuDocSettingForm extends DialogWrapper {
      */
     private JPanel enum2TemplatePanel;
 
+    /**
+     * YApi模板
+     */
+    private JPanel yapiTemplatePanel;
 
     /**
      * 配置信息面板
@@ -73,6 +77,7 @@ public class FuDocSettingForm extends DialogWrapper {
     private FuEditorComponent enum1EditorComponent;
     private FuEditorComponent enum2EditorComponent;
     private FuEditorComponent settingEditorComponent;
+    private FuEditorComponent yapiEditorComponent;
 
     public FuDocSettingForm(Project project, SettingData settingData) {
         super(project, true, IdeModalityType.PROJECT);
@@ -96,6 +101,7 @@ public class FuDocSettingForm extends DialogWrapper {
         this.settingData.setObjectTemplateValue(this.objectEditorComponent.getContent());
         this.settingData.setEnumTemplateValue1(this.enum1EditorComponent.getContent());
         this.settingData.setEnumTemplateValue2(this.enum2EditorComponent.getContent());
+        this.settingData.setYapiTemplateValue(this.yapiEditorComponent.getContent());
     }
 
 
@@ -111,6 +117,7 @@ public class FuDocSettingForm extends DialogWrapper {
         String objectTemplateValue = settingData.getObjectTemplateValue();
         String enumTemplateValue1 = settingData.getEnumTemplateValue1();
         String enumTemplateValue2 = settingData.getEnumTemplateValue2();
+        String yapiTemplateValue = settingData.getYapiTemplateValue();
         if (StringUtils.isNotBlank(fuDocTemplateValue)) {
             this.mainEditorComponent.setContent(fuDocTemplateValue);
         }
@@ -123,6 +130,9 @@ public class FuDocSettingForm extends DialogWrapper {
         if (StringUtils.isNotBlank(enumTemplateValue2)) {
             this.enum2EditorComponent.setContent(enumTemplateValue2);
         }
+        if (StringUtils.isNotBlank(yapiTemplateValue)) {
+            this.yapiEditorComponent.setContent(yapiTemplateValue);
+        }
     }
 
 
@@ -133,12 +143,14 @@ public class FuDocSettingForm extends DialogWrapper {
         this.enum1EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
         this.enum2EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
         this.settingEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, null);
+        this.yapiEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
 
         //初始化面板
         this.mainTemplatePanel = new JPanel(new BorderLayout());
         this.objectTemplatePanel = new JPanel(new BorderLayout());
         this.enum1TemplatePanel = new JPanel(new BorderLayout());
         this.enum2TemplatePanel = new JPanel(new BorderLayout());
+        this.yapiTemplatePanel = new JPanel(new BorderLayout());
         this.settingPanel = new JPanel(new BorderLayout());
 
         //将编辑器组件挂载到面板上
@@ -146,6 +158,7 @@ public class FuDocSettingForm extends DialogWrapper {
         this.objectTemplatePanel.add(this.objectEditorComponent.getMainPanel());
         this.enum1TemplatePanel.add(this.enum1EditorComponent.getMainPanel());
         this.enum2TemplatePanel.add(this.enum2EditorComponent.getMainPanel());
+        this.yapiTemplatePanel.add(this.yapiEditorComponent.getMainPanel());
         this.settingPanel.add(this.settingEditorComponent.getMainPanel());
     }
 

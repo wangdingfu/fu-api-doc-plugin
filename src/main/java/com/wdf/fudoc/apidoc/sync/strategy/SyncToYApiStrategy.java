@@ -1,26 +1,23 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
 import cn.hutool.core.util.NumberUtil;
-import cn.hutool.http.HttpUtil;
 import com.google.common.collect.Lists;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.PsiClass;
-import com.wdf.fudoc.apidoc.constant.enumtype.MockResultType;
-import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
-import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
-import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
+import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
+import com.wdf.fudoc.apidoc.constant.enumtype.*;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiData;
-import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.YapiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.*;
 import com.wdf.fudoc.apidoc.sync.service.YApiService;
+import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import com.wdf.fudoc.util.JsonUtil;
-import com.wdf.fudoc.util.MapListUtil;
-import com.wdf.fudoc.util.YApiUtil;
+import com.wdf.fudoc.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -42,24 +38,43 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
 
 
     @Override
-    protected BaseSyncConfigData checkConfig(BaseSyncConfigData baseSyncConfigData) {
-        if (Objects.isNull(baseSyncConfigData)) {
-            baseSyncConfigData = new YapiConfigData();
+    protected boolean checkConfig(BaseSyncConfigData baseSyncConfigData) {
+        return true;
+    }
+
+    @Override
+    protected String doSync(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
+        YApiSaveDTO yApiSaveDTO = assembleSyncData(fuDocItemData, apiProjectDTO, apiCategoryDTO);
+        YApiService service = ServiceHelper.getService(YApiService.class);
+        try {
+            if (!service.saveOrUpdate(configData.getBaseUrl(), yApiSaveDTO)) {
+                return "同步至YApi失败";
+            }
+        } catch (Exception e) {
+            return "同步至YApi失败";
         }
-        //检查配置
-        baseSyncConfigData.setSyncApiUrl("/api/interface/save");
-        baseSyncConfigData.setAddCategoryUrl("/api/interface/add_cat");
-        return baseSyncConfigData;
+        return null;
     }
 
     @Override
-    protected String assembleSyncData(SyncApiData syncApiData) {
+    protected ApiProjectDTO getSyncProjectConfig(BaseSyncConfigData configData, PsiClass psiClass) {
+        YapiConfigData yapiConfigData = (YapiConfigData) configData;
+        Module module = ModuleUtil.findModuleForPsiElement(psiClass);
+
+        List<ApiProjectDTO> projectConfigList = yapiConfigData.getProjectConfigList(module.getName());
+        if (CollectionUtils.isNotEmpty(projectConfigList)) {
+            ApiProjectDTO apiProjectDTO = projectConfigList.get(0);
+            apiProjectDTO.setModuleName(module.getName());
+            return apiProjectDTO;
+        }
+        return null;
+    }
+
+    protected YApiSaveDTO assembleSyncData(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
         //组装Yapi需要的数据
-        YApiSaveDTO convert = convert(syncApiData);
-        return JsonUtil.toJson(convert);
+        return convert(fuDocItemData, apiProjectDTO, apiCategoryDTO);
     }
 
-    @Override
     protected String checkSyncResult(SyncApiData syncApiData, String result) {
         //检查同步结果
         if (YApiUtil.isSuccess(result)) {
@@ -71,21 +86,21 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
     }
 
 
-    private YApiSaveDTO convert(SyncApiData syncApiData) {
+    private YApiSaveDTO convert(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
         YApiSaveDTO yApiSaveDTO = new YApiSaveDTO();
-        FuDocItemData fuDocItemData = syncApiData.getFuDocItemData();
-        yApiSaveDTO.setToken(syncApiData.getProjectToken());
-        String projectId = syncApiData.getProjectId();
+        yApiSaveDTO.setToken(apiProjectDTO.getProjectToken());
+        String projectId = apiProjectDTO.getProjectId();
         if (StringUtils.isNotBlank(projectId) && NumberUtil.isNumber(projectId)) {
             yApiSaveDTO.setProjectId(Long.valueOf(projectId));
         }
-        String categoryId = syncApiData.getCategoryId();
+        String categoryId = apiCategoryDTO.getCategoryId();
         if (StringUtils.isNotBlank(categoryId) && NumberUtil.isNumber(categoryId)) {
             yApiSaveDTO.setCatId(Long.valueOf(categoryId));
         }
         yApiSaveDTO.setPath(fuDocItemData.getUrlList().get(0));
         yApiSaveDTO.setMethod(fuDocItemData.getRequestType());
-        yApiSaveDTO.setReqBodyType(fuDocItemData.getContentType());
+        String contentType = fuDocItemData.getContentType();
+        yApiSaveDTO.setReqBodyType(StringUtils.isBlank(contentType) ? ContentType.FORM_DATA.getDesc() : contentType);
         if (MockResultType.JSON.getCode().equals(fuDocItemData.getRequestExampleType())) {
             //post请求 填充json schema
             yApiSaveDTO.setReqBodyOther(buildJsonSchema(fuDocItemData.getRequestParams()));
@@ -106,7 +121,12 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
         //响应数据的json schema
         yApiSaveDTO.setResBody(buildJsonSchema(fuDocItemData.getResponseParams()));
         yApiSaveDTO.setTitle(fuDocItemData.getTitle());
+
+        //设置markdown内容
+        yApiSaveDTO.setMarkdown(FuDocRender.yapiMarkdown(fuDocItemData, FuDocSetting.getSettingData()));
+        yApiSaveDTO.setDesc(MarkdownToHtmlUtils.markdownToHtml(yApiSaveDTO.getMarkdown()));
         return yApiSaveDTO;
+
     }
 
 
@@ -154,7 +174,9 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
         jsonSchema.setType("object");
         if (CollectionUtils.isNotEmpty(fuDocParamDataList)) {
             MapListUtil<String, FuDocParamData> instance = MapListUtil.getInstance(fuDocParamDataList, FuDocParamData::getParentParamNo);
-            jsonSchema.setProperties(buildProperties(instance.get(FuDocConstants.ROOT), instance));
+            YApiJsonSchema yApiJsonSchema = buildProperties(instance.get(FuDocConstants.ROOT), instance);
+            jsonSchema.setProperties(yApiJsonSchema.getProperties());
+            jsonSchema.setRequired(yApiJsonSchema.getRequired());
         }
         return JsonUtil.toJson(jsonSchema);
     }
@@ -165,7 +187,9 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
         String paramType = fuDocParamData.getParamType();
         if ("object".equals(paramType)) {
             //对象
-            jsonSchema.setProperties(buildProperties(instance.get(fuDocParamData.getParamNo()), instance));
+            YApiJsonSchema yApiJsonSchema = buildProperties(instance.get(fuDocParamData.getParamNo()), instance);
+            jsonSchema.setProperties(yApiJsonSchema.getProperties());
+            jsonSchema.setRequired(yApiJsonSchema.getRequired());
         } else if ("array".equals(paramType)) {
             //组装items
             FuDocParamData item = new FuDocParamData();
@@ -186,59 +210,41 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
     }
 
 
-    private Map<String, YApiJsonSchema> buildProperties(List<FuDocParamData> childList, MapListUtil<String, FuDocParamData> instance) {
+    private YApiJsonSchema buildProperties(List<FuDocParamData> childList, MapListUtil<String, FuDocParamData> instance) {
+        YApiJsonSchema result = new YApiJsonSchema();
+        List<String> required = Lists.newArrayList();
         Map<String, YApiJsonSchema> properties = new HashMap<>();
         if (CollectionUtils.isNotEmpty(childList)) {
-            childList.forEach(f -> properties.put(f.getParamName(), buildJsonSchema(f, instance)));
+            childList.forEach(f -> {
+                properties.put(f.getParamName(), buildJsonSchema(f, instance));
+                if(YesOrNo.YES.getDesc().equals(f.getParamRequire())){
+                    required.add(f.getParamName());
+                }
+            });
         }
-        return properties;
+        result.setProperties(properties);
+        result.setRequired(required);
+        return result;
     }
 
 
     @Override
-    public ApiStructureTreeDTO getApiStructureTree(PsiClass psiClass) {
-        ApiStructureTreeDTO apiStructureTreeDTO = new ApiStructureTreeDTO();
-        apiStructureTreeDTO.setCurrent(buildApiTreeKeyDTO());
-        return apiStructureTreeDTO;
-    }
-
-    @Override
-    public ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, AddApiCategoryDTO addApiCategoryDTO) {
+    public ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, ApiProjectDTO apiProjectDTO, String categoryName) {
         YApiCreateCategoryDTO categoryDTO = new YApiCreateCategoryDTO();
-        categoryDTO.setToken(addApiCategoryDTO.getProjectToken());
-        String projectId = addApiCategoryDTO.getProjectId();
+        categoryDTO.setToken(apiProjectDTO.getProjectToken());
+        String projectId = apiProjectDTO.getProjectId();
         if (StringUtils.isNotBlank(projectId) && NumberUtil.isNumber(projectId)) {
             categoryDTO.setProjectId(Long.valueOf(projectId));
         }
-        categoryDTO.setName(addApiCategoryDTO.getCategoryName());
-        categoryDTO.setDesc(addApiCategoryDTO.getCategoryDesc());
-        String result = HttpUtil.post(baseSyncConfigData.getBaseUrl() + baseSyncConfigData.getAddCategoryUrl(), JsonUtil.toJson(categoryDTO));
-        YApiCreateCategoryDTO data = YApiUtil.getData(result, YApiCreateCategoryDTO.class);
-        if (Objects.nonNull(data) && Objects.nonNull(data.getCatId())) {
-            return new ApiCategoryDTO(data.getCatId() + "", data.getName());
-        }
-        return new ApiCategoryDTO();
+        categoryDTO.setName(categoryName);
+        YApiService service = ServiceHelper.getService(YApiService.class);
+        return service.createCategory(baseSyncConfigData.getBaseUrl(), categoryDTO);
     }
 
     @Override
-    public List<ApiCategoryDTO> categoryList(String projectName, BaseSyncConfigData baseSyncConfigData) {
+    public List<ApiCategoryDTO> categoryList(ApiProjectDTO apiProjectDTO, BaseSyncConfigData baseSyncConfigData) {
         YApiService service = ServiceHelper.getService(YApiService.class);
-        YapiConfigData yapiConfigData = (YapiConfigData) baseSyncConfigData;
-        YApiProjectTableData yApiProjectTableData = yapiConfigData.getByProjectName(projectName);
-        if (Objects.isNull(yApiProjectTableData)) {
-            return Lists.newArrayList();
-        }
-        return service.categoryList(baseSyncConfigData.getBaseUrl(), yApiProjectTableData.getProjectId() + "", yApiProjectTableData.getProjectToken());
+        return service.categoryList(baseSyncConfigData.getBaseUrl(), apiProjectDTO.getProjectId(), apiProjectDTO.getProjectToken());
     }
 
-
-    private ApiProjectDTO buildApiTreeKeyDTO() {
-        ApiProjectDTO apiProjectDTO = new ApiProjectDTO();
-        apiProjectDTO.setGroupId("11");
-        apiProjectDTO.setGroupName("个人空间");
-        apiProjectDTO.setProjectId("11");
-        apiProjectDTO.setProjectName("FuDoc测试");
-        apiProjectDTO.setProjectToken("c726bc0a87275e135fb39a8160131155a7d564a26af3a936efbc8ab4b8491c64");
-        return apiProjectDTO;
-    }
 }

@@ -1,7 +1,5 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.http.HttpUtil;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
@@ -10,13 +8,10 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
-import com.wdf.fudoc.apidoc.sync.data.SyncApiData;
-import com.wdf.fudoc.apidoc.sync.data.SyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.dto.*;
 import com.wdf.fudoc.apidoc.view.SyncApiView;
-import com.wdf.fudoc.common.FuDocMessageBundle;
-import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.fudoc.apidoc.view.dialog.SyncApiCategoryDialog;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.ProjectUtils;
@@ -24,6 +19,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 同步接口文档至第三方接口文档系统抽象类
@@ -38,30 +34,31 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      *
      * @param baseSyncConfigData 第三方接口文档系统相关配置
      */
-    protected abstract BaseSyncConfigData checkConfig(BaseSyncConfigData baseSyncConfigData);
+    protected abstract boolean checkConfig(BaseSyncConfigData baseSyncConfigData);
 
 
     /**
      * 组装同步到第三方接口文档系统的数据
-     *
-     * @param syncApiData 同步的接口数据
-     * @return 第三方接口文档系统需要的数据
      */
-    protected abstract String assembleSyncData(SyncApiData syncApiData);
+    protected abstract String doSync(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO);
 
 
     /**
-     * 校验同步后的返回结果
+     * 获取当前同步的项目配置
      *
-     * @param result 同步接口文档请求的结果
+     * @param configData 配置数据
+     * @param psiClass   当前操作的class
+     * @return 本次同步的项目
      */
-    protected abstract String checkSyncResult(SyncApiData syncApiData, String result);
+    protected abstract ApiProjectDTO getSyncProjectConfig(BaseSyncConfigData configData, PsiClass psiClass);
 
 
     @Override
     public void syncFuDoc(FuDocContext fuDocContext, PsiClass psiClass, BaseSyncConfigData configData) {
         //1、检查三方接口文档配置
-        configData = checkConfig(configData);
+        if (!checkConfig(configData)) {
+            return;
+        }
 
         //2、检查三方接口文档系统是否能建立连接
 
@@ -71,222 +68,109 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             //发出通知 没有可以同步的接口
             return;
         }
-
-        //4、获取api层级结构树
-        ApiStructureTreeDTO apiStructureTree = getApiStructureTree(psiClass);
+        //4、确定当前要同步的项目配置
+        ApiProjectDTO apiProjectDTO = getSyncProjectConfig(configData, psiClass);
 
         //5、同步接口文档
-        boolean syncResult = fuDocContext.isSyncDialog() ? syncApiForAuto(apiStructureTree, fuDocItemDataList, configData, psiClass) : syncApiForDialog(apiStructureTree, fuDocItemDataList, configData);
+        List<SyncApiResultDTO> resultDTOList = fuDocContext.isSyncDialog() ? syncApiList(apiProjectDTO, fuDocItemDataList, configData, psiClass) : syncApiForDialog(apiProjectDTO, fuDocItemDataList, configData);
 
-        if(syncResult){
-            //发出成功通知
-            FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_SUCCESS));
-        }else {
-            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_FAIL));
-        }
+        //6、同步结果提示
 
     }
 
 
-    /**
-     * 同步api到第三方接口文档系统-基于默认规则同步 不开启弹框让用户选择
-     *
-     * @param apiStructureTree   第三方接口文档系统层级结构
-     * @param fuDocItemDataList  同步的接口集合
-     * @param baseSyncConfigData 第三方接口文档配置
-     */
-    private boolean syncApiForAuto(ApiStructureTreeDTO apiStructureTree, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData baseSyncConfigData, PsiClass psiClass) {
-        ApiProjectDTO current = apiStructureTree.getCurrent();
-        if (Objects.isNull(current)) {
-            FuDocNotification.notifyError("没有当前项目的配置 无法同步接口");
-            return false;
+    private List<SyncApiResultDTO> syncApiList(ApiProjectDTO apiProjectDTO, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData configData, PsiClass psiClass) {
+        if (!configData.isAutoGenCategory() && fuDocItemDataList.stream().allMatch(a -> configData.isRecord(a.getUrlList().get(0)))) {
+            //按照之前记录同步
+            return fuDocItemDataList.stream().map(f -> doSyncApi(configData, f, apiProjectDTO, configData.getRecord(f.getUrlList().get(0)).getCategory())).collect(Collectors.toList());
         }
-        //获取Controller上的标题
-        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
-        String commentTitle = apiDocCommentData.getCommentTitle();
-        String category = StringUtils.isNotBlank(commentTitle) ? commentTitle : psiClass.getName();
-        String categoryId = null;
-        //需要判断当前分类是否存在 不存在则需要创建分类
-        List<ApiCategoryDTO> apiCategoryList = current.getApiCategoryList();
-        if (CollectionUtils.isNotEmpty(apiCategoryList)) {
-            Optional<ApiCategoryDTO> first = apiCategoryList.stream().filter(f -> f.getCategoryName().equals(category)).findFirst();
-            categoryId = first.map(ApiCategoryDTO::getCategoryId).orElse(null);
+        //确认需要同步的分类
+        ApiProjectDTO confirm = confirmApiCategory(apiProjectDTO, configData, psiClass);
+        if (Objects.isNull(confirm)) {
+            FuDocNotification.notifyWarn("本次同步失败, 没有选定需要同步的接口分类");
+            return Lists.newArrayList();
         }
-        if(StringUtils.isBlank(categoryId)){
-            AddApiCategoryDTO addApiCategoryDTO = new AddApiCategoryDTO();
-            addApiCategoryDTO.setProjectId(current.getProjectId());
-            addApiCategoryDTO.setProjectName(current.getProjectName());
-            addApiCategoryDTO.setProjectToken(current.getProjectToken());
-            addApiCategoryDTO.setCategoryName(category);
-            categoryId = createCategory(baseSyncConfigData, addApiCategoryDTO).getCategoryId();
-        }
-        //无需开启弹框 直接加载之前同步记录的数据发起同步接口
-        for (FuDocItemData fuDocItemData : fuDocItemDataList) {
-            SyncApiData syncApiData = buildSyncApiData(current, fuDocItemData);
-            syncApiData.setCategoryName(category);
-            syncApiData.setCategoryId(categoryId);
-            //组装同步接口文档所需要的数据 同步接口
-            boolean result = syncSingleApi(syncApiData, baseSyncConfigData);
-
-        }
-        return true;
+        //将本次接口均同步至该分类下
+        return fuDocItemDataList.stream().map(f -> doSyncApi(configData, f, confirm, confirm.getSelectCategory())).collect(Collectors.toList());
     }
 
+
+    private SyncApiResultDTO doSyncApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
+        SyncApiResultDTO resultDTO = new SyncApiResultDTO();
+        String errorMsg = doSync(configData, fuDocItemData, apiProjectDTO, apiCategoryDTO);
+        resultDTO.setApiName(fuDocItemData.getTitle());
+        resultDTO.setApiUrl(fuDocItemData.getUrlList().get(0));
+        resultDTO.setProjectName(apiProjectDTO.getProjectName());
+        resultDTO.setCategoryName(apiCategoryDTO.getCategoryName());
+        resultDTO.setSyncStatus(StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS.getMessage() : ApiSyncStatus.FAIL.getMessage());
+        resultDTO.setErrorMsg(errorMsg);
+        return resultDTO;
+    }
 
     /**
      * 同步api到第三方接口文档系统-基于弹框让用户选择同步到哪个分类规则
      *
-     * @param apiStructureTree   第三方接口文档系统层级结构
      * @param fuDocItemDataList  同步的接口集合
      * @param baseSyncConfigData 第三方接口文档配置
      */
-    private boolean syncApiForDialog(ApiStructureTreeDTO apiStructureTree, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData baseSyncConfigData) {
+    private List<SyncApiResultDTO> syncApiForDialog(ApiProjectDTO apiProjectDTO, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData baseSyncConfigData) {
         //弹框让用户选择需要同步的目录
 
 
         SyncApiView syncApiView = new SyncApiView(ProjectUtils.getCurrProject());
         if (!syncApiView.showAndGet()) {
             //选择取消 则不同步接口
-            return false;
         }
         List<SyncApiTableData> tableDataList = syncApiView.getTableDataList();
         if (CollectionUtils.isEmpty(tableDataList)) {
             //没有选择接口同步 直接返回
-            return false;
         }
-        //获取用户选择好的接口循环同步
-        for (SyncApiTableData syncApiTableData : tableDataList) {
-            SyncApiData syncApiData = buildSyncApiData(syncApiTableData, syncApiTableData.getApiData());
-            //同步接口文档至第三方接口文档系统
-            boolean syncResult = syncSingleApi(syncApiData, baseSyncConfigData);
-            //更新表格中每一条接口的同步结果
-            syncApiTableData.setSyncStatus(syncResult ? "同步成功" : "同步失败");
+        return Lists.newArrayList();
+    }
+
+
+    private ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass) {
+        if (configData.isAutoGenCategory()) {
+            //自动生成接口分类 无需用户选择
+            String categoryName = getApiCategoryFromController(psiClass);
+            ApiCategoryDTO matchCategory = matchCategory(categoryName, apiProjectDTO.getApiCategoryList());
+            if (Objects.isNull(matchCategory)) {
+                //创建一个接口分类
+                matchCategory = createCategory(configData, apiProjectDTO, categoryName);
+            }
+            apiProjectDTO.setSelectCategory(matchCategory);
+            return apiProjectDTO;
         }
-        return tableDataList.stream().allMatch(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus()));
+        //弹框让用户选择要同步的分类
+        SyncApiCategoryDialog dialog = new SyncApiCategoryDialog(ProjectUtils.getCurrProject(), false, apiProjectDTO.getModuleName(), apiProjectDTO);
+        dialog.show();
+        ApiProjectDTO selectCategory = dialog.getSelectCategory();
+        return selectCategory;
     }
 
 
-    /**
-     * 同步单个接口到第三方接口文档系统
-     *
-     * @param syncApiData 同步的接口数据
-     * @param configData  第三方接口文档配置数据
-     */
-    protected boolean syncSingleApi(SyncApiData syncApiData, BaseSyncConfigData configData) {
-        //5、组装第三方接口文档系统所需的数据结构
-        String syncDaJson = assembleSyncData(syncApiData);
-
-        //6、请求第三方接口文档系统接口 将接口文档同步至三方接口文档系统中
-        String result = HttpUtil.post(configData.getBaseUrl() + configData.getSyncApiUrl(), syncDaJson, 6000);
-
-        //7、校验返回结果
-        String errorMsg = checkSyncResult(syncApiData, result);
-        if (StringUtils.isNotBlank(errorMsg)) {
-            FuDocNotification.notifyError(errorMsg);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 构建同步接口数据对象
-     *
-     * @param data          能够标识接口唯一位置的对象
-     * @param fuDocItemData 接口数据
-     * @return 同步接口文档的数据对象
-     */
-    private SyncApiData buildSyncApiData(Object data, FuDocItemData fuDocItemData) {
-        SyncApiData syncApiData = new SyncApiData();
-        BeanUtil.copyProperties(data, syncApiData);
-        syncApiData.setFuDocItemData(fuDocItemData);
-        return syncApiData;
-    }
-
-
-    /**
-     * 校验当前接口之前的同步记录现在是否可以同步（即判断之前同步记录的分组 项目 接口分类是否还存在 通过名称来校验）
-     *
-     * @param syncApiRecordData 之前同步的记录
-     * @param apiTreeKeys       第三方接口文档系统现有的接口层级目录唯一标识集合
-     * @return true 可以按照之前同步记录方式同步
-     */
-    private boolean isCanSync(SyncApiRecordData syncApiRecordData, Set<String> apiTreeKeys) {
-        return Objects.nonNull(syncApiRecordData) && apiTreeKeys.contains(buildApiTreeKey(syncApiRecordData));
-    }
-
-
-    /**
-     * 将api层级结构扁平化
-     *
-     * @param apiStructureTree api层级结构
-     * @return 扁平化后的api结构
-     */
-    private List<ApiTreeKeyDTO> buildApiPositionKey(ApiStructureTreeDTO apiStructureTree) {
-        List<ApiTreeKeyDTO> resultList = Lists.newArrayList();
-        List<ApiGroupDTO> groupList = Lists.newArrayList();
-        if (CollectionUtils.isNotEmpty(groupList)) {
-            for (ApiGroupDTO apiGroupDTO : groupList) {
-                List<ApiProjectDTO> apiProjectList = apiGroupDTO.getApiProjectList();
-                if (CollectionUtils.isNotEmpty(apiProjectList)) {
-                    for (ApiProjectDTO apiProjectDTO : apiProjectList) {
-                        List<ApiCategoryDTO> categoryKeyList = buildApiCategoryKeyList(apiProjectDTO.getApiCategoryList());
-                        if (CollectionUtils.isNotEmpty(categoryKeyList)) {
-                            for (ApiCategoryDTO category : categoryKeyList) {
-                                ApiTreeKeyDTO apiTreeKeyDTO = new ApiTreeKeyDTO();
-                                apiTreeKeyDTO.setGroupId(apiGroupDTO.getGroupId());
-                                apiTreeKeyDTO.setGroupName(apiGroupDTO.getGroupName());
-                                apiTreeKeyDTO.setProjectId(apiProjectDTO.getProjectId());
-                                apiTreeKeyDTO.setProjectName(apiProjectDTO.getProjectName());
-                                apiTreeKeyDTO.setCategoryId(category.getCategoryId());
-                                apiTreeKeyDTO.setCategoryName(category.getCategoryName());
-                                resultList.add(apiTreeKeyDTO);
-                            }
-                        }
-                    }
+    private ApiCategoryDTO matchCategory(String categoryName, List<ApiCategoryDTO> categoryDTOList) {
+        if (CollectionUtils.isNotEmpty(categoryDTOList)) {
+            for (ApiCategoryDTO apiCategoryDTO : categoryDTOList) {
+                if (categoryName.equals(apiCategoryDTO.getCategoryName())) {
+                    return apiCategoryDTO;
+                }
+                ApiCategoryDTO matchCategory = matchCategory(categoryName, apiCategoryDTO.getApiCategoryList());
+                if (Objects.nonNull(matchCategory)) {
+                    return matchCategory;
                 }
             }
         }
-        return resultList;
+        return null;
     }
 
 
-    /**
-     * 递归拼接接口分类 将接口分类名称通过"/"连接起来 将树形接口的api分类扁平化
-     *
-     * @param apiCategoryList 接口分类树集合
-     * @return 扁平化后的接口分类集合
-     */
-    private List<ApiCategoryDTO> buildApiCategoryKeyList(List<ApiCategoryDTO> apiCategoryList) {
-        List<ApiCategoryDTO> resultList = Lists.newArrayList();
-        if (CollectionUtils.isNotEmpty(apiCategoryList)) {
-            for (ApiCategoryDTO apiCategoryDTO : apiCategoryList) {
-                String categoryName = apiCategoryDTO.getCategoryName();
-                List<ApiCategoryDTO> categoryKeyList = buildApiCategoryKeyList(apiCategoryDTO.getApiCategoryList());
-                if (CollectionUtils.isNotEmpty(categoryKeyList)) {
-                    for (ApiCategoryDTO subCategory : categoryKeyList) {
-                        resultList.add(new ApiCategoryDTO(subCategory.getCategoryId(), categoryName + "/" + subCategory));
-                    }
-                }
-                return resultList;
-            }
-        }
-        return apiCategoryList;
+    private String getApiCategoryFromController(PsiClass psiClass) {
+        //获取Controller上的标题
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
+        String commentTitle = apiDocCommentData.getCommentTitle();
+        return StringUtils.isNotBlank(commentTitle) ? commentTitle : psiClass.getName();
     }
 
 
-    private String buildApiTreeKey(SyncApiRecordData syncApiRecordData) {
-        return buildApiTreeKey(syncApiRecordData.getGroupName(), syncApiRecordData.getProjectName(), syncApiRecordData.getCategoryName());
-    }
-
-    /**
-     * 构建一个接口的唯一位置
-     *
-     * @param groupName   分组名称
-     * @param projectName 项目名称
-     * @param category    分类名称（多个"/"拼接）
-     * @return api树唯一key
-     */
-    private String buildApiTreeKey(String groupName, String projectName, String category) {
-        return groupName + ":" + projectName + "" + category;
-    }
 }

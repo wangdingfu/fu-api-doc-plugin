@@ -39,4 +39,9 @@ public class ApiCategoryDTO {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
+
+    @Override
+    public String toString() {
+        return this.categoryName;
+    }
 }

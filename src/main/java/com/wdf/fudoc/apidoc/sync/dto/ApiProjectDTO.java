@@ -42,7 +42,22 @@ public class ApiProjectDTO {
 
 
     /**
+     * 选中的分类
+     */
+    private ApiCategoryDTO selectCategory;
+
+    /**
+     * java 模块名称
+     */
+    private String moduleName;
+
+    /**
      * 分类集合
      */
     private List<ApiCategoryDTO> apiCategoryList;
+
+    @Override
+    public String toString() {
+        return this.projectName;
+    }
 }
