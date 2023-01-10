@@ -21,28 +21,22 @@ public class SyncShowDocStrategy extends AbstractSyncFuDocStrategy {
 
 
     @Override
-    protected boolean checkConfig(BaseSyncConfigData baseSyncConfigData) {
+    protected boolean checkConfig(BaseSyncConfigData configData) {
         return false;
     }
 
     @Override
-    protected String doSync(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
+    protected String doSingleApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
         return null;
     }
 
     @Override
-    protected ApiProjectDTO getSyncProjectConfig(BaseSyncConfigData configData, PsiClass psiClass) {
+    public ApiCategoryDTO createCategory(BaseSyncConfigData configData, ApiProjectDTO apiProjectDTO, String categoryName) {
         return null;
     }
 
     @Override
-    public ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, ApiProjectDTO apiProjectDTO, String categoryName) {
+    public List<ApiCategoryDTO> categoryList(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData) {
         return null;
     }
-
-    @Override
-    public List<ApiCategoryDTO> categoryList(ApiProjectDTO apiProjectDTO, BaseSyncConfigData baseSyncConfigData) {
-        return null;
-    }
-
 }

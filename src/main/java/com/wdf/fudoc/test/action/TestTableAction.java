@@ -21,13 +21,11 @@ public class TestTableAction extends AnAction {
         Module module = ModuleUtil.findModuleForPsiElement(PsiClassUtils.getTargetElement(e));
         SyncApiCategoryDialog syncApiCategoryDialog = new SyncApiCategoryDialog(e.getProject(), false, module.getName(), null);
         if (syncApiCategoryDialog.showAndGet()) {
-            ApiProjectDTO selectCategory = syncApiCategoryDialog.getSelectCategory();
-            String selectProjectName = syncApiCategoryDialog.getSelectProjectName();
-            System.out.println("OK:" + selectProjectName);
+            ApiProjectDTO selectCategory = syncApiCategoryDialog.getSelected();
+            System.out.println("OK:" + selectCategory);
         } else {
-            ApiProjectDTO selectCategory = syncApiCategoryDialog.getSelectCategory();
-            String selectProjectName = syncApiCategoryDialog.getSelectProjectName();
-            System.out.println("CANCEL:" + selectProjectName);
+            ApiProjectDTO selectCategory = syncApiCategoryDialog.getSelected();
+            System.out.println("CANCEL:" + selectCategory);
         }
     }
 }

@@ -5,6 +5,7 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -35,8 +36,7 @@ public class YapiConfigData extends BaseSyncConfigData {
     private List<YApiProjectTableData> projectConfigList = Lists.newArrayList();
 
 
-
-    private ApiProjectDTO convert(YApiProjectTableData tableData){
+    private ApiProjectDTO convert(YApiProjectTableData tableData) {
         ApiProjectDTO apiProjectDTO = new ApiProjectDTO();
         apiProjectDTO.setProjectToken(tableData.getProjectToken());
         apiProjectDTO.setProjectId(tableData.getProjectId());
@@ -48,5 +48,10 @@ public class YapiConfigData extends BaseSyncConfigData {
     @Override
     public List<ApiProjectDTO> getProjectConfigList(String moduleName) {
         return ObjectUtils.listToList(projectConfigList, this::convert);
+    }
+
+    @Override
+    public boolean isExistsConfig() {
+        return CollectionUtils.isNotEmpty(this.projectConfigList);
     }
 }
