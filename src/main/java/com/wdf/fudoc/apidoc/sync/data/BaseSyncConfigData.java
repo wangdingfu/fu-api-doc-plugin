@@ -3,9 +3,11 @@ package com.wdf.fudoc.apidoc.sync.data;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -42,6 +44,11 @@ public abstract class BaseSyncConfigData {
         return syncApiRecordMap.get(url);
     }
 
+    public void addRecord(SyncApiRecordData record) {
+        if (Objects.isNull(record) || StringUtils.isBlank(record.getApiUrl())) {
+            this.syncApiRecordMap.put(record.getApiUrl(), record);
+        }
+    }
 
     /**
      * 获取当前module对应到第三方接口文档的项目名称
@@ -50,5 +57,11 @@ public abstract class BaseSyncConfigData {
      * @return 第三方接口文档系统的项目名称
      */
     public abstract List<ApiProjectDTO> getProjectConfigList(String moduleName);
+
+
+    /**
+     * 是否存在当前项目配置
+     */
+    public abstract boolean isExistsConfig();
 
 }

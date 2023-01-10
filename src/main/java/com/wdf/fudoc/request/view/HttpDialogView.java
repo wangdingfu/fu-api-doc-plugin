@@ -169,6 +169,8 @@ public class HttpDialogView implements HttpCallback {
         this.titleLabel.setToolTipText(fuHttpRequestData.getApiName());
         this.requestTabView.initData(fuHttpRequestData);
         initResponseData(fuHttpRequestData);
+        //切换消息
+        messageComponent.switchInfo();
     }
 
 

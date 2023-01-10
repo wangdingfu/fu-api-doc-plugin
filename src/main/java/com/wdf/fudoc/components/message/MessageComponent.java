@@ -4,10 +4,12 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import com.wdf.fudoc.components.bo.FuMsgBO;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
 import com.wdf.fudoc.components.message.handler.FuMsgExecutor;
 import icons.FuDocIcons;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +36,9 @@ public class MessageComponent {
 
     private final JLabel myRefreshIcon = new JLabel(FuDocIcons.FU_MESSAGE);
 
+    @Setter
+    private boolean isShowIcon = true;
+
 
     public MessageComponent() {
         this.rootPanel = new JPanel(new BorderLayout());
@@ -42,13 +47,16 @@ public class MessageComponent {
         initLeftPanel();
         initCenterPanel();
         initRightPanel();
-        switchInfo();
     }
 
 
     public void switchInfo() {
         //随机展示一条消息
         fuMessageComponent.switchMsg();
+    }
+
+    public void setMsg(FuMsgBO fuMsgBO) {
+        fuMessageComponent.setMsg(fuMsgBO);
     }
 
     private void initFuMsgComponent() {
@@ -74,7 +82,7 @@ public class MessageComponent {
             leftPanel.setBorder(JBUI.Borders.empty(0, 4, 0, 1));
             leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.X_AXIS));
             leftPanel.setOpaque(false);
-            myRefreshIcon.setVisible(true);
+            myRefreshIcon.setVisible(isShowIcon);
             myRefreshIcon.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {

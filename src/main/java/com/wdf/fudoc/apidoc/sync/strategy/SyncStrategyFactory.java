@@ -10,11 +10,10 @@ import com.wdf.fudoc.common.ServiceHelper;
  */
 public class SyncStrategyFactory {
 
-    public static SyncFuDocStrategy getInstance() {
-        String enable = FuDocSyncSetting.getSettingData().getEnable();
-        if (ApiDocSystem.YAPI.getCode().equals(enable)) {
+    public static SyncFuDocStrategy getInstance(String apiSystem) {
+        if (ApiDocSystem.YAPI.getCode().equals(apiSystem)) {
             return ServiceHelper.getService(SyncToYApiStrategy.class);
-        } else if (ApiDocSystem.SHOW_DOC.getCode().equals(enable)) {
+        } else if (ApiDocSystem.SHOW_DOC.getCode().equals(apiSystem)) {
             return ServiceHelper.getService(SyncShowDocStrategy.class);
         }
         return null;

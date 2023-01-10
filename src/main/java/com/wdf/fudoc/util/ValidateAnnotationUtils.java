@@ -35,8 +35,16 @@ public class ValidateAnnotationUtils {
      * @return message内容
      */
     public static String getValidMessage(BaseInfoDesc baseInfoDesc) {
-        if (baseInfoDesc.exists(AnnotationConstants.VALID_NOT_NULL)) {
-            return getMessageValue(baseInfoDesc, AnnotationConstants.VALID_NOT_NULL);
+        if (baseInfoDesc.exists(AnnotationConstants.JAVAX_VALID_NOT_NULL)) {
+            return getMessageValue(baseInfoDesc, AnnotationConstants.JAVAX_VALID_NOT_NULL);
+        }
+
+        if (baseInfoDesc.exists(AnnotationConstants.JAVAX_VALID_NOT_EMPTY)) {
+            return getMessageValue(baseInfoDesc, AnnotationConstants.JAVAX_VALID_NOT_EMPTY);
+        }
+
+        if (baseInfoDesc.exists(AnnotationConstants.JAVAX_VALID_NOT_BLANK)) {
+            return getMessageValue(baseInfoDesc, AnnotationConstants.JAVAX_VALID_NOT_BLANK);
         }
 
         if (baseInfoDesc.exists(AnnotationConstants.VALID_NOT_BLANK)) {

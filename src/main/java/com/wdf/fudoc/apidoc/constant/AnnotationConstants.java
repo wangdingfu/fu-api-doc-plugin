@@ -28,9 +28,11 @@ public interface AnnotationConstants {
     String VALIDATED = "org.springframework.validation.annotation.Validated";
     String VALID = "javax.validation.Valid";
 
-    String VALID_NOT_NULL = "javax.validation.constraints.NotNull";
     String VALID_NOT_BLANK = "org.hibernate.validator.constraints.NotBlank";
     String VALID_NOT_EMPTY = "org.hibernate.validator.constraints.NotEmpty";
+    String JAVAX_VALID_NOT_NULL = "javax.validation.constraints.NotNull";
+    String JAVAX_VALID_NOT_EMPTY = "javax.validation.constraints.NotEmpty";
+    String JAVAX_VALID_NOT_BLANK = "javax.validation.constraints.NotBlank";
 
 
     String SWAGGER_API = "io.swagger.annotations.Api";
@@ -40,7 +42,7 @@ public interface AnnotationConstants {
     String SWAGGER_API_PARAM = "io.swagger.annotations.ApiParam";
 
 
-    String[] VALID_NOT = new String[]{VALID_NOT_NULL, VALID_NOT_BLANK, VALID_NOT_EMPTY};
+    String[] VALID_NOT = new String[]{JAVAX_VALID_NOT_NULL, JAVAX_VALID_NOT_EMPTY, JAVAX_VALID_NOT_BLANK, VALID_NOT_BLANK, VALID_NOT_EMPTY};
 
     String[] MAPPING = new String[]{REQUEST_MAPPING, GET_MAPPING, PUT_MAPPING, POST_MAPPING, DELETE_MAPPING, PATCH_MAPPING};
 }

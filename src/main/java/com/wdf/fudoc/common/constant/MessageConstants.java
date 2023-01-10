@@ -62,5 +62,25 @@ public interface MessageConstants {
     String SYNC_YAPI_URL_TIP = "fodoc.sync.yapi.url.tip";
 
     String SYNC_YAPI_GET_PROJECT_FAIL = "fudoc.sync.yapi.project.fail";
+    String SYNC_API_NOT_CONFIRM_CATEGORY = "fudoc.sync.no.category";
+
+    String NOT_SYNC_API = "fudoc.sync.no";
+    String SYNC_API_SUCCESS_ONE = "fudoc.api.sync.success.one";
+    String SYNC_API_SUCCESS_ALL = "fudoc.api.sync.success.all";
+    String SYNC_API_FAILED_ALL = "fudoc.api.sync.failed.all";
+    String SYNC_API_SUCCESS_FAILED = "fudoc.api.sync.success.fail";
+
+    String SYNC_API_TITLE = "fudoc.api.sync.category.title";
+    String SYNC_API_PROJECT_LABEL = "fudoc.api.sync.category.project.label";
+    String SYNC_API_CATEGORY_LABEL = "fudoc.api.sync.category.category.label";
+    String SYNC_API_CREATE_PROJECT = "fudoc.api.sync.create.project";
+    String SYNC_API_CREATE_PROJECT_TITLE = "fudoc.api.sync.create.project.title";
+    String SYNC_API_CREATE_CATEGORY = "fudoc.api.sync.create.category";
+    String SYNC_API_CREATE_CATEGORY_TITLE = "fudoc.api.sync.create.category.title";
+    String SYNC_API_CREATE_CATEGORY_REPEAT = "fudoc.api.sync.create.category.repeat";
+
+
+    String VALIDATOR_INPUT_REPEAT = "fudoc.input.validator.repeat";
+
 
 }

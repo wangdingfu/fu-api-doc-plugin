@@ -13,6 +13,7 @@ public enum FuColor {
     GITHUB("#2da44e","#2da44e"),
     ORANGE("#d9480f","#d9480f"),
     DOCUMENT("#0969da","#0969da"),
+    RED("#e74c3c","#e74c3c"),
 
 
     ;

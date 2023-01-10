@@ -1,8 +1,11 @@
 package com.wdf.fudoc.components.validator;
 
-import com.intellij.openapi.ui.InputValidator;
+import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.util.NlsSafe;
+import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.constant.MessageConstants;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 
@@ -12,20 +15,25 @@ import java.util.Collection;
  * @author wangdingfu
  * @date 2023-01-07 02:32:50
  */
-public class InputExistsValidator implements InputValidator {
+public class InputExistsValidator implements InputValidatorEx {
     private Collection<String> itemList;
+    private String errorTest;
 
     public InputExistsValidator(Collection<String> itemList) {
         this.itemList = itemList;
     }
 
     @Override
-    public boolean checkInput(@NlsSafe String inputString) {
-        return !StringUtils.isEmpty(inputString) && !itemList.contains(inputString);
+    public String getErrorText(@NonNls String inputString) {
+        return errorTest;
     }
 
     @Override
-    public boolean canClose(@NlsSafe String inputString) {
-        return this.checkInput(inputString);
+    public boolean checkInput(@NlsSafe String inputString) {
+        if (StringUtils.isNotBlank(inputString) && itemList.contains(inputString)) {
+            errorTest = FuDocMessageBundle.message(MessageConstants.VALIDATOR_INPUT_REPEAT);
+        }
+        return !StringUtils.isEmpty(inputString) && !itemList.contains(inputString);
     }
+
 }

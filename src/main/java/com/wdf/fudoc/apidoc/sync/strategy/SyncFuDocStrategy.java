@@ -29,24 +29,24 @@ public interface SyncFuDocStrategy {
      * @param fuDocContext 上下文对象
      * @param psiClass     同步的接口所属的class对象
      */
-    void syncFuDoc(FuDocContext fuDocContext, PsiClass psiClass, BaseSyncConfigData baseSyncConfigData);
+    void syncFuDoc(FuDocContext fuDocContext, PsiClass psiClass, BaseSyncConfigData configData);
 
     /**
      * 创建分类
      *
      * @return 分类对象
      */
-    ApiCategoryDTO createCategory(BaseSyncConfigData baseSyncConfigData, ApiProjectDTO apiProjectDTO, String categoryName);
+    ApiCategoryDTO createCategory(BaseSyncConfigData configData, ApiProjectDTO apiProjectDTO, String categoryName);
 
 
     /**
      * 分类集合
      *
-     * @param projectName        项目名称
-     * @param baseSyncConfigData 配置数据
+     * @param apiProjectDTO 项目名称
+     * @param configData    配置数据
      * @return 第三方接口文档系统的接口分类集合
      */
-    List<ApiCategoryDTO> categoryList(ApiProjectDTO apiProjectDTO, BaseSyncConfigData baseSyncConfigData);
+    List<ApiCategoryDTO> categoryList(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData);
 
 
 }
