@@ -34,15 +34,13 @@ public class MessageComponent {
 
     private FuMessageComponent fuMessageComponent;
 
-    private final JLabel myRefreshIcon = new JLabel(FuDocIcons.FU_MESSAGE);
-
-    @Setter
-    private boolean isShowIcon = true;
+    private final JLabel myRefreshIcon;
 
 
-    public MessageComponent() {
+    public MessageComponent(boolean isShowIcon) {
         this.rootPanel = new JPanel(new BorderLayout());
         this.rootPanel.setBorder(BorderFactory.createEmptyBorder(1, 0, 0, 6));
+        this.myRefreshIcon = isShowIcon ? new JLabel(FuDocIcons.FU_MESSAGE) : new JLabel(" ");
         initFuMsgComponent();
         initLeftPanel();
         initCenterPanel();
@@ -82,7 +80,6 @@ public class MessageComponent {
             leftPanel.setBorder(JBUI.Borders.empty(0, 4, 0, 1));
             leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.X_AXIS));
             leftPanel.setOpaque(false);
-            myRefreshIcon.setVisible(isShowIcon);
             myRefreshIcon.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -114,6 +111,7 @@ public class MessageComponent {
             this.rootPanel.add(leftPanel, BorderLayout.WEST);
         }
     }
+
 
     private void initCenterPanel() {
         if (centerPanel == null) {

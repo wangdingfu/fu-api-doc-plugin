@@ -55,7 +55,6 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
     protected abstract String doSingleApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO);
 
 
-
     @Override
     public void syncFuDoc(FuDocContext fuDocContext, PsiClass psiClass, BaseSyncConfigData configData) {
         //1、检查三方接口文档配置
@@ -104,8 +103,7 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         //需要同步的接口数量(生成的接口文档数量可能和实际需要同步的接口数量不一致 有可能会在弹框中选择哪些接口同步哪些不同步)
         int syncApiSize = resultDTOList.size();
         if (syncApiSize < 1) {
-            //本次没有需要同步的接口
-            FuDocNotification.notifyWarn(NOT_SYNC_API);
+            //本次没有需要同步的接口 不需要提示
             return;
         }
         List<SyncApiResultDTO> successList = resultDTOList.stream().filter(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus())).toList();
@@ -123,14 +121,13 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             return;
         }
         if (faileList.size() == syncApiSize) {
-            //全部同步失败情况 - 同步{}个接口到{}分类下失败
-            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.SYNC_API_FAILED_ALL, syncApiSize, resultDTO.getCategoryName()));
+            //全部同步失败情况 - 同步接口失败 失败原因:{0}
+            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.SYNC_API_FAILED_ALL, StringUtils.isNotBlank(resultDTO.getErrorMsg()) ? resultDTO.getErrorMsg() : "未知异常"));
             return;
         }
-        //部分成功 部分失败 - 本次成功同步{0}个接口到{1}分类下 同步失败{2}个接口到{3}分类下
+        //部分成功 部分失败 - 本次成功同步{0}个接口到{1}分类下 同步失败{2}个接口
         SyncApiResultDTO successResultDTO = successList.get(0);
-        SyncApiResultDTO failResultDTO = faileList.get(0);
-        FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_FAILED, successList.size(), successResultDTO.getCategoryName(), faileList.size(), failResultDTO.getCategoryName()));
+        FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_FAILED, successList.size(), successResultDTO.getCategoryName(), faileList.size()));
     }
 
 
@@ -155,12 +152,12 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         StringBuilder errorMsg = new StringBuilder();
         try {
             ApiProjectDTO confirm = confirmApiCategory(apiProjectDTO, configData, psiClass);
-            if (Objects.nonNull(confirm)) {
-                //将本次接口均同步至本次确认的分类下
-                return fuDocItemDataList.stream().map(f -> singleSyncApi(configData, f, confirm, confirm.getSelectCategory())).collect(Collectors.toList());
+            if (Objects.isNull(confirm)) {
+                //没有确认分类 无需发起同步
+                return Lists.newArrayList();
             }
-            //没有确认分类 记录失败原因
-            errorMsg.append(NOT_CONFIRM_CATEGORY);
+            //将本次接口均同步至本次确认的分类下
+            return fuDocItemDataList.stream().map(f -> singleSyncApi(configData, f, confirm, confirm.getSelectCategory())).collect(Collectors.toList());
         } catch (Exception e) {
             //确认分类失败 记录异常原因
             errorMsg.append(e.getMessage());
@@ -292,7 +289,9 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         resultDTO.setApiName(fuDocItemData.getTitle());
         resultDTO.setApiUrl(fuDocItemData.getUrlList().get(0));
         resultDTO.setProjectName(apiProjectDTO.getProjectName());
-        resultDTO.setCategoryName(apiCategoryDTO.getCategoryName());
+        if (Objects.nonNull(apiCategoryDTO)) {
+            resultDTO.setCategoryName(apiCategoryDTO.getCategoryName());
+        }
         resultDTO.setSyncStatus(StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS.getMessage() : ApiSyncStatus.FAIL.getMessage());
         resultDTO.setErrorMsg(errorMsg);
         return resultDTO;

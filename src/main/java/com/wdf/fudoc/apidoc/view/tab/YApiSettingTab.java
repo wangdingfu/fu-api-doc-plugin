@@ -56,6 +56,9 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     private static final TitledBorder baseInfoBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_BASE_TITLE));
     private static final TitledBorder mainBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_MAIN_TITLE));
 
+    private static final String SYNC_TOKEN =  FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN);
+    private static final String SYNC_TOKEN_TITLE =  FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE);
+
 
     /**
      * 项目配置
@@ -99,7 +102,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
             return null;
         }
         List<String> projectTokenList = ObjectUtils.listToList(fuTableComponent.getDataList(), YApiProjectTableData::getProjectToken);
-        String value = Messages.showInputDialog(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN), FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE), Messages.getQuestionIcon(), StringUtils.EMPTY, new InputExistsValidator(projectTokenList));
+        String value = Messages.showInputDialog(SYNC_TOKEN, SYNC_TOKEN_TITLE, Messages.getQuestionIcon(), StringUtils.EMPTY, new InputExistsValidator(projectTokenList));
         if (StringUtils.isEmpty(value)) {
             return null;
         }
@@ -114,6 +117,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         tableData.setProjectId(projectInfo.getProjectId() + "");
         tableData.setProjectName(projectInfo.getProjectName());
         tableData.setProjectToken(value);
+        tableData.setSelect(true);
         return tableData;
     }
 
@@ -130,7 +134,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     }
 
     private void createUIComponents() {
-        this.baseUrl = new PlaceholderTextField("请输入你的YApi服务地址");
+        this.baseUrl = new PlaceholderTextField("请输入你的YApi服务地址 例如:https://yapi.fudoc.com");
     }
 
     @Override

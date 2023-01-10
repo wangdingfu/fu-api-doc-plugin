@@ -95,7 +95,7 @@ public class HttpDialogView implements HttpCallback {
         this.psiElement = psiElement;
         this.requestTabView = new RequestTabView(this.project, this);
         this.responseTabView = new ResponseTabView(this.project);
-        this.messageComponent = new MessageComponent();
+        this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.titleLabel = new JBLabel("", UIUtil.ComponentStyle.REGULAR);
         this.titleLabel.setBorder(JBUI.Borders.emptyLeft(5));

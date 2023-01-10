@@ -319,10 +319,11 @@ public class SyncApiCategoryDialog extends DialogWrapper {
                 if (CollectionUtils.isNotEmpty(categoryList) && categoryList.stream().anyMatch(a -> a.getCategoryName().equals(inputString))) {
                     //当前项目中存在 则不创建
                     myErrorText = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_REPEAT, apiProjectDTO.getProjectName());
-                    return true;
+                    return false;
                 }
             }
-            return false;
+            myErrorText = null;
+            return true;
         }
     }
 

@@ -16,7 +16,7 @@ import java.util.Collection;
  * @date 2023-01-07 02:32:50
  */
 public class InputExistsValidator implements InputValidatorEx {
-    private Collection<String> itemList;
+    private final Collection<String> itemList;
     private String errorTest;
 
     public InputExistsValidator(Collection<String> itemList) {
@@ -32,8 +32,10 @@ public class InputExistsValidator implements InputValidatorEx {
     public boolean checkInput(@NlsSafe String inputString) {
         if (StringUtils.isNotBlank(inputString) && itemList.contains(inputString)) {
             errorTest = FuDocMessageBundle.message(MessageConstants.VALIDATOR_INPUT_REPEAT);
+            return false;
         }
-        return !StringUtils.isEmpty(inputString) && !itemList.contains(inputString);
+        errorTest = null;
+        return true;
     }
 
 }

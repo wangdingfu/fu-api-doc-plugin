@@ -23,9 +23,8 @@ public class SyncApiTopView {
 
     public SyncApiTopView() {
         this.rootPanel = new JPanel(new BorderLayout());
-        MessageComponent messageComponent = new MessageComponent();
+        MessageComponent messageComponent = new MessageComponent(false);
         messageComponent.setMsg(buildMsg());
-        messageComponent.setShowIcon(false);
         this.rootPanel.add(messageComponent.getRootPanel(), BorderLayout.CENTER);
     }
 
