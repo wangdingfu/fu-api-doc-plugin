@@ -6,7 +6,7 @@ import com.wdf.fudoc.common.FuDocMessageBundle;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.constant.UrlConstants;
-import com.wdf.fudoc.apidoc.data.FuDocDataContent;
+import com.wdf.fudoc.util.ProjectUtils;
 
 /**
  * FuDoc通知消息类 (2021.1.3版本之前)
@@ -20,15 +20,15 @@ public class FuDocNotification {
     private static final NotificationGroup NOTIFICATION_GROUP = NotificationGroupManager.getInstance().getNotificationGroup(FuDocConstants.Notify.NOTIFY_GROUP);
 
     public static void notifyInfo(String message) {
-        genNotify(NotificationType.INFORMATION, message, FuDocDataContent.getProject());
+        genNotify(NotificationType.INFORMATION, message, ProjectUtils.getCurrProject());
     }
 
     public static void notifyWarn(String message) {
-        genNotify(NotificationType.WARNING, message, FuDocDataContent.getProject());
+        genNotify(NotificationType.WARNING, message, ProjectUtils.getCurrProject());
     }
 
     public static void notifyError(String message) {
-        genNotify(NotificationType.ERROR, message, FuDocDataContent.getProject());
+        genNotify(NotificationType.ERROR, message, ProjectUtils.getCurrProject());
     }
 
     /**
