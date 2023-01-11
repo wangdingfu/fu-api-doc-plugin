@@ -1,14 +1,19 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
 import com.google.common.collect.Lists;
+import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
+import com.wdf.fudoc.components.bo.TreePathBO;
 import com.wdf.fudoc.util.ObjectUtils;
+import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Yapi配置
@@ -36,22 +41,40 @@ public class YapiConfigData extends BaseSyncConfigData {
     private List<YApiProjectTableData> projectConfigList = Lists.newArrayList();
 
 
-    private ApiProjectDTO convert(YApiProjectTableData tableData) {
-        ApiProjectDTO apiProjectDTO = new ApiProjectDTO();
-        apiProjectDTO.setProjectToken(tableData.getProjectToken());
-        apiProjectDTO.setProjectId(tableData.getProjectId());
-        apiProjectDTO.setProjectName(tableData.getProjectName());
-        return apiProjectDTO;
-    }
-
-
     @Override
     public List<ApiProjectDTO> getProjectConfigList(String moduleName) {
-        return ObjectUtils.listToList(projectConfigList, this::convert);
+        String basePath = ProjectUtils.getCurrentProjectPath();
+        return this.projectConfigList.stream().filter(f -> f.getProjectKeyList().contains(basePath))
+                .map(m -> convert(m, moduleName))
+                //过滤没匹配上的module sort=0则是没有匹配上
+                .filter(f -> YesOrNo.NO.getCode() == f.getSort()).collect(Collectors.toList());
     }
 
     @Override
     public boolean isExistsConfig() {
-        return CollectionUtils.isNotEmpty(this.projectConfigList);
+        String basePath = ProjectUtils.getCurrentProjectPath();
+        return this.projectConfigList.stream().anyMatch(a -> a.getProjectKeyList().contains(basePath));
+    }
+
+
+    private ApiProjectDTO convert(YApiProjectTableData tableData, String moduleName) {
+        ApiProjectDTO apiProjectDTO = new ApiProjectDTO();
+        apiProjectDTO.setProjectToken(tableData.getProjectToken());
+        apiProjectDTO.setProjectId(tableData.getProjectId());
+        apiProjectDTO.setProjectName(tableData.getProjectName());
+        apiProjectDTO.setSort(calProjectSort(tableData, moduleName));
+        return apiProjectDTO;
+    }
+
+
+    private Integer calProjectSort(YApiProjectTableData yApiProjectTableData, String moduleName) {
+        //默认99 排在最后面
+        Integer sort = 99;
+        TreePathBO scope;
+        if (StringUtils.isNotBlank(moduleName) && Objects.nonNull(scope = yApiProjectTableData.getScope()) && scope.isNotNull()) {
+            //当前项目配置有指定module生效
+            return scope.matchModule(moduleName);
+        }
+        return sort;
     }
 }

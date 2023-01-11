@@ -9,18 +9,19 @@
 
 # 20220708
 
-- 同一个类中 不同方法同一个入参时，使用@Validated的group指定不同分组时，由于解析过程中使用了缓存  会导致同一个对象只存在一份，无法区分对应方法里的Group(`已完成`)
-
+- 同一个类中 不同方法同一个入参时，使用@Validated的group指定不同分组时，由于解析过程中使用了缓存
+  会导致同一个对象只存在一份，无法区分对应方法里的Group(`已完成`)
 
 # 20220718
 
 - 支持针对一个普通java类解析字段(`已完成`)
 
-
 # 开通idea代码调试
+
 idea.is.internal=true
 
 # 1.2.5
+
 1、新增基础配置页面. 支持配置需要过滤的类和属性 支持配置自定义数据
 2、工程瘦身. 移除fastJson依赖和HuTools不需要的依赖
 3、支持自定义枚举相关配置、校验注解相关配置
@@ -31,15 +32,14 @@ idea.is.internal=true
 8、支持配置内容为应用级别. 不用每一个项目配置一遍
 9、相关bug修复
 
-
 # 1.3.0
+
 1、支持多controller生成
-
-
 
 # Fu Request
 
 ### ToolBar
+
 - 刷新
 - 保存
 - 上一个
@@ -49,8 +49,8 @@ idea.is.internal=true
 - 关于Fu Doc
 - 历史请求
 
-
 ### 待处理问题
+
 - 提示信息重构
 - 批量编辑组件重构
 - header批量编辑联动
@@ -61,27 +61,20 @@ idea.is.internal=true
 - 支持请求切换
 
 ### 开发计划
+
 - 添加全局请求头维护功能
 - 添加身份验证功能(支持通过有效期动态维护用户token)
 - 文件上传下载支持
 - 消息管理器完善（支持超链接展示）
 - 最近请求
 
+### 20230111
 
-
-
-
-
-
-//                if (file.exists() && Messages.CANCEL == Messages.showOkCancelDialog(ProjectUtils.getCurrProject(), message, title, "覆盖", "取消", null)) {
-//                    return;
-//                }
-if (file.exists() && !MessageDialogBuilder.okCancel(title, message)
-.yesText("覆盖")
-.doNotAsk(option)
-.guessWindowAndAsk()) {
-return;
-}
-
-
-BrowserUtil.browse(url)
+- 同步接口选择弹框需要基于最近使用次数最多和使用时间最近的算法来排序展示分类
+- 优先匹配之前同步记录同步
+- YApi模板可以清空 并且添加默认保存记录
+- 同步提示框完善 支持查看同步结果
+- 同步配置中 勾选项目记录时 将改记录挂在当前项目下 其他项目进来展示不勾选
+- 删除配置时 新增提示确认框
+- mock数据优化
+- 文档补齐

@@ -52,6 +52,11 @@ public class ApiProjectDTO {
     private String moduleName;
 
     /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
      * 分类集合
      */
     private List<ApiCategoryDTO> apiCategoryList;

@@ -1,6 +1,7 @@
 package com.wdf.fudoc.apidoc.view.tab;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
 import com.intellij.ui.IdeBorderFactory;
@@ -26,7 +27,9 @@ import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.components.listener.FuViewListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
 import com.wdf.fudoc.util.ObjectUtils;
+import com.wdf.fudoc.util.ProjectUtils;
 import icons.FuDocIcons;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -56,8 +59,8 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     private static final TitledBorder baseInfoBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_BASE_TITLE));
     private static final TitledBorder mainBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_MAIN_TITLE));
 
-    private static final String SYNC_TOKEN =  FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN);
-    private static final String SYNC_TOKEN_TITLE =  FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE);
+    private static final String SYNC_TOKEN = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN);
+    private static final String SYNC_TOKEN_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE);
 
 
     /**
@@ -149,7 +152,18 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         yapi.setBaseUrl(this.baseUrl.getText());
         yapi.setUserName(this.userName.getText());
         yapi.setPassword(this.password.getText());
-        yapi.setProjectConfigList(this.fuTableComponent.getDataList());
+        //获取当前需要保存的项目配置
+        List<YApiProjectTableData> projectConfigList = this.fuTableComponent.getDataList();
+        Project currProject = ProjectUtils.getCurrProject();
+        String basePath = currProject.getBasePath();
+        for (YApiProjectTableData yApiProjectTableData : projectConfigList) {
+            Boolean select = yApiProjectTableData.getSelect();
+            if (Objects.nonNull(select) && select) {
+                List<String> projectKeyList = yApiProjectTableData.getProjectKeyList();
+                projectKeyList.add(basePath);
+            }
+        }
+        yapi.setProjectConfigList(projectConfigList);
     }
 
     @Override
@@ -161,6 +175,15 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         this.baseUrl.setText(yapi.getBaseUrl());
         this.userName.setText(yapi.getUserName());
         this.password.setText(yapi.getPassword());
-        this.fuTableComponent.setDataList(yapi.getProjectConfigList());
+        Project currProject = ProjectUtils.getCurrProject();
+        String basePath = currProject.getBasePath();
+        List<YApiProjectTableData> projectConfigList = yapi.getProjectConfigList();
+        if(CollectionUtils.isNotEmpty(projectConfigList)){
+            for (YApiProjectTableData yApiProjectTableData : projectConfigList) {
+                List<String> projectKeyList = yApiProjectTableData.getProjectKeyList();
+                yApiProjectTableData.setSelect(projectKeyList.contains(basePath));
+            }
+        }
+        this.fuTableComponent.setDataList(projectConfigList);
     }
 }
