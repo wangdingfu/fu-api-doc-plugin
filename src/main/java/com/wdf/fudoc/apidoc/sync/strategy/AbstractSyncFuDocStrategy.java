@@ -7,6 +7,7 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable;
+import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
@@ -87,7 +88,7 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
                 //同步api接口-会根据配置自动生成分类名称或者弹框让用户选择分类（无交互式的同步）
                 ? intelligenceSyncApi(apiProjectDTO, fuDocItemDataList, configData, psiClass)
                 //弹出弹框显示同步进度（有交互式的同步）
-                : syncApiForDialog(apiProjectDTO, fuDocItemDataList, configData);
+                : syncApiForDialog(apiProjectDTO, fuDocItemDataList, configData, psiClass);
 
         //6、提示同步结果
         tipSyncResult(resultDTOList);
@@ -179,8 +180,10 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
     private SyncApiResultDTO singleSyncApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
         //发起同步
         String errorMsg = doSingleApi(configData, fuDocItemData, apiProjectDTO, apiCategoryDTO);
-        //如果接口同步成功 则记录下来
-        configData.addRecord(buildApiSyncRecord(fuDocItemData, apiProjectDTO));
+        if (StringUtils.isBlank(errorMsg)) {
+            //如果接口同步成功 则记录下来
+            configData.addRecord(buildApiSyncRecord(fuDocItemData, apiProjectDTO));
+        }
         //构建返回结果
         return buildResult(fuDocItemData, apiProjectDTO, apiCategoryDTO, errorMsg);
     }
@@ -189,21 +192,26 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
     /**
      * 同步api到第三方接口文档系统-基于弹框让用户选择同步到哪个分类规则
      *
-     * @param fuDocItemDataList  同步的接口集合
-     * @param baseSyncConfigData 第三方接口文档配置
+     * @param fuDocItemDataList 同步的接口集合
+     * @param configData        第三方接口文档配置
      */
-    private List<SyncApiResultDTO> syncApiForDialog(ApiProjectDTO apiProjectDTO, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData baseSyncConfigData) {
-        //弹框让用户选择需要同步的目录
-
-        SyncApiView syncApiView = new SyncApiView(ProjectUtils.getCurrProject());
-        if (!syncApiView.showAndGet()) {
-            //选择取消 则不同步接口
+    private List<SyncApiResultDTO> syncApiForDialog(ApiProjectDTO apiProjectDTO, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData configData, PsiClass psiClass) {
+        //确认需要同步的分类
+        StringBuilder errorMsg = new StringBuilder();
+        try {
+            ApiProjectDTO confirm = confirmApiCategory(apiProjectDTO, configData, psiClass);
+            if (Objects.isNull(confirm)) {
+                //没有确认分类 无需发起同步
+                return Lists.newArrayList();
+            }
+            //将本次接口均同步至本次确认的分类下
+            return fuDocItemDataList.stream().map(f -> singleSyncApi(configData, f, confirm, confirm.getSelectCategory())).collect(Collectors.toList());
+        } catch (Exception e) {
+            //确认分类失败 记录异常原因
+            errorMsg.append(e.getMessage());
         }
-        List<SyncApiTableData> tableDataList = syncApiView.getTableDataList();
-        if (CollectionUtils.isEmpty(tableDataList)) {
-            //没有选择接口同步 直接返回
-        }
-        return Lists.newArrayList();
+        //构建同步失败结果
+        return ObjectUtils.listToList(fuDocItemDataList, fudoc -> buildResult(fudoc, apiProjectDTO, apiProjectDTO.getSelectCategory(), errorMsg.toString()));
     }
 
 

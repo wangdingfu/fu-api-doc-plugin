@@ -186,6 +186,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         List<ApiCategoryDTO> apiCategoryList = initCategoryList();
         //清空选择分类面板内容
         this.categoryPanel.removeAll();
+        this.categoryPanel.repaint();
         //构建选择分类面板
         this.categoryPanel.add(new JLabel(CATEGORY_LABEL), BorderLayout.WEST);
         if (isCategoryTree) {
@@ -201,6 +202,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
             linkLabel.setBorder(JBUI.Borders.emptyLeft(10));
             this.categoryPanel.add(linkLabel, BorderLayout.EAST);
         }
+        this.categoryPanel.revalidate();
     }
 
 

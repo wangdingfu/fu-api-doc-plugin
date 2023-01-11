@@ -60,6 +60,8 @@ public interface MessageConstants {
 
 
     String SYNC_YAPI_URL_TIP = "fodoc.sync.yapi.url.tip";
+    String SYNC_YAPI_DELETE_PROJECT_CONFIG = "fodoc.sync.yapi.delete.project.config";
+    String SYNC_YAPI_DELETE_PROJECT_CONFIG_TITLE = "fodoc.sync.yapi.delete.project.config.title";
 
     String SYNC_YAPI_GET_PROJECT_FAIL = "fudoc.sync.yapi.project.fail";
     String SYNC_API_NOT_CONFIRM_CATEGORY = "fudoc.sync.no.category";

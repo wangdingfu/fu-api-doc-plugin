@@ -55,6 +55,11 @@ public interface FuTableListener<T> {
 
     }
 
+
+    default boolean isCanDelete(T data) {
+        return true;
+    }
+
     /**
      * row移动
      *

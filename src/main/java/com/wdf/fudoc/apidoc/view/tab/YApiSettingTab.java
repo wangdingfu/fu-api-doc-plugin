@@ -48,7 +48,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     private JPanel baseInfoPanel;
     private JPanel mainPanel;
     private JTextField userName;
-    private JTextField password;
+    private JTextField yapiPwd;
     private JButton loginBtn;
     private JLabel userNameTitle;
     private JLabel passwordTitle;
@@ -61,6 +61,10 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
 
     private static final String SYNC_TOKEN = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN);
     private static final String SYNC_TOKEN_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE);
+    // 当前项目配置存在其他项目在使用 确定要删除吗
+    private static final String DELETE_CONFIG_TIP = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG);
+    // 确认删除项目配置
+    private static final String CONFIRM_DELETE_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG_TITLE);
 
 
     /**
@@ -86,6 +90,23 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         glass.setVisible(true);
         rootPane.setContentPane(this.rootPanel);
         rootPane.setDefaultButton(this.loginBtn);
+    }
+
+
+    /**
+     * 校验项目配置的数据是否可以删除
+     *
+     * @param data 需要删除的数据
+     * @return true 可以删除 false 不可以删除
+     */
+    @Override
+    public boolean isCanDelete(YApiProjectTableData data) {
+        List<String> projectKeyList = data.getProjectKeyList();
+        String currentProjectPath = ProjectUtils.getCurrentProjectPath();
+        if (CollectionUtils.isEmpty(projectKeyList) || (projectKeyList.size() == 1 && currentProjectPath.equals(projectKeyList.get(0)))) {
+            return true;
+        }
+        return Messages.showYesNoDialog(DELETE_CONFIG_TIP, CONFIRM_DELETE_TITLE, Messages.getQuestionIcon()) == Messages.YES;
     }
 
     @Override
@@ -151,16 +172,18 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         YapiConfigData yapi = settingData.getYapi();
         yapi.setBaseUrl(this.baseUrl.getText());
         yapi.setUserName(this.userName.getText());
-        yapi.setPassword(this.password.getText());
+        yapi.setYapiPwd(this.yapiPwd.getText());
         //获取当前需要保存的项目配置
         List<YApiProjectTableData> projectConfigList = this.fuTableComponent.getDataList();
         Project currProject = ProjectUtils.getCurrProject();
         String basePath = currProject.getBasePath();
         for (YApiProjectTableData yApiProjectTableData : projectConfigList) {
             Boolean select = yApiProjectTableData.getSelect();
+            List<String> projectKeyList = yApiProjectTableData.getProjectKeyList();
             if (Objects.nonNull(select) && select) {
-                List<String> projectKeyList = yApiProjectTableData.getProjectKeyList();
                 projectKeyList.add(basePath);
+            } else {
+                projectKeyList.remove(basePath);
             }
         }
         yapi.setProjectConfigList(projectConfigList);
@@ -174,11 +197,11 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         YapiConfigData yapi = settingData.getYapi();
         this.baseUrl.setText(yapi.getBaseUrl());
         this.userName.setText(yapi.getUserName());
-        this.password.setText(yapi.getPassword());
+        this.yapiPwd.setText(yapi.getYapiPwd());
         Project currProject = ProjectUtils.getCurrProject();
         String basePath = currProject.getBasePath();
         List<YApiProjectTableData> projectConfigList = yapi.getProjectConfigList();
-        if(CollectionUtils.isNotEmpty(projectConfigList)){
+        if (CollectionUtils.isNotEmpty(projectConfigList)) {
             for (YApiProjectTableData yApiProjectTableData : projectConfigList) {
                 List<String> projectKeyList = yApiProjectTableData.getProjectKeyList();
                 yApiProjectTableData.setSelect(projectKeyList.contains(basePath));

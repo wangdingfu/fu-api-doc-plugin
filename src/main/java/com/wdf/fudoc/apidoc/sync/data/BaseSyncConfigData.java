@@ -1,10 +1,12 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
+import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -18,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Getter
 @Setter
-public abstract class BaseSyncConfigData {
+public abstract class BaseSyncConfigData implements Serializable {
 
     /**
      * 三方接口文档系统地址
@@ -45,7 +47,7 @@ public abstract class BaseSyncConfigData {
     }
 
     public void addRecord(SyncApiRecordData record) {
-        if (Objects.isNull(record) || StringUtils.isBlank(record.getApiUrl())) {
+        if (Objects.nonNull(record) && StringUtils.isNotBlank(record.getApiUrl())) {
             this.syncApiRecordMap.put(record.getApiUrl(), record);
         }
     }

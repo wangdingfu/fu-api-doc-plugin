@@ -1,6 +1,8 @@
 package com.wdf.fudoc.components.bo;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -58,6 +60,12 @@ public class TreePathBO implements Serializable {
             //传入的module正好匹配 优先级最高
             return ONE_LEVEL_SORT;
         }
+        Project currProject = ProjectUtils.getCurrProject();
+        String currProjectName = currProject.getName();
+        if (this.view.equals(currProjectName)) {
+            //当前配置指定的是针对当前所有项目 则不用继续匹配 当前项目所有模块均可以同步
+            return ONE_LEVEL_SORT;
+        }
         for (TreePath treePath : selectPath) {
             int sortLevel = ONE_LEVEL_SORT;
             //选中的节点 循环是因为可能会存在多选的情况
@@ -65,7 +73,7 @@ public class TreePathBO implements Serializable {
                 Object[] path = treePath.getPath();
                 for (int i = path.length - 1; i >= 0; i--) {
                     Object item = path[i];
-                    if (Objects.nonNull(item) && moduleName.equals(item.toString())) {
+                    if (Objects.nonNull(item) && (moduleName.equals(item.toString()) || currProjectName.equals(item.toString()))) {
                         return sortLevel;
                     }
                     sortLevel++;

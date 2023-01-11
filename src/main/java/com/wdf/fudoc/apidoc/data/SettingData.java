@@ -53,7 +53,7 @@ public class SettingData {
         if (StringUtils.isBlank(this.enumTemplateValue2)) {
             this.setEnumTemplateValue2(ResourceUtils.readResource("template/fu_doc_enum_table.ftl"));
         }
-        if (StringUtils.isBlank(this.yapiTemplateValue)) {
+        if (Objects.isNull(this.yapiTemplateValue)) {
             this.setYapiTemplateValue(ResourceUtils.readResource("template/yapi.ftl"));
         }
         if (Objects.isNull(this.customerSettingData)) {

@@ -10,15 +10,11 @@ import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.AbstractClassAction;
 
-
 /**
- * 同步接口文档至三方接口文档系统动作
- *
  * @author wangdingfu
- * @date 2022-12-31 22:15:45
+ * @date 2023-01-11 18:51:40
  */
-public class SyncFuDocAction extends AbstractClassAction {
-
+public class ConfirmSyncFuDocAction extends AbstractClassAction {
 
     @Override
     protected void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext) {
@@ -26,6 +22,7 @@ public class SyncFuDocAction extends AbstractClassAction {
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
         BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
         ApiDocSystem apiDocSystem = ApiDocSystem.getInstance(settingData.getEnable());
+        fuDocContext.setSyncDialog(false);
         //调用同步接口
         SyncFuDocExecutor.sync(apiDocSystem, enableConfigData, fuDocContext, psiClass);
         //加载配置

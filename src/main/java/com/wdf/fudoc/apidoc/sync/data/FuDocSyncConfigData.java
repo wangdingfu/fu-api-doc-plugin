@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-public class FuDocSyncConfigData {
+public class FuDocSyncConfigData implements Serializable {
 
     /**
      * 当前开启的三方接口文档系统 默认开启yapi

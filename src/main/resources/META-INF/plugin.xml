@@ -116,6 +116,9 @@
             <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Fu Doc Sync">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
             </action>
+            <action id="fudoc.http.sync.confirm" class="com.wdf.fudoc.apidoc.action.ConfirmSyncFuDocAction" text="Fu Doc Sync Confirm">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift S"/>
+            </action>
         </group>
 
 

@@ -92,9 +92,15 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      */
     @Override
     public void removeRow(int row) {
-        removeRowByIndex(row);
+        boolean isCanDelete = true;
         if (Objects.nonNull(fuTableListener)) {
-            fuTableListener.deleteRow(row);
+            isCanDelete = fuTableListener.isCanDelete(this.dataList.get(row));
+        }
+        if (isCanDelete) {
+            removeRowByIndex(row);
+            if (Objects.nonNull(fuTableListener)) {
+                fuTableListener.deleteRow(row);
+            }
         }
     }
 
@@ -203,7 +209,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         //设置table单元格编辑器
         this.columnList.stream().filter(f -> Objects.nonNull(f.getEditor())).forEach(f -> this.fuTableView.getColumn(f.getName()).setCellEditor(f.getEditor()));
         //将数据添加到table
-        if(CollectionUtils.isNotEmpty(this.dataList)){
+        if (CollectionUtils.isNotEmpty(this.dataList)) {
             this.dataList.forEach(this::addRow);
         }
     }

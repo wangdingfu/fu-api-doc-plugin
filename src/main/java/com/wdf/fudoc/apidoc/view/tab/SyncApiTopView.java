@@ -1,6 +1,7 @@
 package com.wdf.fudoc.apidoc.view.tab;
 
 import com.google.common.collect.Lists;
+import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.components.bo.FuMsgBO;
@@ -25,7 +26,9 @@ public class SyncApiTopView {
         this.rootPanel = new JPanel(new BorderLayout());
         MessageComponent messageComponent = new MessageComponent(false);
         messageComponent.setMsg(buildMsg());
-        this.rootPanel.add(messageComponent.getRootPanel(), BorderLayout.CENTER);
+        JPanel messagePanel = messageComponent.getRootPanel();
+        messagePanel.setBorder(JBUI.Borders.emptyBottom(10));
+        this.rootPanel.add(messagePanel, BorderLayout.CENTER);
     }
 
 

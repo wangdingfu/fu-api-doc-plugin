@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class YapiConfigData extends BaseSyncConfigData {
     /**
      * 密码
      */
-    private String password;
+    private String yapiPwd;
 
     /**
      * 项目配置
@@ -47,7 +48,8 @@ public class YapiConfigData extends BaseSyncConfigData {
         return this.projectConfigList.stream().filter(f -> f.getProjectKeyList().contains(basePath))
                 .map(m -> convert(m, moduleName))
                 //过滤没匹配上的module sort=0则是没有匹配上
-                .filter(f -> YesOrNo.NO.getCode() == f.getSort()).collect(Collectors.toList());
+                .filter(f -> YesOrNo.NO.getCode() != f.getSort())
+                .sorted(Comparator.comparing(ApiProjectDTO::getSort)).collect(Collectors.toList());
     }
 
     @Override
