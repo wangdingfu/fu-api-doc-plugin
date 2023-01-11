@@ -38,6 +38,7 @@ public abstract class BaseSyncConfigData implements Serializable {
     private Map<String, SyncApiRecordData> syncApiRecordMap = new ConcurrentHashMap<>();
 
 
+
     public boolean isRecord(String url) {
         return syncApiRecordMap.containsKey(url);
     }

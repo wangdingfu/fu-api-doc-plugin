@@ -31,6 +31,11 @@ public class ApiCategoryDTO {
     private String categoryName;
 
     /**
+     * 排序字段-根据最近使用日期排序
+     */
+    private Integer sort;
+
+    /**
      * 子分类
      */
     private List<ApiCategoryDTO> apiCategoryList;

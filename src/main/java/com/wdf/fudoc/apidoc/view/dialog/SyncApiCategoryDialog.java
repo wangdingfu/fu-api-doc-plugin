@@ -249,6 +249,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
      */
     private List<ApiCategoryDTO> listCategory() {
         List<ApiCategoryDTO> categoryList = this.strategy.categoryList(this.apiProjectDTO, this.configData);
+        //对接口分类排序
         return Objects.isNull(categoryList) ? Lists.newArrayList() : categoryList;
     }
 
