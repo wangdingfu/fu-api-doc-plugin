@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +51,14 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
      */
     @Override
     protected String doSingleApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
+        if (Objects.isNull(apiProjectDTO) || org.apache.commons.lang.StringUtils.isBlank(apiProjectDTO.getProjectToken()) || org.apache.commons.lang.StringUtils.isBlank(apiProjectDTO.getProjectId())) {
+            //构建返回结果
+            return "同步的项目数据错误";
+        }
+        if (Objects.isNull(apiCategoryDTO) || org.apache.commons.lang.StringUtils.isBlank(apiCategoryDTO.getCategoryId()) || org.apache.commons.lang.StringUtils.isBlank(apiCategoryDTO.getCategoryName())) {
+            //构建返回结果
+            return "同步的分类数据错误";
+        }
         //构建同步至YApi系统的数据
         YApiSaveDTO yApiSaveDTO = buildYApiSaveDTO(fuDocItemData, apiProjectDTO, apiCategoryDTO);
         YApiService service = ServiceHelper.getService(YApiService.class);

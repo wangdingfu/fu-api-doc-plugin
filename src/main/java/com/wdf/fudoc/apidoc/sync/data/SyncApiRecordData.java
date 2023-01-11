@@ -4,6 +4,8 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * 已经同步过的接口文档记录
  *
@@ -12,12 +14,16 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SyncApiRecordData {
+public class SyncApiRecordData implements Serializable {
 
     /**
      * 接口地址
      */
     private String apiUrl;
+    /**
+     * 项目ID
+     */
+    private String projectToken;
 
     /**
      * 项目ID

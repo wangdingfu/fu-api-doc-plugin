@@ -28,6 +28,7 @@ public class FuModuleTreeStructure extends SimpleTreeStructure {
             for (Module module : modules) {
                 String name = module.getName();
                 if (projectName.equals(name)) {
+                    this.root.setModuleName(name);
                     continue;
                 }
                 children.add(new ModuleNode(module.getName(), root));

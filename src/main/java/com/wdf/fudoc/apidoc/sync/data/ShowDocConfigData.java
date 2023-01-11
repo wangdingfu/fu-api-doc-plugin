@@ -19,4 +19,9 @@ public class ShowDocConfigData extends BaseSyncConfigData{
     public boolean isExistsConfig() {
         return false;
     }
+
+    @Override
+    public void clearData(boolean isAll) {
+
+    }
 }

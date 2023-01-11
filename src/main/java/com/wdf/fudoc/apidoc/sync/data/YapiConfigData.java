@@ -58,6 +58,11 @@ public class YapiConfigData extends BaseSyncConfigData {
         return this.projectConfigList.stream().anyMatch(a -> a.getProjectKeyList().contains(basePath));
     }
 
+    @Override
+    public void clearData(boolean isAll) {
+
+    }
+
 
     private ApiProjectDTO convert(YApiProjectTableData tableData, String moduleName) {
         ApiProjectDTO apiProjectDTO = new ApiProjectDTO();

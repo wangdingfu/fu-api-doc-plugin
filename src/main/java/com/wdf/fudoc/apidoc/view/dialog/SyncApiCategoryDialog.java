@@ -13,6 +13,7 @@ import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
+import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncFuDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncStrategyFactory;
 import com.wdf.fudoc.common.FuDocMessageBundle;
@@ -31,6 +32,7 @@ import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -90,6 +92,11 @@ public class SyncApiCategoryDialog extends DialogWrapper {
      */
     private BaseSyncConfigData configData;
 
+    /**
+     * 当前项目同步记录数据
+     */
+    private ProjectSyncApiRecordData projectRecordData;
+
 
     private static final String TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_API_TITLE);
     private static final String PROJECT_LABEL = FuDocMessageBundle.message(MessageConstants.SYNC_API_PROJECT_LABEL);
@@ -100,7 +107,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
     private static final String CREATE_CATEGORY_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_TITLE);
 
 
-    public SyncApiCategoryDialog(@Nullable Project project, boolean isCategoryTree, String moduleName, ApiProjectDTO apiProjectDTO) {
+    public SyncApiCategoryDialog(Project project, boolean isCategoryTree, String moduleName, ApiProjectDTO apiProjectDTO) {
         super(project, true);
         this.project = project;
         this.isCategoryTree = isCategoryTree;
@@ -130,6 +137,11 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         this.projectNameComboBox = new ComboBox<>(projectConfigList.toArray(new ApiProjectDTO[0]));
         if (Objects.isNull(this.apiProjectDTO)) {
             this.apiProjectDTO = projectConfigList.get(0);
+        }
+        this.projectRecordData = this.configData.getProjectRecord(project.getBasePath(), this.apiProjectDTO.getProjectName());
+        if (Objects.isNull(this.projectRecordData)) {
+            this.projectRecordData = new ProjectSyncApiRecordData();
+            this.configData.addProjectRecordData(project.getBasePath(), this.apiProjectDTO.getProjectName(), this.projectRecordData);
         }
         this.projectNameComboBox.setSelectedItem(this.apiProjectDTO);
         this.projectPanel.add(new JLabel(PROJECT_LABEL), BorderLayout.WEST);
@@ -238,11 +250,38 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         if (CollectionUtils.isEmpty(apiCategoryList)) {
             //如果当前项目下没有分类 则调用第三方接口文档系统查询当前项目下的分类
             apiCategoryList = listCategory();
+            //对当前分类排序 并设置到当前项目中
+            apiCategoryList = sortCategory(apiCategoryList);
             apiProjectDTO.setApiCategoryList(apiCategoryList);
         }
         return apiCategoryList;
     }
 
+
+    /**
+     * 对分类排序
+     *
+     * @param categoryDTOList 接口文档系统中的分类
+     * @return 排序后的分类
+     */
+    private List<ApiCategoryDTO> sortCategory(List<ApiCategoryDTO> categoryDTOList) {
+        List<String> categoryList = this.projectRecordData.getCategoryList(this.apiProjectDTO.getProjectName());
+        if (CollectionUtils.isNotEmpty(categoryList) && CollectionUtils.isNotEmpty(categoryDTOList)) {
+            List<ApiCategoryDTO> sortList = Lists.newArrayList();
+            Map<String, ApiCategoryDTO> categoryMap = ObjectUtils.listToMap(categoryDTOList, ApiCategoryDTO::getCategoryName);
+            for (int i = categoryList.size() - 1; i >= 0; i--) {
+                ApiCategoryDTO remove = categoryMap.remove(categoryList.get(i));
+                if (Objects.nonNull(remove)) {
+                    sortList.add(remove);
+                }
+            }
+            //将剩余没有在排序中的分类加入到排序分类集合中
+            List<String> categoryIdList = sortList.stream().map(ApiCategoryDTO::getCategoryId).distinct().toList();
+            sortList.addAll(categoryDTOList.stream().filter(f -> !categoryIdList.contains(f.getCategoryId())).toList());
+            return sortList;
+        }
+        return categoryDTOList;
+    }
 
     /**
      * 查询当前选中项目下的接口分类集合

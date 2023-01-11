@@ -28,4 +28,6 @@ public interface FuDocIcons {
     Icon FU_REQUEST = IconLoader.getIcon("icon/request.svg", FuDocIcons.class);
     Icon FU_MESSAGE = IconLoader.getIcon("icon/message.svg", FuDocIcons.class);
     Icon FU_SETTINGS = IconLoader.getIcon("icon/settings.svg", FuDocIcons.class);
+    Icon FU_API_SYNC = IconLoader.getIcon("icon/sync.svg", FuDocIcons.class);
+    Icon FU_API_SYNC_DIALOG = IconLoader.getIcon("icon/sync2.svg", FuDocIcons.class);
 }

@@ -6,6 +6,7 @@ import com.intellij.openapi.util.NlsSafe;
 import com.intellij.ui.treeStructure.CachingSimpleNode;
 import com.intellij.ui.treeStructure.SimpleNode;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,10 +25,11 @@ public class ModuleNode extends CachingSimpleNode {
      * module名称
      */
     @Getter
+    @Setter
     private String moduleName;
 
     @Getter
-    private List<ModuleNode> childList = Lists.newArrayList();
+    private final List<ModuleNode> childList = Lists.newArrayList();
 
     protected ModuleNode(String moduleName, SimpleNode parent) {
         super(parent);

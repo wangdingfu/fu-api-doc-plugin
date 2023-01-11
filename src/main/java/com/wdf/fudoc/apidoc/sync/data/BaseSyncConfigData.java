@@ -1,15 +1,17 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
-import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
+import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
+import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -33,25 +35,45 @@ public abstract class BaseSyncConfigData implements Serializable {
     private boolean autoGenCategory;
 
     /**
-     * 接口的同步记录
+     * 所有项目下接口的同步记录
+     * key:项目路径 value：项目同步记录
      */
-    private Map<String, SyncApiRecordData> syncApiRecordMap = new ConcurrentHashMap<>();
+    @Getter
+    private Map<String, ProjectSyncApiRecordData> projectSyncRecordMap = new ConcurrentHashMap<>();
 
-
-
-    public boolean isRecord(String url) {
-        return syncApiRecordMap.containsKey(url);
+    public ProjectSyncApiRecordData getProjectRecord(String projectPath, String projectName) {
+        if (StringUtils.isNotBlank(projectPath) && StringUtils.isNotBlank(projectName)) {
+            return projectSyncRecordMap.get(projectPath + "-" + projectName);
+        }
+        return null;
     }
 
-    public SyncApiRecordData getRecord(String url) {
-        return syncApiRecordMap.get(url);
+    public void addProjectRecordData(String projectPath, String projectName, ProjectSyncApiRecordData recordData) {
+        if (StringUtils.isBlank(projectPath) || StringUtils.isBlank(projectName) || Objects.isNull(recordData)) {
+            return;
+        }
+        projectSyncRecordMap.put(projectPath + "-" + projectName, recordData);
     }
 
-    public void addRecord(SyncApiRecordData record) {
-        if (Objects.nonNull(record) && StringUtils.isNotBlank(record.getApiUrl())) {
-            this.syncApiRecordMap.put(record.getApiUrl(), record);
+    /**
+     * 清除缓存数据
+     *
+     * @param isAll 是否全部清楚
+     */
+    public void clear(boolean isAll) {
+        if (isAll) {
+            projectSyncRecordMap.clear();
+            clearData(true);
+        } else {
+            Set<String> keys = projectSyncRecordMap.keySet();
+            for (String key : keys) {
+                if (key.contains(ProjectUtils.getCurrentProjectPath())) {
+                    projectSyncRecordMap.remove(key);
+                }
+            }
         }
     }
+
 
     /**
      * 获取当前module对应到第三方接口文档的项目名称
@@ -66,5 +88,12 @@ public abstract class BaseSyncConfigData implements Serializable {
      * 是否存在当前项目配置
      */
     public abstract boolean isExistsConfig();
+
+    /**
+     * 清楚数据缓存
+     *
+     * @param isAll true 全部清除 false 清除当前项目
+     */
+    public abstract void clearData(boolean isAll);
 
 }

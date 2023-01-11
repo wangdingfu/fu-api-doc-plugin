@@ -9,6 +9,7 @@ import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
+import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.YapiConfigData;
@@ -55,6 +56,9 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     private JTextField baseUrl;
     private JCheckBox isEnable;
     private JLabel baseUrlTitle;
+    private JPanel toolPanel;
+    private JButton clearAllBtn;
+    private JButton clearRecordBtn;
 
     private static final TitledBorder baseInfoBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_BASE_TITLE));
     private static final TitledBorder mainBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_MAIN_TITLE));
@@ -80,6 +84,26 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         this.rootPanel.setBorder(JBUI.Borders.emptyTop(10));
         this.baseInfoPanel.setBorder(baseInfoBorder);
         this.mainPanel.setBorder(mainBorder);
+        initBtn();
+    }
+
+    public void initBtn() {
+        FuDocSyncSetting instance = FuDocSyncSetting.getInstance();
+        if (Objects.isNull(instance)) {
+            return;
+        }
+        FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
+        BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
+        this.clearAllBtn.addActionListener(e -> {
+            //清楚所有缓存数据
+            enableConfigData.clear(true);
+            instance.loadState(settingData);
+        });
+        this.clearRecordBtn.addActionListener(e -> {
+            //清楚同步记录数据
+            enableConfigData.clear(false);
+            instance.loadState(settingData);
+        });
     }
 
 

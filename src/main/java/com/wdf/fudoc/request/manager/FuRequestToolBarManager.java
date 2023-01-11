@@ -9,7 +9,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
+import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
+import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
+import com.wdf.fudoc.apidoc.sync.SyncFuDocExecutor;
+import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
+import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.request.configurable.FuRequestSettingConfigurable;
 import com.wdf.fudoc.request.constants.RequestConstants;
@@ -20,12 +25,15 @@ import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.util.FuDocUtils;
+import com.wdf.fudoc.util.PsiClassUtils;
 import icons.FuDocIcons;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * 【Fu Request】模块工具类管理类
@@ -131,6 +139,46 @@ public class FuRequestToolBarManager {
 
     private void addCommonAction(RequestTabView requestTabView) {
         ActionManager actionManager = ActionManager.getInstance();
+
+
+        defaultActionGroup.addSeparator();
+
+        //添加同步接口文档事件
+        defaultActionGroup.add(new AnAction("Confirm Sync Api", "同步接口文档-确认弹框", FuDocIcons.FU_API_SYNC_DIALOG) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                //获取同步接口文档配置
+                FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
+                BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
+                ApiDocSystem apiDocSystem = ApiDocSystem.getInstance(settingData.getEnable());
+                execute((fuDocContext, psiClass) -> {
+                    fuDocContext.setSyncDialog(false);
+                    //调用同步接口
+                    SyncFuDocExecutor.sync(apiDocSystem, enableConfigData, fuDocContext, psiClass);
+                    //加载配置
+                    FuDocSyncSetting.getInstance().loadState(settingData);
+                });
+            }
+        });
+
+        //添加同步接口文档事件
+        defaultActionGroup.add(new AnAction("Sync Api", "同步接口文档", FuDocIcons.FU_API_SYNC) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                //获取同步接口文档配置
+                FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
+                BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
+                ApiDocSystem apiDocSystem = ApiDocSystem.getInstance(settingData.getEnable());
+                execute((fuDocContext, psiClass) -> {
+                    //调用同步接口
+                    SyncFuDocExecutor.sync(apiDocSystem, enableConfigData, fuDocContext, psiClass);
+                    //加载配置
+                    FuDocSyncSetting.getInstance().loadState(settingData);
+                });
+            }
+        });
+
+
         //添加保存事件
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
             @Override
@@ -148,20 +196,12 @@ public class FuRequestToolBarManager {
         defaultActionGroup.add(new AnAction("Refresh", "Refresh", AllIcons.Actions.Refresh) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                if (Objects.nonNull(psiElement)) {
-                    PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
-                    PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class);
-                    if (Objects.isNull(psiClass) || !FuDocUtils.isController(psiClass) || !FuDocUtils.isControllerMethod(psiMethod)) {
-                        return;
-                    }
-                    FuDocContext fuDocContext = new FuDocContext();
-                    fuDocContext.setSettingData(FuDocSetting.getSettingData());
-                    fuDocContext.setTargetElement(psiElement);
+                execute((fuDocContext, psiClass) -> {
                     FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(fuDocContext, psiClass);
                     if (Objects.nonNull(fuHttpRequestData)) {
                         initData(fuHttpRequestData);
                     }
-                }
+                });
             }
         });
 
@@ -180,6 +220,18 @@ public class FuRequestToolBarManager {
             }
         });
 
+        //添加保存事件
+        defaultActionGroup.add(new AnAction("定位到该方法", "(Alt+Q)", AllIcons.General.Locate) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                PsiMethod targetMethod = PsiClassUtils.getTargetMethod(psiElement);
+                if (Objects.nonNull(targetMethod)) {
+                    //跳转到该方法
+                    targetMethod.navigate(true);
+                }
+            }
+        });
+
         defaultActionGroup.addSeparator();
 
 
@@ -191,6 +243,21 @@ public class FuRequestToolBarManager {
             }
         });
 
+    }
+
+
+    private void execute(BiConsumer<FuDocContext, PsiClass> consumer) {
+        if (Objects.nonNull(psiElement) && Objects.nonNull(consumer)) {
+            PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
+            PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class);
+            if (Objects.isNull(psiClass) || !FuDocUtils.isController(psiClass) || !FuDocUtils.isControllerMethod(psiMethod)) {
+                return;
+            }
+            FuDocContext fuDocContext = new FuDocContext();
+            fuDocContext.setSettingData(FuDocSetting.getSettingData());
+            fuDocContext.setTargetElement(psiElement);
+            consumer.accept(fuDocContext, psiClass);
+        }
     }
 
 

@@ -5,9 +5,9 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable;
-import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
@@ -15,9 +15,7 @@ import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiRecordData;
-import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.dto.*;
-import com.wdf.fudoc.apidoc.view.SyncApiView;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiCategoryDialog;
 import com.wdf.fudoc.common.FuDocMessageBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
@@ -39,7 +37,6 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
 
-    private static final String NOT_CONFIRM_CATEGORY = FuDocMessageBundle.message(MessageConstants.SYNC_API_NOT_CONFIRM_CATEGORY);
     private static final String NOT_SYNC_API = FuDocMessageBundle.message(MessageConstants.NOT_SYNC_API);
 
     /**
@@ -69,8 +66,10 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         String moduleName = Objects.isNull(module) ? org.apache.commons.lang3.StringUtils.EMPTY : module.getName();
         List<ApiProjectDTO> projectConfigList = configData.getProjectConfigList(moduleName);
         if (StringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList)) {
-            //弹框让用户去创建项目
-            ShowSettingsUtil.getInstance().showSettingsDialog(psiClass.getProject(), FuDocSyncSettingConfigurable.class);
+            DumbService.getInstance(psiClass.getProject()).smartInvokeLater(() -> {
+                //弹框让用户去创建项目
+                ShowSettingsUtil.getInstance().showSettingsDialog(psiClass.getProject(), FuDocSyncSettingConfigurable.class);
+            });
             return;
         }
         ApiProjectDTO apiProjectDTO = projectConfigList.get(0);
@@ -145,26 +144,30 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      * @return 同步结果
      */
     private List<SyncApiResultDTO> intelligenceSyncApi(ApiProjectDTO apiProjectDTO, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData configData, PsiClass psiClass) {
-        if (!configData.isAutoGenCategory() && fuDocItemDataList.stream().allMatch(a -> configData.isRecord(a.getUrlList().get(0)))) {
+        ProjectSyncApiRecordData projectRecord = configData.getProjectRecord(ProjectUtils.getCurrentProjectPath(), apiProjectDTO.getProjectName());
+        if (!configData.isAutoGenCategory() && Objects.nonNull(projectRecord) && fuDocItemDataList.stream().allMatch(a -> projectRecord.exists(a.getUrlList().get(0)))) {
             //按照之前记录同步
-            return fuDocItemDataList.stream().map(f -> singleSyncApi(configData, f, apiProjectDTO, configData.getRecord(f.getUrlList().get(0)).getCategory())).collect(Collectors.toList());
+            return fuDocItemDataList.stream().map(f -> singleSyncApi(configData, f, initProjectRecord(configData, apiProjectDTO, projectRecord))).collect(Collectors.toList());
         }
-        //确认需要同步的分类
-        StringBuilder errorMsg = new StringBuilder();
-        try {
-            ApiProjectDTO confirm = confirmApiCategory(apiProjectDTO, configData, psiClass);
-            if (Objects.isNull(confirm)) {
-                //没有确认分类 无需发起同步
-                return Lists.newArrayList();
-            }
-            //将本次接口均同步至本次确认的分类下
-            return fuDocItemDataList.stream().map(f -> singleSyncApi(configData, f, confirm, confirm.getSelectCategory())).collect(Collectors.toList());
-        } catch (Exception e) {
-            //确认分类失败 记录异常原因
-            errorMsg.append(e.getMessage());
-        }
-        //构建同步失败结果
-        return ObjectUtils.listToList(fuDocItemDataList, fudoc -> buildResult(fudoc, apiProjectDTO, apiProjectDTO.getSelectCategory(), errorMsg.toString()));
+        return confirmCategorySync(apiProjectDTO, fuDocItemDataList, configData, psiClass, initProjectRecord(configData, apiProjectDTO, projectRecord));
+    }
+
+
+    /**
+     * 发起单条接口同步-获取历史同步记录数据发起同步
+     *
+     * @param configData    接口文档系统配置
+     * @param fuDocItemData 接口文档
+     * @param projectRecord 当前项目同步记录
+     * @return 同步结果
+     */
+    private SyncApiResultDTO singleSyncApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ProjectSyncApiRecordData projectRecord) {
+        SyncApiRecordData record = projectRecord.getRecord(fuDocItemData.getUrlList().get(0));
+        ApiProjectDTO apiProjectDTO = new ApiProjectDTO();
+        apiProjectDTO.setProjectId(record.getProjectId());
+        apiProjectDTO.setProjectName(record.getProjectName());
+        apiProjectDTO.setProjectToken(record.getProjectToken());
+        return singleSyncApi(configData, fuDocItemData, apiProjectDTO, record.getCategory(), projectRecord);
     }
 
 
@@ -177,12 +180,12 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      * @param apiCategoryDTO 同步的分类
      * @return 同步结果
      */
-    private SyncApiResultDTO singleSyncApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
+    private SyncApiResultDTO singleSyncApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO, ProjectSyncApiRecordData projectRecord) {
         //发起同步
         String errorMsg = doSingleApi(configData, fuDocItemData, apiProjectDTO, apiCategoryDTO);
         if (StringUtils.isBlank(errorMsg)) {
             //如果接口同步成功 则记录下来
-            configData.addRecord(buildApiSyncRecord(fuDocItemData, apiProjectDTO));
+            projectRecord.addRecord(buildApiSyncRecord(fuDocItemData, apiProjectDTO, apiCategoryDTO));
         }
         //构建返回结果
         return buildResult(fuDocItemData, apiProjectDTO, apiCategoryDTO, errorMsg);
@@ -196,16 +199,27 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      * @param configData        第三方接口文档配置
      */
     private List<SyncApiResultDTO> syncApiForDialog(ApiProjectDTO apiProjectDTO, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData configData, PsiClass psiClass) {
+        //目前暂定弹出该窗口
+        return confirmCategorySync(apiProjectDTO, fuDocItemDataList, configData, psiClass, initProjectRecord(configData, apiProjectDTO, configData.getProjectRecord(ProjectUtils.getCurrentProjectPath(), apiProjectDTO.getProjectName())));
+    }
+
+
+    /**
+     * 弹框确认分类同步
+     *
+     * @return 同步结果
+     */
+    private List<SyncApiResultDTO> confirmCategorySync(ApiProjectDTO apiProjectDTO, List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData configData, PsiClass psiClass, ProjectSyncApiRecordData projectRecord) {
         //确认需要同步的分类
         StringBuilder errorMsg = new StringBuilder();
         try {
-            ApiProjectDTO confirm = confirmApiCategory(apiProjectDTO, configData, psiClass);
+            ApiProjectDTO confirm = confirmApiCategory(apiProjectDTO, configData, psiClass, projectRecord);
             if (Objects.isNull(confirm)) {
                 //没有确认分类 无需发起同步
                 return Lists.newArrayList();
             }
             //将本次接口均同步至本次确认的分类下
-            return fuDocItemDataList.stream().map(f -> singleSyncApi(configData, f, confirm, confirm.getSelectCategory())).collect(Collectors.toList());
+            return fuDocItemDataList.stream().map(f -> singleSyncApi(configData, f, confirm, confirm.getSelectCategory(), projectRecord)).collect(Collectors.toList());
         } catch (Exception e) {
             //确认分类失败 记录异常原因
             errorMsg.append(e.getMessage());
@@ -223,7 +237,7 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      * @param psiClass      当前操作的java类
      * @return 指定同步到哪一个分类下的数据对象
      */
-    private ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass) {
+    private ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass, ProjectSyncApiRecordData projectRecord) {
         if (configData.isAutoGenCategory()) {
             //自动生成接口分类 无需用户选择 自动生成分类名称
             String categoryName = getApiCategoryFromController(psiClass);
@@ -239,7 +253,10 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         SyncApiCategoryDialog dialog = new SyncApiCategoryDialog(ProjectUtils.getCurrProject(), false, apiProjectDTO.getModuleName(), apiProjectDTO);
         if (dialog.showAndGet()) {
             //弹框点OK时获取选中的分类数据
-            return dialog.getSelected();
+            ApiProjectDTO selected = dialog.getSelected();
+            //添加当前选中的分类到历史记录中 根据该记录会对分类进行排序
+            projectRecord.addCategory(selected.getProjectName(), selected.getSelectCategory().getCategoryName());
+            return selected;
         }
         return null;
     }
@@ -313,15 +330,23 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
      * @param apiProjectDTO 同步的项目
      * @return 同步记录
      */
-    private SyncApiRecordData buildApiSyncRecord(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO) {
+    private SyncApiRecordData buildApiSyncRecord(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
         SyncApiRecordData record = new SyncApiRecordData();
         record.setProjectId(apiProjectDTO.getProjectId());
         record.setProjectName(apiProjectDTO.getProjectName());
-        record.setCategory(apiProjectDTO.getSelectCategory());
+        record.setProjectToken(apiProjectDTO.getProjectToken());
+        record.setCategory(apiCategoryDTO);
         record.setSyncTime(DateUtil.now());
         record.setApiUrl(fuDocItemData.getUrlList().get(0));
         return record;
     }
 
+    private ProjectSyncApiRecordData initProjectRecord(BaseSyncConfigData configData, ApiProjectDTO apiProjectDTO, ProjectSyncApiRecordData recordData) {
+        if (Objects.isNull(recordData)) {
+            recordData = new ProjectSyncApiRecordData();
+            configData.addProjectRecordData(ProjectUtils.getCurrentProjectPath(), apiProjectDTO.getProjectName(), recordData);
+        }
+        return recordData;
+    }
 
 }
