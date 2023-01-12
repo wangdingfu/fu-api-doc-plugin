@@ -106,8 +106,8 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             //本次没有需要同步的接口 不需要提示
             return;
         }
-        List<SyncApiResultDTO> successList = resultDTOList.stream().filter(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus())).toList();
-        List<SyncApiResultDTO> faileList = resultDTOList.stream().filter(a -> ApiSyncStatus.FAIL.getMessage().equals(a.getSyncStatus())).toList();
+        List<SyncApiResultDTO> successList = resultDTOList.stream().filter(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus())).collect(Collectors.toList());
+        List<SyncApiResultDTO> faileList = resultDTOList.stream().filter(a -> ApiSyncStatus.FAIL.getMessage().equals(a.getSyncStatus())).collect(Collectors.toList());
         SyncApiResultDTO resultDTO = resultDTOList.get(0);
         if (successList.size() == syncApiSize) {
             //全部同步成功情况
