@@ -9,7 +9,7 @@
     </description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="212" until-build="221.*"/>
+    <idea-version since-build="203" until-build="211.*"/>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
