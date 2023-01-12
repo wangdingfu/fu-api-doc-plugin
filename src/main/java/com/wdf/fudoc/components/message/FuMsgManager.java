@@ -2,6 +2,7 @@ package com.wdf.fudoc.components.message;
 
 import cn.hutool.core.lang.WeightRandom;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wdf.fudoc.common.constant.UrlConstants;
@@ -9,8 +10,10 @@ import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.components.bo.FuMsgBO;
 import com.wdf.fudoc.components.bo.FuMsgItemBO;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,20 +32,25 @@ public class FuMsgManager {
     private static final Set<String> MSG_IDS = Sets.newHashSet();
 
     /**
-     * 带有权重的随机消息对象
+     * 系统默认消息
+     */
+    private static final List<FuMsgBO> DEFAULT_MESSAGE = Lists.newArrayList();
+
+    /**
+     * 带有权重的随机消息对象-服务端配置的消息
      */
     private static final WeightRandom<FuMsgBO> WEIGHT_RANDOM = new WeightRandom<>();
 
     static {
         //系统定义好的一些消息
-        addMsg(buildFuMsg("按下esc键可以快速退出当前窗口"));
-        addMsg(buildFuMsg("发送请求后会自动保存当前请求记录"));
-        addMsg(buildFuMsg("点击左侧图标可以切换下一条消息"));
-        addMsg(buildFuMsg("建议先请求接口在生成文档(这样你的接口文档实例数据会比较真实)"));
-        addMsg(buildFuMsg("当响应结果是文件时 会自动切换到保存文件的页面"));
-        addMsg(buildFuMsg("【Fu Doc】目前支持批量编辑请求参数(模仿PostMan的Bulk Edit)"));
-        addMsg(buildShare());
-        addMsg(buildQuestion());
+        DEFAULT_MESSAGE.add((buildFuMsg("按下esc键可以快速退出当前窗口")));
+        DEFAULT_MESSAGE.add(buildFuMsg("发送请求后会自动保存当前请求记录"));
+        DEFAULT_MESSAGE.add(buildFuMsg("点击左侧图标可以切换下一条消息"));
+        DEFAULT_MESSAGE.add(buildFuMsg("建议先请求接口在生成文档(这样你的接口文档实例数据会比较真实)"));
+        DEFAULT_MESSAGE.add(buildFuMsg("当响应结果是文件时 会自动切换到保存文件的页面"));
+        DEFAULT_MESSAGE.add(buildFuMsg("【Fu Doc】目前支持批量编辑请求参数(模仿PostMan的Bulk Edit)"));
+        DEFAULT_MESSAGE.add(buildShare());
+        DEFAULT_MESSAGE.add(buildQuestion());
     }
 
 
@@ -69,7 +77,10 @@ public class FuMsgManager {
      * 当只剩下两条消息时 需要调用接口从服务端获取最新的消息
      */
     public static FuMsgBO nextMsg() {
-        return WEIGHT_RANDOM.next();
+        if (CollectionUtils.isNotEmpty(MSG_IDS)) {
+            return WEIGHT_RANDOM.next();
+        }
+        return DEFAULT_MESSAGE.get(RandomUtil.randomInt(0, DEFAULT_MESSAGE.size()));
     }
 
     public static FuMsgBO buildFuMsg(String message) {

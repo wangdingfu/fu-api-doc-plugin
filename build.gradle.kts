@@ -33,12 +33,13 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.24")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
     implementation("org.freemarker:freemarker:2.3.31")
-    implementation("cn.hutool:hutool-json:5.8.10")
-    implementation("cn.hutool:hutool-http:5.8.10")
-    implementation("cn.hutool:hutool-crypto:5.8.10")
-    implementation("cn.hutool:hutool-system:5.8.10")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
+    implementation("cn.hutool:hutool-json:5.8.11")
+    implementation("cn.hutool:hutool-http:5.8.11")
+    implementation("cn.hutool:hutool-crypto:5.8.11")
+    implementation("cn.hutool:hutool-system:5.8.11")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
     implementation("com.atlassian.commonmark:commonmark:0.17.0")
+    implementation("com.github.oshi:oshi-core:6.4.0")
 }
 
 

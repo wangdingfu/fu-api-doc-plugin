@@ -18,8 +18,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- 应用启动时通知类 -->
-        <backgroundPostStartupActivity implementation="com.wdf.fudoc.start.FuDocAppStartUpListener"/>
-        <postStartupActivity implementation="com.wdf.fudoc.start.FuDocUpdateDialog"/>
+        <postStartupActivity implementation="com.wdf.fudoc.start.FuDocStartUpListener"/>
         <backgroundPostStartupActivity implementation="com.wdf.fudoc.spring.LoadSpringConfigListener"/>
 
         <!-- Add your extensions here -->
