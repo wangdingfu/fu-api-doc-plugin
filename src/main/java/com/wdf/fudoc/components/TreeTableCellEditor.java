@@ -27,7 +27,8 @@ public class TreeTableCellEditor extends AbstractTableCellEditor {
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        if (Objects.nonNull(value) && value instanceof TreePathBO treePathBO) {
+        if (Objects.nonNull(value) && value instanceof TreePathBO) {
+            TreePathBO treePathBO = (TreePathBO) value;
             fuTableTreeComponent.setSelectedItem(treePathBO.getSelectPath());
         }
         return fuTableTreeComponent;
