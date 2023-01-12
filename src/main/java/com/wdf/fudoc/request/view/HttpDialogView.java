@@ -4,6 +4,7 @@ import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.GuiUtils;
@@ -26,6 +27,7 @@ import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +39,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 18:06:24
  */
-public class HttpDialogView implements HttpCallback {
+public class HttpDialogView extends DialogWrapper implements HttpCallback {
 
     /**
      * 根面板
@@ -95,6 +97,12 @@ public class HttpDialogView implements HttpCallback {
 
 
     public HttpDialogView(Project project, PsiElement psiElement) {
+        this(project, psiElement, null);
+
+    }
+
+    public HttpDialogView(Project project, PsiElement psiElement, FuHttpRequestData httpRequestData) {
+        super(project, true);
         this.project = project;
         this.psiElement = psiElement;
         this.requestTabView = new RequestTabView(this.project, this);
@@ -109,6 +117,7 @@ public class HttpDialogView implements HttpCallback {
         initResponseUI();
         initUI();
         addMouseListeners();
+        initData(httpRequestData);
     }
 
     public void close() {
@@ -230,4 +239,8 @@ public class HttpDialogView implements HttpCallback {
     }
 
 
+    @Override
+    protected @Nullable JComponent createCenterPanel() {
+        return this.rootPanel;
+    }
 }

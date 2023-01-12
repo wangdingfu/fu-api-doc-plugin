@@ -48,6 +48,5 @@ public class RequestAction extends AbstractClassAction {
             }
         }
         HttpDialogView.popup(e.getProject(), fuDocContext.getTargetElement(), request);
-
     }
 }
