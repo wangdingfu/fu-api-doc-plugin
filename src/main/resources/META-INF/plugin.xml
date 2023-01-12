@@ -9,7 +9,7 @@
     </description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="203" until-build="211.*"/>
+    <idea-version since-build="203.5981.155" until-build="211.*"/>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
@@ -84,10 +84,6 @@
 
 <!--        <iw.actionProvider implementation="com.wdf.fudoc.request.action.editor.FormatActionProvider"/>-->
 
-        <editorFloatingToolbarProvider
-                order="after DefaultFloatingToolbarProvider"
-                implementation="com.wdf.fudoc.test.action.editor.FuDocEditorFloatingToolbarProvider"
-                id="FuDocEditorFloatingToolbarProvider"/>
     </extensions>
 
     <actions>

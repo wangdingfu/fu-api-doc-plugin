@@ -29,12 +29,17 @@ public class InputExistsValidator implements InputValidatorEx {
     }
 
     @Override
-    public boolean checkInput(@NlsSafe String inputString) {
+    public boolean checkInput( String inputString) {
         if (StringUtils.isNotBlank(inputString) && itemList.contains(inputString)) {
             errorTest = FuDocMessageBundle.message(MessageConstants.VALIDATOR_INPUT_REPEAT);
             return false;
         }
         errorTest = null;
+        return true;
+    }
+
+    @Override
+    public boolean canClose( String inputString) {
         return true;
     }
 

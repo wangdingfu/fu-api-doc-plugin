@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.NlsSafe;
 import com.intellij.ui.components.labels.LinkLabel;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
@@ -366,6 +367,11 @@ public class SyncApiCategoryDialog extends DialogWrapper {
                 }
             }
             myErrorText = null;
+            return true;
+        }
+
+        @Override
+        public boolean canClose(String inputString) {
             return true;
         }
     }
