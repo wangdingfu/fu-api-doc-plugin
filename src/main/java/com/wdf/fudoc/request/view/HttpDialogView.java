@@ -1,12 +1,15 @@
 package com.wdf.fudoc.request.view;
 
 import com.intellij.find.editorHeaderActions.Utils;
+import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.psi.PsiElement;
+import com.intellij.ui.GuiUtils;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.RelativeFont;
+import com.intellij.ui.WindowMoveListener;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
@@ -22,6 +25,7 @@ import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,6 +108,7 @@ public class HttpDialogView implements HttpCallback {
         initRequestUI();
         initResponseUI();
         initUI();
+        addMouseListeners();
     }
 
     public void close() {
@@ -154,6 +159,7 @@ public class HttpDialogView implements HttpCallback {
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
         //添加状态信息展示面板到跟面板上
         this.rootPanel.add(this.statusInfoPanel, BorderLayout.SOUTH);
+        GuiUtils.replaceJSplitPaneWithIDEASplitter(this.rootPanel, true);
     }
 
     /**
@@ -165,7 +171,12 @@ public class HttpDialogView implements HttpCallback {
         if (Objects.isNull(fuHttpRequestData)) {
             return;
         }
-        this.titleLabel.setText(fuHttpRequestData.getApiName());
+        String apiName = fuHttpRequestData.getApiName();
+        String showName = apiName;
+        if (StringUtils.isNotBlank(apiName) && apiName.length() > 30) {
+            showName = apiName.substring(0, 30) + "......";
+        }
+        this.titleLabel.setText(showName);
         this.titleLabel.setToolTipText(fuHttpRequestData.getApiName());
         this.requestTabView.initData(fuHttpRequestData);
         initResponseData(fuHttpRequestData);
@@ -191,6 +202,18 @@ public class HttpDialogView implements HttpCallback {
         httpDialogView.setJbPopup(PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), fuRequestToolBarManager.getPinStatus()));
     }
 
+    private void addMouseListeners() {
+        WindowMoveListener windowMoveListener = new WindowMoveListener(this.rootPanel);
+        this.rootPanel.addMouseListener(windowMoveListener);
+        this.rootPanel.addMouseMotionListener(windowMoveListener);
+        this.toolBarPanel.addMouseListener(windowMoveListener);
+        this.toolBarPanel.addMouseMotionListener(windowMoveListener);
+        this.titleLabel.addMouseListener(windowMoveListener);
+        this.titleLabel.addMouseMotionListener(windowMoveListener);
+        this.statusInfoPanel.addMouseListener(windowMoveListener);
+        this.statusInfoPanel.addMouseMotionListener(windowMoveListener);
+    }
+
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         this.requestTabView.doSendBefore(fuHttpRequestData);
@@ -205,5 +228,6 @@ public class HttpDialogView implements HttpCallback {
             messageComponent.switchInfo();
         });
     }
+
 
 }

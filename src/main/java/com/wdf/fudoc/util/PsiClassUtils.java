@@ -146,7 +146,7 @@ public class PsiClassUtils {
     }
 
     public static String getMethodName(PsiMethod psiMethod) {
-        String psiClassName = ((PsiClassImpl) psiMethod.getParent()).getQualifiedName();
+        String psiClassName = ((PsiClassImpl) psiMethod.getParent()).getName();
         String name = psiMethod.getName();
         return psiClassName + "#" + name;
     }
