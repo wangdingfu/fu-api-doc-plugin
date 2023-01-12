@@ -5,8 +5,6 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
-import cn.hutool.system.SystemUtil;
-import cn.hutool.system.oshi.OshiUtil;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.diagnostic.Logger;
@@ -14,8 +12,6 @@ import com.intellij.openapi.extensions.PluginId;
 import com.wdf.fudoc.apidoc.config.state.FuDocSecuritySetting;
 import com.wdf.fudoc.apidoc.view.FuDocGeneralForm;
 import com.wdf.fudoc.common.CommonResult;
-import com.wdf.fudoc.util.CodeUtils;
-import oshi.hardware.ComputerSystem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,8 +24,7 @@ import java.util.Objects;
 public class RequestManager {
     private static final Logger LOGGER = Logger.getInstance(FuDocGeneralForm.class);
 
-    //    private static final String BASE_URL = "http://150.158.164.160:9090";
-    private static final String BASE_URL = "http://localhost:9090";
+        private static final String BASE_URL = "http://150.158.164.160:9090";
     private static final String PRIMARY_KEY = "dfe68b77d54943fc8d481c6ae80a2a9d";
 
     public static String doSendRequest(String apiUrl) {
