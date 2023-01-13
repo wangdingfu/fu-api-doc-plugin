@@ -178,7 +178,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("YApi", FuDocIcons.FU_SETTINGS, this.rootPane).builder();
+        return FuTabComponent.getInstance("YApi", FuDocIcons.FU_API_YAPI, this.rootPane).builder();
     }
 
     private void createUIComponents() {
