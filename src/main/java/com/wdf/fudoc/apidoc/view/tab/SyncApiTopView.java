@@ -56,7 +56,7 @@ public class SyncApiTopView {
         FuMsgItemBO fuMsgItemBO = new FuMsgItemBO();
         fuMsgItemBO.setText("点我快速了解如何添加这些配置吧!");
         fuMsgItemBO.setMsgId("fudoc.sync.api.tip.noConfig.link");
-        fuMsgItemBO.setValue(UrlConstants.DOCUMENT);
+        fuMsgItemBO.setValue(UrlConstants.FU_DOCUMENT_SYNC_URL);
         fuMsgItemBO.setMsgType(MessageType.LINK.getCode());
         fuMsgItemBO.setRegularColor(FuColor.GITHUB.getRegularColor());
         fuMsgItemBO.setDarkColor(FuColor.GITHUB.getDarkColor());

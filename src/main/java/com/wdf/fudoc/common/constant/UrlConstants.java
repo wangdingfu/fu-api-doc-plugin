@@ -16,4 +16,6 @@ public interface UrlConstants {
     String GITEE = "https://gitee.com/wdfu/fu-api-doc-plugin";
 
     String FU_DOC_URL = "http://150.158.164.160:9090";
+
+    String FU_DOCUMENT_SYNC_URL = "https://wangdingfu.github.io/#/zh-cn/sync/quickstart";
 }
