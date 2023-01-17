@@ -30,4 +30,6 @@ public interface FuDocIcons {
     Icon FU_SETTINGS = IconLoader.getIcon("icon/settings.svg", FuDocIcons.class);
     Icon FU_API_SYNC = IconLoader.getIcon("icon/sync.svg", FuDocIcons.class);
     Icon FU_API_SYNC_DIALOG = IconLoader.getIcon("icon/sync2.svg", FuDocIcons.class);
+    Icon FU_API_YAPI = IconLoader.getIcon("icon/yapi.svg", FuDocIcons.class);
+    Icon FU_API_SHOW_DOC = IconLoader.getIcon("icon/showdoc.svg", FuDocIcons.class);
 }
