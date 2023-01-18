@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>Fu Doc</name>
-    <version>1.2.8</version>
+    <version>222.1.5.1</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -9,8 +9,7 @@
     </description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <!-- idea版本需要大于2021.1 -->
-    <idea-version since-build="212.4746.92"/>
+    <idea-version since-build="222" until-build="223.*"/>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
@@ -19,53 +18,168 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- 应用启动时通知类 -->
-        <backgroundPostStartupActivity implementation="com.wdf.fudoc.start.FuDocAppStartUpListener"/>
+        <postStartupActivity implementation="com.wdf.fudoc.start.FuDocStartUpListener"/>
+        <backgroundPostStartupActivity implementation="com.wdf.fudoc.spring.LoadSpringConfigListener"/>
 
         <!-- Add your extensions here -->
         <notificationGroup id="com.wdf.fudoc.notification.group" displayType="BALLOON"/>
         <notificationGroup id="com.wdf.fudoc.notification.start.group" displayType="BALLOON"/>
 
+        <projectService serviceImplementation="com.wdf.fudoc.request.state.FuRequestState"/>
+
+        <applicationService serviceImplementation="com.wdf.fudoc.request.state.FuRequestSettingState"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting"/>
 
         <!-- 应用级别的service（所有项目都是这一个实例 不跟项目隔离） 项目级别的service则使用projectService标签 -->
-        <applicationService serviceImplementation="com.wdf.fudoc.config.state.FuDocSetting"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.config.state.FuDocSecuritySetting"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.parse.FuDocClassParserImpl"/>
+        <applicationService serviceInterface="com.wdf.fudoc.apidoc.mock.MockDataService" serviceImplementation="com.wdf.fudoc.apidoc.mock.AutoMockDataServiceImpl"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSetting"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSecuritySetting"/>
 
-        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.ControllerAssembleService"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.InterfaceAssembleService"/>
-        <applicationService serviceImplementation="com.wdf.fudoc.assemble.impl.FeignAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.parse.FuDocClassParserImpl"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.ControllerAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.InterfaceAssembleService"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.FeignAssembleService"/>
 
-        <applicationService serviceImplementation="com.wdf.fudoc.mock.FuDocObjectJMockData"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.sync.strategy.SyncToYApiStrategy"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.sync.strategy.SyncShowDocStrategy"/>
 
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.mock.FuDocObjectJMockData"/>
 
-        <projectConfigurable instance="com.wdf.fudoc.config.configurable.FuDocSettingConfigurable"
+        <applicationService serviceInterface="com.wdf.fudoc.apidoc.sync.service.YApiService" serviceImplementation="com.wdf.fudoc.apidoc.sync.service.YApiServiceImpl"/>
+
+        <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSettingConfigurable"
                              id="fu.doc.setting"
                              displayName="Fu Doc"
                              nonDefaultProject="true"/>
 
-        <projectConfigurable instance="com.wdf.fudoc.config.configurable.FuDocGeneralConfigurable"
+        <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocGeneralConfigurable"
                              id="fu.doc.setting.general"
                              groupId="fu.doc.setting"
                              displayName="General"
                              nonDefaultProject="true"/>
 
 
+        <projectConfigurable instance="com.wdf.fudoc.request.configurable.FuRequestSettingConfigurable"
+                             id="fu.request.setting"
+                             groupId="fu.doc.setting"
+                             displayName="Fu Request"
+                             nonDefaultProject="true"/>
+        <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable"
+                             id="fu.doc.setting.sync"
+                             groupId="fu.doc.setting"
+                             displayName="Sync Settings"
+                             nonDefaultProject="true"/>
+
+        <toolWindow id="Fu Request"
+                    icon="FuDocIcons.FU_DOC"
+                    anchor="right"
+                    secondary="false"
+                    doNotActivateOnStart="true"
+                    order="last"
+                    factoryClass="com.wdf.fudoc.request.view.toolwindow.FuDocToolWindowFactory"/>
+
+        <!-- provider -->
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.wdf.fudoc.request.view.provider.FuDocLineMarkerProvider"/>
+
+
+<!--        <iw.actionProvider implementation="com.wdf.fudoc.request.action.editor.FormatActionProvider"/>-->
+
+        <editorFloatingToolbarProvider
+                order="after DefaultFloatingToolbarProvider"
+                implementation="com.wdf.fudoc.test.action.editor.FuDocEditorFloatingToolbarProvider"
+                id="FuDocEditorFloatingToolbarProvider"/>
     </extensions>
 
     <actions>
 
-        <group id="wdf.fudoc" popup="false" compact="true">
+        <!-- 接口文档相关动作 -->
+        <group id="wdf.fudoc.apidoc" popup="false" compact="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="gen-api-doc" class="com.wdf.fudoc.action.GenFuDocAction" text="Fu Doc">
+            <action id="fudoc.gen.api.doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Fu Doc">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
-            </action>
-
-            <action id="com.fudoc.toJson" class="com.wdf.fudoc.action.BeanToJsonAction" text="Bean to Json" description="Bean to json">
-                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
             </action>
         </group>
 
 
+        <!-- http请求相关动作 -->
+        <group id="wdf.fudoc.request" popup="false" compact="true">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Fu Request">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
+            </action>
+        </group>
+
+        <!-- http请求相关动作 -->
+        <group id="wdf.fudoc.sync" popup="false" compact="true">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Fu Doc Sync">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
+            </action>
+            <action id="fudoc.http.sync.confirm" class="com.wdf.fudoc.apidoc.action.ConfirmSyncFuDocAction" text="Fu Doc Sync Confirm">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift S"/>
+            </action>
+        </group>
+
+
+        <!-- 测试功能点相关动作 -->
+<!--        <group id="wdf.fudoc.test" popup="false" compact="true">
+            <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
+            <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test" description="Test"/>
+            <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
+                    description="Test table"/>
+        </group>-->
+
+
+
+        <!-- 工具相关动作 -->
+        <group id="wdf.fudoc.futool" text="Fu Tool" popup="true">
+            <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
+            <action id="com.fudoc.futool.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
+            </action>
+            <action id="com.fudoc.futool.beancopy" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction" text="Bean Copy">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift G"/>
+            </action>
+        </group>
+
+        <action id="fudoc.request.toolbar.action.stop"
+                class="com.wdf.fudoc.request.action.toolbar.FuRequestStopAction"
+                text="Stop Request" description="Stop request" icon="AllIcons.Actions.Suspend"/>
+
+       <!-- &lt;!&ndash; 接口请求工具栏相关动作  &ndash;&gt;
+        <group id="fudoc.request.toolbar.action">
+            <action id="fudoc.request.toolbar.action.save"
+                    class="com.wdf.fudoc.request.action.toolbar.SaveAction"
+                    text="Save" description="Save" icon="AllIcons.Actions.MenuSaveall"/>
+            <action id="fudoc.request.toolbar.action.last"
+                    class="com.wdf.fudoc.request.action.toolbar.LastRequestAction"
+                    text="上一条请求" icon="AllIcons.Actions.Back"/>
+            <action id="fudoc.request.toolbar.action.next"
+                    class="com.wdf.fudoc.request.action.toolbar.NextRequestAction"
+                    text="下一条请求" icon="AllIcons.Actions.Forward"/>
+
+
+            <separator/>
+
+            <action id="fudoc.request.toolbar.action.refresh"
+                    class="com.wdf.fudoc.request.action.toolbar.FuRequestRefreshAction"
+                    text="Refresh" description="Refresh" icon="AllIcons.Actions.Refresh"/>
+
+            <action id="fudoc.request.toolbar.action.setting"
+                    class="com.wdf.fudoc.request.action.toolbar.FuRequestSettingAction"
+                    text="Setting" description="Setting" icon="AllIcons.General.Settings"/>
+            <separator/>
+            <action id="fudoc.request.toolbar.action.help" class="com.wdf.fudoc.request.action.toolbar.FuDocHelpAction" text="帮助文档" icon="FuDocIcons.FU_DOC"/>
+            <separator/>
+
+            <action id="fudoc.http.toolbar.action.exist" class="com.wdf.fudoc.components.toolbar.ExistToolBarAction" text="Exist" icon="AllIcons.Actions.Cancel">
+            </action>
+        </group>
+-->
+        <!-- 魔法棒格式化json动作  -->
+        <group id="fu.doc.editor.format">
+            <action id="fu.doc.format" class="com.wdf.fudoc.test.action.editor.FuEditorFormatAction"/>
+        </group>
     </actions>
 
 </idea-plugin>
