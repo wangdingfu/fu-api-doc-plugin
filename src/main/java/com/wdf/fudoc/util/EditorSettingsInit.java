@@ -31,4 +31,10 @@ public class EditorSettingsInit {
         editorSettings.setCaretRowShown(false);
     }
 
+    public static void initHtml(Editor editor) {
+        EditorSettings editorSettings = editor.getSettings();
+        editorSettings.setRightMargin(60);
+        init(editor);
+    }
+
 }

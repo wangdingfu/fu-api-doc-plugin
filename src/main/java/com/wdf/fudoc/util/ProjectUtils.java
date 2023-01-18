@@ -52,6 +52,12 @@ public class ProjectUtils {
         return projectManager.getDefaultProject();
     }
 
+    public static String getCurrentProjectPath() {
+        Project currProject = getCurrProject();
+        return currProject.getBasePath();
+    }
+
+
     /**
      * 进行旧版本兼容，该方法已经存在 @see {@link com.intellij.openapi.project.ProjectUtil#guessProjectDir(Project)}
      *

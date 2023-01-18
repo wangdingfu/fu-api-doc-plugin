@@ -10,11 +10,9 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.4.0"
+    id("org.jetbrains.intellij") version "1.11.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
-    // Gradle Qodana Plugin
-    id("org.jetbrains.qodana") version "0.1.13"
 }
 
 
@@ -31,17 +29,16 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    compileOnly("org.projectlombok:lombok:1.18.20")
-    annotationProcessor("org.projectlombok:lombok:1.18.20")
+    compileOnly("org.projectlombok:lombok:1.18.24")
+    annotationProcessor("org.projectlombok:lombok:1.18.24")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
     implementation("org.freemarker:freemarker:2.3.31")
-    implementation("cn.hutool:hutool-json:5.8.5")
-    implementation("cn.hutool:hutool-http:5.8.5")
-    implementation("cn.hutool:hutool-crypto:5.8.5")
-    implementation("cn.hutool:hutool-system:5.8.5")
+    implementation("cn.hutool:hutool-json:5.8.11")
+    implementation("cn.hutool:hutool-http:5.8.11")
+    implementation("cn.hutool:hutool-crypto:5.8.11")
+    implementation("cn.hutool:hutool-system:5.8.11")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
+    implementation("com.atlassian.commonmark:commonmark:0.17.0")
 }
 
 
@@ -65,14 +62,6 @@ changelog {
     groups.set(emptyList())
 }
 
-
-// Configure Gradle Qodana Plugin - read more: https://github.com/JetBrains/gradle-qodana-plugin
-qodana {
-    cachePath.set(projectDir.resolve(".qodana").canonicalPath)
-    reportPath.set(projectDir.resolve("build/reports/inspections").canonicalPath)
-    saveReport.set(true)
-    showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
-}
 
 tasks {
     // Set the JVM compatibility versions

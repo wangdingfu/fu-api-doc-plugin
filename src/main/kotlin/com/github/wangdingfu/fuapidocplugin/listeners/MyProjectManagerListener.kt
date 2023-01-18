@@ -7,7 +7,4 @@ import com.github.wangdingfu.fuapidocplugin.services.MyProjectService
 
 internal class MyProjectManagerListener : ProjectManagerListener {
 
-    override fun projectOpened(project: Project) {
-        project.service<MyProjectService>()
-    }
 }

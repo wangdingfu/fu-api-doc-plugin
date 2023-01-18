@@ -1,5 +1,6 @@
 package com.wdf.fudoc.util;
 
+import cn.hutool.core.util.URLUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
@@ -52,6 +53,16 @@ public class PathUtils {
      * @return 拼接成最终的url
      */
     public static String urlJoin(String... urls) {
+        return JOINT + joinUrl(urls);
+    }
+
+    /**
+     * url请求路径拼接
+     *
+     * @param urls 多个url路径
+     * @return 拼接成最终的url
+     */
+    public static String joinUrl(String... urls) {
         if (Objects.isNull(urls) || urls.length <= 0) {
             return StringUtils.EMPTY;
         }
@@ -67,7 +78,6 @@ public class PathUtils {
                 }
             }
         }
-        return JOINT + StringUtils.join(uriList, JOINT);
+        return StringUtils.join(uriList, JOINT);
     }
-
 }

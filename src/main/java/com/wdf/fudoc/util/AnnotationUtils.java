@@ -3,10 +3,10 @@ package com.wdf.fudoc.util;
 import com.google.common.collect.Lists;
 import com.intellij.lang.jvm.annotation.*;
 import com.intellij.psi.PsiAnnotation;
-import com.wdf.fudoc.constant.enumtype.AnnotationValueType;
-import com.wdf.fudoc.pojo.data.AnnotationData;
-import com.wdf.fudoc.pojo.data.AnnotationValueData;
-import com.wdf.fudoc.pojo.data.annotation.*;
+import com.wdf.fudoc.apidoc.pojo.data.annotation.*;
+import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
+import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
+import com.wdf.fudoc.apidoc.pojo.data.AnnotationValueData;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,14 +1,10 @@
 package com.wdfu.fudoc;
 
-import cn.hutool.core.lang.Dict;
-import com.google.common.collect.Lists;
-import com.wdf.fudoc.config.FreeMarkerConfig;
-import com.wdf.fudoc.pojo.data.FuDocEnumItemData;
+import cn.hutool.system.oshi.OshiUtil;
+import com.wdf.fudoc.request.view.ResponseErrorView;
+import oshi.hardware.ComputerSystem;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import javax.swing.*;
 
 /**
  * @author wangdingfu
@@ -17,7 +13,18 @@ import java.util.Set;
  */
 public class FuDocSettingTest {
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
+        JFrame jFrame = new JFrame();
+        ResponseErrorView responseErrorView = new ResponseErrorView();
+        jFrame.add(responseErrorView.getRootPanel());
+        jFrame.setVisible(true);
+        //        关闭事件
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
 
+
+    public static void main(String[] args) {
+        ComputerSystem system = OshiUtil.getSystem();
+        System.out.println(system.getHardwareUUID());
     }
 }
