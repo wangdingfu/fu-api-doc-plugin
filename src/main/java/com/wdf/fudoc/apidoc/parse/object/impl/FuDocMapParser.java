@@ -46,8 +46,8 @@ public class FuDocMapParser extends AbstractApiDocObjectParser {
         //获取泛型
         Map<String, PsiType> genericsMap = buildGenericsMap(psiType, PsiUtil.resolveClassInType(psiType));
         List<ObjectInfoDesc> childList = Lists.newArrayList();
-        childList.add(build(genericsMap.get("K"), parseObjectBO, FuDocConstants.KEY,"属性名(key)",  CommonObjectType.STRING.getName()));
-        childList.add(build(genericsMap.get("V"), parseObjectBO, FuDocConstants.VALUE,"属性值(value)",  CommonObjectType.OBJECT_TYPE.getName()));
+        childList.add(build(genericsMap.get("K"), parseObjectBO, FuDocConstants.KEY, "属性名(key)", CommonObjectType.STRING.getName()));
+        childList.add(build(genericsMap.get("V"), parseObjectBO, FuDocConstants.VALUE, "属性值(value)", CommonObjectType.OBJECT_TYPE.getName()));
         objectInfoDesc.setChildList(childList);
         return objectInfoDesc;
     }
@@ -57,7 +57,7 @@ public class FuDocMapParser extends AbstractApiDocObjectParser {
         if (Objects.isNull(psiType)) {
             return ObjectInfoDescFactory.build(name, typeView, comment);
         }
-        ParseObjectBO genericParseObjectBO = new ParseObjectBO(parseObjectBO.getFuDocContext());
+        ParseObjectBO genericParseObjectBO = new ParseObjectBO(parseObjectBO.getFuDocContext(), parseObjectBO.getMockRealData());
         genericParseObjectBO.setFuDocField(new FuDocCustomerField(name, comment));
         genericParseObjectBO.setRootId(parseObjectBO.getRootId());
         genericParseObjectBO.setParamType(parseObjectBO.getParamType());

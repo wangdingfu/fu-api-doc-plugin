@@ -5,6 +5,8 @@ import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.fudoc.apidoc.mock.real.JsonRealDataHandler;
+import com.wdf.fudoc.apidoc.mock.real.MockRealData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.fudoc.apidoc.constant.enumtype.CommonObjectType;
@@ -70,12 +72,11 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
         String canonicalText = genericsType.getCanonicalText();
         CommonObjectType commonObjectType = CommonObjectType.getEnum(canonicalText);
         ObjectInfoDesc genericsInfoDesc;
-        ParseObjectBO genericsParseObjectBO = new ParseObjectBO(parseObjectBO.getFuDocContext());
+        ParseObjectBO genericsParseObjectBO = new ParseObjectBO(parseObjectBO.getFuDocContext(), parseObjectBO.getMockRealData());
         if (commonObjectType.isPrimitiveOrCommon()) {
             //基本数据类型和公共数据类型 可以直接解析返回
             genericsInfoDesc = buildDefault(genericsType, commonObjectType.getName(), genericsParseObjectBO);
             objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.GENERICS_TYPE, commonObjectType.getFuDocObjectType());
-            genericsInfoDesc.setValue(mockCommonType(genericsInfoDesc));
             objectInfoDesc.setChildList(Lists.newArrayList(genericsInfoDesc));
             objectInfoDesc.setChildTypeView(commonObjectType.getName());
         } else {
@@ -83,6 +84,8 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
             genericsParseObjectBO.setGenericsMap(parseObjectBO.getGenericsMap());
             genericsParseObjectBO.setRootId(parseObjectBO.getRootId());
             genericsParseObjectBO.setParamType(parseObjectBO.getParamType());
+            MockRealData mockRealData = genericsParseObjectBO.getMockRealData();
+            genericsParseObjectBO.setMockRealData(new JsonRealDataHandler(Objects.nonNull(mockRealData) ? mockRealData.getData(null) : null));
             genericsInfoDesc = ObjectParserExecutor.execute(genericsType, genericsParseObjectBO);
             if (Objects.nonNull(genericsInfoDesc)) {
                 //将泛型对象的字段集合设置到当前apiDoc中

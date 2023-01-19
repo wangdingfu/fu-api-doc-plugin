@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -120,6 +121,12 @@ public class FuDocUtils {
             }
         }
         return false;
+    }
+
+    public static String genApiKey(PsiMethod psiMethod) {
+        Module module = ModuleUtil.findModuleForPsiElement(psiMethod);
+        String methodId = PsiClassUtils.getMethodId(psiMethod);
+        return genApiKey(getModuleId(module), methodId);
     }
 
     /**

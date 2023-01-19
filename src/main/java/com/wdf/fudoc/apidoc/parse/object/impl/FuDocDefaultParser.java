@@ -6,9 +6,10 @@ import com.google.common.collect.Sets;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.fudoc.apidoc.constant.CommonObjectNames;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamType;
+import com.wdf.fudoc.apidoc.mock.real.JsonRealDataHandler;
+import com.wdf.fudoc.apidoc.mock.real.MockRealData;
 import com.wdf.fudoc.apidoc.parse.ObjectParserExecutor;
 import com.wdf.fudoc.apidoc.parse.field.FuDocField;
 import com.wdf.fudoc.apidoc.parse.field.FuDocPsiField;
@@ -17,6 +18,7 @@ import com.wdf.fudoc.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -26,8 +28,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 /**
+ * 默认对象解析器(用户自定义对象)
+ *
  * @author wangdingfu
- * @description 默认对象解析器(用户自定义对象)
  * @date 2022-04-18 21:34:42
  */
 public class FuDocDefaultParser extends AbstractApiDocObjectParser {
@@ -80,7 +83,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             //添加到EarlyMap中（半成品对象）
             fuDocContext.add(canonicalText, objectInfoDesc);
             //解析对象
-            paddingChildList(objectInfoDesc, doParseDefaultObject(parseObjectBO, psiType, psiClass));
+            paddingChildList(objectInfoDesc, doParseDefaultObject(objectInfoDesc, parseObjectBO, psiType, psiClass));
             //当前对象解析完成 从earlyMap中移动到objectInfoDescMap中（从半成品变为成品）
             fuDocContext.parseFinish(canonicalText);
         } else {
@@ -100,17 +103,21 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
      * @param psiType       对象类型
      * @param psiClass      对象class
      */
-    private List<ObjectInfoDesc> doParseDefaultObject(ParseObjectBO parseObjectBO, PsiType psiType, PsiClass psiClass) {
+    private List<ObjectInfoDesc> doParseDefaultObject(ObjectInfoDesc objectInfoDesc, ParseObjectBO parseObjectBO, PsiType psiType, PsiClass psiClass) {
         List<ObjectInfoDesc> childList = Lists.newArrayList();
         if (Objects.nonNull(psiType) && psiType.isValid() && PsiClassUtils.isClass(psiClass) && !CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
             FuDocContext fuDocContext = parseObjectBO.getFuDocContext();
             Set<String> filterFieldNames = getNeedFilterFieldNames(fuDocContext.getFilterMap(), psiClass);
+            MockRealData parentMockRealData = parseObjectBO.getMockRealData();
+            boolean isJson = Objects.nonNull(parentMockRealData) && parentMockRealData instanceof JsonRealDataHandler;
+            MockRealData mockRealData = isJson ? new JsonRealDataHandler(objectInfoDesc.getValue()) : parentMockRealData;
             //遍历当前类的所有字段（包含父类）
             for (PsiField psiField : psiClass.getAllFields()) {
                 if (filterFieldNames.contains(psiField.getName()) || fieldIsIgnore(psiField, parseObjectBO)) {
                     //如果属性在过滤列表里 则标识该属性呗过滤掉了
                     continue;
                 }
+                parseObjectBO.setMockRealData(mockRealData);
                 parseObjectBO.setFuDocField(new FuDocPsiField(psiField));
                 childList.add(ObjectParserExecutor.execute(psiField.getType(), parseObjectBO));
             }
