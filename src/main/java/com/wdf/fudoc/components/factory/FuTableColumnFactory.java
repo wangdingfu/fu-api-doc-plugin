@@ -7,11 +7,14 @@ import com.wdf.fudoc.apidoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.apidoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
+import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
+import com.wdf.fudoc.components.ButtonTableCellEditor;
 import com.wdf.fudoc.components.bo.*;
 import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
 import com.wdf.fudoc.request.pojo.CommonHeader;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * 创建FuTable的column的工厂类
@@ -112,6 +115,21 @@ public class FuTableColumnFactory {
         return columns;
     }
 
+    /**
+     * api同步结果table
+     */
+    public static List<Column> syncApiResult(ButtonTableCellEditor cellEditor) {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new StringColumn<>("接口名称", SyncApiResultDTO::getApiName, SyncApiResultDTO::setApiName));
+        columns.add(new StringColumn<>("接口地址", SyncApiResultDTO::getApiUrl, SyncApiResultDTO::setApiUrl));
+        columns.add(new StringColumn<>("项目名称", SyncApiResultDTO::getProjectName, SyncApiResultDTO::setProjectName));
+        columns.add(new StringColumn<>("接口分类名称", SyncApiResultDTO::getCategoryName, SyncApiResultDTO::setCategoryName));
+        columns.add(new StringColumn<>("同步状态", SyncApiResultDTO::getSyncStatus, SyncApiResultDTO::setSyncStatus));
+        columns.add(new StringColumn<>("失败信息", SyncApiResultDTO::getErrorMsg, SyncApiResultDTO::setErrorMsg));
+        columns.add(new ButtonColumn<>("操作", SyncApiResultDTO::getBtnText, SyncApiResultDTO::setBtnText, cellEditor));
+        return columns;
+    }
+
 
     @SuppressWarnings("all")
     public static <T, R> R getValue(T data, Column column) {
@@ -126,6 +144,9 @@ public class FuTableColumnFactory {
         }
         if (column instanceof TreeModuleComboBoxColumn) {
             return (R) ((TreeModuleComboBoxColumn) column).getGetFun().apply(data);
+        }
+        if (column instanceof ButtonColumn) {
+            return (R) ((ButtonColumn) column).getGetFun().apply(data);
         }
         return null;
     }
@@ -143,6 +164,9 @@ public class FuTableColumnFactory {
         }
         if (column instanceof TreeModuleComboBoxColumn) {
             ((TreeModuleComboBoxColumn) column).getSetFun().accept(data, (TreePathBO) value);
+        }
+        if (column instanceof ButtonColumn) {
+            ((ButtonColumn) column).getSetFun().accept(data, (String) value);
         }
     }
 }

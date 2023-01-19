@@ -42,4 +42,6 @@ public class SyncApiResultDTO {
      * 失败信息
      */
     private String errorMsg;
+
+    private String btnText = "重新同步";
 }

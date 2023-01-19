@@ -16,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -29,13 +31,13 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * table列集合
      */
-    private final List<Column> columnList;
+    private List<Column> columnList;
 
     /**
      * table数据集合
      */
     @Getter
-    private final List<T> dataList;
+    private List<T> dataList;
 
     /**
      * table对象
@@ -45,7 +47,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * table数据的class对象
      */
-    private final Class<T> clazz;
+    private Class<T> clazz;
 
     /**
      * table组件监听器
@@ -54,12 +56,19 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     private FuTableListener<T> fuTableListener;
 
     public FuTableComponent(List<Column> columnList, List<T> dataList, Class<T> clazz) {
+        init(columnList, dataList, clazz);
+    }
+
+    public FuTableComponent() {
+    }
+
+    public JPanel init(List<Column> columnList, List<T> dataList, Class<T> clazz) {
         this.columnList = columnList;
         this.dataList = dataList;
         this.clazz = clazz;
         this.initTable();
+        return createPanel();
     }
-
 
     public void addListener(FuTableListener<T> fuTableListener) {
         this.fuTableListener = fuTableListener;
@@ -188,10 +197,14 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         return new FuTableComponent<>(columnList, dataList, clazz);
     }
 
+
     /**
      * 创建面板
      */
     public JPanel createPanel() {
+        if (Objects.isNull(this.fuTableView)) {
+            return new JPanel();
+        }
         return ToolbarDecorator.createDecorator(this.fuTableView).createPanel();
     }
 
@@ -207,7 +220,14 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         //格式化第一列
         formatFirstColumn();
         //设置table单元格编辑器
-        this.columnList.stream().filter(f -> Objects.nonNull(f.getEditor())).forEach(f -> this.fuTableView.getColumn(f.getName()).setCellEditor(f.getEditor()));
+        this.columnList.stream().filter(f -> Objects.nonNull(f.getEditor())).forEach(f -> {
+            TableColumn column = this.fuTableView.getColumn(f.getName());
+            column.setCellEditor(f.getEditor());
+            TableCellRenderer cellRenderer = f.getCellRenderer();
+            if (Objects.nonNull(cellRenderer)) {
+                column.setCellRenderer(cellRenderer);
+            }
+        });
         //将数据添加到table
         if (CollectionUtils.isNotEmpty(this.dataList)) {
             this.dataList.forEach(this::addRow);
@@ -286,6 +306,20 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         this.columnList.stream().map(item -> FuTableColumnFactory.getValue(data, item)).forEach(vector::add);
         return vector;
     }
+
+    /**
+     * 获取表格中某一行的数据
+     *
+     * @param row 行数
+     * @return 当前行的数据
+     */
+    public T getData(Integer row) {
+        if (Objects.nonNull(row) && this.dataList.size() > row) {
+            return this.dataList.get(row);
+        }
+        return null;
+    }
+
 
     /**
      * 实例化表格数据对象

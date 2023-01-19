@@ -2,6 +2,7 @@ package com.wdf.fudoc.apidoc.sync.strategy;
 
 import cn.hutool.core.date.DateUtil;
 import com.google.common.collect.Lists;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.ShowSettingsUtil;
@@ -20,12 +21,16 @@ import com.wdf.fudoc.apidoc.view.dialog.SyncApiCategoryDialog;
 import com.wdf.fudoc.common.FuDocMessageBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.notification.FuDocNotification;
+import com.wdf.fudoc.components.ButtonTableCellEditor;
+import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import javax.swing.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -106,6 +111,14 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             //本次没有需要同步的接口 不需要提示
             return;
         }
+        FuTableComponent<SyncApiResultDTO> fuTableComponent = new FuTableComponent<>();
+        ButtonTableCellEditor buttonTableCellEditor = new ButtonTableCellEditor("重新同步", row -> {
+            //按钮点击事件 发起同步
+            SyncApiResultDTO data = fuTableComponent.getData(row);
+            //刷新当前table
+            return "已同步";
+        });
+        JPanel showPanel = fuTableComponent.init(FuTableColumnFactory.syncApiResult(buttonTableCellEditor), resultDTOList, SyncApiResultDTO.class);
         List<SyncApiResultDTO> successList = resultDTOList.stream().filter(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus())).collect(Collectors.toList());
         List<SyncApiResultDTO> faileList = resultDTOList.stream().filter(a -> ApiSyncStatus.FAIL.getMessage().equals(a.getSyncStatus())).collect(Collectors.toList());
         SyncApiResultDTO resultDTO = resultDTOList.get(0);
@@ -113,21 +126,25 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             //全部同步成功情况
             if (syncApiSize == 1) {
                 //成功同步{0}接口到{0}分类下
-                FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_ONE, resultDTO.getApiName(), resultDTO.getCategoryName()));
+                String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_ONE, resultDTO.getApiName(), resultDTO.getCategoryName());
+                FuDocNotification.notifySyncApiResult(NotificationType.INFORMATION, message, showPanel);
                 return;
             }
             //本次共计成功同步{0}个接口到{0}分类下
-            FuDocNotification.notifyInfo(FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_ALL, syncApiSize, resultDTO.getCategoryName()));
+            String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_ALL, syncApiSize, resultDTO.getCategoryName());
+            FuDocNotification.notifySyncApiResult(NotificationType.INFORMATION, message, showPanel);
             return;
         }
         if (faileList.size() == syncApiSize) {
             //全部同步失败情况 - 同步接口失败 失败原因:{0}
-            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.SYNC_API_FAILED_ALL, StringUtils.isNotBlank(resultDTO.getErrorMsg()) ? resultDTO.getErrorMsg() : "未知异常"));
+            String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_FAILED_ALL, StringUtils.isNotBlank(resultDTO.getErrorMsg()) ? resultDTO.getErrorMsg() : "未知异常");
+            FuDocNotification.notifySyncApiResult(NotificationType.ERROR, message, showPanel);
             return;
         }
         //部分成功 部分失败 - 本次成功同步{0}个接口到{1}分类下 同步失败{2}个接口
         SyncApiResultDTO successResultDTO = successList.get(0);
-        FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_FAILED, successList.size(), successResultDTO.getCategoryName(), faileList.size()));
+        String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_FAILED, successList.size(), successResultDTO.getCategoryName(), faileList.size());
+        FuDocNotification.notifySyncApiResult(NotificationType.WARNING, message, showPanel);
     }
 
 

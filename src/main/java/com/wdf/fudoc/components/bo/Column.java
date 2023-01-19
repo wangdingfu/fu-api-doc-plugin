@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
 /**
  * @author wangdingfu
@@ -14,6 +15,10 @@ import javax.swing.table.TableCellEditor;
 public abstract class Column {
 
     public abstract Class<?> getColumnClass();
+
+    public TableCellRenderer getCellRenderer() {
+        return null;
+    }
 
     /**
      * 列名
@@ -26,12 +31,10 @@ public abstract class Column {
     private TableCellEditor editor;
 
 
-
     public Column(String name, TableCellEditor editor) {
         this.name = name;
         this.editor = editor;
     }
-
 
 
 }
