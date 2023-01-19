@@ -28,7 +28,7 @@ public class ShowDocSettingsTab implements FuTab, FuViewListener {
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("ShowDoc", FuDocIcons.FU_SETTINGS, this.rootPanel).builder();
+        return FuTabComponent.getInstance("ShowDoc", FuDocIcons.FU_API_SHOW_DOC, this.rootPanel).builder();
     }
 
     @Override
