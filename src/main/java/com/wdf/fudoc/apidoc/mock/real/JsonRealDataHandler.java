@@ -35,7 +35,10 @@ public class JsonRealDataHandler implements MockRealData {
 
     @Override
     public Object getData(String fieldName) {
-        if (Objects.nonNull(this.jsonRealData) && StringUtils.isNotBlank(fieldName)) {
+        if (Objects.nonNull(this.jsonRealData)) {
+            if (StringUtils.isBlank(fieldName)) {
+                return this.jsonRealData;
+            }
             return this.jsonRealData.getByPath(fieldName);
         }
         if (Objects.nonNull(this.arrayRealData) && !this.arrayRealData.isEmpty()) {

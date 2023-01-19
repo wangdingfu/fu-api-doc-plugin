@@ -1,5 +1,7 @@
 package com.wdf.fudoc.apidoc.parse;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -22,6 +24,7 @@ import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -105,9 +108,8 @@ public class FuDocClassParserImpl implements FuDocClassParser {
         List<ObjectInfoDesc> requestList = Lists.newArrayList();
         //从【Fu Request】模块中获取当前接口实际请求示例数据
         MockRealData keyValueRealData = buildKeyValueParamRealData(fuRequestData);
-        MockRealData jsonRealData = buildJsonRealData(fuRequestData);
         for (PsiParameter parameter : parameterList.getParameters()) {
-            MockRealData mockRealData = (parameter.getAnnotation(AnnotationConstants.REQUEST_BODY) != null) ? jsonRealData : keyValueRealData;
+            MockRealData mockRealData = (parameter.getAnnotation(AnnotationConstants.REQUEST_BODY) != null) ? buildJsonRealData(parameter.getName(), fuRequestData) : keyValueRealData;
             ParseObjectBO parseObjectBO = new ParseObjectBO(fuDocContext, mockRealData);
             parseObjectBO.setFuDocField(new FuDocPsiParameter(parameter, apiDocCommentData));
             parseObjectBO.setParamType(ParamType.REQUEST_PARAM);
@@ -123,10 +125,12 @@ public class FuDocClassParserImpl implements FuDocClassParser {
         return requestList;
     }
 
-    private MockRealData buildJsonRealData(FuRequestData requestData) {
+    private MockRealData buildJsonRealData(String fieldName, FuRequestData requestData) {
         FuRequestBodyData body;
         if (Objects.nonNull(requestData) && Objects.nonNull(body = requestData.getBody())) {
-            return new JsonRealDataHandler(body.getJson());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.putOnce(fieldName, JSONUtil.parse(body.getJson()));
+            return new JsonRealDataHandler(jsonObject);
         }
         return null;
     }
@@ -192,12 +196,15 @@ public class FuDocClassParserImpl implements FuDocClassParser {
      * @return 解析后的响应参数对象
      */
     protected ObjectInfoDesc responseParse(FuDocContext fuDocContext, PsiMethod psiMethod, ApiDocCommentData apiDocCommentData, FuResponseData response) {
-        ParseObjectBO parseObjectBO = new ParseObjectBO(fuDocContext, new JsonRealDataHandler(Objects.nonNull(response) ? response.getContent() : null));
         PsiType returnType = psiMethod.getReturnType();
         PsiClass psiClass = PsiUtil.resolveClassInType(returnType);
-        if (Objects.nonNull(psiClass)) {
-            parseObjectBO.setFuDocField(new FuDocPsiClass(psiClass, apiDocCommentData));
+        if (Objects.isNull(psiClass)) {
+            throw new FuDocException("【Fu Doc】解析异常");
         }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.putOnce(psiClass.getName(), Objects.nonNull(response) ? JSONUtil.parse(response.getContent()) : null);
+        ParseObjectBO parseObjectBO = new ParseObjectBO(fuDocContext, new JsonRealDataHandler(jsonObject));
+        parseObjectBO.setFuDocField(new FuDocPsiClass(psiClass, apiDocCommentData));
         parseObjectBO.setParamType(ParamType.RESPONSE_PARAM);
         return ObjectParserExecutor.execute(returnType, parseObjectBO);
     }
