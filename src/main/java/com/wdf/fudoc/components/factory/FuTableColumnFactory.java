@@ -118,7 +118,7 @@ public class FuTableColumnFactory {
     /**
      * api同步结果table
      */
-    public static List<Column> syncApiResult(ButtonTableCellEditor cellEditor) {
+    public static List<Column> syncApiResult() {
         List<Column> columns = Lists.newArrayList();
         columns.add(new StringColumn<>("接口名称", SyncApiResultDTO::getApiName, SyncApiResultDTO::setApiName));
         columns.add(new StringColumn<>("接口地址", SyncApiResultDTO::getApiUrl, SyncApiResultDTO::setApiUrl));
@@ -126,7 +126,6 @@ public class FuTableColumnFactory {
         columns.add(new StringColumn<>("接口分类名称", SyncApiResultDTO::getCategoryName, SyncApiResultDTO::setCategoryName));
         columns.add(new StringColumn<>("同步状态", SyncApiResultDTO::getSyncStatus, SyncApiResultDTO::setSyncStatus));
         columns.add(new StringColumn<>("失败信息", SyncApiResultDTO::getErrorMsg, SyncApiResultDTO::setErrorMsg));
-        columns.add(new ButtonColumn<>("操作", SyncApiResultDTO::getBtnText, SyncApiResultDTO::setBtnText, cellEditor));
         return columns;
     }
 

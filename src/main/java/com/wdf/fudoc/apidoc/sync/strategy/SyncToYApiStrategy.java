@@ -12,6 +12,7 @@ import com.wdf.fudoc.apidoc.sync.service.YApiService;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -53,23 +54,16 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
     protected String doSingleApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
         if (Objects.isNull(apiProjectDTO) || org.apache.commons.lang.StringUtils.isBlank(apiProjectDTO.getProjectToken()) || org.apache.commons.lang.StringUtils.isBlank(apiProjectDTO.getProjectId())) {
             //构建返回结果
-            return "同步的项目数据错误";
+            throw new FuDocException("同步的项目数据错误");
         }
         if (Objects.isNull(apiCategoryDTO) || org.apache.commons.lang.StringUtils.isBlank(apiCategoryDTO.getCategoryId()) || org.apache.commons.lang.StringUtils.isBlank(apiCategoryDTO.getCategoryName())) {
             //构建返回结果
-            return "同步的分类数据错误";
+            throw new FuDocException("同步的分类数据错误");
         }
         //构建同步至YApi系统的数据
         YApiSaveDTO yApiSaveDTO = buildYApiSaveDTO(fuDocItemData, apiProjectDTO, apiCategoryDTO);
         YApiService service = ServiceHelper.getService(YApiService.class);
-        try {
-            if (service.saveOrUpdate(configData.getBaseUrl(), yApiSaveDTO)) {
-                return null;
-            }
-        } catch (Exception e) {
-            log.info("同步【{}】接口至YApi系统失败", fuDocItemData.getTitle(), e);
-        }
-        return "同步至YApi失败";
+        return service.saveOrUpdate(configData.getBaseUrl(), yApiSaveDTO);
     }
 
 
@@ -107,10 +101,6 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
         YApiService service = ServiceHelper.getService(YApiService.class);
         return service.categoryList(baseSyncConfigData.getBaseUrl(), apiProjectDTO.getProjectId(), apiProjectDTO.getProjectToken());
     }
-
-
-
-
 
 
     /**

@@ -2,9 +2,12 @@ package com.wdf.fudoc.apidoc.sync.service;
 
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
 import com.wdf.fudoc.apidoc.sync.dto.*;
 import com.wdf.fudoc.util.JsonUtil;
 import com.wdf.fudoc.util.YApiUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,9 +48,13 @@ public class YApiServiceImpl implements YApiService {
     }
 
     @Override
-    public boolean saveOrUpdate(String baseUrl, YApiSaveDTO yApiSaveDTO) {
+    public String saveOrUpdate(String baseUrl, YApiSaveDTO yApiSaveDTO) {
         String result = HttpUtil.post(URLUtil.completeUrl(baseUrl, saveApiUrl), JsonUtil.toJson(yApiSaveDTO));
-        return YApiUtil.isSuccess(result);
+        List<JSONObject> dataList = YApiUtil.getDataList(result, JSONObject.class);
+        if (CollectionUtils.isNotEmpty(dataList)) {
+            return dataList.get(0).getStr("_id");
+        }
+        return StringUtils.EMPTY;
     }
 
 }

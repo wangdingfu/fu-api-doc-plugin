@@ -36,17 +36,19 @@ public class FuDocNotification {
     /**
      * 接口文档生成通知
      */
-    public static void notifySyncApiResult(NotificationType notificationType, String message, JPanel showPanel) {
+    public static void notifySyncApiResult(NotificationType notificationType, String message, String apiSystemName, String url, JPanel showPanel) {
         //查看同步结果
-        String syncResult = FuDocMessageBundle.message(MessageConstants.READ_DOC_ACTION);
-        String faqAction = FuDocMessageBundle.message(MessageConstants.FAQ_ACTION);
+        String syncResult = FuDocMessageBundle.message(MessageConstants.SYNC_API_RECORD_READ);
+        //去接口文档系统查看文档(去YApi查看文档)
+        String apiSystem = FuDocMessageBundle.message(MessageConstants.SYNC_API_INTO_API_SYSTEM, apiSystemName);
+        //给我点赞
         String starAction = FuDocMessageBundle.message(MessageConstants.STAR_ACTION);
 
         NOTIFICATION_GROUP.createNotification(FuDocConstants.FU_DOC, message, notificationType)
                 //新增查看同步结果
-                .addAction(new PanelNotificationAction(syncResult,showPanel))
-                //新增给我提问题按钮
-                .addAction(new BrowseNotificationAction(faqAction, UrlConstants.ISSUE))
+                .addAction(new PanelNotificationAction(syncResult, showPanel))
+                //去接口文档系统查看文档(去YApi查看文档)
+                .addAction(new BrowseNotificationAction(apiSystem, url))
                 //新增给我点个小爱心按钮
                 .addAction(new BrowseNotificationAction(starAction, UrlConstants.GITHUB))
                 .notify(ProjectUtils.getCurrProject());

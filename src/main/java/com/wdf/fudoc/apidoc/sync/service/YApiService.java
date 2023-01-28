@@ -42,7 +42,7 @@ public interface YApiService {
      * 保存或更新接口
      *
      * @param yApiSaveDTO 接口请求参数
-     * @return 响应结果
+     * @return 文档id
      */
-    boolean saveOrUpdate(String baseUrl, YApiSaveDTO yApiSaveDTO);
+    String saveOrUpdate(String baseUrl, YApiSaveDTO yApiSaveDTO);
 }

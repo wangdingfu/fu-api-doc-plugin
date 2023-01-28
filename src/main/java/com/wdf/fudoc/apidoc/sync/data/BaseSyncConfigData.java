@@ -1,7 +1,9 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
+import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
+import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -96,4 +98,15 @@ public abstract class BaseSyncConfigData implements Serializable {
      */
     public abstract void clearData(boolean isAll);
 
+    /**
+     * 获取同步的接口文档系统
+     */
+    public abstract ApiDocSystem getApiSystem();
+
+    /**
+     * 获取接口文档地址
+     *
+     * @return 第三方接口文档系统中指定文档的地址
+     */
+    public abstract String getApiDocUrl(SyncApiResultDTO syncApiResultDTO);
 }
