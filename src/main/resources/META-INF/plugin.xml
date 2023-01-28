@@ -110,12 +110,12 @@
         </group>
 
         <!-- http请求相关动作 -->
-        <group id="wdf.fudoc.sync" popup="false" compact="true">
+        <group id="wdf.fudoc.sync" text="Fu Doc Sync" popup="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Fu Doc Sync">
+            <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Sync Api">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
             </action>
-            <action id="fudoc.http.sync.confirm" class="com.wdf.fudoc.apidoc.action.ConfirmSyncFuDocAction" text="Fu Doc Sync Confirm">
+            <action id="fudoc.http.sync.confirm" class="com.wdf.fudoc.apidoc.action.ConfirmSyncFuDocAction" text="Sync Api Confirm">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt shift S"/>
             </action>
         </group>

@@ -20,6 +20,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * http请求部分内容
@@ -239,8 +240,10 @@ public class RequestTabView implements FuTab, HttpCallback {
      * @param requestType 请求类型
      */
     private void setRequestType(String requestType) {
-        FuRequestData request = fuHttpRequestData.getRequest();
-        request.setRequestType(RequestType.getRequestType(requestType));
+        if(Objects.nonNull(this.fuHttpRequestData)){
+            FuRequestData request = fuHttpRequestData.getRequest();
+            request.setRequestType(RequestType.getRequestType(requestType));
+        }
     }
 
 }
