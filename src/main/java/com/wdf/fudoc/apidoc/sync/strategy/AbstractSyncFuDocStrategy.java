@@ -8,7 +8,6 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiClass;
-import com.intellij.ui.table.JBTable;
 import com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
@@ -24,6 +23,8 @@ import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
+import com.wdf.fudoc.components.listener.FuTableListener;
+import com.wdf.fudoc.util.FuDocViewUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.ProjectUtils;
@@ -112,9 +113,18 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             return;
         }
         String apiSystem = configData.getApiSystem().getCode();
-        JPanel showPanel = FuTableComponent.create(FuTableColumnFactory.syncApiResult(), resultDTOList, SyncApiResultDTO.class).createPanel();
         List<SyncApiResultDTO> successList = resultDTOList.stream().filter(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus())).toList();
         List<SyncApiResultDTO> faileList = resultDTOList.stream().filter(a -> ApiSyncStatus.FAIL.getMessage().equals(a.getSyncStatus())).toList();
+        FuTableComponent<SyncApiResultDTO> tableComponent = FuTableComponent.create(FuTableColumnFactory.syncApiResult(CollectionUtils.isNotEmpty(faileList)), resultDTOList, SyncApiResultDTO.class);
+        tableComponent.addListener(new FuTableListener<>() {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                //设置不可编辑
+                return false;
+            }
+        });
+
+        JPanel showPanel = FuDocViewUtils.createPanel("同步接口至" + apiSystem + "记录列表", tableComponent.createMainPanel());
         SyncApiResultDTO resultDTO = resultDTOList.get(0);
         if (successList.size() == syncApiSize) {
             String apiDocUrl = configData.getApiDocUrl(resultDTO);

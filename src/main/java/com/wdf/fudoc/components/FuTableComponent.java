@@ -218,12 +218,15 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
 
 
     public JPanel createMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
         if (Objects.isNull(this.fuTableView)) {
-            return mainPanel;
+            return new JPanel();
         }
-        mainPanel.add(this.fuTableView);
-        return mainPanel;
+        ToolbarDecorator decorator = ToolbarDecorator.createDecorator(this.fuTableView);
+        decorator.disableAddAction();
+        decorator.disableRemoveAction();
+        decorator.disableUpAction();
+        decorator.disableDownAction();
+        return decorator.createPanel();
     }
 
     /**
@@ -252,6 +255,13 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         }
     }
 
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        if (Objects.nonNull(this.fuTableListener)) {
+            return this.fuTableListener.isCellEditable(row, column);
+        }
+        return super.isCellEditable(row, column);
+    }
 
     /**
      * 第一列如果是复选框 则重置该列的宽度
