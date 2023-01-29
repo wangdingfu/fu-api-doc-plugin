@@ -25,4 +25,13 @@ public enum ApiSyncStatus {
         this.code = code;
         this.message = message;
     }
+
+    public static ApiSyncStatus getInstance(String message) {
+        for (ApiSyncStatus value : ApiSyncStatus.values()) {
+            if (value.getMessage().equals(message)) {
+                return value;
+            }
+        }
+        return null;
+    }
 }

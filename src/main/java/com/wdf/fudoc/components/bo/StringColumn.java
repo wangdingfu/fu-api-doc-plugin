@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -14,7 +15,7 @@ import java.util.function.Function;
  */
 @Getter
 @Setter
-public class StringColumn<T> extends Column{
+public class StringColumn<T> extends Column {
 
     /**
      * get方法
@@ -24,6 +25,9 @@ public class StringColumn<T> extends Column{
      * set方法
      */
     private BiConsumer<T, String> setFun;
+
+    private TableCellRenderer tableCellRenderer;
+
 
     public StringColumn(String name, Function<T, String> getFun, BiConsumer<T, String> setFun) {
         super(name, TableCellEditorFactory.createTextFieldEditor());
@@ -37,6 +41,17 @@ public class StringColumn<T> extends Column{
         this.setFun = setFun;
     }
 
+    public StringColumn(String name, TableCellRenderer cellRenderer, Function<T, String> getFun, BiConsumer<T, String> setFun) {
+        super(name, TableCellEditorFactory.createTextFieldEditor());
+        this.getFun = getFun;
+        this.setFun = setFun;
+        this.tableCellRenderer = cellRenderer;
+    }
+
+    @Override
+    public TableCellRenderer getCellRenderer() {
+        return this.tableCellRenderer;
+    }
 
     @Override
     public Class<?> getColumnClass() {

@@ -7,10 +7,13 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import icons.FuDocIcons;
 import org.apache.commons.lang3.StringUtils;
@@ -42,8 +45,8 @@ public class FuEditorFormatAction extends AnAction {
             } else {
                 e.getPresentation().setEnabledAndVisible(false);
             }
+            super.update(e);
         }
-        super.update(e);
     }
 
     @Override

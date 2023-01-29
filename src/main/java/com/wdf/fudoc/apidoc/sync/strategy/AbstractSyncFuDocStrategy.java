@@ -8,6 +8,7 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiClass;
+import com.intellij.ui.table.JBTable;
 import com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;

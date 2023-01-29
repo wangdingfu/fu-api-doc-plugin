@@ -34,7 +34,7 @@ public class YApiServiceImpl implements YApiService {
 
     @Override
     public ApiCategoryDTO createCategory(String baseUrl, YApiCreateCategoryDTO yApiCreateCategoryDTO) {
-        String result = HttpUtil.post(URLUtil.completeUrl(baseUrl, addCategoryUrl), JsonUtil.toJson(yApiCreateCategoryDTO));
+        String result = HttpUtil.post(URLUtil.completeUrl(baseUrl, addCategoryUrl), JsonUtil.toJson(yApiCreateCategoryDTO),6000);
         return YApiUtil.getData(result, ApiCategoryDTO.class);
     }
 
@@ -43,13 +43,13 @@ public class YApiServiceImpl implements YApiService {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("token", token);
         paramMap.put("project_id", projectId);
-        String result = HttpUtil.get(URLUtil.completeUrl(baseUrl, categoryListUrl), paramMap);
+        String result = HttpUtil.get(URLUtil.completeUrl(baseUrl, categoryListUrl), paramMap,6000);
         return YApiUtil.getDataList(result, ApiCategoryDTO.class);
     }
 
     @Override
     public String saveOrUpdate(String baseUrl, YApiSaveDTO yApiSaveDTO) {
-        String result = HttpUtil.post(URLUtil.completeUrl(baseUrl, saveApiUrl), JsonUtil.toJson(yApiSaveDTO));
+        String result = HttpUtil.post(URLUtil.completeUrl(baseUrl, saveApiUrl), JsonUtil.toJson(yApiSaveDTO),6000);
         List<JSONObject> dataList = YApiUtil.getDataList(result, JSONObject.class);
         if (CollectionUtils.isNotEmpty(dataList)) {
             return dataList.get(0).getStr("_id");

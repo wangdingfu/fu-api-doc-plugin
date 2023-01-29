@@ -16,8 +16,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -68,6 +70,12 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         this.clazz = clazz;
         this.initTable();
         return createPanel();
+    }
+
+    public void setEnable(boolean enable) {
+        if (Objects.nonNull(this.fuTableView)) {
+            this.fuTableView.setEnabled(enable);
+        }
     }
 
     public void addListener(FuTableListener<T> fuTableListener) {
@@ -206,6 +214,16 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
             return new JPanel();
         }
         return ToolbarDecorator.createDecorator(this.fuTableView).createPanel();
+    }
+
+
+    public JPanel createMainPanel() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        if (Objects.isNull(this.fuTableView)) {
+            return mainPanel;
+        }
+        mainPanel.add(this.fuTableView);
+        return mainPanel;
     }
 
     /**
