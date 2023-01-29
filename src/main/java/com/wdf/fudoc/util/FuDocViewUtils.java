@@ -31,6 +31,15 @@ public class FuDocViewUtils {
 
     private static final Map<String, AtomicBoolean> pinStatusMap = new ConcurrentHashMap<>();
 
+    public static AtomicBoolean getPinStatus(String title) {
+        AtomicBoolean pinStatus = pinStatusMap.get(title);
+        if (Objects.isNull(pinStatus)) {
+            pinStatus = new AtomicBoolean(false);
+            pinStatusMap.put(title, pinStatus);
+        }
+        return pinStatus;
+    }
+
     public static JPanel createPanel(String title, JComponent content) {
         return createPanel(title, null, content);
     }
@@ -41,6 +50,7 @@ public class FuDocViewUtils {
         rootPanel.add(headPanel, BorderLayout.NORTH);
         rootPanel.add(contentCmp, BorderLayout.CENTER);
         MessageComponent messageComponent = new MessageComponent(true);
+        messageComponent.switchInfo();
         rootPanel.add(messageComponent.getRootPanel(), BorderLayout.SOUTH);
         addMouseListeners(rootPanel, headPanel);
         return rootPanel;
@@ -58,10 +68,7 @@ public class FuDocViewUtils {
         if (Objects.isNull(actionGroup)) {
             actionGroup = new DefaultActionGroup();
         }
-        if(Objects.isNull(pinStatusMap.get(title))){
-            pinStatusMap.put(title, new AtomicBoolean(false));
-        }
-        AtomicBoolean status = pinStatusMap.get(title);
+        AtomicBoolean status = getPinStatus(title);
         //添加pin
         actionGroup.add(new ToggleAction("Pin", "Pin", AllIcons.General.Pin_tab) {
             @Override

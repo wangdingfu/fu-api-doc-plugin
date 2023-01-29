@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -124,7 +125,9 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             }
         });
 
-        JPanel showPanel = FuDocViewUtils.createPanel("同步接口至" + apiSystem + "记录列表", tableComponent.createMainPanel());
+        String title = "同步接口至" + apiSystem + "记录列表";
+        JPanel showPanel = FuDocViewUtils.createPanel(title, tableComponent.createMainPanel());
+        AtomicBoolean pinStatus = FuDocViewUtils.getPinStatus(title);
         SyncApiResultDTO resultDTO = resultDTOList.get(0);
         if (successList.size() == syncApiSize) {
             String apiDocUrl = configData.getApiDocUrl(resultDTO);
@@ -132,24 +135,24 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
             if (syncApiSize == 1) {
                 //成功同步{0}接口到{0}分类下
                 String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_ONE, resultDTO.getApiName(), resultDTO.getCategoryName());
-                FuDocNotification.notifySyncApiResult(NotificationType.INFORMATION, message, apiSystem, apiDocUrl, showPanel);
+                FuDocNotification.notifySyncApiResult(NotificationType.INFORMATION, message, apiSystem, apiDocUrl, showPanel, pinStatus);
                 return;
             }
             //本次共计成功同步{0}个接口到{0}分类下
             String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_ALL, syncApiSize, resultDTO.getCategoryName());
-            FuDocNotification.notifySyncApiResult(NotificationType.INFORMATION, message, apiSystem, apiDocUrl, showPanel);
+            FuDocNotification.notifySyncApiResult(NotificationType.INFORMATION, message, apiSystem, apiDocUrl, showPanel, pinStatus);
             return;
         }
         if (faileList.size() == syncApiSize) {
             //全部同步失败情况 - 同步接口失败 失败原因:{0}
             String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_FAILED_ALL, StringUtils.isNotBlank(resultDTO.getErrorMsg()) ? resultDTO.getErrorMsg() : "未知异常");
-            FuDocNotification.notifySyncApiResult(NotificationType.ERROR, message, apiSystem, configData.getApiDocUrl(resultDTO), showPanel);
+            FuDocNotification.notifySyncApiResult(NotificationType.ERROR, message, apiSystem, configData.getApiDocUrl(resultDTO), showPanel, pinStatus);
             return;
         }
         //部分成功 部分失败 - 本次成功同步{0}个接口到{1}分类下 同步失败{2}个接口
         SyncApiResultDTO successResultDTO = successList.get(0);
         String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_FAILED, successList.size(), successResultDTO.getCategoryName(), faileList.size());
-        FuDocNotification.notifySyncApiResult(NotificationType.WARNING, message, apiSystem, configData.getApiDocUrl(successResultDTO), showPanel);
+        FuDocNotification.notifySyncApiResult(NotificationType.WARNING, message, apiSystem, configData.getApiDocUrl(successResultDTO), showPanel, pinStatus);
     }
 
 

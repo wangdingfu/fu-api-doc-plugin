@@ -4,6 +4,7 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.util.NlsContexts;
+import com.wdf.fudoc.util.FuDocViewUtils;
 import com.wdf.fudoc.util.PopupUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,14 +21,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PanelNotificationAction extends NotificationAction {
 
     private JPanel rootPanel;
+    private AtomicBoolean pinStatus;
 
-    public PanelNotificationAction(@Nullable @NlsContexts.NotificationContent String text, JPanel showPanel) {
+    public PanelNotificationAction(@Nullable @NlsContexts.NotificationContent String text, AtomicBoolean pinStatus, JPanel showPanel) {
         super(text);
         this.rootPanel = showPanel;
+        this.pinStatus = pinStatus;
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
-        PopupUtils.create(this.rootPanel, this.rootPanel, new AtomicBoolean(false));
+        PopupUtils.create(this.rootPanel, this.rootPanel, this.pinStatus);
     }
 }
