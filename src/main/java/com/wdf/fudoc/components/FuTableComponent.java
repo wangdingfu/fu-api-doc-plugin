@@ -205,7 +205,6 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         return new FuTableComponent<>(columnList, dataList, clazz);
     }
 
-
     /**
      * 创建面板
      */
