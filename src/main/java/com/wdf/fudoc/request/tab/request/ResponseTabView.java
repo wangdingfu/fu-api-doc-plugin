@@ -8,11 +8,12 @@ import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
+import com.wdf.fudoc.components.message.MessageComponent;
+import com.wdf.fudoc.components.message.ResponseInfoMessageGenerator;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
-import com.wdf.fudoc.request.view.ResponseDownloadFileVIew;
 import com.wdf.fudoc.request.view.ResponseErrorView;
 import com.wdf.fudoc.request.view.ResponseFileView;
 import com.wdf.fudoc.util.HttpResponseUtil;
@@ -45,6 +46,11 @@ public class ResponseTabView implements FuTab, HttpCallback {
 
     private final ResponseFileView responseFileView;
 
+    /**
+     * 状态信息面板
+     */
+    private final MessageComponent responseInfoMessage;
+
     private Integer tab = 0;
 
     public ResponseTabView(Project project) {
@@ -53,13 +59,14 @@ public class ResponseTabView implements FuTab, HttpCallback {
         this.responseFileView = new ResponseFileView();
         this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "");
         this.rootPanel = new JPanel(new BorderLayout());
+        this.responseInfoMessage = new MessageComponent(false);
         switchPanel(1, this.fuEditorComponent.getMainPanel());
     }
 
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Response", null, this.rootPanel).builder();
+        return FuTabComponent.getInstance("Response", null, this.rootPanel).builder(responseInfoMessage.getRootPanel());
     }
 
 
@@ -75,9 +82,11 @@ public class ResponseTabView implements FuTab, HttpCallback {
         if (Objects.isNull(response) || Objects.isNull(responseType = response.getResponseType())) {
             return;
         }
+        //设置响应信息
+        responseInfoMessage.setMsg(ResponseInfoMessageGenerator.buildMsg(httpRequestData));
         //响应类型
         switch (responseType) {
-            case SUCCESS:
+            case SUCCESS -> {
                 //判断返回结果是文件还是文本
                 String fileName = getFileName(response);
                 if (StringUtils.isNotBlank(fileName)) {
@@ -93,13 +102,13 @@ public class ResponseTabView implements FuTab, HttpCallback {
                     fuEditorComponent.setContent(JSONUtil.formatJsonStr(response.getContent()));
                     switchPanel(1, fuEditorComponent.getMainPanel());
                 }
-                break;
-            case ERR_CONNECTION_REFUSED:
+            }
+            case ERR_CONNECTION_REFUSED -> {
                 //请求连接被拒绝
                 responseErrorView.setErrorDetail(response.getErrorDetail());
                 switchPanel(2, responseErrorView.getRootPanel());
-                //发送消息
-                break;
+            }
+            //发送消息
         }
     }
 
@@ -142,8 +151,8 @@ public class ResponseTabView implements FuTab, HttpCallback {
     }
 
 
-    public void initRootPane(){
-        if(Objects.nonNull(responseFileView)){
+    public void initRootPane() {
+        if (Objects.nonNull(responseFileView)) {
             responseFileView.initRootPane();
         }
     }

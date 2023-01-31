@@ -11,6 +11,7 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +48,12 @@ public class FuTabBuilder {
     }
 
     public FuTabBuilder addTab(FuTab fuTab) {
+        return addTab(fuTab, null);
+    }
+
+    public FuTabBuilder addTab(FuTab fuTab, JPanel sidePanel) {
         TabInfo tabInfo = fuTab.getTabInfo();
+        addSideComponent(tabInfo, sidePanel);
         fuTabMap.put(tabInfo.getText(), fuTab);
         return addTab(tabInfo);
     }
@@ -57,6 +63,28 @@ public class FuTabBuilder {
         this.rootPanel.add(tabs.getComponent());
         this.rootPanel.setFont(JBUI.Fonts.label(11));
         return this.rootPanel;
+    }
+
+    public void addSideComponent(JPanel sideComponent) {
+        this.tabInfoMap.forEach((key, value) -> addSideComponent(value, sideComponent));
+    }
+
+    public void addSideComponent(String title, JPanel sideComponent) {
+        addSideComponent(this.tabInfoMap.get(title), sideComponent);
+    }
+
+    private void addSideComponent(TabInfo tabInfo, JPanel sideComponent) {
+        if (Objects.nonNull(tabInfo) && Objects.nonNull(sideComponent)) {
+            JComponent beforeSide = tabInfo.getSideComponent();
+            if (Objects.isNull(beforeSide)) {
+                JPanel sidePanel = new JPanel(new BorderLayout());
+                sidePanel.add(sideComponent, BorderLayout.EAST);
+                tabInfo.setSideComponent(sideComponent);
+            } else {
+                beforeSide.add(sideComponent, BorderLayout.EAST);
+                tabInfo.setSideComponent(beforeSide);
+            }
+        }
     }
 
     /**

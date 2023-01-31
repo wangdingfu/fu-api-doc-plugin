@@ -80,14 +80,6 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.responseHeaderTabView = new ResponseHeaderTabView();
         splitter.setFirstComponent(this.requestTabView.getRootPane());
         splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).build());
-//        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-//        splitPane.setTopComponent(this.requestTabView.getRootPane());
-//        splitPane.setBottomComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).build());
-//        splitPane.setBorder(JBUI.Borders.empty());
-//        splitPane.setDividerLocation(0.6);
-//        splitPane.setDividerSize(1);
-//        splitPane.setBorder(JBUI.Borders.empty());
-//        splitPane.setContinuousLayout(true);
         this.rootPanel.add(splitter, BorderLayout.CENTER);
         this.messageComponent = new MessageComponent(true);
         this.messageComponent.switchInfo();
@@ -119,7 +111,12 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
 
     @Override
     public void doSendAfter(FuHttpRequestData fuHttpRequestData) {
-        ApplicationManager.getApplication().invokeLater(() -> this.responseTabView.initData(fuHttpRequestData));
+        ApplicationManager.getApplication().invokeLater(() -> {
+            //填充响应面板数据
+            this.responseTabView.initData(fuHttpRequestData);
+            //填充响应头面板数据
+            this.responseHeaderTabView.initData(fuHttpRequestData);
+        });
     }
 
 
@@ -127,4 +124,6 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.requestTabView.initRootPane();
         this.responseTabView.initRootPane();
     }
+
+
 }
