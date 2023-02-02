@@ -8,12 +8,11 @@ import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableDisableListener;
-import com.wdf.fudoc.components.message.MessageComponent;
-import com.wdf.fudoc.components.message.ResponseInfoMessageGenerator;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 
 import java.util.List;
 import java.util.Map;
@@ -36,17 +35,17 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
     /**
      * 状态信息面板
      */
-    private final MessageComponent responseInfoMessage;
+    private final FuRequestStatusInfoView fuRequestStatusInfoView;
 
     public ResponseHeaderTabView() {
-        this.responseInfoMessage = new MessageComponent(false);
+        this.fuRequestStatusInfoView = new FuRequestStatusInfoView();
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class);
         this.fuTableComponent.addListener(new FuTableDisableListener<>());
     }
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Header", null, fuTableComponent.createMainPanel()).builder(this.responseInfoMessage.getRootPanel());
+        return FuTabComponent.getInstance("Header", null, fuTableComponent.createMainPanel()).builder(this.fuRequestStatusInfoView.getRootPanel());
     }
 
 
@@ -62,7 +61,7 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
             Map<String, List<String>> headers = response.getHeaders();
         }
         //设置响应信息
-        responseInfoMessage.setMsg(ResponseInfoMessageGenerator.buildMsg(httpRequestData));
+        fuRequestStatusInfoView.initData(httpRequestData);
     }
 
     @Override

@@ -107,7 +107,7 @@ public class FuTabComponent {
         return builder(null);
     }
 
-    public TabInfo builder(JPanel sidePanel) {
+    public TabInfo builder(JComponent sideCmp) {
         TabInfo tabInfo = new TabInfo(this.rootPanel);
         if (Objects.nonNull(this.icon)) {
             tabInfo.setIcon(this.icon);
@@ -133,17 +133,17 @@ public class FuTabComponent {
                 //只有一级工具栏 则直接将一级工具栏放在右侧
                 ToolBarUtils.addActionToToolBar(this.toolBarPanel, TOOLBAR_LEFT_PLACE, actionGroup, BorderLayout.EAST);
             }
-            if (Objects.isNull(sidePanel)) {
+            if (Objects.isNull(sideCmp)) {
                 tabInfo.setSideComponent(this.toolBarPanel);
             } else {
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.add(this.toolBarPanel, BorderLayout.WEST);
-                panel.add(sidePanel, BorderLayout.CENTER);
+                panel.add(sideCmp, BorderLayout.EAST);
                 tabInfo.setSideComponent(panel);
             }
         } else {
-            if (Objects.nonNull(sidePanel)) {
-                tabInfo.setSideComponent(sidePanel);
+            if (Objects.nonNull(sideCmp)) {
+                tabInfo.setSideComponent(sideCmp);
             }
         }
         return tabInfo;

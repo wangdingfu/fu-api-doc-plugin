@@ -13,10 +13,13 @@ import com.wdf.fudoc.components.listener.FuMsgListener;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
 
+import javax.accessibility.AccessibleContext;
+import javax.accessibility.AccessibleRole;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -167,6 +170,8 @@ public class FuMessageComponent extends FuHighlightComponent {
                 }
                 addHighlighter(fuMsgItemBO, textAttributes);
             }
+            //设置内容
+            super.setMyText(highlightedRegionList.stream().map(m -> m.getFuMsgItemBO().getText()).collect(Collectors.joining()));
             updateOnTextChange();
         }
     }

@@ -14,6 +14,7 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import com.wdf.fudoc.request.view.ResponseErrorView;
 import com.wdf.fudoc.request.view.ResponseFileView;
 import com.wdf.fudoc.util.HttpResponseUtil;
@@ -49,7 +50,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
     /**
      * 状态信息面板
      */
-    private final MessageComponent responseInfoMessage;
+    private final FuRequestStatusInfoView fuRequestStatusInfoView;
 
     private Integer tab = 0;
 
@@ -59,14 +60,14 @@ public class ResponseTabView implements FuTab, HttpCallback {
         this.responseFileView = new ResponseFileView();
         this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "");
         this.rootPanel = new JPanel(new BorderLayout());
-        this.responseInfoMessage = new MessageComponent(false);
+        this.fuRequestStatusInfoView = new FuRequestStatusInfoView();
         switchPanel(1, this.fuEditorComponent.getMainPanel());
     }
 
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Response", null, this.rootPanel).builder(responseInfoMessage.getRootPanel());
+        return FuTabComponent.getInstance("Response", null, this.rootPanel).builder(fuRequestStatusInfoView.getRootPanel());
     }
 
 
@@ -83,7 +84,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
             return;
         }
         //设置响应信息
-        responseInfoMessage.setMsg(ResponseInfoMessageGenerator.buildMsg(httpRequestData));
+        this.fuRequestStatusInfoView.initData(httpRequestData);
         //响应类型
         switch (responseType) {
             case SUCCESS -> {

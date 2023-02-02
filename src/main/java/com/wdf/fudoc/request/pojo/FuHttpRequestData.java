@@ -51,5 +51,10 @@ public class FuHttpRequestData {
     /**
      * 请求的时间 单位:ms
      */
-    private long time;
+    private Long time;
+
+    /**
+     * http状态码
+     */
+    private Integer httpCode;
 }

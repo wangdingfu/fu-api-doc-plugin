@@ -13,6 +13,7 @@ import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
+import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -83,6 +84,9 @@ public class RequestTabView implements FuTab, HttpCallback {
      */
     private final HttpCallback httpCallback;
 
+
+    private final FuRequestStatusInfoView fuRequestStatusInfoView;
+
     public RequestTabView(Project project, HttpCallback httpCallback) {
         this.project = project;
         this.httpCallback = httpCallback;
@@ -94,6 +98,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.httpGetParamsTab = new HttpGetParamsTab(this);
         this.httpRequestBodyTab = new HttpRequestBodyTab();
         this.rootPane = new JRootPane();
+        this.fuRequestStatusInfoView = new FuRequestStatusInfoView();
         initRootPane();
         initUI();
         //初始化相关组件的事件监听器
@@ -123,7 +128,7 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Request", null, this.rootPane).builder();
+        return FuTabComponent.getInstance("Request", null, this.rootPane).builder(this.fuRequestStatusInfoView.getRootPanel());
     }
 
 
@@ -173,6 +178,10 @@ public class RequestTabView implements FuTab, HttpCallback {
         httpRequestBodyTab.doSendBefore(fuHttpRequestData);
     }
 
+    @Override
+    public void doSendAfter(FuHttpRequestData fuHttpRequestData) {
+        this.fuRequestStatusInfoView.initData(fuHttpRequestData);
+    }
 
     /**
      * 自动定位tab页
@@ -240,7 +249,7 @@ public class RequestTabView implements FuTab, HttpCallback {
      * @param requestType 请求类型
      */
     private void setRequestType(String requestType) {
-        if(Objects.nonNull(this.fuHttpRequestData)){
+        if (Objects.nonNull(this.fuHttpRequestData)) {
             FuRequestData request = fuHttpRequestData.getRequest();
             request.setRequestType(RequestType.getRequestType(requestType));
         }

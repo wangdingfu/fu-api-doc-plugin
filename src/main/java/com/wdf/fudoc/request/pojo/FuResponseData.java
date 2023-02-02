@@ -45,7 +45,7 @@ public class FuResponseData {
     /**
      * 响应状态码
      */
-    private int status;
+    private Integer status;
 
     /**
      * 请求失败详情
