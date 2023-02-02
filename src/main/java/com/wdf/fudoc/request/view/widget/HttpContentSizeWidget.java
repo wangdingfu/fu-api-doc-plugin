@@ -1,6 +1,5 @@
 package com.wdf.fudoc.request.view.widget;
 
-import com.intellij.ui.HyperlinkLabel;
 import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.components.bo.FuMsgBO;
 import com.wdf.fudoc.components.message.FuMessageComponent;

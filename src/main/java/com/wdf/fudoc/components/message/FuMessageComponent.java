@@ -127,8 +127,6 @@ public class FuMessageComponent extends FuHighlightComponent {
      * 设置消息
      */
     public void setMsg(FuMsgBO fuMsgBO) {
-        if (Objects.isNull(fuMsgBO)) {
-        }
         this.message = fuMsgBO;
         initMessage();
     }
