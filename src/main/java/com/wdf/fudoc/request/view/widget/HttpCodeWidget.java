@@ -1,6 +1,8 @@
 package com.wdf.fudoc.request.view.widget;
 
+import com.wdf.fudoc.apidoc.constant.enumtype.HttpCode;
 import com.wdf.fudoc.common.enumtype.FuColor;
+import com.wdf.fudoc.components.bo.FuMsgBO;
 import com.wdf.fudoc.components.message.FuMessageComponent;
 import com.wdf.fudoc.components.message.FuMsgBuilder;
 import com.wdf.fudoc.components.widget.FuWidget;
@@ -31,11 +33,12 @@ public class HttpCodeWidget implements FuWidget {
     @Override
     public void initData(FuHttpRequestData fuHttpRequestData) {
         Integer status;
-        if (Objects.isNull(status = fuHttpRequestData.getHttpCode())) {
-            return;
+        FuMsgBO fuMsgBO = null;
+        if (Objects.nonNull(status = fuHttpRequestData.getHttpCode())) {
+            boolean isOk = fuHttpRequestData.isOk();
+            fuMsgBO = FuMsgBuilder.getInstance().text("Status: ").text(HttpCode.getMessage(status), isOk ? FuColor.GREEN : FuColor.RED).build();
         }
-        boolean isOk = status.equals(200);
-        fuMessageComponent.setMsg(FuMsgBuilder.getInstance().text("Status: ").text(isOk ? status + " OK" : status + "", isOk ? FuColor.GREEN : FuColor.RED).build());
+        fuMessageComponent.setMsg(fuMsgBO);
     }
 
 

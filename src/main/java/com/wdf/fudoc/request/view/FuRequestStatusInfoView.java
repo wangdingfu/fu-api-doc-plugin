@@ -72,10 +72,10 @@ public class FuRequestStatusInfoView {
         }
     }
     private void initRightPanel() {
-        if (rightPanel == null) {
-            rightPanel = new JPanel();
-            rightPanel.setBorder(JBUI.Borders.emptyLeft(1));
-            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.X_AXIS) {
+        if (this.rightPanel == null) {
+            this.rightPanel = new JPanel();
+            this.rightPanel.setBorder(JBUI.Borders.emptyLeft(1));
+            this.rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.X_AXIS) {
                 @Override
                 public void layoutContainer(Container target) {
                     super.layoutContainer(target);
@@ -90,8 +90,8 @@ public class FuRequestStatusInfoView {
                     }
                 }
             });
-            rightPanel.setOpaque(false);
-            this.rootPanel.add(rightPanel, BorderLayout.EAST);
+            this.rightPanel.setOpaque(false);
+            this.rootPanel.add(this.rightPanel, BorderLayout.EAST);
         }
     }
 

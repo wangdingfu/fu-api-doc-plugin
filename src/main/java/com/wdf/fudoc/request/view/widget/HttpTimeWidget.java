@@ -1,7 +1,7 @@
 package com.wdf.fudoc.request.view.widget;
 
-import com.intellij.ui.HyperlinkLabel;
 import com.wdf.fudoc.common.enumtype.FuColor;
+import com.wdf.fudoc.components.bo.FuMsgBO;
 import com.wdf.fudoc.components.message.FuMessageComponent;
 import com.wdf.fudoc.components.message.FuMsgBuilder;
 import com.wdf.fudoc.components.widget.FuWidget;
@@ -29,11 +29,12 @@ public class HttpTimeWidget implements FuWidget {
 
     @Override
     public void initData(FuHttpRequestData fuHttpRequestData) {
+        FuMsgBO fuMsgBO = null;
         Long time = fuHttpRequestData.getTime();
-        if (Objects.isNull(time)) {
-            return;
+        if (Objects.nonNull(time)) {
+            fuMsgBO = FuMsgBuilder.getInstance().text("Time: ").text(time + " ms", FuColor.GREEN).build();
         }
-        fuMessageComponent.setMsg(FuMsgBuilder.getInstance().text("Time: ").text(time + " ms", FuColor.GREEN).build());
+        fuMessageComponent.setMsg(fuMsgBO);
 
     }
 }

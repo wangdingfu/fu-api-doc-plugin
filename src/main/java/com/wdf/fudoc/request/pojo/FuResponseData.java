@@ -75,14 +75,4 @@ public class FuResponseData {
     public String getContent() {
         return HttpUtil.getString(this.getBody(), CharsetUtil.CHARSET_UTF_8, null == this.charsetFromResponse);
     }
-
-    /**
-     * 请求是否成功，判断依据为：状态码范围在200~299内。
-     *
-     * @return 是否成功请求
-     * @since 4.1.9
-     */
-    public boolean isOk() {
-        return this.status >= 200 && this.status < 300;
-    }
 }
