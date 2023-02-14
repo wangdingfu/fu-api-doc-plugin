@@ -1,8 +1,6 @@
 package com.wdfu.fudoc;
 
-import cn.hutool.system.oshi.OshiUtil;
 import com.wdf.fudoc.request.view.ResponseErrorView;
-import oshi.hardware.ComputerSystem;
 
 import javax.swing.*;
 
@@ -23,8 +21,4 @@ public class FuDocSettingTest {
     }
 
 
-    public static void main(String[] args) {
-        ComputerSystem system = OshiUtil.getSystem();
-        System.out.println(system.getHardwareUUID());
-    }
 }
