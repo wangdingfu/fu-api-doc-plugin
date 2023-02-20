@@ -9,6 +9,7 @@ import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.view.AuthSettingView;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import com.wdf.fudoc.test.view.TestTipPanel;
 import com.wdf.fudoc.util.PopupUtils;
@@ -24,21 +25,8 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        FuEditorComponent fuEditorComponent = FuEditorComponent.create(JavaFileType.INSTANCE);
-        fuEditorComponent.setContent("package com.wdf.fudoc;\n" +
-                "\n" +
-                "/**\n" +
-                " * @author wangdingfu\n" +
-                " * @date 2023-02-10 22:16:48\n" +
-                " */\n" +
-                "public class FuDocTest {\n" +
-                "\n" +
-                "\n" +
-                "    public void authAfter(String userName, String password) {\n" +
-                "\n" +
-                "    }\n" +
-                "}\n");
-        PopupUtils.create(fuEditorComponent.getMainPanel(),null,new AtomicBoolean(true));
+        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
+        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
     }
 
 

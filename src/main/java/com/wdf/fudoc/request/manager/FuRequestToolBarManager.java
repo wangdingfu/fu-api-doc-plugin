@@ -220,6 +220,15 @@ public class FuRequestToolBarManager {
             }
         });
 
+
+        //鉴权
+        defaultActionGroup.add(new AnAction("鉴权配置", "Auth", AllIcons.General.Settings) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                //展示设置界面
+            }
+        });
+
         //添加保存事件
         defaultActionGroup.add(new AnAction("定位到该方法", "(Alt+Q)", AllIcons.General.Locate) {
             @Override
