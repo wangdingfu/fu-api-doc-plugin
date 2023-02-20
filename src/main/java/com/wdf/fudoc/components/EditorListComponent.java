@@ -10,6 +10,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.components.bo.BaseTemplate;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
@@ -110,6 +111,7 @@ public class EditorListComponent<T extends BaseTemplate> {
 
     private void initList() {
         this.jbList = new JBList<>(getAllItem());
+        this.jbList.setBackground(UIUtil.getTextFieldBackground());
         this.rootPanel.add(this.jbList, BorderLayout.CENTER);
         this.jbList.addListSelectionListener(e -> {
             if (this.refresh) {
@@ -143,6 +145,8 @@ public class EditorListComponent<T extends BaseTemplate> {
                     T data = BeanUtil.copyProperties(item, clazz);
                     data.setIdentify(itemName);
                     dataList.add(data);
+                    setDataList(dataList);
+                    setCurrentItem(data.getIdentify());
                     listener.doAction(data);
                 }));
             }
@@ -162,6 +166,8 @@ public class EditorListComponent<T extends BaseTemplate> {
                     T data = newInstance();
                     data.setIdentify(itemName);
                     dataList.add(data);
+                    setDataList(dataList);
+                    setCurrentItem(itemName);
                     listener.doAction(data);
                 });
             }
@@ -193,7 +199,6 @@ public class EditorListComponent<T extends BaseTemplate> {
                     return;
                 }
                 T target = dataList.remove(index);
-                dataList.add(index - 1, target);
                 listener.doAction(target);
             }
 
