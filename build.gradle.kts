@@ -52,6 +52,9 @@ intellij {
     //沙箱目录位置，用于保存IDEA的设置，默认在build文件下面，防止clean，放在根目录下。
     sandboxDir.set("${rootProject.rootDir}/idea-sandbox")
 
+    //下载源码
+    downloadSources.set(true)
+
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
 }

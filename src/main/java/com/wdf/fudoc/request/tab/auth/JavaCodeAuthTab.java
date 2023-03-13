@@ -21,7 +21,7 @@ public class JavaCodeAuthTab implements FuTab, FuActionListener<AuthConfigData> 
 
     private final FuEditorComponent fuEditorComponent;
 
-    public final static String TAB = "JAVA";
+    public final static String TAB = "Java";
 
     public JavaCodeAuthTab() {
         this.fuEditorComponent = FuEditorComponent.create(JavaFileType.INSTANCE);
