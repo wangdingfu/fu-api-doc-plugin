@@ -6,6 +6,10 @@ package com.wdf.fudoc.components.listener;
  */
 public interface FuActionListener<T> {
 
+
     void doAction(T data);
+
+
+    void doActionAfter(T data);
 
 }

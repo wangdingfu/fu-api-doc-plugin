@@ -6,8 +6,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.EditorKind;
+import com.intellij.openapi.editor.impl.EditorImpl;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
@@ -32,13 +36,12 @@ import com.wdf.fudoc.apidoc.view.dialog.SyncApiCategoryDialog;
 import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.components.message.FuMessageComponent;
 import com.wdf.fudoc.components.message.FuMsgBuilder;
-import com.wdf.fudoc.util.EditorUtils;
-import com.wdf.fudoc.util.FuDocUtils;
-import com.wdf.fudoc.util.PopupUtils;
-import com.wdf.fudoc.util.PsiClassUtils;
+import com.wdf.fudoc.spring.SpringConfigManager;
+import com.wdf.fudoc.util.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -52,33 +55,16 @@ public class TestTableAction extends AnAction {
         EditorFactory editorFactory = EditorFactory.getInstance();
         PsiElement targetElement = PsiClassUtils.getTargetElement(e);
         PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
-        PsiFile containingFile = psiClass.getContainingFile();
-//        Document document = PsiDocumentManager.getInstance(e.getProject()).getDocument(containingFile);
-//        PsiClass aClass = JavaDirectoryService.getInstance().createClass(dir, "a", "Class", true);
-//        PsiDirectoryFactory.getInstance(e.getProject()).createDirectory()
-//        JavaDirectoryService.getInstance().createClass();
-        String text = "package com.wdf.fudoc;\n" +
-                "\n" +
-                "/**\n" +
-                " * @author wangdingfu\n" +
-                " * @date 2023-02-10 22:16:48\n" +
-                " */\n" +
-                "public class FuDocTest {\n" +
-                "\n" +
-                "    public static void main(String[] args) {\n" +
-                "        System.out.println(\"222\");\n" +
-                "    }\n" +
-                "\n" +
-                "    public void authAfter(String userName, String password) {\n" +
-                "\n" +
-                "    }\n" +
-                "}\n";
-        PsiFile file = PsiFileFactory.getInstance(e.getProject()).createFileFromText("sample.java", JavaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), false, false);
-        file.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.HIGHEST);
-        Document document = PsiDocumentManager.getInstance(e.getProject()).getDocument(file);
+        VirtualFile testJava = SpringConfigManager.getFile(ModuleUtil.findModuleForPsiElement(psiClass), "TestJava");
+        if(Objects.nonNull(testJava)){
+            EditorImpl editor = createEditor(e.getProject(), testJava);
+            PopupUtils.create(editor.getComponent(),null,new AtomicBoolean(true));
+        }
 
-        Editor editor = editorFactory.createEditor(document, e.getProject(), JavaFileType.INSTANCE, false);
-        PopupUtils.create(editor.getComponent(),null,new AtomicBoolean(true));
+    }
 
+    private static EditorImpl createEditor(@NotNull Project project, @NotNull VirtualFile file) {
+        Document document = FileDocumentManager.getInstance().getDocument(file);
+        return (EditorImpl)EditorFactory.getInstance().createEditor(document, project, EditorKind.MAIN_EDITOR);
     }
 }

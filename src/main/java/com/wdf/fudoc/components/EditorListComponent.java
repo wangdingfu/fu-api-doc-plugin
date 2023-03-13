@@ -7,8 +7,12 @@ import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.ui.AnActionButton;
+import com.intellij.ui.AnActionButtonRunnable;
 import com.intellij.ui.CollectionListModel;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
+import com.intellij.util.ui.EditableModel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.components.bo.BaseTemplate;
@@ -30,7 +34,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2023-02-20 22:35:30
  */
-public class EditorListComponent<T extends BaseTemplate> {
+public class EditorListComponent<T extends BaseTemplate> extends DefaultListModel<String>{
 
     /**
      * 根面板
@@ -86,9 +90,26 @@ public class EditorListComponent<T extends BaseTemplate> {
     private void init() {
         this.rootPanel.setBorder(JBUI.Borders.emptyBottom(1));
         //初始化toolbar
-        initToolBar();
+//        initToolBar();
         //初始化展示的列表
         initList();
+    }
+
+    /**
+     * 创建面板
+     */
+    public JPanel createPanel() {
+        if (Objects.isNull(this.jbList)) {
+            return new JPanel();
+        }
+        return ToolbarDecorator.createDecorator(this.jbList).setAddAction(anActionButton -> inputItemName("demo", itemName -> {
+            T data = newInstance();
+            data.setIdentify(itemName);
+            dataList.add(data);
+            setDataList(dataList);
+            setCurrentItem(itemName);
+            listener.doAction(data);
+        })).createPanel();
     }
 
 
@@ -110,7 +131,7 @@ public class EditorListComponent<T extends BaseTemplate> {
 
 
     private void initList() {
-        this.jbList = new JBList<>(getAllItem());
+        this.jbList = new JBList<>(this);
         this.jbList.setBackground(UIUtil.getTextFieldBackground());
         this.rootPanel.add(this.jbList, BorderLayout.CENTER);
         this.jbList.addListSelectionListener(e -> {
@@ -124,6 +145,30 @@ public class EditorListComponent<T extends BaseTemplate> {
             this.currentItem = selectedValue;
             listener.doAction(findByIdentify(selectedValue));
         });
+        initData();
+    }
+
+    @Override
+    public String remove(int index) {
+        T remove = this.dataList.remove(index);
+        return remove.getIdentify();
+    }
+
+    @Override
+    public void addElement(String element) {
+        T t = newInstance();
+        t.setIdentify(element);
+        this.dataList.add(t);
+    }
+
+    @Override
+    public String set(int index, String element) {
+        System.out.println("set:"+index+":"+element);
+        return super.set(index, element);
+    }
+
+    private void initData(){
+        this.dataList.forEach(f->add(getSize(),f.getIdentify()));
     }
 
     private List<String> getAllItem() {
@@ -280,4 +325,6 @@ public class EditorListComponent<T extends BaseTemplate> {
             }
         }
     }
+
+
 }

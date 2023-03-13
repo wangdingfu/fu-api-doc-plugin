@@ -1,10 +1,8 @@
 package com.wdf.fudoc.request.view;
 
-import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.components.EditorListComponent;
+import com.wdf.fudoc.components.FuListStringComponent;
 import com.wdf.fudoc.components.LeftRightComponent;
-import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
 import lombok.Getter;
 
@@ -29,7 +27,7 @@ public class AuthSettingView {
     /**
      * 左侧列表组件 维护多个鉴权
      */
-    private final EditorListComponent<AuthConfigData> leftComponent;
+    private final FuListStringComponent<AuthConfigData> leftComponent;
 
     /**
      * 右侧权限配置页面
@@ -40,19 +38,9 @@ public class AuthSettingView {
     public AuthSettingView(Project project) {
         this.rootPanel = new JPanel(new BorderLayout());
         this.authConfigView = new AuthConfigView(project);
-        this.leftComponent = new EditorListComponent<>(new AuthConfigListener(), "权限名称", Lists.newArrayList(), AuthConfigData.class);
-        this.rootPanel.add(new LeftRightComponent(this.leftComponent.getRootPanel(), this.authConfigView.getRootPanel()).getRootPanel(), BorderLayout.CENTER);
+        this.leftComponent = new FuListStringComponent<>("权限名称", this.authConfigView, AuthConfigData.class);
+        this.rootPanel.add(new LeftRightComponent(this.leftComponent.createPanel(), this.authConfigView.getRootPanel()).getRootPanel(), BorderLayout.CENTER);
     }
 
 
-    /**
-     * 左侧列表选中时触发事件 初始化右侧面板
-     */
-    class AuthConfigListener implements FuActionListener<AuthConfigData> {
-
-        @Override
-        public void doAction(AuthConfigData data) {
-            authConfigView.init(data);
-        }
-    }
 }
