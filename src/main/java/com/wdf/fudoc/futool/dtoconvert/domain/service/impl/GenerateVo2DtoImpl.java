@@ -1,5 +1,6 @@
 package com.wdf.fudoc.futool.dtoconvert.domain.service.impl;
 
+import com.google.common.collect.Lists;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.Application;
@@ -10,8 +11,10 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.PsiJavaFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GenerateContext;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.SetObjConfigDO;
@@ -33,9 +36,20 @@ public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         assert editor != null;
         Document document = editor.getDocument();
+        List<String> importList = Lists.newArrayList();
+        if (Objects.nonNull(psiElement)) {
+            PsiJavaFileImpl psiJavaFile = (PsiJavaFileImpl) psiElement.getContainingFile();
+            if (Objects.nonNull(psiJavaFile.getImportList())) {
+                PsiImportStatementBase[] allImportStatements = psiJavaFile.getImportList().getAllImportStatements();
+                for (PsiImportStatementBase allImportStatement : allImportStatements) {
+                    importList.add(allImportStatement.getText());
+                }
+            }
+        }
 
         // 封装生成对象上下文
         GenerateContext generateContext = new GenerateContext();
+        generateContext.setImportList(importList);
         generateContext.setProject(project);
         generateContext.setPsiFile(psiFile);
         generateContext.setDataContext(dataContext);
@@ -97,10 +111,15 @@ public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
             }
 
             String clazzName = elementAt.getText();
-            PsiClass[] psiClasses = PsiShortNamesCache.getInstance(generateContext.getProject()).getClassesByName(clazzName, GlobalSearchScope.projectScope(generateContext.getProject()));
-            psiClass = psiClasses[0];
+            List<String> importList = generateContext.getImportList();
+            String importPkg = importList.stream().filter(f -> f.endsWith("." + clazzName + ";")).findFirst().orElse(clazzName);
 
-            repair += psiClass.getName().length();
+            PsiClass targetPsiClass = JavaPsiFacade.getInstance(generateContext.getProject()).findClass(importPkg, GlobalSearchScope.allScope(generateContext.getProject()));
+            if(Objects.isNull(targetPsiClass)){
+                throw new FuDocException("无法获取到目标类");
+            }
+
+            repair += targetPsiClass.getName().length();
         }
 
         Pattern setMtd = Pattern.compile(setRegex);
@@ -137,10 +156,14 @@ public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
 
         String clazzName = split[0].trim();
         String clazzParam = split[1].trim();
+        List<String> importList = generateContext.getImportList();
+        String importPkg = importList.stream().filter(f -> f.endsWith("." + clazzName + ";")).findFirst().orElse(clazzName);
 
         // 获取类
-        PsiClass[] psiClasses = PsiShortNamesCache.getInstance(generateContext.getProject()).getClassesByName(clazzName, GlobalSearchScope.projectScope(generateContext.getProject()));
-        PsiClass psiClass = psiClasses[0];
+        PsiClass psiClass = JavaPsiFacade.getInstance(generateContext.getProject()).findClass(importPkg, GlobalSearchScope.allScope(generateContext.getProject()));
+        if(Objects.isNull(psiClass)){
+            throw new FuDocException("无法获取到目标类");
+        }
         List<PsiClass> psiClassLinkList = getPsiClassLinkList(psiClass);
 
         Map<String, String> paramMtdMap = new HashMap<>();

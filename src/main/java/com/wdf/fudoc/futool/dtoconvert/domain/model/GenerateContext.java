@@ -7,6 +7,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 
+import java.util.List;
+
 public class GenerateContext {
 
     /** 工程对象 */
@@ -29,6 +31,7 @@ public class GenerateContext {
     private Integer startOffset;
     /** 文本编辑 */
     private CharSequence editorText;
+    private List<String> importList;
 
     public Project getProject() {
         return project;
@@ -108,5 +111,13 @@ public class GenerateContext {
 
     public void setEditorText(CharSequence editorText) {
         this.editorText = editorText;
+    }
+
+    public List<String> getImportList() {
+        return importList;
+    }
+
+    public void setImportList(List<String> importList) {
+        this.importList = importList;
     }
 }
