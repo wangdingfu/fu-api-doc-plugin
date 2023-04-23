@@ -4,6 +4,10 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.helper.MockDataHelper;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
+import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 /**
  * mock接口数据实现
@@ -21,6 +25,10 @@ public class AutoMockDataServiceImpl extends AbstractMockDataService {
 
     @Override
     protected String mockResponse(MethodInfoDesc methodInfoDesc) {
-        return MockDataHelper.mockJsonData(Lists.newArrayList(methodInfoDesc.getResponse()));
+        ObjectInfoDesc response = methodInfoDesc.getResponse();
+        if (Objects.isNull(response)) {
+            return StringUtils.EMPTY;
+        }
+        return MockDataHelper.mockJsonData(Lists.newArrayList(response));
     }
 }

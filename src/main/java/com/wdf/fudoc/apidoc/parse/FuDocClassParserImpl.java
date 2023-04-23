@@ -199,7 +199,8 @@ public class FuDocClassParserImpl implements FuDocClassParser {
         PsiType returnType = psiMethod.getReturnType();
         PsiClass psiClass = PsiUtil.resolveClassInType(returnType);
         if (Objects.isNull(psiClass)) {
-            throw new FuDocException("【Fu Doc】解析异常");
+            //响应类型为void 直接返回null
+            return null;
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.putOnce(psiClass.getName(), Objects.nonNull(response) ? JSONUtil.parse(response.getContent()) : null);

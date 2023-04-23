@@ -75,13 +75,11 @@ public abstract class AbstractMockDataService implements MockDataService {
 
 
     private boolean mockResponse(MockResultBo mockResultBo, FuResponseData response) {
-        if (Objects.isNull(response)) {
-            return false;
-        }
-        String content = response.getContent();
-        if (StringUtils.isNotBlank(content)) {
-            mockResultBo.setResponseExample(content);
+        String content;
+        if (Objects.nonNull(response) && StringUtils.isNotBlank(content = response.getContent())) {
+            mockResultBo.setResponseExample(JSONUtil.formatJsonStr(content));
             mockResultBo.setResponseExampleType(JSONUtil.isTypeJSON(content) ? MockResultType.JSON.getCode() : MockResultType.DEFAULT.getCode());
+            return true;
         }
         return false;
     }

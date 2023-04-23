@@ -64,6 +64,9 @@ public class FuRequestData {
      */
     public String getRequestUrl() {
         String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
+        if(StringUtils.isBlank(this.baseUrl) && StringUtils.isBlank(this.paramUrl)){
+            return StringUtils.EMPTY;
+        }
         return URLUtil.normalize(this.baseUrl + params, false, true);
     }
 

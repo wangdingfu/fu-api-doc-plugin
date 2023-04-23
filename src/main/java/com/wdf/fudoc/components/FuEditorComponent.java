@@ -65,6 +65,7 @@ public class FuEditorComponent {
     /**
      * 编辑器组件
      */
+    @Getter
     private EditorImpl editor;
 
     /**

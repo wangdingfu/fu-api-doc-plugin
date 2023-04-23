@@ -41,6 +41,16 @@ import java.util.Objects;
  */
 public class FuHttpRequestDataFactory {
 
+    public static FuHttpRequestData buildEmptyHttpRequestData() {
+        FuHttpRequestData fuHttpRequestData = new FuHttpRequestData();
+        FuRequestData fuRequestData = new FuRequestData();
+        fuRequestData.setBody(new FuRequestBodyData());
+        fuRequestData.setRequestType(RequestType.POST);
+        fuHttpRequestData.setRequest(fuRequestData);
+        fuHttpRequestData.setResponse(new FuResponseData());
+        return fuHttpRequestData;
+    }
+
 
     public static FuHttpRequestData build(Project project, PsiClass psiClass, FuDocContext fuDocContext) {
         FuHttpRequestData request;
