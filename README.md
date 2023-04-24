@@ -15,13 +15,18 @@
 
 演示
 ---
+
 ![演示](https://user-images.githubusercontent.com/100477650/171110724-8a653d36-ee3d-4337-a662-1dc68d400e98.gif)
 
-![插件截图1](https://user-images.githubusercontent.com/100477650/171110675-0822fee0-7a3e-4c59-b7cc-d645ac9feaee.png)
+![插件功能概览](https://user-images.githubusercontent.com/100477650/233889169-b149aade-1a67-453a-a973-593cb72c368e.png)
 
-![插件截图2](https://user-images.githubusercontent.com/100477650/171111420-cc94d6de-7d83-4132-a97a-23b1ab6c5408.png)
+![一键发起http请求](https://user-images.githubusercontent.com/100477650/233889579-620b82ec-ce41-4fb0-a8af-727c89400f09.png)
 
-![插件生成的接口文档](https://user-images.githubusercontent.com/100477650/171110794-b1aacc55-8ca1-4795-a018-9e429b62fa9f.png)
+![一键生成接口文档](https://user-images.githubusercontent.com/100477650/233889676-d1c16348-e6e6-4489-b3e7-4be930739a57.png)
+
+![YApi项目配置](https://user-images.githubusercontent.com/100477650/233889913-6485e904-283a-417b-bef0-2cee173c28b5.png)
+
+![一键同步接口文档至YApi](https://user-images.githubusercontent.com/100477650/233890460-cf7f2ed2-b062-4b5a-9535-1ceb20c63ffa.png)
 
 
 安装步骤
