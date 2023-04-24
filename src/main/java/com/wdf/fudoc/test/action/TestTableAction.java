@@ -1,8 +1,6 @@
 package com.wdf.fudoc.test.action;
 
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.lang.LanguageParserDefinitions;
-import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Document;
@@ -11,40 +9,12 @@ import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.EditorKind;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiFileFactoryImpl;
-import com.intellij.psi.impl.PsiJavaParserFacadeImpl;
-import com.intellij.psi.impl.PsiManagerImpl;
-import com.intellij.psi.impl.file.PsiDirectoryFactory;
-import com.intellij.psi.impl.file.PsiFileImplUtil;
-import com.intellij.psi.impl.file.impl.FileManager;
-import com.intellij.psi.impl.file.impl.FileManagerImpl;
-import com.intellij.psi.impl.source.PsiJavaFileImpl;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileSystemItemUtil;
-import com.intellij.psi.util.FindClassUtil;
-import com.intellij.psi.util.PsiClassUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.LocalTimeCounter;
-import com.intellij.util.ResourceUtil;
-import com.intellij.util.ui.UIUtil;
-import com.wdf.fudoc.FuDocTest;
-import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
-import com.wdf.fudoc.apidoc.view.dialog.SyncApiCategoryDialog;
-import com.wdf.fudoc.common.enumtype.FuColor;
-import com.wdf.fudoc.components.message.FuMessageComponent;
-import com.wdf.fudoc.components.message.FuMsgBuilder;
-import com.wdf.fudoc.spring.SpringConfigManager;
 import com.wdf.fudoc.util.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
