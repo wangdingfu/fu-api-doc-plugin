@@ -112,14 +112,16 @@ public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
 
             String clazzName = elementAt.getText();
             List<String> importList = generateContext.getImportList();
-            String importPkg = importList.stream().filter(f -> f.endsWith("." + clazzName + ";")).findFirst().orElse(clazzName);
+            String importPkg = importList.stream().filter(f -> f.endsWith("." + clazzName + ";"))
+                    .map(m -> m.replace("import", "").replace(";", "").trim())
+                    .findFirst().orElse(clazzName);
 
-            PsiClass targetPsiClass = JavaPsiFacade.getInstance(generateContext.getProject()).findClass(importPkg, GlobalSearchScope.allScope(generateContext.getProject()));
-            if(Objects.isNull(targetPsiClass)){
+            psiClass = JavaPsiFacade.getInstance(generateContext.getProject()).findClass(importPkg, GlobalSearchScope.allScope(generateContext.getProject()));
+            if(Objects.isNull(psiClass)){
                 throw new FuDocException("无法获取到目标类");
             }
 
-            repair += targetPsiClass.getName().length();
+            repair += psiClass.getName().length();
         }
 
         Pattern setMtd = Pattern.compile(setRegex);
@@ -157,8 +159,9 @@ public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
         String clazzName = split[0].trim();
         String clazzParam = split[1].trim();
         List<String> importList = generateContext.getImportList();
-        String importPkg = importList.stream().filter(f -> f.endsWith("." + clazzName + ";")).findFirst().orElse(clazzName);
-
+        String importPkg = importList.stream().filter(f -> f.endsWith("." + clazzName + ";"))
+                .map(m -> m.replace("import", "").replace(";", "").trim())
+                .findFirst().orElse(clazzName);
         // 获取类
         PsiClass psiClass = JavaPsiFacade.getInstance(generateContext.getProject()).findClass(importPkg, GlobalSearchScope.allScope(generateContext.getProject()));
         if(Objects.isNull(psiClass)){
