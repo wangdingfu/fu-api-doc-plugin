@@ -34,13 +34,14 @@ public class RequestAction extends AbstractClassAction {
 
     @Override
     protected boolean isShow(JavaClassType javaClassType) {
-        return JavaClassType.CONTROLLER.equals(javaClassType);
+        return true;
     }
 
     @Override
     protected void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext) {
-        FuHttpRequestData request = FuHttpRequestDataFactory.build(e.getProject(), psiClass, fuDocContext);
-        if (Objects.isNull(request)) {
+        FuHttpRequestData request;
+        if (!JavaClassType.CONTROLLER.equals(JavaClassType.get(psiClass))
+                || Objects.isNull(request = FuHttpRequestDataFactory.build(e.getProject(), psiClass, fuDocContext))) {
             //获取最近一次请求记录
             request = FuRequestManager.getRecent(e.getProject(), FuDocUtils.getModuleId(ModuleUtil.findModuleForPsiElement(psiClass)));
             if (Objects.isNull(request)) {
