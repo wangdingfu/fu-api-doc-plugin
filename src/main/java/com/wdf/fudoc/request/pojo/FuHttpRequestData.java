@@ -1,7 +1,10 @@
 package com.wdf.fudoc.request.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Objects;
 
 /**
  * api接口发起http请求数据对象
@@ -51,5 +54,23 @@ public class FuHttpRequestData {
     /**
      * 请求的时间 单位:ms
      */
-    private long time;
+    @JsonIgnore
+    private Long time;
+
+    /**
+     * http状态码
+     */
+    @JsonIgnore
+    private Integer httpCode;
+
+
+    /**
+     * 请求是否成功，判断依据为：状态码范围在200~299内。
+     *
+     * @return 是否成功请求
+     * @since 4.1.9
+     */
+    public boolean isOk() {
+        return Objects.nonNull(this.httpCode) && this.httpCode >= 200 && this.httpCode < 300;
+    }
 }

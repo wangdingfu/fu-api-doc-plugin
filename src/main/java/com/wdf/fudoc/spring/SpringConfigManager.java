@@ -105,4 +105,15 @@ public class SpringConfigManager {
     }
 
 
+    public static VirtualFile getFile(Module module,String fileName){
+        VirtualFile[] rootList = ModuleRootManager.getInstance(module).getSourceRoots(false);
+        for (VirtualFile virtualFile : rootList) {
+            if (SpringConfigFileConstants.RESOURCE.equals(virtualFile.getName())) {
+                return virtualFile;
+            }
+        }
+        return null;
+    }
+
+
 }

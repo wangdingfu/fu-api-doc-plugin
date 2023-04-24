@@ -181,12 +181,8 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
             return;
         }
         String apiName = fuHttpRequestData.getApiName();
-        String showName = apiName;
-        if (StringUtils.isNotBlank(apiName) && apiName.length() > 30) {
-            showName = apiName.substring(0, 30) + "......";
-        }
-        this.titleLabel.setText(showName);
-        this.titleLabel.setToolTipText(fuHttpRequestData.getApiName());
+        this.titleLabel.setText(apiName);
+        this.titleLabel.setToolTipText(apiName);
         this.requestTabView.initData(fuHttpRequestData);
         initResponseData(fuHttpRequestData);
         //切换消息
@@ -232,6 +228,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     public void doSendAfter(FuHttpRequestData fuHttpRequestData) {
         ApplicationManager.getApplication().invokeLater(() -> {
             this.fuTabBuilder.select(ResponseTabView.RESPONSE);
+            this.requestTabView.doSendAfter(fuHttpRequestData);
             this.responseTabView.initData(fuHttpRequestData);
             //切换消息展示
             messageComponent.switchInfo();

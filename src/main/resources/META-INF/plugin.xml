@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>Fu Doc</name>
-    <version>222.1.5.1</version>
+    <version>222.1.5.5</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -9,12 +9,14 @@
     </description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="222" until-build="223.*"/>
+    <idea-version since-build="222" until-build="231.*"/>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
+    <depends>JavaScript</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.spring</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- 应用启动时通知类 -->
@@ -110,24 +112,26 @@
         </group>
 
         <!-- http请求相关动作 -->
-        <group id="wdf.fudoc.sync" popup="false" compact="true">
+        <group id="wdf.fudoc.sync" text="Fu Doc Sync" popup="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Fu Doc Sync">
+            <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Sync Api">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
             </action>
-            <action id="fudoc.http.sync.confirm" class="com.wdf.fudoc.apidoc.action.ConfirmSyncFuDocAction" text="Fu Doc Sync Confirm">
+            <action id="fudoc.http.sync.confirm" class="com.wdf.fudoc.apidoc.action.ConfirmSyncFuDocAction" text="Sync Api Confirm">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt shift S"/>
             </action>
         </group>
 
 
         <!-- 测试功能点相关动作 -->
-<!--        <group id="wdf.fudoc.test" popup="false" compact="true">
+<!--
+        <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test" description="Test"/>
             <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
                     description="Test table"/>
-        </group>-->
+        </group>
+-->
 
 
 

@@ -28,6 +28,7 @@ public class FuHttpResponseBuilder {
         response.setHttpResponse(httpResponse);
         response.setBody(httpResponse.bodyBytes());
         response.setStatus(httpResponse.getStatus());
+        fuHttpRequestData.setHttpCode(httpResponse.getStatus());
         response.setHeaders(httpResponse.headers());
         response.setContentLength(httpResponse.contentLength());
         response.setResponseType(ResponseType.SUCCESS);

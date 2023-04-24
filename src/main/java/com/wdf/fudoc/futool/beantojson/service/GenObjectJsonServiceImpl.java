@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * 将java bean 生成json对象
+ *
  * @author wangdingfu
  * @date 2022-07-18 20:52:37
  */
@@ -24,7 +25,7 @@ public class GenObjectJsonServiceImpl implements FuDocService {
 
     @Override
     public String genFuDocContent(FuDocContext fuDocContext, PsiClass psiClass) {
-        ParseObjectBO parseObjectBO = new ParseObjectBO(fuDocContext);
+        ParseObjectBO parseObjectBO = new ParseObjectBO(fuDocContext, null);
         List<ObjectInfoDesc> fieldList = Lists.newArrayList();
         //解析对象参数
         for (PsiField psiField : psiClass.getAllFields()) {

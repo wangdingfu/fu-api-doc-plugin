@@ -29,15 +29,15 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.24")
-    annotationProcessor("org.projectlombok:lombok:1.18.24")
+    compileOnly("org.projectlombok:lombok:1.18.26")
+    annotationProcessor("org.projectlombok:lombok:1.18.26")
     implementation("com.github.jsonzou:jmockdata:4.3.0")
     implementation("org.freemarker:freemarker:2.3.31")
-    implementation("cn.hutool:hutool-json:5.8.11")
-    implementation("cn.hutool:hutool-http:5.8.11")
-    implementation("cn.hutool:hutool-crypto:5.8.11")
-    implementation("cn.hutool:hutool-system:5.8.11")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
+    implementation("cn.hutool:hutool-json:5.8.15")
+    implementation("cn.hutool:hutool-http:5.8.15")
+    implementation("cn.hutool:hutool-crypto:5.8.15")
+    implementation("cn.hutool:hutool-system:5.8.15")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
     implementation("com.atlassian.commonmark:commonmark:0.17.0")
 }
 

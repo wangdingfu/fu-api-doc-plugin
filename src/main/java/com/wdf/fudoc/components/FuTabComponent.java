@@ -103,8 +103,11 @@ public class FuTabComponent {
         return tabActionMap.get(title);
     }
 
-
     public TabInfo builder() {
+        return builder(null);
+    }
+
+    public TabInfo builder(JComponent sideCmp) {
         TabInfo tabInfo = new TabInfo(this.rootPanel);
         if (Objects.nonNull(this.icon)) {
             tabInfo.setIcon(this.icon);
@@ -130,7 +133,18 @@ public class FuTabComponent {
                 //只有一级工具栏 则直接将一级工具栏放在右侧
                 ToolBarUtils.addActionToToolBar(this.toolBarPanel, TOOLBAR_LEFT_PLACE, actionGroup, BorderLayout.EAST);
             }
-            tabInfo.setSideComponent(toolBarPanel);
+            if (Objects.isNull(sideCmp)) {
+                tabInfo.setSideComponent(this.toolBarPanel);
+            } else {
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.add(this.toolBarPanel, BorderLayout.WEST);
+                panel.add(sideCmp, BorderLayout.EAST);
+                tabInfo.setSideComponent(panel);
+            }
+        } else {
+            if (Objects.nonNull(sideCmp)) {
+                tabInfo.setSideComponent(sideCmp);
+            }
         }
         return tabInfo;
     }

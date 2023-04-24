@@ -14,6 +14,10 @@ import lombok.Setter;
 public class SyncApiResultDTO {
 
     /**
+     * 文档id
+     */
+    private String apiId;
+    /**
      * 接口地址
      */
     private String apiUrl;
@@ -24,9 +28,19 @@ public class SyncApiResultDTO {
     private String apiName;
 
     /**
+     * 项目ID
+     */
+    private String projectId;
+
+    /**
      * 项目名称
      */
     private String projectName;
+
+    /**
+     * 接口分类名称
+     */
+    private String categoryId;
 
     /**
      * 接口分类名称
@@ -42,4 +56,6 @@ public class SyncApiResultDTO {
      * 失败信息
      */
     private String errorMsg;
+
+    private String btnText = "重新同步";
 }

@@ -10,7 +10,10 @@ import com.intellij.util.ui.GraphicsUtil;
 import com.wdf.fudoc.components.bo.FuMsgItemBO;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
+import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.Nls;
 
 import javax.accessibility.Accessible;
 import javax.swing.*;
@@ -30,7 +33,10 @@ public class FuHighlightComponent extends JComponent implements Accessible {
     /**
      * 高亮文本集合
      */
-    private List<HighlightedRegion> highlightedRegionList;
+    protected List<HighlightedRegion> highlightedRegionList;
+
+    @Setter
+    protected String myText;
 
 
     @Override
@@ -133,8 +139,6 @@ public class FuHighlightComponent extends JComponent implements Accessible {
     }
 
 
-
-
     /**
      * 获取当前光标位于那一段消息上
      *
@@ -157,7 +161,6 @@ public class FuHighlightComponent extends JComponent implements Accessible {
     }
 
 
-
     /**
      * 获取初始化x轴位置
      */
@@ -170,4 +173,19 @@ public class FuHighlightComponent extends JComponent implements Accessible {
         UISettings.setupAntialiasing(g);
     }
 
+    @Override
+    public Dimension getPreferredSize() {
+        FontMetrics defFontMetrics = getFontMetrics(getFont());
+
+        int height = defFontMetrics.getHeight() + defFontMetrics.getLeading();
+
+        return new Dimension(getStringWidth(myText, defFontMetrics) + 10, height);
+    }
+
+    protected int getStringWidth(@Nls String text, FontMetrics fontMetrics) {
+        if (StringUtils.isBlank(text)) {
+            return 0;
+        }
+        return fontMetrics.stringWidth(text);
+    }
 }

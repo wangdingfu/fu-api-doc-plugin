@@ -2,8 +2,10 @@ package com.wdf.fudoc.apidoc.pojo.bo;
 
 import com.intellij.psi.PsiType;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamType;
+import com.wdf.fudoc.apidoc.mock.real.MockRealData;
 import com.wdf.fudoc.apidoc.parse.field.FuDocField;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
+import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.MapUtils;
@@ -45,6 +47,12 @@ public class ParseObjectBO {
     private ParamType paramType;
 
 
+    /**
+     * mock真实示例数据
+     */
+    private MockRealData mockRealData;
+
+
     public PsiType getPsiType(String generics) {
         if (MapUtils.isNotEmpty(genericsMap) && StringUtils.isNotBlank(generics)) {
             return genericsMap.get(generics);
@@ -52,7 +60,8 @@ public class ParseObjectBO {
         return null;
     }
 
-    public ParseObjectBO(FuDocContext fuDocContext) {
+    public ParseObjectBO(FuDocContext fuDocContext, MockRealData mockRealData) {
         this.fuDocContext = fuDocContext;
+        this.mockRealData = mockRealData;
     }
 }

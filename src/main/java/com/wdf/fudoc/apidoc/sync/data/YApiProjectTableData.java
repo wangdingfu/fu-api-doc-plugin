@@ -5,6 +5,7 @@ import com.wdf.fudoc.components.bo.TreePathBO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class YApiProjectTableData {
+public class YApiProjectTableData implements Serializable {
 
     /**
      * 是否选中

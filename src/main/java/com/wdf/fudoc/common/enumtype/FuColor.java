@@ -14,6 +14,7 @@ public enum FuColor {
     ORANGE("#d9480f","#d9480f"),
     DOCUMENT("#0969da","#0969da"),
     RED("#e74c3c","#e74c3c"),
+    GREEN("#4a8a5a","#4a8a5a"),
 
 
     ;

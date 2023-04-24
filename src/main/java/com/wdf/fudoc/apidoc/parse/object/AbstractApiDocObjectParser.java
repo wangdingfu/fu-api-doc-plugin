@@ -5,6 +5,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
+import com.wdf.fudoc.apidoc.mock.real.MockRealData;
 import com.wdf.fudoc.apidoc.parse.field.FuDocField;
 import com.wdf.fudoc.apidoc.parse.field.FuDocPsiClass;
 import com.wdf.fudoc.apidoc.parse.field.FuDocPsiParameter;
@@ -70,12 +71,25 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
         objectInfoDesc.setTypeView(typeView);
         objectInfoDesc.setType(psiType.getCanonicalText());
         objectInfoDesc.setFuDocObjectType(getObjectType());
-        objectInfoDesc.setValue(mockCommonType(objectInfoDesc));
+        objectInfoDesc.setValue(mockValue(objectInfoDesc, parseObjectBO));
         Integer rootId = parseObjectBO.getRootId();
         if (Objects.nonNull(rootId)) {
             objectInfoDesc.setRootId(rootId);
         }
         return objectInfoDesc;
+    }
+
+
+    private Object mockValue(ObjectInfoDesc objectInfoDesc, ParseObjectBO parseObjectBO) {
+        //优先mock有真实请求的数据
+        MockRealData mockRealData = parseObjectBO.getMockRealData();
+        if (Objects.nonNull(mockRealData)) {
+            Object data = mockRealData.getData(objectInfoDesc.getName());
+            if (Objects.nonNull(data)) {
+                return data;
+            }
+        }
+        return mockCommonType(objectInfoDesc);
     }
 
 

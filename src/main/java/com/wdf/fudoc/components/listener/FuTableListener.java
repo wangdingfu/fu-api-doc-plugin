@@ -83,4 +83,12 @@ public interface FuTableListener<T> {
         return null;
     }
 
+
+    /**
+     * 默认可编辑
+     */
+    default boolean isCellEditable(int rowIndex, int columnIndex) {
+        return true;
+    }
+
 }

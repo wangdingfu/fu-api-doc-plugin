@@ -1,14 +1,14 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
 import com.google.common.collect.Lists;
+import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
+import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.components.bo.TreePathBO;
-import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
@@ -45,11 +45,9 @@ public class YapiConfigData extends BaseSyncConfigData {
     @Override
     public List<ApiProjectDTO> getProjectConfigList(String moduleName) {
         String basePath = ProjectUtils.getCurrentProjectPath();
-        return this.projectConfigList.stream().filter(f -> f.getProjectKeyList().contains(basePath))
-                .map(m -> convert(m, moduleName))
+        return this.projectConfigList.stream().filter(f -> f.getProjectKeyList().contains(basePath)).map(m -> convert(m, moduleName))
                 //过滤没匹配上的module sort=0则是没有匹配上
-                .filter(f -> YesOrNo.NO.getCode() != f.getSort())
-                .sorted(Comparator.comparing(ApiProjectDTO::getSort)).collect(Collectors.toList());
+                .filter(f -> YesOrNo.NO.getCode() != f.getSort()).sorted(Comparator.comparing(ApiProjectDTO::getSort)).collect(Collectors.toList());
     }
 
     @Override
@@ -61,6 +59,27 @@ public class YapiConfigData extends BaseSyncConfigData {
     @Override
     public void clearData(boolean isAll) {
 
+    }
+
+    @Override
+    public ApiDocSystem getApiSystem() {
+        return ApiDocSystem.YAPI;
+    }
+
+    @Override
+    public String getApiDocUrl(SyncApiResultDTO syncApiResultDTO) {
+        String projectId = syncApiResultDTO.getProjectId();
+        if (StringUtils.isBlank(projectId)) {
+            return getBaseUrl();
+        }
+        String apiUrl = getBaseUrl() + "project/" + syncApiResultDTO.getProjectId() + "/interface/api/";
+        if (StringUtils.isNotBlank(syncApiResultDTO.getApiId())) {
+            return apiUrl + syncApiResultDTO.getApiId();
+        }
+        if (StringUtils.isNotBlank(syncApiResultDTO.getCategoryId())) {
+            return apiUrl + "cat_" + syncApiResultDTO.getCategoryId();
+        }
+        return apiUrl;
     }
 
 

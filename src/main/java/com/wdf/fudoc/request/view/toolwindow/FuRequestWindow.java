@@ -4,13 +4,16 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
+import com.intellij.openapi.ui.Splitter;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.common.datakey.FuDocDataKey;
+import com.wdf.fudoc.components.factory.FuTabBuilder;
+import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
+import com.wdf.fudoc.request.tab.request.ResponseHeaderTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +53,16 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
      */
     private final ResponseTabView responseTabView;
 
+    /**
+     * 响应头面板
+     */
+    private final ResponseHeaderTabView responseHeaderTabView;
+
+    /**
+     * 状态信息面板
+     */
+    private final MessageComponent messageComponent;
+
 
     @Setter
     @Getter
@@ -61,18 +74,16 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.project = project;
         this.toolWindow = toolWindow;
         this.rootPanel = new JPanel(new BorderLayout());
-        JSplitPane splitPane = new JSplitPane();
+        Splitter splitter = new Splitter(true, 0.6F);
         this.requestTabView = new RequestTabView(project, this);
         this.responseTabView = new ResponseTabView(project);
-        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-        splitPane.setTopComponent(this.requestTabView.getRootPane());
-        splitPane.setBottomComponent(this.responseTabView.getRootPanel());
-        splitPane.setBorder(JBUI.Borders.empty());
-        splitPane.setDividerLocation(0.4);
-        splitPane.setDividerSize(1);
-        splitPane.setBorder(JBUI.Borders.empty());
-        splitPane.setContinuousLayout(true);
-        this.rootPanel.add(splitPane, BorderLayout.CENTER);
+        this.responseHeaderTabView = new ResponseHeaderTabView();
+        splitter.setFirstComponent(this.requestTabView.getRootPane());
+        splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).build());
+        this.rootPanel.add(splitter, BorderLayout.CENTER);
+        this.messageComponent = new MessageComponent(true);
+        this.messageComponent.switchInfo();
+        this.rootPanel.add(this.messageComponent.getRootPanel(), BorderLayout.SOUTH);
         setContent(this.rootPanel);
     }
 
@@ -89,6 +100,8 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     public void initData(FuHttpRequestData httpRequestData) {
         this.requestTabView.initData(httpRequestData);
         this.responseTabView.initData(httpRequestData);
+        this.responseHeaderTabView.initData(httpRequestData);
+        this.messageComponent.switchInfo();
     }
 
     @Override
@@ -99,7 +112,10 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     @Override
     public void doSendAfter(FuHttpRequestData fuHttpRequestData) {
         ApplicationManager.getApplication().invokeLater(() -> {
+            //填充响应面板数据
             this.responseTabView.initData(fuHttpRequestData);
+            //填充响应头面板数据
+            this.responseHeaderTabView.initData(fuHttpRequestData);
         });
     }
 
@@ -108,4 +124,6 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.requestTabView.initRootPane();
         this.responseTabView.initRootPane();
     }
+
+
 }

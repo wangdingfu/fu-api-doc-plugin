@@ -80,7 +80,9 @@ public interface MessageConstants {
     String SYNC_API_CREATE_CATEGORY = "fudoc.api.sync.create.category";
     String SYNC_API_CREATE_CATEGORY_TITLE = "fudoc.api.sync.create.category.title";
     String SYNC_API_CREATE_CATEGORY_REPEAT = "fudoc.api.sync.create.category.repeat";
+    String SYNC_API_INTO_API_SYSTEM = "fudoc.api.sync.into.api.system";
 
+    String SYNC_API_RECORD_READ = "fudoc.api.sync.record.read";
 
     String VALIDATOR_INPUT_REPEAT = "fudoc.input.validator.repeat";
 

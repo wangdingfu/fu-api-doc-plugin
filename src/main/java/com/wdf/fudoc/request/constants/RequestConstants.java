@@ -17,4 +17,8 @@ public interface RequestConstants {
      * 定义请求工具栏位置
      */
     String PLACE_REQUEST_TOOLBAR = "fudoc.request.toolbar";
+
+
+
+    String PLACE_PANEL_TOOLBAR = "fudoc.panel.toolbar";
 }

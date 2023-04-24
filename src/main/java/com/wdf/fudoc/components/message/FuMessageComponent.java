@@ -12,11 +12,15 @@ import com.wdf.fudoc.components.bo.FuMsgItemBO;
 import com.wdf.fudoc.components.listener.FuMsgListener;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -123,9 +127,6 @@ public class FuMessageComponent extends FuHighlightComponent {
      * 设置消息
      */
     public void setMsg(FuMsgBO fuMsgBO) {
-        if (Objects.isNull(fuMsgBO)) {
-            return;
-        }
         this.message = fuMsgBO;
         initMessage();
     }
@@ -154,12 +155,14 @@ public class FuMessageComponent extends FuHighlightComponent {
      * 初始化消息
      */
     private void initMessage() {
-        if (Objects.nonNull(this.message)) {
-            //清空上一条消息
-            super.clear();
-            applyFont();
+        //清空上一条消息
+        super.clear();
+        applyFont();
+        List<FuMsgItemBO> messageItemList;
+        String myText = StringUtils.EMPTY;
+        if (Objects.nonNull(this.message) && CollectionUtils.isNotEmpty(messageItemList = this.message.getItemList())) {
             //循环处理每一段消息
-            for (FuMsgItemBO fuMsgItemBO : this.message.getItemList()) {
+            for (FuMsgItemBO fuMsgItemBO : messageItemList) {
                 JBColor color = ColorUtils.getColor(fuMsgItemBO);
                 TextAttributes textAttributes = null;
                 if (MessageType.isUnNormal(fuMsgItemBO.getMsgType())) {
@@ -167,8 +170,11 @@ public class FuMessageComponent extends FuHighlightComponent {
                 }
                 addHighlighter(fuMsgItemBO, textAttributes);
             }
-            updateOnTextChange();
+            //设置内容
+            myText = highlightedRegionList.stream().map(m -> m.getFuMsgItemBO().getText()).collect(Collectors.joining());
         }
+        super.setMyText(myText);
+        updateOnTextChange();
     }
 
 
