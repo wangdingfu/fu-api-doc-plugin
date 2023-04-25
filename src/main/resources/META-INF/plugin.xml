@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>Fu Doc</name>
-    <version>222.1.5.6</version>
+    <version>222.1.5.7</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -9,8 +9,7 @@
     </description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="222" until-build="231.*"/>
-
+    <idea-version since-build="222"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>JavaScript</depends>

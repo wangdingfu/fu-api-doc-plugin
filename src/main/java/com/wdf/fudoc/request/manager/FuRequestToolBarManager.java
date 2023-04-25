@@ -22,6 +22,7 @@ import com.wdf.fudoc.request.constants.enumtype.RequestDialog;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
+import com.wdf.fudoc.request.view.AuthSettingView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.util.FuDocUtils;
@@ -222,12 +223,12 @@ public class FuRequestToolBarManager {
 
 
         //鉴权
-        defaultActionGroup.add(new AnAction("鉴权配置", "Auth", AllIcons.General.Settings) {
+/*        defaultActionGroup.add(new AnAction("鉴权配置", "Auth", AllIcons.General.Settings) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //展示设置界面
             }
-        });
+        });*/
 
         //添加保存事件
         defaultActionGroup.add(new AnAction("定位到该方法", "(Alt+Q)", AllIcons.General.Locate) {

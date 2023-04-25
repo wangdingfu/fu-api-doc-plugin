@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
+import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.sync.SyncFuDocExecutor;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
@@ -19,6 +20,10 @@ import com.wdf.fudoc.common.AbstractClassAction;
  */
 public class SyncFuDocAction extends AbstractClassAction {
 
+    @Override
+    protected boolean isShow(JavaClassType javaClassType) {
+        return JavaClassType.isController(javaClassType);
+    }
 
     @Override
     protected void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext) {
