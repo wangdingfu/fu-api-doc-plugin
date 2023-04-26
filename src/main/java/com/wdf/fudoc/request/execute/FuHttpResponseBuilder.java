@@ -1,6 +1,8 @@
 package com.wdf.fudoc.request.execute;
 
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
@@ -32,6 +34,7 @@ public class FuHttpResponseBuilder {
         response.setHeaders(httpResponse.headers());
         response.setContentLength(httpResponse.contentLength());
         response.setResponseType(ResponseType.SUCCESS);
+        response.setContent(HttpUtil.getString(response.getBody(), CharsetUtil.CHARSET_UTF_8, null == response.getCharsetFromResponse()));
     }
 
 

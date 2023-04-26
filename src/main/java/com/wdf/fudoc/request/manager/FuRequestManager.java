@@ -33,7 +33,7 @@ public class FuRequestManager {
         String apiKey = fuHttpRequestData.getApiKey();
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> requestDataMap = data.getRequestDataMap();
-        requestDataMap.put(apiKey, JSONUtil.toJsonStr(fuHttpRequestData));
+        requestDataMap.put(apiKey, JsonUtil.toJson(fuHttpRequestData));
         Map<String, List<String>> recentRequestKeyMap = data.getRecentRequestKeyMap();
         String moduleId = fuHttpRequestData.getModuleId();
         List<String> apiKeyList = recentRequestKeyMap.get(moduleId);

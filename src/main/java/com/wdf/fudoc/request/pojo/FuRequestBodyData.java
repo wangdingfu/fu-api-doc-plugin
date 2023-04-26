@@ -3,6 +3,7 @@ package com.wdf.fudoc.request.pojo;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import lombok.Getter;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.List;
 

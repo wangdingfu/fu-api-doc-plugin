@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.tab.request;
 
 import cn.hutool.core.util.URLUtil;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
@@ -91,11 +92,12 @@ public class ResponseTabView implements FuTab, HttpCallback {
                 //判断返回结果是文件还是文本
                 String fileName = getFileName(response);
                 if (StringUtils.isNotBlank(fileName)) {
-                    //下载文件
-                    fileName = URLUtil.decode(fileName, Charset.defaultCharset());
+                    response.setFileName(fileName);
+                    //TODO 将文件内容保存在默认位置
+
+                    //响应面板切换到文件下载面板
                     responseFileView.setFileName(fileName);
                     responseFileView.setFuResponseData(response);
-                    response.setFileName(fileName);
                     switchPanel(3, responseFileView.getRootPane());
                     initRootPane();
                 } else {
@@ -109,7 +111,6 @@ public class ResponseTabView implements FuTab, HttpCallback {
                 responseErrorView.setErrorDetail(response.getErrorDetail());
                 switchPanel(2, responseErrorView.getRootPanel());
             }
-            //发送消息
         }
     }
 
@@ -128,11 +129,11 @@ public class ResponseTabView implements FuTab, HttpCallback {
 
 
     private String getFileName(FuResponseData fuResponseData) {
-        String fileName = fuResponseData.getFileName();
-        if (StringUtils.isNotBlank(fileName)) {
-            return fileName;
+        HttpResponse httpResponse = fuResponseData.getHttpResponse();
+        if (Objects.isNull(httpResponse)) {
+            return fuResponseData.getFileName();
         }
-        return HttpResponseUtil.getFileNameFromDisposition(fuResponseData.getHttpResponse());
+        return URLUtil.decode(HttpResponseUtil.getFileNameFromDisposition(httpResponse), Charset.defaultCharset());
     }
 
     /**

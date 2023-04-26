@@ -40,11 +40,13 @@ public class FuResponseData {
     /**
      * 字节流内容
      */
+    @JsonIgnore
     private byte[] body;
 
     /**
      * 响应状态码
      */
+    @JsonIgnore
     private Integer status;
 
     /**
@@ -68,11 +70,12 @@ public class FuResponseData {
     private String fileName;
 
     /**
+     * 文件路径
+     */
+    private String filePath;
+
+    /**
      * 响应结果编码
      */
     private Charset charsetFromResponse;
-
-    public String getContent() {
-        return HttpUtil.getString(this.getBody(), CharsetUtil.CHARSET_UTF_8, null == this.charsetFromResponse);
-    }
 }
