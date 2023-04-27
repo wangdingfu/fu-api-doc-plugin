@@ -12,7 +12,7 @@
     <idea-version since-build="222"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
-<!--    <depends>JavaScript</depends>-->
+    <depends>JavaScript</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
 <!--    <depends>com.intellij.spring</depends>-->

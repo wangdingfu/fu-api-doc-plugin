@@ -1,11 +1,14 @@
 package com.wdf.fudoc.request.tab.request;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
+import cn.hutool.system.SystemUtil;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tabs.TabInfo;
+import com.intellij.util.ResourceUtil;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
@@ -19,11 +22,14 @@ import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import com.wdf.fudoc.request.view.ResponseErrorView;
 import com.wdf.fudoc.request.view.ResponseFileView;
 import com.wdf.fudoc.util.HttpResponseUtil;
+import com.wdf.fudoc.util.ResourceUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
@@ -93,8 +99,9 @@ public class ResponseTabView implements FuTab, HttpCallback {
                 String fileName = getFileName(response);
                 if (StringUtils.isNotBlank(fileName)) {
                     response.setFileName(fileName);
-                    //TODO 将文件内容保存在默认位置
-
+                    String suffix = FileUtil.getSuffix(fileName);
+                    //将文件暂存到临时目录
+                    FileUtil.writeBytes(response.getBody(), ResourceUtils.createFuRequestFileDir(httpRequestData.getModuleId(), suffix));
                     //响应面板切换到文件下载面板
                     responseFileView.setFileName(fileName);
                     responseFileView.setFuResponseData(response);
