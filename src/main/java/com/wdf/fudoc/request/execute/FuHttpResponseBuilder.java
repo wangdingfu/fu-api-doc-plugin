@@ -1,12 +1,17 @@
 package com.wdf.fudoc.request.execute;
 
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.util.HttpResponseUtil;
+import org.apache.commons.lang3.StringUtils;
 
+import java.nio.charset.Charset;
 import java.util.Objects;
 
 
@@ -34,7 +39,15 @@ public class FuHttpResponseBuilder {
         response.setHeaders(httpResponse.headers());
         response.setContentLength(httpResponse.contentLength());
         response.setResponseType(ResponseType.SUCCESS);
-        response.setContent(HttpUtil.getString(response.getBody(), CharsetUtil.CHARSET_UTF_8, null == response.getCharsetFromResponse()));
+        String fileNameFromDisposition = HttpResponseUtil.getFileNameFromDisposition(httpResponse);
+        if (StringUtils.isNotBlank(fileNameFromDisposition)) {
+            String fileName = URLUtil.decode(fileNameFromDisposition, Charset.defaultCharset());
+            fileName = CharsetUtil.convert(fileName, CharsetUtil.CHARSET_ISO_8859_1, CharsetUtil.CHARSET_UTF_8);
+            response.setFileName(FileNameUtil.cleanInvalid(fileName));
+        } else {
+            //只有当不是文件时 才将body中的内容写入content中
+            response.setContent(HttpUtil.getString(response.getBody(), CharsetUtil.CHARSET_UTF_8, null == response.getCharsetFromResponse()));
+        }
     }
 
 

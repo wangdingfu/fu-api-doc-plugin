@@ -139,8 +139,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
         if (Objects.isNull(httpResponse)) {
             return fuResponseData.getFileName();
         }
-        String fileName = URLUtil.decode(HttpResponseUtil.getFileNameFromDisposition(httpResponse), Charset.defaultCharset());
-        return FileNameUtil.cleanInvalid(CharsetUtil.convert(fileName, CharsetUtil.CHARSET_ISO_8859_1, CharsetUtil.CHARSET_UTF_8));
+        return null;
     }
 
     /**
