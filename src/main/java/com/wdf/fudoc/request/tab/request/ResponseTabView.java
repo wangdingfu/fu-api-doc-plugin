@@ -92,7 +92,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
         //响应类型
         switch (responseType) {
             case SUCCESS -> {
-                String fileName = getFileName(response);
+                String fileName = response.getFileName();
                 if (StringUtils.isNotBlank(fileName)) {
                     //响应结果是文件
                     response.setFileName(fileName);
@@ -134,13 +134,6 @@ public class ResponseTabView implements FuTab, HttpCallback {
     }
 
 
-    private String getFileName(FuResponseData fuResponseData) {
-        HttpResponse httpResponse = fuResponseData.getHttpResponse();
-        if (Objects.isNull(httpResponse)) {
-            return fuResponseData.getFileName();
-        }
-        return null;
-    }
 
     /**
      * 切换面板

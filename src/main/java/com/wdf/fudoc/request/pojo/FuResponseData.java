@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.pojo;
 
 import cn.hutool.http.HttpResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FuResponseData {
 
     /**
