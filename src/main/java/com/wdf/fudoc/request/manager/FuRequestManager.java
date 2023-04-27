@@ -1,6 +1,6 @@
 package com.wdf.fudoc.request.manager;
 
-import cn.hutool.json.JSONUtil;
+import cn.hutool.core.util.IdUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.global.GlobalRequestData;
@@ -19,6 +19,29 @@ import java.util.Objects;
  * @date 2022-10-08 17:19:54
  */
 public class FuRequestManager {
+
+
+    public static String getModuleId(Project project, String moduleName) {
+        GlobalRequestData data = FuRequestState.getData(project);
+        Map<String, String> moduleIdMap = data.getModuleIdMap();
+        String moduleId = moduleIdMap.get(moduleName);
+        if (StringUtils.isBlank(moduleId)) {
+            moduleId = IdUtil.getSnowflakeNextIdStr();
+            moduleIdMap.put(moduleName, moduleId);
+        }
+        return moduleId;
+    }
+
+    public static String getMethodId(Project project, String methodName) {
+        GlobalRequestData data = FuRequestState.getData(project);
+        Map<String, String> methodIdMap = data.getMethodIdMap();
+        String methodId = methodIdMap.get(methodName);
+        if (StringUtils.isBlank(methodId)) {
+            methodId = IdUtil.getSnowflakeNextIdStr();
+            methodIdMap.put(methodName, methodId);
+        }
+        return methodId;
+    }
 
 
     /**

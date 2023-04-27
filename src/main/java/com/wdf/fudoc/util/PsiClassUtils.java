@@ -12,6 +12,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.pojo.bo.PsiClassTypeBO;
+import com.wdf.fudoc.request.manager.FuRequestManager;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -142,7 +143,7 @@ public class PsiClassUtils {
         for (PsiParameter parameter : parameterList.getParameters()) {
             paramTypes.add(parameter.getType().getCanonicalText());
         }
-        return psiClassName + "#" + name + "(" + StringUtils.join(paramTypes, ",") + ")";
+        return FuRequestManager.getMethodId(psiMethod.getProject(), psiClassName + "#" + name + "(" + StringUtils.join(paramTypes, ",") + ")");
     }
 
     public static String getMethodName(PsiMethod psiMethod) {

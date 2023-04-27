@@ -1,8 +1,6 @@
 package com.wdf.fudoc.request.pojo;
 
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import lombok.Getter;
