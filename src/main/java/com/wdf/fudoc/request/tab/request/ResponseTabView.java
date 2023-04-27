@@ -1,6 +1,8 @@
 package com.wdf.fudoc.request.tab.request;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
@@ -96,7 +98,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
                     response.setFileName(fileName);
                     //将文件暂存到临时目录
                     String suffix = FileUtil.getSuffix(fileName);
-                    File tmpFile = ResourceUtils.createFuRequestFileDir(httpRequestData.getModuleId(), suffix);
+                    File tmpFile = ResourceUtils.createFuRequestFileDir(project.getName(), suffix);
                     FileUtil.writeBytes(response.getBody(), tmpFile);
                     response.setFilePath(tmpFile.getPath());
                     //响应面板切换到文件下载面板
@@ -137,7 +139,8 @@ public class ResponseTabView implements FuTab, HttpCallback {
         if (Objects.isNull(httpResponse)) {
             return fuResponseData.getFileName();
         }
-        return URLUtil.decode(HttpResponseUtil.getFileNameFromDisposition(httpResponse), Charset.defaultCharset());
+        String fileName = URLUtil.decode(HttpResponseUtil.getFileNameFromDisposition(httpResponse), Charset.defaultCharset());
+        return FileNameUtil.cleanInvalid(CharsetUtil.convert(fileName, CharsetUtil.CHARSET_ISO_8859_1, CharsetUtil.CHARSET_UTF_8));
     }
 
     /**
