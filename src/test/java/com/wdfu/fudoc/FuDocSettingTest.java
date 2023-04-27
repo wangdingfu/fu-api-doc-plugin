@@ -19,7 +19,7 @@ import java.util.Date;
 public class FuDocSettingTest {
 
     public static void main(String[] args) {
-        FileUtil.writeBytes(FileUtil.readBytes("C:\\Users\\fuge\\Desktop\\斗鱼-工时单-202304-王定福.xls"), genFilePath("test"));
+        FileUtil.copyFile(FileUtil.newFile("C:\\Users\\fuge\\Desktop\\斗鱼-工时单-202304-王定福.xls"), FileUtil.newFile("C:\\Users\\fuge\\Desktop\\2.xls"));
     }
 
     public static File genFilePath(String moduleName) {

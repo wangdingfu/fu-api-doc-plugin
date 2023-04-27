@@ -4,16 +4,12 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
-import cn.hutool.system.SystemUtil;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tabs.TabInfo;
-import com.intellij.util.ResourceUtil;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
-import com.wdf.fudoc.components.message.MessageComponent;
-import com.wdf.fudoc.components.message.ResponseInfoMessageGenerator;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -25,7 +21,6 @@ import com.wdf.fudoc.util.HttpResponseUtil;
 import com.wdf.fudoc.util.ResourceUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,13 +90,15 @@ public class ResponseTabView implements FuTab, HttpCallback {
         //响应类型
         switch (responseType) {
             case SUCCESS -> {
-                //判断返回结果是文件还是文本
                 String fileName = getFileName(response);
                 if (StringUtils.isNotBlank(fileName)) {
+                    //响应结果是文件
                     response.setFileName(fileName);
-                    String suffix = FileUtil.getSuffix(fileName);
                     //将文件暂存到临时目录
-                    FileUtil.writeBytes(response.getBody(), ResourceUtils.createFuRequestFileDir(httpRequestData.getModuleId(), suffix));
+                    String suffix = FileUtil.getSuffix(fileName);
+                    File tmpFile = ResourceUtils.createFuRequestFileDir(httpRequestData.getModuleId(), suffix);
+                    FileUtil.writeBytes(response.getBody(), tmpFile);
+                    response.setFilePath(tmpFile.getPath());
                     //响应面板切换到文件下载面板
                     responseFileView.setFileName(fileName);
                     responseFileView.setFuResponseData(response);

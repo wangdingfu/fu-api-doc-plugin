@@ -78,39 +78,20 @@ public class ResponseFileView {
         ProgressManager.getInstance().run(new Task.Backgroundable(ProjectUtils.getCurrProject(), "Download file", false) {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
-                File file = FileUtil.file(filePath, fileName);
-                if (file.exists()) {
+                File targetFile = FileUtil.file(filePath, fileName);
+                if (targetFile.exists()) {
                     //生成新的文件名
-                    file = FileUtil.file(filePath, "【Fu Doc】" + RandomUtil.randomInt(100000) + "-" + fileName);
+                    targetFile = FileUtil.file(filePath, "【Fu Doc】" + RandomUtil.randomInt(100000) + "-" + fileName);
                 }
-                HttpResponse httpResponse = fuResponseData.getHttpResponse();
-                if (Objects.nonNull(httpResponse)) {
-                    httpResponse.writeBody(FileUtil.getOutputStream(file), true, new StreamProgress() {
-                        @Override
-                        public void start() {
-                            indicator.setText("Start download....");
-                        }
-
-                        @Override
-                        public void progress(long total, long progressSize) {
-                            indicator.setText("downloading..... " + NumberUtil.decimalFormat("#%", NumberUtil.div(progressSize, total)));
-                        }
-
-                        @Override
-                        public void finish() {
-                            indicator.setText("Download finished....");
-                        }
-                    });
+                //文件临时暂存目录
+                File srcFile = FileUtil.file(fuResponseData.getFilePath());
+                if (!srcFile.exists()) {
+                    //提示用户 历史请求的文件遗失 无法保存
+                    FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.FU_REQUEST_DOWNLOAD_NOT_FILE));
                     return;
                 }
-                byte[] body = fuResponseData.getBody();
-                if (Objects.nonNull(body) && body.length > 0) {
-                    //写出文件
-                    FileUtil.writeBytes(body, file);
-                    return;
-                }
-                //提示用户 历史请求的文件遗失 无法保存
-                FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.FU_REQUEST_DOWNLOAD_NOT_FILE));
+                //将源文件拷贝至目标文件
+                FileUtil.copyFile(srcFile, targetFile);
             }
         });
     }
