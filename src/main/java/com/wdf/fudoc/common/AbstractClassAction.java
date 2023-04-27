@@ -40,7 +40,10 @@ public abstract class AbstractClassAction extends AnAction {
      */
     protected abstract void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext);
 
-
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
     /**
      * 在点击右键显示操作栏时 会调用该方法判断是否显示生成接口按钮
      *
