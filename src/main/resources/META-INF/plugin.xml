@@ -1,13 +1,12 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>Fu Doc</name>
-    <version>222.1.5.7</version>
+    <version>222.1.5.8</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
         <![CDATA[ Description will be added by gradle build]]>
     </description>
-
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
     <idea-version since-build="222.3345.118"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
