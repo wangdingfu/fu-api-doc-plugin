@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.pojo;
 
 import cn.hutool.core.util.URLUtil;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import lombok.Getter;
@@ -42,16 +43,19 @@ public class FuRequestData {
     /**
      * 请求头
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<KeyValueTableBO> headers;
 
     /**
      * 请求参数（GET请求）
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<KeyValueTableBO> params;
 
     /**
      * 接口路径上的请求参数（GET请求 POST请求都可能有值）
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<KeyValueTableBO> pathVariables;
 
     /**

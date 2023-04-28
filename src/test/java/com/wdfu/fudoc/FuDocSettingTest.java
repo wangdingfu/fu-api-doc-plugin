@@ -1,8 +1,15 @@
 package com.wdfu.fudoc;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.system.SystemUtil;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.request.view.ResponseErrorView;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import java.io.File;
+import java.util.Date;
 
 /**
  * @author wangdingfu
@@ -11,14 +18,15 @@ import javax.swing.*;
  */
 public class FuDocSettingTest {
 
-    public static void main1(String[] args) {
-        JFrame jFrame = new JFrame();
-        ResponseErrorView responseErrorView = new ResponseErrorView();
-        jFrame.add(responseErrorView.getRootPanel());
-        jFrame.setVisible(true);
-        //        关闭事件
-        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    public static void main(String[] args) {
+        FileUtil.copyFile(FileUtil.newFile("C:\\Users\\fuge\\Desktop\\斗鱼-工时单-202304-王定福.xls"), FileUtil.newFile("C:\\Users\\fuge\\Desktop\\2.xls"));
     }
 
+    public static File genFilePath(String moduleName) {
+        String timeStr = DatePattern.PURE_DATE_FORMAT.format(new Date());
+        String yyyyMM = StringUtils.substring(timeStr, 0, 6);
+        String day = StringUtils.substring(timeStr, 6, 8);
+        return FileUtil.file(FileUtil.getTmpDir(), FuDocConstants.FU_DOC_PATH, moduleName, yyyyMM, day,"a1.xls");
+    }
 
 }

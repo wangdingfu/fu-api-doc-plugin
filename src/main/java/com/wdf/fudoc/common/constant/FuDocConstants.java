@@ -13,6 +13,8 @@ public interface FuDocConstants {
     String VALUE = "value";
 
     String FU_DOC = "Fu Doc";
+    String FU_DOC_PATH = "fu-doc";
+    String FU_REQUEST_PATH = "fu-request";
 
     String FU_DOC_FILE = "FuDocFile.";
 

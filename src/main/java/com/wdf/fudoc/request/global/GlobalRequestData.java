@@ -3,7 +3,6 @@ package com.wdf.fudoc.request.global;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +21,15 @@ public class GlobalRequestData {
      * 当前项目激活的接口
      */
     private String activeApiKey;
+
+    /**
+     * key:moduleId value：随机字符串
+     */
+    private Map<String, String> moduleIdMap = new ConcurrentHashMap<>();
+    /**
+     * key:方法全路径 value:随机字符串
+     */
+    private Map<String, String> methodIdMap = new ConcurrentHashMap<>();
 
     /**
      * 请求数据集合

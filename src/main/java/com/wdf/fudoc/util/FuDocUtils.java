@@ -13,6 +13,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
+import com.wdf.fudoc.request.manager.FuRequestManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -136,6 +137,11 @@ public class FuDocUtils {
      * @return module的绝对路径
      */
     public static String getModuleId(Module module) {
+        return FuRequestManager.getModuleId(ProjectUtils.getCurrProject(), getModulePath(module));
+    }
+
+
+    private static String getModulePath(Module module) {
         VirtualFile[] contentRoots = ModuleRootManager.getInstance(module).getContentRoots();
         if (contentRoots.length > 0) {
             return contentRoots[0].getPath();

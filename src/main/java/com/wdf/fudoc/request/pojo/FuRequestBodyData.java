@@ -1,8 +1,10 @@
 package com.wdf.fudoc.request.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import lombok.Getter;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FuRequestBodyData {
 
     /**
@@ -29,6 +32,7 @@ public class FuRequestBodyData {
     /**
      * json内容
      */
+
     private String json;
 
     /**
