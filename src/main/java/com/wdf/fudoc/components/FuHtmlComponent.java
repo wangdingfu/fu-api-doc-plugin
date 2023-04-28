@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.util.ui.HTMLEditorKitBuilder;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +61,7 @@ public class FuHtmlComponent extends DialogWrapper {
     private void initPanel() {
         this.editorPane.setContentType("text/html");
         this.editorPane.setEditable(false);
-        this.editorPane.setEditorKit(UIUtil.getHTMLEditorKit());
+        this.editorPane.setEditorKit(HTMLEditorKitBuilder.simple());
         this.editorPane.addHyperlinkListener(BrowserHyperlinkListener.INSTANCE);
         UIUtil.doNotScrollToCaret(this.editorPane);
         this.editorPane.setText(this.html);
