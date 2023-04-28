@@ -1,6 +1,5 @@
 package com.wdf.fudoc.apidoc.pojo.data.annotation;
 
-import com.intellij.lang.jvm.JvmEnumField;
 import com.intellij.lang.jvm.annotation.JvmAnnotationEnumFieldValue;
 import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationValueData;
@@ -27,10 +26,6 @@ public class AnnotationEnumValueData extends AnnotationValueData {
      */
     private String enumValue;
 
-    /**
-     * 枚举字段
-     */
-    private JvmEnumField enumField;
 
     public AnnotationEnumValueData(AnnotationValueType valueType) {
         super(valueType);
@@ -39,11 +34,8 @@ public class AnnotationEnumValueData extends AnnotationValueData {
     public AnnotationEnumValueData(AnnotationValueType valueType, JvmAnnotationEnumFieldValue enumFieldValue) {
         super(valueType);
         if (Objects.nonNull(enumFieldValue)) {
-            this.enumField = enumFieldValue.getField();
-            this.enumClassName = enumFieldValue.getContainingClass().getQualifiedName();
-            if (Objects.nonNull(this.enumField)) {
-                this.enumValue = this.enumField.getName();
-            }
+            this.enumClassName = enumFieldValue.getContainingClassName();
+            this.enumValue = enumFieldValue.getFieldName();
         }
     }
 
