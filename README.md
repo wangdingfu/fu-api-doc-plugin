@@ -1,13 +1,12 @@
 
 # fu-api-doc-plugin
 
-[![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/v/19269-fu-doc.svg)](https://plugins.jetbrains.com/plugin/19269-fu-doc)Cancel changes
-[![Version](http://phpstorm.espend.de/badge/19269/version)](https://plugins.jetbrains.com/plugin/19269-fu-doc/versions)
+[![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/v/19269-fu-doc.svg)](https://plugins.jetbrains.com/plugin/19269-fu-doc)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/19269-fu-doc.svg)](https://plugins.jetbrains.com/plugin/19269-fu-doc)
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 
-> Fu Doc是一个根据 `JAVA` 代码一键生成 `markdown` 格式接口文档的 Idea 插件。你只需要在你的开发工具里安装上Fu Doc这个插件即可，对你的项目完全零侵入。当然需要有一个良好的开发习惯（写注释的好习惯），此时你只需要一个快捷键就可以生成你平时需要耗费大量时间去复制粘贴编写的接口文档
+> Fu Doc是一个根据 `JAVA` 代码一键生成接口文档，并且支持同步接口文档到`YApi`、`ShowDoc`等第三方文档系统，支持一键发起HTTP请求的 IDEA插件。你只需要在你的开发工具里安装上Fu Doc这个插件即可，他对你的项目完全零侵入。
 
 查看[Fu Doc文档](http://www.fudoc.cn/)详细了解
 
@@ -33,7 +32,7 @@
 ---
 
 - **在线安装:**
-![img.png](img.png)
+![img.png](img/install.png)
     - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu Doc`
 
 - **手动安装:**
