@@ -103,6 +103,10 @@ public class FuTabComponent {
         return tabActionMap.get(title);
     }
 
+    public TabActionBO getDefaultAction() {
+        return tabActionMap.get(DEFAULT);
+    }
+
     public TabInfo builder() {
         return builder(null);
     }
