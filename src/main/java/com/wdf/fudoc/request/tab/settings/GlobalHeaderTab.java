@@ -8,6 +8,7 @@ import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
 import com.wdf.fudoc.request.pojo.CommonHeader;
@@ -36,6 +37,11 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<CommonHeader> im
      */
     private final FuEditorComponent fuEditorComponent;
 
+    private FuTabComponent fuTabComponent;
+
+
+    private static final String TITLE = "公共请求头";
+
 
     public GlobalHeaderTab() {
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.commonHeaders(), Lists.newArrayList(), CommonHeader.class);
@@ -45,7 +51,8 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<CommonHeader> im
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("公共请求头", FuDocIcons.FU_REQUEST_HEADER, fuTableComponent.createPanel()).addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
+        this.fuTabComponent = FuTabComponent.getInstance(TITLE, FuDocIcons.FU_REQUEST_HEADER, fuTableComponent.createPanel()).addBulkEditBar(fuEditorComponent.getMainPanel(), this);
+        return this.fuTabComponent.builder();
     }
 
     @Override
@@ -65,6 +72,11 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<CommonHeader> im
 
 
     public List<CommonHeader> getData() {
+        TabActionBO tabActionBO = this.fuTabComponent.getDefaultAction();
+        if(Objects.nonNull(tabActionBO) && tabActionBO.isSelect()){
+            //如果当前是编辑器状态 则需要从编辑器组件同步数据到table组件
+            bulkEditToTableData(TITLE);
+        }
         List<CommonHeader> dataList = fuTableComponent.getDataList();
         if (CollectionUtils.isNotEmpty(dataList)) {
             for (CommonHeader commonHeader : dataList) {

@@ -85,7 +85,12 @@ public abstract class AbstractBulkEditTabLinkage<T extends KeyValueTableBO> impl
      * 将编辑器组件的内容转换成表格的数据
      */
     protected List<T> editorToTableData(String tab) {
-        String content = getEditorComponent(tab).getContent();
+        return editorToTableDataList(getEditorComponent(tab).getContent());
+    }
+
+
+
+    protected List<T> editorToTableDataList(String content){
         List<T> dataList = Lists.newArrayList();
         if (StringUtils.isNotBlank(content)) {
             for (String line : content.split("\n")) {
