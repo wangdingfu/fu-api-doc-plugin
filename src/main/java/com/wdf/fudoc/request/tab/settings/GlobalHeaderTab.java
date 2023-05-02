@@ -77,6 +77,7 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<CommonHeader> im
             //如果当前是编辑器状态 则需要从编辑器组件同步数据到table组件
             bulkEditToTableData(TITLE);
         }
+        //从table组件中获取请求头数据集合
         List<CommonHeader> dataList = fuTableComponent.getDataList();
         if (CollectionUtils.isNotEmpty(dataList)) {
             for (CommonHeader commonHeader : dataList) {
