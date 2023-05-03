@@ -28,13 +28,22 @@ public class GeneralAuthView {
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.dynamicColumns(), KeyValueTableBO.class);
         JPanel contentPanel = new JPanel(new BorderLayout());
         JPanel northPanel = new JPanel(new BorderLayout());
+        //添加过期时间面板
+        northPanel.add(createExpireTime(), BorderLayout.EAST);
         this.rootPanel.add(northPanel, BorderLayout.NORTH);
         this.rootPanel.add(contentPanel, BorderLayout.CENTER);
+    }
+
+
+    /**
+     * 创建过期时间配置面板
+     */
+    private JPanel createExpireTime(){
         JPanel expirePanel = new JPanel(new BorderLayout());
         expirePanel.add(new JLabel("过期时间："), BorderLayout.WEST);
         expirePanel.add(this.expireTime, BorderLayout.CENTER);
         expirePanel.add(new JLabel("秒"), BorderLayout.EAST);
-        northPanel.add(expirePanel, BorderLayout.EAST);
+        return expirePanel;
     }
 
 
