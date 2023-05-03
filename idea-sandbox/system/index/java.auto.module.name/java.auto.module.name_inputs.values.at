@@ -1,0 +1,14 @@
+/Header Record For PersistentHashMapValueStoragespring.bootjakarta.annotation.apijul.to.slf4jlogback.corelogback.classicspring.boot.starter.loggingspring.boot.autoconfigurespring.boot.starter.web	log4j.apilog4j.to.slf4jspring.boot.starterspring.core
+spring.jcl	snakeyamlspring.boot.starter.jsonjackson.databindjackson.datatype.jdk8jackson.corejackson.annotationsjackson.datatype.jsr310!jackson.module.parameter.namesspring.boot.starter.tomcattomcat.embed.coretomcat.embed.eltomcat.embed.websocket
+spring.webspring.beansspring.webmvc
+spring.aopspring.contextspring.expression	lombokcommons.lang3commons.collections4	jmockdatavalidation.apifastjsonspringfox.boot.starterspringfox.oasswagger.annotationsswagger.modelsspringfox.spispringfox.schemaspringfox.core
+byte.buddyspringfox.spring.web
+classgraphspringfox.spring.webmvcspringfox.spring.webfluxspringfox.swagger.common	mapstructspringfox.data.restspringfox.bean.validatorsspringfox.swagger2swagger.annotationsswagger.modelsspringfox.swagger.ui	classmate	slf4j.apispring.plugin.corespring.plugin.metadataswagger.bootstrap.uimybatis.plus.boot.startermybatis.plusmybatis.plus.extensionmybatis.plus.coremybatis.plus.annotation
+jsqlparser
+mybatismybatis.springspring.boot.starter.jdbcHikariCPspring.jdbc	spring.txmysql.connector.javaspring.boot.starter.testspring.boot.test!spring.boot.test.autoconfigure	json.path
+json.smartaccessors.smartasmjakarta.xml.bind.apijakarta.activation.apiassertj.corehamcrestjunit.jupiterjunit.jupiter.api
+opentest4jjunit.platform.commonsapiguardian.apijunit.jupiter.paramsjunit.jupiter.enginejunit.platform.enginemockito.corebyte.buddy.agent	objenesismockito.junit.jupiter
+jsonassertandroid.jsonspring.testxmlunit.core)&dynamic.datasource.spring.boot.starterspring.boot.starter.aopaspectjweavercharsets	deploycldrdatadnsns
+jaccessjfxrt
+localedata
+nashornsunecsunjce.provider	sunpkcs11zipfs	javawsjcejfr	jfxswtjssemanagement.agent	plugin	resourcesrt

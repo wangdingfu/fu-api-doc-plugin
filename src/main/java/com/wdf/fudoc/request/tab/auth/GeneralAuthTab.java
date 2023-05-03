@@ -29,11 +29,20 @@ public class GeneralAuthTab implements FuTab, FuActionListener<AuthConfigData> {
     }
 
 
+    /**
+     * 添加一条配置数据时调用
+     * @param data 配置数据
+     */
     @Override
     public void doAction(AuthConfigData data) {
 
+
     }
 
+    /**
+     * 离开该配置时调用 需要获取配置的数据并保存
+     * @param data 配置数据
+     */
     @Override
     public void doActionAfter(AuthConfigData data) {
 

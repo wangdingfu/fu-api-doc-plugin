@@ -1,0 +1,9 @@
+<project>
+  <component name="ExternalCompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="api-doc-example" target="11" />
+      <module name="mybatis-read-write-example" target="11" />
+      <module name="springboot-example" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

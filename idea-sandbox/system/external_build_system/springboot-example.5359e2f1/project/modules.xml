@@ -1,0 +1,9 @@
+<project>
+  <component name="ExternalProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/api-doc-example/api-doc-example.iml" filepath="$PROJECT_DIR$/api-doc-example/api-doc-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mybatis-read-write-example/mybatis-read-write-example.iml" filepath="$PROJECT_DIR$/mybatis-read-write-example/mybatis-read-write-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springboot-example.iml" filepath="$PROJECT_DIR$/springboot-example.iml" />
+    </modules>
+  </component>
+</project>

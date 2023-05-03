@@ -1,0 +1,10 @@
+<application>
+  <component name="SettingsSyncSettings">
+    <option name="disabledCategories">
+      <list>
+        <option value="PLUGINS" />
+      </list>
+    </option>
+    <option name="migrationFromOldStorageChecked" value="true" />
+  </component>
+</application>

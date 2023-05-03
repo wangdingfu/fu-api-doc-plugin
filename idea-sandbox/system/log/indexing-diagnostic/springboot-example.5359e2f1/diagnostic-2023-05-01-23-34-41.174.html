@@ -1,0 +1,3377 @@
+<html>
+  <head>
+    <title>Indexing diagnostics of 'springboot-example'</title>
+    <style>body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table {
+  width: 80%;
+}
+
+table.two-columns td {
+  width: 50%;
+}
+
+th, td {
+  padding: 3px;
+}
+
+th {
+  background: lightgrey;
+}
+
+td {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+        
+.stats-content {
+  margin-left: 20%;
+}
+
+.aggregate-report-content {
+  margin-left: 10%;
+}
+
+.navigation-bar {
+  width: 15%;
+  background-color: lightgrey;
+  position: fixed;
+  height: 100%;
+}
+
+div.navigation-bar ul {
+  list-style-type: none;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+}
+
+div.navigation-bar ul li a, label {
+  display: block;
+  color: #000;
+  padding: 8px 20px;
+  text-decoration: none;
+}
+
+label input {
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+}
+
+div.navigation-bar ul li a:hover {
+  background-color: #555;
+  color: white;
+}
+
+.minor-data {}
+
+.invisible {
+  display: none;
+}
+
+.jetbrains-logo {
+  width: 50%;
+  bottom: 5%;
+  position: absolute;
+  left: 20%;
+}
+
+.centered-text {
+  text-align: center;
+}
+
+.linkable-table-row:hover {
+  background: #f2f3ff;
+  outline: none;
+  cursor: pointer;
+}</style>
+    <script>function hideElementsHavingClass(className, hideOrShow) {
+  const elements = document.getElementsByClassName(className)
+  const displayType = hideOrShow ? 'none' : 'initial'
+  for (const element of elements) {
+    element.classList.toggle('invisible', hideOrShow)
+  }
+}</script>
+  </head>
+  <body>
+    <div class="navigation-bar">
+      <ul>
+        <li><a href="#id-project-name">Project name</a></li>
+        <li><a href="#id-app-info">Application info</a></li>
+        <li><a href="#id-runtime-info">Runtime</a></li>
+        <li><a href="#id-indexing-info">Indexing info</a></li>
+        <li><a href="#id-slow-files">Slowly indexed files</a></li>
+        <li><a href="#id-stats-per-file-type">Statistics per file type</a></li>
+        <li><a href="#id-stats-per-indexer">Statistics per indexer</a></li>
+        <li><a href="#id-scanning">Scanning</a></li>
+        <li><a href="#id-indexing">Indexing</a></li>
+      </ul>
+      <hr class="solid">
+      <ul>
+        <li><label for="id-hide-minor-data-checkbox">Hide minor data<input checked="checked" id="id-hide-minor-data-checkbox" type="checkbox" onclick="hideElementsHavingClass('minor-data', this.checked)">
+              <style>padding-left: 10px</style>
+            </label></li>
+      </ul>
+      <div class="jetbrains-logo"><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120.21407 130.10375">
+  <title>logo-grey</title>
+  <g>
+    <path d="M120.2,68.6a4.99684,4.99684,0,0,0-1.4-3.5L55.191,2.68736a7.86372,7.86372,0,0,0-3.36731-2.261c-.03467-.012-.06812-.02612-.103-.03766-.19336-.06323-.3913-.11511-.591-.16327-.06689-.0163-.13177-.0368-.1994-.05133-.18744-.04-.37909-.06738-.57117-.09363-.0788-.0108-.15527-.0274-.23492-.03589A7.83914,7.83914,0,0,0,49.3,0a7.73961,7.73961,0,0,0-1.21088.10413c-.0235.00391-.04694.00671-.07037.0108a7.62573,7.62573,0,0,0-3.092,1.24969c-.07343.04773-.155.08575-.22668.13538L4.9,28.3c-.08221.08221-.15106.10632-.17773.16437L4.67218,28.5H4.6A11.11647,11.11647,0,0,0,.15875,39.45683l.00854.04449c.05176.28589.11011.56958.18372.84973.03052.119.06964.235.104.35284.054.181.10278.3634.16571.5412A11.15109,11.15109,0,0,0,5.3,47.1a8.82025,8.82025,0,0,0,2,.9c.4.2,45.4,18.8,45.4,18.8a4.291,4.291,0,0,0,4.4-7.3c-.06525,0-16.839-13.21332-28.69928-22.52606l21.105-19.03113,57.91815,49.58282L28.6,110.7a9.82332,9.82332,0,0,0-4.7,4.1,10.0662,10.0662,0,0,0,3.6,13.9,10.28689,10.28689,0,0,0,10.7-.2c.2-.2.5-.3.7-.5L116.9,73.2a18.32,18.32,0,0,0,1.58612-1.2663A4.74573,4.74573,0,0,0,120.2,68.6Z" transform="translate(0.01406 0.00002)" fill="#cdcdcd"/>
+    <g id="_Group_" data-name="&lt;Group&gt;">
+      <rect id="_Path_" data-name="&lt;Path&gt;" x="34.61406" y="37.40002" width="51" height="51"/>
+      <rect id="_Path_2" data-name="&lt;Path&gt;" x="39.01406" y="78.80002" width="19.1" height="3.2" fill="#fff"/>
+      <g id="_Group_2" data-name="&lt;Group&gt;">
+        <path id="_Path_3" data-name="&lt;Path&gt;" d="M38.8,50.8l1.5-1.4a1.70271,1.70271,0,0,0,1.3.8q.9,0,.9-1.2V43.7h2.3V49a2.79543,2.79543,0,0,1-3.1,3.1A3.026,3.026,0,0,1,38.8,50.8Z" transform="translate(0.01406 0.00002)" fill="#fff"/>
+        <path id="_Path_4" data-name="&lt;Path&gt;" d="M45.3,43.8H52v1.9H47.6V47h4v1.8h-4v1.3h4.5v2H45.4Z" transform="translate(0.01406 0.00002)" fill="#fff"/>
+        <path id="_Path_5" data-name="&lt;Path&gt;" d="M55,45.8H52.5v-2h7.3v2H57.3v6.3H55Z" transform="translate(0.01406 0.00002)" fill="#fff"/>
+        <path id="_Compound_Path_" data-name="&lt;Compound Path&gt;" d="M39,54h4.3a3.7023,3.7023,0,0,1,2.3.7,1.97822,1.97822,0,0,1,.5,1.4h0A1.95538,1.95538,0,0,1,44.8,58a1.94762,1.94762,0,0,1,1.6,2h0c0,1.4-1.2,2.3-3.1,2.3H39Zm4.8,2.6c0-.5-.4-.7-1-.7H41.3v1.5h1.4c.7-.1,1.1-.3,1.1-.8ZM43,59H41.2v1.5H43c.7,0,1.1-.3,1.1-.8h0C44.1,59.2,43.7,59,43,59Z" transform="translate(0.01406 0.00002)" fill="#fff"/>
+        <path id="_Compound_Path_2" data-name="&lt;Compound Path&gt;" d="M46.8,54h3.9a3.51463,3.51463,0,0,1,2.7.9,2.48948,2.48948,0,0,1,.7,1.9h0a2.76053,2.76053,0,0,1-1.7,2.6l2,2.9H51.8l-1.7-2.5h-1v2.5H46.8Zm3.8,4c.8,0,1.2-.4,1.2-1h0c0-.7-.5-1-1.2-1H49.1v2Z" transform="translate(0.01406 0.00002)" fill="#fff"/>
+        <path id="_Compound_Path_3" data-name="&lt;Compound Path&gt;" d="M56.8,54H59l3.5,8.4H60l-.6-1.5H56.2l-.6,1.5H53.2Zm2,5-.9-2.3L57,59Z" transform="translate(0.01406 0.00002)" fill="#fff"/>
+        <path id="_Path_6" data-name="&lt;Path&gt;" d="M62.8,54h2.3v8.3H62.8Z" transform="translate(0.01406 0.00002)" fill="#fff"/>
+        <path id="_Path_7" data-name="&lt;Path&gt;" d="M65.7,54h2.1l3.4,4.4V54h2.3v8.3h-2L68,57.8v4.6H65.7Z" transform="translate(0.01406 0.00002)" fill="#fff"/>
+        <path id="_Path_8" data-name="&lt;Path&gt;" d="M73.7,61.1,75,59.6a3.94219,3.94219,0,0,0,2.7,1c.6,0,1-.2,1-.6h0c0-.4-.3-.5-1.4-.8-1.8-.4-3.1-.9-3.1-2.6h0c0-1.5,1.2-2.7,3.2-2.7A5.33072,5.33072,0,0,1,80.8,55l-1.2,1.6a4.55346,4.55346,0,0,0-2.3-.8c-.6,0-.8.2-.8.5h0c0,.4.3.5,1.4.8,1.9.4,3.1,1,3.1,2.6h0c0,1.7-1.3,2.7-3.4,2.7A5.29336,5.29336,0,0,1,73.7,61.1Z" transform="translate(0.01406 0.00002)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+    </div>
+    <div class="stats-content">
+      <div id="id-project-name">
+        <h1 class="Project name"></h1>
+springboot-example</div>
+      <div id="id-app-info">
+        <h1 class="Application info"></h1>
+        <table class="two-columns">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Build</td>
+              <td>223.8214.52</td>
+            </tr>
+            <tr>
+              <td>Build date</td>
+              <td>19:24:14 20 12月</td>
+            </tr>
+            <tr>
+              <td>Product code</td>
+              <td>IU</td>
+            </tr>
+            <tr>
+              <td>Generated</td>
+              <td>23:34:41 01 5月</td>
+            </tr>
+            <tr>
+              <td>OS</td>
+              <td>macOS 13.3.1</td>
+            </tr>
+            <tr>
+              <td>Runtime</td>
+              <td>JetBrains s.r.o. 17.0.5 17.0.5+1-b653.23</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="id-runtime-info">
+        <h1 class="Runtime"></h1>
+        <table class="two-columns">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Max memory</td>
+              <td>786.43 MB</td>
+            </tr>
+            <tr>
+              <td>Number of processors</td>
+              <td>16</td>
+            </tr>
+            <tr>
+              <td>Max number of indexing threads</td>
+              <td>15</td>
+            </tr>
+            <tr>
+              <td>Max size of file for analysis</td>
+              <td>2.56 MB</td>
+            </tr>
+            <tr>
+              <td>Max size of file for content loading</td>
+              <td>20.97 MB</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="id-indexing-info">
+        <h1 class="Indexing info"></h1>
+        <table class="two-columns">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Number of file providers</td>
+              <td>109</td>
+            </tr>
+            <tr>
+              <td>Number of scanned files</td>
+              <td>72486</td>
+            </tr>
+            <tr>
+              <td>Number of files indexed by shared indexes during the scan (without loading content)</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Number of files scheduled for indexing after scanning</td>
+              <td>71171</td>
+            </tr>
+            <tr>
+              <td>Number of files indexed by shared indexes during the indexing stage (with loading content)</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Number of files indexed during the indexing stage with loading content (including indexed by shared indexes)</td>
+              <td>71171</td>
+            </tr>
+            <tr>
+              <td>Number of too large for indexing files</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Started at</td>
+              <td>23:33:59 01 5月</td>
+            </tr>
+            <tr>
+              <td>Reason</td>
+              <td>changes in: &quot;Module 'springboot-example' (springboot-example)&quot;, &quot;Module 'api-doc-example' (api-doc-example)&quot;, &quot;Module 'mybatis-read-write-example' (mybatis-read-write-example)&quot;, &quot;JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/&quot;, &quot;Library Maven: org.springframework.boot:spring-boot-starter-web:2.6.5 (#1 class roots, #0 source roots)&quot;, &quot;Library Maven: org.springframework.boot:spring-boot-starter:2.6.5 (#1 class roots, #0 source roots)&quot;, &quot;Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots)&quot;, &quot;Library Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.5 (#1 class roots, #0 source roots)&quot;, &quot;Library Maven: org.springframework.boot:spring-boot-starter-logging:2.6.5 (#1 class roots, #0 source roots)&quot;, &quot;Library Maven: ch.qos.logback:logback-classic:1.2.11 (#1 class roots, #0 source roots)&quot; and 99 iterators more</td>
+            </tr>
+            <tr>
+              <td>Type</td>
+              <td>partial</td>
+            </tr>
+            <tr>
+              <td>Finished at</td>
+              <td>23:34:41 01 5月</td>
+            </tr>
+            <tr>
+              <td>Cancelled?</td>
+              <td>false</td>
+            </tr>
+            <tr>
+              <td>Suspended time</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Total time</td>
+              <td>41 s 247 ms</td>
+            </tr>
+            <tr>
+              <td>Indexing time</td>
+              <td>33 s 926 ms</td>
+            </tr>
+            <tr>
+              <td>Iterators creation time</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr>
+              <td>Scanning time</td>
+              <td>7 s 315 ms</td>
+            </tr>
+            <tr>
+              <td>Content loading time</td>
+              <td>1 s 996 ms</td>
+            </tr>
+            <tr>
+              <td>Pushing properties time</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr>
+              <td>Running extensions time</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Index writing time</td>
+              <td>16 s 120 ms</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="id-slow-files">
+        <h1 class="Slowly indexed files (&gt; 500 ms)"></h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Provider name</th>
+              <th>File</th>
+              <th>Content loading time</th>
+              <th>Indexing time</th>
+              <th>Total processing time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Library Maven: io.springfox:springfox-swagger-ui:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>swagger-ui-bundle.js</td>
+              <td>32 ms</td>
+              <td>5 s 84 ms</td>
+              <td>5 s 295 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>swagger-ui-standalone-preset.js</td>
+              <td>13 ms</td>
+              <td>2 s 508 ms</td>
+              <td>2 s 593 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>springfox.js</td>
+              <td>7 ms</td>
+              <td>1 s 621 ms</td>
+              <td>1 s 695 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>swagger-ui.js.map</td>
+              <td>75 ms</td>
+              <td>580 ms</td>
+              <td>1 s 376 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>swagger-ui.css</td>
+              <td>2 ms</td>
+              <td>685 ms</td>
+              <td>1 s 213 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>swagger-ui-standalone-preset.js.map</td>
+              <td>30 ms</td>
+              <td>389 ms</td>
+              <td>1 s 183 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>index.html</td>
+              <td>55 ms</td>
+              <td>473 ms</td>
+              <td>537 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>springfox.js.map</td>
+              <td>27 ms</td>
+              <td>198 ms</td>
+              <td>511 ms</td>
+            </tr>
+            <tr>
+              <td>Library Maven: com.github.xiaoymin:swagger-bootstrap-ui:1.8.5 (#1 class roots, #0 source roots)</td>
+              <td>ace.js</td>
+              <td>13 ms</td>
+              <td>2 s 528 ms</td>
+              <td>2 s 632 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>jquery-1.9.1.min.js</td>
+              <td>3 ms</td>
+              <td>1 s 101 ms</td>
+              <td>1 s 154 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>showdown.min.js</td>
+              <td>12 ms</td>
+              <td>893 ms</td>
+              <td>978 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>swaggerbootstrapui.js</td>
+              <td>2 ms</td>
+              <td>848 ms</td>
+              <td>914 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>doc.html</td>
+              <td>1 ms</td>
+              <td>741 ms</td>
+              <td>762 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>highlight.pack.js</td>
+              <td>1 ms</td>
+              <td>540 ms</td>
+              <td>603 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>bootstrap.min.css</td>
+              <td>7 ms</td>
+              <td>537 ms</td>
+              <td>572 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>worker-json.js</td>
+              <td>1 ms</td>
+              <td>510 ms</td>
+              <td>566 ms</td>
+            </tr>
+            <tr>
+              <td>Library Maven: ch.qos.logback:logback-classic:1.2.11 (#1 class roots, #0 source roots)</td>
+              <td>oracle.sql</td>
+              <td>&lt; 1 ms</td>
+              <td>838 ms</td>
+              <td>840 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>db2.sql</td>
+              <td>&lt; 1 ms</td>
+              <td>836 ms</td>
+              <td>840 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>h2.sql</td>
+              <td>&lt; 1 ms</td>
+              <td>836 ms</td>
+              <td>839 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>sybaseSqlAnywhere.sql</td>
+              <td>&lt; 1 ms</td>
+              <td>837 ms</td>
+              <td>839 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>sqllite.sql</td>
+              <td>&lt; 1 ms</td>
+              <td>835 ms</td>
+              <td>838 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>mysql.sql</td>
+              <td>&lt; 1 ms</td>
+              <td>835 ms</td>
+              <td>837 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>mssql.sql</td>
+              <td>&lt; 1 ms</td>
+              <td>834 ms</td>
+              <td>836 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>postgresql.sql</td>
+              <td>&lt; 1 ms</td>
+              <td>833 ms</td>
+              <td>835 ms</td>
+            </tr>
+            <tr>
+              <td>^</td>
+              <td>hsqldb.sql</td>
+              <td>&lt; 1 ms</td>
+              <td>833 ms</td>
+              <td>835 ms</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="id-stats-per-file-type">
+        <h1 class="Statistics per file type"></h1>
+        <table>
+          <thead>
+            <tr>
+              <th>File type</th>
+              <th>Number of files</th>
+              <th>Total processing time</th>
+              <th>Content loading time</th>
+              <th>Total files size</th>
+              <th>Total processing speed</th>
+              <th>The biggest contributors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+              <td>CLASS</td>
+              <td>59133</td>
+              <td>18 s 899 ms (55.7%)</td>
+              <td>1 s 625 ms (81.4%)</td>
+              <td>204.38 MB</td>
+              <td>902.67 kB/s</td>
+              <td>48.9%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 32974 files of total size 107.94 MB
+5.9%: Library Maven: org.assertj:assertj-core:3.21.0 (#1 class roots, #0 source roots) 3283 files of total size 13.4 MB
+5.7%: Library Maven: net.bytebuddy:byte-buddy:1.11.22 (#1 class roots, #0 source roots) 2573 files of total size 8.88 MB
+2.6%: Library Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.60 (#1 class roots, #0 source roots) 1530 files of total size 6.19 MB
+2.2%: Library Maven: org.springframework:spring-web:5.3.17 (#1 class roots, #0 source roots) 1010 files of total size 3.61 MB
+2.1%: Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots) 908 files of total size 3.12 MB
+2.1%: Library Maven: mysql:mysql-connector-java:8.0.28 (#1 class roots, #0 source roots) 1033 files of total size 6.09 MB
+2.0%: Library Maven: org.springframework:spring-core:5.3.17 (#1 class roots, #0 source roots) 976 files of total size 3.08 MB
+1.9%: Library Maven: org.mybatis:mybatis:3.5.9 (#1 class roots, #0 source roots) 1004 files of total size 3.59 MB
+1.7%: Library Maven: org.springframework:spring-webmvc:5.3.17 (#1 class roots, #0 source roots) 557 files of total size 2.32 MB</td>
+            </tr>
+            <tr class="">
+              <td>JAVA</td>
+              <td>10294</td>
+              <td>10 s 209 ms (30.1%)</td>
+              <td>287 ms (14.4%)</td>
+              <td>107.69 MB</td>
+              <td>880.42 kB/s</td>
+              <td>99.1%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 10252 files of total size 107.65 MB
+&lt; 1%: Module 'mybatis-read-write-example' (mybatis-read-write-example) 8 files of total size 7.11 kB
+&lt; 1%: Module 'api-doc-example' (api-doc-example) 34 files of total size 30.28 kB</td>
+            </tr>
+            <tr class="">
+              <td>JavaScript</td>
+              <td>47</td>
+              <td>1 s 773 ms (5.2%)</td>
+              <td>10 ms (&lt; 1%)</td>
+              <td>2.78 MB</td>
+              <td>130.66 kB/s</td>
+              <td>53.7%: Library Maven: com.github.xiaoymin:swagger-bootstrap-ui:1.8.5 (#1 class roots, #0 source roots) 33 files of total size 1.35 MB
+45.1%: Library Maven: io.springfox:springfox-swagger-ui:3.0.0 (#1 class roots, #0 source roots) 3 files of total size 1.4 MB
+1.2%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 11 files of total size 19.63 kB</td>
+            </tr>
+            <tr class="">
+              <td>Properties</td>
+              <td>791</td>
+              <td>829 ms (2.4%)</td>
+              <td>21 ms (1.1%)</td>
+              <td>3.63 MB</td>
+              <td>365.49 kB/s</td>
+              <td>83.3%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 635 files of total size 3 MB
+5.8%: Library Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.60 (#1 class roots, #0 source roots) 59 files of total size 273.76 kB
+1.8%: Library Maven: io.github.classgraph:classgraph:4.8.83 (#1 class roots, #0 source roots) 1 files of total size 66 B
+1.4%: Library Maven: mysql:mysql-connector-java:8.0.28 (#1 class roots, #0 source roots) 10 files of total size 147.5 kB
+1.0%: Library Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 119.04 kB
+&lt; 1%: Library Maven: org.springframework:spring-beans:5.3.17 (#1 class roots, #0 source roots) 2 files of total size 7.47 kB
+&lt; 1%: Library Maven: org.springframework:spring-aop:5.3.17 (#1 class roots, #0 source roots) 2 files of total size 2.26 kB
+&lt; 1%: Library Maven: org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE (#1 class roots, #0 source roots) 3 files of total size 345 B
+&lt; 1%: Library Maven: org.springframework:spring-web:5.3.17 (#1 class roots, #0 source roots) 3 files of total size 4.23 kB
+&lt; 1%: Library Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.60 (#1 class roots, #0 source roots) 4 files of total size 19.75 kB</td>
+            </tr>
+            <tr class="">
+              <td>SQL</td>
+              <td>9</td>
+              <td>629 ms (1.9%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>16.15 kB</td>
+              <td>2.14 kB/s</td>
+              <td>100.0%: Library Maven: ch.qos.logback:logback-classic:1.2.11 (#1 class roots, #0 source roots) 9 files of total size 16.15 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>SourceMap</td>
+              <td>5</td>
+              <td>314 ms (&lt; 1%)</td>
+              <td>10 ms (&lt; 1%)</td>
+              <td>3.5 MB</td>
+              <td>930.34 kB/s</td>
+              <td>93.9%: Library Maven: io.springfox:springfox-swagger-ui:3.0.0 (#1 class roots, #0 source roots) 4 files of total size 3.41 MB
+6.1%: Library Maven: com.github.xiaoymin:swagger-bootstrap-ui:1.8.5 (#1 class roots, #0 source roots) 1 files of total size 91.77 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>CSS</td>
+              <td>32</td>
+              <td>298 ms (&lt; 1%)</td>
+              <td>4 ms (&lt; 1%)</td>
+              <td>845.69 kB</td>
+              <td>236.83 kB/s</td>
+              <td>42.6%: Library Maven: com.github.xiaoymin:swagger-bootstrap-ui:1.8.5 (#1 class roots, #0 source roots) 13 files of total size 263.85 kB
+35.4%: Library Maven: io.springfox:springfox-swagger-ui:3.0.0 (#1 class roots, #0 source roots) 2 files of total size 144.82 kB
+22.1%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 17 files of total size 437.01 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>XML</td>
+              <td>139</td>
+              <td>239 ms (&lt; 1%)</td>
+              <td>7 ms (&lt; 1%)</td>
+              <td>2.15 MB</td>
+              <td>751.17 kB/s</td>
+              <td>49.5%: Library Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.60 (#1 class roots, #0 source roots) 49 files of total size 1.2 MB
+6.6%: Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots) 7 files of total size 7.75 kB
+6.1%: Library Maven: io.github.classgraph:classgraph:4.8.83 (#1 class roots, #0 source roots) 1 files of total size 28.03 kB
+4.3%: Library Maven: org.springframework:spring-webmvc:5.3.17 (#1 class roots, #0 source roots) 3 files of total size 155.75 kB
+3.3%: Library Maven: org.springframework:spring-beans:5.3.17 (#1 class roots, #0 source roots) 3 files of total size 57.37 kB
+2.8%: Library Maven: org.springframework:spring-context:5.3.17 (#1 class roots, #0 source roots) 6 files of total size 69.43 kB
+2.7%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 6 files of total size 64.96 kB
+1.9%: Library Maven: org.mybatis:mybatis:3.5.9 (#1 class roots, #0 source roots) 5 files of total size 62.84 kB
+1.8%: Library Maven: org.assertj:assertj-core:3.21.0 (#1 class roots, #0 source roots) 1 files of total size 28.5 kB
+&lt; 1%: Library Maven: io.swagger:swagger-annotations:1.5.20 (#1 class roots, #0 source roots) 1 files of total size 6.25 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>PLAIN_TEXT</td>
+              <td>422</td>
+              <td>174 ms (&lt; 1%)</td>
+              <td>11 ms (&lt; 1%)</td>
+              <td>1.54 MB</td>
+              <td>735.93 kB/s</td>
+              <td>46.9%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 300 files of total size 636.83 kB
+4.8%: Library Maven: org.springframework:spring-web:5.3.17 (#1 class roots, #0 source roots) 3 files of total size 76.85 kB
+3.7%: Library Maven: org.projectlombok:lombok:1.18.22 (#1 class roots, #0 source roots) 6 files of total size 100.17 kB
+3.7%: Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots) 3 files of total size 11.61 kB
+3.7%: Library Maven: org.springframework:spring-aop:5.3.17 (#1 class roots, #0 source roots) 3 files of total size 16.13 kB
+3.3%: Library Maven: org.springframework:spring-beans:5.3.17 (#1 class roots, #0 source roots) 3 files of total size 16.43 kB
+2.3%: Library Maven: org.springframework:spring-test:5.3.17 (#1 class roots, #0 source roots) 2 files of total size 15.87 kB
+2.2%: Library Maven: org.objenesis:objenesis:3.2 (#1 class roots, #0 source roots) 3 files of total size 12.04 kB
+2.1%: Library Maven: org.springframework.boot:spring-boot-starter-jdbc:2.6.5 (#1 class roots, #0 source roots) 2 files of total size 11.57 kB
+1.8%: Library Maven: org.springframework:spring-core:5.3.17 (#1 class roots, #0 source roots) 3 files of total size 16.38 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>HTML</td>
+              <td>17</td>
+              <td>157 ms (&lt; 1%)</td>
+              <td>4 ms (&lt; 1%)</td>
+              <td>63.76 kB</td>
+              <td>33.78 kB/s</td>
+              <td>53.3%: Library Maven: io.springfox:springfox-swagger-ui:3.0.0 (#1 class roots, #0 source roots) 2 files of total size 5.56 kB
+40.4%: Library Maven: com.github.xiaoymin:swagger-bootstrap-ui:1.8.5 (#1 class roots, #0 source roots) 1 files of total size 52.67 kB
+5.8%: Library Maven: org.mybatis:mybatis:3.5.9 (#1 class roots, #0 source roots) 13 files of total size 4.7 kB
+&lt; 1%: Library Maven: org.projectlombok:lombok:1.18.22 (#1 class roots, #0 source roots) 1 files of total size 825 B</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Manifest</td>
+              <td>126</td>
+              <td>130 ms (&lt; 1%)</td>
+              <td>4 ms (&lt; 1%)</td>
+              <td>247.25 kB</td>
+              <td>158.48 kB/s</td>
+              <td>31.4%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 21 files of total size 57.28 kB
+14.1%: Library Maven: io.github.classgraph:classgraph:4.8.83 (#1 class roots, #0 source roots) 1 files of total size 930 B
+5.9%: Library Maven: org.mybatis:mybatis:3.5.9 (#1 class roots, #0 source roots) 1 files of total size 5.29 kB
+5.5%: Library Maven: io.springfox:springfox-swagger-ui:3.0.0 (#1 class roots, #0 source roots) 1 files of total size 311 B
+2.4%: Library Maven: com.baomidou:mybatis-plus-extension:3.5.1 (#1 class roots, #0 source roots) 1 files of total size 258 B
+2.2%: Library Maven: org.springframework:spring-aop:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 170 B
+2.1%: Library Maven: org.springframework.boot:spring-boot-test-autoconfigure:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 204 B
+1.9%: Library Maven: io.swagger:swagger-annotations:1.5.20 (#1 class roots, #0 source roots) 1 files of total size 767 B
+1.6%: Library Maven: org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE (#1 class roots, #0 source roots) 1 files of total size 223 B
+1.6%: Library Maven: org.junit.jupiter:junit-jupiter:5.8.2 (#1 class roots, #0 source roots) 1 files of total size 627 B</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>C++</td>
+              <td>19</td>
+              <td>62 ms (&lt; 1%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>200.05 kB</td>
+              <td>267.18 kB/s</td>
+              <td>100.0%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 19 files of total size 200.05 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Markdown</td>
+              <td>20</td>
+              <td>41 ms (&lt; 1%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>140.71 kB</td>
+              <td>281.06 kB/s</td>
+              <td>18.0%: Library Maven: org.junit.jupiter:junit-jupiter:5.8.2 (#1 class roots, #0 source roots) 2 files of total size 14.55 kB
+14.2%: Library Maven: org.junit.jupiter:junit-jupiter-params:5.8.2 (#1 class roots, #0 source roots) 3 files of total size 23.85 kB
+11.7%: Library Maven: jakarta.xml.bind:jakarta.xml.bind-api:2.3.3 (#1 class roots, #0 source roots) 2 files of total size 3.99 kB
+10.5%: Library Maven: jakarta.activation:jakarta.activation-api:1.2.2 (#1 class roots, #0 source roots) 2 files of total size 2.52 kB
+9.4%: Library Maven: jakarta.annotation:jakarta.annotation-api:1.3.5 (#1 class roots, #0 source roots) 2 files of total size 36.54 kB
+9.3%: Library Maven: org.projectlombok:lombok:1.18.22 (#1 class roots, #0 source roots) 1 files of total size 1.05 kB
+8.5%: Library Maven: org.junit.jupiter:junit-jupiter-engine:5.8.2 (#1 class roots, #0 source roots) 2 files of total size 14.55 kB
+7.0%: Library Maven: org.junit.jupiter:junit-jupiter-api:5.8.2 (#1 class roots, #0 source roots) 2 files of total size 14.55 kB
+6.0%: Library Maven: org.junit.platform:junit-platform-commons:1.8.2 (#1 class roots, #0 source roots) 2 files of total size 14.55 kB
+5.4%: Library Maven: org.junit.platform:junit-platform-engine:1.8.2 (#1 class roots, #0 source roots) 2 files of total size 14.55 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>SPI</td>
+              <td>52</td>
+              <td>35 ms (&lt; 1%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>14.56 kB</td>
+              <td>34.3 kB/s</td>
+              <td>61.8%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 18 files of total size 2.29 kB
+24.4%: Library Maven: org.projectlombok:lombok:1.18.22 (#1 class roots, #0 source roots) 11 files of total size 5.89 kB
+2.1%: Library Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.60 (#1 class roots, #0 source roots) 3 files of total size 2.5 kB
+1.9%: Library Maven: org.springframework:spring-web:5.3.17 (#1 class roots, #0 source roots) 2 files of total size 751 B
+1.6%: Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 64 B
+1.5%: Library Maven: org.springframework:spring-core:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 683 B
+1.3%: Library Maven: com.alibaba:fastjson:1.2.80 (#1 class roots, #0 source roots) 4 files of total size 212 B
+1.0%: Library Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.60 (#1 class roots, #0 source roots) 1 files of total size 817 B
+&lt; 1%: Library Maven: org.springframework:spring-jcl:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 44 B
+&lt; 1%: Library Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2 (#1 class roots, #0 source roots) 1 files of total size 53 B</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>JSON</td>
+              <td>16</td>
+              <td>34 ms (&lt; 1%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>727.32 kB</td>
+              <td>1.75 MB/s</td>
+              <td>34.4%: Library Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.5 (#1 class roots, #0 source roots) 2 files of total size 550.71 kB
+30.1%: Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots) 2 files of total size 81.73 kB
+10.6%: Library Maven: com.baomidou:dynamic-datasource-spring-boot-starter:3.0.0 (#1 class roots, #0 source roots) 1 files of total size 34.83 kB
+8.0%: Library Maven: com.baomidou:mybatis-plus-boot-starter:3.5.1 (#1 class roots, #0 source roots) 2 files of total size 37.12 kB
+5.1%: Library Maven: io.springfox:springfox-boot-starter:3.0.0 (#1 class roots, #0 source roots) 1 files of total size 4.37 kB
+5.0%: Library Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.60 (#1 class roots, #0 source roots) 3 files of total size 16.22 kB
+3.1%: Library Maven: org.springframework.boot:spring-boot-test-autoconfigure:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 491 B
+2.2%: Library Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.60 (#1 class roots, #0 source roots) 2 files of total size 364 B
+1.4%: Library Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.60 (#1 class roots, #0 source roots) 2 files of total size 1.49 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>spring.factories</td>
+              <td>9</td>
+              <td>27 ms (&lt; 1%)</td>
+              <td>3 ms (&lt; 1%)</td>
+              <td>38.78 kB</td>
+              <td>119.3 kB/s</td>
+              <td>16.9%: Library Maven: org.springframework.boot:spring-boot-test-autoconfigure:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 15.48 kB
+16.6%: Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 5.69 kB
+11.9%: Library Maven: org.springframework.boot:spring-boot-test:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 992 B
+11.6%: Library Maven: org.springframework:spring-beans:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 91 B
+10.8%: Library Maven: com.baomidou:dynamic-datasource-spring-boot-starter:3.0.0 (#1 class roots, #0 source roots) 1 files of total size 157 B
+10.1%: Library Maven: org.springframework:spring-test:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 1.1 kB
+7.8%: Library Maven: io.springfox:springfox-boot-starter:3.0.0 (#1 class roots, #0 source roots) 1 files of total size 144 B
+7.3%: Library Maven: com.baomidou:mybatis-plus-boot-starter:3.5.1 (#1 class roots, #0 source roots) 1 files of total size 445 B
+6.8%: Library Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 14.68 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>kotlin_module</td>
+              <td>13</td>
+              <td>18 ms (&lt; 1%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>1.52 kB</td>
+              <td>6.74 kB/s</td>
+              <td>46.6%: Library Maven: org.springframework:spring-webmvc:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 140 B
+15.2%: Library Maven: org.springframework.boot:spring-boot-test:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 94 B
+14.0%: Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots) 1 files of total size 79 B
+10.5%: Library Maven: org.springframework:spring-beans:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 115 B
+7.6%: Library Maven: com.baomidou:mybatis-plus-extension:3.5.1 (#1 class roots, #0 source roots) 1 files of total size 16 B
+1.2%: Library Maven: org.springframework:spring-tx:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 99 B
+&lt; 1%: Library Maven: org.springframework:spring-jdbc:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 160 B
+&lt; 1%: Library Maven: org.springframework:spring-core:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 82 B
+&lt; 1%: Library Maven: org.junit.jupiter:junit-jupiter-params:5.8.2 (#1 class roots, #0 source roots) 1 files of total size 80 B
+&lt; 1%: Library Maven: org.springframework:spring-context:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 276 B</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>FTL</td>
+              <td>1</td>
+              <td>16 ms (&lt; 1%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>14.02 kB</td>
+              <td>71.86 kB/s</td>
+              <td>100.0%: Library Maven: org.springframework:spring-webmvc:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 14.02 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>DTD</td>
+              <td>13</td>
+              <td>15 ms (&lt; 1%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>144.93 kB</td>
+              <td>762.45 kB/s</td>
+              <td>82.8%: Library Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.60 (#1 class roots, #0 source roots) 7 files of total size 99.77 kB
+8.2%: Library Maven: org.springframework:spring-beans:5.3.17 (#1 class roots, #0 source roots) 1 files of total size 22.64 kB
+4.4%: Library Maven: org.mybatis:mybatis:3.5.9 (#1 class roots, #0 source roots) 2 files of total size 10.05 kB
+2.8%: JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/ 2 files of total size 4.39 kB
+1.8%: Library Maven: org.aspectj:aspectjweaver:1.9.7 (#1 class roots, #0 source roots) 1 files of total size 8.08 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>SVG</td>
+              <td>4</td>
+              <td>13 ms (&lt; 1%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>151.63 kB</td>
+              <td>910.77 kB/s</td>
+              <td>85.4%: Library Maven: com.github.xiaoymin:swagger-bootstrap-ui:1.8.5 (#1 class roots, #0 source roots) 2 files of total size 132.78 kB
+14.6%: Library Maven: org.projectlombok:lombok:1.18.22 (#1 class roots, #0 source roots) 2 files of total size 18.85 kB</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>AUTO_DETECTED</td>
+              <td>9</td>
+              <td>4 ms (&lt; 1%)</td>
+              <td>&lt; 1 ms (&lt; 1%)</td>
+              <td>0 B</td>
+              <td>0 B/s</td>
+              <td>82.3%: Library Maven: com.github.xiaoymin:swagger-bootstrap-ui:1.8.5 (#1 class roots, #0 source roots) 5 files of total size 0 B
+6.7%: Library Maven: io.springfox:springfox-spring-webflux:3.0.0 (#1 class roots, #0 source roots) 1 files of total size 0 B
+5.2%: Library Maven: io.springfox:springfox-spring-webmvc:3.0.0 (#1 class roots, #0 source roots) 1 files of total size 0 B
+3.8%: Library Maven: io.springfox:springfox-core:3.0.0 (#1 class roots, #0 source roots) 1 files of total size 0 B
+2.0%: Library Maven: io.springfox:springfox-spring-web:3.0.0 (#1 class roots, #0 source roots) 1 files of total size 0 B</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="id-stats-per-indexer">
+        <h1 class="Statistics per indexer"></h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Number of files</th>
+              <th>Part of total indexing time</th>
+              <th>Total number of files indexed by shared indexes</th>
+              <th>Total files size</th>
+              <th>Indexing speed</th>
+              <th>Snapshot input mapping statistics</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+              <td>Stubs</td>
+              <td>60240</td>
+              <td>63.2%</td>
+              <td>0</td>
+              <td>214.1 MB</td>
+              <td>2.63 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="">
+              <td>IdIndex</td>
+              <td>12016</td>
+              <td>13.1%</td>
+              <td>0</td>
+              <td>123.89 MB</td>
+              <td>7.34 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>bytecodeAnalysis</td>
+              <td>59133</td>
+              <td>7.2%</td>
+              <td>0</td>
+              <td>204.38 MB</td>
+              <td>21.88 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>org.jetbrains.kotlin.idea.vfilefinder.KotlinClassFileIndex</td>
+              <td>59133</td>
+              <td>5.1%</td>
+              <td>0</td>
+              <td>204.38 MB</td>
+              <td>31.15 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Trigram.Index</td>
+              <td>12025</td>
+              <td>4.5%</td>
+              <td>0</td>
+              <td>123.89 MB</td>
+              <td>21.58 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>org.jetbrains.kotlin.idea.vfilefinder.KotlinPartialPackageNamesIndex</td>
+              <td>59133</td>
+              <td>2.2%</td>
+              <td>0</td>
+              <td>204.38 MB</td>
+              <td>72.64 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>org.jetbrains.kotlin.idea.versions.KotlinJvmMetadataVersionIndex</td>
+              <td>59133</td>
+              <td>1.8%</td>
+              <td>0</td>
+              <td>204.38 MB</td>
+              <td>86.44 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>js.string.literal.words.index</td>
+              <td>47</td>
+              <td>1.1%</td>
+              <td>0</td>
+              <td>2.78 MB</td>
+              <td>1.92 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>HashFragmentIndex</td>
+              <td>41</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>37.17 kB</td>
+              <td>79.43 kB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>js.implicit.elements.index</td>
+              <td>17</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>63.76 kB</td>
+              <td>142.29 kB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>XmlNamespaces</td>
+              <td>48</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>1.23 MB</td>
+              <td>3.28 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>java.source.module.name</td>
+              <td>126</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>247.25 kB</td>
+              <td>1.4 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>java.fun.expression</td>
+              <td>42</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>37.39 kB</td>
+              <td>271.44 kB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>FtlFileIndex</td>
+              <td>1</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>14.02 kB</td>
+              <td>106.47 kB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>org.jetbrains.kotlin.idea.vfilefinder.KotlinJvmModuleAnnotationsIndex</td>
+              <td>13</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>1.52 kB</td>
+              <td>12.34 kB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>js.custom.single.entry.index</td>
+              <td>48</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>2.79 MB</td>
+              <td>36.92 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>DomFileIndex</td>
+              <td>139</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>2.15 MB</td>
+              <td>30.44 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>java.binary.plus.expression</td>
+              <td>42</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>37.39 kB</td>
+              <td>554.19 kB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>spring.autoConfigureMetadataIndex</td>
+              <td>2</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>121.43 kB</td>
+              <td>2.63 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>json.file.root.values</td>
+              <td>16</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>727.32 kB</td>
+              <td>18.17 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>java.cucumber.java8.step</td>
+              <td>42</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>37.39 kB</td>
+              <td>955.43 kB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>SpringXmlBeansIndex</td>
+              <td>139</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>2.15 MB</td>
+              <td>78.88 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>spring.spiFileIndex</td>
+              <td>9</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>38.78 kB</td>
+              <td>1.65 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>org.jetbrains.kotlin.idea.vfilefinder.KotlinModuleMappingIndex</td>
+              <td>13</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>1.52 kB</td>
+              <td>80.18 kB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>java.null.method.argument</td>
+              <td>42</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>37.39 kB</td>
+              <td>2.01 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>org.jetbrains.kotlin.idea.vfilefinder.KotlinStdlibIndex</td>
+              <td>126</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>247.25 kB</td>
+              <td>18.25 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>org.jetbrains.kotlin.idea.versions.KotlinJsMetadataVersionIndex</td>
+              <td>47</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>2.78 MB</td>
+              <td>282.95 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>xmlProperties</td>
+              <td>89</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>832.32 kB</td>
+              <td>85.47 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>OpenapiSpecificationContentIndexer</td>
+              <td>16</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>727.32 kB</td>
+              <td>80.55 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>IdeaPluginRegistrationIndex</td>
+              <td>139</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>2.15 MB</td>
+              <td>539.12 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>NavXmlIndex</td>
+              <td>89</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>832.32 kB</td>
+              <td>222.37 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>devkit.ExtensionPointClassIndex</td>
+              <td>139</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>2.15 MB</td>
+              <td>846.2 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>PluginIdModuleIndex</td>
+              <td>139</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>2.15 MB</td>
+              <td>973.2 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>PluginIdDependenciesIndex</td>
+              <td>139</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>2.15 MB</td>
+              <td>1.3 GB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>devkit.ExtensionPointIndex</td>
+              <td>139</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>2.15 MB</td>
+              <td>1.49 GB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>taglibUris</td>
+              <td>2</td>
+              <td>&lt; 1%</td>
+              <td>0</td>
+              <td>93.74 kB</td>
+              <td>113.84 MB/s</td>
+              <td>requests: 0, hits: 0 (100%), misses: 0 (100%)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="id-scanning">
+        <h1 class="Scanning"></h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Provider name</th>
+              <th>Number of scanned files</th>
+              <th>Number of files scheduled for indexing</th>
+              <th>Number of files fully indexed by shared indexes</th>
+              <th>Number of double-scanned skipped files</th>
+              <th>Total time of getting files' statuses (part of scanning)</th>
+              <th>Scanning time</th>
+              <th>Time processing up-to-date files</th>
+              <th>Time updating content-less indexes</th>
+              <th>Time indexing without content</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+              <td>JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/</td>
+              <td>44723</td>
+              <td>44255</td>
+              <td>0</td>
+              <td>0</td>
+              <td>4 s 622 ms</td>
+              <td>4 s 724 ms</td>
+              <td>869 ms</td>
+              <td>1 s 416 ms</td>
+              <td>200 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.projectlombok:lombok:1.18.22 (#1 class roots, #0 source roots)</td>
+              <td>981</td>
+              <td>187</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1 s 269 ms</td>
+              <td>1 s 280 ms</td>
+              <td>98 ms</td>
+              <td>199 ms</td>
+              <td>2 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.60 (#1 class roots, #0 source roots)</td>
+              <td>1651</td>
+              <td>1651</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1 s 221 ms</td>
+              <td>1 s 242 ms</td>
+              <td>191 ms</td>
+              <td>399 ms</td>
+              <td>24 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>1204</td>
+              <td>1204</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1 s 71 ms</td>
+              <td>1 s 148 ms</td>
+              <td>134 ms</td>
+              <td>380 ms</td>
+              <td>19 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-core:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>982</td>
+              <td>982</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1 s 26 ms</td>
+              <td>1 s 51 ms</td>
+              <td>114 ms</td>
+              <td>407 ms</td>
+              <td>15 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>927</td>
+              <td>926</td>
+              <td>0</td>
+              <td>0</td>
+              <td>909 ms</td>
+              <td>974 ms</td>
+              <td>112 ms</td>
+              <td>313 ms</td>
+              <td>17 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: net.bytebuddy:byte-buddy:1.11.22 (#1 class roots, #0 source roots)</td>
+              <td>2581</td>
+              <td>2581</td>
+              <td>0</td>
+              <td>0</td>
+              <td>911 ms</td>
+              <td>916 ms</td>
+              <td>147 ms</td>
+              <td>305 ms</td>
+              <td>29 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-web:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>1021</td>
+              <td>1021</td>
+              <td>0</td>
+              <td>0</td>
+              <td>903 ms</td>
+              <td>913 ms</td>
+              <td>159 ms</td>
+              <td>321 ms</td>
+              <td>19 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.fasterxml.jackson.core:jackson-databind:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>713</td>
+              <td>713</td>
+              <td>0</td>
+              <td>0</td>
+              <td>774 ms</td>
+              <td>786 ms</td>
+              <td>90 ms</td>
+              <td>227 ms</td>
+              <td>12 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-context:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>910</td>
+              <td>905</td>
+              <td>0</td>
+              <td>0</td>
+              <td>742 ms</td>
+              <td>755 ms</td>
+              <td>90 ms</td>
+              <td>234 ms</td>
+              <td>13 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-webmvc:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>570</td>
+              <td>569</td>
+              <td>0</td>
+              <td>0</td>
+              <td>575 ms</td>
+              <td>586 ms</td>
+              <td>101 ms</td>
+              <td>173 ms</td>
+              <td>9 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: io.springfox:springfox-swagger-ui:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>29</td>
+              <td>12</td>
+              <td>0</td>
+              <td>0</td>
+              <td>583 ms</td>
+              <td>585 ms</td>
+              <td>2 ms</td>
+              <td>11 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.assertj:assertj-core:3.21.0 (#1 class roots, #0 source roots)</td>
+              <td>3286</td>
+              <td>3286</td>
+              <td>0</td>
+              <td>0</td>
+              <td>562 ms</td>
+              <td>568 ms</td>
+              <td>109 ms</td>
+              <td>159 ms</td>
+              <td>28 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.mybatis:mybatis:3.5.9 (#1 class roots, #0 source roots)</td>
+              <td>1030</td>
+              <td>1030</td>
+              <td>0</td>
+              <td>0</td>
+              <td>477 ms</td>
+              <td>485 ms</td>
+              <td>81 ms</td>
+              <td>122 ms</td>
+              <td>14 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-beans:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>402</td>
+              <td>400</td>
+              <td>0</td>
+              <td>0</td>
+              <td>476 ms</td>
+              <td>481 ms</td>
+              <td>52 ms</td>
+              <td>129 ms</td>
+              <td>6 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: ch.qos.logback:logback-core:1.2.11 (#1 class roots, #0 source roots)</td>
+              <td>357</td>
+              <td>357</td>
+              <td>0</td>
+              <td>0</td>
+              <td>432 ms</td>
+              <td>475 ms</td>
+              <td>44 ms</td>
+              <td>166 ms</td>
+              <td>7 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: mysql:mysql-connector-java:8.0.28 (#1 class roots, #0 source roots)</td>
+              <td>1050</td>
+              <td>1050</td>
+              <td>0</td>
+              <td>0</td>
+              <td>420 ms</td>
+              <td>426 ms</td>
+              <td>74 ms</td>
+              <td>144 ms</td>
+              <td>14 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.apache.commons:commons-collections4:4.4 (#1 class roots, #0 source roots)</td>
+              <td>529</td>
+              <td>529</td>
+              <td>0</td>
+              <td>0</td>
+              <td>396 ms</td>
+              <td>403 ms</td>
+              <td>52 ms</td>
+              <td>121 ms</td>
+              <td>7 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.github.xiaoymin:swagger-bootstrap-ui:1.8.5 (#1 class roots, #0 source roots)</td>
+              <td>82</td>
+              <td>73</td>
+              <td>0</td>
+              <td>0</td>
+              <td>389 ms</td>
+              <td>400 ms</td>
+              <td>6 ms</td>
+              <td>17 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.apache.logging.log4j:log4j-api:2.17.2 (#1 class roots, #0 source roots)</td>
+              <td>188</td>
+              <td>188</td>
+              <td>0</td>
+              <td>0</td>
+              <td>292 ms</td>
+              <td>329 ms</td>
+              <td>21 ms</td>
+              <td>155 ms</td>
+              <td>3 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: ch.qos.logback:logback-classic:1.2.11 (#1 class roots, #0 source roots)</td>
+              <td>170</td>
+              <td>170</td>
+              <td>0</td>
+              <td>0</td>
+              <td>275 ms</td>
+              <td>311 ms</td>
+              <td>48 ms</td>
+              <td>111 ms</td>
+              <td>3 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.yaml:snakeyaml:1.29 (#1 class roots, #0 source roots)</td>
+              <td>229</td>
+              <td>229</td>
+              <td>0</td>
+              <td>0</td>
+              <td>283 ms</td>
+              <td>290 ms</td>
+              <td>27 ms</td>
+              <td>117 ms</td>
+              <td>3 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.apache.commons:commons-lang3:3.9 (#1 class roots, #0 source roots)</td>
+              <td>286</td>
+              <td>286</td>
+              <td>0</td>
+              <td>0</td>
+              <td>280 ms</td>
+              <td>285 ms</td>
+              <td>31 ms</td>
+              <td>101 ms</td>
+              <td>4 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-aop:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>285</td>
+              <td>284</td>
+              <td>0</td>
+              <td>0</td>
+              <td>276 ms</td>
+              <td>283 ms</td>
+              <td>69 ms</td>
+              <td>73 ms</td>
+              <td>4 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.github.jsqlparser:jsqlparser:4.3 (#1 class roots, #0 source roots)</td>
+              <td>428</td>
+              <td>428</td>
+              <td>0</td>
+              <td>0</td>
+              <td>253 ms</td>
+              <td>259 ms</td>
+              <td>38 ms</td>
+              <td>51 ms</td>
+              <td>6 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: io.github.classgraph:classgraph:4.8.83 (#1 class roots, #0 source roots)</td>
+              <td>236</td>
+              <td>236</td>
+              <td>0</td>
+              <td>0</td>
+              <td>251 ms</td>
+              <td>253 ms</td>
+              <td>25 ms</td>
+              <td>98 ms</td>
+              <td>29 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.60 (#1 class roots, #0 source roots)</td>
+              <td>196</td>
+              <td>196</td>
+              <td>0</td>
+              <td>0</td>
+              <td>216 ms</td>
+              <td>221 ms</td>
+              <td>27 ms</td>
+              <td>65 ms</td>
+              <td>3 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.aspectj:aspectjweaver:1.9.7 (#1 class roots, #0 source roots)</td>
+              <td>974</td>
+              <td>974</td>
+              <td>0</td>
+              <td>0</td>
+              <td>211 ms</td>
+              <td>216 ms</td>
+              <td>41 ms</td>
+              <td>63 ms</td>
+              <td>10 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.slf4j:jul-to-slf4j:1.7.36 (#1 class roots, #0 source roots)</td>
+              <td>4</td>
+              <td>4</td>
+              <td>0</td>
+              <td>0</td>
+              <td>20 ms</td>
+              <td>211 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>17 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.mockito:mockito-core:4.0.0 (#1 class roots, #0 source roots)</td>
+              <td>583</td>
+              <td>582</td>
+              <td>0</td>
+              <td>0</td>
+              <td>201 ms</td>
+              <td>208 ms</td>
+              <td>38 ms</td>
+              <td>60 ms</td>
+              <td>8 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.60 (#1 class roots, #0 source roots)</td>
+              <td>173</td>
+              <td>173</td>
+              <td>0</td>
+              <td>0</td>
+              <td>195 ms</td>
+              <td>199 ms</td>
+              <td>43 ms</td>
+              <td>60 ms</td>
+              <td>3 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: javax.validation:validation-api:2.0.1.Final (#1 class roots, #0 source roots)</td>
+              <td>149</td>
+              <td>149</td>
+              <td>0</td>
+              <td>0</td>
+              <td>197 ms</td>
+              <td>199 ms</td>
+              <td>48 ms</td>
+              <td>57 ms</td>
+              <td>2 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.alibaba:fastjson:1.2.80 (#1 class roots, #0 source roots)</td>
+              <td>283</td>
+              <td>283</td>
+              <td>0</td>
+              <td>0</td>
+              <td>186 ms</td>
+              <td>194 ms</td>
+              <td>25 ms</td>
+              <td>71 ms</td>
+              <td>4 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.fasterxml.jackson.core:jackson-core:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>134</td>
+              <td>134</td>
+              <td>0</td>
+              <td>0</td>
+              <td>185 ms</td>
+              <td>193 ms</td>
+              <td>13 ms</td>
+              <td>82 ms</td>
+              <td>3 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-tx:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>271</td>
+              <td>270</td>
+              <td>0</td>
+              <td>0</td>
+              <td>188 ms</td>
+              <td>192 ms</td>
+              <td>26 ms</td>
+              <td>65 ms</td>
+              <td>3 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-test:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>509</td>
+              <td>509</td>
+              <td>0</td>
+              <td>0</td>
+              <td>178 ms</td>
+              <td>182 ms</td>
+              <td>30 ms</td>
+              <td>50 ms</td>
+              <td>6 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.junit.jupiter:junit-jupiter-params:5.8.2 (#1 class roots, #0 source roots)</td>
+              <td>348</td>
+              <td>348</td>
+              <td>0</td>
+              <td>0</td>
+              <td>170 ms</td>
+              <td>173 ms</td>
+              <td>24 ms</td>
+              <td>45 ms</td>
+              <td>4 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>76</td>
+              <td>76</td>
+              <td>0</td>
+              <td>0</td>
+              <td>164 ms</td>
+              <td>173 ms</td>
+              <td>9 ms</td>
+              <td>63 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-jdbc:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>298</td>
+              <td>297</td>
+              <td>0</td>
+              <td>0</td>
+              <td>143 ms</td>
+              <td>146 ms</td>
+              <td>26 ms</td>
+              <td>38 ms</td>
+              <td>3 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>64</td>
+              <td>64</td>
+              <td>0</td>
+              <td>0</td>
+              <td>130 ms</td>
+              <td>134 ms</td>
+              <td>11 ms</td>
+              <td>48 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-expression:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>154</td>
+              <td>154</td>
+              <td>0</td>
+              <td>0</td>
+              <td>128 ms</td>
+              <td>131 ms</td>
+              <td>12 ms</td>
+              <td>59 ms</td>
+              <td>2 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: io.springfox:springfox-core:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>182</td>
+              <td>182</td>
+              <td>0</td>
+              <td>0</td>
+              <td>117 ms</td>
+              <td>119 ms</td>
+              <td>21 ms</td>
+              <td>34 ms</td>
+              <td>2 ms</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: io.swagger:swagger-models:1.5.20 (#1 class roots, #0 source roots)</td>
+              <td>96</td>
+              <td>96</td>
+              <td>0</td>
+              <td>0</td>
+              <td>106 ms</td>
+              <td>108 ms</td>
+              <td>9 ms</td>
+              <td>28 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: jakarta.annotation:jakarta.annotation-api:1.3.5 (#1 class roots, #0 source roots)</td>
+              <td>20</td>
+              <td>20</td>
+              <td>0</td>
+              <td>0</td>
+              <td>39 ms</td>
+              <td>94 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>33 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus-core:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>149</td>
+              <td>149</td>
+              <td>0</td>
+              <td>0</td>
+              <td>85 ms</td>
+              <td>90 ms</td>
+              <td>12 ms</td>
+              <td>19 ms</td>
+              <td>2 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-test-autoconfigure:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>171</td>
+              <td>171</td>
+              <td>0</td>
+              <td>0</td>
+              <td>84 ms</td>
+              <td>89 ms</td>
+              <td>14 ms</td>
+              <td>20 ms</td>
+              <td>2 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.jayway.jsonpath:json-path:2.6.0 (#1 class roots, #0 source roots)</td>
+              <td>183</td>
+              <td>183</td>
+              <td>0</td>
+              <td>0</td>
+              <td>84 ms</td>
+              <td>86 ms</td>
+              <td>15 ms</td>
+              <td>23 ms</td>
+              <td>2 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.apache.logging.log4j:log4j-to-slf4j:2.17.2 (#1 class roots, #0 source roots)</td>
+              <td>13</td>
+              <td>13</td>
+              <td>0</td>
+              <td>0</td>
+              <td>50 ms</td>
+              <td>85 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>22 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.hamcrest:hamcrest:2.2 (#1 class roots, #0 source roots)</td>
+              <td>109</td>
+              <td>109</td>
+              <td>0</td>
+              <td>0</td>
+              <td>83 ms</td>
+              <td>85 ms</td>
+              <td>9 ms</td>
+              <td>48 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: jakarta.xml.bind:jakarta.xml.bind-api:2.3.3 (#1 class roots, #0 source roots)</td>
+              <td>120</td>
+              <td>120</td>
+              <td>0</td>
+              <td>0</td>
+              <td>83 ms</td>
+              <td>85 ms</td>
+              <td>41 ms</td>
+              <td>12 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.jupiter:junit-jupiter-api:5.8.2 (#1 class roots, #0 source roots)</td>
+              <td>172</td>
+              <td>172</td>
+              <td>0</td>
+              <td>0</td>
+              <td>80 ms</td>
+              <td>82 ms</td>
+              <td>13 ms</td>
+              <td>24 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-test:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>147</td>
+              <td>147</td>
+              <td>0</td>
+              <td>0</td>
+              <td>75 ms</td>
+              <td>78 ms</td>
+              <td>10 ms</td>
+              <td>19 ms</td>
+              <td>2 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.xmlunit:xmlunit-core:2.8.4 (#1 class roots, #0 source roots)</td>
+              <td>158</td>
+              <td>158</td>
+              <td>0</td>
+              <td>0</td>
+              <td>64 ms</td>
+              <td>72 ms</td>
+              <td>13 ms</td>
+              <td>17 ms</td>
+              <td>2 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework:spring-jcl:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>21</td>
+              <td>21</td>
+              <td>0</td>
+              <td>0</td>
+              <td>60 ms</td>
+              <td>72 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>30 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Module 'api-doc-example' (api-doc-example)</td>
+              <td>37</td>
+              <td>34</td>
+              <td>0</td>
+              <td>0</td>
+              <td>39 ms</td>
+              <td>68 ms</td>
+              <td>13 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.jupiter:junit-jupiter-engine:5.8.2 (#1 class roots, #0 source roots)</td>
+              <td>127</td>
+              <td>127</td>
+              <td>0</td>
+              <td>0</td>
+              <td>63 ms</td>
+              <td>65 ms</td>
+              <td>13 ms</td>
+              <td>17 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.platform:junit-platform-engine:1.8.2 (#1 class roots, #0 source roots)</td>
+              <td>129</td>
+              <td>129</td>
+              <td>0</td>
+              <td>0</td>
+              <td>58 ms</td>
+              <td>60 ms</td>
+              <td>12 ms</td>
+              <td>17 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.swagger.core.v3:swagger-models:2.1.2 (#1 class roots, #0 source roots)</td>
+              <td>65</td>
+              <td>65</td>
+              <td>0</td>
+              <td>0</td>
+              <td>47 ms</td>
+              <td>56 ms</td>
+              <td>5 ms</td>
+              <td>17 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-spring-web:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>82</td>
+              <td>82</td>
+              <td>0</td>
+              <td>0</td>
+              <td>55 ms</td>
+              <td>56 ms</td>
+              <td>8 ms</td>
+              <td>13 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-swagger-common:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>50</td>
+              <td>50</td>
+              <td>0</td>
+              <td>0</td>
+              <td>53 ms</td>
+              <td>56 ms</td>
+              <td>4 ms</td>
+              <td>13 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: net.bytebuddy:byte-buddy-agent:1.11.22 (#1 class roots, #0 source roots)</td>
+              <td>70</td>
+              <td>68</td>
+              <td>0</td>
+              <td>0</td>
+              <td>51 ms</td>
+              <td>54 ms</td>
+              <td>6 ms</td>
+              <td>8 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-swagger2:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>67</td>
+              <td>67</td>
+              <td>0</td>
+              <td>0</td>
+              <td>47 ms</td>
+              <td>50 ms</td>
+              <td>5 ms</td>
+              <td>16 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.platform:junit-platform-commons:1.8.2 (#1 class roots, #0 source roots)</td>
+              <td>47</td>
+              <td>47</td>
+              <td>0</td>
+              <td>0</td>
+              <td>17 ms</td>
+              <td>50 ms</td>
+              <td>3 ms</td>
+              <td>4 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus-extension:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>89</td>
+              <td>89</td>
+              <td>0</td>
+              <td>0</td>
+              <td>44 ms</td>
+              <td>48 ms</td>
+              <td>9 ms</td>
+              <td>14 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-web:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>3</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>9 ms</td>
+              <td>47 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>8 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.swagger:swagger-annotations:1.5.20 (#1 class roots, #0 source roots)</td>
+              <td>34</td>
+              <td>34</td>
+              <td>0</td>
+              <td>0</td>
+              <td>44 ms</td>
+              <td>47 ms</td>
+              <td>5 ms</td>
+              <td>10 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-logging:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>3</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>9 ms</td>
+              <td>45 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>8 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>3</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>9 ms</td>
+              <td>44 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>7 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-schema:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>56</td>
+              <td>56</td>
+              <td>0</td>
+              <td>0</td>
+              <td>40 ms</td>
+              <td>43 ms</td>
+              <td>6 ms</td>
+              <td>13 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.swagger.core.v3:swagger-annotations:2.1.2 (#1 class roots, #0 source roots)</td>
+              <td>47</td>
+              <td>47</td>
+              <td>0</td>
+              <td>0</td>
+              <td>39 ms</td>
+              <td>41 ms</td>
+              <td>4 ms</td>
+              <td>14 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.objenesis:objenesis:3.2 (#1 class roots, #0 source roots)</td>
+              <td>47</td>
+              <td>47</td>
+              <td>0</td>
+              <td>0</td>
+              <td>39 ms</td>
+              <td>41 ms</td>
+              <td>9 ms</td>
+              <td>6 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.zaxxer:HikariCP:4.0.3 (#1 class roots, #0 source roots)</td>
+              <td>79</td>
+              <td>79</td>
+              <td>0</td>
+              <td>0</td>
+              <td>39 ms</td>
+              <td>40 ms</td>
+              <td>8 ms</td>
+              <td>13 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.fasterxml:classmate:1.5.1 (#1 class roots, #0 source roots)</td>
+              <td>45</td>
+              <td>45</td>
+              <td>0</td>
+              <td>0</td>
+              <td>37 ms</td>
+              <td>40 ms</td>
+              <td>2 ms</td>
+              <td>19 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: net.minidev:json-smart:2.4.8 (#1 class roots, #0 source roots)</td>
+              <td>96</td>
+              <td>96</td>
+              <td>0</td>
+              <td>0</td>
+              <td>33 ms</td>
+              <td>35 ms</td>
+              <td>6 ms</td>
+              <td>12 ms</td>
+              <td>1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-oas:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>46</td>
+              <td>46</td>
+              <td>0</td>
+              <td>0</td>
+              <td>32 ms</td>
+              <td>34 ms</td>
+              <td>5 ms</td>
+              <td>9 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE (#1 class roots, #0 source roots)</td>
+              <td>25</td>
+              <td>25</td>
+              <td>0</td>
+              <td>0</td>
+              <td>30 ms</td>
+              <td>33 ms</td>
+              <td>2 ms</td>
+              <td>11 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.github.jsonzou:jmockdata:4.3.0 (#1 class roots, #0 source roots)</td>
+              <td>55</td>
+              <td>55</td>
+              <td>0</td>
+              <td>0</td>
+              <td>30 ms</td>
+              <td>32 ms</td>
+              <td>7 ms</td>
+              <td>9 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>27</td>
+              <td>27</td>
+              <td>0</td>
+              <td>0</td>
+              <td>21 ms</td>
+              <td>28 ms</td>
+              <td>2 ms</td>
+              <td>14 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-data-rest:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>40</td>
+              <td>40</td>
+              <td>0</td>
+              <td>0</td>
+              <td>26 ms</td>
+              <td>28 ms</td>
+              <td>3 ms</td>
+              <td>9 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.mybatis:mybatis-spring:2.0.6 (#1 class roots, #0 source roots)</td>
+              <td>40</td>
+              <td>40</td>
+              <td>0</td>
+              <td>0</td>
+              <td>25 ms</td>
+              <td>27 ms</td>
+              <td>4 ms</td>
+              <td>5 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Module 'mybatis-read-write-example' (mybatis-read-write-example)</td>
+              <td>10</td>
+              <td>8</td>
+              <td>0</td>
+              <td>0</td>
+              <td>8 ms</td>
+              <td>27 ms</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:dynamic-datasource-spring-boot-starter:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>57</td>
+              <td>57</td>
+              <td>0</td>
+              <td>0</td>
+              <td>22 ms</td>
+              <td>26 ms</td>
+              <td>4 ms</td>
+              <td>8 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-spi:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>44</td>
+              <td>44</td>
+              <td>0</td>
+              <td>0</td>
+              <td>25 ms</td>
+              <td>26 ms</td>
+              <td>4 ms</td>
+              <td>12 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.mapstruct:mapstruct:1.3.1.Final (#1 class roots, #0 source roots)</td>
+              <td>35</td>
+              <td>35</td>
+              <td>0</td>
+              <td>0</td>
+              <td>22 ms</td>
+              <td>24 ms</td>
+              <td>3 ms</td>
+              <td>7 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus-boot-starter:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>23</td>
+              <td>23</td>
+              <td>0</td>
+              <td>0</td>
+              <td>17 ms</td>
+              <td>18 ms</td>
+              <td>2 ms</td>
+              <td>5 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.slf4j:slf4j-api:1.7.36 (#1 class roots, #0 source roots)</td>
+              <td>37</td>
+              <td>37</td>
+              <td>0</td>
+              <td>0</td>
+              <td>14 ms</td>
+              <td>16 ms</td>
+              <td>3 ms</td>
+              <td>4 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-json:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>3</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>13 ms</td>
+              <td>16 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>11 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Module 'springboot-example' (springboot-example)</td>
+              <td>7</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>12 ms</td>
+              <td>15 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>2 ms</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.ow2.asm:asm:9.1 (#1 class roots, #0 source roots)</td>
+              <td>39</td>
+              <td>39</td>
+              <td>0</td>
+              <td>0</td>
+              <td>14 ms</td>
+              <td>15 ms</td>
+              <td>3 ms</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-bean-validators:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>22</td>
+              <td>22</td>
+              <td>0</td>
+              <td>0</td>
+              <td>12 ms</td>
+              <td>15 ms</td>
+              <td>3 ms</td>
+              <td>2 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.plugin:spring-plugin-metadata:2.0.0.RELEASE (#1 class roots, #0 source roots)</td>
+              <td>9</td>
+              <td>9</td>
+              <td>0</td>
+              <td>0</td>
+              <td>11 ms</td>
+              <td>14 ms</td>
+              <td>2 ms</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: jakarta.activation:jakarta.activation-api:1.2.2 (#1 class roots, #0 source roots)</td>
+              <td>37</td>
+              <td>37</td>
+              <td>0</td>
+              <td>0</td>
+              <td>14 ms</td>
+              <td>14 ms</td>
+              <td>2 ms</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus-annotation:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>18</td>
+              <td>18</td>
+              <td>0</td>
+              <td>0</td>
+              <td>11 ms</td>
+              <td>13 ms</td>
+              <td>2 ms</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-spring-webflux:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>10</td>
+              <td>10</td>
+              <td>0</td>
+              <td>0</td>
+              <td>10 ms</td>
+              <td>11 ms</td>
+              <td>1 ms</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: net.minidev:accessors-smart:2.4.8 (#1 class roots, #0 source roots)</td>
+              <td>16</td>
+              <td>16</td>
+              <td>0</td>
+              <td>0</td>
+              <td>10 ms</td>
+              <td>11 ms</td>
+              <td>1 ms</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.skyscreamer:jsonassert:1.5.0 (#1 class roots, #0 source roots)</td>
+              <td>23</td>
+              <td>23</td>
+              <td>0</td>
+              <td>0</td>
+              <td>7 ms</td>
+              <td>8 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>2 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>3</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>3 ms</td>
+              <td>8 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>9</td>
+              <td>9</td>
+              <td>0</td>
+              <td>0</td>
+              <td>7 ms</td>
+              <td>7 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>5 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-boot-starter:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>15</td>
+              <td>15</td>
+              <td>0</td>
+              <td>0</td>
+              <td>6 ms</td>
+              <td>7 ms</td>
+              <td>1 ms</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-spring-webmvc:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>11</td>
+              <td>11</td>
+              <td>0</td>
+              <td>0</td>
+              <td>5 ms</td>
+              <td>6 ms</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1 (#1 class roots, #0 source roots)</td>
+              <td>9</td>
+              <td>9</td>
+              <td>0</td>
+              <td>0</td>
+              <td>5 ms</td>
+              <td>5 ms</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.apiguardian:apiguardian-api:1.1.2 (#1 class roots, #0 source roots)</td>
+              <td>5</td>
+              <td>5</td>
+              <td>0</td>
+              <td>0</td>
+              <td>2 ms</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.opentest4j:opentest4j:1.2.0 (#1 class roots, #0 source roots)</td>
+              <td>8</td>
+              <td>8</td>
+              <td>0</td>
+              <td>0</td>
+              <td>3 ms</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.mockito:mockito-junit-jupiter:4.0.0 (#1 class roots, #0 source roots)</td>
+              <td>4</td>
+              <td>4</td>
+              <td>0</td>
+              <td>0</td>
+              <td>2 ms</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-tomcat:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>3</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>2 ms</td>
+              <td>2 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.jupiter:junit-jupiter:5.8.2 (#1 class roots, #0 source roots)</td>
+              <td>4</td>
+              <td>4</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1 ms</td>
+              <td>2 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-jdbc:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>3</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1 ms</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-test:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>3</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1 ms</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-aop:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>3</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>&lt; 1 ms</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="id-indexing">
+        <h1 class="Indexing"></h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Provider name</th>
+              <th>Total processing time</th>
+              <th>Content loading time</th>
+              <th>Number of indexed files</th>
+              <th>Number of files indexed by shared indexes</th>
+              <th>Number of too large for indexing files</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+              <td>JDK 1.8 /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/javafx-src.zip!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/charsets.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/deploy.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/cldrdata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/dnsns.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jaccess.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/jfxrt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/localedata.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/nashorn.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunec.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/ext/zipfs.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/javaws.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jce.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfr.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jfxswt.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/jsse.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/management-agent.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/plugin.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/resources.jar!/, /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/rt.jar!/</td>
+              <td>16 s 420 ms</td>
+              <td>1 s</td>
+              <td>44255</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: io.springfox:springfox-swagger-ui:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>4 s 345 ms</td>
+              <td>72 ms</td>
+              <td>12</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.github.xiaoymin:swagger-bootstrap-ui:1.8.5 (#1 class roots, #0 source roots)</td>
+              <td>2 s 521 ms</td>
+              <td>24 ms</td>
+              <td>73</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: io.github.classgraph:classgraph:4.8.83 (#1 class roots, #0 source roots)</td>
+              <td>949 ms</td>
+              <td>38 ms</td>
+              <td>236</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.assertj:assertj-core:3.21.0 (#1 class roots, #0 source roots)</td>
+              <td>931 ms</td>
+              <td>91 ms</td>
+              <td>3286</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: net.bytebuddy:byte-buddy:1.11.22 (#1 class roots, #0 source roots)</td>
+              <td>910 ms</td>
+              <td>87 ms</td>
+              <td>2581</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: ch.qos.logback:logback-classic:1.2.11 (#1 class roots, #0 source roots)</td>
+              <td>858 ms</td>
+              <td>6 ms</td>
+              <td>170</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.60 (#1 class roots, #0 source roots)</td>
+              <td>540 ms</td>
+              <td>51 ms</td>
+              <td>1651</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-webmvc:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>371 ms</td>
+              <td>15 ms</td>
+              <td>569</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-web:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>355 ms</td>
+              <td>24 ms</td>
+              <td>1021</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework.boot:spring-boot:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>352 ms</td>
+              <td>34 ms</td>
+              <td>926</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: mysql:mysql-connector-java:8.0.28 (#1 class roots, #0 source roots)</td>
+              <td>328 ms</td>
+              <td>27 ms</td>
+              <td>1050</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>316 ms</td>
+              <td>28 ms</td>
+              <td>1204</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-core:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>315 ms</td>
+              <td>35 ms</td>
+              <td>982</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.mybatis:mybatis:3.5.9 (#1 class roots, #0 source roots)</td>
+              <td>303 ms</td>
+              <td>29 ms</td>
+              <td>1030</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.fasterxml.jackson.core:jackson-databind:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>261 ms</td>
+              <td>23 ms</td>
+              <td>713</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.aspectj:aspectjweaver:1.9.7 (#1 class roots, #0 source roots)</td>
+              <td>236 ms</td>
+              <td>22 ms</td>
+              <td>974</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-context:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>212 ms</td>
+              <td>14 ms</td>
+              <td>905</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-test:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>196 ms</td>
+              <td>11 ms</td>
+              <td>509</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.springframework:spring-beans:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>171 ms</td>
+              <td>12 ms</td>
+              <td>400</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: com.github.jsqlparser:jsqlparser:4.3 (#1 class roots, #0 source roots)</td>
+              <td>147 ms</td>
+              <td>9 ms</td>
+              <td>428</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.xmlunit:xmlunit-core:2.8.4 (#1 class roots, #0 source roots)</td>
+              <td>118 ms</td>
+              <td>9 ms</td>
+              <td>158</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.junit.jupiter:junit-jupiter-params:5.8.2 (#1 class roots, #0 source roots)</td>
+              <td>113 ms</td>
+              <td>17 ms</td>
+              <td>348</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.apache.commons:commons-lang3:3.9 (#1 class roots, #0 source roots)</td>
+              <td>111 ms</td>
+              <td>11 ms</td>
+              <td>286</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="">
+              <td>Library Maven: org.mockito:mockito-core:4.0.0 (#1 class roots, #0 source roots)</td>
+              <td>104 ms</td>
+              <td>7 ms</td>
+              <td>582</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework:spring-aop:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>99 ms</td>
+              <td>11 ms</td>
+              <td>284</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.fasterxml.jackson.core:jackson-core:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>95 ms</td>
+              <td>7 ms</td>
+              <td>134</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.apache.commons:commons-collections4:4.4 (#1 class roots, #0 source roots)</td>
+              <td>88 ms</td>
+              <td>10 ms</td>
+              <td>529</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-test:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>85 ms</td>
+              <td>5 ms</td>
+              <td>147</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus-extension:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>81 ms</td>
+              <td>29 ms</td>
+              <td>89</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.jupiter:junit-jupiter-engine:5.8.2 (#1 class roots, #0 source roots)</td>
+              <td>76 ms</td>
+              <td>7 ms</td>
+              <td>127</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.jupiter:junit-jupiter-api:5.8.2 (#1 class roots, #0 source roots)</td>
+              <td>75 ms</td>
+              <td>6 ms</td>
+              <td>172</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.alibaba:fastjson:1.2.80 (#1 class roots, #0 source roots)</td>
+              <td>75 ms</td>
+              <td>10 ms</td>
+              <td>283</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.60 (#1 class roots, #0 source roots)</td>
+              <td>74 ms</td>
+              <td>7 ms</td>
+              <td>196</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.yaml:snakeyaml:1.29 (#1 class roots, #0 source roots)</td>
+              <td>73 ms</td>
+              <td>6 ms</td>
+              <td>229</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.projectlombok:lombok:1.18.22 (#1 class roots, #0 source roots)</td>
+              <td>72 ms</td>
+              <td>10 ms</td>
+              <td>187</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: ch.qos.logback:logback-core:1.2.11 (#1 class roots, #0 source roots)</td>
+              <td>71 ms</td>
+              <td>6 ms</td>
+              <td>357</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-test-autoconfigure:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>70 ms</td>
+              <td>5 ms</td>
+              <td>171</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.60 (#1 class roots, #0 source roots)</td>
+              <td>69 ms</td>
+              <td>7 ms</td>
+              <td>173</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework:spring-jdbc:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>68 ms</td>
+              <td>8 ms</td>
+              <td>297</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.hamcrest:hamcrest:2.2 (#1 class roots, #0 source roots)</td>
+              <td>55 ms</td>
+              <td>6 ms</td>
+              <td>109</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Module 'api-doc-example' (api-doc-example)</td>
+              <td>53 ms</td>
+              <td>2 ms</td>
+              <td>34</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.apache.logging.log4j:log4j-api:2.17.2 (#1 class roots, #0 source roots)</td>
+              <td>52 ms</td>
+              <td>4 ms</td>
+              <td>188</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework:spring-expression:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>52 ms</td>
+              <td>4 ms</td>
+              <td>154</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework:spring-tx:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>50 ms</td>
+              <td>5 ms</td>
+              <td>270</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Module 'mybatis-read-write-example' (mybatis-read-write-example)</td>
+              <td>49 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>8</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.platform:junit-platform-engine:1.8.2 (#1 class roots, #0 source roots)</td>
+              <td>46 ms</td>
+              <td>8 ms</td>
+              <td>129</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: jakarta.xml.bind:jakarta.xml.bind-api:2.3.3 (#1 class roots, #0 source roots)</td>
+              <td>45 ms</td>
+              <td>9 ms</td>
+              <td>120</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus-core:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>43 ms</td>
+              <td>4 ms</td>
+              <td>149</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.zaxxer:HikariCP:4.0.3 (#1 class roots, #0 source roots)</td>
+              <td>40 ms</td>
+              <td>2 ms</td>
+              <td>79</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-core:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>38 ms</td>
+              <td>4 ms</td>
+              <td>182</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>37 ms</td>
+              <td>4 ms</td>
+              <td>64</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.jayway.jsonpath:json-path:2.6.0 (#1 class roots, #0 source roots)</td>
+              <td>34 ms</td>
+              <td>7 ms</td>
+              <td>183</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:dynamic-datasource-spring-boot-starter:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>34 ms</td>
+              <td>1 ms</td>
+              <td>57</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: javax.validation:validation-api:2.0.1.Final (#1 class roots, #0 source roots)</td>
+              <td>32 ms</td>
+              <td>4 ms</td>
+              <td>149</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-boot-starter:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>29 ms</td>
+              <td>21 ms</td>
+              <td>15</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.mapstruct:mapstruct:1.3.1.Final (#1 class roots, #0 source roots)</td>
+              <td>26 ms</td>
+              <td>1 ms</td>
+              <td>35</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.swagger.core.v3:swagger-models:2.1.2 (#1 class roots, #0 source roots)</td>
+              <td>25 ms</td>
+              <td>2 ms</td>
+              <td>65</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-swagger2:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>25 ms</td>
+              <td>1 ms</td>
+              <td>67</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.slf4j:slf4j-api:1.7.36 (#1 class roots, #0 source roots)</td>
+              <td>23 ms</td>
+              <td>1 ms</td>
+              <td>37</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.swagger:swagger-models:1.5.20 (#1 class roots, #0 source roots)</td>
+              <td>23 ms</td>
+              <td>2 ms</td>
+              <td>96</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.fasterxml:classmate:1.5.1 (#1 class roots, #0 source roots)</td>
+              <td>22 ms</td>
+              <td>1 ms</td>
+              <td>45</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.swagger:swagger-annotations:1.5.20 (#1 class roots, #0 source roots)</td>
+              <td>19 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>34</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-swagger-common:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>19 ms</td>
+              <td>3 ms</td>
+              <td>50</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.ow2.asm:asm:9.1 (#1 class roots, #0 source roots)</td>
+              <td>18 ms</td>
+              <td>2 ms</td>
+              <td>39</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: net.minidev:json-smart:2.4.8 (#1 class roots, #0 source roots)</td>
+              <td>18 ms</td>
+              <td>2 ms</td>
+              <td>96</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-data-rest:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>18 ms</td>
+              <td>1 ms</td>
+              <td>40</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE (#1 class roots, #0 source roots)</td>
+              <td>17 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>25</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus-boot-starter:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>17 ms</td>
+              <td>1 ms</td>
+              <td>23</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-spring-web:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>17 ms</td>
+              <td>1 ms</td>
+              <td>82</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.platform:junit-platform-commons:1.8.2 (#1 class roots, #0 source roots)</td>
+              <td>16 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>47</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.github.jsonzou:jmockdata:4.3.0 (#1 class roots, #0 source roots)</td>
+              <td>16 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>55</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>15 ms</td>
+              <td>1 ms</td>
+              <td>76</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: net.bytebuddy:byte-buddy-agent:1.11.22 (#1 class roots, #0 source roots)</td>
+              <td>13 ms</td>
+              <td>2 ms</td>
+              <td>68</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.objenesis:objenesis:3.2 (#1 class roots, #0 source roots)</td>
+              <td>13 ms</td>
+              <td>1 ms</td>
+              <td>47</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.mybatis:mybatis-spring:2.0.6 (#1 class roots, #0 source roots)</td>
+              <td>12 ms</td>
+              <td>1 ms</td>
+              <td>40</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: jakarta.activation:jakarta.activation-api:1.2.2 (#1 class roots, #0 source roots)</td>
+              <td>11 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>37</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.swagger.core.v3:swagger-annotations:2.1.2 (#1 class roots, #0 source roots)</td>
+              <td>11 ms</td>
+              <td>1 ms</td>
+              <td>47</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-schema:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>10 ms</td>
+              <td>1 ms</td>
+              <td>56</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-bean-validators:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>10 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>22</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-spi:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>9 ms</td>
+              <td>1 ms</td>
+              <td>44</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework:spring-jcl:5.3.17 (#1 class roots, #0 source roots)</td>
+              <td>9 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>21</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-oas:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>8 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>46</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.junit.jupiter:junit-jupiter:5.8.2 (#1 class roots, #0 source roots)</td>
+              <td>7 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>4</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.skyscreamer:jsonassert:1.5.0 (#1 class roots, #0 source roots)</td>
+              <td>6 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>23</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: jakarta.annotation:jakarta.annotation-api:1.3.5 (#1 class roots, #0 source roots)</td>
+              <td>6 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>20</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: net.minidev:accessors-smart:2.4.8 (#1 class roots, #0 source roots)</td>
+              <td>5 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>16</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.apiguardian:apiguardian-api:1.1.2 (#1 class roots, #0 source roots)</td>
+              <td>5 ms</td>
+              <td>3 ms</td>
+              <td>5</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>5 ms</td>
+              <td>1 ms</td>
+              <td>27</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-spring-webflux:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>5 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>10</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-jdbc:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>4 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1 (#1 class roots, #0 source roots)</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>9</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus-annotation:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>18</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.apache.logging.log4j:log4j-to-slf4j:2.17.2 (#1 class roots, #0 source roots)</td>
+              <td>3 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>13</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.2 (#1 class roots, #0 source roots)</td>
+              <td>2 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>9</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.mockito:mockito-junit-jupiter:4.0.0 (#1 class roots, #0 source roots)</td>
+              <td>2 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>4</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-web:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>2 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: io.springfox:springfox-spring-webmvc:3.0.0 (#1 class roots, #0 source roots)</td>
+              <td>2 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>11</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.opentest4j:opentest4j:1.2.0 (#1 class roots, #0 source roots)</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>8</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.slf4j:jul-to-slf4j:1.7.36 (#1 class roots, #0 source roots)</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>4</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-tomcat:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.plugin:spring-plugin-metadata:2.0.0.RELEASE (#1 class roots, #0 source roots)</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>9</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-json:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: com.baomidou:mybatis-plus:3.5.1 (#1 class roots, #0 source roots)</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-logging:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-aop:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr class="minor-data invisible">
+              <td>Library Maven: org.springframework.boot:spring-boot-starter-test:2.6.5 (#1 class roots, #0 source roots)</td>
+              <td>&lt; 1 ms</td>
+              <td>&lt; 1 ms</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

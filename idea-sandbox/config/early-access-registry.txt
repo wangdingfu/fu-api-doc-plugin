@@ -1,0 +1,4 @@
+ide.experimental.ui
+false
+ide.mac.transparentTitleBarAppearance
+true
