@@ -8,6 +8,7 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.tab.auth.GeneralAuthTab;
 import com.wdf.fudoc.request.tab.auth.JavaCodeAuthTab;
 import com.wdf.fudoc.request.tab.auth.JavaScriptCodeAuthTab;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
@@ -41,6 +42,11 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
     /**
      * java代码tab
      */
+    private final GeneralAuthTab generalAuthTab;
+
+    /**
+     * java代码tab
+     */
     private final JavaCodeAuthTab javaCodeAuthTab;
 
     /**
@@ -53,6 +59,7 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
         Splitter splitter = new Splitter(true, 0.6F);
         this.requestTabView = new RequestTabView(project, this);
         this.responseTabView = new ResponseTabView(project);
+        this.generalAuthTab = new GeneralAuthTab(project);
         this.javaCodeAuthTab = new JavaCodeAuthTab();
         this.javaScriptCodeAuthTab = new JavaScriptCodeAuthTab();
         splitter.setFirstComponent(FuTabBuilder.getInstance().addTab(this.requestTabView).addTab(this.responseTabView).build());
@@ -81,6 +88,7 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
     @Override
     public void doAction(AuthConfigData data) {
         initData(formatHttpData(data));
+        generalAuthTab.doAction(data);
         javaCodeAuthTab.doAction(data);
         javaScriptCodeAuthTab.doAction(data);
     }
@@ -88,6 +96,7 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
     @Override
     public void doActionAfter(AuthConfigData data) {
         doSendBefore(formatHttpData(data));
+        generalAuthTab.doActionAfter(data);
         javaCodeAuthTab.doActionAfter(data);
         javaScriptCodeAuthTab.doActionAfter(data);
     }
