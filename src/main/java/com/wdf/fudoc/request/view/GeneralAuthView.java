@@ -30,6 +30,8 @@ public class GeneralAuthView {
         JPanel northPanel = new JPanel(new BorderLayout());
         //添加过期时间面板
         northPanel.add(createExpireTime(), BorderLayout.EAST);
+        //添加表格面板
+        contentPanel.add(this.fuTableComponent.createPanel());
         this.rootPanel.add(northPanel, BorderLayout.NORTH);
         this.rootPanel.add(contentPanel, BorderLayout.CENTER);
     }
