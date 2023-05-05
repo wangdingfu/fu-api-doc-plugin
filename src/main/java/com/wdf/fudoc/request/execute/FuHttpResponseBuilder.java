@@ -9,9 +9,13 @@ import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.util.HttpResponseUtil;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -36,7 +40,12 @@ public class FuHttpResponseBuilder {
         response.setBody(httpResponse.bodyBytes());
         response.setStatus(httpResponse.getStatus());
         fuHttpRequestData.setHttpCode(httpResponse.getStatus());
-        response.setHeaders(httpResponse.headers());
+        Map<String, List<String>> headers = httpResponse.headers();
+        if(MapUtils.isNotEmpty(headers)){
+            Map<String, List<String>> responseHeaders = new HashMap<>(headers);
+            responseHeaders.remove(null);
+            response.setHeaders(responseHeaders);
+        }
         response.setContentLength(httpResponse.contentLength());
         response.setResponseType(ResponseType.SUCCESS);
         String fileNameFromDisposition = HttpResponseUtil.getFileNameFromDisposition(httpResponse);
