@@ -21,6 +21,8 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -172,7 +174,7 @@ public class RequestTabView implements FuTab, HttpCallback {
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         //设置请求类型
-        setRequestType(requestTypeComponent.getSelectedItem() + "");
+        setRequestType(requestTypeComponent.getSelectedItem() + StringUtils.EMPTY);
         httpHeaderTab.doSendBefore(fuHttpRequestData);
         httpGetParamsTab.doSendBefore(fuHttpRequestData);
         httpRequestBodyTab.doSendBefore(fuHttpRequestData);
@@ -209,7 +211,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.sendBtn.addActionListener(e -> HttpApiExecutor.doSendRequest(project, fuHttpRequestData, httpCallback));
 
         //对请求类型按钮添加选项选中事件
-        this.requestTypeComponent.addItemListener(e -> setRequestType(e.getItem() + ""));
+        this.requestTypeComponent.addItemListener(e -> setRequestType(String.valueOf(e.getItem())));
 
         //对请求地址添加属性内容变更事件
         this.requestUrlComponent.getDocument().addDocumentListener(new DocumentListener() {
@@ -239,7 +241,20 @@ public class RequestTabView implements FuTab, HttpCallback {
             return;
         }
         request.setBaseUrl(StringUtils.substringBefore(requestUrl, "?"));
-        request.setParamUrl(StringUtils.substringAfter(requestUrl, "?"));
+        String paramUrl = StringUtils.substringAfter(requestUrl, "?");
+        request.setParamUrl(paramUrl);
+        FuTab selected = this.fuTabBuilder.getSelected();
+        if (Objects.nonNull(selected)) {
+            Map<String, String> paramMap = new HashMap<>();
+            for (String params : paramUrl.split("&")) {
+                String[] param = params.split("=");
+                if (params.length() == 2) {
+                    paramMap.put(param[0], param[1]);
+                }
+            }
+            //根据请求url回填表格参数
+            selected.resetParams(paramMap);
+        }
     }
 
 

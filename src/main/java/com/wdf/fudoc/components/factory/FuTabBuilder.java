@@ -99,6 +99,18 @@ public class FuTabBuilder {
         }
     }
 
+
+    /**
+     * 获取当前选中的tab
+     */
+    public FuTab getSelected(){
+        TabInfo selectedInfo = this.tabs.getSelectedInfo();
+        if(Objects.isNull(selectedInfo)){
+            return null;
+        }
+        return fuTabMap.get(selectedInfo.getText());
+    }
+
     public void addListener() {
         this.tabs.addListener(new TabsListener() {
             @Override
