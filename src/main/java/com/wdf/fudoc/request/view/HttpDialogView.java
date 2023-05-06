@@ -1,7 +1,6 @@
 package com.wdf.fudoc.request.view;
 
 import com.intellij.find.editorHeaderActions.Utils;
-import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -14,19 +13,18 @@ import com.intellij.ui.WindowMoveListener;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
+import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
-import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
-import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -93,7 +91,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     private FuRequestToolBarManager fuRequestToolBarManager;
 
     @Getter
-    private PsiElement psiElement;
+    private final PsiElement psiElement;
 
 
     public HttpDialogView(Project project, PsiElement psiElement) {
