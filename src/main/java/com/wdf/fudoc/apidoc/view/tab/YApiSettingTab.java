@@ -10,6 +10,7 @@ import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
+import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
@@ -199,19 +200,12 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         yapi.setUserName(this.userName.getText());
         yapi.setYapiPwd(this.yapiPwd.getText());
         //获取当前需要保存的项目配置
-        List<YApiProjectTableData> projectConfigList = this.fuTableComponent.getDataList();
-        Project currProject = ProjectUtils.getCurrProject();
-        String basePath = currProject.getBasePath();
-        for (YApiProjectTableData yApiProjectTableData : projectConfigList) {
-            Boolean select = yApiProjectTableData.getSelect();
-            List<String> projectKeyList = yApiProjectTableData.getProjectKeyList();
-            if (Objects.nonNull(select) && select) {
-                projectKeyList.add(basePath);
-            } else {
-                projectKeyList.remove(basePath);
-            }
+        FuDocSyncProjectSetting instance = FuDocSyncProjectSetting.getInstance();
+        if(Objects.nonNull(instance)){
+            SyncApiConfigData configData = instance.getState();
+            configData.setYapiConfigList(this.fuTableComponent.getDataList());
+            instance.loadState(configData);
         }
-        FuDocSyncProjectSetting.getInstance().setYapiConfigList(projectConfigList);
     }
 
     @Override
