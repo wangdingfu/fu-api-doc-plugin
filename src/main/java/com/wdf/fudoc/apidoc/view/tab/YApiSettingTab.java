@@ -217,15 +217,6 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         this.baseUrl.setText(yapi.getBaseUrl());
         this.userName.setText(yapi.getUserName());
         this.yapiPwd.setText(yapi.getYapiPwd());
-        Project currProject = ProjectUtils.getCurrProject();
-        String basePath = currProject.getBasePath();
-        List<YApiProjectTableData> yapiConfigList = FuDocSyncProjectSetting.getYapiConfigList();
-        if (CollectionUtils.isNotEmpty(yapiConfigList)) {
-            for (YApiProjectTableData yApiProjectTableData : yapiConfigList) {
-                List<String> projectKeyList = yApiProjectTableData.getProjectKeyList();
-                yApiProjectTableData.setSelect(projectKeyList.contains(basePath));
-            }
-        }
-        this.fuTableComponent.setDataList(yapiConfigList);
+        this.fuTableComponent.setDataList(FuDocSyncProjectSetting.getYapiConfigList());
     }
 }
