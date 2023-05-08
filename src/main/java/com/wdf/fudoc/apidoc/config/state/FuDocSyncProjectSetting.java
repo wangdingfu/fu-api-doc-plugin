@@ -19,7 +19,7 @@ import java.util.Objects;
  * @date 2023-05-08 20:31:08
  */
 @Data
-@State(name = "syncConfig", storages = {@Storage("FuApiSyncConfig.xml")})
+@State(name = "syncConfig", storages = {@Storage("/fudoc/fu-api-sync-config.xml")})
 public class FuDocSyncProjectSetting  implements PersistentStateComponent<SyncApiConfigData> {
 
     private SyncApiConfigData syncApiConfigData;

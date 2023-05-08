@@ -7,6 +7,7 @@ import com.wdf.fudoc.components.tree.FuModuleTreeComponent;
 import com.wdf.fudoc.components.tree.FuTableTreeComponent;
 import com.wdf.fudoc.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -58,7 +59,16 @@ public class TreeTableCellEditor extends AbstractTableCellEditor {
     @Override
     public Object getCellEditorValue() {
         TreePath[] selected = fuTableTreeComponent.getSelectedItem();
-        return new TreePathBO(selected);
+        List<String> selectPathList = Lists.newArrayList();
+        if (Objects.nonNull(selected)) {
+            for (TreePath treePath : selected) {
+                Object lastPathComponent = treePath.getLastPathComponent();
+                if (Objects.nonNull(lastPathComponent)) {
+                    selectPathList.add(lastPathComponent.toString());
+                }
+            }
+        }
+        return new TreePathBO(selectPathList);
     }
 
 

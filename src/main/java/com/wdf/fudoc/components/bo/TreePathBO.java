@@ -8,10 +8,8 @@ import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.tree.TreePath;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -21,20 +19,17 @@ import java.util.Objects;
 @Setter
 public class TreePathBO implements Serializable {
 
-    private List<String> selectPathList = Lists.newArrayList();
+    private List<String> selectPathList;
 
     private String view;
 
-    public TreePathBO(TreePath[] selectPath) {
-        if (Objects.nonNull(selectPath) && selectPath.length > 0) {
-            for (TreePath treePath : selectPath) {
-                Object lastPathComponent = treePath.getLastPathComponent();
-                if (Objects.nonNull(lastPathComponent)) {
-                    selectPathList.add(lastPathComponent.toString());
-                }
-            }
-            this.view = StringUtils.join(selectPathList, ",");
-        }
+    public TreePathBO() {
+    }
+
+    public TreePathBO(List<String> selectPathList) {
+        this.selectPathList = selectPathList;
+        this.view = StringUtils.join(selectPathList, ",");
+
     }
 
     public boolean isNotNull() {
