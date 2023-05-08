@@ -7,6 +7,7 @@ import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
+import com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
@@ -210,7 +211,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
                 projectKeyList.remove(basePath);
             }
         }
-        yapi.setProjectConfigList(projectConfigList);
+        FuDocSyncProjectSetting.getInstance().setYapiConfigList(projectConfigList);
     }
 
     @Override
@@ -224,13 +225,13 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         this.yapiPwd.setText(yapi.getYapiPwd());
         Project currProject = ProjectUtils.getCurrProject();
         String basePath = currProject.getBasePath();
-        List<YApiProjectTableData> projectConfigList = yapi.getProjectConfigList();
-        if (CollectionUtils.isNotEmpty(projectConfigList)) {
-            for (YApiProjectTableData yApiProjectTableData : projectConfigList) {
+        List<YApiProjectTableData> yapiConfigList = FuDocSyncProjectSetting.getYapiConfigList();
+        if (CollectionUtils.isNotEmpty(yapiConfigList)) {
+            for (YApiProjectTableData yApiProjectTableData : yapiConfigList) {
                 List<String> projectKeyList = yApiProjectTableData.getProjectKeyList();
                 yApiProjectTableData.setSelect(projectKeyList.contains(basePath));
             }
         }
-        this.fuTableComponent.setDataList(projectConfigList);
+        this.fuTableComponent.setDataList(yapiConfigList);
     }
 }
