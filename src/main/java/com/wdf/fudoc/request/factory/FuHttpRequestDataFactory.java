@@ -12,9 +12,11 @@ import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
+import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.pojo.annotation.*;
 import com.wdf.fudoc.apidoc.pojo.bo.RootParamBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
+import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.request.manager.FuRequestManager;
@@ -24,6 +26,7 @@ import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.spring.SpringConfigManager;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.storage.FuStorageExecutor;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -61,6 +64,12 @@ public class FuHttpRequestDataFactory {
         PsiMethod targetMethod = PsiClassUtils.getTargetMethod(fuDocContext.getTargetElement());
         if (Objects.isNull(targetMethod)) {
             return null;
+        }
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(targetMethod.getDocComment());
+        String commentTitle = apiDocCommentData.getCommentTitle();
+        FuHttpRequestData fuHttpRequestData = FuStorageExecutor.readFile(commentTitle);
+        if (Objects.nonNull(fuHttpRequestData)) {
+            return fuHttpRequestData;
         }
         String methodId = PsiClassUtils.getMethodId(targetMethod);
         //当前接口的唯一标识

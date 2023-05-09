@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.json.JSONUtil;
 import com.intellij.notification.*;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -17,6 +18,7 @@ import com.wdf.fudoc.components.FuHtmlComponent;
 import com.wdf.fudoc.components.bo.FuMsgBO;
 import com.wdf.fudoc.components.message.FuMsgManager;
 import com.wdf.fudoc.start.dto.*;
+import com.wdf.fudoc.storage.FuStorageExecutor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +47,8 @@ public class FuDocStartUpListener implements StartupActivity {
 
     @Override
     public void runActivity(@NotNull Project project) {
+        //初始化持久目录
+        ApplicationManager.getApplication().invokeLater(FuStorageExecutor::init);
         if (reentrantLock.tryLock()) {
             try {
                 FuDocSecuritySetting instance = FuDocSecuritySetting.getInstance();
@@ -72,7 +76,6 @@ public class FuDocStartUpListener implements StartupActivity {
                 reentrantLock.unlock();
             }
         }
-
     }
 
 

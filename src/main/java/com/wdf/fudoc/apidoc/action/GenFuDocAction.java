@@ -35,10 +35,6 @@ public class GenFuDocAction extends AbstractClassAction {
         return !JavaClassType.ANNOTATION.equals(javaClassType);
     }
 
-    @Override
-    protected String exceptionMsg() {
-        return MessageConstants.NOTIFY_GEN_FAIL;
-    }
 
     /**
      * 点击按钮或按下快捷键触发生成API接口文档方法
