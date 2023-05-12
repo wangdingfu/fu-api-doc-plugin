@@ -26,6 +26,7 @@
         <notificationGroup id="com.wdf.fudoc.notification.start.group" displayType="BALLOON"/>
 
         <projectService serviceImplementation="com.wdf.fudoc.request.state.FuRequestState"/>
+        <projectService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting"/>
 
         <applicationService serviceImplementation="com.wdf.fudoc.request.state.FuRequestSettingState"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting"/>
