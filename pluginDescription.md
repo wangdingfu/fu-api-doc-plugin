@@ -11,14 +11,14 @@
 > 【fudoc】is an IDEA plugin that generates API documentation entirely based on code. It supports one-click initiation of HTTP requests to debug APIs and also allows for one-click synchronization of API documentation to third-party systems such as YApi, ShowDoc, and Apifox.
 
 ### generate api doc
-- 1、press `alt+D` or right click `fudoc`-->`Gen Doc` in java class
+- 1、press `alt+D` or right click `Fu Doc` in java class
 - 2、paste in api doc system(`Show doc` or `YApi` or `MarkDown` or `others` )
 
 ### debug api
-- press `alt+R` or right click `fudoc`-->`Http Request` in java class
+- press `alt+R` or right click `Fu Request` in java class
 
 ### sync api doc
-- press `alt+S` or right click `fudoc`-->`Sync Api` in java class
+- press `alt+S` or right click`Fu Doc Sync` in java class
 
 
 ### Support
@@ -33,18 +33,18 @@
 
 
 ### 生成接口文档
-- 1、在java类中按下快捷键`alt+D` 或者 右键 `fudoc`-->`Gen Doc`（`光标在指定方法中则会只生成该接口的文档`）.
+- 1、在java类中按下快捷键`alt+D` 或者 右键 `Fu Doc`（`光标在指定方法中则会只生成该接口的文档`）.
 - 2、查看右下角是否提示当前类已生成接口文档至剪贴板
 - 3、直接去自己平时使用的接口文档系统中粘贴接口文档即可
 
 
 ### 调试API接口（一键发起http请求）
-- 将光标至于需要调试的接口方法体内按下快捷键`alt+R` 或则右键 `fudoc`-->`Http Request`(`可以在任意地方按下该快捷键打开最近一次请求`)
+- 将光标至于需要调试的接口方法体内按下快捷键`alt+R` 或则右键 `Fu Request`(`可以在任意地方按下该快捷键打开最近一次请求`)
 - 在弹出的http请求窗体中修改对应请求数据后点击`Send`按钮发送请求
 
 ### 同步接口文档
 - 先进入 `Settings`-->`Fu Doc`-->`Http Request`中配置对应第三方文档系统信息
-- 在java类中按下快捷键`alt+S` 或则右键 `fudoc`-->`Sync Api`
+- 在java类中按下快捷键`alt+S` 或则右键`Fu Doc Sync`
 - 在弹出的窗体中选择需要将文档同步至哪一个分类下 点击`OK`按钮就会同步文档至第三方文档系统
 - 在右下角弹出的同步成功通知中可以点击进入第三方文档系统查看同步后的文档
 
