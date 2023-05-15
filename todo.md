@@ -2,6 +2,9 @@
 
 [插件文档地址](https://plugins.jetbrains.com/docs/intellij/welcome.html)
 
+# 开启调试模式
+idea.is.internal=true
+
 # 20220705
 
 - 参数是否必填支持从`@RequestParam`注解`required`中获取(`已完成`)
