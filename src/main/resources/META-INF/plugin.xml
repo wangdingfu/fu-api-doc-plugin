@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.wdf.api</id>
-    <name>Fu Doc</name>
+    <name>fudoc</name>
     <version>222.1.5.9</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
