@@ -94,32 +94,31 @@
     <actions>
 
         <!-- 接口文档相关动作 -->
-        <group id="wdf.fudoc.apidoc" popup="false" compact="true">
+        <group id="wdf.fudoc.apidoc" popup="true" text="Fu Doc">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="fudoc.gen.api.doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Fu Doc">
+            <action id="fudoc.gen.api.doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Gen Doc">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
             </action>
-        </group>
-
-
-        <!-- http请求相关动作 -->
-        <group id="wdf.fudoc.request" popup="false" compact="true">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <separator/>
             <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Fu Request">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
             </action>
-        </group>
-
-        <!-- http请求相关动作 -->
-        <group id="wdf.fudoc.sync" text="Fu Doc Sync" popup="true">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <separator/>
             <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Sync Api">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
             </action>
             <action id="fudoc.http.sync.confirm" class="com.wdf.fudoc.apidoc.action.ConfirmSyncFuDocAction" text="Sync Api Confirm">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt shift S"/>
             </action>
+            <separator/>
+            <action id="com.fudoc.futool.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
+            </action>
+            <action id="com.fudoc.futool.beancopy" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction" text="Bean Copy">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift G"/>
+            </action>
         </group>
+
 
 
         <!-- 测试功能点相关动作 -->
@@ -133,17 +132,6 @@
 -->
 
 
-
-        <!-- 工具相关动作 -->
-        <group id="wdf.fudoc.futool" text="Fu Tool" popup="true">
-            <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
-            <action id="com.fudoc.futool.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json">
-                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
-            </action>
-            <action id="com.fudoc.futool.beancopy" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction" text="Bean Copy">
-                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift G"/>
-            </action>
-        </group>
 
         <action id="fudoc.request.toolbar.action.stop"
                 class="com.wdf.fudoc.request.action.toolbar.FuRequestStopAction"
