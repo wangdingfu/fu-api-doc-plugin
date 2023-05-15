@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>fudoc</name>
-    <version>222.1.5.9</version>
+    <version>222.1.6.0</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -63,7 +63,7 @@
         <projectConfigurable instance="com.wdf.fudoc.request.configurable.FuRequestSettingConfigurable"
                              id="fu.request.setting"
                              groupId="fu.doc.setting"
-                             displayName="Fu Request"
+                             displayName="Http Request"
                              nonDefaultProject="true"/>
         <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable"
                              id="fu.doc.setting.sync"
@@ -93,35 +93,38 @@
 
     <actions>
 
-        <!-- 接口文档相关动作 -->
-        <group id="wdf.fudoc.apidoc" popup="false" compact="true">
+
+        <!-- http相关动作 -->
+        <group id="wdf.fudoc" text="Fu Doc" popup="true">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="fudoc.gen.api.doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Fu Doc">
+            <!-- 接口文档相关动作 -->
+            <action id="fudoc.gen.api.doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Gen Doc">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
             </action>
-        </group>
-
-
-        <!-- http请求相关动作 -->
-        <group id="wdf.fudoc.request" popup="false" compact="true">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Fu Request">
+            <!-- http请求相关动作 -->
+            <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Http Request">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
             </action>
-        </group>
-
-        <!-- http请求相关动作 -->
-        <group id="wdf.fudoc.sync" text="Fu Doc Sync" popup="true">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <!-- 文档同步相关动作 -->
             <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Sync Api">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
             </action>
             <action id="fudoc.http.sync.confirm" class="com.wdf.fudoc.apidoc.action.ConfirmSyncFuDocAction" text="Sync Api Confirm">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt shift S"/>
             </action>
+
         </group>
 
-
+        <!-- 工具相关动作 -->
+        <group id="wdf.fudoc.futool" text="Fu Tool" popup="true">
+            <add-to-group group-id="wdf.fudoc" anchor="last"/>
+            <action id="com.fudoc.futool.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
+            </action>
+            <action id="com.fudoc.futool.beancopy" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction" text="Bean Copy">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift G"/>
+            </action>
+        </group>
         <!-- 测试功能点相关动作 -->
 <!--
         <group id="wdf.fudoc.test" popup="false" compact="true">
@@ -134,16 +137,7 @@
 
 
 
-        <!-- 工具相关动作 -->
-        <group id="wdf.fudoc.futool" text="Fu Tool" popup="true">
-            <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
-            <action id="com.fudoc.futool.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json">
-                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
-            </action>
-            <action id="com.fudoc.futool.beancopy" class="com.wdf.fudoc.futool.dtoconvert.action.Vo2DtoGenerateAction" text="Bean Copy">
-                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift G"/>
-            </action>
-        </group>
+
 
         <action id="fudoc.request.toolbar.action.stop"
                 class="com.wdf.fudoc.request.action.toolbar.FuRequestStopAction"
