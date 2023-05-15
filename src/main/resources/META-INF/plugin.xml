@@ -68,7 +68,7 @@
         <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable"
                              id="fu.doc.setting.sync"
                              groupId="fu.doc.setting"
-                             displayName="Sync Settings"
+                             displayName="Sync Api"
                              nonDefaultProject="true"/>
 
         <toolWindow id="Fu Request"
@@ -117,7 +117,7 @@
 
         <!-- 工具相关动作 -->
         <group id="wdf.fudoc.futool" text="Fu Tool" popup="true">
-            <add-to-group group-id="wdf.fudoc" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <action id="com.fudoc.futool.toJson" class="com.wdf.fudoc.futool.beantojson.action.BeanToJsonAction" text="Bean to Json">
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift D"/>
             </action>
