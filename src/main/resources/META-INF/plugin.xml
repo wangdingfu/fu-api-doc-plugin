@@ -14,6 +14,7 @@
     <depends>JavaScript</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
+    <depends>com.jetbrains.restClient</depends>
 <!--    <depends>com.intellij.spring</depends>-->
 
     <extensions defaultExtensionNs="com.intellij">
@@ -122,14 +123,14 @@
 
 
         <!-- 测试功能点相关动作 -->
-<!--
+
         <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test" description="Test"/>
             <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
                     description="Test table"/>
         </group>
--->
+
 
 
 

@@ -25,7 +25,6 @@ public class RequestAction extends AbstractClassAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        super.update(e);
     }
 
     @Override
