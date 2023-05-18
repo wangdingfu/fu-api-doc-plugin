@@ -1,9 +1,12 @@
-# 测试http请求
-
-POST http://localhost:8080/a
+# @name 测试接口01
+POST http://localhost:8089/deme01
 Content-Type: application/json
+
 {
 
 }
 
-### 测试下一个
+###
+
+// 测试接口2
+POST http://localhost:8089/deme02

@@ -49,6 +49,7 @@ public class FuHttpRequestData {
     /**
      * 请求状态 true 正在请求中
      */
+    @JsonIgnore
     private boolean requestStatus;
 
     /**
