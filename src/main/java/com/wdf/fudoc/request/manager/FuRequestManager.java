@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.global.GlobalRequestData;
+import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.state.FuRequestState;
 import com.wdf.fudoc.storage.FuStorageExecutor;
@@ -55,6 +56,7 @@ public class FuRequestManager {
         if (Objects.isNull(fuHttpRequestData)) {
             return;
         }
+
         FuStorageExecutor.saveRequest(fuHttpRequestData);
         String apiKey = fuHttpRequestData.getApiKey();
         GlobalRequestData data = FuRequestState.getData(project);

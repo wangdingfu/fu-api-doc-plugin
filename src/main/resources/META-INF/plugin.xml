@@ -104,6 +104,9 @@
             <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Fu Request">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
             </action>
+            <action id="fudoc.http.request.http" class="com.wdf.fudoc.request.http.action.RequestHttpAction" text="Fu Http">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift R"/>
+            </action>
             <separator/>
             <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Sync Api">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>

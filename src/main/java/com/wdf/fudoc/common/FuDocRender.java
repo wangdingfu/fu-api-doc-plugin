@@ -7,6 +7,7 @@ import com.wdf.fudoc.apidoc.data.SettingData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocEnumData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
+import com.wdf.fudoc.request.http.data.HttpClientData;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -70,6 +71,11 @@ public class FuDocRender {
         String template = YesOrNo.YES.getCode() == type ? "fu_doc_enum.ftl" : "fu_doc_enum_table.ftl";
         String templateContent = YesOrNo.YES.getCode() == type ? settingData.getEnumTemplateValue1() : settingData.getEnumTemplateValue2();
         return render(fuDocEnumData, template, templateContent);
+    }
+
+
+    public static String httpRender(HttpClientData httpClientData) {
+        return FreeMarkerConfig.generateContent(httpClientData,"http/http_client.ftl");
     }
 
     public static String render(Object data, String templateName) {

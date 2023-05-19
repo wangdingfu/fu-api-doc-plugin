@@ -29,6 +29,8 @@ public interface FuDocConstants {
 
     String PATH_VARIABLE = "path_variable";
 
+    String CONTENT_TYPE = "Content-Type";
+
 
     String DEFAULT_HOST = "http://localhost";
 

@@ -8,7 +8,7 @@ import com.wdf.fudoc.storage.enumtype.FuStorageType;
  * 持久化http请求数据
  * <p>
  * 持久化文件目录：项目根目录/${FuDocDir}/${moduleName}/${controllerName}/${fileName}.json
- *
+ * ～/fudoc/http/${项目名称}/${模块名称}/${Controller名称}/${方法名}.http
  * @author wangdingfu
  * @date 2023-05-15 21:23:46
  */

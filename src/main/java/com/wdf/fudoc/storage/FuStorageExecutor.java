@@ -2,6 +2,9 @@ package com.wdf.fudoc.storage;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
+import com.wdf.fudoc.common.FuDocRender;
+import com.wdf.fudoc.request.http.convert.HttpDataConvert;
+import com.wdf.fudoc.request.http.data.HttpClientData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.util.JsonUtil;
 import com.wdf.fudoc.util.ProjectUtils;
@@ -45,7 +48,7 @@ public class FuStorageExecutor {
     public static void saveRequest(FuHttpRequestData fuHttpRequestData) {
         String apiName = fuHttpRequestData.getApiName();
         String currentProjectPath = ProjectUtils.getCurrentProjectPath();
-
+        String httpFileContent = FuDocRender.httpRender(HttpDataConvert.convert(fuHttpRequestData));
         File file = FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API, apiName + FU_DOC_API_SUFFIX);
         if (file.exists()) {
             //存在则删除该文件
