@@ -2,6 +2,10 @@ package com.wdf.fudoc.storage;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
+import com.intellij.ide.extensionResources.ExtensionsRootType;
+import com.intellij.ide.scratch.ScratchFileService;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.http.data.HttpClientData;
@@ -25,7 +29,7 @@ public class FuStorageExecutor {
     public static final String FU_DOC_DIR = ".fudoc";
     public static final String FU_DOC_CONFIG = "config";
     public static final String FU_DOC_API = "api";
-    public static final String FU_DOC_API_SUFFIX = ".json";
+    public static final String FU_DOC_API_SUFFIX = ".http";
 
     /**
      * fuDoc存储初始化
@@ -50,12 +54,15 @@ public class FuStorageExecutor {
         String currentProjectPath = ProjectUtils.getCurrentProjectPath();
         String httpFileContent = FuDocRender.httpRender(HttpDataConvert.convert(fuHttpRequestData));
         File file = FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API, apiName + FU_DOC_API_SUFFIX);
+        saveFile(file,httpFileContent);
+    }
+
+    public static void saveFile(File file, String text) {
         if (file.exists()) {
             //存在则删除该文件
             FileUtil.del(file);
         }
-        byte[] bytes = JSONUtil.formatJsonStr(JsonUtil.toJson(fuHttpRequestData)).getBytes(StandardCharsets.UTF_8);
-        FileUtil.writeBytes(bytes, file);
+        FileUtil.writeString(text,file,Charset.defaultCharset());
     }
 
 
