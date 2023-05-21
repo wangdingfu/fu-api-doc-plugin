@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.http.convert;
 
 import com.google.common.collect.Lists;
+import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.base.KeyValueBO;
@@ -38,20 +39,6 @@ public class HttpDataConvert {
 
 
 
-
-    public static FuHttpRequestData convert(HttpClientData httpClientData){
-        FuHttpRequestData fuHttpRequestData = new FuHttpRequestData();
-        fuHttpRequestData.setApiName(httpClientData.getApiName());
-        FuRequestData request = new FuRequestData();
-        request.setRequestType(RequestType.getRequestType(httpClientData.getMethodName()));
-        String url = httpClientData.getUrl();
-        request.setBaseUrl(StringUtils.substringBefore(url,"?"));
-        request.setParamUrl(StringUtils.substringAfter(url,"?"));
-        request.setHeaders(ObjectUtils.listToList(httpClientData.getHeaders(),data->new KeyValueTableBO(true,data.getKey(),data.getValue())));
-        fuHttpRequestData.setRequest(request);
-
-        return fuHttpRequestData;
-    }
 
     public static String buildUrl(FuRequestData fuRequestData) {
         String requestUrl = fuRequestData.getRequestUrl();
@@ -98,7 +85,6 @@ public class HttpDataConvert {
         }
         return StringUtils.EMPTY;
     }
-
 
 
 }

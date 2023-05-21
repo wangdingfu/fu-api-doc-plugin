@@ -66,13 +66,15 @@ public class FuStorageExecutor {
     }
 
 
+
     public static FuHttpRequestData readFile(String apiName) {
         String currentProjectPath = ProjectUtils.getCurrentProjectPath();
         File file = FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API, apiName + FU_DOC_API_SUFFIX);
         if (file.exists()) {
             String httpFileContent = StringUtils.toEncodedString(FileUtil.readBytes(file), StandardCharsets.UTF_8);
-
-            return JsonUtil.toBean(, FuHttpRequestData.class);
+            if(StringUtils.isNotBlank(httpFileContent)){
+                return JsonUtil.toBean(httpFileContent, FuHttpRequestData.class);
+            }
         }
         return null;
     }
