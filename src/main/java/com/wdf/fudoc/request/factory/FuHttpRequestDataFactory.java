@@ -8,6 +8,7 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
@@ -111,7 +112,7 @@ public class FuHttpRequestDataFactory {
             title = PsiClassUtils.getMethodName(fuDocRootParamData.getPsiMethod());
         }
         fuHttpRequestData.setApiName(title);
-        //接口请求类型
+        //接口请求类型5
         fuRequestData.setRequestType(RequestType.getRequestType(fuDocRootParamData.getRequestType()));
         //设置接口url
         String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
@@ -121,55 +122,82 @@ public class FuHttpRequestDataFactory {
         fuHttpRequestData.setRequest(fuRequestData);
         //构建请求参数
         buildRequestParamsData(fuHttpRequestData, fuDocRootParamData);
-
         //初始化response
         fuHttpRequestData.setResponse(new FuResponseData());
         return fuHttpRequestData;
     }
 
-
-    public static void buildRequestParamsData(FuHttpRequestData fuHttpRequestData, FuDocRootParamData fuDocRootParamData) {
-        FuRequestData request = fuHttpRequestData.getRequest();
-        List<KeyValueTableBO> getParamList = Lists.newArrayList();
+    public static void buildParamData(FuHttpRequestData fuHttpRequestData, FuDocRootParamData fuDocRootParamData, RequestType requestType) {
+        List<KeyValueTableBO> paramList = Lists.newArrayList();
         List<KeyValueTableBO> pathVariableList = Lists.newArrayList();
-        List<KeyValueTableBO> postParamList = Lists.newArrayList();
-        List<KeyValueTableBO> postFormDataList = Lists.newArrayList();
-        RequestType requestType = RequestType.getRequestType(fuDocRootParamData.getRequestType());
         List<RootParamBO> rootParamBOList = fuDocRootParamData.getRootParamBOList();
-        boolean isFile = false;
         if (CollectionUtils.isNotEmpty(rootParamBOList)) {
             for (RootParamBO rootParamBO : rootParamBOList) {
                 SpringAnnotationData springAnnotationData = rootParamBO.getSpringAnnotationData();
-                if (springAnnotationData instanceof RequestBodyData) {
-                    //如果是requestBody
-                    paddingBody(fuHttpRequestData, rootParamBO.getMockData());
-                    break;
-                }
-                //其他的应该是RequestParam 和PathVariable注解标识或无注解标识
                 List<KeyValueTableBO> tableBOList = paramConvertToTableData(rootParamBO.getFuDocParamDataList());
-                if (isFile || tableBOList.stream().anyMatch(a -> RequestParamType.FILE.getCode().equals(a.getRequestParamType()))) {
-                    //存在文件 则需要吧参数当成form-data格式提交
-                    isFile = true;
-                    postFormDataList.addAll(tableBOList);
-                } else {
-                    if (springAnnotationData instanceof PathVariableData) {
-                        pathVariableList.addAll(tableBOList);
-                    } else if (springAnnotationData instanceof RequestParamData || springAnnotationData instanceof DefaultAnnotationData) {
-                        if (RequestType.GET.equals(requestType)) {
-                            getParamList.addAll(tableBOList);
-                        } else if (RequestType.POST.equals(requestType)) {
-                            postFormDataList.addAll(tableBOList);
-                        }
-                    }
+                if (CollectionUtils.isNotEmpty(tableBOList)) {
+                    paramList.addAll(tableBOList);
+                }
+                if (springAnnotationData instanceof PathVariableData) {
+                    pathVariableList.addAll(tableBOList);
                 }
             }
         }
-        request.setFile(isFile);
+        FuRequestData request = fuHttpRequestData.getRequest();
         request.setPathVariables(pathVariableList);
-        request.setParams(getParamList);
-        FuRequestBodyData body = request.getBody();
-        body.setFormDataList(postFormDataList);
-        body.setFormUrlEncodedList(postParamList);
+        if(RequestType.GET.equals(requestType)){
+            request.setParams(paramList);
+        }
+        if(RequestType.POST.equals(requestType)){
+            ContentType contentType = fuDocRootParamData.getContentType();
+            if (Objects.isNull(contentType)) {
+                return;
+            }
+            FuRequestBodyData body = request.getBody();
+            if(ContentType.FORM_DATA.equals(contentType)){
+                body.setFormDataList(paramList);
+            }else {
+                body.setFormUrlEncodedList(paramList);
+            }
+        }
+    }
+
+
+    public static void buildPostParamData(FuHttpRequestData fuHttpRequestData, FuDocRootParamData fuDocRootParamData) {
+        List<RootParamBO> rootParamBOList = fuDocRootParamData.getRootParamBOList();
+        if (CollectionUtils.isEmpty(rootParamBOList)) {
+            return;
+        }
+        RootParamBO rootParamBO = rootParamBOList.stream().filter(f -> isJson(f.getSpringAnnotationData())).findFirst().orElse(null);
+        if (Objects.nonNull(rootParamBO)) {
+            paddingBody(fuHttpRequestData, rootParamBO.getMockData());
+            return;
+        }
+        buildParamData(fuHttpRequestData, fuDocRootParamData,RequestType.POST);
+    }
+
+
+    public static boolean isJson(SpringAnnotationData springAnnotationData) {
+        return Objects.nonNull(springAnnotationData) && springAnnotationData instanceof RequestBodyData;
+    }
+
+
+    public static void buildRequestParamsData(FuHttpRequestData fuHttpRequestData, FuDocRootParamData fuDocRootParamData) {
+        RequestType requestType = RequestType.getRequestType(fuDocRootParamData.getRequestType());
+        if (Objects.isNull(requestType)) {
+            return;
+        }
+
+        switch (requestType) {
+            case GET:
+                buildParamData(fuHttpRequestData, fuDocRootParamData,RequestType.GET);
+                break;
+            case POST:
+                buildPostParamData(fuHttpRequestData, fuDocRootParamData);
+                break;
+            case PUT:
+            case DELETE:
+        }
     }
 
     private static List<KeyValueTableBO> paramConvertToTableData(List<FuDocParamData> fuDocParamDataList) {
@@ -178,7 +206,7 @@ public class FuHttpRequestDataFactory {
             for (FuDocParamData fuDocParamData : fuDocParamDataList) {
                 String paramName = fuDocParamData.getParamName();
                 boolean isSelect = YesOrNo.getByDesc(fuDocParamData.getParamRequire());
-                RequestParamType requestParamType = "file".equals(fuDocParamData.getParamType()) ? RequestParamType.FILE : RequestParamType.TEXT;
+                RequestParamType requestParamType = FuDocConstants.FILE.equals(fuDocParamData.getParamType()) ? RequestParamType.FILE : RequestParamType.TEXT;
                 tableBOList.add(new KeyValueTableBO(isSelect, requestParamType.getCode(), paramName, fuDocParamData.getParamValue(), fuDocParamData.getParamDesc()));
             }
         }
@@ -194,11 +222,7 @@ public class FuHttpRequestDataFactory {
             request.setBody(body);
         }
         //body 参数
-        if (JSONUtil.isTypeJSON(paramValue)) {
-            body.setJson(paramValue);
-        } else {
-            body.setRaw(paramValue);
-        }
+        body.setJson(paramValue);
     }
 
 

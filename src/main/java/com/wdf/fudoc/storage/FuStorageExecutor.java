@@ -70,7 +70,9 @@ public class FuStorageExecutor {
         String currentProjectPath = ProjectUtils.getCurrentProjectPath();
         File file = FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API, apiName + FU_DOC_API_SUFFIX);
         if (file.exists()) {
-            return JsonUtil.toBean(StringUtils.toEncodedString(FileUtil.readBytes(file), StandardCharsets.UTF_8), FuHttpRequestData.class);
+            String httpFileContent = StringUtils.toEncodedString(FileUtil.readBytes(file), StandardCharsets.UTF_8);
+
+            return JsonUtil.toBean(, FuHttpRequestData.class);
         }
         return null;
     }

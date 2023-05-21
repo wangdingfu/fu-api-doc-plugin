@@ -3,6 +3,7 @@ package com.wdf.fudoc.request.tab.request;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
+import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
@@ -83,25 +84,29 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
     public void initData(FuHttpRequestData httpRequestData) {
         FuRequestData request = httpRequestData.getRequest();
         FuRequestBodyData body = request.getBody();
-        List<KeyValueTableBO> formDataList = body.getFormDataList();
-        if (CollectionUtils.isNotEmpty(formDataList)) {
-            this.formDataComponent.setDataList(formDataList);
-            this.fuTabComponent.switchTab(FORM_DATA);
+        String json = body.getJson();
+        if (StringUtils.isNotBlank(json)) {
+            this.jsonComponent.setContent(json);
+            this.fuTabComponent.switchTab(JSON);
+            return;
         }
         List<KeyValueTableBO> formUrlEncodedList = body.getFormUrlEncodedList();
         if (CollectionUtils.isNotEmpty(formUrlEncodedList)) {
             this.urlencodedComponent.setDataList(formUrlEncodedList);
             this.fuTabComponent.switchTab(FORM_URLENCODED);
+            return;
+        }
+
+        List<KeyValueTableBO> formDataList = body.getFormDataList();
+        if (CollectionUtils.isNotEmpty(formDataList)) {
+            this.formDataComponent.setDataList(formDataList);
+            this.fuTabComponent.switchTab(FORM_DATA);
+            return;
         }
         String raw = body.getRaw();
         if (StringUtils.isNotBlank(raw)) {
             this.rawComponent.setContent(raw);
             this.fuTabComponent.switchTab(RAW);
-        }
-        String json = body.getJson();
-        if (StringUtils.isNotBlank(json)) {
-            this.jsonComponent.setContent(json);
-            this.fuTabComponent.switchTab(JSON);
         }
     }
 
@@ -129,7 +134,27 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
         if (StringUtils.isNotBlank(json)) {
             body.setJson(json);
         }
+        String currentTab = fuTabComponent.getCurrentTab();
+        if (StringUtils.isBlank(currentTab)) {
+            return;
+        }
+        request.addContentType(getContentType(currentTab));
     }
+
+
+    public static ContentType getContentType(String currentTab) {
+        if (FORM_URLENCODED.equals(currentTab)) {
+            return ContentType.URLENCODED;
+        } else if (JSON.equals(currentTab)) {
+            return ContentType.JSON;
+        } else if (RAW.equals(currentTab)) {
+            return ContentType.RAW;
+        } else if (FORM_DATA.equals(currentTab)) {
+            return ContentType.FORM_DATA;
+        }
+        return null;
+    }
+
 
     @Override
     protected FuTableComponent<KeyValueTableBO> getTableComponent(String title) {

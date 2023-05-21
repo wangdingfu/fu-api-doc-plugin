@@ -35,6 +35,24 @@ public class HttpDataConvert {
         return httpClientData;
     }
 
+
+
+
+
+    public static FuHttpRequestData convert(HttpClientData httpClientData){
+        FuHttpRequestData fuHttpRequestData = new FuHttpRequestData();
+        fuHttpRequestData.setApiName(httpClientData.getApiName());
+        FuRequestData request = new FuRequestData();
+        request.setRequestType(RequestType.getRequestType(httpClientData.getMethodName()));
+        String url = httpClientData.getUrl();
+        request.setBaseUrl(StringUtils.substringBefore(url,"?"));
+        request.setParamUrl(StringUtils.substringAfter(url,"?"));
+        request.setHeaders(ObjectUtils.listToList(httpClientData.getHeaders(),data->new KeyValueTableBO(true,data.getKey(),data.getValue())));
+        fuHttpRequestData.setRequest(request);
+
+        return fuHttpRequestData;
+    }
+
     public static String buildUrl(FuRequestData fuRequestData) {
         String requestUrl = fuRequestData.getRequestUrl();
         List<KeyValueTableBO> pathVariables = fuRequestData.getPathVariables();
@@ -80,6 +98,7 @@ public class HttpDataConvert {
         }
         return StringUtils.EMPTY;
     }
+
 
 
 }

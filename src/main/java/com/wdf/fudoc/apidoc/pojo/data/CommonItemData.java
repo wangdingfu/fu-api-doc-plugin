@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.pojo.data;
 
+import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,5 +43,5 @@ public class CommonItemData {
     /**
      * 请求内容类型
      */
-    private String contentType;
+    private ContentType contentType;
 }

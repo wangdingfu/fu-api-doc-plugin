@@ -22,6 +22,7 @@ public interface FuDocConstants {
 
 
     String API_ID = "apiId";
+    String FILE = "file";
 
 
     String SPRING_PARAM = "springParam";

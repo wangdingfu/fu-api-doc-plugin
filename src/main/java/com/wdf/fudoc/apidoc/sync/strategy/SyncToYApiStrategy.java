@@ -128,8 +128,8 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
         yApiSaveDTO.setPath(fuDocItemData.getUrlList().get(0));
         yApiSaveDTO.setMethod(fuDocItemData.getRequestType());
         //接口请求body类型 GET请求默认设置为form POST请求需要根据实际请求内容决定
-        String contentType = fuDocItemData.getContentType();
-        yApiSaveDTO.setReqBodyType(StringUtils.isBlank(contentType) ? ContentType.FORM_DATA.getDesc() : contentType);
+        ContentType contentType = fuDocItemData.getContentType();
+        yApiSaveDTO.setReqBodyType(Objects.isNull(contentType) ? ContentType.FORM_DATA.getDesc() : contentType.getDesc());
         if (MockResultType.JSON.getCode().equals(fuDocItemData.getRequestExampleType())) {
             //请求内容为JSON格式 填充json schema
             yApiSaveDTO.setReqBodyOther(buildJsonSchema(fuDocItemData.getRequestParams()));

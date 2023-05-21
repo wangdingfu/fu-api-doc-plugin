@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
@@ -111,6 +112,12 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         request.setParams(this.fuTableComponent.getDataList());
     }
 
+    @Override
+    public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
+        //切换到当前tab
+        FuRequestData request = httpRequestData.getRequest();
+        request.removeHeader(FuDocConstants.CONTENT_TYPE);
+    }
 
     /**
      * 重置table中的请求参数
