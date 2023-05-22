@@ -8,6 +8,10 @@ import com.wdf.fudoc.request.http.dto.HttpRecentDTO;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * 【Fu Request】模块持久化
+ * <p>
+ * 持久化目录：${baseHome}/fudoc/${projectName}/${moduleName}/${controllerName}/${methodName}.http
+ *
  * @author wangdingfu
  * @date 2023-05-21 23:26:16
  */
