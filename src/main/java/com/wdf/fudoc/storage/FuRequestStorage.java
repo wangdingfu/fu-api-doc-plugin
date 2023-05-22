@@ -5,6 +5,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.request.http.FuHttpClient;
 import com.wdf.fudoc.request.http.dto.HttpRecentDTO;
+import com.wdf.fudoc.util.FuRequestUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -25,6 +26,8 @@ public class FuRequestStorage {
      * @return 该接口对应http请求对象
      */
     public static FuHttpClient read(Project project, PsiClass psiClass, PsiMethod psiMethod) {
+
+
         return null;
     }
 

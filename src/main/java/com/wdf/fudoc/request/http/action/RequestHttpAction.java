@@ -1,10 +1,12 @@
 package com.wdf.fudoc.request.http.action;
 
 import com.intellij.httpClient.http.request.HttpRequestPsiFile;
+import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
@@ -39,15 +41,18 @@ public class RequestHttpAction extends AnAction {
         Project project = e.getProject();
         //获取来源文件
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
-        PsiElement psiElement = e.getData(LangDataKeys.PSI_ELEMENT);
         if (Objects.isNull(psiFile)) {
             return;
         }
         FuRequest fuRequest = null;
         if (psiFile instanceof HttpRequestPsiFile) {
             //从.http文件或者是.rest文件发起请求
-            fuRequest = new FuRequestImpl(new FuHttpClientImpl(project, (HttpRequestPsiFile) psiFile, psiElement));
+            HttpRequest httpRequest = FuRequestUtils.getHttpRequest((HttpRequestPsiFile) psiFile, e.getData(LangDataKeys.EDITOR));
+            if(Objects.nonNull(httpRequest)){
+                fuRequest = new FuRequestImpl(new FuHttpClientImpl(project, httpRequest));
+            }
         } else if (psiFile instanceof PsiJavaFile) {
+            PsiElement psiElement = e.getData(LangDataKeys.PSI_ELEMENT);
             //从Controller文件的方法体上发起请求
             fuRequest = genFuRequest(project, (PsiJavaFile) psiFile, psiElement);
         }
