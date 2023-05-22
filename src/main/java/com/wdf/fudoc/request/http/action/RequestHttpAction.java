@@ -10,6 +10,7 @@ import com.intellij.psi.*;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.request.http.FuHttpClient;
 import com.wdf.fudoc.request.http.FuRequest;
+import com.wdf.fudoc.request.http.dto.HttpRecentDTO;
 import com.wdf.fudoc.request.http.impl.FuHttpClientImpl;
 import com.wdf.fudoc.request.http.impl.FuRequestImpl;
 import com.wdf.fudoc.storage.FuRequestStorage;
@@ -45,17 +46,31 @@ public class RequestHttpAction extends AnAction {
         FuRequest fuRequest = null;
         if (psiFile instanceof HttpRequestPsiFile) {
             //从.http文件或者是.rest文件发起请求
-            fuRequest = new FuRequestImpl(new FuHttpClientImpl((HttpRequestPsiFile) psiFile, project, psiElement));
+            fuRequest = new FuRequestImpl(new FuHttpClientImpl(project, (HttpRequestPsiFile) psiFile, psiElement));
         } else if (psiFile instanceof PsiJavaFile) {
             //从Controller文件的方法体上发起请求
             fuRequest = genFuRequest(project, (PsiJavaFile) psiFile, psiElement);
         }
         //如果以上途径都无法获取到FuRequest对象 则默认去请求记录中寻找最近一次的请求并组装成FuRequest对象
         if (Objects.isNull(fuRequest)) {
-            //获取最近请求的记录搜索来源
-
+            HttpRecentDTO recentRecord = FuRequestStorage.readRecent(project);
+            if (Objects.isNull(recentRecord)) {
+                return;
+            }
+            PsiClass psiClass = PsiClassUtils.findJavaFile(project, recentRecord.getControllerPkg());
+            PsiMethod targetMethod = PsiClassUtils.findTargetMethod(psiClass, recentRecord.getMethodName(), recentRecord.getMappingUrl());
+            if (Objects.isNull(targetMethod)) {
+                return;
+            }
+            //搜索httpClient
+            FuHttpClient fuHttpClient = FuRequestStorage.read(project, psiClass, targetMethod);
+            fuRequest = new FuRequestImpl(psiClass, targetMethod, fuHttpClient, project);
         }
+
+        //开始弹框展示http请求窗体
     }
+
+
 
     private FuRequest genFuRequest(Project project, PsiJavaFile psiJavaFile, PsiElement psiElement) {
         PsiClass psiClass = psiJavaFile.getClasses()[0];

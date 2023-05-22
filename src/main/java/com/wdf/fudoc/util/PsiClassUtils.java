@@ -8,13 +8,17 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiClassImpl;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.pojo.bo.PsiClassTypeBO;
 import com.wdf.fudoc.request.manager.FuRequestManager;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,6 +67,39 @@ public class PsiClassUtils {
             return target instanceof SyntheticElement ? null : target;
         }
         return null;
+    }
+
+    public static PsiMethod findTargetMethod(PsiClass psiClass, String methodName, String mappingUrl) {
+        for (PsiMethod psiMethod : psiClass.getAllMethods()) {
+            if (!psiMethod.getName().equals(methodName)) {
+                continue;
+            }
+            String mapping = FuRequestUtils.getMapping(psiMethod);
+            if (StringUtils.isBlank(mapping)) {
+                continue;
+            }
+            AnnotationData annotationData = AnnotationUtils.parse(psiMethod.getAnnotation(mapping));
+            if (Objects.isNull(annotationData)) {
+                continue;
+            }
+            List<String> urlList = annotationData.array().constant().stringValue();
+            if (CollectionUtils.isNotEmpty(urlList) && urlList.contains(mappingUrl)) {
+                return psiMethod;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 查找java文件
+     *
+     * @param project 项目对象
+     * @param pkg     java对象路径
+     * @return java文件class
+     */
+    public static PsiClass findJavaFile(Project project, String pkg) {
+        return JavaPsiFacade.getInstance(project).findClass(pkg, GlobalSearchScope.allScope(project));
     }
 
 

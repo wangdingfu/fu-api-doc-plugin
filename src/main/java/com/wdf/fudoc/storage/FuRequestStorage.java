@@ -4,6 +4,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.request.http.FuHttpClient;
+import com.wdf.fudoc.request.http.dto.HttpRecentDTO;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author wangdingfu
@@ -19,6 +21,18 @@ public class FuRequestStorage {
      * @return 该接口对应http请求对象
      */
     public static FuHttpClient read(Project project, PsiClass psiClass, PsiMethod psiMethod) {
+        return null;
+    }
+
+
+    /**
+     * 读取最近一次请求记录
+     *
+     * @param project 当前项目
+     * @return 最近一次请求记录 ${ControllerPath}#${methodName}#${mappingUrl}
+     */
+    public static HttpRecentDTO readRecent(Project project) {
+
         return null;
     }
 }

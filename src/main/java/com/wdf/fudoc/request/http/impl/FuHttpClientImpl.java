@@ -2,11 +2,13 @@ package com.wdf.fudoc.request.http.impl;
 
 
 import com.intellij.httpClient.http.request.HttpRequestPsiFile;
+import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.request.http.FuHttpClient;
+import com.wdf.fudoc.util.FuRequestUtils;
 
 /**
  * @author wangdingfu
@@ -18,13 +20,20 @@ public class FuHttpClientImpl implements FuHttpClient {
 
     private final Project project;
 
-    private final PsiElement psiElement;
+    private final HttpRequest httpRequest;
 
-    public FuHttpClientImpl(HttpRequestPsiFile httpRequestPsiFile, Project project, PsiElement psiElement) {
+    public FuHttpClientImpl(Project project, HttpRequestPsiFile httpRequestPsiFile, PsiElement psiElement) {
         this.httpRequestPsiFile = httpRequestPsiFile;
         this.project = project;
-        this.psiElement = psiElement;
+        this.httpRequest = FuRequestUtils.getHttpRequest(httpRequestPsiFile, psiElement);
     }
+
+    public FuHttpClientImpl(Project project, HttpRequestPsiFile httpRequestPsiFile, String url) {
+        this.httpRequestPsiFile = httpRequestPsiFile;
+        this.project = project;
+        this.httpRequest = FuRequestUtils.getHttpRequest(httpRequestPsiFile, url);
+    }
+
 
     @Override
     public Project getProject() {
