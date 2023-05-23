@@ -1,7 +1,10 @@
 package com.wdf.fudoc.util;
 
 import com.intellij.httpClient.http.request.HttpRequestPsiFile;
+import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
 import com.intellij.httpClient.http.request.psi.HttpRequest;
+import com.intellij.httpClient.http.request.psi.HttpRequestBlock;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
@@ -37,11 +40,24 @@ public class FuRequestUtils {
      * 根据光标位置从.http或.rest文件中读取指定的接口
      *
      * @param httpRequestPsiFile httpClient文件
-     * @param psiElement         光标所在的节点
      * @return 光标所在的接口对象
      */
-    public static HttpRequest getHttpRequest(HttpRequestPsiFile httpRequestPsiFile, PsiElement psiElement) {
-        return null;
+    public static HttpRequest getHttpRequest(HttpRequestPsiFile httpRequestPsiFile, Editor editor) {
+        HttpRequestBlock[] requestBlocks = HttpRequestPsiUtils.getRequestBlocks(httpRequestPsiFile);
+        if (requestBlocks.length == 0) {
+            return null;
+        }
+        if (requestBlocks.length == 1) {
+            return requestBlocks[0].getRequest();
+        }
+        int offset = editor.getCaretModel().getOffset();
+        for (int i = 1; i < requestBlocks.length; i++) {
+            int textOffset = requestBlocks[i].getTextOffset();
+            if (offset < textOffset) {
+                return requestBlocks[i - 1].getRequest();
+            }
+        }
+        return requestBlocks[requestBlocks.length - 1].getRequest();
     }
 
 

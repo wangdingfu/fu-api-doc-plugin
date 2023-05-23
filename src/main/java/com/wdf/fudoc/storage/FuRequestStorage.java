@@ -1,11 +1,19 @@
 package com.wdf.fudoc.storage;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.request.http.FuHttpClient;
 import com.wdf.fudoc.request.http.dto.HttpRecentDTO;
+import com.wdf.fudoc.util.AnnotationUtils;
+import com.wdf.fudoc.util.FuRequestUtils;
+import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 /**
  * 【Fu Request】模块持久化
@@ -25,6 +33,13 @@ public class FuRequestStorage {
      * @return 该接口对应http请求对象
      */
     public static FuHttpClient read(Project project, PsiClass psiClass, PsiMethod psiMethod) {
+        //去指定目录下读取.http文件或则.rest文件
+        String projectName = project.getName();
+        Module module = ModuleUtil.findModuleForPsiElement(psiMethod);
+        String moduleName = Objects.isNull(module) ? StringUtils.EMPTY : module.getName();
+        String controllerName = psiClass.getName();
+        String methodName = psiMethod.getName();
+
         return null;
     }
 

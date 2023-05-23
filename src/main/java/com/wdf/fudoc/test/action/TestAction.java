@@ -6,6 +6,7 @@ import com.intellij.httpClient.execution.RestClientFormBodyPart;
 import com.intellij.httpClient.execution.RestClientRequest;
 import com.intellij.httpClient.execution.RestClientRequestBuilder;
 import com.intellij.httpClient.http.request.HttpRequestPsiConverter;
+import com.intellij.httpClient.http.request.HttpRequestPsiFile;
 import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
 import com.intellij.httpClient.http.request.HttpRequestVariableSubstitutor;
 import com.intellij.httpClient.http.request.psi.HttpQuery;
@@ -15,6 +16,7 @@ import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.impl.EditorComponentImpl;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
@@ -25,6 +27,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.AuthSettingView;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import com.wdf.fudoc.test.view.TestTipPanel;
+import com.wdf.fudoc.util.FuRequestUtils;
 import com.wdf.fudoc.util.PopupUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +50,9 @@ public class TestAction extends AnAction {
         HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
         //读取http文件
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
+
+        HttpRequest httpRequest = FuRequestUtils.getHttpRequest((HttpRequestPsiFile) psiFile, e.getData(LangDataKeys.EDITOR));
+
         if(Objects.isNull(psiFile)){
             return;
         }
