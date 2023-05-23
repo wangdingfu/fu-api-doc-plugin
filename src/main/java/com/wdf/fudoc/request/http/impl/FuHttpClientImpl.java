@@ -28,12 +28,6 @@ public class FuHttpClientImpl implements FuHttpClient {
         this.httpRequest = FuRequestUtils.getHttpRequest(httpRequestPsiFile, psiElement);
     }
 
-    public FuHttpClientImpl(Project project, HttpRequestPsiFile httpRequestPsiFile, String url) {
-        this.httpRequestPsiFile = httpRequestPsiFile;
-        this.project = project;
-        this.httpRequest = FuRequestUtils.getHttpRequest(httpRequestPsiFile, url);
-    }
-
 
     @Override
     public Project getProject() {
