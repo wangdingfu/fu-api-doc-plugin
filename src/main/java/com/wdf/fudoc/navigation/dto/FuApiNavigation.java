@@ -1,4 +1,4 @@
-package com.wdf.fudoc.search.test.dto;
+package com.wdf.fudoc.navigation.dto;
 
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;

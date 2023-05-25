@@ -3,8 +3,6 @@ package com.wdf.fudoc.navigation;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereContributor;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereContributorFactory;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.wdf.fudoc.search.test.FuApiSearchContributor;
-import com.wdf.fudoc.search.test.dto.FuApiNavigation;
 import org.jetbrains.annotations.NotNull;
 
 /**

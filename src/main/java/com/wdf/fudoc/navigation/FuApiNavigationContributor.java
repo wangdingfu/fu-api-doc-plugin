@@ -9,7 +9,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.Processor;
 import com.intellij.util.PsiNavigateUtil;
 import com.wdf.fudoc.navigation.match.FuApiMatcher;
-import com.wdf.fudoc.search.test.FuSearchApiExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -96,7 +95,7 @@ public class FuApiNavigationContributor implements WeightedSearchEverywhereContr
     public boolean isShownInSeparateTab() {
         return true;
     }
-    
+
     /**
      * 渲染API
      */

@@ -3,7 +3,7 @@ package com.wdf.fudoc.navigation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
-import com.wdf.fudoc.search.test.dto.MethodPathInfo;
+import com.wdf.fudoc.navigation.dto.MethodPathInfo;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;

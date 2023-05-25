@@ -94,25 +94,18 @@
 
 
 
-        <searchEverywhereContributor implementation="com.wdf.fudoc.search.FuSearchEveryWhereFactory"/>
         <searchEverywhereContributor implementation="com.wdf.fudoc.navigation.FuNavigationApiEveryWhereFactory"/>
 
     </extensions>
 
     <actions>
-        <!-- url 导航 -->
-        <action id="cn.gudqs.search.goto" class="com.wdf.fudoc.search.action.SearchApiAction"
-                text="Search Api" description="Go to Api" icon="AllIcons.Actions.Search">
-            <add-to-group group-id="GoToTargetEx" anchor="first"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH" />
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
-        </action>
 
         <!-- url 导航 -->
         <action id="fu.api.navigation" class="com.wdf.fudoc.navigation.action.FuApiNavigationAction"
                 text="Navigation Api" description="Navigation api" icon="AllIcons.Actions.Search">
             <add-to-group group-id="GoToTargetEx" anchor="first"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P" />
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH" />
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
         </action>
 
         <!-- 接口文档相关动作 -->

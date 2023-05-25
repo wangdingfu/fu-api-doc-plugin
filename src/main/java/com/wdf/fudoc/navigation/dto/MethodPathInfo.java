@@ -1,4 +1,4 @@
-package com.wdf.fudoc.search.test.dto;
+package com.wdf.fudoc.navigation.dto;
 
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;

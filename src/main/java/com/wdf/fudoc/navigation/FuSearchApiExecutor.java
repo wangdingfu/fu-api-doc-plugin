@@ -1,4 +1,4 @@
-package com.wdf.fudoc.search.test;
+package com.wdf.fudoc.navigation;
 
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
@@ -11,9 +11,8 @@ import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.common.exception.FuDocException;
-import com.wdf.fudoc.navigation.ApiNavigationItem;
-import com.wdf.fudoc.search.test.dto.FuApiNavigation;
-import com.wdf.fudoc.search.test.dto.MethodPathInfo;
+import com.wdf.fudoc.navigation.dto.FuApiNavigation;
+import com.wdf.fudoc.navigation.dto.MethodPathInfo;
 import com.wdf.fudoc.util.AnnotationUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
