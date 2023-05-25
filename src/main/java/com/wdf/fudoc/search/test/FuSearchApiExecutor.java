@@ -11,6 +11,7 @@ import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.common.exception.FuDocException;
+import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.search.test.dto.FuApiNavigation;
 import com.wdf.fudoc.search.test.dto.MethodPathInfo;
 import com.wdf.fudoc.util.AnnotationUtils;
@@ -19,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -35,6 +37,20 @@ public class FuSearchApiExecutor {
 
     public static FuSearchApiExecutor getInstance(Project project) {
         return new FuSearchApiExecutor(project);
+    }
+
+    public List<ApiNavigationItem> getApiList() {
+        List<FuApiNavigation> fuApiNavigationList = getFuApiNavigationList();
+        if (CollectionUtils.isNotEmpty(fuApiNavigationList)) {
+            return fuApiNavigationList.stream().map(this::convertTo).collect(Collectors.toList());
+        }
+        return Lists.newArrayList();
+    }
+
+
+    private ApiNavigationItem convertTo(FuApiNavigation fuApiNavigation) {
+        return new ApiNavigationItem(fuApiNavigation.getPsiElement(), fuApiNavigation.getRequestType(), fuApiNavigation.getUrl(), fuApiNavigation.getMethodPathInfo());
+
     }
 
     @NotNull
