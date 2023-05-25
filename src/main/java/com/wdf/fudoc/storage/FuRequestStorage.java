@@ -1,5 +1,11 @@
 package com.wdf.fudoc.storage;
 
+import com.intellij.httpClient.http.request.HttpRequestPsiFile;
+import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
+import com.intellij.httpClient.http.request.HttpRequestVariableSubstitutor;
+import com.intellij.httpClient.http.request.psi.HttpRequest;
+import com.intellij.httpClient.http.request.psi.HttpRequestBlock;
+import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -8,11 +14,15 @@ import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.request.http.FuHttpClient;
 import com.wdf.fudoc.request.http.dto.HttpRecentDTO;
+import com.wdf.fudoc.request.http.impl.FuHttpClientImpl;
 import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.FuRequestUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
+import com.wdf.fudoc.util.StorageUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,6 +35,11 @@ import java.util.Objects;
  */
 public class FuRequestStorage {
 
+
+    public static FuHttpClient read(Project project, PsiClass psiClass) {
+        return null;
+    }
+
     /**
      * 读取HttpClient文件 并返回该对象
      *
@@ -32,15 +47,41 @@ public class FuRequestStorage {
      * @param psiMethod 对应的接口方法体
      * @return 该接口对应http请求对象
      */
-    public static FuHttpClient read(Project project, PsiClass psiClass, PsiMethod psiMethod) {
+    public static FuHttpClient read(Project project, PsiClass psiClass, PsiMethod psiMethod, List<String> mappingUrlList) {
+        if (CollectionUtils.isEmpty(mappingUrlList)) {
+            return null;
+        }
         //去指定目录下读取.http文件或则.rest文件
-        String projectName = project.getName();
-        Module module = ModuleUtil.findModuleForPsiElement(psiMethod);
-        String moduleName = Objects.isNull(module) ? StringUtils.EMPTY : module.getName();
-        String controllerName = psiClass.getName();
-        String methodName = psiMethod.getName();
-
+        HttpRequestPsiFile httpRequestPsiFile = StorageUtils.readHttp(project, psiClass, psiMethod);
+        if (Objects.isNull(httpRequestPsiFile)) {
+            return null;
+        }
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project);
+        HttpRequestBlock[] requestBlocks = HttpRequestPsiUtils.getRequestBlocks(httpRequestPsiFile);
+        for (HttpRequestBlock requestBlock : requestBlocks) {
+            HttpRequest request = requestBlock.getRequest();
+            HttpRequestTarget requestTarget = request.getRequestTarget();
+            if (Objects.isNull(requestTarget)) {
+                continue;
+            }
+            String httpPath = requestTarget.getHttpPath(substitutor);
+            if (matchUrl(mappingUrlList, httpPath)) {
+                //匹配成功 找到指定接口
+                return new FuHttpClientImpl(project, request);
+            }
+        }
         return null;
+    }
+
+
+    private static boolean matchUrl(List<String> mappingUrlList, String httpUrl) {
+        for (String mappingUrl : mappingUrlList) {
+            if (mappingUrl.contains("{") && mappingUrl.contains("}")) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

@@ -9,7 +9,8 @@ import com.wdf.fudoc.request.http.FuHttpClient;
 
 /**
  * @author wangdingfu
- * @date 2023-05-21 23:10:52 */
+ * @date 2023-05-21 23:10:52
+ */
 public class FuHttpClientImpl implements FuHttpClient {
 
 
@@ -36,5 +37,10 @@ public class FuHttpClientImpl implements FuHttpClient {
     @Override
     public PsiMethod getPsiMethod() {
         return null;
+    }
+
+    @Override
+    public HttpRequest getHttpRequest() {
+        return this.httpRequest;
     }
 }

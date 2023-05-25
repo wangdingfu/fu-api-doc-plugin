@@ -125,4 +125,9 @@ public interface FuDocConstants {
     }
 
 
+    interface SearchApi{
+        String TITLE = "Fu Api";
+    }
+
+
 }

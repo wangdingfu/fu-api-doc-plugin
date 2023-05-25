@@ -1,8 +1,10 @@
 package com.wdf.fudoc.apidoc.constant.enumtype;
 
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
+import icons.FuDocIcons;
 import lombok.Getter;
 
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -14,19 +16,23 @@ import java.util.stream.Collectors;
 @Getter
 public enum RequestType {
 
-    GET("GET", new String[]{AnnotationConstants.GET_MAPPING}),
-    POST("POST", new String[]{AnnotationConstants.POST_MAPPING}),
-    PUT("PUT", new String[]{AnnotationConstants.PUT_MAPPING, AnnotationConstants.PATCH_MAPPING}),
-    DELETE("DELETE", new String[]{AnnotationConstants.DELETE_MAPPING});
+    ALL("ALL", FuDocIcons.ALL_DARK,new String[]{AnnotationConstants.REQUEST_MAPPING}),
+    GET("GET", FuDocIcons.GET_DARK,new String[]{AnnotationConstants.GET_MAPPING}),
+    POST("POST", FuDocIcons.POST_DARK,new String[]{AnnotationConstants.POST_MAPPING}),
+    PUT("PUT", FuDocIcons.PUT_DARK,new String[]{AnnotationConstants.PUT_MAPPING, AnnotationConstants.PATCH_MAPPING}),
+    DELETE("DELETE", FuDocIcons.DELETE_DARK,new String[]{AnnotationConstants.DELETE_MAPPING});
 
 
     private final String requestType;
 
+    private final Icon icon;
+
     private final String[] annotations;
 
 
-    RequestType(String requestType, String[] annotations) {
+    RequestType(String requestType, Icon icon, String[] annotations) {
         this.requestType = requestType;
+        this.icon = icon;
         this.annotations = annotations;
     }
 

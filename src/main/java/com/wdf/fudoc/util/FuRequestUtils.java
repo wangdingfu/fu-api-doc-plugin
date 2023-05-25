@@ -1,14 +1,23 @@
 package com.wdf.fudoc.util;
 
+import cn.hutool.core.io.FileUtil;
 import com.intellij.httpClient.http.request.HttpRequestPsiFile;
 import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
 import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestBlock;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
+import com.wdf.fudoc.common.constant.FuDocConstants;
+import org.apache.commons.lang3.StringUtils;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
@@ -59,6 +68,26 @@ public class FuRequestUtils {
         }
         return requestBlocks[requestBlocks.length - 1].getRequest();
     }
+
+
+    /**
+     * 获取http请求持久化路径
+     *
+     * @param project  当前项目
+     * @param psiClass controller
+     * @return 持久化目录
+     */
+    public static String getRequestPath(Project project, PsiClass psiClass) {
+        String basePath = project.getBasePath();
+        if (StringUtils.isBlank(basePath)) {
+            basePath = FileUtil.getTmpDir().getPath();
+        }
+        Module module = ModuleUtil.findModuleForPsiElement(psiClass);
+        String moduleName = Objects.isNull(module) ? StringUtils.EMPTY : module.getName();
+        String controllerName = psiClass.getName();
+        return Paths.get(basePath, FuDocConstants.IDEA_DIR, FuDocConstants.FU_DOC, FuDocConstants.API_DIR, moduleName, controllerName).toString();
+    }
+
 
 
     /**

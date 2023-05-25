@@ -1,19 +1,12 @@
 package com.wdf.fudoc.request.http.impl;
 
-import cn.hutool.core.io.FileUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.request.http.FuHttpClient;
 import com.wdf.fudoc.request.http.FuRequest;
-import org.apache.commons.lang3.StringUtils;
-
-import java.nio.file.Paths;
-import java.util.Objects;
+import com.wdf.fudoc.util.FuRequestUtils;
 
 /**
  * @author wangdingfu
@@ -47,14 +40,7 @@ public class FuRequestImpl implements FuRequest {
      */
     @Override
     public String getPath() {
-        String basePath = project.getBasePath();
-        if (StringUtils.isBlank(basePath)) {
-            basePath = FileUtil.getTmpDir().getPath();
-        }
-        Module module = ModuleUtil.findModuleForPsiElement(psiMethod);
-        String moduleName = Objects.isNull(module) ? StringUtils.EMPTY : module.getName();
-        String controllerName = psiClass.getName();
-        return Paths.get(basePath, FuDocConstants.IDEA_DIR, FuDocConstants.FU_DOC, FuDocConstants.API_DIR, moduleName, controllerName).toString();
+        return FuRequestUtils.getRequestPath(this.project, this.psiClass);
     }
 
     @Override
@@ -63,11 +49,9 @@ public class FuRequestImpl implements FuRequest {
     }
 
 
-
     @Override
     public String httpContent() {
-
-
+        HttpRequest httpRequest = fuHttpClient.getHttpRequest();
         return null;
     }
 }

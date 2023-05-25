@@ -1,11 +1,17 @@
 package com.wdf.fudoc.util;
 
+import com.intellij.httpClient.http.request.HttpRequestLanguage;
+import com.intellij.httpClient.http.request.HttpRequestPsiFile;
+import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.*;
 import com.wdf.fudoc.request.http.FuRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
@@ -38,6 +44,26 @@ public class StorageUtils {
         } catch (IOException e) {
             log.info("持久化http文件异常", e);
         }
+    }
+
+
+    /**
+     * 读取http文件
+     *
+     * @param project   项目
+     * @param psiClass  controller
+     * @param psiMethod 接口方法体
+     * @return http文件内容
+     */
+    public static HttpRequestPsiFile readHttp(Project project, PsiClass psiClass, PsiMethod psiMethod) {
+        final FileViewProviderFactory factory = LanguageFileViewProviders.INSTANCE.forLanguage(HttpRequestLanguage.INSTANCE);
+        String requestPath = FuRequestUtils.getRequestPath(project, psiClass);
+        VirtualFile file = VfsUtil.findFile(Paths.get(requestPath, psiMethod.getName() + ".http"), false);
+        if (Objects.isNull(file)) {
+            return null;
+        }
+        FileViewProvider fileViewProvider = factory.createFileViewProvider(file, HttpRequestLanguage.INSTANCE, PsiManager.getInstance(project), true);
+        return new HttpRequestPsiFile(fileViewProvider);
     }
 
 

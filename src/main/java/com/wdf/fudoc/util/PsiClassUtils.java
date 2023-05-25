@@ -74,20 +74,26 @@ public class PsiClassUtils {
             if (!psiMethod.getName().equals(methodName)) {
                 continue;
             }
-            String mapping = FuRequestUtils.getMapping(psiMethod);
-            if (StringUtils.isBlank(mapping)) {
-                continue;
-            }
-            AnnotationData annotationData = AnnotationUtils.parse(psiMethod.getAnnotation(mapping));
-            if (Objects.isNull(annotationData)) {
-                continue;
-            }
-            List<String> urlList = annotationData.array().constant().stringValue();
+            //获取方法体标识mapping注解上的url 例如GetMapping PostMapping RequestMapping
+            List<String> urlList = findMappingUrlList(psiMethod);
             if (CollectionUtils.isNotEmpty(urlList) && urlList.contains(mappingUrl)) {
                 return psiMethod;
             }
         }
         return null;
+    }
+
+
+    public static List<String> findMappingUrlList(PsiMethod psiMethod){
+        String mapping = FuRequestUtils.getMapping(psiMethod);
+        if (StringUtils.isBlank(mapping)) {
+            return null;
+        }
+        AnnotationData annotationData = AnnotationUtils.parse(psiMethod.getAnnotation(mapping));
+        if (Objects.isNull(annotationData)) {
+            return null;
+        }
+        return annotationData.array().constant().stringValue();
     }
 
 

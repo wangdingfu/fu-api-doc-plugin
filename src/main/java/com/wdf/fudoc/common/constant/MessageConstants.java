@@ -87,4 +87,8 @@ public interface MessageConstants {
     String VALIDATOR_INPUT_REPEAT = "fudoc.input.validator.repeat";
 
 
+
+    String SEARCH_API_DESCRIPTION = "fudoc.api.search.description";
+
+
 }

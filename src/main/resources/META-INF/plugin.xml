@@ -36,6 +36,7 @@
         <applicationService serviceInterface="com.wdf.fudoc.apidoc.mock.MockDataService" serviceImplementation="com.wdf.fudoc.apidoc.mock.AutoMockDataServiceImpl"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSetting"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSecuritySetting"/>
+        <projectService serviceImplementation="com.wdf.fudoc.search.test.state.MethodFilterConfiguration"/>
 
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.parse.FuDocClassParserImpl"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.assemble.impl.ControllerAssembleService"/>
@@ -90,9 +91,21 @@
                 order="after DefaultFloatingToolbarProvider"
                 implementation="com.wdf.fudoc.test.action.editor.FuDocEditorFloatingToolbarProvider"
                 id="FuDocEditorFloatingToolbarProvider"/>
+
+
+
+        <searchEverywhereContributor implementation="com.wdf.fudoc.search.FuSearchEveryWhereFactory"/>
+
     </extensions>
 
     <actions>
+        <!-- url 导航 -->
+        <action id="cn.gudqs.search.goto" class="com.wdf.fudoc.search.action.SearchApiAction"
+                text="Search Api" description="Go to Api" icon="AllIcons.Actions.Search">
+            <add-to-group group-id="GoToTargetEx" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH" />
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
+        </action>
 
         <!-- 接口文档相关动作 -->
         <group id="wdf.fudoc.apidoc" popup="true" text="Fu Doc">
