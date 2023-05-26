@@ -57,7 +57,7 @@ public class FuRequestManager {
             return;
         }
 
-        FuStorageExecutor.saveRequest(fuHttpRequestData);
+//        FuStorageExecutor.saveRequest(fuHttpRequestData);
         String apiKey = fuHttpRequestData.getApiKey();
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> requestDataMap = data.getRequestDataMap();

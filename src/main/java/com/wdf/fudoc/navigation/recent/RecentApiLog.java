@@ -36,7 +36,7 @@ public class RecentApiLog {
         if (StringUtils.isBlank(content)) {
             return;
         }
-        String[] split = StringUtils.split("|");
+        String[] split = StringUtils.split(content, "|");
         if (split.length == 1) {
             this.url = split[0];
         }

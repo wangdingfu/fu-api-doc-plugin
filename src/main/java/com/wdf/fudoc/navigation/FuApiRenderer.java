@@ -12,6 +12,8 @@ import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.util.TextWithIcon;
 import com.intellij.util.ui.UIUtil;
+import com.wdf.fudoc.common.enumtype.FuColor;
+import com.wdf.fudoc.util.ColorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -42,11 +44,9 @@ public class FuApiRenderer extends SearchEverywherePsiRenderer {
         ApiNavigationItem apiNavigationItem = (ApiNavigationItem) value;
         String name = apiNavigationItem.getUrl();
         String timeStr = apiNavigationItem.getTimeStr();
+        String timeView = StringUtils.isBlank(timeStr) ? StringUtils.EMPTY : " (" + timeStr + ")";
 
         String locationString = "    " + apiNavigationItem.getRightText();
-        if (StringUtils.isNotBlank(timeStr)) {
-            locationString += "   (" + timeStr + ")";
-        }
 
         SpeedSearchUtil.appendColoredFragmentForMatcher(name, renderer, nameAttributes, itemMatchers.nameMatcher, bgColor, selected);
         renderer.setIcon(apiNavigationItem.getRequestType().getIcon());
@@ -54,17 +54,27 @@ public class FuApiRenderer extends SearchEverywherePsiRenderer {
         if (StringUtils.isNotEmpty(locationString)) {
             FontMetrics fm = list.getFontMetrics(list.getFont());
             int maxWidth = list.getWidth() - fm.stringWidth(name) - myRightComponentWidth - 36;
-            int fullWidth = fm.stringWidth(locationString);
+            int fullWidth = fm.stringWidth(locationString + timeView);
             if (fullWidth < maxWidth) {
                 SpeedSearchUtil.appendColoredFragmentForMatcher(locationString, renderer, SimpleTextAttributes.GRAYED_ATTRIBUTES, itemMatchers.nameMatcher, bgColor, selected);
+                if (StringUtils.isNotBlank(timeView)) {
+                    SimpleTextAttributes timeAttributes = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, ColorUtils.convertColor(FuColor.GREEN.getDarkColor()));
+                    SpeedSearchUtil.appendColoredFragmentForMatcher(timeView, renderer, timeAttributes, itemMatchers.locationMatcher, UIUtil.getListBackground(), selected);
+                }
             } else {
-                int adjustedWidth = Math.max(locationString.length() * maxWidth / fullWidth - 1, 3);
+                String text = locationString + timeView;
+                int adjustedWidth = Math.max(text.length() * maxWidth / fullWidth - 1, 3);
                 locationString = StringUtil.trimMiddle(locationString, adjustedWidth);
                 SpeedSearchUtil.appendColoredFragmentForMatcher(locationString, renderer, SimpleTextAttributes.GRAYED_ATTRIBUTES, itemMatchers.nameMatcher, bgColor, selected);
+                if (StringUtils.isNotBlank(timeView)) {
+                    SimpleTextAttributes timeAttributes = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, ColorUtils.convertColor(FuColor.GREEN.getDarkColor()));
+                    SpeedSearchUtil.appendColoredFragmentForMatcher(timeView, renderer, timeAttributes, itemMatchers.locationMatcher, UIUtil.getListBackground(), selected);
+                }
             }
         }
         return true;
     }
+
 
 
     @Override
