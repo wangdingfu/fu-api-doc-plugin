@@ -19,6 +19,7 @@ public interface FuDocConstants {
     String FU_DOC_FILE = "FuDocFile.";
 
     String ROOT = "root";
+    String FU_DOC_DIR = "fudoc";
 
 
     String API_ID = "apiId";

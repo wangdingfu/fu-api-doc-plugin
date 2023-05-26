@@ -103,9 +103,12 @@ public class FuApiNavigationContributor implements WeightedSearchEverywhereContr
      */
     @Override
     public boolean processSelectedItem(@NotNull ApiNavigationItem selected, int modifiers, @NotNull String searchText) {
+        log.info("搜索api【{}】====>选中api【{}】", searchText, selected.getUrl());
+        long start = System.currentTimeMillis();
         PsiNavigateUtil.navigate(selected.getPsiElement());
         //记录历史搜索
         ApplicationManager.getApplication().runReadAction(() -> RecentNavigationManager.add(project, selected));
+        log.info("选中api【{}】共计耗时{}ms", selected.getUrl(), System.currentTimeMillis() - start);
         return true;
     }
 

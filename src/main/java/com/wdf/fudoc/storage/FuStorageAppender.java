@@ -2,15 +2,17 @@ package com.wdf.fudoc.storage;
 
 
 import cn.hutool.core.io.FileUtil;
+import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.FuDocException;
-import com.wdf.fudoc.util.ProjectUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,7 +30,7 @@ public class FuStorageAppender {
     }
 
     public static FuStorageAppender getInstance(Project project, String fileName, String path) {
-        File file = FileUtil.file(project.getBasePath(), FuDocConstants.IDEA_DIR, FuDocConstants.FU_DOC, path, fileName);
+        File file = FileUtil.file(project.getBasePath(), FuDocConstants.IDEA_DIR, FuDocConstants.FU_DOC_DIR, path, fileName);
         if (FileUtilRt.createIfNotExists(file)) {
             log.error("创建目录【{}】失败", file.getAbsolutePath());
         }
@@ -45,7 +47,7 @@ public class FuStorageAppender {
      */
     public void append(String content) {
         try {
-            FileUtil.appendUtf8String(content, this.file);
+            FileUtil.appendUtf8Lines(Lists.newArrayList(content), this.file);
         } catch (Exception e) {
             log.error("向文件{}追加内容{}失败", file.getAbsolutePath(), content, e);
         }
@@ -55,6 +57,8 @@ public class FuStorageAppender {
      * 读取文件 按行读取
      */
     public List<String> read() {
-        return FileUtil.readLines(this.file, Charset.defaultCharset());
+        List<String> lineList = FileUtil.readLines(this.file, Charset.defaultCharset());
+        lineList.removeIf(StringUtils::isBlank);
+        return lineList;
     }
 }

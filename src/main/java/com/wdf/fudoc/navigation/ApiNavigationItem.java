@@ -4,6 +4,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +26,9 @@ public class ApiNavigationItem {
     private final String location;
 
     private final String title;
+
+    @Setter
+    private String timeStr;
 
     public ApiNavigationItem(PsiMethod psiMethod, String url, RequestType requestType, String location, String title) {
         this.psiElement = psiMethod;
