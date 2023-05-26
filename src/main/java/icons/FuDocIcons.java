@@ -32,4 +32,14 @@ public interface FuDocIcons {
     Icon FU_API_SYNC_DIALOG = IconLoader.getIcon("icon/sync2.svg", FuDocIcons.class);
     Icon FU_API_YAPI = IconLoader.getIcon("icon/yapi.svg", FuDocIcons.class);
     Icon FU_API_SHOW_DOC = IconLoader.getIcon("icon/showdoc.svg", FuDocIcons.class);
+    Icon FU_API_FOX = IconLoader.getIcon("icon/apifox.svg", FuDocIcons.class);
+
+
+    Icon GET_DARK = IconLoader.getIcon("icon/http/get_dark.svg", FuDocIcons.class);
+    Icon POST_DARK = IconLoader.getIcon("icon/http/post_dark.svg", FuDocIcons.class);
+    Icon PUT_DARK = IconLoader.getIcon("icon/http/put_dark.svg", FuDocIcons.class);
+    Icon DELETE_DARK = IconLoader.getIcon("icon/http/delete_dark.svg", FuDocIcons.class);
+    Icon ALL_DARK = IconLoader.getIcon("icon/http/all_dark.svg", FuDocIcons.class);
+
+
 }

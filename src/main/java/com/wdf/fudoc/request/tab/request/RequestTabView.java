@@ -21,6 +21,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -112,7 +113,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         //send区域
         this.mainPanel.add(initSendPanel(), BorderLayout.NORTH);
         //请求参数区域
-        this.mainPanel.add(fuTabBuilder.addTab(this.httpHeaderTab.getTabInfo()).addTab(this.httpGetParamsTab.getTabInfo()).addTab(this.httpRequestBodyTab.getTabInfo()).build(), BorderLayout.CENTER);
+        this.mainPanel.add(fuTabBuilder.addTab(this.httpHeaderTab).addTab(this.httpGetParamsTab).addTab(this.httpRequestBodyTab).build(), BorderLayout.CENTER);
     }
 
     private JPanel initSendPanel() {
@@ -214,6 +215,23 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.requestTypeComponent.addItemListener(e -> setRequestType(String.valueOf(e.getItem())));
 
         //对请求地址添加属性内容变更事件
+        this.requestUrlComponent.addFocusListener(new FocusListener() {
+            String beforeFocusValue;
+            @Override
+            public void focusGained(FocusEvent e) {
+                beforeFocusValue = requestUrlComponent.getText();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String currentValue = requestUrlComponent.getText();
+                if(!currentValue.equals(beforeFocusValue)){
+                    resetRequestParam();
+                }
+            }
+        });
+
+
         this.requestUrlComponent.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -241,14 +259,19 @@ public class RequestTabView implements FuTab, HttpCallback {
             return;
         }
         request.setBaseUrl(StringUtils.substringBefore(requestUrl, "?"));
+        request.setParamUrl(StringUtils.substringAfter(requestUrl, "?"));
+    }
+
+
+    private void resetRequestParam(){
+        String requestUrl = this.requestUrlComponent.getText();
         String paramUrl = StringUtils.substringAfter(requestUrl, "?");
-        request.setParamUrl(paramUrl);
         FuTab selected = this.fuTabBuilder.getSelected();
         if (Objects.nonNull(selected)) {
             Map<String, String> paramMap = new HashMap<>();
             for (String params : paramUrl.split("&")) {
                 String[] param = params.split("=");
-                if (params.length() == 2) {
+                if (param.length == 2) {
                     paramMap.put(param[0], param[1]);
                 }
             }

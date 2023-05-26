@@ -5,12 +5,11 @@ import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.tree.TreePath;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -20,26 +19,21 @@ import java.util.Objects;
 @Setter
 public class TreePathBO implements Serializable {
 
-    private TreePath[] selectPath;
+    private List<String> selectPathList;
 
     private String view;
 
-    public TreePathBO(TreePath[] selectPath) {
-        this.selectPath = selectPath;
-        if (Objects.nonNull(selectPath) && selectPath.length > 0) {
-            List<String> viewNameList = Lists.newArrayList();
-            for (TreePath treePath : selectPath) {
-                Object lastPathComponent = treePath.getLastPathComponent();
-                if (Objects.nonNull(lastPathComponent)) {
-                    viewNameList.add(lastPathComponent.toString());
-                }
-            }
-            this.view = StringUtils.join(viewNameList, ",");
-        }
+    public TreePathBO() {
+    }
+
+    public TreePathBO(List<String> selectPathList) {
+        this.selectPathList = selectPathList;
+        this.view = StringUtils.join(selectPathList, ",");
+
     }
 
     public boolean isNotNull() {
-        return StringUtils.isNotBlank(this.view) && Objects.nonNull(this.selectPath) && this.selectPath.length > 0;
+        return StringUtils.isNotBlank(this.view) && CollectionUtils.isNotEmpty(selectPathList);
     }
 
     private static final Integer DEFAULT_SORT = 99;
@@ -66,18 +60,10 @@ public class TreePathBO implements Serializable {
             //当前配置指定的是针对当前所有项目 则不用继续匹配 当前项目所有模块均可以同步
             return ONE_LEVEL_SORT;
         }
-        for (TreePath treePath : selectPath) {
-            int sortLevel = ONE_LEVEL_SORT;
+        for (String path : selectPathList) {
             //选中的节点 循环是因为可能会存在多选的情况
-            if (Objects.nonNull(treePath)) {
-                Object[] path = treePath.getPath();
-                for (int i = path.length - 1; i >= 0; i--) {
-                    Object item = path[i];
-                    if (Objects.nonNull(item) && (moduleName.equals(item.toString()) || currProjectName.equals(item.toString()))) {
-                        return sortLevel;
-                    }
-                    sortLevel++;
-                }
+            if(StringUtils.isNotBlank(path) && (moduleName.equals(path) || currProjectName.equals(path))){
+                return ONE_LEVEL_SORT;
             }
         }
         //没有匹配到

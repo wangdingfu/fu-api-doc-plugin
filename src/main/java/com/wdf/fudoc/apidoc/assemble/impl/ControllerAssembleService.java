@@ -3,7 +3,10 @@ package com.wdf.fudoc.apidoc.assemble.impl;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.assemble.AbstractAssembleService;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
+import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
+import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.fudoc.apidoc.pojo.data.CommonItemData;
+import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.pojo.bo.AssembleBO;
@@ -11,6 +14,7 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
+import com.wdf.fudoc.util.FuApiUtils;
 import com.wdf.fudoc.util.PathUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +70,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
      *
      * @param fuDocContext   【FU DOC】全局上下文对象
      * @param methodInfoDesc 方法描述信息
-     * @param commonItemData  具体每一个接口渲染的数据对象
+     * @param commonItemData 具体每一个接口渲染的数据对象
      * @param assembleBO     组装参数信息
      * @return true: 该方法可以生成接口文档  false: 该方法过滤掉 不生成接口文档
      */
@@ -85,33 +89,31 @@ public class ControllerAssembleService extends AbstractAssembleService {
                         requestType = RequestType.GET.getRequestType();
                     }
                 } else {
-                    requestType = RequestType.getByAnnotationName(qualifiedName);
+                    requestType = RequestType.getByAnnotationName(qualifiedName).getRequestType();
                 }
                 commonItemData.setRequestType(requestType);
-                commonItemData.setUrlList(joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
+                commonItemData.setUrlList(FuApiUtils.joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
+                //Content-Type
+                if (RequestType.POST.getRequestType().equals(requestType)) {
+                    commonItemData.setContentType(analysisContentType(methodInfoDesc.getRequestList()));
+                }
                 return true;
             }
         }
         return false;
     }
 
-    /**
-     * 拼接请求地址(将controller上的请求地址和方法上的请求地址拼接成一个完成的请求地址)
-     *
-     * @param controllerUrls controller上的请求地址集合
-     * @param methodUrlList  方法体上的请求地址
-     * @return 该请求存在的请求地址集合
-     */
-    private List<String> joinUrl(List<String> controllerUrls, List<String> methodUrlList) {
-        if (CollectionUtils.isEmpty(controllerUrls)) {
-            return methodUrlList;
-        }
-        List<String> urlList = Lists.newArrayList();
-        for (String controllerUrl : controllerUrls) {
-            for (String methodUrl : methodUrlList) {
-                urlList.add(PathUtils.urlJoin(controllerUrl, methodUrl));
+
+    public ContentType analysisContentType(List<ObjectInfoDesc> requestList) {
+        if (CollectionUtils.isNotEmpty(requestList)) {
+            ObjectInfoDesc objectInfoDesc = requestList.stream().filter(a -> a.exists(AnnotationConstants.REQUEST_BODY)).findFirst().orElse(null);
+            if (Objects.nonNull(objectInfoDesc)) {
+                return CollectionUtils.isNotEmpty(objectInfoDesc.getChildList()) ? ContentType.RAW : ContentType.JSON;
+            } else {
+                return requestList.stream().anyMatch(a -> FuDocObjectType.MULTIPART_FILE.equals(a.getFuDocObjectType())) ? ContentType.FORM_DATA : ContentType.URLENCODED;
             }
         }
-        return urlList;
+        return null;
     }
+
 }

@@ -2,6 +2,9 @@
 
 [插件文档地址](https://plugins.jetbrains.com/docs/intellij/welcome.html)
 
+# 开启调试模式
+idea.is.internal=true
+
 # 20220705
 
 - 参数是否必填支持从`@RequestParam`注解`required`中获取(`已完成`)
@@ -85,3 +88,8 @@ idea.is.internal=true
 - 支持在任意地方直接通过快捷键（`ALT+R`）唤醒上次发起的请求窗口
 - README补齐
 - 支持IDEA 2023.1版本
+
+      // 使用 ExtensionsRootType 可以打开 Extensions 目录
+                        ExtensionsRootType fileService = ExtensionsRootType.getInstance();
+                        VirtualFile scratchFile = fileService.findFile(project, pathName, Option.create_new_always);
+                        VfsUtil.saveText(scratchFile, text);

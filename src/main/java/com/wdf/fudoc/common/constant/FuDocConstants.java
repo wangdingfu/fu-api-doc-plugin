@@ -19,15 +19,22 @@ public interface FuDocConstants {
     String FU_DOC_FILE = "FuDocFile.";
 
     String ROOT = "root";
+    String FU_DOC_DIR = "fudoc";
 
 
     String API_ID = "apiId";
+    String FILE = "file";
+
+    String IDEA_DIR = ".idea";
+    String API_DIR = "api";
 
 
     String SPRING_PARAM = "springParam";
     String ROOT_PARAM_TYPE = "rootParamType";
 
     String PATH_VARIABLE = "path_variable";
+
+    String CONTENT_TYPE = "Content-Type";
 
 
     String DEFAULT_HOST = "http://localhost";
@@ -116,6 +123,11 @@ public interface FuDocConstants {
 
     interface SettingForm {
 
+    }
+
+
+    interface SearchApi{
+        String TITLE = "Fu Api";
     }
 
 

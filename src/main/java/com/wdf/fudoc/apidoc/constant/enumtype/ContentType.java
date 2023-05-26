@@ -14,15 +14,15 @@ public enum ContentType {
     /**
      * POST 请求
      */
-    URLENCODED("application/x-www-form-urlencoded", ""),
+    URLENCODED("x-www-form-urlencoded", ""),
     FORM_DATA("multipart/form-data", "form"),
-    JSON("content-type:application/json", "json"),
-    RAW("content-type:application/raw", "raw"),
+    JSON("application/json", "json"),
+    RAW("application/raw", "raw"),
     ;
 
-    private String type;
+    private final String type;
 
-    private String desc;
+    private final String desc;
 
     ContentType(String type, String desc) {
         this.type = type;

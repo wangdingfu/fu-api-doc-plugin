@@ -1,8 +1,10 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
 import com.google.common.collect.Lists;
+import com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
+import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.components.bo.TreePathBO;
@@ -36,16 +38,13 @@ public class YapiConfigData extends BaseSyncConfigData {
      */
     private String yapiPwd;
 
-    /**
-     * 项目配置
-     */
-    private List<YApiProjectTableData> projectConfigList = Lists.newArrayList();
+
 
 
     @Override
     public List<ApiProjectDTO> getProjectConfigList(String moduleName) {
         String basePath = ProjectUtils.getCurrentProjectPath();
-        return this.projectConfigList.stream().filter(f -> f.getProjectKeyList().contains(basePath)).map(m -> convert(m, moduleName))
+        return FuDocSyncProjectSetting.getYapiConfigList().stream().filter(f -> f.getProjectKeyList().contains(basePath)).map(m -> convert(m, moduleName))
                 //过滤没匹配上的module sort=0则是没有匹配上
                 .filter(f -> YesOrNo.NO.getCode() != f.getSort()).sorted(Comparator.comparing(ApiProjectDTO::getSort)).collect(Collectors.toList());
     }
@@ -53,7 +52,7 @@ public class YapiConfigData extends BaseSyncConfigData {
     @Override
     public boolean isExistsConfig() {
         String basePath = ProjectUtils.getCurrentProjectPath();
-        return this.projectConfigList.stream().anyMatch(a -> a.getProjectKeyList().contains(basePath));
+        return FuDocSyncProjectSetting.getYapiConfigList().stream().anyMatch(a -> a.getProjectKeyList().contains(basePath));
     }
 
     @Override

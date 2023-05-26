@@ -4,8 +4,11 @@ import cn.hutool.core.util.IdUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.global.GlobalRequestData;
+import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.state.FuRequestState;
+import com.wdf.fudoc.storage.FuStorageExecutor;
+import com.wdf.fudoc.storage.handler.FuRequestStorage;
 import com.wdf.fudoc.util.JsonUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -53,6 +56,8 @@ public class FuRequestManager {
         if (Objects.isNull(fuHttpRequestData)) {
             return;
         }
+
+//        FuStorageExecutor.saveRequest(fuHttpRequestData);
         String apiKey = fuHttpRequestData.getApiKey();
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> requestDataMap = data.getRequestDataMap();

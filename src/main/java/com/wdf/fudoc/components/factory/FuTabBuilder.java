@@ -1,12 +1,12 @@
 package com.wdf.fudoc.components.factory;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.TabsListener;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.common.FuTab;
+import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author wangdingfu
  * @date 2022-09-04 21:26:23
  */
-public class FuTabBuilder {
+public class FuTabBuilder{
 
     private final JPanel rootPanel;
 
@@ -33,7 +33,7 @@ public class FuTabBuilder {
 
     public FuTabBuilder() {
         this.rootPanel = new BorderLayoutPanel();
-        this.tabs = new JBTabsImpl(null, null, ApplicationManager.getApplication());
+        this.tabs = new JBTabsImpl(ProjectUtils.getCurrProject());
     }
 
     public static FuTabBuilder getInstance() {

@@ -9,6 +9,7 @@ import javax.swing.plaf.ComboBoxUI;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.plaf.metal.MetalComboBoxUI;
 import javax.swing.tree.TreePath;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -29,11 +30,17 @@ public class FuTableTreeComponent extends JComboBox<TreePath[]> {
 
     private MetalComboBoxUI metalComboBoxUI;
 
-    public FuTableTreeComponent(SimpleTree simpleTree) {
-        this.simpleTree = simpleTree;
+    @Getter
+    private final FuModuleTreeComponent fuModuleTreeComponent;
+
+    public FuTableTreeComponent(FuModuleTreeComponent fuModuleTreeComponent) {
+        this.simpleTree = fuModuleTreeComponent.getCatalogTree();
+        this.fuModuleTreeComponent = fuModuleTreeComponent;
         init();
         setTree(simpleTree);
     }
+
+
 
     /**
      * 设置树

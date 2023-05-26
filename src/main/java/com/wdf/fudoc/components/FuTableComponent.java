@@ -38,7 +38,6 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * table数据集合
      */
-    @Getter
     private List<T> dataList;
 
     /**
@@ -56,6 +55,10 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      */
     @Getter
     private FuTableListener<T> fuTableListener;
+
+    public List<T> getDataList() {
+        return Objects.isNull(dataList) ? Lists.newArrayList() : dataList;
+    }
 
     public FuTableComponent(List<Column> columnList, List<T> dataList, Class<T> clazz) {
         init(columnList, dataList, clazz);
@@ -122,7 +125,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     }
 
 
-    private void removeRowByIndex(int row) {
+    public void removeRowByIndex(int row) {
         //从持久化数据对象中移除
         this.dataList.remove(row);
         //从table中移除

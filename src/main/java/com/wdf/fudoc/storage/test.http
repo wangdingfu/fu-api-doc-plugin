@@ -1,0 +1,12 @@
+# @name 测试接口01
+POST http://localhost:8089/deme01
+Content-Type: application/json
+
+{
+
+}
+
+### 测试接口2
+
+// 测试接口2
+POST http://localhost:8089/deme02

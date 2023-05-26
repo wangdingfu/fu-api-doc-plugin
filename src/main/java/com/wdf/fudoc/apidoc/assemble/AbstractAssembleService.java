@@ -140,14 +140,6 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         fuDocItemData.setRequestExampleType(mockResultBo.getRequestExampleType());
         fuDocItemData.setResponseExample(mockResultBo.getResponseExample());
         fuDocItemData.setResponseExampleType(mockResultBo.getResponseExampleType());
-        //POST (form-data)
-        if (RequestType.POST.getRequestType().equals(fuDocItemData.getRequestType())) {
-            if (MockResultType.JSON.getCode().equals(fuDocItemData.getRequestExampleType())) {
-                fuDocItemData.setContentType(ContentType.JSON.getDesc());
-            } else {
-                fuDocItemData.setContentType(ContentType.FORM_DATA.getDesc());
-            }
-        }
         //组装扩展数据
         fuDocItemData.setFudoc(CustomerValueHelper.customerValue(methodInfoDesc, fuDocContext));
     }

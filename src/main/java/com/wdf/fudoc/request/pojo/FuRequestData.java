@@ -2,13 +2,18 @@ package com.wdf.fudoc.request.pojo;
 
 import cn.hutool.core.util.URLUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Lists;
+import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * http请求数据
@@ -63,12 +68,39 @@ public class FuRequestData {
      */
     private FuRequestBodyData body;
 
+
+    public void addHeader(String key, String value) {
+        if (Objects.isNull(this.headers)) {
+            this.headers = Lists.newArrayList();
+        }
+        KeyValueTableBO keyValueTableBO = this.headers.stream().filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
+        if (Objects.isNull(keyValueTableBO)) {
+            keyValueTableBO = new KeyValueTableBO(true, key, value);
+            this.headers.add(keyValueTableBO);
+        }
+        keyValueTableBO.setValue(value);
+    }
+
+    public void addContentType(ContentType contentType) {
+        if (Objects.isNull(contentType)) {
+            removeHeader(FuDocConstants.CONTENT_TYPE);
+            return;
+        }
+        addHeader(FuDocConstants.CONTENT_TYPE, contentType.getType());
+    }
+
+    public void removeHeader(String key) {
+        if (CollectionUtils.isNotEmpty(this.headers)) {
+            this.headers.removeIf(f -> f.getKey().equals(key));
+        }
+    }
+
     /**
      * 获取一个完整的请求地址
      */
     public String getRequestUrl() {
         String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
-        if(StringUtils.isBlank(this.baseUrl) && StringUtils.isBlank(this.paramUrl)){
+        if (StringUtils.isBlank(this.baseUrl) && StringUtils.isBlank(this.paramUrl)) {
             return StringUtils.EMPTY;
         }
         return URLUtil.normalize(this.baseUrl + params, false, true);

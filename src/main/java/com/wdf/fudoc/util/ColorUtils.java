@@ -28,7 +28,7 @@ public class ColorUtils {
     }
 
 
-    private static Color convertColor(String color) {
+    public static Color convertColor(String color) {
         return StringUtils.isBlank(color) ? UIUtil.getLabelBackground() : ColorHexUtil.fromHex(color);
     }
 

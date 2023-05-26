@@ -4,6 +4,7 @@ import cn.hutool.core.map.MapUtil;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.apidoc.constant.enumtype.ActionType;
+import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.util.ToolBarUtils;
@@ -85,6 +86,9 @@ public class FuTabComponent {
      */
     private JPanel toolBarRightPanel;
 
+    private String currentTab;
+
+    private FuTab fuTab;
 
     public FuTabComponent(String title, Icon icon, JComponent mainComponent) {
         this.title = title;
@@ -106,6 +110,7 @@ public class FuTabComponent {
     public TabActionBO getDefaultAction() {
         return tabActionMap.get(DEFAULT);
     }
+
 
     public TabInfo builder() {
         return builder(null);
@@ -164,6 +169,10 @@ public class FuTabComponent {
         this.toolBarPanel.add(this.toolBarRightPanel, BorderLayout.EAST);
     }
 
+    public FuTabComponent addListener(FuTab fuTab) {
+        this.fuTab = fuTab;
+        return this;
+    }
 
     /**
      * 往tab右侧的工具栏中添加一个动作
@@ -176,6 +185,7 @@ public class FuTabComponent {
     public FuTabComponent addAction(String title, Icon icon, JPanel actionPanel) {
         return addAction(title, icon, actionPanel, null, null);
     }
+
 
     /**
      * 往tab右侧的工具栏中添加批量编辑按钮
@@ -281,6 +291,7 @@ public class FuTabComponent {
 
     public void switchTab(String parentTab, TabActionBO tabActionBO) {
         switchTab(parentTab, tabActionBO, true);
+        currentTab = tabActionBO.getTitle();
     }
 
     /**
@@ -299,6 +310,10 @@ public class FuTabComponent {
         }
         //切换主面板
         switchPanel(switchComponent);
+        //通知监听器
+        if (Objects.nonNull(fuTab)) {
+            fuTab.rightActionChange(tabActionBO, isSelect);
+        }
         //通知监听器
         TabBarListener tabBarListener = tabActionBO.getTabBarListener();
         if (Objects.nonNull(tabBarListener)) {
@@ -382,6 +397,10 @@ public class FuTabComponent {
 
         private final TabActionBO tabActionBO;
 
+        @Override
+        public @NotNull ActionUpdateThread getActionUpdateThread() {
+            return ActionUpdateThread.BGT;
+        }
         public TabToggleAction(String parentTitle, TabActionBO tabActionBO) {
             super(tabActionBO.getTitle(), tabActionBO.getTitle(), tabActionBO.getIcon());
             this.parentTitle = parentTitle;

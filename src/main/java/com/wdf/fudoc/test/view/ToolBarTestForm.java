@@ -15,6 +15,7 @@ import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.util.ProjectUtils;
 import icons.FuDocIcons;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -78,7 +79,7 @@ public class ToolBarTestForm {
 
 
     private JComponent createTabPanel() {
-        final JBTabsImpl tabs = new JBTabsImpl(null, null, ApplicationManager.getApplication());
+        final JBTabsImpl tabs = new JBTabsImpl(ProjectUtils.getCurrProject());
         tabs.addTab(createTabInfo("Header", FuDocIcons.FU_REQUEST_HEADER, this.tablePanel).setSideComponent(this.bulkEditPanel));
         tabs.addTab(createTabInfo("Params", FuDocIcons.FU_REQUEST_PARAMS, this.tablePanel).setSideComponent(this.bulkEditPanel));
         tabs.addTab(createTabInfo("Body", FuDocIcons.FU_REQUEST_BODY, this.editPanel));

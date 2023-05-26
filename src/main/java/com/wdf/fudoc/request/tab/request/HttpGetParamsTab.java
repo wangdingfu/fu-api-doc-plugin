@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
@@ -15,10 +16,12 @@ import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -75,7 +78,7 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
      */
     @Override
     public TabInfo getTabInfo() {
-        fuTabComponent = FuTabComponent.getInstance(PARAMS, null, fuTableComponent.createPanel());
+        this.fuTabComponent = FuTabComponent.getInstance(PARAMS, null, this.fuTableComponent.createPanel());
         return fuTabComponent.addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
     }
 
@@ -109,6 +112,38 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         request.setParams(this.fuTableComponent.getDataList());
     }
 
+    @Override
+    public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
+        //切换到当前tab
+        FuRequestData request = httpRequestData.getRequest();
+        request.removeHeader(FuDocConstants.CONTENT_TYPE);
+    }
+
+    /**
+     * 重置table中的请求参数
+     *
+     * @param param 请求参数
+     */
+    @Override
+    public void resetParams(Map<String, String> param) {
+        List<KeyValueTableBO> dataList = this.fuTableComponent.getDataList();
+        List<KeyValueTableBO> tableList = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(dataList)) {
+            for (KeyValueTableBO keyValueTableBO : dataList) {
+                String value = param.remove(keyValueTableBO.getKey());
+                if(StringUtils.isNotBlank(value)){
+                    keyValueTableBO.setValue(value);
+                    keyValueTableBO.setSelect(true);
+                }else {
+                    keyValueTableBO.setSelect(false);
+                }
+                tableList.add(keyValueTableBO);
+            }
+        }
+        //将url中的请求参数添加到table中
+        param.forEach((key, value) -> tableList.add(new KeyValueTableBO(true, key, value)));
+        this.fuTableComponent.setDataList(tableList);
+    }
 
     @Override
     protected FuTableComponent<KeyValueTableBO> getTableComponent(String tab) {
@@ -130,6 +165,11 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
 
         public HttpGetParamsTableListener(HttpGetParamsTab httpGetParamsTab) {
             this.httpGetParamsTab = httpGetParamsTab;
+        }
+
+        @Override
+        public void addRow(KeyValueTableBO data) {
+            this.httpGetParamsTab.resetRequestUrlFromTable();
         }
 
         @Override
