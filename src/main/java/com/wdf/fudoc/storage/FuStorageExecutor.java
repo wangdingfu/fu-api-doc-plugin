@@ -1,14 +1,10 @@
 package com.wdf.fudoc.storage;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.json.JSONUtil;
-import com.intellij.ide.extensionResources.ExtensionsRootType;
-import com.intellij.ide.scratch.ScratchFileService;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.common.FuDocRender;
+import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
-import com.wdf.fudoc.request.http.data.HttpClientData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.util.JsonUtil;
 import com.wdf.fudoc.util.ProjectUtils;
@@ -34,27 +30,36 @@ public class FuStorageExecutor {
     /**
      * fuDoc存储初始化
      */
-    public static void init() {
-        //检查是否存在.fudoc目录 没有则创建
-        String currentProjectPath = ProjectUtils.getCurrentProjectPath();
-        File file = FileUtil.file(currentProjectPath, FU_DOC_DIR);
-        if (file.exists()) {
-            return;
-        }
-        if (file.mkdir()
-                && FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_CONFIG).mkdir()
-                && FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API).mkdir()) {
-            log.info("初始化[fudoc]根目录成功");
-        }
+    public static void init(Project project) {
+        //初始化fudoc目录
+        initHome(project);
+        //初始化配置文件
+        RecentNavigationManager.create(project);
     }
 
+
+    private static void initHome(Project project) {
+        //检查是否存在.fudoc目录 没有则创建
+        String currentProjectPath = project.getBasePath();
+        if (StringUtils.isNotBlank(currentProjectPath)) {
+            File file = FileUtil.file(currentProjectPath, FU_DOC_DIR);
+            if (file.exists()) {
+                return;
+            }
+            if (file.mkdir()
+                    && FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_CONFIG).mkdir()
+                    && FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API).mkdir()) {
+                log.info("初始化[fudoc]根目录成功");
+            }
+        }
+    }
 
     public static void saveRequest(FuHttpRequestData fuHttpRequestData) {
         String apiName = fuHttpRequestData.getApiName();
         String currentProjectPath = ProjectUtils.getCurrentProjectPath();
         String httpFileContent = FuDocRender.httpRender(HttpDataConvert.convert(fuHttpRequestData));
         File file = FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API, apiName + FU_DOC_API_SUFFIX);
-        saveFile(file,httpFileContent);
+        saveFile(file, httpFileContent);
     }
 
     public static void saveFile(File file, String text) {
@@ -62,9 +67,8 @@ public class FuStorageExecutor {
             //存在则删除该文件
             FileUtil.del(file);
         }
-        FileUtil.writeString(text,file,Charset.defaultCharset());
+        FileUtil.writeString(text, file, Charset.defaultCharset());
     }
-
 
 
     public static FuHttpRequestData readFile(String apiName) {
@@ -72,7 +76,7 @@ public class FuStorageExecutor {
         File file = FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API, apiName + FU_DOC_API_SUFFIX);
         if (file.exists()) {
             String httpFileContent = StringUtils.toEncodedString(FileUtil.readBytes(file), StandardCharsets.UTF_8);
-            if(StringUtils.isNotBlank(httpFileContent)){
+            if (StringUtils.isNotBlank(httpFileContent)) {
                 return JsonUtil.toBean(httpFileContent, FuHttpRequestData.class);
             }
         }

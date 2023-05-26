@@ -23,6 +23,10 @@ import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
+import com.wdf.fudoc.navigation.ApiNavigationItem;
+import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
+import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
+import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.AuthSettingView;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
@@ -41,39 +45,51 @@ import java.util.Objects;
 public class TestAction extends AnAction {
 
 
-
-
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
 //        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
 //        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
+//        request(e);
+        apiTest(e);
+    }
+
+
+    private void apiTest(AnActionEvent e) {
+        ProjectRecentApi projectRecentApi = RecentNavigationManager.create(e.getProject());
+        long start = System.currentTimeMillis();
+        List<ApiNavigationItem> apiList = FuApiNavigationExecutor.getInstance(e.getProject(), projectRecentApi).getApiList();
+        System.out.println("读取api【" + apiList.size() + "】条 共计耗时:" + (System.currentTimeMillis() - start) + "ms");
+    }
+
+
+    private void request(AnActionEvent e) {
         HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
         //读取http文件
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 
         HttpRequest httpRequest = FuRequestUtils.getHttpRequest((HttpRequestPsiFile) psiFile, e.getData(LangDataKeys.EDITOR));
 
-        if(Objects.isNull(psiFile)){
+        if (Objects.isNull(psiFile)) {
             return;
         }
         HttpRequest firstRequest = HttpRequestPsiUtils.getFirstRequest(psiFile);
-        if(Objects.isNull(firstRequest)){
+        if (Objects.isNull(firstRequest)) {
             return;
         }
         HttpRequestTarget requestTarget = firstRequest.getRequestTarget();
         String httpUrl = firstRequest.getHttpUrl(substitutor);
-        log.info("httpUrl:"+httpUrl);
+        log.info("httpUrl:" + httpUrl);
         String httpMethod = firstRequest.getHttpMethod();
-        log.info("httpMethod:"+httpMethod);
+        log.info("httpMethod:" + httpMethod);
         String text = firstRequest.getText();
-        log.info("text:"+text);
+        log.info("text:" + text);
         HttpQuery query;
-        if(Objects.nonNull(requestTarget) && Objects.nonNull(query = requestTarget.getQuery())){
+        if (Objects.nonNull(requestTarget) && Objects.nonNull(query = requestTarget.getQuery())) {
             List<HttpQueryParameter> queryParameterList = query.getQueryParameterList();
             for (HttpQueryParameter httpQueryParameter : queryParameterList) {
                 String value = httpQueryParameter.getValue(substitutor);
                 String key = httpQueryParameter.getKey(substitutor);
-                log.info("key:"+key+"="+value);
+                log.info("key:" + key + "=" + value);
             }
         }
         RequestBuilder<RestClientRequest, RestClientFormBodyPart> requestBuilder = new RestClientRequestBuilder();
@@ -83,8 +99,8 @@ public class TestAction extends AnAction {
             List<File> files = restClientRequest.getFiles();
             String url = restClientRequest.getURL();
             String textToSend = restClientRequest.getTextToSend();
-        }catch (Exception exception){
-            log.info("解析http请求错误",exception);
+        } catch (Exception exception) {
+            log.info("解析http请求错误", exception);
         }
     }
 

@@ -36,16 +36,16 @@ public enum RequestType {
         this.annotations = annotations;
     }
 
-    public static String getByAnnotationName(String annotationName) {
+    public static RequestType getByAnnotationName(String annotationName) {
         for (RequestType value : RequestType.values()) {
             String[] annotations = value.getAnnotations();
             for (String annotation : annotations) {
                 if (annotation.equals(annotationName)) {
-                    return value.getRequestType();
+                    return value;
                 }
             }
         }
-        return null;
+        return RequestType.ALL;
     }
 
     public static RequestType getRequestType(String requestType) {

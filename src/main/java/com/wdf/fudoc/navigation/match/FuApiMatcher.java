@@ -57,9 +57,7 @@ public class FuApiMatcher {
         }
         if (matchApiList.size() == 1) {
             Pair<ApiNavigationItem, MatchResult> pair = matchApiList.get(0);
-            if (!consumer.process(new FoundItemDescriptor<>(pair.first, 0))) {
-                return false;
-            }
+            return consumer.process(new FoundItemDescriptor<>(pair.first, 0));
         }
         //根据匹配结果排序
         matchApiList.sort(Comparator.comparing(o -> o.second));

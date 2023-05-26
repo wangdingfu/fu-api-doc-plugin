@@ -3,7 +3,6 @@ package com.wdf.fudoc.navigation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
-import com.wdf.fudoc.navigation.dto.MethodPathInfo;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -21,27 +20,29 @@ public class ApiNavigationItem {
 
     private final String url;
 
-    private PsiMethod psiMethod;
-
     private final RequestType requestType;
-    private final MethodPathInfo methodPathInfo;
 
-    public ApiNavigationItem(PsiElement psiElement, RequestType requestType, String url, MethodPathInfo methodPathInfo) {
-        this.requestType = requestType;
+    private final String location;
+
+    private final String title;
+
+    public ApiNavigationItem(PsiMethod psiMethod, String url, RequestType requestType, String location, String title) {
+        this.psiElement = psiMethod;
         this.url = url;
-        this.methodPathInfo = methodPathInfo;
-        this.psiElement = psiElement;
-        if (psiElement instanceof PsiMethod) {
-            this.psiMethod = (PsiMethod) psiElement;
-        }
+        this.requestType = requestType;
+        this.location = location;
+        this.title = title;
     }
 
+
+    /**
+     * api搜索结果列表中 url后面跟着的描述文本
+     */
     @NotNull
     public String getRightText() {
-        if (StringUtils.isNotBlank(methodPathInfo.getMethodDesc())) {
-            return methodPathInfo.getMethodDesc() + "   " + methodPathInfo.getLocation();
-        } else {
-            return methodPathInfo.getLocation();
+        if (StringUtils.isNotBlank(title)) {
+            return title + "   " + location;
         }
+        return location;
     }
 }

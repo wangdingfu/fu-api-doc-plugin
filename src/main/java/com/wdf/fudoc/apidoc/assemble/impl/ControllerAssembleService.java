@@ -14,6 +14,7 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
+import com.wdf.fudoc.util.FuApiUtils;
 import com.wdf.fudoc.util.PathUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -88,10 +89,10 @@ public class ControllerAssembleService extends AbstractAssembleService {
                         requestType = RequestType.GET.getRequestType();
                     }
                 } else {
-                    requestType = RequestType.getByAnnotationName(qualifiedName);
+                    requestType = RequestType.getByAnnotationName(qualifiedName).getRequestType();
                 }
                 commonItemData.setRequestType(requestType);
-                commonItemData.setUrlList(joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
+                commonItemData.setUrlList(FuApiUtils.joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
                 //Content-Type
                 if (RequestType.POST.getRequestType().equals(requestType)) {
                     commonItemData.setContentType(analysisContentType(methodInfoDesc.getRequestList()));
@@ -115,23 +116,4 @@ public class ControllerAssembleService extends AbstractAssembleService {
         return null;
     }
 
-    /**
-     * 拼接请求地址(将controller上的请求地址和方法上的请求地址拼接成一个完成的请求地址)
-     *
-     * @param controllerUrls controller上的请求地址集合
-     * @param methodUrlList  方法体上的请求地址
-     * @return 该请求存在的请求地址集合
-     */
-    private List<String> joinUrl(List<String> controllerUrls, List<String> methodUrlList) {
-        if (CollectionUtils.isEmpty(controllerUrls)) {
-            return methodUrlList;
-        }
-        List<String> urlList = Lists.newArrayList();
-        for (String controllerUrl : controllerUrls) {
-            for (String methodUrl : methodUrlList) {
-                urlList.add(PathUtils.urlJoin(controllerUrl, methodUrl));
-            }
-        }
-        return urlList;
-    }
 }

@@ -48,7 +48,7 @@ public class FuDocStartUpListener implements StartupActivity {
     @Override
     public void runActivity(@NotNull Project project) {
         //初始化持久目录
-        ApplicationManager.getApplication().invokeLater(FuStorageExecutor::init);
+        ApplicationManager.getApplication().invokeLater(()->FuStorageExecutor.init(project));
         if (reentrantLock.tryLock()) {
             try {
                 FuDocSecuritySetting instance = FuDocSecuritySetting.getInstance();

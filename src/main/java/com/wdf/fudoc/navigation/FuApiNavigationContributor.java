@@ -3,18 +3,25 @@ package com.wdf.fudoc.navigation;
 import com.intellij.ide.actions.searcheverywhere.FoundItemDescriptor;
 import com.intellij.ide.actions.searcheverywhere.WeightedSearchEverywhereContributor;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.Processor;
 import com.intellij.util.PsiNavigateUtil;
+import com.intellij.util.containers.ContainerUtil;
+import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
+import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.navigation.match.FuApiMatcher;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.List;
 
 /**
  * Api导航实现
@@ -25,14 +32,19 @@ import javax.swing.*;
 @Slf4j
 public class FuApiNavigationContributor implements WeightedSearchEverywhereContributor<ApiNavigationItem> {
 
-    public static final String INSTANCE = "FuApi";
+    public static final String INSTANCE = "Fu Api";
 
     private final Project project;
+    private final ProjectRecentApi projectRecentApi;
+    /**
+     * api匹配器
+     */
     private final FuApiMatcher fuApiMatcher;
 
     public FuApiNavigationContributor(AnActionEvent initEvent) {
         this.project = initEvent.getProject();
-        this.fuApiMatcher = new FuApiMatcher(project, FuSearchApiExecutor.getInstance(project).getApiList());
+        projectRecentApi = RecentNavigationManager.create(project);
+        this.fuApiMatcher = new FuApiMatcher(project, FuApiNavigationExecutor.getInstance(project, projectRecentApi).getApiList());
     }
 
 
@@ -45,8 +57,17 @@ public class FuApiNavigationContributor implements WeightedSearchEverywhereContr
      */
     @Override
     public void fetchWeightedElements(@NotNull String pattern, @NotNull ProgressIndicator progressIndicator, @NotNull Processor<? super FoundItemDescriptor<ApiNavigationItem>> consumer) {
-        boolean b = fuApiMatcher.matchApi(pattern, progressIndicator, consumer);
-        log.info("api导航:{}", b);
+        long start = System.currentTimeMillis();
+        log.info("搜索api.....");
+        List<FoundItemDescriptor<ApiNavigationItem>> recentApiList;
+        if (StringUtils.isBlank(pattern) && CollectionUtils.isNotEmpty(recentApiList = projectRecentApi.historyList())) {
+            //直接展示最近搜索的api
+            ContainerUtil.process(recentApiList, consumer);
+            log.info("匹配历史搜索的api【{}】条. 共计耗时:{}ms", recentApiList.size(), System.currentTimeMillis() - start);
+            return;
+        }
+        boolean flag = fuApiMatcher.matchApi(pattern, progressIndicator, consumer);
+        log.info("匹配 api【{}】{}. 共计耗时:{}ms", pattern, flag, System.currentTimeMillis() - start);
     }
 
 
@@ -83,6 +104,8 @@ public class FuApiNavigationContributor implements WeightedSearchEverywhereContr
     @Override
     public boolean processSelectedItem(@NotNull ApiNavigationItem selected, int modifiers, @NotNull String searchText) {
         PsiNavigateUtil.navigate(selected.getPsiElement());
+        //记录历史搜索
+        ApplicationManager.getApplication().runReadAction(() -> RecentNavigationManager.add(project, selected));
         return true;
     }
 
@@ -108,7 +131,6 @@ public class FuApiNavigationContributor implements WeightedSearchEverywhereContr
     public @Nullable @Nls String getAdvertisement() {
         return DumbService.isDumb(project) ? "The project is being indexed..." : "type url to search";
     }
-
 
 
     @Override
