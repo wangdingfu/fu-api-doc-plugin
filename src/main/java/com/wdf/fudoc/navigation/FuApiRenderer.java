@@ -55,26 +55,19 @@ public class FuApiRenderer extends SearchEverywherePsiRenderer {
             FontMetrics fm = list.getFontMetrics(list.getFont());
             int maxWidth = list.getWidth() - fm.stringWidth(name) - myRightComponentWidth - 36;
             int fullWidth = fm.stringWidth(locationString + timeView);
-            if (fullWidth < maxWidth) {
-                SpeedSearchUtil.appendColoredFragmentForMatcher(locationString, renderer, SimpleTextAttributes.GRAYED_ATTRIBUTES, itemMatchers.nameMatcher, bgColor, selected);
-                if (StringUtils.isNotBlank(timeView)) {
-                    SimpleTextAttributes timeAttributes = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, ColorUtils.convertColor(FuColor.GREEN.getDarkColor()));
-                    SpeedSearchUtil.appendColoredFragmentForMatcher(timeView, renderer, timeAttributes, itemMatchers.locationMatcher, UIUtil.getListBackground(), selected);
-                }
-            } else {
+            if (fullWidth >= maxWidth) {
                 String text = locationString + timeView;
                 int adjustedWidth = Math.max(text.length() * maxWidth / fullWidth - 1, 3);
                 locationString = StringUtil.trimMiddle(locationString, adjustedWidth);
-                SpeedSearchUtil.appendColoredFragmentForMatcher(locationString, renderer, SimpleTextAttributes.GRAYED_ATTRIBUTES, itemMatchers.nameMatcher, bgColor, selected);
-                if (StringUtils.isNotBlank(timeView)) {
-                    SimpleTextAttributes timeAttributes = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, ColorUtils.convertColor(FuColor.GREEN.getDarkColor()));
-                    SpeedSearchUtil.appendColoredFragmentForMatcher(timeView, renderer, timeAttributes, itemMatchers.locationMatcher, UIUtil.getListBackground(), selected);
-                }
+            }
+            SpeedSearchUtil.appendColoredFragmentForMatcher(locationString, renderer, SimpleTextAttributes.GRAYED_ATTRIBUTES, itemMatchers.nameMatcher, bgColor, selected);
+            if (StringUtils.isNotBlank(timeView)) {
+                SimpleTextAttributes timeAttributes = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, ColorUtils.convertColor(FuColor.GREEN.getDarkColor()));
+                SpeedSearchUtil.appendColoredFragmentForMatcher(timeView, renderer, timeAttributes, itemMatchers.locationMatcher, UIUtil.getListBackground(), selected);
             }
         }
         return true;
     }
-
 
 
     @Override
