@@ -39,7 +39,7 @@ public class ApiNavigationItem {
     @NotNull
     public String getRightText() {
         if (StringUtils.isNotBlank(methodPathInfo.getMethodDesc())) {
-            return methodPathInfo.getMethodDesc() + " " + methodPathInfo.getLocation();
+            return methodPathInfo.getMethodDesc() + "   " + methodPathInfo.getLocation();
         } else {
             return methodPathInfo.getLocation();
         }

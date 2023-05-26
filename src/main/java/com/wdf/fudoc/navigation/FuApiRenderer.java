@@ -34,7 +34,7 @@ public class FuApiRenderer extends SearchEverywherePsiRenderer {
         ItemMatchers itemMatchers = getItemMatchers(list, value);
         ApiNavigationItem apiNavigationItem = (ApiNavigationItem) value;
         String name = apiNavigationItem.getUrl();
-        String locationString = " " + apiNavigationItem.getRightText();
+        String locationString = "    " + apiNavigationItem.getRightText();
 
         SpeedSearchUtil.appendColoredFragmentForMatcher(name, renderer, nameAttributes, itemMatchers.nameMatcher, bgColor, selected);
         renderer.setIcon(apiNavigationItem.getRequestType().getIcon());
