@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.storage.FuStorageAppender;
 import com.wdf.fudoc.util.ObjectUtils;
+import com.wdf.fudoc.util.TimeFormatUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -34,8 +35,9 @@ public class ProjectRecentApi {
     public void add(ApiNavigationItem apiNavigationItem) {
         String url = apiNavigationItem.getUrl();
         historyUrlList.removeIf(f -> f.getUrl().equals(url));
-        appender.append(url);
-        historyUrlList.add(new RecentApiLog(url, DateUtil.currentSeconds()));
+        long currentSeconds = DateUtil.currentSeconds();
+        appender.append(url + "|" + currentSeconds);
+        historyUrlList.add(new RecentApiLog(url, currentSeconds));
         historyMap.put(url, apiNavigationItem);
     }
 
@@ -57,7 +59,7 @@ public class ProjectRecentApi {
                 if (Objects.isNull(apiNavigationItem)) {
                     continue;
                 }
-                apiNavigationItem.setTimeStr(recentApiLog.getTime() + "");
+                apiNavigationItem.setTimeStr(TimeFormatUtils.format(recentApiLog.getTime()));
                 apiList.add(new FoundItemDescriptor<>(apiNavigationItem, 0));
             }
         }
