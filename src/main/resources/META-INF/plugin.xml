@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>fudoc</name>
-    <version>222.1.6.1</version>
+    <version>222.1.6.2</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -117,9 +117,9 @@
             <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Fu Request">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
             </action>
-<!--            <action id="fudoc.http.request.http" class="com.wdf.fudoc.request.http.action.RequestHttpAction" text="Fu Http">
+            <action id="fudoc.http.request.http" class="com.wdf.fudoc.request.http.action.RequestHttpAction" text="Fu Http">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt shift R"/>
-            </action>-->
+            </action>
             <separator/>
             <action id="fudoc.http.sync" class="com.wdf.fudoc.apidoc.action.SyncFuDocAction" text="Sync Api">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>

@@ -30,16 +30,6 @@ public class FuHttpClientImpl implements FuHttpClient {
     }
 
     @Override
-    public PsiClass getPsiClass() {
-        return null;
-    }
-
-    @Override
-    public PsiMethod getPsiMethod() {
-        return null;
-    }
-
-    @Override
     public HttpRequest getHttpRequest() {
         return this.httpRequest;
     }

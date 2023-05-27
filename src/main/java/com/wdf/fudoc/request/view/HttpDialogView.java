@@ -1,6 +1,9 @@
 package com.wdf.fudoc.request.view;
 
 import com.intellij.find.editorHeaderActions.Utils;
+import com.intellij.ide.BrowserUtil;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -13,6 +16,7 @@ import com.intellij.ui.WindowMoveListener;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
@@ -23,12 +27,16 @@ import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
+import icons.FuDocIcons;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -96,7 +104,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
 
     public HttpDialogView(Project project, PsiElement psiElement) {
         this(project, psiElement, null);
-
     }
 
     public HttpDialogView(Project project, PsiElement psiElement, FuHttpRequestData httpRequestData) {
@@ -116,11 +123,35 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         initUI();
         addMouseListeners();
         initData(httpRequestData);
+        setModal(false);
+        init();
+        setTitle(Objects.isNull(httpRequestData) ? "Send Http Request" : httpRequestData.getApiName());
+    }
+
+    @Override
+    protected @Nullable Border createContentPaneBorder() {
+        return JBUI.Borders.empty();
     }
 
     public void close() {
         this.jbPopup.cancel();
     }
+
+    @Override
+    protected @Nullable JComponent createTitlePane() {
+        return this.toolBarPanel;
+    }
+
+    @Override
+    protected Action @NotNull [] createActions() {
+        return new Action[]{};
+    }
+
+    @Override
+    protected JComponent createSouthPanel() {
+        return this.statusInfoPanel;
+    }
+
 
     /**
      * 初始化工具栏面板
@@ -129,7 +160,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         this.toolBarPanel = new JPanel(new BorderLayout());
         Utils.setSmallerFontForChildren(this.toolBarPanel);
         this.toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
-        this.toolBarPanel.add(this.titleLabel, BorderLayout.WEST);
         //创建及初始化工具栏
         this.fuRequestToolBarManager = FuRequestToolBarManager.getInstance(this);
         ToolBarUtils.addActionToToolBar(this.toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, this.fuRequestToolBarManager.initToolBar(), BorderLayout.EAST);
@@ -160,8 +190,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         this.rootPanel.setPreferredSize(new Dimension(700, 440));
         // 设置边框
         this.rootPanel.setBorder(JBUI.Borders.empty());
-        //添加工具栏面板到跟面板上
-        this.rootPanel.add(this.toolBarPanel, BorderLayout.NORTH);
         //添加请求相应主面板到跟面板上
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
         //添加状态信息展示面板到跟面板上
@@ -175,6 +203,8 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
      * @param fuHttpRequestData http请求数据
      */
     public void initData(FuHttpRequestData fuHttpRequestData) {
+        //切换消息
+        messageComponent.switchInfo();
         if (Objects.isNull(fuHttpRequestData)) {
             return;
         }
@@ -183,8 +213,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         this.titleLabel.setToolTipText(apiName);
         this.requestTabView.initData(fuHttpRequestData);
         initResponseData(fuHttpRequestData);
-        //切换消息
-        messageComponent.switchInfo();
     }
 
 
@@ -236,6 +264,9 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
 
     @Override
     protected @Nullable JComponent createCenterPanel() {
-        return this.rootPanel;
+        JPanel centerPanel = fuTabBuilder.build();
+        centerPanel.setMinimumSize(new Dimension(700, 440));
+        centerPanel.setPreferredSize(new Dimension(700, 440));
+        return centerPanel;
     }
 }

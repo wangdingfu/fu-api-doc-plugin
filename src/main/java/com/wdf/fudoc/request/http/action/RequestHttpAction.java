@@ -16,6 +16,7 @@ import com.wdf.fudoc.request.http.dto.HttpRecentDTO;
 import com.wdf.fudoc.request.http.helper.FuRequestFactory;
 import com.wdf.fudoc.request.http.impl.FuHttpClientImpl;
 import com.wdf.fudoc.request.http.impl.FuRequestImpl;
+import com.wdf.fudoc.request.http.view.FuRequestView;
 import com.wdf.fudoc.storage.FuRequestStorage;
 import com.wdf.fudoc.util.FuRequestUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -44,6 +45,7 @@ public class RequestHttpAction extends AnAction {
             return;
         }
         //开始弹框展示http请求窗体
+        FuRequestView.getInstance(e.getProject(), fuRequest).show();
     }
 
 
