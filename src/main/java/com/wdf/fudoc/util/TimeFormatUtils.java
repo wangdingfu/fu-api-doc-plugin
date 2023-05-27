@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.format.FastDateFormat;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -48,7 +49,10 @@ public class TimeFormatUtils {
             Long hour = diffTime / ONE_HOUR;
             return hour + " hours ago";
         } else if (diffTime < ONE_DAY) {
-            return "today " + NORM_TIME_FORMAT.format(time);
+            //判断是否为今天
+            int endDay = DateUtil.endOfDay(new Date()).second();
+            String day = currentSeconds < endDay ? "today" : "yesterday";
+            return day + " " + NORM_TIME_FORMAT.format(time);
         } else if (diffTime < ONE_WEEK) {
             Long day = diffTime / ONE_DAY;
             return day + " days ago";
