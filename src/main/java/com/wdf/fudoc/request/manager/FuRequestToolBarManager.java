@@ -88,30 +88,28 @@ public class FuRequestToolBarManager {
         return new FuRequestToolBarManager(fuRequestWindow);
     }
 
+    public RequestTabView getRequestTabView(){
+        return RequestDialog.HTTP_DIALOG.equals(this.requestDialog)
+                ? this.httpDialogView.getRequestTabView()
+                : fuRequestWindow.getRequestTabView();
+    }
+
     /**
      * 初始化工具栏
      */
     public DefaultActionGroup initToolBar() {
         if (RequestDialog.HTTP_DIALOG.equals(this.requestDialog)) {
-            addCommonAction(this.defaultActionGroup,this.httpDialogView.getRequestTabView());
+            addCommonAction(this.defaultActionGroup);
 
         }
         if (RequestDialog.TOOL_WINDOW.equals(this.requestDialog)) {
-            addCommonAction(this.defaultActionGroup,fuRequestWindow.getRequestTabView());
+            addCommonAction(this.defaultActionGroup);
         }
         return defaultActionGroup;
     }
 
 
-    public DefaultActionGroup addActionByHttpDialog() {
-        DefaultActionGroup defaultActionGroup = new DefaultActionGroup();
-        //添加公共动作
-        addCommonAction(defaultActionGroup, this.httpDialogView.getRequestTabView());
-        return defaultActionGroup;
-    }
-
-
-    private void addCommonAction(DefaultActionGroup defaultActionGroup, RequestTabView requestTabView) {
+    private void addCommonAction(DefaultActionGroup defaultActionGroup) {
         ActionManager actionManager = ActionManager.getInstance();
 
 
@@ -158,10 +156,13 @@ public class FuRequestToolBarManager {
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                FuHttpRequestData fuHttpRequestData = requestTabView.getFuHttpRequestData();
-                requestTabView.doSendBefore(fuHttpRequestData);
-                //保存当前请求
-                FuRequestManager.saveRequest(requestTabView.getProject(), fuHttpRequestData);
+                RequestTabView requestTabView = getRequestTabView();
+                if(Objects.nonNull(requestTabView)){
+                    FuHttpRequestData fuHttpRequestData = requestTabView.getFuHttpRequestData();
+                    requestTabView.doSendBefore(fuHttpRequestData);
+                    //保存当前请求
+                    FuRequestManager.saveRequest(requestTabView.getProject(), fuHttpRequestData);
+                }
             }
         });
 
