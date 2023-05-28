@@ -90,8 +90,9 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     private final FuRequestStatusInfoView fuRequestStatusInfoView;
 
-    public RequestTabView(Project project, HttpCallback httpCallback) {
+    public RequestTabView(Project project, HttpCallback httpCallback, FuRequestStatusInfoView fuRequestStatusInfoView) {
         this.project = project;
+        this.fuRequestStatusInfoView = fuRequestStatusInfoView;
         this.httpCallback = httpCallback;
         this.mainPanel = new JPanel(new BorderLayout());
         this.requestTypeComponent = new ComboBox<>(RequestType.getItems());
@@ -101,7 +102,6 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.httpGetParamsTab = new HttpGetParamsTab(this);
         this.httpRequestBodyTab = new HttpRequestBodyTab();
         this.rootPane = new JRootPane();
-        this.fuRequestStatusInfoView = new FuRequestStatusInfoView();
         initRootPane();
         initUI();
         //初始化相关组件的事件监听器
@@ -131,7 +131,8 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Request", null, this.rootPane).builder(this.fuRequestStatusInfoView.getRootPanel());
+        JPanel jPanel = Objects.isNull(this.fuRequestStatusInfoView) ? null : this.fuRequestStatusInfoView.getRootPanel();
+        return FuTabComponent.getInstance("Request", null, this.rootPane).builder(jPanel);
     }
 
 
@@ -217,6 +218,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         //对请求地址添加属性内容变更事件
         this.requestUrlComponent.addFocusListener(new FocusListener() {
             String beforeFocusValue;
+
             @Override
             public void focusGained(FocusEvent e) {
                 beforeFocusValue = requestUrlComponent.getText();
@@ -225,7 +227,7 @@ public class RequestTabView implements FuTab, HttpCallback {
             @Override
             public void focusLost(FocusEvent e) {
                 String currentValue = requestUrlComponent.getText();
-                if(!currentValue.equals(beforeFocusValue)){
+                if (!currentValue.equals(beforeFocusValue)) {
                     resetRequestParam();
                 }
             }
@@ -263,7 +265,7 @@ public class RequestTabView implements FuTab, HttpCallback {
     }
 
 
-    private void resetRequestParam(){
+    private void resetRequestParam() {
         String requestUrl = this.requestUrlComponent.getText();
         String paramUrl = StringUtils.substringAfter(requestUrl, "?");
         FuTab selected = this.fuTabBuilder.getSelected();

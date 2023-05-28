@@ -25,6 +25,7 @@ import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
+import com.wdf.fudoc.request.view.widget.HttpToolBarWidget;
 import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
 import icons.FuDocIcons;
@@ -101,6 +102,8 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     @Getter
     private final PsiElement psiElement;
 
+    private final FuRequestStatusInfoView fuRequestStatusInfoView;
+
 
     public HttpDialogView(Project project, PsiElement psiElement) {
         this(project, psiElement, null);
@@ -110,14 +113,16 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         super(project, true);
         this.project = project;
         this.psiElement = psiElement;
-        this.requestTabView = new RequestTabView(this.project, this);
-        this.responseTabView = new ResponseTabView(this.project);
+        this.fuRequestStatusInfoView = new FuRequestStatusInfoView();
+        initToolBarUI();
+        fuRequestStatusInfoView.addWidget(new HttpToolBarWidget(this.toolBarPanel));
+        this.requestTabView = new RequestTabView(this.project, this, this.fuRequestStatusInfoView);
+        this.responseTabView = new ResponseTabView(this.project,this.fuRequestStatusInfoView);
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.titleLabel = new JBLabel("", UIUtil.ComponentStyle.REGULAR);
         this.titleLabel.setBorder(JBUI.Borders.emptyLeft(5));
         RelativeFont.BOLD.install(this.titleLabel);
-        initToolBarUI();
         initRequestUI();
         initResponseUI();
         initUI();
@@ -137,10 +142,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         this.jbPopup.cancel();
     }
 
-    @Override
-    protected @Nullable JComponent createTitlePane() {
-        return this.toolBarPanel;
-    }
 
     @Override
     protected Action @NotNull [] createActions() {
@@ -159,7 +160,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     private void initToolBarUI() {
         this.toolBarPanel = new JPanel(new BorderLayout());
         Utils.setSmallerFontForChildren(this.toolBarPanel);
-        this.toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
+//        this.toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
         //创建及初始化工具栏
         this.fuRequestToolBarManager = FuRequestToolBarManager.getInstance(this);
         ToolBarUtils.addActionToToolBar(this.toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, this.fuRequestToolBarManager.initToolBar(), BorderLayout.EAST);

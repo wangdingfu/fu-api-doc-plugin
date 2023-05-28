@@ -68,10 +68,10 @@ public class FuHttpRequestDataFactory {
         }
         ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(targetMethod.getDocComment());
         String commentTitle = apiDocCommentData.getCommentTitle();
-        FuHttpRequestData fuHttpRequestData = FuStorageExecutor.readFile(commentTitle);
-        if (Objects.nonNull(fuHttpRequestData)) {
-            return fuHttpRequestData;
-        }
+//        FuHttpRequestData fuHttpRequestData = FuStorageExecutor.readFile(commentTitle);
+//        if (Objects.nonNull(fuHttpRequestData)) {
+//            return fuHttpRequestData;
+//        }
         String methodId = PsiClassUtils.getMethodId(targetMethod);
         //当前接口的唯一标识
         String apiKey = FuDocUtils.genApiKey(moduleId, methodId);

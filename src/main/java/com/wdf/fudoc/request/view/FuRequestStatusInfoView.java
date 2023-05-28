@@ -37,7 +37,6 @@ public class FuRequestStatusInfoView {
     private final List<FuWidget> widgetList = Lists.newArrayList();
 
 
-
     public FuRequestStatusInfoView() {
         this.rootPanel = new JPanel(new BorderLayout());
         this.leftPanel = new JPanel();
@@ -53,7 +52,8 @@ public class FuRequestStatusInfoView {
 
     public void addWidget(FuWidget fuWidget) {
         widgetList.add(fuWidget);
-        rightPanel.add(fuWidget.getComponent(),index++);
+        rightPanel.add(fuWidget.getComponent(), index++);
+        this.rootPanel.revalidate();
     }
 
 
@@ -62,8 +62,6 @@ public class FuRequestStatusInfoView {
         addWidget(new HttpCodeWidget());
         //初始化接口请求耗时
         addWidget(new HttpTimeWidget());
-        //初始化响应内容大小
-        addWidget(new HttpContentSizeWidget());
     }
 
     public void initData(FuHttpRequestData fuHttpRequestData) {
@@ -71,6 +69,7 @@ public class FuRequestStatusInfoView {
             fuWidget.initData(fuHttpRequestData);
         }
     }
+
     private void initRightPanel() {
         if (this.rightPanel == null) {
             this.rightPanel = new JPanel();

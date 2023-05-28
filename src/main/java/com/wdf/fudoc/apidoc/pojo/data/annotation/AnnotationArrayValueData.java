@@ -5,6 +5,7 @@ import com.wdf.fudoc.apidoc.pojo.data.AnnotationValueData;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -82,6 +83,21 @@ public class AnnotationArrayValueData extends AnnotationValueData {
 
         ArrayEnumValue(List<AnnotationEnumValueData> valueDataList) {
             this.valueDataList = valueDataList;
+        }
+
+        public List<String> enumValueList(){
+            return valueDataList.stream().map(AnnotationEnumValueData::getEnumValue).collect(Collectors.toList());
+        }
+
+        public String enumClassName(){
+            if(CollectionUtils.isNotEmpty(valueDataList)){
+                return valueDataList.get(0).getEnumClassName();
+            }
+            return StringUtils.EMPTY;
+        }
+
+        public boolean isEmpty(){
+            return CollectionUtils.isEmpty(this.valueDataList);
         }
     }
 

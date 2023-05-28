@@ -54,11 +54,12 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
      */
     private final JavaScriptCodeAuthTab javaScriptCodeAuthTab;
 
+
     public AuthConfigView(Project project) {
         this.rootPanel = new JPanel(new BorderLayout());
         Splitter splitter = new Splitter(true, 0.6F);
-        this.requestTabView = new RequestTabView(project, this);
-        this.responseTabView = new ResponseTabView(project);
+        this.requestTabView = new RequestTabView(project, this, null);
+        this.responseTabView = new ResponseTabView(project, null);
         this.generalAuthTab = new GeneralAuthTab(project);
         this.javaCodeAuthTab = new JavaCodeAuthTab();
         this.javaScriptCodeAuthTab = new JavaScriptCodeAuthTab();

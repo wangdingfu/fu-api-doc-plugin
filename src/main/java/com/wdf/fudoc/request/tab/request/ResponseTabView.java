@@ -58,20 +58,21 @@ public class ResponseTabView implements FuTab, HttpCallback {
 
     private Integer tab = 0;
 
-    public ResponseTabView(Project project) {
+    public ResponseTabView(Project project, FuRequestStatusInfoView fuRequestStatusInfoView) {
         this.project = project;
         this.responseErrorView = new ResponseErrorView();
         this.responseFileView = new ResponseFileView();
         this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "");
         this.rootPanel = new JPanel(new BorderLayout());
-        this.fuRequestStatusInfoView = new FuRequestStatusInfoView();
+        this.fuRequestStatusInfoView = fuRequestStatusInfoView;
         switchPanel(1, this.fuEditorComponent.getMainPanel());
     }
 
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Response", null, this.rootPanel).builder(fuRequestStatusInfoView.getRootPanel());
+        JPanel sidePanel = Objects.isNull(this.fuRequestStatusInfoView) ? null : this.fuRequestStatusInfoView.getRootPanel();
+        return FuTabComponent.getInstance("Response", null, this.rootPanel).builder(sidePanel);
     }
 
 
@@ -132,7 +133,6 @@ public class ResponseTabView implements FuTab, HttpCallback {
             responseFileView.resetDefaultBtn();
         }
     }
-
 
 
     /**
