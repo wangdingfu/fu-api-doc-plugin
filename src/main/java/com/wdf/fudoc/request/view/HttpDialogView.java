@@ -1,23 +1,14 @@
 package com.wdf.fudoc.request.view;
 
 import com.intellij.find.editorHeaderActions.Utils;
-import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.GuiUtils;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.RelativeFont;
 import com.intellij.ui.WindowMoveListener;
-import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.UIUtil;
-import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
@@ -27,18 +18,14 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.request.view.widget.HttpToolBarWidget;
-import com.wdf.fudoc.util.PopupUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
-import icons.FuDocIcons;
 import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -56,21 +43,10 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     private JPanel rootPanel;
 
     /**
-     * 工具栏面板
-     */
-    @Getter
-    private JPanel toolBarPanel;
-
-    /**
      * 当前项目
      */
     @Getter
     private final Project project;
-
-    /**
-     * 请求接口标题
-     */
-    private final JLabel titleLabel;
 
     /**
      * tab页构建器
@@ -94,9 +70,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     private final MessageComponent messageComponent;
     private final JPanel statusInfoPanel;
 
-    @Setter
-    private JBPopup jbPopup;
-
     @Getter
     private final FuRequestToolBarManager fuRequestToolBarManager;
 
@@ -104,12 +77,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     private final PsiElement psiElement;
 
     private final DefaultActionGroup actionGroup;
-
-
-
-    public HttpDialogView(Project project, PsiElement psiElement) {
-        this(project, psiElement, null);
-    }
 
     public HttpDialogView(Project project, PsiElement psiElement, FuHttpRequestData httpRequestData) {
         super(project, true);
@@ -122,9 +89,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         this.responseTabView = new ResponseTabView(this.project,FuRequestStatusInfoView.getInstance().addWidget(new HttpToolBarWidget(initToolBarUI())).revalidate());
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
-        this.titleLabel = new JBLabel("", UIUtil.ComponentStyle.REGULAR);
-        this.titleLabel.setBorder(JBUI.Borders.emptyLeft(5));
-        RelativeFont.BOLD.install(this.titleLabel);
         initRequestUI();
         initResponseUI();
         initUI();
@@ -138,10 +102,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     @Override
     protected @Nullable Border createContentPaneBorder() {
         return JBUI.Borders.empty();
-    }
-
-    public void close() {
-        this.jbPopup.cancel();
     }
 
 
@@ -211,9 +171,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         if (Objects.isNull(fuHttpRequestData)) {
             return;
         }
-        String apiName = fuHttpRequestData.getApiName();
-        this.titleLabel.setText(apiName);
-        this.titleLabel.setToolTipText(apiName);
         this.requestTabView.initData(fuHttpRequestData);
         initResponseData(fuHttpRequestData);
     }
