@@ -26,34 +26,45 @@ public class FuRequestStatusInfoView {
     @Getter
     private final JPanel rootPanel;
 
-    private final JPanel leftPanel;
+    private JPanel leftPanel;
 
     private final JPanel centerPanel;
 
     private JPanel rightPanel;
 
-    private int index = 0;
+    private int leftIndex = 0;
+    private int rightIndex = 0;
 
     private final List<FuWidget> widgetList = Lists.newArrayList();
 
 
     public FuRequestStatusInfoView() {
         this.rootPanel = new JPanel(new BorderLayout());
-        this.leftPanel = new JPanel();
         this.centerPanel = new JPanel();
-        this.rootPanel.add(this.leftPanel, BorderLayout.WEST);
         this.rootPanel.add(this.centerPanel, BorderLayout.CENTER);
         this.rootPanel.setOpaque(true);
         initRightPanel();
         initWidget();
+    }
+
+    public static FuRequestStatusInfoView getInstance(){
+        return new FuRequestStatusInfoView();
+    }
+
+    public FuRequestStatusInfoView revalidate(){
         this.rootPanel.revalidate();
+        return this;
     }
 
 
-    public void addWidget(FuWidget fuWidget) {
+    public FuRequestStatusInfoView addWidget(FuWidget fuWidget) {
         widgetList.add(fuWidget);
-        rightPanel.add(fuWidget.getComponent(), index++);
-        this.rootPanel.revalidate();
+        if (fuWidget.isRight()) {
+            rightPanel.add(fuWidget.getComponent(), rightIndex++);
+        } else {
+            this.leftPanel.add(fuWidget.getComponent(), leftIndex++);
+        }
+        return this;
     }
 
 
@@ -91,6 +102,30 @@ public class FuRequestStatusInfoView {
             });
             this.rightPanel.setOpaque(false);
             this.rootPanel.add(this.rightPanel, BorderLayout.EAST);
+        }
+    }
+
+    private void initLeftPanel() {
+        if (this.leftPanel == null) {
+            this.leftPanel = new JPanel();
+            this.leftPanel.setBorder(JBUI.Borders.emptyLeft(1));
+            this.leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.X_AXIS) {
+                @Override
+                public void layoutContainer(Container target) {
+                    super.layoutContainer(target);
+                    for (Component component : target.getComponents()) {
+                        if (component instanceof MemoryUsagePanel) {
+                            Rectangle r = component.getBounds();
+                            r.y = 0;
+                            r.width += SystemInfo.isMac ? 4 : 0;
+                            r.height = target.getHeight();
+                            component.setBounds(r);
+                        }
+                    }
+                }
+            });
+            this.leftPanel.setOpaque(false);
+            this.rootPanel.add(this.leftPanel, BorderLayout.WEST);
         }
     }
 

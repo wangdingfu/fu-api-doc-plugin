@@ -13,6 +13,11 @@ public class HttpToolBarWidget implements FuWidget {
 
     private final JPanel toolBarPanel;
 
+    @Override
+    public boolean isRight() {
+        return true;
+    }
+
     public HttpToolBarWidget(JPanel toolBarPanel) {
         this.toolBarPanel = toolBarPanel;
     }

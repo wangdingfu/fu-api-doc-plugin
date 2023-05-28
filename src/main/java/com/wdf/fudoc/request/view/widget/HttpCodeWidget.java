@@ -25,6 +25,7 @@ public class HttpCodeWidget implements FuWidget {
         this.fuMessageComponent = new FuMessageComponent();
     }
 
+
     @Override
     public JComponent getComponent() {
         return this.fuMessageComponent;

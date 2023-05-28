@@ -102,7 +102,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     @Getter
     private final PsiElement psiElement;
 
-    private final FuRequestStatusInfoView fuRequestStatusInfoView;
 
 
     public HttpDialogView(Project project, PsiElement psiElement) {
@@ -113,11 +112,10 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         super(project, true);
         this.project = project;
         this.psiElement = psiElement;
-        this.fuRequestStatusInfoView = new FuRequestStatusInfoView();
         initToolBarUI();
-        fuRequestStatusInfoView.addWidget(new HttpToolBarWidget(this.toolBarPanel));
-        this.requestTabView = new RequestTabView(this.project, this, this.fuRequestStatusInfoView);
-        this.responseTabView = new ResponseTabView(this.project,this.fuRequestStatusInfoView);
+        HttpToolBarWidget httpToolBarWidget = new HttpToolBarWidget(this.toolBarPanel);
+        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance().addWidget(httpToolBarWidget).revalidate());
+        this.responseTabView = new ResponseTabView(this.project,FuRequestStatusInfoView.getInstance().addWidget(httpToolBarWidget).revalidate());
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.titleLabel = new JBLabel("", UIUtil.ComponentStyle.REGULAR);

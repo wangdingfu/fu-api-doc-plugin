@@ -120,7 +120,7 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
         //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("Confirm Sync Api", "同步接口文档-确认弹框", FuDocIcons.FU_API_SYNC_DIALOG) {
+        defaultActionGroup.add(new AnAction("同步接口文档-确认弹框", "", FuDocIcons.FU_API_SYNC_DIALOG) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //获取同步接口文档配置
@@ -138,7 +138,7 @@ public class FuRequestToolBarManager {
         });
 
         //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("Sync Api", "同步接口文档", FuDocIcons.FU_API_SYNC) {
+        defaultActionGroup.add(new AnAction("同步接口文档", "", FuDocIcons.FU_API_SYNC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //获取同步接口文档配置
@@ -154,6 +154,7 @@ public class FuRequestToolBarManager {
             }
         });
 
+        defaultActionGroup.addSeparator();
 
         //添加保存事件
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
@@ -166,7 +167,6 @@ public class FuRequestToolBarManager {
             }
         });
 
-        defaultActionGroup.addSeparator();
 
         //添加刷新事件
         defaultActionGroup.add(new AnAction("Refresh", "Refresh", AllIcons.Actions.Refresh) {
@@ -180,6 +180,7 @@ public class FuRequestToolBarManager {
                 });
             }
         });
+        defaultActionGroup.addSeparator();
 
         //添加请求状态显示按钮 支持终止请求
         AnAction stopAction = actionManager.getAction(RequestConstants.ACTION_REQUEST_TOOLBAR_STOP);
@@ -227,6 +228,7 @@ public class FuRequestToolBarManager {
                 BrowserUtil.browse(UrlConstants.DOCUMENT);
             }
         });
+
 
     }
 
