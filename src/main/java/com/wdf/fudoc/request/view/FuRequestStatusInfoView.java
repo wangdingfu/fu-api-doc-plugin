@@ -43,6 +43,7 @@ public class FuRequestStatusInfoView {
         this.centerPanel = new JPanel();
         this.rootPanel.add(this.centerPanel, BorderLayout.CENTER);
         this.rootPanel.setOpaque(true);
+        initLeftPanel();
         initRightPanel();
         initWidget();
     }

@@ -4,6 +4,7 @@ import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -97,10 +98,12 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     private JBPopup jbPopup;
 
     @Getter
-    private FuRequestToolBarManager fuRequestToolBarManager;
+    private final FuRequestToolBarManager fuRequestToolBarManager;
 
     @Getter
     private final PsiElement psiElement;
+
+    private final DefaultActionGroup actionGroup;
 
 
 
@@ -112,10 +115,11 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         super(project, true);
         this.project = project;
         this.psiElement = psiElement;
+        this.fuRequestToolBarManager = FuRequestToolBarManager.getInstance(this);
+        this.actionGroup = this.fuRequestToolBarManager.initToolBar();
         initToolBarUI();
-        HttpToolBarWidget httpToolBarWidget = new HttpToolBarWidget(this.toolBarPanel);
-        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance().addWidget(httpToolBarWidget).revalidate());
-        this.responseTabView = new ResponseTabView(this.project,FuRequestStatusInfoView.getInstance().addWidget(httpToolBarWidget).revalidate());
+        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance().addWidget(new HttpToolBarWidget(initToolBarUI())).revalidate());
+        this.responseTabView = new ResponseTabView(this.project,FuRequestStatusInfoView.getInstance().addWidget(new HttpToolBarWidget(initToolBarUI())).revalidate());
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.titleLabel = new JBLabel("", UIUtil.ComponentStyle.REGULAR);
@@ -155,13 +159,13 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     /**
      * 初始化工具栏面板
      */
-    private void initToolBarUI() {
-        this.toolBarPanel = new JPanel(new BorderLayout());
-        Utils.setSmallerFontForChildren(this.toolBarPanel);
+    private JPanel initToolBarUI() {
+        JPanel toolBarPanel = new JPanel(new BorderLayout());
+        Utils.setSmallerFontForChildren(toolBarPanel);
 //        this.toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
         //创建及初始化工具栏
-        this.fuRequestToolBarManager = FuRequestToolBarManager.getInstance(this);
-        ToolBarUtils.addActionToToolBar(this.toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, this.fuRequestToolBarManager.initToolBar(), BorderLayout.EAST);
+        ToolBarUtils.addActionToToolBar(toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, this.actionGroup, BorderLayout.EAST);
+        return toolBarPanel;
     }
 
 
@@ -220,26 +224,11 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     }
 
 
-    /**
-     * 弹出当前页面
-     *
-     * @param project 当前项目
-     */
-    public static void popup(Project project, PsiElement psiElement, FuHttpRequestData fuHttpRequestData) {
-        HttpDialogView httpDialogView = new HttpDialogView(project, psiElement);
-        httpDialogView.initData(fuHttpRequestData);
-        FuRequestToolBarManager fuRequestToolBarManager = httpDialogView.getFuRequestToolBarManager();
-        httpDialogView.setJbPopup(PopupUtils.create(httpDialogView.getRootPanel(), httpDialogView.getToolBarPanel(), fuRequestToolBarManager.getPinStatus()));
-    }
 
     private void addMouseListeners() {
         WindowMoveListener windowMoveListener = new WindowMoveListener(this.rootPanel);
         this.rootPanel.addMouseListener(windowMoveListener);
         this.rootPanel.addMouseMotionListener(windowMoveListener);
-        this.toolBarPanel.addMouseListener(windowMoveListener);
-        this.toolBarPanel.addMouseMotionListener(windowMoveListener);
-        this.titleLabel.addMouseListener(windowMoveListener);
-        this.titleLabel.addMouseMotionListener(windowMoveListener);
         this.statusInfoPanel.addMouseListener(windowMoveListener);
         this.statusInfoPanel.addMouseMotionListener(windowMoveListener);
     }

@@ -59,11 +59,6 @@ public class FuRequestToolBarManager {
      */
     private final DefaultActionGroup defaultActionGroup = new DefaultActionGroup();
 
-    /**
-     * pin 状态 默认pin住
-     */
-    @Getter
-    public final AtomicBoolean pinStatus = new AtomicBoolean(true);
 
     /**
      * 请求窗体方式
@@ -98,22 +93,25 @@ public class FuRequestToolBarManager {
      */
     public DefaultActionGroup initToolBar() {
         if (RequestDialog.HTTP_DIALOG.equals(this.requestDialog)) {
-            addActionByHttpDialog();
+            addCommonAction(this.defaultActionGroup,this.httpDialogView.getRequestTabView());
+
         }
         if (RequestDialog.TOOL_WINDOW.equals(this.requestDialog)) {
-            addCommonAction(fuRequestWindow.getRequestTabView());
+            addCommonAction(this.defaultActionGroup,fuRequestWindow.getRequestTabView());
         }
         return defaultActionGroup;
     }
 
 
-    private void addActionByHttpDialog() {
+    public DefaultActionGroup addActionByHttpDialog() {
+        DefaultActionGroup defaultActionGroup = new DefaultActionGroup();
         //添加公共动作
-        addCommonAction(this.httpDialogView.getRequestTabView());
+        addCommonAction(defaultActionGroup, this.httpDialogView.getRequestTabView());
+        return defaultActionGroup;
     }
 
 
-    private void addCommonAction(RequestTabView requestTabView) {
+    private void addCommonAction(DefaultActionGroup defaultActionGroup, RequestTabView requestTabView) {
         ActionManager actionManager = ActionManager.getInstance();
 
 
@@ -235,8 +233,8 @@ public class FuRequestToolBarManager {
 
     private void execute(BiConsumer<FuDocContext, PsiClass> consumer) {
         if (Objects.nonNull(psiElement) && Objects.nonNull(consumer)) {
-            PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
-            PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class);
+            PsiMethod psiMethod = PsiClassUtils.getTargetMethod(psiElement);
+            PsiClass psiClass = PsiClassUtils.getPsiClass(psiElement);
             if (Objects.isNull(psiClass) || !FuDocUtils.isController(psiClass) || !FuDocUtils.isControllerMethod(psiMethod)) {
                 return;
             }
