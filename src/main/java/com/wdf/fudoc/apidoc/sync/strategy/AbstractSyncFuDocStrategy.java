@@ -3,6 +3,7 @@ package com.wdf.fudoc.apidoc.sync.strategy;
 import cn.hutool.core.date.DateUtil;
 import com.google.common.collect.Lists;
 import com.intellij.notification.NotificationType;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.ShowSettingsUtil;
@@ -73,7 +74,7 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         String moduleName = Objects.isNull(module) ? org.apache.commons.lang3.StringUtils.EMPTY : module.getName();
         List<ApiProjectDTO> projectConfigList = configData.getProjectConfigList(moduleName);
         if (StringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList)) {
-            DumbService.getInstance(psiClass.getProject()).smartInvokeLater(() -> {
+            ApplicationManager.getApplication().runReadAction(()->{
                 //弹框让用户去创建项目
                 ShowSettingsUtil.getInstance().showSettingsDialog(psiClass.getProject(), FuDocSyncSettingConfigurable.class);
             });
