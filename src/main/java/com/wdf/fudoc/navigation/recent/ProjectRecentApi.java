@@ -12,10 +12,12 @@ import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.TimeFormatUtils;
 import org.apache.commons.collections.CollectionUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -73,18 +75,38 @@ public class ProjectRecentApi {
 
     public ProjectRecentApi(Project project) {
         this.appender = FuStorageAppender.getInstance(project, FILE_NAME, "config");
+        this.historyUrlList = readApiLogList();
+    }
+
+
+    private List<RecentApiLog> readApiLogList() {
         List<String> navigationLogList = this.appender.read();
-        int size = navigationLogList.size();
-        List<String> apiLogList = Lists.newArrayList();
-        //只保存最近100条api导航记录
-        for (int i = size - FuDocConstants.API_NAVIGATION_LIMIT; i < size; i++) {
-            apiLogList.add(navigationLogList.get(i));
+        if (CollectionUtils.isEmpty(navigationLogList)) {
+            return Lists.newArrayList();
         }
-        //当历史搜索记录超过500行时 需要对文件进行重置 避免历史导航记录文件过大
+        if (navigationLogList.size() <= FuDocConstants.API_NAVIGATION_LIMIT) {
+            //数量小于100条 不处理 直接放入历史记录中
+            return ObjectUtils.listToList(navigationLogList, RecentApiLog::new);
+        }
+        List<RecentApiLog> recentList = Lists.newArrayList();
+        //从最后一条（即最近一条导航记录）开始遍历 只取最近100条api导航记录
+        for (int i = navigationLogList.size() - 1; i >= 0; i--) {
+            if (recentList.size() >= 100) {
+                break;
+            }
+            RecentApiLog recentApiLog = new RecentApiLog(navigationLogList.get(i));
+            //判断是否有重复url
+            if (recentList.stream().noneMatch(a -> a.getUrl().equals(recentApiLog.getUrl()))) {
+                recentList.add(recentApiLog);
+            }
+        }
+        //根据时间排序
+        recentList.sort(Comparator.comparing(RecentApiLog::getTime));
+        //当导航API日志文件条数超过300条 则需要进行去重和优化至最近100条 防止文件过大
         if (navigationLogList.size() > FuDocConstants.API_NAVIGATION_MAX_LIMIT) {
-            ApplicationManager.getApplication().runWriteAction(() -> this.appender.writeAll(apiLogList));
+            ApplicationManager.getApplication().runWriteAction(() -> this.appender.writeAll(recentList.stream().map(RecentApiLog::toString).collect(Collectors.toList())));
         }
-        this.historyUrlList = ObjectUtils.listToList(apiLogList, RecentApiLog::new);
+        return recentList;
     }
 
 
