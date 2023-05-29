@@ -40,6 +40,7 @@ import javax.swing.*;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class TestAction extends AnAction {
@@ -47,10 +48,10 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-//        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
-//        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
+        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
+        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
 //        request(e);
-        apiTest(e);
+//        apiTest(e);
     }
 
 

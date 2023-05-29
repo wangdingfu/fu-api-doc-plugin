@@ -1,9 +1,13 @@
 package com.wdf.fudoc.request.view;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.tabs.TabInfo;
+import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuListStringComponent;
+import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.LeftRightComponent;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
+import icons.FuDocIcons;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -15,8 +19,9 @@ import java.awt.*;
  * @author wangdingfu
  * @date 2023-02-16 21:55:28
  */
-public class AuthSettingView {
+public class AuthSettingView implements FuTab {
 
+    private static final String TITLE = "鉴权配置";
 
     /**
      * 根面板
@@ -43,4 +48,8 @@ public class AuthSettingView {
     }
 
 
+    @Override
+    public TabInfo getTabInfo() {
+        return FuTabComponent.getInstance(TITLE, FuDocIcons.FU_AUTH, this.rootPanel).builder();
+    }
 }

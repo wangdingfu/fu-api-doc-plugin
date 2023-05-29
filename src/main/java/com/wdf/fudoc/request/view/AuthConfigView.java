@@ -40,7 +40,7 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
     private final ResponseTabView responseTabView;
 
     /**
-     * java代码tab
+     * 通用配置tab
      */
     private final GeneralAuthTab generalAuthTab;
 
@@ -50,14 +50,14 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
     private final JavaCodeAuthTab javaCodeAuthTab;
 
     /**
-     * java代码tab
+     * javaScript代码tab
      */
     private final JavaScriptCodeAuthTab javaScriptCodeAuthTab;
 
 
     public AuthConfigView(Project project) {
         this.rootPanel = new JPanel(new BorderLayout());
-        Splitter splitter = new Splitter(true, 0.6F);
+        Splitter splitter = new Splitter(true, 0.4F);
         this.requestTabView = new RequestTabView(project, this, null);
         this.responseTabView = new ResponseTabView(project, null);
         this.generalAuthTab = new GeneralAuthTab(project);

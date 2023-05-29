@@ -36,14 +36,17 @@ public class FuRequestSettingView extends DialogWrapper {
      */
     private final FuTabBuilder fuTabBuilder = FuTabBuilder.getInstance();
 
+    private final Project project;
 
     private GlobalConfigTab globalConfigTab;
     private GlobalVariableTab globalVariableTab;
     private GlobalHeaderTab globalHeaderTab;
+    private AuthSettingView authSettingView;
 
 
     public FuRequestSettingView(@Nullable Project project) {
         super(project, true);
+        this.project = project;
         this.rootPanel = new JPanel(new BorderLayout());
         setTitle("【Fu Request】设置");
         initSettingPanel();
@@ -58,8 +61,9 @@ public class FuRequestSettingView extends DialogWrapper {
         this.globalConfigTab = new GlobalConfigTab();
         this.globalVariableTab = new GlobalVariableTab();
         this.globalHeaderTab = new GlobalHeaderTab();
+        this.authSettingView = new AuthSettingView(this.project);
         //添加tab页
-        fuTabBuilder.addTab(this.globalHeaderTab).addTab(this.globalConfigTab).addTab(this.globalVariableTab);
+        fuTabBuilder.addTab(this.globalHeaderTab).addTab(this.globalConfigTab).addTab(this.globalVariableTab).addTab(this.authSettingView);
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
         initData();
     }
