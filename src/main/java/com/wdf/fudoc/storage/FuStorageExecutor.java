@@ -3,6 +3,7 @@ package com.wdf.fudoc.storage;
 import cn.hutool.core.io.FileUtil;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.common.FuDocRender;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -22,9 +23,9 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class FuStorageExecutor {
 
-    public static final String FU_DOC_DIR = ".fudoc";
+    public static final String FU_DOC_DIR = "fudoc";
     public static final String FU_DOC_CONFIG = "config";
-    public static final String FU_DOC_API = "api";
+    public static final String FU_DOC_API = "request";
     public static final String FU_DOC_API_SUFFIX = ".http";
 
     /**
@@ -42,13 +43,13 @@ public class FuStorageExecutor {
         //检查是否存在.fudoc目录 没有则创建
         String currentProjectPath = project.getBasePath();
         if (StringUtils.isNotBlank(currentProjectPath)) {
-            File file = FileUtil.file(currentProjectPath, FU_DOC_DIR);
+            File file = FileUtil.file(currentProjectPath, FuDocConstants.IDEA_DIR, FU_DOC_DIR);
             if (file.exists()) {
                 return;
             }
             if (file.mkdir()
-                    && FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_CONFIG).mkdir()
-                    && FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API).mkdir()) {
+                    && FileUtil.file(currentProjectPath, FuDocConstants.IDEA_DIR, FU_DOC_DIR, FU_DOC_CONFIG).mkdir()
+                    && FileUtil.file(currentProjectPath, FuDocConstants.IDEA_DIR, FU_DOC_DIR, FU_DOC_API).mkdir()) {
                 log.info("初始化[fudoc]根目录成功");
             }
         }
@@ -58,7 +59,7 @@ public class FuStorageExecutor {
         String apiName = fuHttpRequestData.getApiName();
         String currentProjectPath = ProjectUtils.getCurrentProjectPath();
         String httpFileContent = FuDocRender.httpRender(HttpDataConvert.convert(fuHttpRequestData));
-        File file = FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API, apiName + FU_DOC_API_SUFFIX);
+        File file = FileUtil.file(currentProjectPath,FuDocConstants.IDEA_DIR, FU_DOC_DIR, FU_DOC_API, apiName + FU_DOC_API_SUFFIX);
         saveFile(file, httpFileContent);
     }
 
