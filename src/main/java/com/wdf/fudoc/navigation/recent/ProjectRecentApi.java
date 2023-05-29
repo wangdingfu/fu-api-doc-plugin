@@ -3,7 +3,9 @@ package com.wdf.fudoc.navigation.recent;
 import cn.hutool.core.date.DateUtil;
 import com.google.common.collect.Lists;
 import com.intellij.ide.actions.searcheverywhere.FoundItemDescriptor;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.storage.FuStorageAppender;
 import com.wdf.fudoc.util.ObjectUtils;
@@ -33,12 +35,14 @@ public class ProjectRecentApi {
     private final Map<String, ApiNavigationItem> historyMap = new ConcurrentHashMap<>();
 
     public void add(ApiNavigationItem apiNavigationItem) {
-        String url = apiNavigationItem.getUrl();
-        historyUrlList.removeIf(f -> f.getUrl().equals(url));
-        long currentSeconds = DateUtil.currentSeconds();
-        appender.append(url + "|" + currentSeconds);
-        historyUrlList.add(new RecentApiLog(url, currentSeconds));
-        historyMap.put(url, apiNavigationItem);
+        ApplicationManager.getApplication().runWriteAction(() -> {
+            String url = apiNavigationItem.getUrl();
+            historyUrlList.removeIf(f -> f.getUrl().equals(url));
+            long currentSeconds = DateUtil.currentSeconds();
+            appender.append(url + "|" + currentSeconds);
+            historyUrlList.add(new RecentApiLog(url, currentSeconds));
+            historyMap.put(url, apiNavigationItem);
+        });
     }
 
 
@@ -69,7 +73,18 @@ public class ProjectRecentApi {
 
     public ProjectRecentApi(Project project) {
         this.appender = FuStorageAppender.getInstance(project, FILE_NAME, "config");
-        historyUrlList = ObjectUtils.listToList(this.appender.read(), RecentApiLog::new);
+        List<String> navigationLogList = this.appender.read();
+        int size = navigationLogList.size();
+        List<String> apiLogList = Lists.newArrayList();
+        //只保存最近100条api导航记录
+        for (int i = size - FuDocConstants.API_NAVIGATION_LIMIT; i < size; i++) {
+            apiLogList.add(navigationLogList.get(i));
+        }
+        //当历史搜索记录超过500行时 需要对文件进行重置 避免历史导航记录文件过大
+        if (navigationLogList.size() > FuDocConstants.API_NAVIGATION_MAX_LIMIT) {
+            ApplicationManager.getApplication().runWriteAction(() -> this.appender.writeAll(apiLogList));
+        }
+        this.historyUrlList = ObjectUtils.listToList(apiLogList, RecentApiLog::new);
     }
 
 
