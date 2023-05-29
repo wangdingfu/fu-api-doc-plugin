@@ -24,7 +24,7 @@ public class RecentApiLog {
     /**
      * 记录时间
      */
-    private Long time;
+    private long time;
 
 
     @Override
@@ -39,11 +39,12 @@ public class RecentApiLog {
         String[] split = StringUtils.split(content, "|");
         if (split.length == 1) {
             this.url = split[0];
+            this.time = 0;
         }
         if (split.length == 2) {
             this.url = split[0];
             String timeStr = split[1];
-            this.time = (StringUtils.isNotBlank(timeStr) && StringUtils.isNumeric(timeStr)) ? Long.parseLong(timeStr) : null;
+            this.time = (StringUtils.isNotBlank(timeStr) && StringUtils.isNumeric(timeStr)) ? Long.parseLong(timeStr) : 0;
         }
     }
 }

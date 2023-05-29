@@ -53,6 +53,15 @@ public class FuStorageAppender {
         }
     }
 
+
+    public void writeAll(List<String> contentList) {
+        try {
+            FileUtil.writeUtf8Lines(contentList, this.file);
+        } catch (Exception e) {
+            log.error("向文件{}重置内容失败", file.getAbsolutePath(), e);
+        }
+    }
+
     /**
      * 读取文件 按行读取
      */

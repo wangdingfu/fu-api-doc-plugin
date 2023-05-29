@@ -28,6 +28,9 @@ public interface FuDocConstants {
     String IDEA_DIR = ".idea";
     String API_DIR = "api";
 
+    Integer API_NAVIGATION_LIMIT = 100;
+    Integer API_NAVIGATION_MAX_LIMIT = 300;
+
 
     String SPRING_PARAM = "springParam";
     String ROOT_PARAM_TYPE = "rootParamType";
