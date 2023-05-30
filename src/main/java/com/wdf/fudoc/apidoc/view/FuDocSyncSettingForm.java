@@ -83,6 +83,12 @@ public class FuDocSyncSettingForm {
     }
 
 
+    public void setSize(Dimension dimension){
+        this.rootPanel.setMinimumSize(dimension);
+        this.rootPanel.setPreferredSize(dimension);
+    }
+
+
     private FuMsgBO buildMsg() {
         FuMsgBO fuMsgBO = new FuMsgBO();
         fuMsgBO.setMsgId("fudoc.sync.api.tip.noConfig");

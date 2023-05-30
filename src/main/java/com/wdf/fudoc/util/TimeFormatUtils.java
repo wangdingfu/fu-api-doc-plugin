@@ -42,7 +42,7 @@ public class TimeFormatUtils {
         } else if (diffTime < ONE_DAY) {
             DateTime endOfDay = DateUtil.endOfDay(new Date(time * 1000));
             long endDay = endOfDay.toTimestamp().getTime() / 1000;
-            String day = time < endDay ? "today" : "yesterday";
+            String day = currentSeconds < endDay ? "today" : "yesterday";
             DateTime dateTime = DateTime.of(time * 1000);
             int hour = dateTime.hour(true);
             int minute = dateTime.minute();

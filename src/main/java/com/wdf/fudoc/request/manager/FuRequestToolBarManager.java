@@ -2,12 +2,13 @@ package com.wdf.fudoc.request.manager;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
@@ -22,19 +23,16 @@ import com.wdf.fudoc.request.constants.enumtype.RequestDialog;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
-import com.wdf.fudoc.request.view.AuthSettingView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
+import com.wdf.fudoc.util.ShowSettingUtils;
 import icons.FuDocIcons;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * 【Fu Request】模块工具类管理类
@@ -88,7 +86,7 @@ public class FuRequestToolBarManager {
         return new FuRequestToolBarManager(fuRequestWindow);
     }
 
-    public RequestTabView getRequestTabView(){
+    public RequestTabView getRequestTabView() {
         return RequestDialog.HTTP_DIALOG.equals(this.requestDialog)
                 ? this.httpDialogView.getRequestTabView()
                 : fuRequestWindow.getRequestTabView();
@@ -157,7 +155,7 @@ public class FuRequestToolBarManager {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 RequestTabView requestTabView = getRequestTabView();
-                if(Objects.nonNull(requestTabView)){
+                if (Objects.nonNull(requestTabView)) {
                     FuHttpRequestData fuHttpRequestData = requestTabView.getFuHttpRequestData();
                     requestTabView.doSendBefore(fuHttpRequestData);
                     //保存当前请求
@@ -192,18 +190,10 @@ public class FuRequestToolBarManager {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //展示设置界面
-                ShowSettingsUtil.getInstance().showSettingsDialog(e.getProject(), FuRequestSettingConfigurable.class);
+                ShowSettingUtils.showConfigurable(e.getProject(), new FuRequestSettingConfigurable(), 1000, 600);
             }
         });
 
-
-        //鉴权
-/*        defaultActionGroup.add(new AnAction("鉴权配置", "Auth", AllIcons.General.Settings) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                //展示设置界面
-            }
-        });*/
 
         //添加保存事件
         defaultActionGroup.add(new AnAction("定位到该方法", "(Alt+Q)", AllIcons.General.Locate) {

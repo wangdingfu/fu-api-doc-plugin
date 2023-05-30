@@ -6,8 +6,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.DumbService;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.config.configurable.FuDocSyncSettingConfigurable;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
@@ -17,7 +16,10 @@ import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiRecordData;
-import com.wdf.fudoc.apidoc.sync.dto.*;
+import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
+import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
+import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
+import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiCategoryDialog;
 import com.wdf.fudoc.common.FuDocMessageBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
@@ -25,15 +27,13 @@ import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableDisableListener;
-import com.wdf.fudoc.util.FuDocViewUtils;
-import com.wdf.fudoc.util.GenFuDocUtils;
-import com.wdf.fudoc.util.ObjectUtils;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.fudoc.util.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -74,9 +74,9 @@ public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
         String moduleName = Objects.isNull(module) ? org.apache.commons.lang3.StringUtils.EMPTY : module.getName();
         List<ApiProjectDTO> projectConfigList = configData.getProjectConfigList(moduleName);
         if (StringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList)) {
-            ApplicationManager.getApplication().runReadAction(()->{
-                //弹框让用户去创建项目
-                ShowSettingsUtil.getInstance().showSettingsDialog(psiClass.getProject(), FuDocSyncSettingConfigurable.class);
+            ApplicationManager.getApplication().invokeLater(() -> {
+                Project project = psiClass.getProject();
+                ShowSettingUtils.showConfigurable(project, new FuDocSyncSettingConfigurable(), 800, 600);
             });
             return;
         }
