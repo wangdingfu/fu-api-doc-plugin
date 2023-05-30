@@ -40,10 +40,9 @@ public class TimeFormatUtils {
             Long hour = diffTime / ONE_HOUR;
             return hour + " hours ago";
         } else if (diffTime < ONE_DAY) {
-            //判断是否为今天
-            DateTime today = DateUtil.endOfDay(new Date());
-            long endDay = today.toTimestamp().getTime() / 1000;
-            String day = currentSeconds < endDay ? "today" : "yesterday";
+            DateTime endOfDay = DateUtil.endOfDay(new Date(time * 1000));
+            long endDay = endOfDay.toTimestamp().getTime() / 1000;
+            String day = time < endDay ? "today" : "yesterday";
             DateTime dateTime = DateTime.of(time * 1000);
             int hour = dateTime.hour(true);
             int minute = dateTime.minute();
