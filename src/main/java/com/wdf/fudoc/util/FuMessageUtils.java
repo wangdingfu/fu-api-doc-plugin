@@ -2,7 +2,9 @@ package com.wdf.fudoc.util;
 
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.bo.FuMsgBO;
+import com.wdf.fudoc.components.message.FuMsgBuilder;
 import com.wdf.fudoc.components.message.MessageComponent;
+import com.wdf.fudoc.request.constants.enumtype.MessageType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,4 +25,5 @@ public class FuMessageUtils {
         rootPanel.add(messagePanel, BorderLayout.CENTER);
         return rootPanel;
     }
+
 }

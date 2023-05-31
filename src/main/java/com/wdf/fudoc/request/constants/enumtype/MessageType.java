@@ -14,6 +14,7 @@ public enum MessageType {
 
     NORMAL("normal"),
     LINK("link"),
+    CLICK("click"),
     DIALOG("dialog");
 
 

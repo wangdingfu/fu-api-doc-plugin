@@ -86,8 +86,10 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
     }
 
 
+
     @Override
     public void doAction(AuthConfigData data) {
+
         initData(formatHttpData(data));
         generalAuthTab.doAction(data);
         javaCodeAuthTab.doAction(data);
@@ -109,4 +111,5 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
         }
         return data.getHttpRequestData();
     }
+
 }

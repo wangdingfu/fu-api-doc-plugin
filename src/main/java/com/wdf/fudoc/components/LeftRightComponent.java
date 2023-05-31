@@ -28,26 +28,19 @@ public class LeftRightComponent {
     /**
      * 右侧面板
      */
-    private final JPanel rightPanel;
+    private final JComponent rightPanel;
 
-    /**
-     * 预设值窗口大小
-     */
-    private final Dimension preferredSize;
-
-    public LeftRightComponent(JPanel leftPanel, JPanel rightPanel) {
-        this(leftPanel, rightPanel, 0.2F, new Dimension(600, 400));
+    public LeftRightComponent(JPanel leftPanel, JComponent rightPanel) {
+        this(leftPanel, rightPanel, 0.2F);
     }
 
-    public LeftRightComponent(JPanel leftPanel, JPanel rightPanel, float proportion, Dimension preferredSize) {
+    public LeftRightComponent(JPanel leftPanel, JComponent rightPanel, float proportion) {
         this.rootPanel = new JPanel(new BorderLayout());
         this.leftPanel = leftPanel;
         this.rightPanel = rightPanel;
-        this.preferredSize = preferredSize;
         Splitter splitter = new Splitter(false, proportion);
         splitter.setFirstComponent(this.leftPanel);
         splitter.setSecondComponent(this.rightPanel);
         this.rootPanel.add(splitter, BorderLayout.CENTER);
-        this.rootPanel.setPreferredSize(this.preferredSize);
     }
 }

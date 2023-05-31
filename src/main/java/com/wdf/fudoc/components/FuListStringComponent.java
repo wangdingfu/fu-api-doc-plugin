@@ -80,9 +80,9 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
 
     private void initListAction() {
         this.jbList.addListSelectionListener(e -> {
-            if(StringUtils.isNotBlank(this.currentItem)){
+            if (StringUtils.isNotBlank(this.currentItem)) {
                 T data = dataMap.get(this.currentItem);
-                if(Objects.nonNull(data)){
+                if (Objects.nonNull(data)) {
                     listener.doActionAfter(data);
                 }
             }
@@ -105,16 +105,18 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
         this.nameList.add(data.getName());
         this.dataMap.put(data.getName(), data);
         addElement(data.getName());
+        this.jbList.setSelectedValue(data.getName(), true);
     }
 
 
     @Override
     public String remove(int index) {
-        String remove = this.nameList.remove(index);
+        String remove = super.remove(index);
+        this.nameList.remove(index);
         if (StringUtils.isNotBlank(remove)) {
-            this.dataMap.remove(remove);
+            this.listener.remove(this.dataMap.remove(remove));
         }
-        return super.remove(index);
+        return remove;
     }
 
 

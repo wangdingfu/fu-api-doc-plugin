@@ -190,7 +190,7 @@ public class FuRequestToolBarManager {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //展示设置界面
-                ShowSettingUtils.showConfigurable(e.getProject(), new FuRequestSettingConfigurable(), 1000, 600);
+                ShowSettingUtils.showConfigurable(e.getProject(), new FuRequestSettingConfigurable(), 800, 900);
             }
         });
 

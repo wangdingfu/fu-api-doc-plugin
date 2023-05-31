@@ -21,6 +21,7 @@ public class FuMsgHandler {
         FU_MSG_EXECUTOR_MAP.put(MessageType.NORMAL, new NormalMsgExecutor());
         FU_MSG_EXECUTOR_MAP.put(MessageType.LINK, new LinkMsgExecutor());
         FU_MSG_EXECUTOR_MAP.put(MessageType.DIALOG, new DialogMsgExecutor());
+        FU_MSG_EXECUTOR_MAP.put(MessageType.CLICK, new NormalMsgExecutor());
     }
 
     public static FuMsgExecutor get(MessageType messageType) {

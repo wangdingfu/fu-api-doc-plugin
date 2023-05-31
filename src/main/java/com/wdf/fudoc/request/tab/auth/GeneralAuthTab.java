@@ -29,6 +29,8 @@ public class GeneralAuthTab implements FuTab, FuActionListener<AuthConfigData> {
     }
 
 
+
+
     /**
      * 添加一条配置数据时调用
      * @param data 配置数据

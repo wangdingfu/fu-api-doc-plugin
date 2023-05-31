@@ -32,6 +32,7 @@ public class JavaCodeAuthTab implements FuTab, FuActionListener<AuthConfigData> 
         return FuTabComponent.getInstance(TAB, null, this.fuEditorComponent.getMainPanel()).builder();
     }
 
+
     @Override
     public void doAction(AuthConfigData data) {
         JavaCodeAuthConfig authConfig = (JavaCodeAuthConfig) data.getAuthConfig(TAB);

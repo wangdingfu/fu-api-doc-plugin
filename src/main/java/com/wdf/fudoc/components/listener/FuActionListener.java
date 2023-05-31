@@ -12,4 +12,9 @@ public interface FuActionListener<T> {
 
     void doActionAfter(T data);
 
+
+    default void remove(T data){
+
+    }
+
 }
