@@ -34,6 +34,7 @@ public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfig
     private static final List<TipCmd> cmdList = Lists.newArrayList(
             new TipCmd("设置当前项目参数","fu.projectEnv.set('','')"),
             new TipCmd("设置全局请求头","fu.env.set('','')"),
+            new TipCmd("获取当前项目参数","fu.env.get('')"),
             new TipCmd("获取响应结果","fu.result.data")
     );
 
