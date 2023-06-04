@@ -49,11 +49,12 @@ public class FuCmdComponent {
         itemPanel.add(BorderLayout.NORTH, new JLabel(title));
         JPanel cmdPanel = new JPanel();
         cmdPanel.setLayout(new BoxLayout(cmdPanel, BoxLayout.Y_AXIS));
+        cmdPanel.setBorder(JBUI.Borders.empty());
         if (CollectionUtils.isNotEmpty(tipCmdList)) {
             tipCmdList.forEach(f -> addCmd(cmdPanel, f));
         }
         itemPanel.add(cmdPanel, BorderLayout.CENTER);
-        itemPanel.setBorder(JBUI.Borders.emptyTop(20));
+        itemPanel.setBorder(JBUI.Borders.empty(20, 0, 3, 0));
         this.rootPanel.add(itemPanel);
     }
 
@@ -61,7 +62,7 @@ public class FuCmdComponent {
         ActionLink actionLink = new ActionLink(scriptCmd.getText(), e -> {
             onClick(scriptCmd);
         });
-        actionLink.setForeground(JBColor.PINK);
+        actionLink.setForeground(scriptCmd.getColor());
         actionLink.setBorder(JBUI.Borders.empty(1, 10, 3, 1));
         cmdPanel.add(actionLink);
     }
