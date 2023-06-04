@@ -1,11 +1,13 @@
 package com.wdf.fudoc.components;
 
+import com.google.common.collect.Lists;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.bo.TipCmd;
 import lombok.Getter;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,29 +22,39 @@ public class FuCmdComponent {
     @Getter
     private final JPanel rootPanel;
 
-    private final JPanel cmdPanel;
 
-    private final List<TipCmd> tipCmdList;
-
-    public FuCmdComponent(String title, List<TipCmd> tipCmdList) {
-        this.rootPanel = new JPanel(new BorderLayout());
-        this.rootPanel.setBorder(JBUI.Borders.empty(11, 16, 16, 16));
-        this.cmdPanel = new JPanel();
-        this.cmdPanel.setLayout(new BoxLayout(this.cmdPanel, BoxLayout.Y_AXIS));
-        this.cmdPanel.add(Box.createVerticalStrut(10));
-        this.tipCmdList = tipCmdList;
-        this.rootPanel.add(BorderLayout.NORTH, new JLabel(title));
-        this.rootPanel.add(this.cmdPanel, BorderLayout.CENTER);
+    public FuCmdComponent() {
+        this.rootPanel = new JPanel();
+        this.rootPanel.setBorder(JBUI.Borders.empty(11, 0, 16, 16));
+        this.rootPanel.setLayout(new BoxLayout(this.rootPanel, BoxLayout.Y_AXIS));
     }
 
-    public void addCmd(TipCmd tipCmd) {
-        this.tipCmdList.add(tipCmd);
+    public static FuCmdComponent getInstance(){
+        return new FuCmdComponent();
+    }
+
+
+    public FuCmdComponent addCmd(String title, List<TipCmd> tipCmdList) {
+        JPanel itemPanel = new JPanel(new BorderLayout());
+        itemPanel.add(BorderLayout.NORTH, new JLabel(title));
+        JPanel cmdPanel = new JPanel();
+        cmdPanel.setLayout(new BoxLayout(cmdPanel, BoxLayout.Y_AXIS));
+        cmdPanel.add(Box.createVerticalStrut(10));
+        if (CollectionUtils.isNotEmpty(tipCmdList)) {
+            tipCmdList.forEach(f -> addCmd(cmdPanel, f));
+        }
+        itemPanel.add(cmdPanel, BorderLayout.CENTER);
+        this.rootPanel.add(itemPanel);
+        return this;
+    }
+
+    public void addCmd(JPanel cmdPanel, TipCmd tipCmd) {
         ActionLink actionLink = new ActionLink(tipCmd.getText(), e -> {
             onClick(tipCmd);
         });
         actionLink.setForeground(JBColor.PINK);
-        actionLink.setBorder(JBUI.Borders.empty(1, 17, 3, 1));
-        this.cmdPanel.add(actionLink);
+        actionLink.setBorder(JBUI.Borders.empty(1, 10, 3, 1));
+        cmdPanel.add(actionLink);
     }
 
 

@@ -5,6 +5,7 @@ import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
+import com.wdf.fudoc.components.FuCmdComponent;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.TipCmdComponent;
@@ -41,7 +42,8 @@ public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfig
     public JavaScriptCodeAuthTab() {
         this.rootPanel = new JPanel(new BorderLayout());
         this.codeTipPanel = new JPanel(new BorderLayout());
-        this.codeTipPanel.add(new TipCmdComponent(cmdList).getList(), BorderLayout.CENTER);
+        FuCmdComponent fuCmdComponent = FuCmdComponent.getInstance().addCmd("提示脚本1", this.cmdList).addCmd("提示脚本2", this.cmdList).addCmd("提示脚本3", this.cmdList).addCmd("提示脚本4", this.cmdList).addCmd("提示脚本5", this.cmdList);
+        this.codeTipPanel.add(fuCmdComponent.getRootPanel(), BorderLayout.CENTER);
         this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE);
         Splitter splitter = new Splitter(false, 0.7F);
         splitter.setFirstComponent(this.fuEditorComponent.getMainPanel());
