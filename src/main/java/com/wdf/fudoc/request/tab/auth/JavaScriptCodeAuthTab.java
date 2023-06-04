@@ -8,7 +8,6 @@ import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuCmdComponent;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
-import com.wdf.fudoc.components.TipCmdComponent;
 import com.wdf.fudoc.components.bo.TipCmd;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.request.pojo.AuthConfigData;

@@ -23,6 +23,7 @@ import com.wdf.fudoc.request.constants.enumtype.RequestDialog;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
+import com.wdf.fudoc.request.view.FuRequestSettingView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.util.FuDocUtils;
@@ -190,7 +191,9 @@ public class FuRequestToolBarManager {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //展示设置界面
-                ShowSettingUtils.showConfigurable(e.getProject(), new FuRequestSettingConfigurable(), 800, 900);
+                FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(e.getProject());
+                fuRequestSettingView.setSize(1000, 1000);
+                fuRequestSettingView.show();
             }
         });
 
