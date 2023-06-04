@@ -13,20 +13,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+import static com.intellij.ui.ScrollPaneFactory.createScrollPane;
+import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
+
 /**
  * @author wangdingfu
  * @date 2023-06-04 20:48:50
  */
 public class FuCmdComponent {
 
-    @Getter
     private final JPanel rootPanel;
 
 
     public FuCmdComponent() {
         this.rootPanel = new JPanel();
-        this.rootPanel.setBorder(JBUI.Borders.empty(11, 0, 16, 16));
+        this.rootPanel.setBorder(JBUI.Borders.empty(0, 0, 16, 16));
         this.rootPanel.setLayout(new BoxLayout(this.rootPanel, BoxLayout.Y_AXIS));
+    }
+
+
+    public JScrollPane build(){
+        JScrollPane pane = createScrollPane(this.rootPanel, true);
+        pane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
+        return pane;
     }
 
     public static FuCmdComponent getInstance(){
@@ -39,11 +48,11 @@ public class FuCmdComponent {
         itemPanel.add(BorderLayout.NORTH, new JLabel(title));
         JPanel cmdPanel = new JPanel();
         cmdPanel.setLayout(new BoxLayout(cmdPanel, BoxLayout.Y_AXIS));
-        cmdPanel.add(Box.createVerticalStrut(10));
         if (CollectionUtils.isNotEmpty(tipCmdList)) {
             tipCmdList.forEach(f -> addCmd(cmdPanel, f));
         }
         itemPanel.add(cmdPanel, BorderLayout.CENTER);
+        itemPanel.setBorder(JBUI.Borders.emptyTop(20));
         this.rootPanel.add(itemPanel);
         return this;
     }

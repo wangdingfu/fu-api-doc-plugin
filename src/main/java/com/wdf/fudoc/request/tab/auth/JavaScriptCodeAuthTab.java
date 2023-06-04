@@ -27,7 +27,6 @@ import java.util.Objects;
 public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfigData> {
 
     private final JPanel rootPanel;
-    private final JComponent codeTipPanel;
     private final FuEditorComponent fuEditorComponent;
 
     public final static String TAB = "JavaScript";
@@ -41,13 +40,11 @@ public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfig
 
     public JavaScriptCodeAuthTab() {
         this.rootPanel = new JPanel(new BorderLayout());
-        this.codeTipPanel = new JPanel(new BorderLayout());
         FuCmdComponent fuCmdComponent = FuCmdComponent.getInstance().addCmd("提示脚本1", this.cmdList).addCmd("提示脚本2", this.cmdList).addCmd("提示脚本3", this.cmdList).addCmd("提示脚本4", this.cmdList).addCmd("提示脚本5", this.cmdList);
-        this.codeTipPanel.add(fuCmdComponent.getRootPanel(), BorderLayout.CENTER);
         this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE);
         Splitter splitter = new Splitter(false, 0.7F);
         splitter.setFirstComponent(this.fuEditorComponent.getMainPanel());
-        splitter.setSecondComponent(this.codeTipPanel);
+        splitter.setSecondComponent(fuCmdComponent.build());
         this.rootPanel.add(splitter, BorderLayout.CENTER);
     }
 
