@@ -2,6 +2,7 @@ package com.wdf.fudoc.apidoc.pojo.desc;
 
 import cn.hutool.json.JSONObject;
 import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -71,6 +72,11 @@ public class ObjectInfoDesc extends BaseInfoDesc {
      */
     private JSONObject extInfo;
 
+
+    @Override
+    public String getParamType() {
+        return getValue(FuDocConstants.ExtInfo.PARAM_TYPE,String.class);
+    }
 
     public void addExtInfo(String name, Object value) {
         if (Objects.isNull(this.extInfo)) {

@@ -65,6 +65,7 @@ public interface FuDocConstants {
         String IS_EARLY = "isEarly";
 
         String GENERICS_TYPE = "genericsType";
+        String PARAM_TYPE = "paramType";
 
         String REFERENCE_DESC_ID = "referenceDescId";
         String ROOT = "root";

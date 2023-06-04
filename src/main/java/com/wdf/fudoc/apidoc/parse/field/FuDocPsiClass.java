@@ -45,6 +45,11 @@ public class FuDocPsiClass extends AbstractFuDocField {
     }
 
     @Override
+    public String getParamType() {
+        return getName();
+    }
+
+    @Override
     public PsiAnnotation[] getAnnotations() {
         return this.psiClass.getAnnotations();
     }

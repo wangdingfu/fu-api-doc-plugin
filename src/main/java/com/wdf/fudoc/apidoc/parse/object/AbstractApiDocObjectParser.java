@@ -61,6 +61,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
                 parseObjectBO.setRootId(objectInfoDesc.getRootId());
                 fuDocContext.add(objectInfoDesc.getDescId(), objectInfoDesc);
             }
+            objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.PARAM_TYPE, fuDocField.getParamType());
             objectInfoDesc.setDocText(fuDocField.getComment());
             objectInfoDesc.setName(fuDocField.getName());
             objectInfoDesc.setAnnotationDataMap(AnnotationUtils.parse(fuDocField.getAnnotations()));
