@@ -6,6 +6,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.bo.TipCmd;
+import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -43,7 +44,7 @@ public class FuCmdComponent {
     }
 
 
-    public FuCmdComponent addCmd(String title, List<TipCmd> tipCmdList) {
+    public void addCmd(String title, List<ScriptCmd> tipCmdList) {
         JPanel itemPanel = new JPanel(new BorderLayout());
         itemPanel.add(BorderLayout.NORTH, new JLabel(title));
         JPanel cmdPanel = new JPanel();
@@ -54,12 +55,11 @@ public class FuCmdComponent {
         itemPanel.add(cmdPanel, BorderLayout.CENTER);
         itemPanel.setBorder(JBUI.Borders.emptyTop(20));
         this.rootPanel.add(itemPanel);
-        return this;
     }
 
-    public void addCmd(JPanel cmdPanel, TipCmd tipCmd) {
-        ActionLink actionLink = new ActionLink(tipCmd.getText(), e -> {
-            onClick(tipCmd);
+    private void addCmd(JPanel cmdPanel, ScriptCmd scriptCmd) {
+        ActionLink actionLink = new ActionLink(scriptCmd.getText(), e -> {
+            onClick(scriptCmd);
         });
         actionLink.setForeground(JBColor.PINK);
         actionLink.setBorder(JBUI.Borders.empty(1, 10, 3, 1));
@@ -67,7 +67,7 @@ public class FuCmdComponent {
     }
 
 
-    public void onClick(TipCmd tipCmd) {
-        System.out.println("点击了【" + tipCmd.getText() + "】命令为：" + tipCmd.getCmd());
+    public void onClick(ScriptCmd scriptCmd) {
+        System.out.println("点击了【" + scriptCmd.getText() + "】命令为：" + scriptCmd.getCmd());
     }
 }

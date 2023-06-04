@@ -1,5 +1,7 @@
 package com.wdf.fudoc.common.enumtype;
 
+import com.intellij.ui.JBColor;
+import com.wdf.fudoc.util.ColorUtils;
 import lombok.Getter;
 
 /**
@@ -9,12 +11,20 @@ import lombok.Getter;
 @Getter
 public enum FuColor {
 
-    GITEE("#fea436","#fea436"),
-    GITHUB("#2da44e","#2da44e"),
-    ORANGE("#d9480f","#d9480f"),
-    DOCUMENT("#0969da","#0969da"),
-    RED("#e74c3c","#e74c3c"),
-    GREEN("#4a8a5a","#4a8a5a"),
+    GITEE("#fea436", "#fea436"),
+    GITHUB("#2da44e", "#2da44e"),
+    ORANGE("#d9480f", "#d9480f"),
+    DOCUMENT("#0969da", "#0969da"),
+    RED("#e74c3c", "#e74c3c"),
+    GREEN("#4a8a5a", "#4a8a5a"),
+
+    color1("#6897BB","#6897BB"),
+    color2("#D5756C","#D5756C"),
+    color3("#629755","#629755"),
+    color4("#9876AA","#9876AA"),
+    color5("#F75464","#F75464"),
+    color6("#56A8F5","#56A8F5"),
+    color7("#299999","#299999"),
 
 
     ;
@@ -31,5 +41,10 @@ public enum FuColor {
     FuColor(String regularColor, String darkColor) {
         this.regularColor = regularColor;
         this.darkColor = darkColor;
+    }
+
+
+    public JBColor color() {
+        return new JBColor(ColorUtils.convertColor(getRegularColor()), ColorUtils.convertColor(getDarkColor()));
     }
 }

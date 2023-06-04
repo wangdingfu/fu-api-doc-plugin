@@ -10,6 +10,7 @@ import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.bo.TipCmd;
 import com.wdf.fudoc.components.listener.FuActionListener;
+import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
 import com.wdf.fudoc.request.pojo.JavaCodeAuthConfig;
 import com.wdf.fudoc.util.ResourceUtils;
@@ -30,20 +31,15 @@ public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfig
 
     public final static String TAB = "JavaScript";
 
-    private static final List<TipCmd> cmdList = Lists.newArrayList(
-            new TipCmd("设置当前项目参数","fu.projectEnv.set('','')"),
-            new TipCmd("设置全局请求头","fu.env.set('','')"),
-            new TipCmd("获取当前项目参数","fu.env.get('')"),
-            new TipCmd("获取响应结果","fu.result.data")
-    );
 
     public JavaScriptCodeAuthTab() {
         this.rootPanel = new JPanel(new BorderLayout());
-        FuCmdComponent fuCmdComponent = FuCmdComponent.getInstance().addCmd("提示脚本1", this.cmdList).addCmd("提示脚本2", this.cmdList).addCmd("提示脚本3", this.cmdList).addCmd("提示脚本4", this.cmdList).addCmd("提示脚本5", this.cmdList);
+        FuCmdComponent instance = FuCmdComponent.getInstance();
+        ScriptCmd.forEach((cmdType, list) -> instance.addCmd(cmdType.getDesc(), list));
         this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE);
         Splitter splitter = new Splitter(false, 0.7F);
         splitter.setFirstComponent(this.fuEditorComponent.getMainPanel());
-        splitter.setSecondComponent(fuCmdComponent.build());
+        splitter.setSecondComponent(instance.build());
         this.rootPanel.add(splitter, BorderLayout.CENTER);
     }
 
