@@ -70,10 +70,7 @@ public class CustomerValueHelper {
         }
 
         //设置参数类型
-
         fuDocMap.put(FuDocConstants.ExtInfo.PARAM_TYPE, baseInfoDesc.getParamType());
-
-
         return fuDocMap;
     }
 

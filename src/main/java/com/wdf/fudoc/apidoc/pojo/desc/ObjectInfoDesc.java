@@ -75,7 +75,7 @@ public class ObjectInfoDesc extends BaseInfoDesc {
 
     @Override
     public String getParamType() {
-        return getValue(FuDocConstants.ExtInfo.PARAM_TYPE,String.class);
+        return getValue(FuDocConstants.ExtInfo.PARAM_TYPE, String.class);
     }
 
     public void addExtInfo(String name, Object value) {

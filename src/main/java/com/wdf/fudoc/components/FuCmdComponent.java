@@ -49,7 +49,6 @@ public class FuCmdComponent {
         itemPanel.add(BorderLayout.NORTH, new JLabel(title));
         JPanel cmdPanel = new JPanel();
         cmdPanel.setLayout(new BoxLayout(cmdPanel, BoxLayout.Y_AXIS));
-        cmdPanel.setBorder(JBUI.Borders.empty());
         if (CollectionUtils.isNotEmpty(tipCmdList)) {
             tipCmdList.forEach(f -> addCmd(cmdPanel, f));
         }

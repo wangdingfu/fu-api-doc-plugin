@@ -168,7 +168,7 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
      */
     private List<FuDocParamData> filterPathVariableParams(List<FuDocParamData> requestParams) {
         if (CollectionUtils.isNotEmpty(requestParams)) {
-            return requestParams.stream().filter(f -> f.getFudoc().containsKey(FuDocConstants.PATH_VARIABLE)).collect(Collectors.toList());
+            return requestParams.stream().filter(f -> f.getExt().containsKey(FuDocConstants.PATH_VARIABLE)).collect(Collectors.toList());
         }
         return Lists.newArrayList();
     }
@@ -181,7 +181,7 @@ public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
      */
     private List<FuDocParamData> filterRequestParams(List<FuDocParamData> requestParams) {
         if (CollectionUtils.isNotEmpty(requestParams)) {
-            return requestParams.stream().filter(f -> !f.getFudoc().containsKey(FuDocConstants.PATH_VARIABLE)).collect(Collectors.toList());
+            return requestParams.stream().filter(f -> !f.getExt().containsKey(FuDocConstants.PATH_VARIABLE)).collect(Collectors.toList());
         }
         return Lists.newArrayList();
     }
