@@ -22,8 +22,11 @@ public class FuCmdComponent {
     @Getter
     private final JPanel rootPanel;
 
+    private final FuEditorComponent fuEditorComponent;
 
-    public FuCmdComponent() {
+
+    public FuCmdComponent(FuEditorComponent fuEditorComponent) {
+        this.fuEditorComponent = fuEditorComponent;
         this.rootPanel = new JPanel();
         this.rootPanel.setBorder(JBUI.Borders.empty(10, 0, 16, 16));
         this.rootPanel.setLayout(new BoxLayout(this.rootPanel, BoxLayout.Y_AXIS));
@@ -36,8 +39,8 @@ public class FuCmdComponent {
         return pane;
     }
 
-    public static FuCmdComponent getInstance() {
-        return new FuCmdComponent();
+    public static FuCmdComponent getInstance(FuEditorComponent fuEditorComponent) {
+        return new FuCmdComponent(fuEditorComponent);
     }
 
     public void addCmd(String title, List<ScriptCmd> tipCmdList) {
@@ -66,5 +69,6 @@ public class FuCmdComponent {
 
     public void onClick(ScriptCmd scriptCmd) {
         System.out.println("点击了【" + scriptCmd.getText() + "】命令为：" + scriptCmd.getCmd());
+        fuEditorComponent.append(scriptCmd.getCmd());
     }
 }

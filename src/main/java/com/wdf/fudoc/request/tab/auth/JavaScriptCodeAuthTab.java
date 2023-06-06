@@ -1,6 +1,5 @@
 package com.wdf.fudoc.request.tab.auth;
 
-import com.google.common.collect.Lists;
 import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.tabs.TabInfo;
@@ -8,7 +7,6 @@ import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuCmdComponent;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
-import com.wdf.fudoc.components.bo.TipCmd;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
@@ -17,7 +15,6 @@ import com.wdf.fudoc.util.ResourceUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -34,9 +31,9 @@ public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfig
 
     public JavaScriptCodeAuthTab() {
         this.rootPanel = new JPanel(new BorderLayout());
-        FuCmdComponent instance = FuCmdComponent.getInstance();
-        ScriptCmd.forEach((cmdType, list) -> instance.addCmd(cmdType.getDesc(), list));
         this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE);
+        FuCmdComponent instance = FuCmdComponent.getInstance(this.fuEditorComponent);
+        ScriptCmd.execute((cmdType, list) -> instance.addCmd(cmdType.getDesc(), list));
         Splitter splitter = new Splitter(false, 0.7F);
         splitter.setFirstComponent(this.fuEditorComponent.getMainPanel());
         splitter.setSecondComponent(instance.getRootPanel());
