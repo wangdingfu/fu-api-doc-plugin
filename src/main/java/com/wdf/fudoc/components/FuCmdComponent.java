@@ -1,11 +1,7 @@
 package com.wdf.fudoc.components;
 
-import com.google.common.collect.Lists;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.ui.JBColor;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.util.ui.JBUI;
-import com.wdf.fudoc.components.bo.TipCmd;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
@@ -23,6 +19,7 @@ import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
  */
 public class FuCmdComponent {
 
+    @Getter
     private final JPanel rootPanel;
 
 
@@ -46,8 +43,11 @@ public class FuCmdComponent {
 
     public void addCmd(String title, List<ScriptCmd> tipCmdList) {
         JPanel itemPanel = new JPanel(new BorderLayout());
-        itemPanel.add(BorderLayout.NORTH, new JLabel(title));
+        JLabel titleLabel = new JLabel(title);
+        titleLabel.setFont(new Font("Consolas", Font.BOLD, 16));
+        itemPanel.add(BorderLayout.NORTH, titleLabel);
         JPanel cmdPanel = new JPanel();
+        cmdPanel.setBorder(JBUI.Borders.emptyTop(5));
         cmdPanel.setLayout(new BoxLayout(cmdPanel, BoxLayout.Y_AXIS));
         if (CollectionUtils.isNotEmpty(tipCmdList)) {
             tipCmdList.forEach(f -> addCmd(cmdPanel, f));

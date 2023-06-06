@@ -39,7 +39,7 @@ public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfig
         this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE);
         Splitter splitter = new Splitter(false, 0.7F);
         splitter.setFirstComponent(this.fuEditorComponent.getMainPanel());
-        splitter.setSecondComponent(instance.build());
+        splitter.setSecondComponent(instance.getRootPanel());
         this.rootPanel.add(splitter, BorderLayout.CENTER);
     }
 
