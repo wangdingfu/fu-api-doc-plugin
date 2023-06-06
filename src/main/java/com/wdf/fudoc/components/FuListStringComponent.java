@@ -9,6 +9,7 @@ import com.wdf.fudoc.components.bo.BaseList;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
 import com.wdf.fudoc.util.ObjectUtils;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -38,11 +39,13 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
     /**
      * list组件展示名称的数据集合
      */
+    @Getter
     private final List<String> nameList;
 
     /**
      * 存放实际数据集合
      */
+    @Getter
     private final Map<String, T> dataMap;
 
 
@@ -101,7 +104,7 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
     }
 
     //添加一行数据
-    private void addRow(T data) {
+    public void addRow(T data) {
         this.nameList.add(data.getName());
         this.dataMap.put(data.getName(), data);
         addElement(data.getName());

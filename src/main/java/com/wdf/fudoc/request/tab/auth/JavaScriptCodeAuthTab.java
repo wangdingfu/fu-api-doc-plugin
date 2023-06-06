@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.tab.auth;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.tabs.TabInfo;
@@ -11,7 +12,9 @@ import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
 import com.wdf.fudoc.request.pojo.JavaCodeAuthConfig;
-import com.wdf.fudoc.util.ResourceUtils;
+import com.wdf.fudoc.request.pojo.ScriptConfigData;
+import icons.JavaScriptPsiIcons;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +29,7 @@ public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfig
     private final JPanel rootPanel;
     private final FuEditorComponent fuEditorComponent;
 
-    public final static String TAB = "JavaScript";
+    public final static String TAB = "script";
 
 
     public JavaScriptCodeAuthTab() {
@@ -43,18 +46,18 @@ public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfig
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance(TAB, null, this.rootPanel).builder();
+        return FuTabComponent.getInstance(TAB, AllIcons.FileTypes.JavaScript, this.rootPanel).builder();
     }
 
 
     @Override
     public void doAction(AuthConfigData data) {
-        JavaCodeAuthConfig authConfig = (JavaCodeAuthConfig) data.getAuthConfig(TAB);
+        ScriptConfigData authConfig = (ScriptConfigData) data.getAuthConfig(TAB);
         if (Objects.isNull(authConfig)) {
-            authConfig = new JavaCodeAuthConfig();
-            authConfig.setJavaCode(ResourceUtils.readResource("/template/auth_config.js"));
+            authConfig = new ScriptConfigData();
+            authConfig.setScript(StringUtils.EMPTY);
         }
-        this.fuEditorComponent.setContent(authConfig.getJavaCode());
+        this.fuEditorComponent.setContent(authConfig.getScript());
     }
 
     @Override

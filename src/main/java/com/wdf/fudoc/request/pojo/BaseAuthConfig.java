@@ -16,5 +16,7 @@ public abstract class BaseAuthConfig {
      */
     private Long expireTime;
 
+    public abstract String getSuffix();
 
+    public abstract String getScript();
 }

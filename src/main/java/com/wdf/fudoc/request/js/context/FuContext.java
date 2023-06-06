@@ -4,8 +4,6 @@ import cn.hutool.json.JSON;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author wangdingfu
@@ -17,12 +15,17 @@ public class FuContext {
 
 
     /**
-     * 环境变量
+     * 当前项目环境(针对当前项目)
      */
-    private final Map<String, Object> env = new HashMap<>();
+    private final FuEnv projectEnv = new FuEnv();
 
     /**
-     * 响应结果
+     * 全局环境(针对所有项目)
+     */
+    private final FuEnv globalEnv = new FuEnv();
+
+    /**
+     * 响应结果(配置的前置请求返回的结果)
      */
     private JSON result;
 }

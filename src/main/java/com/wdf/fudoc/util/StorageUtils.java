@@ -1,5 +1,6 @@
 package com.wdf.fudoc.util;
 
+import cn.hutool.json.JSONUtil;
 import com.intellij.httpClient.http.request.HttpRequestLanguage;
 import com.intellij.httpClient.http.request.HttpRequestPsiFile;
 import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
@@ -9,8 +10,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.wdf.fudoc.request.http.FuRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.Objects;
 
@@ -64,6 +67,50 @@ public class StorageUtils {
         }
         FileViewProvider fileViewProvider = factory.createFileViewProvider(file, HttpRequestLanguage.INSTANCE, PsiManager.getInstance(project), true);
         return new HttpRequestPsiFile(fileViewProvider);
+    }
+
+    public static void writeJson(String path, String fileName, Object value) {
+        write(path, fileName, JSONUtil.toJsonPrettyStr(value));
+    }
+
+    /**
+     * 将json数据写入到指定目录下
+     *
+     * @param path     目录
+     * @param fileName 文件名称
+     * @param value    json数据
+     */
+    public static void write(String path, String fileName, String value) {
+        try {
+            //获取或则创建目录
+            VirtualFile virtualFile = VfsUtil.createDirectoryIfMissing(path);
+            if (Objects.isNull(virtualFile)) {
+                log.info("持久化目录【{}】不存在", path);
+                return;
+            }
+
+            //读取该文件
+            VirtualFile httpVirtualFile = virtualFile.findOrCreateChildData(null, fileName);
+
+            //将数据格式化为json 并写入硬盘
+            VfsUtil.saveText(httpVirtualFile, value);
+        } catch (IOException e) {
+            log.info("持久化{}文件异常", fileName, e);
+        }
+    }
+
+
+    public static String readContent(String path, String fileName) {
+        VirtualFile file = VfsUtil.findFile(Paths.get(path, fileName), false);
+        if (Objects.nonNull(file) && file.exists()) {
+            try {
+                return StringUtils.toEncodedString(file.contentsToByteArray(), Charset.defaultCharset());
+
+            } catch (Exception e) {
+                log.info("读取文件【{}】异常", file.getPath());
+            }
+        }
+        return StringUtils.EMPTY;
     }
 
 

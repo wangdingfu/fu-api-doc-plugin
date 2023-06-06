@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.apache.commons.collections.MapUtils;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author wangdingfu
@@ -32,5 +34,12 @@ public class AuthConfigData extends BaseList {
             return authConfigMap.get(tab);
         }
         return null;
+    }
+
+    public void addAuthConfig(String name, BaseAuthConfig baseAuthConfig) {
+        if (Objects.isNull(this.authConfigMap)) {
+            this.authConfigMap = new ConcurrentHashMap<>();
+        }
+        this.authConfigMap.put(name, baseAuthConfig);
     }
 }

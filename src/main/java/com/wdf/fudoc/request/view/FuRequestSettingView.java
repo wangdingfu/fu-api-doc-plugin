@@ -4,15 +4,18 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.request.data.FuRequestSettingData;
+import com.wdf.fudoc.request.pojo.AuthConfigData;
 import com.wdf.fudoc.request.state.FuRequestSettingState;
 import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
 import com.wdf.fudoc.request.tab.settings.GlobalHeaderTab;
 import com.wdf.fudoc.request.tab.settings.GlobalVariableTab;
 import lombok.Getter;
+import org.apache.commons.collections.MapUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 /**
  * 【Fu Request】设置面板
@@ -82,6 +85,8 @@ public class FuRequestSettingView extends DialogWrapper {
      * 保存数据
      */
     public void apply() {
+        //持久化配置数据
+        this.authSettingView.apply();
         FuRequestSettingData data = FuRequestSettingState.getData();
         data.setCommonHeaderList(globalHeaderTab.getData());
     }
