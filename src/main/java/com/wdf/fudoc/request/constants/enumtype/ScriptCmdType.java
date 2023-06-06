@@ -8,17 +8,20 @@ import lombok.Getter;
  */
 @Getter
 public enum ScriptCmdType {
-    DEMO("demo","脚本编写教程"),
-    SCRIPT_DEMO("script_demo","设置示例"),
-    LOG("log","日志打印"),
+    DEMO("demo","脚本编写教程",1),
+    SCRIPT_DEMO("script_demo","设置示例",2),
+    LOG("log","日志打印",3),
     ;
 
     private final String type;
 
     private final String desc;
 
-    ScriptCmdType(String type, String desc) {
+    private final Integer sort;
+
+    ScriptCmdType(String type, String desc, Integer sort) {
         this.type = type;
         this.desc = desc;
+        this.sort = sort;
     }
 }

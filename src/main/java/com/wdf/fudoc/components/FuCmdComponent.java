@@ -25,45 +25,42 @@ public class FuCmdComponent {
 
     public FuCmdComponent() {
         this.rootPanel = new JPanel();
-        this.rootPanel.setBorder(JBUI.Borders.empty(0, 0, 16, 16));
+        this.rootPanel.setBorder(JBUI.Borders.empty(10, 0, 16, 16));
         this.rootPanel.setLayout(new BoxLayout(this.rootPanel, BoxLayout.Y_AXIS));
     }
 
 
-    public JScrollPane build(){
+    public JScrollPane build() {
         JScrollPane pane = createScrollPane(this.rootPanel, true);
         pane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
         return pane;
     }
 
-    public static FuCmdComponent getInstance(){
+    public static FuCmdComponent getInstance() {
         return new FuCmdComponent();
     }
 
-
     public void addCmd(String title, List<ScriptCmd> tipCmdList) {
-        JPanel itemPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(new Font("Consolas", Font.BOLD, 16));
-        itemPanel.add(BorderLayout.NORTH, titleLabel);
-        JPanel cmdPanel = new JPanel();
-        cmdPanel.setBorder(JBUI.Borders.emptyTop(5));
-        cmdPanel.setLayout(new BoxLayout(cmdPanel, BoxLayout.Y_AXIS));
+        JLabel titleLabel = new JLabel();
+        Font font = titleLabel.getFont();
+        titleLabel.setFont(new Font(font.getFontName(), Font.BOLD, 14));
+        titleLabel.setText(title);
+        this.rootPanel.add(titleLabel);
+        this.rootPanel.add(Box.createVerticalStrut(5));
         if (CollectionUtils.isNotEmpty(tipCmdList)) {
-            tipCmdList.forEach(f -> addCmd(cmdPanel, f));
+            tipCmdList.forEach(this::addCmd);
         }
-        itemPanel.add(cmdPanel, BorderLayout.CENTER);
-        itemPanel.setBorder(JBUI.Borders.empty(20, 0, 3, 0));
-        this.rootPanel.add(itemPanel);
+        this.rootPanel.add(Box.createVerticalStrut(20));
     }
 
-    private void addCmd(JPanel cmdPanel, ScriptCmd scriptCmd) {
+
+    private void addCmd(ScriptCmd scriptCmd) {
         ActionLink actionLink = new ActionLink(scriptCmd.getText(), e -> {
             onClick(scriptCmd);
         });
         actionLink.setForeground(scriptCmd.getColor());
-        actionLink.setBorder(JBUI.Borders.empty(1, 10, 3, 1));
-        cmdPanel.add(actionLink);
+        actionLink.setBorder(JBUI.Borders.empty(1, 14, 3, 1));
+        this.rootPanel.add(actionLink);
     }
 
 

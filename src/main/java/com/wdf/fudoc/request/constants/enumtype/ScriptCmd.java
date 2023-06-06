@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -39,6 +40,9 @@ public enum ScriptCmd {
 
 
     public static void forEach(BiConsumer<ScriptCmdType, List<ScriptCmd>> consumer) {
-        Arrays.stream(ScriptCmd.values()).collect(Collectors.groupingBy(ScriptCmd::getCmdType, Collectors.toList())).forEach(consumer);
+        Arrays.stream(ScriptCmd.values())
+                .sorted(Comparator.comparingInt(o -> o.getCmdType().getSort()))
+                .collect(Collectors.groupingBy(ScriptCmd::getCmdType, Collectors.toList()))
+                .forEach(consumer);
     }
 }
