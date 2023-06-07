@@ -2,7 +2,6 @@ package com.wdf.fudoc.request.view;
 
 import cn.hutool.json.JSONUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBPanelWithEmptyText;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
@@ -13,14 +12,11 @@ import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.LeftRightComponent;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
-import com.wdf.fudoc.request.pojo.BaseAuthConfig;
-import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.storage.service.AuthConfigStorageService;
 import com.wdf.fudoc.util.StorageUtils;
 import icons.FuDocIcons;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -111,7 +107,7 @@ public class AuthSettingView implements FuTab, FuActionListener<AuthConfigData> 
         this.authConfigView.doActionAfter(data);
     }
 
-    public void reset() {
+    public void initData() {
         //读取配置内容
         String content = StorageUtils.readContent(FuPaths.AUTH_PATH, FuPaths.PACKAGE);
         if (StringUtils.isBlank(content)) {
@@ -133,6 +129,7 @@ public class AuthSettingView implements FuTab, FuActionListener<AuthConfigData> 
         if (CollectionUtils.isEmpty(nameList)) {
             return;
         }
+        this.leftComponent.doActionAfter();
         //持久化名字集合
         StorageUtils.writeJson(FuPaths.AUTH_PATH, FuPaths.PACKAGE, nameList);
         for (String name : nameList) {

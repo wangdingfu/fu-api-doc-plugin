@@ -3,12 +3,14 @@ package com.wdf.fudoc.util;
 import cn.hutool.json.JSONUtil;
 import com.intellij.httpClient.http.request.HttpRequestLanguage;
 import com.intellij.httpClient.http.request.HttpRequestPsiFile;
-import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.wdf.fudoc.request.http.FuRequest;
+import k.K.E;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -81,31 +83,30 @@ public class StorageUtils {
      * @param value    json数据
      */
     public static void write(String path, String fileName, String value) {
-        try {
-            //获取或则创建目录
-            VirtualFile virtualFile = VfsUtil.createDirectoryIfMissing(path);
-            if (Objects.isNull(virtualFile)) {
-                log.info("持久化目录【{}】不存在", path);
-                return;
+        //将数据格式化为json 并写入硬盘
+        ApplicationManager.getApplication().runWriteAction(() -> {
+            try {
+                //获取或则创建目录
+                VirtualFile virtualFile = VfsUtil.createDirectoryIfMissing(path);
+                if (Objects.isNull(virtualFile)) {
+                    log.info("持久化目录【{}】不存在", path);
+                    return;
+                }
+                //读取该文件
+                VirtualFile httpVirtualFile = virtualFile.findOrCreateChildData(null, fileName);
+                VfsUtil.saveText(httpVirtualFile, value);
+            } catch (Exception e) {
+                log.info("持久化{}文件异常", fileName, e);
             }
-
-            //读取该文件
-            VirtualFile httpVirtualFile = virtualFile.findOrCreateChildData(null, fileName);
-
-            //将数据格式化为json 并写入硬盘
-            VfsUtil.saveText(httpVirtualFile, value);
-        } catch (IOException e) {
-            log.info("持久化{}文件异常", fileName, e);
-        }
+        });
     }
 
 
     public static String readContent(String path, String fileName) {
-        VirtualFile file = VfsUtil.findFile(Paths.get(path, fileName), false);
+        VirtualFile file = ApplicationManager.getApplication().runReadAction((Computable<VirtualFile>) () -> VfsUtil.findFile(Paths.get(path, fileName), false));
         if (Objects.nonNull(file) && file.exists()) {
             try {
                 return StringUtils.toEncodedString(file.contentsToByteArray(), Charset.defaultCharset());
-
             } catch (Exception e) {
                 log.info("读取文件【{}】异常", file.getPath());
             }

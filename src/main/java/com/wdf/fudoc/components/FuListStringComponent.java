@@ -83,13 +83,7 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
 
     private void initListAction() {
         this.jbList.addListSelectionListener(e -> {
-            if (StringUtils.isNotBlank(this.currentItem)) {
-                T data = dataMap.get(this.currentItem);
-                if (Objects.nonNull(data)) {
-                    listener.doActionAfter(data);
-                }
-            }
-
+            doActionAfter();
             //选中列表中的指定项时 触发的事件
             String selectedValue = jbList.getSelectedValue();
             if (StringUtils.isEmpty(selectedValue)) {
@@ -127,6 +121,16 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
     public String set(int index, String element) {
         this.nameList.set(index, element);
         return super.set(index, element);
+    }
+
+
+    public void doActionAfter(){
+        if (StringUtils.isNotBlank(this.currentItem)) {
+            T data = dataMap.get(this.currentItem);
+            if (Objects.nonNull(data)) {
+                listener.doActionAfter(data);
+            }
+        }
     }
 
     /**

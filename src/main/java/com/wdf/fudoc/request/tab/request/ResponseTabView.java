@@ -88,8 +88,10 @@ public class ResponseTabView implements FuTab, HttpCallback {
         if (Objects.isNull(response) || Objects.isNull(responseType = response.getResponseType())) {
             return;
         }
-        //设置响应信息
-        this.fuRequestStatusInfoView.initData(httpRequestData);
+        if(Objects.nonNull(this.fuRequestStatusInfoView)){
+            //设置响应信息
+            this.fuRequestStatusInfoView.initData(httpRequestData);
+        }
         //响应类型
         switch (responseType) {
             case SUCCESS -> {

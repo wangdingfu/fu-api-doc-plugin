@@ -11,6 +11,7 @@ import com.wdf.fudoc.request.tab.settings.GlobalHeaderTab;
 import com.wdf.fudoc.request.tab.settings.GlobalVariableTab;
 import lombok.Getter;
 import org.apache.commons.collections.MapUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -78,8 +79,15 @@ public class FuRequestSettingView extends DialogWrapper {
     public void initData() {
         FuRequestSettingData data = FuRequestSettingState.getData();
         globalHeaderTab.initData(data.getCommonHeaderList());
+        this.authSettingView.initData();
     }
 
+
+    @Override
+    protected void doOKAction() {
+        apply();
+        super.doOKAction();
+    }
 
     /**
      * 保存数据

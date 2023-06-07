@@ -13,7 +13,6 @@ import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
 import com.wdf.fudoc.request.pojo.JavaCodeAuthConfig;
 import com.wdf.fudoc.request.pojo.ScriptConfigData;
-import icons.JavaScriptPsiIcons;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -56,16 +55,18 @@ public class JavaScriptCodeAuthTab implements FuTab, FuActionListener<AuthConfig
         if (Objects.isNull(authConfig)) {
             authConfig = new ScriptConfigData();
             authConfig.setScript(StringUtils.EMPTY);
+            data.addAuthConfig(TAB, authConfig);
         }
         this.fuEditorComponent.setContent(authConfig.getScript());
     }
 
     @Override
     public void doActionAfter(AuthConfigData data) {
-        JavaCodeAuthConfig authConfig = (JavaCodeAuthConfig) data.getAuthConfig(TAB);
+        ScriptConfigData authConfig = (ScriptConfigData) data.getAuthConfig(TAB);
         if (Objects.isNull(authConfig)) {
-            authConfig = new JavaCodeAuthConfig();
+            authConfig = new ScriptConfigData();
+            data.addAuthConfig(TAB, authConfig);
         }
-        authConfig.setJavaCode(this.fuEditorComponent.getContent());
+        authConfig.setScript(this.fuEditorComponent.getContent());
     }
 }

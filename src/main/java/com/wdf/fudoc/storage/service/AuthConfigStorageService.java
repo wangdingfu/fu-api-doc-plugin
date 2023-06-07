@@ -45,10 +45,14 @@ public class AuthConfigStorageService {
                         if (StringUtils.isBlank(fileContent)) {
                             continue;
                         }
-                        if (HTTP_FILE.equals(child.getName() + "." + child.getExtension())) {
+                        String fileName = child.getName();
+                        if (HTTP_FILE.equals(fileName)) {
                             authConfigData.setHttpRequestData(JsonUtil.toBean(fileContent, FuHttpRequestData.class));
                         } else {
-                            authConfigData.addAuthConfig(child.getName(), JsonUtil.toBean(fileContent, ScriptConfigData.class));
+                            String tabName = StringUtils.substringBeforeLast(fileName, ".");
+                            ScriptConfigData scriptConfigData = new ScriptConfigData();
+                            scriptConfigData.setScript(fileContent);
+                            authConfigData.addAuthConfig(tabName, scriptConfigData);
                         }
                     }
                 }
@@ -56,6 +60,7 @@ public class AuthConfigStorageService {
         } catch (Exception e) {
             log.info("读取鉴权配置文件失败", e);
         }
+        authConfigData.setName(name);
         return authConfigData;
     }
 

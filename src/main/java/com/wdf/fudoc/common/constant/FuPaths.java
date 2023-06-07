@@ -1,5 +1,7 @@
 package com.wdf.fudoc.common.constant;
 
+import com.intellij.openapi.application.PathManager;
+
 import java.nio.file.Paths;
 
 /**
@@ -7,7 +9,9 @@ import java.nio.file.Paths;
  * @date 2023-06-06 20:52:43
  */
 public interface FuPaths {
+    String EXTENSIONS = "extensions";
 
+    String BASE_PATH = Paths.get(PathManager.getConfigPath(), EXTENSIONS).toString();
 
     String FU_DOC = "fudoc";
 
@@ -15,8 +19,7 @@ public interface FuPaths {
 
     String AUTH = "auth";
 
-    String AUTH_PATH = Paths.get(FU_DOC, CONFIG, AUTH).toString();
-
+    String AUTH_PATH = Paths.get(BASE_PATH, FU_DOC, CONFIG, AUTH).toString();
 
 
     String FILE_NAME_PACKAGE = "package";
