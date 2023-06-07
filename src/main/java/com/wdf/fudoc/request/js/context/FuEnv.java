@@ -14,40 +14,5 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class FuEnv {
 
-    /**
-     * 变量集合
-     */
-    private final Map<String, Object> variableMap = new ConcurrentHashMap<>();
-    /**
-     * 请求头集合
-     */
-    private final Map<String, Object> headerMap = new ConcurrentHashMap<>();
 
-
-    /**
-     * 设置变量
-     *
-     * @param variableName 变量名
-     * @param value        变量值
-     */
-    public void setVariable(String variableName, Object value) {
-        if (StringUtils.isBlank(variableName) || Objects.isNull(value)) {
-            return;
-        }
-        variableMap.put(variableName, value);
-    }
-
-
-    /**
-     * 设置请求头
-     *
-     * @param headerName 请求头key
-     * @param value      请求头值
-     */
-    public void setHeader(String headerName, Object value) {
-        if (StringUtils.isBlank(headerName) || Objects.isNull(value)) {
-            return;
-        }
-        headerMap.put(headerName, value);
-    }
 }

@@ -3,6 +3,7 @@ package com.wdf.fudoc.components;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
+import com.wdf.fudoc.util.ResourceUtils;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -68,7 +69,13 @@ public class FuCmdComponent {
 
 
     public void onClick(ScriptCmd scriptCmd) {
-        System.out.println("点击了【" + scriptCmd.getText() + "】命令为：" + scriptCmd.getCmd());
-        fuEditorComponent.append(scriptCmd.getCmd());
+        String cmd = scriptCmd.getCmd();
+        String content = ResourceUtils.readResource("template/auth/" + cmd);
+        if (scriptCmd.isReset()) {
+            fuEditorComponent.setContent(content);
+        } else {
+            fuEditorComponent.append(content);
+        }
+
     }
 }
