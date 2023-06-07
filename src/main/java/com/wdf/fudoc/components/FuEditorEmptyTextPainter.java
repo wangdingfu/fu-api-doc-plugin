@@ -16,6 +16,7 @@ import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
+import com.intellij.ui.components.JBPanelWithEmptyText;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.Nls;
@@ -26,12 +27,38 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 
+import static com.intellij.openapi.wm.impl.IdeBackgroundUtil.getIdeBackgroundColor;
+
 
 /**
  * @author wangdingfu
  * @date 2023-05-31 14:35:09
  */
 public class FuEditorEmptyTextPainter {
+
+    public static JPanel createFramePreview() {
+        FuEditorEmptyTextPainter painter = new FuEditorEmptyTextPainter();
+        JBPanelWithEmptyText panel = new JBPanelWithEmptyText() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                painter.paintEmptyText(this, g);
+            }
+
+            @Override
+            public Color getBackground() {
+                return getIdeBackgroundColor();
+            }
+
+            @Override
+            public boolean isOpaque() {
+                return true;
+            }
+        };
+        panel.getEmptyText().clear();
+        return panel;
+    }
+
 
 
     public void paintEmptyText(@NotNull JComponent splitters, @NotNull Graphics g) {

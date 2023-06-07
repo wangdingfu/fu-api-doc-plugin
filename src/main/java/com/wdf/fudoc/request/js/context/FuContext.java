@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.js.context;
 
 import cn.hutool.json.JSON;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -28,11 +29,19 @@ public class FuContext {
      */
     private final Map<String, Object> headerMap = new ConcurrentHashMap<>();
 
+
     /**
      * 响应结果(配置的前置请求返回的结果)
      */
     private JSON result;
 
+
+    /**
+     * 发起鉴权接口请求 并返回响应结果
+     */
+    public JSON doRequest() {
+        return null;
+    }
 
     /**
      * 设置变量
@@ -87,8 +96,6 @@ public class FuContext {
         }
         return null;
     }
-
-
 
 
 }
