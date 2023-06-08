@@ -8,6 +8,7 @@ import com.wdf.fudoc.request.pojo.AuthConfigData;
 import com.wdf.fudoc.request.state.FuRequestSettingState;
 import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
 import com.wdf.fudoc.request.tab.settings.GlobalHeaderTab;
+import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
 import com.wdf.fudoc.request.tab.settings.GlobalVariableTab;
 import lombok.Getter;
 import org.apache.commons.collections.MapUtils;
@@ -45,7 +46,8 @@ public class FuRequestSettingView extends DialogWrapper {
     private GlobalConfigTab globalConfigTab;
     private GlobalVariableTab globalVariableTab;
     private GlobalHeaderTab globalHeaderTab;
-    private AuthSettingView authSettingView;
+
+    private GlobalPreScriptTab globalPreScriptTab;
 
 
     public FuRequestSettingView(@Nullable Project project) {
@@ -65,9 +67,9 @@ public class FuRequestSettingView extends DialogWrapper {
         this.globalConfigTab = new GlobalConfigTab();
         this.globalVariableTab = new GlobalVariableTab();
         this.globalHeaderTab = new GlobalHeaderTab();
-        this.authSettingView = new AuthSettingView(this.project);
+        this.globalPreScriptTab = new GlobalPreScriptTab(project);
         //添加tab页
-        fuTabBuilder.addTab(this.globalHeaderTab).addTab(this.globalConfigTab).addTab(this.globalVariableTab).addTab(this.authSettingView);
+        fuTabBuilder.addTab(this.globalHeaderTab).addTab(this.globalConfigTab).addTab(this.globalVariableTab).addTab(this.globalPreScriptTab);
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
         initData();
     }
@@ -79,7 +81,8 @@ public class FuRequestSettingView extends DialogWrapper {
     public void initData() {
         FuRequestSettingData data = FuRequestSettingState.getData();
         globalHeaderTab.initData(data.getCommonHeaderList());
-        this.authSettingView.initData();
+        this.globalPreScriptTab.initData(null);
+        this.globalVariableTab.initData(null);
     }
 
 
@@ -94,7 +97,8 @@ public class FuRequestSettingView extends DialogWrapper {
      */
     public void apply() {
         //持久化配置数据
-        this.authSettingView.apply();
+        this.globalPreScriptTab.saveData(null);
+        this.globalVariableTab.saveData(null);
         FuRequestSettingData data = FuRequestSettingState.getData();
         data.setCommonHeaderList(globalHeaderTab.getData());
     }

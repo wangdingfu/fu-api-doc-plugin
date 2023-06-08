@@ -1,7 +1,9 @@
 package com.wdf.fudoc.components;
 
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.util.ui.JBUI;
+import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.util.ResourceUtils;
 import lombok.Getter;
@@ -25,9 +27,12 @@ public class FuCmdComponent {
 
     private final FuEditorComponent fuEditorComponent;
 
+    private final FuActionListener<ScriptCmd> fuActionListener;
 
-    public FuCmdComponent(FuEditorComponent fuEditorComponent) {
+
+    public FuCmdComponent(FuEditorComponent fuEditorComponent,FuActionListener<ScriptCmd> listener) {
         this.fuEditorComponent = fuEditorComponent;
+        this.fuActionListener = listener;
         this.rootPanel = new JPanel();
         this.rootPanel.setBorder(JBUI.Borders.empty(10, 0, 16, 16));
         this.rootPanel.setLayout(new BoxLayout(this.rootPanel, BoxLayout.Y_AXIS));
@@ -40,8 +45,8 @@ public class FuCmdComponent {
         return pane;
     }
 
-    public static FuCmdComponent getInstance(FuEditorComponent fuEditorComponent) {
-        return new FuCmdComponent(fuEditorComponent);
+    public static FuCmdComponent getInstance(FuEditorComponent fuEditorComponent,FuActionListener<ScriptCmd> listener) {
+        return new FuCmdComponent(fuEditorComponent,listener);
     }
 
     public void addCmd(String title, List<ScriptCmd> tipCmdList) {
@@ -60,7 +65,7 @@ public class FuCmdComponent {
 
     private void addCmd(ScriptCmd scriptCmd) {
         ActionLink actionLink = new ActionLink(scriptCmd.getText(), e -> {
-            onClick(scriptCmd);
+            this.fuActionListener.doAction(scriptCmd);
         });
         actionLink.setForeground(scriptCmd.getColor());
         actionLink.setBorder(JBUI.Borders.empty(1, 14, 3, 1));
