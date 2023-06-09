@@ -78,9 +78,7 @@ tasks {
         }
     }
 
-    wrapper {
-        gradleVersion = properties("gradleVersion")
-    }
+
 
     patchPluginXml {
 

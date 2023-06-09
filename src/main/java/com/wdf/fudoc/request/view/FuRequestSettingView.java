@@ -48,6 +48,7 @@ public class FuRequestSettingView extends DialogWrapper {
     private GlobalHeaderTab globalHeaderTab;
 
     private GlobalPreScriptTab globalPreScriptTab;
+    private GlobalPreScriptTab globalPreScriptTab1;
 
 
     public FuRequestSettingView(@Nullable Project project) {
@@ -68,8 +69,9 @@ public class FuRequestSettingView extends DialogWrapper {
         this.globalVariableTab = new GlobalVariableTab();
         this.globalHeaderTab = new GlobalHeaderTab();
         this.globalPreScriptTab = new GlobalPreScriptTab(project);
+        this.globalPreScriptTab1 = new GlobalPreScriptTab(project);
         //添加tab页
-        fuTabBuilder.addTab(this.globalHeaderTab).addTab(this.globalConfigTab).addTab(this.globalVariableTab).addTab(this.globalPreScriptTab);
+        fuTabBuilder.addTab(this.globalHeaderTab).addTab(this.globalConfigTab).addTab(this.globalVariableTab).addTab(this.globalPreScriptTab).addTab(this.globalPreScriptTab1);
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
         initData();
     }
@@ -82,6 +84,7 @@ public class FuRequestSettingView extends DialogWrapper {
         FuRequestSettingData data = FuRequestSettingState.getData();
         globalHeaderTab.initData(data.getCommonHeaderList());
         this.globalPreScriptTab.initData(null);
+        this.globalPreScriptTab1.initData(null);
         this.globalVariableTab.initData(null);
     }
 
@@ -98,6 +101,7 @@ public class FuRequestSettingView extends DialogWrapper {
     public void apply() {
         //持久化配置数据
         this.globalPreScriptTab.saveData(null);
+        this.globalPreScriptTab1.saveData(null);
         this.globalVariableTab.saveData(null);
         FuRequestSettingData data = FuRequestSettingState.getData();
         data.setCommonHeaderList(globalHeaderTab.getData());

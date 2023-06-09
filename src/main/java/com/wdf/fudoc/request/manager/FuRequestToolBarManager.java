@@ -192,7 +192,7 @@ public class FuRequestToolBarManager {
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //展示设置界面
                 FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(e.getProject());
-                fuRequestSettingView.setSize(1000, 1000);
+                fuRequestSettingView.setSize(700, 600);
                 fuRequestSettingView.show();
             }
         });

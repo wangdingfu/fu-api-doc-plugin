@@ -21,4 +21,7 @@ public interface RequestConstants {
 
 
     String PLACE_PANEL_TOOLBAR = "fudoc.panel.toolbar";
+
+
+    String PLACE_SETTINGS_ADD_TAB = "fudoc.request.setting.tab.add";
 }

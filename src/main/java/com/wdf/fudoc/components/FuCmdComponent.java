@@ -25,13 +25,11 @@ public class FuCmdComponent {
     @Getter
     private final JPanel rootPanel;
 
-    private final FuEditorComponent fuEditorComponent;
 
     private final FuActionListener<ScriptCmd> fuActionListener;
 
 
-    public FuCmdComponent(FuEditorComponent fuEditorComponent,FuActionListener<ScriptCmd> listener) {
-        this.fuEditorComponent = fuEditorComponent;
+    public FuCmdComponent(FuActionListener<ScriptCmd> listener) {
         this.fuActionListener = listener;
         this.rootPanel = new JPanel();
         this.rootPanel.setBorder(JBUI.Borders.empty(10, 0, 16, 16));
@@ -45,8 +43,22 @@ public class FuCmdComponent {
         return pane;
     }
 
-    public static FuCmdComponent getInstance(FuEditorComponent fuEditorComponent,FuActionListener<ScriptCmd> listener) {
-        return new FuCmdComponent(fuEditorComponent,listener);
+    public static FuCmdComponent getInstance(FuActionListener<ScriptCmd> listener) {
+        return new FuCmdComponent(listener);
+    }
+
+
+    /**
+     * 新增展示面板
+     *
+     * @param component 组件
+     */
+    public void addComponent(JComponent component) {
+        this.rootPanel.add(component);
+    }
+
+    public void addStrut(int size){
+        this.rootPanel.add(Box.createVerticalStrut(size));
     }
 
     public void addCmd(String title, List<ScriptCmd> tipCmdList) {
@@ -72,15 +84,4 @@ public class FuCmdComponent {
         this.rootPanel.add(actionLink);
     }
 
-
-    public void onClick(ScriptCmd scriptCmd) {
-        String cmd = scriptCmd.getCmd();
-        String content = ResourceUtils.readResource("template/auth/" + cmd);
-        if (scriptCmd.isReset()) {
-            fuEditorComponent.setContent(content);
-        } else {
-            fuEditorComponent.append(content);
-        }
-
-    }
 }
