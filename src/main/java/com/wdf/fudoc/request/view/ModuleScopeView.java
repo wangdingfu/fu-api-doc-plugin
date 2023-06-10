@@ -10,10 +10,12 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.popup.list.IconListPopupRenderer;
 import com.intellij.util.ui.table.IconTableCellRenderer;
 import com.wdf.fudoc.components.JLabelListRendererComponent;
+import com.wdf.fudoc.util.FuDocUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.plaf.multi.MultiComboBoxUI;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
@@ -31,17 +33,16 @@ public class ModuleScopeView extends DialogWrapper {
 
     private final JComboBox<String> moduleComboBox;
 
-    public ModuleScopeView(@Nullable Project project) {
+    public ModuleScopeView(@Nullable Project project, List<String> selectedList) {
         super(project, true);
         setTitle(TITLE);
         this.rootPanel = new JPanel(new BorderLayout());
-        Module[] modules = ModuleManager.getInstance(project).getModules();
-        List<String> collect = Arrays.stream(modules).map(Module::getName).collect(Collectors.toList());
-        this.moduleComboBox = new ComboBox(collect.toArray(new String[0]));
-        for (String s : collect) {
+        List<String> allModuleNameList = FuDocUtils.getAllModuleNameList(project);
+        this.moduleComboBox = new ComboBox(allModuleNameList.toArray(new String[0]));
+        this.moduleComboBox.setUI(new MultiComboBoxUI());
+        for (String s : selectedList) {
             this.moduleComboBox.setSelectedItem(s);
         }
-        this.moduleComboBox.setEditable(true);
         this.moduleComboBox.setRenderer(new JLabelListRendererComponent());
         this.rootPanel.add(this.moduleComboBox, BorderLayout.CENTER);
         init();

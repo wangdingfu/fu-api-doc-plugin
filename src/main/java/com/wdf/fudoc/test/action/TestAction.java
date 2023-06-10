@@ -16,6 +16,9 @@ import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.impl.EditorComponentImpl;
+import com.intellij.openapi.ui.popup.JBPopup;
+import com.intellij.openapi.ui.popup.JBPopupListener;
+import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.ui.UIUtil;
@@ -53,6 +56,7 @@ public class TestAction extends AnAction {
 //        request(e);
 //        apiTest(e);
     }
+
 
 
     private void apiTest(AnActionEvent e) {

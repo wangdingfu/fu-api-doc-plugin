@@ -80,6 +80,11 @@ public class FuCmdComponent {
             this.fuActionListener.doAction(scriptCmd);
         });
         actionLink.setForeground(scriptCmd.getColor());
+        addAction(actionLink);
+    }
+
+
+    public void addAction(ActionLink actionLink){
         actionLink.setBorder(JBUI.Borders.empty(1, 14, 3, 1));
         this.rootPanel.add(actionLink);
     }
