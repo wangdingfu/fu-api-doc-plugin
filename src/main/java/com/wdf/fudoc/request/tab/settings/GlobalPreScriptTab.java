@@ -58,6 +58,8 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
 
     private FuHttpRequestData fuHttpRequestData;
 
+    private FuFiltersAction fuFiltersAction;
+
     public GlobalPreScriptTab(Project project) {
         this(project, TITLE, null);
     }
@@ -95,22 +97,28 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance(this.title, FuDocIcons.FU_SCRIPT, this.rootPanel).addAction(new FuFiltersAction<>("配置生效Module", this, () -> {
-        })).builder();
+        this.fuFiltersAction = new FuFiltersAction<>("配置生效Module", this, () -> {
+        });
+        return FuTabComponent.getInstance(this.title, FuDocIcons.FU_SCRIPT, this.rootPanel).addAction(this.fuFiltersAction).builder();
     }
 
     @Override
     public void doAction(ScriptCmd scriptCmd) {
-        if (!isEditor) {
-            isEditor = true;
-            switchPanel(this.leftPanel, this.fuEditorComponent.getMainPanel());
-        }
+        switchPanel();
         String cmd = scriptCmd.getCmd();
         String content = ResourceUtils.readResource("template/auth/" + cmd);
         if (scriptCmd.isReset()) {
             fuEditorComponent.setContent(content);
         } else {
             fuEditorComponent.append(content);
+        }
+    }
+
+
+    private void switchPanel() {
+        if (!isEditor) {
+            isEditor = true;
+            switchPanel(this.leftPanel, this.fuEditorComponent.getMainPanel());
         }
     }
 
@@ -143,6 +151,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
             }
             String script = globalPreScriptPO.getScript();
             if (StringUtils.isNotBlank(script)) {
+                switchPanel();
                 this.fuEditorComponent.setContent(script);
             }
             this.fuHttpRequestData = globalPreScriptPO.getFuHttpRequestData();
@@ -196,5 +205,11 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
         } else {
             this.scopeModuleList.remove(data);
         }
+    }
+
+
+    @Override
+    public void moveOff() {
+        this.fuFiltersAction.exit();
     }
 }

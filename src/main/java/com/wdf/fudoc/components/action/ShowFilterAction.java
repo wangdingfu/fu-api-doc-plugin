@@ -1,8 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.wdf.fudoc.components.action;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.ElementsChooser;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -26,12 +24,12 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 
 public abstract class ShowFilterAction extends ToggleAction implements DumbAware {
-    private JBPopup myFilterPopup;
+    protected JBPopup myFilterPopup;
     private final BadgeIconSupplier FILTER_ICON;
 
     public ShowFilterAction(String text, String desc, Icon icon) {
         super(text, desc, icon);
-        this.FILTER_ICON = new BadgeIconSupplier(AllIcons.General.Filter);
+        this.FILTER_ICON = new BadgeIconSupplier(icon);
     }
 
     @Override
@@ -108,7 +106,7 @@ public abstract class ShowFilterAction extends ToggleAction implements DumbAware
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(chooser);
         JPanel buttons = new JPanel();
-        JButton all = new JButton(IdeBundle.message("big.popup.filter.button.all"));
+        JButton all = new JButton("全选");
         all.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -116,7 +114,7 @@ public abstract class ShowFilterAction extends ToggleAction implements DumbAware
             }
         });
         buttons.add(all);
-        JButton invert = new JButton(IdeBundle.message("big.popup.filter.button.invert"));
+        JButton invert = new JButton("反选");
         invert.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -124,6 +122,14 @@ public abstract class ShowFilterAction extends ToggleAction implements DumbAware
             }
         });
         buttons.add(invert);
+        JButton exit = new JButton("退出");
+        all.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                myFilterPopup.cancel();
+            }
+        });
+        buttons.add(exit);
         panel.add(buttons);
         return panel;
     }

@@ -125,12 +125,16 @@ public class FuRequestSettingView extends DialogWrapper {
      */
     @Override
     protected void doOKAction() {
+        this.apply();
+        super.doOKAction();
+    }
+
+    public void apply() {
         //持久化配置数据
         this.preScriptTabs.forEach(f -> f.saveData(configPO));
         this.globalHeaderTab.saveData(configPO);
         this.globalVariableTab.saveData(configPO);
         this.storage.saveData(configPO);
-        super.doOKAction();
     }
 
     @Override

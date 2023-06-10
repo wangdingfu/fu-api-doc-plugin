@@ -247,9 +247,11 @@ public class FuEditorComponent {
         }
         String indent = document.getText().substring(lineStartOffset, indentEndOffset);
         String content = appendContent + "\n" + indent;
+
+        int lineRow = StringUtils.countMatches(appendContent, "\n");
         WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().insertString(offset, content));
         VisualPosition visualPosition = caret.getVisualPosition();
-        caret.moveToVisualPosition(new VisualPosition(visualPosition.getLine() + 1, visualPosition.getColumn()));
+        caret.moveToVisualPosition(new VisualPosition(visualPosition.getLine() + lineRow + 1, visualPosition.getColumn()));
     }
 
 

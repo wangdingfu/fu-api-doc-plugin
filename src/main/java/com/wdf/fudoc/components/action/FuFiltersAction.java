@@ -63,4 +63,11 @@ public class FuFiltersAction<T> extends ShowFilterAction {
         return res;
     }
 
+
+    public void exit() {
+        if (myFilterPopup != null && !myFilterPopup.isDisposed()) {
+            myFilterPopup.cancel();
+        }
+    }
+
 }
