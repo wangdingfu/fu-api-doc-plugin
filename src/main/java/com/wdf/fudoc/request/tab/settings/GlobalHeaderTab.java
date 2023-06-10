@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tabs.TabInfo;
+import com.wdf.fudoc.common.FuDataTab;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
@@ -11,6 +12,8 @@ import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.pojo.CommonHeader;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
 import com.wdf.fudoc.util.ProjectUtils;
@@ -26,12 +29,12 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-12-07 21:47:14
  */
-public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<CommonHeader> implements FuTab {
+public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<GlobalKeyValuePO> implements FuDataTab<FuRequestConfigPO> {
 
     /**
      * table组件
      */
-    private final FuTableComponent<CommonHeader> fuTableComponent;
+    private final FuTableComponent<GlobalKeyValuePO> fuTableComponent;
     /**
      * 批量编辑请求参数组件
      */
@@ -44,7 +47,7 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<CommonHeader> im
 
 
     public GlobalHeaderTab() {
-        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.commonHeaders(), Lists.newArrayList(), CommonHeader.class);
+        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.globalConfig("请求头名称", "请求头值"), Lists.newArrayList(), GlobalKeyValuePO.class);
         //文本编辑器
         this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
     }
@@ -56,7 +59,7 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<CommonHeader> im
     }
 
     @Override
-    protected FuTableComponent<CommonHeader> getTableComponent(String title) {
+    protected FuTableComponent<GlobalKeyValuePO> getTableComponent(String title) {
         return this.fuTableComponent;
     }
 
@@ -66,36 +69,19 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<CommonHeader> im
     }
 
 
-    public void initData(List<CommonHeader> dataList) {
-        fuTableComponent.setDataList(dataList);
+    @Override
+    public void initData(FuRequestConfigPO configPO) {
+        fuTableComponent.setDataList(configPO.getGlobalHeaderList());
     }
 
 
-    public List<CommonHeader> getData() {
+    @Override
+    public void saveData(FuRequestConfigPO configPO) {
         TabActionBO tabActionBO = this.fuTabComponent.getDefaultAction();
-        if(Objects.nonNull(tabActionBO) && tabActionBO.isSelect()){
+        if (Objects.nonNull(tabActionBO) && tabActionBO.isSelect()) {
             //如果当前是编辑器状态 则需要从编辑器组件同步数据到table组件
             bulkEditToTableData(TITLE);
         }
-        List<CommonHeader> dataList = fuTableComponent.getDataList();
-        if (CollectionUtils.isNotEmpty(dataList)) {
-            for (CommonHeader commonHeader : dataList) {
-                if (HeaderScope.CURRENT_PROJECT.getName().equals(commonHeader.getScope())) {
-                    Project currProject = ProjectUtils.getCurrProject();
-                    List<String> projectIdList = commonHeader.getProjectIdList();
-                    if (Objects.isNull(projectIdList)) {
-                        projectIdList = Lists.newArrayList();
-                        commonHeader.setProjectIdList(projectIdList);
-                    }
-                    String projectId = currProject.getLocationHash();
-                    projectIdList.remove(projectId);
-                    Boolean select = commonHeader.getSelect();
-                    if (Objects.nonNull(select) && select) {
-                        projectIdList.add(projectId);
-                    }
-                }
-            }
-        }
-        return dataList;
+        configPO.setGlobalHeaderList(fuTableComponent.getDataList());
     }
 }

@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.request.data.FuRequestSettingData;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.state.FuRequestSettingState;
 import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
 import com.wdf.fudoc.request.tab.settings.GlobalHeaderTab;
@@ -49,7 +50,7 @@ public class FuRequestSettingView extends DialogWrapper {
     private GlobalVariableTab globalVariableTab;
     private GlobalHeaderTab globalHeaderTab;
 
-    private volatile AtomicInteger preScriptIndex = new AtomicInteger(0);
+    private final AtomicInteger preScriptIndex = new AtomicInteger(0);
 
     private final List<GlobalPreScriptTab> preScriptTabs = Lists.newArrayList();
 
@@ -133,11 +134,10 @@ public class FuRequestSettingView extends DialogWrapper {
      * 保存数据
      */
     public void apply() {
+        FuRequestConfigPO configPO = new FuRequestConfigPO();
         //持久化配置数据
-        this.preScriptTabs.forEach(f -> f.saveData(null));
-        this.globalVariableTab.saveData(null);
-        FuRequestSettingData data = FuRequestSettingState.getData();
-        data.setCommonHeaderList(globalHeaderTab.getData());
+        this.preScriptTabs.forEach(f -> f.saveData(configPO));
+        this.globalVariableTab.saveData(configPO);
     }
 
     @Override
