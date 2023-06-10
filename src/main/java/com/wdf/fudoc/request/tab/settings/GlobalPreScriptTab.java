@@ -15,13 +15,19 @@ import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuFiltersListener;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.po.GlobalPreScriptPO;
+import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.ResourceUtils;
 import icons.FuDocIcons;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 前置操作tab
@@ -46,15 +52,17 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
     private boolean isEditor = false;
 
 
-    private final List<String> scopeModuleList;
+    private List<String> scopeModuleList;
 
     private final String title;
 
+    private FuHttpRequestData fuHttpRequestData;
+
     public GlobalPreScriptTab(Project project) {
-        this(project, TITLE);
+        this(project, TITLE, null);
     }
 
-    public GlobalPreScriptTab(Project project, String title) {
+    public GlobalPreScriptTab(Project project, String title, FuRequestConfigPO configPO) {
         this.project = project;
         this.title = title;
         this.rootPanel = new JPanel(new BorderLayout());
@@ -69,6 +77,9 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
         splitter.setFirstComponent(this.leftPanel);
         splitter.setSecondComponent(rightPanel);
         this.rootPanel.add(splitter, BorderLayout.CENTER);
+        if (Objects.nonNull(configPO)) {
+            initData(configPO);
+        }
     }
 
 
@@ -84,7 +95,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance(this.title, FuDocIcons.FU_REQUEST_HEADER, this.rootPanel).addAction(new FuFiltersAction<>("配置生效Module", this, () -> {
+        return FuTabComponent.getInstance(this.title, FuDocIcons.FU_SCRIPT, this.rootPanel).addAction(new FuFiltersAction<>("配置生效Module", this, () -> {
         })).builder();
     }
 
@@ -123,12 +134,39 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
      */
     @Override
     public void initData(FuRequestConfigPO data) {
-
+        Map<String, GlobalPreScriptPO> preScriptMap = data.getPreScriptMap();
+        GlobalPreScriptPO globalPreScriptPO = preScriptMap.get(this.title);
+        if (Objects.nonNull(globalPreScriptPO)) {
+            List<String> scope = globalPreScriptPO.getScope();
+            if (CollectionUtils.isNotEmpty(scope)) {
+                this.scopeModuleList = scope;
+            }
+            String script = globalPreScriptPO.getScript();
+            if (StringUtils.isNotBlank(script)) {
+                this.fuEditorComponent.setContent(script);
+            }
+            this.fuHttpRequestData = globalPreScriptPO.getFuHttpRequestData();
+        }
     }
 
+
+    /**
+     * 将内存数据持久化到硬盘上
+     *
+     * @param data 持久化对象
+     */
     @Override
     public void saveData(FuRequestConfigPO data) {
-
+        Map<String, GlobalPreScriptPO> preScriptMap = data.getPreScriptMap();
+        GlobalPreScriptPO globalPreScriptPO = preScriptMap.get(this.title);
+        if (Objects.isNull(globalPreScriptPO)) {
+            globalPreScriptPO = new GlobalPreScriptPO();
+            preScriptMap.put(this.title, globalPreScriptPO);
+        }
+        globalPreScriptPO.setScript(this.fuEditorComponent.getContent());
+        globalPreScriptPO.setScope(this.scopeModuleList);
+        globalPreScriptPO.setTitle(this.title);
+        globalPreScriptPO.setFuHttpRequestData(this.fuHttpRequestData);
     }
 
     @Override

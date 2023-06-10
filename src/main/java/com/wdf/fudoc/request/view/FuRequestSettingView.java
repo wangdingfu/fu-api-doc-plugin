@@ -5,9 +5,8 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
-import com.wdf.fudoc.request.data.FuRequestSettingData;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
-import com.wdf.fudoc.request.state.FuRequestSettingState;
+import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
 import com.wdf.fudoc.request.tab.settings.GlobalHeaderTab;
 import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
@@ -20,6 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -50,6 +51,8 @@ public class FuRequestSettingView extends DialogWrapper {
     private GlobalVariableTab globalVariableTab;
     private GlobalHeaderTab globalHeaderTab;
 
+    private final FuRequestConfigPO configPO;
+
     private final AtomicInteger preScriptIndex = new AtomicInteger(0);
 
     private final List<GlobalPreScriptTab> preScriptTabs = Lists.newArrayList();
@@ -59,8 +62,9 @@ public class FuRequestSettingView extends DialogWrapper {
         super(project, true);
         this.project = project;
         this.rootPanel = new JPanel(new BorderLayout());
+        this.configPO = new FuRequestConfigPO();
         setTitle("【Fu Request】设置");
-        initSettingPanel();
+        initPanel();
         init();
     }
 
@@ -68,12 +72,14 @@ public class FuRequestSettingView extends DialogWrapper {
     /**
      * 初始化设置面板
      */
-    private void initSettingPanel() {
+    private void initPanel() {
         this.globalConfigTab = new GlobalConfigTab();
         this.globalVariableTab = new GlobalVariableTab();
         this.globalHeaderTab = new GlobalHeaderTab();
         //默认前置脚本
         this.preScriptTabs.add(new GlobalPreScriptTab(project));
+        //初始化数据
+        initData();
         //添加tab页
         fuTabBuilder
                 //全局请求头
@@ -82,11 +88,9 @@ public class FuRequestSettingView extends DialogWrapper {
                 .addTab(this.globalConfigTab)
                 //全局变量
                 .addTab(this.globalVariableTab);
-
-        //前置脚本
+        //添加前置脚本tab
         this.preScriptTabs.forEach(fuTabBuilder::addTab);
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
-        initData();
     }
 
 
@@ -94,10 +98,30 @@ public class FuRequestSettingView extends DialogWrapper {
      * 初始化数据
      */
     public void initData() {
-        FuRequestSettingData data = FuRequestSettingState.getData();
-        this.globalHeaderTab.initData(data.getCommonHeaderList());
-        this.preScriptTabs.forEach(f -> f.initData(null));
-        this.globalVariableTab.initData(null);
+        //初始化全局请求头
+        this.globalHeaderTab.initData(this.configPO);
+        //初始化全局变量
+        this.globalVariableTab.initData(this.configPO);
+        //初始化全局前置脚本
+        Map<String, GlobalPreScriptPO> preScriptMap = this.configPO.getPreScriptMap();
+        //如果不存在默认前置脚本数据 则需要添加上默认的前置脚本数据
+        GlobalPreScriptPO globalPreScriptPO = preScriptMap.get(GlobalPreScriptTab.TITLE);
+        if (Objects.isNull(globalPreScriptPO)) {
+            globalPreScriptPO = new GlobalPreScriptPO();
+            preScriptMap.put(GlobalPreScriptTab.TITLE, globalPreScriptPO);
+        }
+        //对前置脚本排序(为了展示顺序性) 创建前置脚本tab 并 初始化数据
+        Lists.newArrayList(preScriptMap.keySet()).stream().sorted().forEach(f -> this.preScriptTabs.add(new GlobalPreScriptTab(project, f, configPO)));
+
+    }
+
+    /**
+     * 保存数据
+     */
+    public void apply() {
+        //持久化配置数据
+        this.preScriptTabs.forEach(f -> f.saveData(configPO));
+        this.globalVariableTab.saveData(configPO);
     }
 
 
@@ -124,21 +148,12 @@ public class FuRequestSettingView extends DialogWrapper {
         @Override
         protected void doAction(ActionEvent e) {
             //新增前置脚本
-            GlobalPreScriptTab globalPreScriptTab = new GlobalPreScriptTab(project, GlobalPreScriptTab.TITLE + preScriptIndex.incrementAndGet());
+            GlobalPreScriptTab globalPreScriptTab = new GlobalPreScriptTab(project, GlobalPreScriptTab.TITLE + preScriptIndex.incrementAndGet(), null);
             preScriptTabs.add(globalPreScriptTab);
             fuTabBuilder.addTab(globalPreScriptTab);
         }
     }
 
-    /**
-     * 保存数据
-     */
-    public void apply() {
-        FuRequestConfigPO configPO = new FuRequestConfigPO();
-        //持久化配置数据
-        this.preScriptTabs.forEach(f -> f.saveData(configPO));
-        this.globalVariableTab.saveData(configPO);
-    }
 
     @Override
     protected @Nullable JComponent createCenterPanel() {
