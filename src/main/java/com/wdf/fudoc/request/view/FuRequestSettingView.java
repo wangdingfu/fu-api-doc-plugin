@@ -11,6 +11,7 @@ import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
 import com.wdf.fudoc.request.tab.settings.GlobalHeaderTab;
 import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
 import com.wdf.fudoc.request.tab.settings.GlobalVariableTab;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,6 +54,8 @@ public class FuRequestSettingView extends DialogWrapper {
 
     private final FuRequestConfigPO configPO;
 
+    private final FuRequestConfigStorage storage;
+
     private final AtomicInteger preScriptIndex = new AtomicInteger(0);
 
     private final List<GlobalPreScriptTab> preScriptTabs = Lists.newArrayList();
@@ -62,7 +65,8 @@ public class FuRequestSettingView extends DialogWrapper {
         super(project, true);
         this.project = project;
         this.rootPanel = new JPanel(new BorderLayout());
-        this.configPO = new FuRequestConfigPO();
+        this.storage = FuRequestConfigStorage.getInstance(project);
+        this.configPO = this.storage.readData();
         setTitle("【Fu Request】设置");
         initPanel();
         init();
@@ -115,19 +119,17 @@ public class FuRequestSettingView extends DialogWrapper {
 
     }
 
+
     /**
-     * 保存数据
+     * 点击ok按钮时触发保存
      */
-    public void apply() {
-        //持久化配置数据
-        this.preScriptTabs.forEach(f -> f.saveData(configPO));
-        this.globalVariableTab.saveData(configPO);
-    }
-
-
     @Override
     protected void doOKAction() {
-        apply();
+        //持久化配置数据
+        this.preScriptTabs.forEach(f -> f.saveData(configPO));
+        this.globalHeaderTab.saveData(configPO);
+        this.globalVariableTab.saveData(configPO);
+        this.storage.saveData(configPO);
         super.doOKAction();
     }
 
