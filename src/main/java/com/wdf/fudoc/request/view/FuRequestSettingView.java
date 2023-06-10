@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
@@ -80,8 +81,6 @@ public class FuRequestSettingView extends DialogWrapper {
         this.globalConfigTab = new GlobalConfigTab();
         this.globalVariableTab = new GlobalVariableTab();
         this.globalHeaderTab = new GlobalHeaderTab();
-        //默认前置脚本
-        this.preScriptTabs.add(new GlobalPreScriptTab(project));
         //初始化数据
         initData();
         //添加tab页
@@ -141,6 +140,7 @@ public class FuRequestSettingView extends DialogWrapper {
     protected Action @NotNull [] createActions() {
         List<Action> actionList = Lists.newArrayList(super.createActions());
         actionList.add(new CreateTabAction("新增前置脚本"));
+        actionList.add(new RemoveTabAction("删除前置脚本"));
         return actionList.toArray(new Action[]{});
     }
 
@@ -157,6 +157,32 @@ public class FuRequestSettingView extends DialogWrapper {
             GlobalPreScriptTab globalPreScriptTab = new GlobalPreScriptTab(project, GlobalPreScriptTab.TITLE + preScriptIndex.incrementAndGet(), null);
             preScriptTabs.add(globalPreScriptTab);
             fuTabBuilder.addTab(globalPreScriptTab);
+        }
+    }
+
+    protected class RemoveTabAction extends DialogWrapperAction {
+        protected RemoveTabAction(String title) {
+            super(title);
+            putValue(Action.SMALL_ICON, AllIcons.General.Remove);
+        }
+
+        @Override
+        protected void doAction(ActionEvent e) {
+            //新增前置脚本
+            FuTab selected = fuTabBuilder.getSelected();
+            if (Objects.nonNull(selected)) {
+                String text = selected.getTabInfo().getText();
+                if (GlobalPreScriptTab.TITLE.equals(text)) {
+                    return;
+                }
+                boolean isDelete = preScriptTabs.removeIf(f -> f.getTabInfo().getText().equals(text));
+                if (isDelete) {
+                    fuTabBuilder.select(GlobalPreScriptTab.TITLE);
+                    fuTabBuilder.removeTab(text);
+                    Map<String, GlobalPreScriptPO> preScriptMap = configPO.getPreScriptMap();
+                    preScriptMap.remove(text);
+                }
+            }
         }
     }
 

@@ -58,7 +58,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
 
     private FuHttpRequestData fuHttpRequestData;
 
-    private FuFiltersAction fuFiltersAction;
+    private final FuFiltersAction fuFiltersAction;
 
     public GlobalPreScriptTab(Project project) {
         this(project, TITLE, null);
@@ -71,6 +71,8 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
         this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE);
         //当前脚本针对以下module所有的接口生效
         this.scopeModuleList = FuDocUtils.getAllModuleNameList(project);
+        this.fuFiltersAction = new FuFiltersAction<>("配置生效Module", this, () -> {
+        });
         this.leftPanel = new JPanel(new BorderLayout());
         this.leftPanel.add(FuEditorEmptyTextPainter.createFramePreview(), BorderLayout.CENTER);
         JPanel rightPanel = new JPanel(new BorderLayout());
@@ -97,8 +99,6 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
 
     @Override
     public TabInfo getTabInfo() {
-        this.fuFiltersAction = new FuFiltersAction<>("配置生效Module", this, () -> {
-        });
         return FuTabComponent.getInstance(this.title, FuDocIcons.FU_SCRIPT, this.rootPanel).addAction(this.fuFiltersAction).builder();
     }
 

@@ -1,5 +1,6 @@
 package com.wdf.fudoc.components;
 
+import com.google.common.collect.Lists;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
@@ -30,7 +31,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 编辑器组件
@@ -246,12 +249,17 @@ public class FuEditorComponent {
             indentEndOffset++;
         }
         String indent = document.getText().substring(lineStartOffset, indentEndOffset);
-        String content = appendContent + "\n" + indent;
+        String[] split = StringUtils.split(appendContent, "\n");
+        List<String> appendList = Lists.newArrayList();
+        for (String line : split) {
+            appendList.add(indent + line);
+        }
+        appendList.add(indent);
+        String content = String.join("\n", appendList);
 
-        int lineRow = StringUtils.countMatches(appendContent, "\n");
         WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().insertString(offset, content));
         VisualPosition visualPosition = caret.getVisualPosition();
-        caret.moveToVisualPosition(new VisualPosition(visualPosition.getLine() + lineRow + 1, visualPosition.getColumn()));
+        caret.moveToVisualPosition(new VisualPosition(visualPosition.getLine() + split.length + 1, visualPosition.getColumn()));
     }
 
 

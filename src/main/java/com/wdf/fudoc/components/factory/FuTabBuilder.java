@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author wangdingfu
  * @date 2022-09-04 21:26:23
  */
-public class FuTabBuilder{
+public class FuTabBuilder {
 
     private final JPanel rootPanel;
 
@@ -45,6 +45,13 @@ public class FuTabBuilder{
         this.tabs.addTab(tabInfo);
         tabInfoMap.put(tabInfo.getText(), tabInfo);
         return this;
+    }
+
+    public void removeTab(String text){
+        TabInfo remove = tabInfoMap.remove(text);
+        if(Objects.nonNull(remove)){
+            this.tabs.removeTab(remove);
+        }
     }
 
     public FuTabBuilder addTab(FuTab fuTab) {
@@ -103,9 +110,9 @@ public class FuTabBuilder{
     /**
      * 获取当前选中的tab
      */
-    public FuTab getSelected(){
+    public FuTab getSelected() {
         TabInfo selectedInfo = this.tabs.getSelectedInfo();
-        if(Objects.isNull(selectedInfo)){
+        if (Objects.isNull(selectedInfo)) {
             return null;
         }
         return fuTabMap.get(selectedInfo.getText());
@@ -120,6 +127,12 @@ public class FuTabBuilder{
                     FuTab fuTab = fuTabMap.get(text);
                     if (Objects.nonNull(fuTab)) {
                         fuTab.selectionChanged(oldSelection, newSelection);
+                    }
+                }
+                if (Objects.nonNull(oldSelection)) {
+                    FuTab fuTab = fuTabMap.get(oldSelection.getText());
+                    if (Objects.nonNull(fuTab)) {
+                        fuTab.moveOff();
                     }
                 }
             }

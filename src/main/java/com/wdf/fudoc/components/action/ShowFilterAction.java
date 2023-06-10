@@ -123,7 +123,7 @@ public abstract class ShowFilterAction extends ToggleAction implements DumbAware
         });
         buttons.add(invert);
         JButton exit = new JButton("退出");
-        all.addActionListener(new ActionListener() {
+        exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 myFilterPopup.cancel();
