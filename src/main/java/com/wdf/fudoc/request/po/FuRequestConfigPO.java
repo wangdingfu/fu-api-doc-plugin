@@ -2,11 +2,16 @@ package com.wdf.fudoc.request.po;
 
 
 import com.google.common.collect.Lists;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.TreePathBO;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -35,5 +40,44 @@ public class FuRequestConfigPO {
     private Map<String, GlobalPreScriptPO> preScriptMap = new ConcurrentHashMap<>();
 
 
+    public String header(String headerName, List<String> scope) {
+        return globalHeaderList.stream().filter(KeyValueTableBO::getSelect).filter(f -> f.getKey().equals(headerName)).filter(f -> contains(scope, f.getScope().getSelectPathList())).map(KeyValueTableBO::getValue).findFirst().orElse(StringUtils.EMPTY);
+    }
 
+    public String variable(String variableName, List<String> scope) {
+        return globalVariableList.stream().filter(KeyValueTableBO::getSelect).filter(f -> f.getKey().equals(variableName)).filter(f -> contains(scope, f.getScope().getSelectPathList())).map(KeyValueTableBO::getValue).findFirst().orElse(StringUtils.EMPTY);
+    }
+
+
+    private boolean contains(List<String> scope1, List<String> scope2) {
+        if (CollectionUtils.isEmpty(scope1) || CollectionUtils.isEmpty(scope2)) {
+            return false;
+        }
+        return scope1.stream().anyMatch(scope2::contains);
+    }
+
+    public void addHeader(String headerName, String headerValue, List<String> scope) {
+        GlobalKeyValuePO globalKeyValuePO = globalHeaderList.stream().filter(f -> f.getKey().equals(headerName)).findFirst().orElse(null);
+        if (Objects.isNull(globalKeyValuePO)) {
+            globalKeyValuePO = new GlobalKeyValuePO();
+            this.globalHeaderList.add(globalKeyValuePO);
+        }
+        globalKeyValuePO.setScope(new TreePathBO(scope));
+        globalKeyValuePO.setKey(headerName);
+        globalKeyValuePO.setValue(headerValue);
+        globalKeyValuePO.setSelect(true);
+        this.globalHeaderList.add(globalKeyValuePO);
+    }
+
+    public void addVariable(String variableName, String variableValue, List<String> scope) {
+        GlobalKeyValuePO globalKeyValuePO = globalVariableList.stream().filter(f -> f.getKey().equals(variableName)).findFirst().orElse(null);
+        if (Objects.isNull(globalKeyValuePO)) {
+            globalKeyValuePO = new GlobalKeyValuePO();
+            this.globalVariableList.add(globalKeyValuePO);
+        }
+        globalKeyValuePO.setScope(new TreePathBO(scope));
+        globalKeyValuePO.setKey(variableName);
+        globalKeyValuePO.setValue(variableValue);
+        globalKeyValuePO.setSelect(true);
+    }
 }

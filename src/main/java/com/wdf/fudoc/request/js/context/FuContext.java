@@ -1,14 +1,22 @@
 package com.wdf.fudoc.request.js.context;
 
 import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Lists;
+import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.request.constants.enumtype.ResponseType;
+import com.wdf.fudoc.request.execute.HttpExecutor;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.po.GlobalPreScriptPO;
+import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -19,28 +27,48 @@ import java.util.concurrent.ConcurrentHashMap;
 @Setter
 public class FuContext {
 
+    /**
+     * 配置对象
+     */
+    private final FuRequestConfigPO configPO;
+
+    private final Project project;
+
+    private final GlobalPreScriptPO preScriptPO;
+
+    private final List<String> scope;
+
+    public FuContext(Project project, String scriptName) {
+        this.project = project;
+        this.configPO = FuRequestConfigStorage.getInstance(project).readData();
+        this.preScriptPO = this.configPO.getPreScriptMap().get(scriptName);
+        this.scope = Objects.isNull(preScriptPO) ? Lists.newArrayList() : this.preScriptPO.getScope();
+    }
+
+    public FuContext(Project project, FuRequestConfigPO configPO, GlobalPreScriptPO preScriptPO) {
+        this.project = project;
+        this.configPO = configPO;
+        this.preScriptPO = preScriptPO;
+        this.scope = Objects.isNull(preScriptPO) ? Lists.newArrayList() : this.preScriptPO.getScope();
+    }
+
+    public String getScript() {
+        return this.preScriptPO.getScript();
+    }
 
     /**
-     * 变量集合
+     * 发起接口请求 并返回响应结果
      */
-    private final Map<String, Object> variableMap = new ConcurrentHashMap<>();
-    /**
-     * 请求头集合
-     */
-    private final Map<String, Object> headerMap = new ConcurrentHashMap<>();
+    public String doHttpRequest() {
+        FuHttpRequestData fuHttpRequestData = preScriptPO.getFuHttpRequestData();
+        if (Objects.isNull(fuHttpRequestData)) {
+            return StringUtils.EMPTY;
+        }
+        //发起请求
+        HttpExecutor.execute(fuHttpRequestData);
 
-
-    /**
-     * 响应结果(配置的前置请求返回的结果)
-     */
-    private JSON result;
-
-
-    /**
-     * 发起鉴权接口请求 并返回响应结果
-     */
-    public JSON doRequest() {
-        return null;
+        FuResponseData response = fuHttpRequestData.getResponse();
+        return response.getContent();
     }
 
     /**
@@ -53,7 +81,7 @@ public class FuContext {
         if (StringUtils.isBlank(variableName) || Objects.isNull(value)) {
             return;
         }
-        variableMap.put(variableName, value);
+        configPO.addVariable(variableName, value.toString(), this.scope);
     }
 
 
@@ -65,7 +93,7 @@ public class FuContext {
      */
     public Object variable(String variableName) {
         if (StringUtils.isNotBlank(variableName)) {
-            return variableMap.get(variableName);
+            return configPO.variable(variableName, this.scope);
         }
         return null;
     }
@@ -81,7 +109,7 @@ public class FuContext {
         if (StringUtils.isBlank(headerName) || Objects.isNull(value)) {
             return;
         }
-        headerMap.put(headerName, value);
+        configPO.addHeader(headerName, value.toString(), scope);
     }
 
     /**
@@ -92,7 +120,7 @@ public class FuContext {
      */
     public Object header(String headerName) {
         if (StringUtils.isNotBlank(headerName)) {
-            return headerMap.get(headerName);
+            return configPO.header(headerName, this.scope);
         }
         return null;
     }

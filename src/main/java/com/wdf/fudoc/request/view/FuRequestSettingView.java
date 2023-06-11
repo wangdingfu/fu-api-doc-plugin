@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.util.ActionCallback;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
@@ -13,6 +14,7 @@ import com.wdf.fudoc.request.tab.settings.GlobalHeaderTab;
 import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
 import com.wdf.fudoc.request.tab.settings.GlobalVariableTab;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,9 +55,6 @@ public class FuRequestSettingView extends DialogWrapper {
     private GlobalVariableTab globalVariableTab;
     private GlobalHeaderTab globalHeaderTab;
 
-    private final FuRequestConfigPO configPO;
-
-    private final FuRequestConfigStorage storage;
 
     private final AtomicInteger preScriptIndex = new AtomicInteger(0);
 
@@ -66,8 +65,6 @@ public class FuRequestSettingView extends DialogWrapper {
         super(project, true);
         this.project = project;
         this.rootPanel = new JPanel(new BorderLayout());
-        this.storage = FuRequestConfigStorage.getInstance(project);
-        this.configPO = this.storage.readData();
         setTitle("【Fu Request】设置");
         initPanel();
         init();
@@ -79,8 +76,8 @@ public class FuRequestSettingView extends DialogWrapper {
      */
     private void initPanel() {
         this.globalConfigTab = new GlobalConfigTab();
-        this.globalVariableTab = new GlobalVariableTab();
-        this.globalHeaderTab = new GlobalHeaderTab();
+        this.globalVariableTab = new GlobalVariableTab(project);
+        this.globalHeaderTab = new GlobalHeaderTab(project);
         //初始化数据
         initData();
         //添加tab页
@@ -101,12 +98,13 @@ public class FuRequestSettingView extends DialogWrapper {
      * 初始化数据
      */
     public void initData() {
+        FuRequestConfigPO configPO = FuRequestConfigStorageFactory.get(project).readData();
         //初始化全局请求头
-        this.globalHeaderTab.initData(this.configPO);
+        this.globalHeaderTab.initData(configPO);
         //初始化全局变量
-        this.globalVariableTab.initData(this.configPO);
+        this.globalVariableTab.initData(configPO);
         //初始化全局前置脚本
-        Map<String, GlobalPreScriptPO> preScriptMap = this.configPO.getPreScriptMap();
+        Map<String, GlobalPreScriptPO> preScriptMap = configPO.getPreScriptMap();
         //如果不存在默认前置脚本数据 则需要添加上默认的前置脚本数据
         GlobalPreScriptPO globalPreScriptPO = preScriptMap.get(GlobalPreScriptTab.TITLE);
         if (Objects.isNull(globalPreScriptPO)) {
@@ -129,11 +127,13 @@ public class FuRequestSettingView extends DialogWrapper {
     }
 
     public void apply() {
+        FuRequestConfigStorage storage = FuRequestConfigStorageFactory.get(project);
+        FuRequestConfigPO configPO = storage.readData();
         //持久化配置数据
         this.preScriptTabs.forEach(f -> f.saveData(configPO));
         this.globalHeaderTab.saveData(configPO);
         this.globalVariableTab.saveData(configPO);
-        this.storage.saveData(configPO);
+        storage.saveData(configPO);
     }
 
     @Override
@@ -168,22 +168,20 @@ public class FuRequestSettingView extends DialogWrapper {
 
         @Override
         protected void doAction(ActionEvent e) {
-            //新增前置脚本
-            FuTab selected = fuTabBuilder.getSelected();
-            if (Objects.nonNull(selected)) {
-                String text = selected.getTabInfo().getText();
-                if (GlobalPreScriptTab.TITLE.equals(text)) {
-                    return;
-                }
-                boolean isDelete = preScriptTabs.removeIf(f -> f.getTabInfo().getText().equals(text));
-                if (isDelete) {
-                    fuTabBuilder.select(GlobalPreScriptTab.TITLE);
-                    fuTabBuilder.removeTab(text);
-                    fuTabBuilder.revalidate();
-                    Map<String, GlobalPreScriptPO> preScriptMap = configPO.getPreScriptMap();
-                    preScriptMap.remove(text);
-                }
-            }
+//            //新增前置脚本
+//            FuTab selected = fuTabBuilder.getSelected();
+//            if (Objects.nonNull(selected)) {
+//                String text = selected.getTabInfo().getText();
+//                if (GlobalPreScriptTab.TITLE.equals(text)) {
+//                    return;
+//                }
+//                boolean isDelete = preScriptTabs.removeIf(f -> f.getTabInfo().getText().equals(text));
+//                if (isDelete) {
+//                    fuTabBuilder.removeTab(text);
+//                    Map<String, GlobalPreScriptPO> preScriptMap = configPO.getPreScriptMap();
+//                    preScriptMap.remove(text);
+//                }
+//            }
         }
     }
 

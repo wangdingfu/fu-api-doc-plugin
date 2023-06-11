@@ -23,7 +23,7 @@ public class JsExecutor {
             // 将Java对象绑定到Rhino执行上下文中
             ScriptableObject scriptableObject = cx.initStandardObjects();
             ScriptableObject.putProperty(scriptableObject, "fu", fuContext);
-            cx.evaluateString(scriptableObject, "", "<cmd>", 1, null);
+            cx.evaluateString(scriptableObject, fuContext.getScript(), "<cmd>", 1, null);
         } finally {
             Context.exit();
         }

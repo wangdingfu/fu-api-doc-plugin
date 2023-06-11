@@ -96,8 +96,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         this.toolBarPanel = initToolBarUI();
         initRequestUI();
         initResponseUI();
-//        initUI();
-//        addMouseListeners();
         initData(httpRequestData);
         setModal(isSave);
         init();
@@ -206,13 +204,11 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
 
     @Override
     public void doSendAfter(FuHttpRequestData fuHttpRequestData) {
-        ApplicationManager.getApplication().invokeLater(() -> {
-            this.fuTabBuilder.select(ResponseTabView.RESPONSE);
-            this.requestTabView.doSendAfter(fuHttpRequestData);
-            this.responseTabView.initData(fuHttpRequestData);
-            //切换消息展示
-            messageComponent.switchInfo();
-        });
+        this.fuTabBuilder.select(ResponseTabView.RESPONSE);
+        this.requestTabView.doSendAfter(fuHttpRequestData);
+        this.responseTabView.initData(fuHttpRequestData);
+        //切换消息展示
+        messageComponent.switchInfo();
     }
 
 

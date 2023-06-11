@@ -118,22 +118,10 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
         if (Objects.isNull(body)) {
             body = new FuRequestBodyData();
         }
-        List<KeyValueTableBO> dataList = this.formDataComponent.getDataList();
-        if (CollectionUtils.isNotEmpty(dataList)) {
-            body.setFormDataList(dataList);
-        }
-        List<KeyValueTableBO> urlencodedComponentDataList = this.urlencodedComponent.getDataList();
-        if (CollectionUtils.isNotEmpty(urlencodedComponentDataList)) {
-            body.setFormUrlEncodedList(urlencodedComponentDataList);
-        }
-        String content = this.rawComponent.getContent();
-        if (StringUtils.isNotBlank(content)) {
-            body.setRaw(content);
-        }
-        String json = this.jsonComponent.getContent();
-        if (StringUtils.isNotBlank(json)) {
-            body.setJson(json);
-        }
+        body.setFormDataList(this.formDataComponent.getDataList());
+        body.setFormUrlEncodedList(this.urlencodedComponent.getDataList());
+        body.setRaw(this.rawComponent.getContent());
+        body.setJson(this.jsonComponent.getContent());
         String currentTab = fuTabComponent.getCurrentTab();
         if (StringUtils.isBlank(currentTab)) {
             return;

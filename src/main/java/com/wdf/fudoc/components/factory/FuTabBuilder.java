@@ -1,5 +1,6 @@
 package com.wdf.fudoc.components.factory;
 
+import com.intellij.openapi.util.ActionCallback;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.TabsListener;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
@@ -55,7 +56,7 @@ public class FuTabBuilder {
     public void removeTab(String text){
         TabInfo remove = tabInfoMap.remove(text);
         if(Objects.nonNull(remove)){
-            this.tabs.removeTab(remove);
+            this.tabs.resetDropOver(remove);
         }
     }
 

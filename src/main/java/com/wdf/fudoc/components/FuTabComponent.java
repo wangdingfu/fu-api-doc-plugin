@@ -245,13 +245,13 @@ public class FuTabComponent {
     }
 
 
-    public FuTabComponent addAction(ToggleAction toggleAction) {
+    public FuTabComponent addAction(AnAction action) {
         DefaultActionGroup defaultActionGroup = actionGroupMap.get(DEFAULT);
         if (Objects.isNull(defaultActionGroup)) {
             defaultActionGroup = new DefaultActionGroup();
             actionGroupMap.put(DEFAULT, defaultActionGroup);
         }
-        defaultActionGroup.add(toggleAction);
+        defaultActionGroup.add(action);
         return this;
     }
 

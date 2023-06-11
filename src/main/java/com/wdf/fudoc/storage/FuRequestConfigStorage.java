@@ -8,6 +8,7 @@ import com.wdf.fudoc.util.StorageUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Paths;
+import java.util.Objects;
 
 /**
  * [Fu Request]配置持久化
@@ -23,6 +24,8 @@ public class FuRequestConfigStorage {
 
     private final String path;
 
+    private FuRequestConfigPO configPO;
+
     public FuRequestConfigStorage(Project project) {
         this.path = Paths.get(FuPaths.BASE_PATH, project.getName(), FuPaths.CONFIG).toString();
     }
@@ -32,15 +35,20 @@ public class FuRequestConfigStorage {
     }
 
     public FuRequestConfigPO readData() {
+        if (Objects.nonNull(this.configPO)) {
+            return this.configPO;
+        }
         String content = StorageUtils.readContent(path, FILE_NAME);
         if (StringUtils.isNotBlank(content)) {
-            return JsonUtil.toBean(content, FuRequestConfigPO.class);
+            this.configPO = JsonUtil.toBean(content, FuRequestConfigPO.class);
+            return this.configPO;
         }
         return new FuRequestConfigPO();
     }
 
 
     public void saveData(FuRequestConfigPO configPO) {
+        this.configPO = configPO;
         StorageUtils.writeJson(path, FILE_NAME, configPO);
     }
 

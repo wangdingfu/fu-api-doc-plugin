@@ -2,10 +2,21 @@ package com.wdf.fudoc.request.tab.settings;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.javascript.JavaScriptFileType;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.tabs.TabInfo;
+import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.common.FuDataTab;
+import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuCmdComponent;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuEditorEmptyTextPainter;
@@ -15,21 +26,29 @@ import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuFiltersListener;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
+import com.wdf.fudoc.request.global.FuRequest;
+import com.wdf.fudoc.request.js.JsExecutor;
+import com.wdf.fudoc.request.js.context.FuContext;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.HttpDialogView;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.ResourceUtils;
+import groovy.util.logging.Slf4j;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 前置操作tab
@@ -37,6 +56,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-12-26 22:38:48
  */
+@Slf4j
 public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionListener<ScriptCmd>, FuFiltersListener<String> {
 
     public static final String TITLE = "前置脚本";
@@ -61,6 +81,10 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
     private FuHttpRequestData fuHttpRequestData;
 
     private final FuFiltersAction fuFiltersAction;
+
+    private final AtomicBoolean isExecute = new AtomicBoolean(false);
+
+    private ProgressIndicator progressIndicator;
 
     public GlobalPreScriptTab(Project project) {
         this(project, TITLE, null);
@@ -101,7 +125,48 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance(this.title, FuDocIcons.FU_SCRIPT, this.rootPanel).addAction(this.fuFiltersAction).builder();
+        return FuTabComponent.getInstance(this.title, FuDocIcons.FU_SCRIPT, this.rootPanel)
+                .addAction(new DumbAwareAction("执行脚本", "", AllIcons.Actions.Execute) {
+                    @Override
+                    public void actionPerformed(@NotNull AnActionEvent e) {
+                        ProgressManager.getInstance().run(new Task.Backgroundable(project,title) {
+                            @Override
+                            public void run(@NotNull ProgressIndicator indicator) {
+                                FuRequestConfigPO configPO = FuRequestConfigStorageFactory.get(project).readData();
+                                saveData(configPO);
+                                GlobalPreScriptPO globalPreScriptPO = configPO.getPreScriptMap().get(title);
+                                String script = globalPreScriptPO.getScript();
+                                if (StringUtils.isBlank(script)) {
+                                    FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.REQUEST_SCRIPT_NO));
+                                }
+                                JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO));
+                                System.out.println("执行js完成");
+                            }
+                        });
+                    }
+                })
+                .addAction(new DumbAwareAction("Stop Execute" + title, "", AllIcons.Actions.Suspend) {
+                    @Override
+                    public @NotNull ActionUpdateThread getActionUpdateThread() {
+                        return ActionUpdateThread.BGT;
+                    }
+
+                    @Override
+                    public void update(@NotNull AnActionEvent e) {
+                        Presentation presentation = e.getPresentation();
+                        presentation.setEnabled(isExecute.get());
+                    }
+
+                    @Override
+                    public void actionPerformed(@NotNull AnActionEvent e) {
+                        //停止执行脚本
+                        if(Objects.nonNull(progressIndicator)){
+                            progressIndicator.stop();
+                            isExecute.set(false);
+                        }
+                    }
+                })
+                .addAction(this.fuFiltersAction).builder();
     }
 
     @Override
@@ -190,6 +255,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
         globalPreScriptPO.setTitle(this.title);
         globalPreScriptPO.setFuHttpRequestData(this.fuHttpRequestData);
     }
+
 
     @Override
     public List<String> getAllElements() {
