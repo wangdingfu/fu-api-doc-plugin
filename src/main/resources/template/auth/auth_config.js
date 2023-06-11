@@ -16,7 +16,7 @@ if (currentTime > expireTime) {
  */
 function login() {
     //fu为全局上下文对象 通过fu.doRequest()可以调用配置好的http接口 并返回响应结果
-    const result = JSON.parse(fu.doRequest());
+    const result = JSON.parse(fu.doHttpRequest());
     //将鉴权接口响应接口中的token设置到全局变量中（如果当前鉴权配置在a项目下 那么这个变量会设置到a项目的全局变量中）
     fu.setVariable(TOKEN_VAR, result.data.token);
     //设置当前鉴权有效时间为3600秒 3600秒之后会重新发起鉴权接口 并调用当前脚本
