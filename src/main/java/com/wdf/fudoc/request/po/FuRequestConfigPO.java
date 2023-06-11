@@ -4,6 +4,7 @@ package com.wdf.fudoc.request.po;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.bo.TreePathBO;
+import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
@@ -38,6 +39,17 @@ public class FuRequestConfigPO {
      * 前置脚本集合
      */
     private Map<String, GlobalPreScriptPO> preScriptMap = new ConcurrentHashMap<>();
+
+
+    public List<GlobalPreScriptPO> getPreScriptList(String scope) {
+        List<GlobalPreScriptPO> preScriptPOList = Lists.newArrayList();
+        preScriptMap.forEach((key, value) -> {
+            if (value.getScope().contains(scope)) {
+                preScriptPOList.add(value);
+            }
+        });
+        return preScriptPOList;
+    }
 
 
     public String header(String headerName, List<String> scope) {

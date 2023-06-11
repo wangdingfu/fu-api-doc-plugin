@@ -1,6 +1,7 @@
 package com.wdf.fudoc.apidoc.data;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.module.Module;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +20,6 @@ public class FuDocData {
      * 当前点击的事件对象
      */
     private AnActionEvent event;
+
+    private Module module;
 }

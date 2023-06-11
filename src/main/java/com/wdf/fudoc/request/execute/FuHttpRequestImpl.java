@@ -1,9 +1,22 @@
 package com.wdf.fudoc.request.execute;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.request.HttpCallback;
+import com.wdf.fudoc.request.js.JsExecutor;
+import com.wdf.fudoc.request.js.context.FuContext;
 import com.wdf.fudoc.request.manager.FuRequestManager;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 发起http请求实现类
@@ -54,6 +67,15 @@ public class FuHttpRequestImpl implements FuHttpRequest {
         this.requestStatus = true;
         //执行发起请求前置逻辑
         httpCallback.doSendBefore(this.fuHttpRequestData);
+        //执行前置脚本
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
+        List<GlobalPreScriptPO> preScriptPOList;
+        Module module = FuDocDataContent.getFuDocData().getModule();
+        if (Objects.nonNull(module) && Objects.nonNull(fuRequestConfigPO) && CollectionUtils.isNotEmpty(preScriptPOList = fuRequestConfigPO.getPreScriptList(module.getName()))) {
+            for (GlobalPreScriptPO globalPreScriptPO : preScriptPOList) {
+                JsExecutor.execute(new FuContext(project, fuRequestConfigPO, globalPreScriptPO));
+            }
+        }
         //发起请求
         HttpExecutor.execute(this.fuHttpRequestData);
         //执行请求后置逻辑

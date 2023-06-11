@@ -4,16 +4,23 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
+import com.google.common.collect.Lists;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
+import com.wdf.fudoc.apidoc.data.FuDocDataContent;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,8 +35,17 @@ public class FuHttpRequestBuilder {
      */
     private final HttpRequest httpRequest;
 
-    public FuHttpRequestBuilder(FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest) {
+    private final Project project;
+
+    private final FuRequestConfigPO configPO;
+
+    private final Module module;
+
+    public FuHttpRequestBuilder(Project project, FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest) {
         this.httpRequest = httpRequest;
+        this.project = project;
+        this.configPO = FuRequestConfigStorageFactory.get(project).readData();
+        this.module = FuDocDataContent.getFuDocData().getModule();
         FuRequestData request = fuHttpRequestData.getRequest();
         //添加请求头
         this.addHeader(this.httpRequest, request.getHeaders());
@@ -38,6 +54,7 @@ public class FuHttpRequestBuilder {
             body = new FuRequestBodyData();
             request.setBody(body);
         }
+
         //添加GET请求
         addForm(request.getParams(), false);
         //添加form-data
@@ -56,7 +73,7 @@ public class FuHttpRequestBuilder {
     private void addForm(List<KeyValueTableBO> formDataList, boolean isMultiFile) {
         if (CollectionUtils.isNotEmpty(formDataList)) {
             for (KeyValueTableBO keyValueTableBO : formDataList) {
-                if(Objects.isNull(keyValueTableBO.getSelect()) || !keyValueTableBO.getSelect()){
+                if (Objects.isNull(keyValueTableBO.getSelect()) || !keyValueTableBO.getSelect()) {
                     continue;
                 }
                 String requestParamType = keyValueTableBO.getRequestParamType();
@@ -65,10 +82,20 @@ public class FuHttpRequestBuilder {
                     byte[] bytes = FileUtil.readBytes(file);
                     this.httpRequest.form(keyValueTableBO.getKey(), bytes, file.getName());
                 } else {
-                    this.httpRequest.form(keyValueTableBO.getKey(), keyValueTableBO.getValue());
+                    this.httpRequest.form(keyValueTableBO.getKey(), formatValue(keyValueTableBO.getValue(), false));
                 }
             }
         }
+    }
+
+
+    private String formatValue(String value, boolean isHeader) {
+        if (StringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}") && Objects.nonNull(module)) {
+            String name = StringUtils.substringBetween(value, "{{", "}}");
+            List<String> scope = Lists.newArrayList(module.getName());
+            return isHeader ? configPO.header(name, scope) : configPO.variable(name, scope);
+        }
+        return value;
     }
 
 
@@ -85,11 +112,11 @@ public class FuHttpRequestBuilder {
         }
     }
 
-    public static FuHttpRequestBuilder getInstance(FuHttpRequestData fuHttpRequestData) {
+    public static FuHttpRequestBuilder getInstance(Project project, FuHttpRequestData fuHttpRequestData) {
         FuRequestData request = fuHttpRequestData.getRequest();
         String requestUrl = request.getRequestUrl();
         RequestType requestType = request.getRequestType();
-        return new FuHttpRequestBuilder(fuHttpRequestData, createHttpRequest(requestType, requestUrl));
+        return new FuHttpRequestBuilder(project, fuHttpRequestData, createHttpRequest(requestType, requestUrl));
     }
 
     public HttpRequest builder() {
@@ -105,7 +132,7 @@ public class FuHttpRequestBuilder {
      */
     private void addHeader(HttpRequest httpRequest, List<KeyValueTableBO> headers) {
         if (CollectionUtils.isNotEmpty(headers)) {
-            headers.stream().filter(KeyValueTableBO::getSelect).forEach(data -> httpRequest.header(data.getKey(), data.getValue()));
+            headers.stream().filter(KeyValueTableBO::getSelect).forEach(data -> httpRequest.header(data.getKey(), formatValue(data.getValue(), true)));
         }
     }
 

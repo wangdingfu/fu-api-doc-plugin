@@ -1,6 +1,8 @@
 package com.wdf.fudoc.common;
 
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
@@ -75,7 +77,8 @@ public abstract class AbstractClassAction extends AnAction {
         //获取当前操作的类
         PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
         //向全局上下文中添加Project内容
-        FuDocDataContent.setData(FuDocData.builder().event(e).build());
+        Module module = ModuleUtil.findModuleForPsiElement(psiClass);
+        FuDocDataContent.setData(FuDocData.builder().event(e).module(module).build());
         FuDocContext fuDocContext = new FuDocContext();
         fuDocContext.setSettingData(FuDocSetting.getSettingData());
         fuDocContext.setTargetElement(targetElement);
