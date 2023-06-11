@@ -14,9 +14,11 @@ import com.wdf.fudoc.components.action.FuFiltersAction;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuFiltersListener;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
+import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.ResourceUtils;
 import icons.FuDocIcons;
@@ -105,6 +107,17 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
     @Override
     public void doAction(ScriptCmd scriptCmd) {
         switchPanel();
+        if (ScriptCmd.HTTP_CONFIG.equals(scriptCmd)) {
+            if (Objects.isNull(this.fuHttpRequestData)) {
+                this.fuHttpRequestData = FuHttpRequestDataFactory.buildEmptyHttpRequestData();
+            }
+            //弹框配置http请求
+            HttpDialogView httpDialogView = new HttpDialogView(project, null, this.fuHttpRequestData, true);
+            if (httpDialogView.showAndGet()) {
+                httpDialogView.doSendBefore(this.fuHttpRequestData);
+            }
+            return;
+        }
         String cmd = scriptCmd.getCmd();
         String content = ResourceUtils.readResource("template/auth/" + cmd);
         if (scriptCmd.isReset()) {

@@ -47,6 +47,11 @@ public class FuTabBuilder {
         return this;
     }
 
+
+    public void revalidate(){
+        this.tabs.revalidateAndRepaint();
+    }
+
     public void removeTab(String text){
         TabInfo remove = tabInfoMap.remove(text);
         if(Objects.nonNull(remove)){

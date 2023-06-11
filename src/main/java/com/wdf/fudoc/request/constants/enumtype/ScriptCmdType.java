@@ -10,7 +10,8 @@ import lombok.Getter;
 public enum ScriptCmdType {
     DEMO("demo","脚本编写教程",1),
     SCRIPT_DEMO("script_demo","设置示例",2),
-    LOG("log","日志打印",3),
+    HTTP("http","http请求",3),
+    LOG("log","日志打印",4),
     ;
 
     private final String type;

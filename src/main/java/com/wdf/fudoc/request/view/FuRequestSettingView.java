@@ -179,6 +179,7 @@ public class FuRequestSettingView extends DialogWrapper {
                 if (isDelete) {
                     fuTabBuilder.select(GlobalPreScriptTab.TITLE);
                     fuTabBuilder.removeTab(text);
+                    fuTabBuilder.revalidate();
                     Map<String, GlobalPreScriptPO> preScriptMap = configPO.getPreScriptMap();
                     preScriptMap.remove(text);
                 }
