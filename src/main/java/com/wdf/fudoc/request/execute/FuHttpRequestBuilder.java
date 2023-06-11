@@ -82,18 +82,18 @@ public class FuHttpRequestBuilder {
                     byte[] bytes = FileUtil.readBytes(file);
                     this.httpRequest.form(keyValueTableBO.getKey(), bytes, file.getName());
                 } else {
-                    this.httpRequest.form(keyValueTableBO.getKey(), formatValue(keyValueTableBO.getValue(), false));
+                    this.httpRequest.form(keyValueTableBO.getKey(), formatValue(keyValueTableBO.getValue()));
                 }
             }
         }
     }
 
 
-    private String formatValue(String value, boolean isHeader) {
+    private String formatValue(String value) {
         if (StringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}") && Objects.nonNull(module)) {
             String name = StringUtils.substringBetween(value, "{{", "}}");
             List<String> scope = Lists.newArrayList(module.getName());
-            return isHeader ? configPO.header(name, scope) : configPO.variable(name, scope);
+            return configPO.variable(name, scope);
         }
         return value;
     }
@@ -132,7 +132,7 @@ public class FuHttpRequestBuilder {
      */
     private void addHeader(HttpRequest httpRequest, List<KeyValueTableBO> headers) {
         if (CollectionUtils.isNotEmpty(headers)) {
-            headers.stream().filter(KeyValueTableBO::getSelect).forEach(data -> httpRequest.header(data.getKey(), formatValue(data.getValue(), true)));
+            headers.stream().filter(KeyValueTableBO::getSelect).forEach(data -> httpRequest.header(data.getKey(), formatValue(data.getValue())));
         }
     }
 
