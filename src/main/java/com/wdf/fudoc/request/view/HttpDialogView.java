@@ -1,24 +1,25 @@
 package com.wdf.fudoc.request.view;
 
 import com.intellij.find.editorHeaderActions.Utils;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.GuiUtils;
 import com.intellij.ui.JBColor;
-import com.intellij.ui.WindowMoveListener;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
+import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
+import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
-import com.wdf.fudoc.request.view.widget.HttpToolBarWidget;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +30,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 发起http请求的窗口
@@ -36,7 +38,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 18:06:24
  */
-public class HttpDialogView extends DialogWrapper implements HttpCallback {
+public class HttpDialogView extends DialogWrapper implements HttpCallback, SendHttpListener {
 
     /**
      * 根面板
@@ -80,6 +82,15 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
     private final boolean isSave;
 
 
+    @Getter
+    private ProgressIndicator progressIndicator;
+
+    private final FuHttpRequestData httpRequestData;
+
+    @Getter
+    private final AtomicBoolean sendStatus = new AtomicBoolean(false);
+
+
     public HttpDialogView(Project project, PsiElement psiElement, FuHttpRequestData httpRequestData) {
         this(project, psiElement, httpRequestData, false);
     }
@@ -88,6 +99,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         super(project, true);
         this.project = project;
         this.isSave = isSave;
+        this.httpRequestData = httpRequestData;
         this.psiElement = psiElement;
         this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance());
         this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance());
@@ -218,5 +230,22 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback {
         centerPanel.setMinimumSize(new Dimension(700, 440));
         centerPanel.setPreferredSize(new Dimension(700, 440));
         return centerPanel;
+    }
+
+    @Override
+    public void doSendHttp() {
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "execute " + httpRequestData.getApiName()) {
+            @Override
+            public void run(@NotNull ProgressIndicator indicator) {
+                sendStatus.set(true);
+                progressIndicator = indicator;
+                doSendBefore(httpRequestData);
+                //发起请求
+                HttpApiExecutor.doSendRequest(project, httpRequestData);
+                doSendAfter(httpRequestData);
+                progressIndicator = null;
+                sendStatus.set(false);
+            }
+        });
     }
 }

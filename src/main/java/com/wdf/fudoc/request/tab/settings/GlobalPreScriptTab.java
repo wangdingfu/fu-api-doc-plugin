@@ -132,6 +132,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                         ProgressManager.getInstance().run(new Task.Backgroundable(project,title) {
                             @Override
                             public void run(@NotNull ProgressIndicator indicator) {
+                                progressIndicator = indicator;
                                 FuRequestConfigPO configPO = FuRequestConfigStorageFactory.get(project).readData();
                                 saveData(configPO);
                                 GlobalPreScriptPO globalPreScriptPO = configPO.getPreScriptMap().get(title);
@@ -140,6 +141,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                                     FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.REQUEST_SCRIPT_NO));
                                 }
                                 JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO));
+                                progressIndicator = null;
                                 System.out.println("执行js完成");
                             }
                         });

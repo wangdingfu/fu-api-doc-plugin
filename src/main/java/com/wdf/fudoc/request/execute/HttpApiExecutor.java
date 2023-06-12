@@ -1,10 +1,19 @@
 package com.wdf.fudoc.request.execute;
 
-import cn.hutool.core.thread.ThreadUtil;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.request.HttpCallback;
-import com.wdf.fudoc.request.global.FuRequest;
+import com.wdf.fudoc.request.js.JsExecutor;
+import com.wdf.fudoc.request.js.context.FuContext;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -18,14 +27,18 @@ public class HttpApiExecutor {
      *
      * @param project           当前项目
      * @param fuHttpRequestData 请求数据
-     * @param httpCallback      请求完毕后的回调
      */
-    public static void doSendRequest(Project project, FuHttpRequestData fuHttpRequestData, HttpCallback httpCallback) {
-        FuHttpRequest fuHttpRequest = new FuHttpRequestImpl(project, fuHttpRequestData);
-        //将当前请求添加到全局对象中
-        FuRequest.addRequest(project, fuHttpRequest);
-        //创建一个线程异步发起请求
-        ThreadUtil.execAsync(() -> fuHttpRequest.doSend(httpCallback));
-
+    public static void doSendRequest(Project project, FuHttpRequestData fuHttpRequestData) {
+        //执行前置脚本
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
+        List<GlobalPreScriptPO> preScriptPOList;
+        Module module = FuDocDataContent.getFuDocData().getModule();
+        if (Objects.nonNull(module) && Objects.nonNull(fuRequestConfigPO) && CollectionUtils.isNotEmpty(preScriptPOList = fuRequestConfigPO.getPreScriptList(module.getName()))) {
+            for (GlobalPreScriptPO globalPreScriptPO : preScriptPOList) {
+                JsExecutor.execute(new FuContext(project, fuRequestConfigPO, globalPreScriptPO));
+            }
+        }
+        //发起请求
+        HttpExecutor.execute(project, fuHttpRequestData);
     }
 }

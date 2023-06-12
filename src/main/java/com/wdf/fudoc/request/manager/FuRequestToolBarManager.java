@@ -2,10 +2,8 @@ package com.wdf.fudoc.request.manager;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -20,7 +18,9 @@ import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.request.configurable.FuRequestSettingConfigurable;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.constants.enumtype.RequestDialog;
+import com.wdf.fudoc.request.execute.FuHttpRequest;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
+import com.wdf.fudoc.request.global.FuRequest;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.view.FuRequestSettingView;
@@ -181,10 +181,30 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
         //添加请求状态显示按钮 支持终止请求
-        AnAction stopAction = actionManager.getAction(RequestConstants.ACTION_REQUEST_TOOLBAR_STOP);
-        if (Objects.nonNull(stopAction)) {
-            defaultActionGroup.add(stopAction);
-        }
+        defaultActionGroup.add(new AnAction("Stop", "Stop", AllIcons.General.Settings) {
+
+            @Override
+            public @NotNull ActionUpdateThread getActionUpdateThread() {
+                return ActionUpdateThread.BGT;
+            }
+
+            @Override
+            public void update(@NotNull AnActionEvent e) {
+                Presentation presentation = e.getPresentation();
+                presentation.setEnabled(httpDialogView.getSendStatus().get());
+            }
+
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                Presentation presentation = e.getPresentation();
+                presentation.setEnabled(false);
+                ProgressIndicator progressIndicator = httpDialogView.getProgressIndicator();
+                if (Objects.nonNull(progressIndicator)) {
+                    progressIndicator.stop();
+                }
+            }
+        });
+
 
         //添加设置按钮
         defaultActionGroup.add(new AnAction("Setting", "Setting", AllIcons.General.Settings) {
