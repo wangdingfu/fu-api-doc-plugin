@@ -7,13 +7,13 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiElement;
-import com.intellij.ui.GuiUtils;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
+import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
@@ -38,13 +38,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author wangdingfu
  * @date 2022-09-17 18:06:24
  */
-public class HttpDialogView extends DialogWrapper implements HttpCallback, SendHttpListener {
+public class HttpDialogView extends DialogWrapper implements HttpCallback, SendHttpListener, FuRequestCallback {
 
-    /**
-     * 根面板
-     */
-    @Getter
-    private JPanel rootPanel;
 
     /**
      * 当前项目
@@ -87,8 +82,11 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
 
     private final FuHttpRequestData httpRequestData;
 
-    @Getter
     private final AtomicBoolean sendStatus = new AtomicBoolean(false);
+
+    public boolean getSendStatus(){
+        return sendStatus.get();
+    }
 
 
     public HttpDialogView(Project project, PsiElement psiElement, FuHttpRequestData httpRequestData) {
@@ -168,26 +166,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         fuTabBuilder.addTab(this.responseTabView);
     }
 
-
-    /**
-     * 初始化当前页面
-     */
-    private void initUI() {
-        this.rootPanel = new JPanel(new BorderLayout());
-        this.rootPanel.setMinimumSize(new Dimension(700, 440));
-        this.rootPanel.setPreferredSize(new Dimension(700, 440));
-        // 设置边框
-        this.rootPanel.setBorder(JBUI.Borders.empty());
-        if (Objects.nonNull(this.psiElement)) {
-            //如果不是在代码中弹出的接口 则不需要添加工具栏面板
-            this.rootPanel.add(initToolBarUI(), BorderLayout.NORTH);
-        }
-        //添加请求相应主面板到跟面板上
-        this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
-        //添加状态信息展示面板到跟面板上
-        this.rootPanel.add(this.statusInfoPanel, BorderLayout.SOUTH);
-        GuiUtils.replaceJSplitPaneWithIDEASplitter(this.rootPanel, true);
-    }
 
     /**
      * 初始化请求数据

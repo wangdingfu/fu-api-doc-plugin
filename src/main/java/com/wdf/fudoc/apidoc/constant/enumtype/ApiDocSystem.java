@@ -12,7 +12,9 @@ import lombok.Getter;
 public enum ApiDocSystem {
 
 
-    YAPI("yapi"), SHOW_DOC("showDoc"),
+    YAPI("yapi"),
+    SHOW_DOC("showDoc"),
+    API_FOX("apiFox"),
 
     ;
 

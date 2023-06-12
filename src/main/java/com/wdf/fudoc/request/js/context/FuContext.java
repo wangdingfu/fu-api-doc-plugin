@@ -65,7 +65,7 @@ public class FuContext {
             return StringUtils.EMPTY;
         }
         //发起请求
-        HttpExecutor.execute(fuHttpRequestData);
+        HttpExecutor.execute(project, fuHttpRequestData);
 
         FuResponseData response = fuHttpRequestData.getResponse();
         return response.getContent();

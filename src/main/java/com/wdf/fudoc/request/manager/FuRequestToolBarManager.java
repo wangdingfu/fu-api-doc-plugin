@@ -15,12 +15,8 @@ import com.wdf.fudoc.apidoc.sync.SyncFuDocExecutor;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.constant.UrlConstants;
-import com.wdf.fudoc.request.configurable.FuRequestSettingConfigurable;
-import com.wdf.fudoc.request.constants.RequestConstants;
-import com.wdf.fudoc.request.constants.enumtype.RequestDialog;
-import com.wdf.fudoc.request.execute.FuHttpRequest;
+import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
-import com.wdf.fudoc.request.global.FuRequest;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.view.FuRequestSettingView;
@@ -28,7 +24,6 @@ import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
-import com.wdf.fudoc.util.ShowSettingUtils;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,40 +38,18 @@ import java.util.function.BiConsumer;
  */
 public class FuRequestToolBarManager {
 
-    /**
-     * 【Fu Request】弹窗
-     */
-    private HttpDialogView httpDialogView;
-
-    /**
-     * IDEA工具栏窗体
-     */
-    private FuRequestWindow fuRequestWindow;
 
     /**
      * 【Fu Request】工具类分组
      */
-    private final DefaultActionGroup defaultActionGroup = new DefaultActionGroup();
+    private final DefaultActionGroup defaultActionGroup;
+
+    private final FuRequestCallback fuRequestCallback;
 
 
-    /**
-     * 请求窗体方式
-     */
-    private final RequestDialog requestDialog;
-
-    private final PsiElement psiElement;
-
-
-    public FuRequestToolBarManager(HttpDialogView httpDialogView) {
-        this.httpDialogView = httpDialogView;
-        this.requestDialog = RequestDialog.HTTP_DIALOG;
-        this.psiElement = httpDialogView.getPsiElement();
-    }
-
-    public FuRequestToolBarManager(FuRequestWindow fuRequestWindow) {
-        this.fuRequestWindow = fuRequestWindow;
-        this.requestDialog = RequestDialog.TOOL_WINDOW;
-        this.psiElement = fuRequestWindow.getPsiElement();
+    public FuRequestToolBarManager(FuRequestCallback fuRequestCallback) {
+        this.fuRequestCallback = fuRequestCallback;
+        this.defaultActionGroup = new DefaultActionGroup();
     }
 
     public static FuRequestToolBarManager getInstance(HttpDialogView httpDialogView) {
@@ -87,29 +60,16 @@ public class FuRequestToolBarManager {
         return new FuRequestToolBarManager(fuRequestWindow);
     }
 
-    public RequestTabView getRequestTabView() {
-        return RequestDialog.HTTP_DIALOG.equals(this.requestDialog)
-                ? this.httpDialogView.getRequestTabView()
-                : fuRequestWindow.getRequestTabView();
-    }
-
     /**
      * 初始化工具栏
      */
     public DefaultActionGroup initToolBar() {
-        if (RequestDialog.HTTP_DIALOG.equals(this.requestDialog)) {
-            addCommonAction(this.defaultActionGroup);
-
-        }
-        if (RequestDialog.TOOL_WINDOW.equals(this.requestDialog)) {
-            addCommonAction(this.defaultActionGroup);
-        }
-        return defaultActionGroup;
+        addCommonAction(this.defaultActionGroup);
+        return this.defaultActionGroup;
     }
 
 
     private void addCommonAction(DefaultActionGroup defaultActionGroup) {
-        ActionManager actionManager = ActionManager.getInstance();
 
 
         defaultActionGroup.addSeparator();
@@ -155,7 +115,7 @@ public class FuRequestToolBarManager {
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                RequestTabView requestTabView = getRequestTabView();
+                RequestTabView requestTabView = fuRequestCallback.getRequestTabView();
                 if (Objects.nonNull(requestTabView)) {
                     FuHttpRequestData fuHttpRequestData = requestTabView.getFuHttpRequestData();
                     requestTabView.doSendBefore(fuHttpRequestData);
@@ -173,7 +133,7 @@ public class FuRequestToolBarManager {
                 execute((fuDocContext, psiClass) -> {
                     FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(fuDocContext, psiClass);
                     if (Objects.nonNull(fuHttpRequestData)) {
-                        initData(fuHttpRequestData);
+                        fuRequestCallback.initData(fuHttpRequestData);
                     }
                 });
             }
@@ -191,14 +151,14 @@ public class FuRequestToolBarManager {
             @Override
             public void update(@NotNull AnActionEvent e) {
                 Presentation presentation = e.getPresentation();
-                presentation.setEnabled(httpDialogView.getSendStatus().get());
+                presentation.setEnabled(fuRequestCallback.getSendStatus());
             }
 
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 Presentation presentation = e.getPresentation();
                 presentation.setEnabled(false);
-                ProgressIndicator progressIndicator = httpDialogView.getProgressIndicator();
+                ProgressIndicator progressIndicator = fuRequestCallback.getProgressIndicator();
                 if (Objects.nonNull(progressIndicator)) {
                     progressIndicator.stop();
                 }
@@ -222,6 +182,10 @@ public class FuRequestToolBarManager {
         defaultActionGroup.add(new AnAction("定位到该方法", "(Alt+Q)", AllIcons.General.Locate) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
+                PsiElement psiElement = fuRequestCallback.getPsiElement();
+                if (Objects.isNull(psiElement)) {
+                    return;
+                }
                 PsiMethod targetMethod = PsiClassUtils.getTargetMethod(psiElement);
                 if (Objects.nonNull(targetMethod)) {
                     //跳转到该方法
@@ -246,6 +210,7 @@ public class FuRequestToolBarManager {
 
 
     private void execute(BiConsumer<FuDocContext, PsiClass> consumer) {
+        PsiElement psiElement = fuRequestCallback.getPsiElement();
         if (Objects.nonNull(psiElement) && Objects.nonNull(consumer)) {
             PsiMethod psiMethod = PsiClassUtils.getTargetMethod(psiElement);
             PsiClass psiClass = PsiClassUtils.getPsiClass(psiElement);
@@ -256,15 +221,6 @@ public class FuRequestToolBarManager {
             fuDocContext.setSettingData(FuDocSetting.getSettingData());
             fuDocContext.setTargetElement(psiElement);
             consumer.accept(fuDocContext, psiClass);
-        }
-    }
-
-
-    private void initData(FuHttpRequestData fuHttpRequestData) {
-        if (RequestDialog.HTTP_DIALOG.equals(this.requestDialog) && Objects.nonNull(this.httpDialogView)) {
-            this.httpDialogView.initData(fuHttpRequestData);
-        } else if (RequestDialog.TOOL_WINDOW.equals(this.requestDialog) && Objects.nonNull(this.fuRequestWindow)) {
-            this.fuRequestWindow.initData(fuHttpRequestData);
         }
     }
 

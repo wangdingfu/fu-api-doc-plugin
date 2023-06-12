@@ -35,6 +35,10 @@ public class FuDocSyncConfigData implements Serializable {
      */
     private ShowDocConfigData showDoc = new ShowDocConfigData();
 
+    /**
+     * ApiFox配置数据
+     */
+    private ApiFoxConfigData apiFox = new ApiFoxConfigData();
 
     /**
      * 初始化默认showDow和Yapi的配置
