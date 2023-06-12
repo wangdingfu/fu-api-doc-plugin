@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-12-31 22:07:46
  */
-public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy {
+public abstract class AbstractSyncFuDocStrategy implements SyncFuDocStrategy, SyncCategory {
 
     private static final String NOT_SYNC_API = FuDocMessageBundle.message(MessageConstants.NOT_SYNC_API);
 

@@ -11,6 +11,7 @@ import com.wdf.fudoc.components.bo.TreePathBO;
 import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
@@ -39,20 +40,16 @@ public class YapiConfigData extends BaseSyncConfigData {
     private String yapiPwd;
 
 
-
-
     @Override
     public List<ApiProjectDTO> getProjectConfigList(String moduleName) {
-        String basePath = ProjectUtils.getCurrentProjectPath();
-        return FuDocSyncProjectSetting.getYapiConfigList().stream().filter(f -> f.getProjectKeyList().contains(basePath)).map(m -> convert(m, moduleName))
+        return FuDocSyncProjectSetting.getYapiConfigList().stream().map(m -> convert(m, moduleName))
                 //过滤没匹配上的module sort=0则是没有匹配上
                 .filter(f -> YesOrNo.NO.getCode() != f.getSort()).sorted(Comparator.comparing(ApiProjectDTO::getSort)).collect(Collectors.toList());
     }
 
     @Override
     public boolean isExistsConfig() {
-        String basePath = ProjectUtils.getCurrentProjectPath();
-        return FuDocSyncProjectSetting.getYapiConfigList().stream().anyMatch(a -> a.getProjectKeyList().contains(basePath));
+        return CollectionUtils.isNotEmpty(FuDocSyncProjectSetting.getYapiConfigList());
     }
 
     @Override

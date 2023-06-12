@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.FuActionListener;
+import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
@@ -23,7 +24,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2023-02-20 23:54:03
  */
-public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfigData> {
+public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfigData>, SendHttpListener {
 
     @Getter
     private final JPanel rootPanel;
@@ -112,4 +113,8 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
         return data.getHttpRequestData();
     }
 
+    @Override
+    public void doSendHttp() {
+
+    }
 }

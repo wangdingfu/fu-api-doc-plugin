@@ -38,12 +38,6 @@ public class YApiProjectTableData implements Serializable {
      */
     private String projectName;
 
-    /**
-     * 项目标识-ide中打开的项目代码
-     * 可能会有多个项目关联接口文档的项目
-     */
-    private List<String> projectKeyList = Lists.newArrayList();
-
 
     /**
      * 项目范围
