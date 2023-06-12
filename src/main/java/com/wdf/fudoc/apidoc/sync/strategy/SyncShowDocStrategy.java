@@ -1,13 +1,9 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
-import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
-import com.wdf.fudoc.apidoc.sync.data.SyncApiData;
-import com.wdf.fudoc.apidoc.sync.dto.AddApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
-import com.wdf.fudoc.apidoc.sync.dto.ApiStructureTreeDTO;
 
 import java.util.List;
 
@@ -17,7 +13,7 @@ import java.util.List;
  * @author wangdingfu
  * @date 2022-12-31 22:48:07
  */
-public class SyncShowDocStrategy extends AbstractSyncFuDocStrategy {
+public class SyncShowDocStrategy extends AbstractSyncSingleApiStrategy {
 
 
     @Override

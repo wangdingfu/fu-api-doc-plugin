@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * @date 2022-12-31 22:47:39
  */
 @Slf4j
-public class SyncToYApiStrategy extends AbstractSyncFuDocStrategy {
+public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
 
 
     @Override

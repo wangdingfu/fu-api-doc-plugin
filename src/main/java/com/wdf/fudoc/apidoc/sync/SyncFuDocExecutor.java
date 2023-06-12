@@ -6,6 +6,7 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncFuDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncShowDocStrategy;
+import com.wdf.fudoc.apidoc.sync.strategy.SyncToApiFoxStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncToYApiStrategy;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.notification.FuDocNotification;
@@ -26,6 +27,7 @@ public class SyncFuDocExecutor {
     static {
         syncFuDocMap.put(ApiDocSystem.YAPI, ServiceHelper.getService(SyncToYApiStrategy.class));
         syncFuDocMap.put(ApiDocSystem.SHOW_DOC, ServiceHelper.getService(SyncShowDocStrategy.class));
+        syncFuDocMap.put(ApiDocSystem.API_FOX, ServiceHelper.getService(SyncToApiFoxStrategy.class));
     }
 
 

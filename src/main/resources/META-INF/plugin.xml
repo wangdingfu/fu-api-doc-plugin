@@ -44,6 +44,7 @@
 
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.sync.strategy.SyncToYApiStrategy"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.sync.strategy.SyncShowDocStrategy"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.sync.strategy.SyncToApiFoxStrategy"/>
 
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.mock.FuDocObjectJMockData"/>
 
