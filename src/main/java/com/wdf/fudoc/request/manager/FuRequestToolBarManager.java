@@ -141,7 +141,7 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
         //添加请求状态显示按钮 支持终止请求
-        defaultActionGroup.add(new AnAction("Stop", "Stop", AllIcons.General.Settings) {
+        defaultActionGroup.add(new AnAction("Stop", "Stop", AllIcons.Actions.Suspend) {
 
             @Override
             public @NotNull ActionUpdateThread getActionUpdateThread() {
