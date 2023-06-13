@@ -4,6 +4,7 @@ import cn.hutool.core.util.NumberUtil;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.*;
+import com.wdf.fudoc.apidoc.helper.JsonSchemaHelper;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
@@ -132,7 +133,7 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
         yApiSaveDTO.setReqBodyType(Objects.isNull(contentType) ? ContentType.FORM_DATA.getDesc() : contentType.getDesc());
         if (MockResultType.JSON.getCode().equals(fuDocItemData.getRequestExampleType())) {
             //请求内容为JSON格式 填充json schema
-            yApiSaveDTO.setReqBodyOther(buildJsonSchema(fuDocItemData.getRequestParams()));
+            yApiSaveDTO.setReqBodyOther(JsonSchemaHelper.buildJsonSchemaStr(fuDocItemData.getRequestParams()));
             yApiSaveDTO.setReqBodyIsJsonSchema(true);
         } else {
             //请求内容不是JSON(目前暂未考虑raw格式) 如果是GET请求 填充成查询参数 如果不是则填充到form参数中
@@ -149,7 +150,7 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
         //设置请求头
         yApiSaveDTO.setReqHeaders(Lists.newArrayList());
         //响应数据的json schema
-        yApiSaveDTO.setResBody(buildJsonSchema(fuDocItemData.getResponseParams()));
+        yApiSaveDTO.setResBody(JsonSchemaHelper.buildJsonSchemaStr(fuDocItemData.getResponseParams()));
         yApiSaveDTO.setTitle(fuDocItemData.getTitle());
 
         //设置markdown内容
@@ -211,82 +212,5 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
     }
 
 
-    /**
-     * 构建json schema
-     *
-     * @param fuDocParamDataList 接口文档参数集合
-     * @return json schema
-     */
-    private String buildJsonSchema(List<FuDocParamData> fuDocParamDataList) {
-        YApiJsonSchema jsonSchema = new YApiJsonSchema();
-        jsonSchema.setType("object");
-        if (CollectionUtils.isNotEmpty(fuDocParamDataList)) {
-            MapListUtil<String, FuDocParamData> instance = MapListUtil.getInstance(fuDocParamDataList, FuDocParamData::getParentParamNo);
-            YApiJsonSchema yApiJsonSchema = buildProperties(instance.get(FuDocConstants.ROOT), instance);
-            jsonSchema.setProperties(yApiJsonSchema.getProperties());
-            jsonSchema.setRequired(yApiJsonSchema.getRequired());
-        }
-        return JsonUtil.toJson(jsonSchema);
-    }
-
-
-    /**
-     * 递归遍历json schema
-     *
-     * @param fuDocParamData 当前处理的接口参数
-     * @param instance       所有的接口参数
-     * @return 当前参数的json schema
-     */
-    private YApiJsonSchema buildJsonSchema(FuDocParamData fuDocParamData, MapListUtil<String, FuDocParamData> instance) {
-        YApiJsonSchema jsonSchema = new YApiJsonSchema();
-        String paramType = fuDocParamData.getParamType();
-        if ("object".equals(paramType)) {
-            //对象
-            YApiJsonSchema yApiJsonSchema = buildProperties(instance.get(fuDocParamData.getParamNo()), instance);
-            jsonSchema.setProperties(yApiJsonSchema.getProperties());
-            jsonSchema.setRequired(yApiJsonSchema.getRequired());
-        } else if ("array".equals(paramType)) {
-            //组装items
-            FuDocParamData item = new FuDocParamData();
-            item.setParamNo(fuDocParamData.getParamNo());
-            item.setParamDesc(fuDocParamData.getParamDesc());
-            item.setParamValue(fuDocParamData.getParamValue());
-            item.setParamType(fuDocParamData.getChildParamType());
-            jsonSchema.setItems(buildJsonSchema(item, instance));
-        } else {
-            String paramValue = fuDocParamData.getParamValue();
-            if (StringUtils.isNotBlank(paramValue)) {
-                jsonSchema.setMock(new YApiMock(paramValue));
-            }
-        }
-        jsonSchema.setType(paramType);
-        jsonSchema.setDescription(fuDocParamData.getParamDesc());
-        return jsonSchema;
-    }
-
-
-    /**
-     * 构建一个对象下所有的参数 将这个对象构建出一个json schema
-     *
-     * @param childList 指定对象下所有的参数字段
-     * @param instance  所有的参数
-     * @return 指定对象的字段属性和是否必填
-     */
-    private YApiJsonSchema buildProperties(List<FuDocParamData> childList, MapListUtil<String, FuDocParamData> instance) {
-        YApiJsonSchema result = new YApiJsonSchema();
-        List<String> required = Lists.newArrayList();
-        Map<String, YApiJsonSchema> properties = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(childList)) {
-            childList.forEach(f -> {
-                properties.put(f.getParamName(), buildJsonSchema(f, instance));
-                if (YesOrNo.YES.getDesc().equals(f.getParamRequire())) {
-                    required.add(f.getParamName());
-                }
-            });
-        }
-        result.setProperties(properties);
-        result.setRequired(required);
-        return result;
-    }
 
 }

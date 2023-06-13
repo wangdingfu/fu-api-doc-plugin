@@ -7,11 +7,16 @@ import java.util.Map;
 
 /**
  * @author wangdingfu
- * @date 2023-06-12 18:15:24
+ * @date 2023-06-13 18:42:06
  */
 @Getter
 @Setter
-public class OpenApiRequestBody {
+public class OpenApiResponseDTO {
+
+    /**
+     * 响应描述
+     */
+    private String description;
 
     /**
      * 接口请求body

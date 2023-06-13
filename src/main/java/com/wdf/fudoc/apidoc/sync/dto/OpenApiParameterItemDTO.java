@@ -17,7 +17,7 @@ public class OpenApiParameterItemDTO {
     private String name;
 
     /**
-     *
+     * 参数位置，可以是 path、query、header、cookie
      */
     private String in;
 
@@ -39,5 +39,5 @@ public class OpenApiParameterItemDTO {
     /**
      * 参数格式
      */
-    private OpenApiItemDTO schema;
+    private YApiJsonSchema schema;
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wangdingfu
@@ -50,4 +51,9 @@ public class OpenApiItemDTO {
      * 请求体数据
      */
     private OpenApiRequestBody requestBody;
+
+    /**
+     * 响应结果
+     */
+    private Map<String, OpenApiResponseDTO> responses;
 }

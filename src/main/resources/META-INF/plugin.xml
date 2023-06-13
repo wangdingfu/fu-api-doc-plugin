@@ -49,6 +49,7 @@
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.mock.FuDocObjectJMockData"/>
 
         <applicationService serviceInterface="com.wdf.fudoc.apidoc.sync.service.YApiService" serviceImplementation="com.wdf.fudoc.apidoc.sync.service.YApiServiceImpl"/>
+        <applicationService serviceInterface="com.wdf.fudoc.apidoc.sync.service.ApiFoxService" serviceImplementation="com.wdf.fudoc.apidoc.sync.service.ApiFoxServiceImpl"/>
 
         <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSettingConfigurable"
                              id="fu.doc.setting"
