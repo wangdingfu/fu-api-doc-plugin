@@ -16,6 +16,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FList;
 import com.intellij.util.indexing.FindSymbolParameters;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
+import com.wdf.fudoc.util.MatchUrlUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +31,6 @@ import java.util.Objects;
  * @date 2023-05-25 20:24:08
  */
 public class FuApiMatcher {
-    private static final String UNIVERSAL_SEPARATOR = "\u0000";
 
     private final Project project;
 
@@ -43,11 +43,11 @@ public class FuApiMatcher {
 
     public boolean matchApi(String matchText, ProgressIndicator progressIndicator, Processor<? super FoundItemDescriptor<ApiNavigationItem>> consumer) {
         List<Pair<ApiNavigationItem, MatchResult>> matchApiList = new SmartList<>();
-        MinusculeMatcher fullMatcher = getFullMatcher(createParameters(matchText));
+        MinusculeMatcher fullMatcher = MatchUrlUtils.getFullMatcher(project, matchText);
 
         for (ApiNavigationItem apiNavigationItem : apiList) {
             progressIndicator.checkCanceled();
-            MatchResult qualifiedResult = matchApi(fullMatcher, apiNavigationItem);
+            MatchResult qualifiedResult = MatchUrlUtils.matchApi(fullMatcher, apiNavigationItem);
             if (qualifiedResult != null) {
                 matchApiList.add(Pair.create(apiNavigationItem, qualifiedResult));
             }
@@ -67,50 +67,4 @@ public class FuApiMatcher {
     }
 
 
-    public FindSymbolParameters createParameters(String matchText) {
-        GlobalSearchScope searchScope = FindSymbolParameters.searchScopeFor(project, true);
-        return new FindSymbolParameters(matchText, matchText, searchScope);
-    }
-
-
-    public static MinusculeMatcher getFullMatcher(FindSymbolParameters parameters) {
-        return NameUtil.buildMatcher(buildFullPattern(parameters.getCompletePattern()), NameUtil.MatchingCaseSensitivity.NONE);
-    }
-
-
-    private static String buildFullPattern(String matchText) {
-        String fullMatchText = "*" + matchText;
-        for (String separator : getSeparators()) {
-            fullMatchText = StringUtil.replace(fullMatchText, separator, "*" + UNIVERSAL_SEPARATOR + "*");
-        }
-        return fullMatchText;
-    }
-
-
-    public static MatchResult matchApi(MinusculeMatcher fullMatcher, @NotNull ApiNavigationItem item) {
-        String url = item.getUrl();
-        if (StringUtils.isBlank(url)) {
-            return null;
-        }
-        for (String separator : getSeparators()) {
-            url = StringUtil.replace(url, separator, UNIVERSAL_SEPARATOR);
-        }
-        MatchResult matchResult = matchName(fullMatcher, url);
-        String rightText = item.getRightText();
-        if (Objects.isNull(matchResult) && StringUtils.isNotBlank(rightText)) {
-            matchResult = matchName(fullMatcher, rightText);
-        }
-        return matchResult;
-    }
-
-
-    @Nullable
-    private static MatchResult matchName(@NotNull MinusculeMatcher matcher, @NotNull String name) {
-        FList<TextRange> fragments = matcher.matchingFragments(name);
-        return fragments != null ? new MatchResult(name, matcher.matchingDegree(name, false, fragments), MinusculeMatcher.isStartMatch(fragments)) : null;
-    }
-
-    public static String @NotNull [] getSeparators() {
-        return new String[]{"/", "?"};
-    }
 }

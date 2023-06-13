@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex;
 import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -19,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -76,7 +78,7 @@ public class PsiClassUtils {
             }
             //获取方法体标识mapping注解上的url 例如GetMapping PostMapping RequestMapping
             List<String> urlList = findMappingUrlList(psiMethod);
-            if (CollectionUtils.isNotEmpty(urlList) && urlList.contains(mappingUrl)) {
+            if (CollectionUtils.isNotEmpty(urlList) && MatchUrlUtils.matchUrl(urlList, mappingUrl)) {
                 return psiMethod;
             }
         }
@@ -84,7 +86,7 @@ public class PsiClassUtils {
     }
 
 
-    public static List<String> findMappingUrlList(PsiMethod psiMethod){
+    public static List<String> findMappingUrlList(PsiMethod psiMethod) {
         String mapping = FuRequestUtils.getMapping(psiMethod);
         if (StringUtils.isBlank(mapping)) {
             return null;
@@ -136,6 +138,19 @@ public class PsiClassUtils {
                 PsiClass superClass = PsiUtil.resolveClassInType(superType);
                 if (Objects.nonNull(superClass) && !superClass.isInterface() && !superClass.isEnum()) {
                     return new PsiClassTypeBO(superClass, superType);
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public static PsiClass getController(Project project, String controllerName) {
+        Collection<PsiClass> psiClasses = JavaShortClassNameIndex.getInstance().get(controllerName, project, GlobalSearchScope.allScope(project));
+        if (CollectionUtils.isNotEmpty(psiClasses)) {
+            for (PsiClass psiClass : psiClasses) {
+                if (FuDocUtils.isController(psiClass)) {
+                    return psiClass;
                 }
             }
         }

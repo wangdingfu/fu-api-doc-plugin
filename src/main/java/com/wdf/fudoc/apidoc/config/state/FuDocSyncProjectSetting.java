@@ -20,22 +20,22 @@ import java.util.Objects;
  */
 @Data
 @State(name = "syncConfig", storages = {@Storage("fuApiSyncConfig.xml")})
-public class FuDocSyncProjectSetting  implements PersistentStateComponent<SyncApiConfigData> {
+public class FuDocSyncProjectSetting implements PersistentStateComponent<SyncApiConfigData> {
 
-    private SyncApiConfigData syncApiConfigData;
+    private SyncApiConfigData syncApiConfigData = new SyncApiConfigData();
 
     public static FuDocSyncProjectSetting getInstance() {
         Project currProject = ProjectUtils.getCurrProject();
         return currProject.getService(FuDocSyncProjectSetting.class);
     }
 
-    public static List<YApiProjectTableData> getYapiConfigList(){
+    public static List<YApiProjectTableData> getYapiConfigList() {
         return getInstance().getState().getYapiConfigList();
     }
 
     @Override
     public SyncApiConfigData getState() {
-        return Objects.isNull(this.syncApiConfigData) ? new SyncApiConfigData() : this.syncApiConfigData;
+        return this.syncApiConfigData;
     }
 
     @Override

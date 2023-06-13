@@ -15,6 +15,7 @@ public interface HttpCallback {
      */
     void initData(FuHttpRequestData httpRequestData);
 
+
     /**
      * 发起请求前置方法
      *

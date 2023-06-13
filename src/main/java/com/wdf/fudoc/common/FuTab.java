@@ -38,4 +38,12 @@ public interface FuTab extends TabsListener {
 
     }
 
+
+    /**
+     * 离开当前tab
+     */
+    default void moveOff(){
+
+    }
+
 }

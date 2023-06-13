@@ -12,6 +12,7 @@ import com.wdf.fudoc.apidoc.sync.renderer.SyncStatusCellRenderer;
 import com.wdf.fudoc.components.ButtonTableCellEditor;
 import com.wdf.fudoc.components.bo.*;
 import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
+import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.pojo.CommonHeader;
 
 import javax.swing.table.DefaultTableCellRenderer;
@@ -80,12 +81,12 @@ public class FuTableColumnFactory {
     /**
      * 过滤属性table列
      */
-    public static List<Column> commonHeaders() {
+    public static List<Column> globalConfig(String key, String value) {
         List<Column> columns = Lists.newArrayList();
-        columns.add(new BooleanColumn<>("", CommonHeader::getSelect, CommonHeader::setSelect));
-        columns.add(new StringColumn<>("请求头KEY", CommonHeader::getKey, CommonHeader::setKey));
-        columns.add(new StringColumn<>("请求头VALUE", CommonHeader::getValue, CommonHeader::setValue));
-        columns.add(new ComboBoxColumn<>("作用范围", CommonHeader::getScope, CommonHeader::setScope, HeaderScope.scopeList()));
+        columns.add(new BooleanColumn<>("", GlobalKeyValuePO::getSelect, GlobalKeyValuePO::setSelect));
+        columns.add(new StringColumn<>(key, GlobalKeyValuePO::getKey, GlobalKeyValuePO::setKey));
+        columns.add(new StringColumn<>(value, GlobalKeyValuePO::getValue, GlobalKeyValuePO::setValue));
+        columns.add(new TreeModuleComboBoxColumn<>("作用范围", GlobalKeyValuePO::getScope, GlobalKeyValuePO::setScope));
         return columns;
     }
 
@@ -127,7 +128,7 @@ public class FuTableColumnFactory {
         columns.add(new StringColumn<>("项目名称", SyncApiResultDTO::getProjectName, SyncApiResultDTO::setProjectName));
         columns.add(new StringColumn<>("接口分类名称", SyncApiResultDTO::getCategoryName, SyncApiResultDTO::setCategoryName));
         columns.add(new StringColumn<>("同步状态", new SyncStatusCellRenderer(), SyncApiResultDTO::getSyncStatus, SyncApiResultDTO::setSyncStatus));
-        if(isShowFailMessage){
+        if (isShowFailMessage) {
             columns.add(new StringColumn<>("失败信息", SyncApiResultDTO::getErrorMsg, SyncApiResultDTO::setErrorMsg));
         }
         return columns;

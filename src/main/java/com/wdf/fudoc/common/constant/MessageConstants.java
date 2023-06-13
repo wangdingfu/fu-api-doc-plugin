@@ -91,4 +91,8 @@ public interface MessageConstants {
     String SEARCH_API_DESCRIPTION = "fudoc.api.search.description";
 
 
+
+    String REQUEST_SCRIPT_NO = "fudoc.request.script.no";
+
+
 }

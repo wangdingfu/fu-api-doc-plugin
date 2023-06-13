@@ -36,4 +36,7 @@ public interface FuDocField {
     boolean hasProperty(String name);
 
 
+    String getParamType();
+
+
 }

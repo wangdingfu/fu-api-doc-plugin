@@ -1,9 +1,10 @@
 package com.wdf.fudoc.util;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.date.format.FastDateFormat;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -11,15 +12,6 @@ import java.util.Objects;
  * @date 2023-05-26 18:53:38
  */
 public class TimeFormatUtils {
-
-    /**
-     * 标准时间格式：HH:mm
-     */
-    public static final String NORM_TIME_PATTERN = "HH:mm";
-    /**
-     * 标准时间格式 {@link FastDateFormat}：HH:mm
-     */
-    public static final FastDateFormat NORM_TIME_FORMAT = FastDateFormat.getInstance(NORM_TIME_PATTERN);
 
     private static final Long ONE_HOUR = 3600L;
     private static final Long THREE_HOUR = 10800L;
@@ -48,7 +40,15 @@ public class TimeFormatUtils {
             Long hour = diffTime / ONE_HOUR;
             return hour + " hours ago";
         } else if (diffTime < ONE_DAY) {
-            return "today " + NORM_TIME_FORMAT.format(time);
+            DateTime endOfDay = DateUtil.endOfDay(new Date(time * 1000));
+            long endDay = endOfDay.toTimestamp().getTime() / 1000;
+            String day = currentSeconds < endDay ? "today" : "yesterday";
+            DateTime dateTime = DateTime.of(time * 1000);
+            int hour = dateTime.hour(true);
+            int minute = dateTime.minute();
+            String hourStr = hour < 10 ? "0" + hour : String.valueOf(hour);
+            String minuteStr = minute < 10 ? "0" + minute : String.valueOf(minute);
+            return day + " " + hourStr + ":" + minuteStr;
         } else if (diffTime < ONE_WEEK) {
             Long day = diffTime / ONE_DAY;
             return day + " days ago";

@@ -69,4 +69,9 @@ public class FuDocPsiParameter extends AbstractFuDocField {
         }
         return false;
     }
+
+    @Override
+    public String getParamType() {
+        return psiParameter.getType().getPresentableText();
+    }
 }

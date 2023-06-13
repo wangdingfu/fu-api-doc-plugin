@@ -16,6 +16,9 @@ import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.impl.EditorComponentImpl;
+import com.intellij.openapi.ui.popup.JBPopup;
+import com.intellij.openapi.ui.popup.JBPopupListener;
+import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.ui.UIUtil;
@@ -40,6 +43,7 @@ import javax.swing.*;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class TestAction extends AnAction {
@@ -47,11 +51,12 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-//        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
-//        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
+        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
+        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
 //        request(e);
-        apiTest(e);
+//        apiTest(e);
     }
+
 
 
     private void apiTest(AnActionEvent e) {

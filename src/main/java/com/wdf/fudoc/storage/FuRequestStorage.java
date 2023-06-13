@@ -15,10 +15,7 @@ import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.request.http.FuHttpClient;
 import com.wdf.fudoc.request.http.dto.HttpRecentDTO;
 import com.wdf.fudoc.request.http.impl.FuHttpClientImpl;
-import com.wdf.fudoc.util.AnnotationUtils;
-import com.wdf.fudoc.util.FuRequestUtils;
-import com.wdf.fudoc.util.PsiClassUtils;
-import com.wdf.fudoc.util.StorageUtils;
+import com.wdf.fudoc.util.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -65,7 +62,7 @@ public class FuRequestStorage {
                 continue;
             }
             String httpPath = requestTarget.getHttpPath(substitutor);
-            if (matchUrl(mappingUrlList, httpPath)) {
+            if (MatchUrlUtils.matchUrl(mappingUrlList, httpPath)) {
                 //匹配成功 找到指定接口
                 return new FuHttpClientImpl(project, request);
             }
@@ -74,15 +71,6 @@ public class FuRequestStorage {
     }
 
 
-    private static boolean matchUrl(List<String> mappingUrlList, String httpUrl) {
-        for (String mappingUrl : mappingUrlList) {
-            if (mappingUrl.contains("{") && mappingUrl.contains("}")) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
 
     /**

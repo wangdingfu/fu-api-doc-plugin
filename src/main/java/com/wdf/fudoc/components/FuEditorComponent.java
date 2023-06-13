@@ -1,17 +1,18 @@
 package com.wdf.fudoc.components;
 
+import com.google.common.collect.Lists;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.EditorKind;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.openapi.editor.ex.DocumentEx;
 import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.ErrorStripeEditorCustomization;
@@ -30,7 +31,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 编辑器组件
@@ -229,6 +232,34 @@ public class FuEditorComponent {
             WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().setText(this.content));
             this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(currProject, lightVirtualFile));
         }
+    }
+
+
+    public void append(String appendContent) {
+        Project currProject = ProjectUtils.getCurrProject();
+        // 获取当前光标所在位置并添加一段文本
+        Caret caret = this.editor.getCaretModel().getCurrentCaret();
+        DocumentEx document = this.editor.getDocument();
+        int offset = caret.getOffset();
+        // 在新行前添加和上一行相同的缩进
+        int lineNumber = document.getLineNumber(offset);
+        int lineStartOffset = document.getLineStartOffset(lineNumber);
+        int indentEndOffset = lineStartOffset;
+        while (indentEndOffset < offset && Character.isSpaceChar(document.getText(new TextRange(indentEndOffset, indentEndOffset + 1)).charAt(0))) {
+            indentEndOffset++;
+        }
+        String indent = document.getText().substring(lineStartOffset, indentEndOffset);
+        String[] split = StringUtils.split(appendContent, "\n");
+        List<String> appendList = Lists.newArrayList();
+        for (String line : split) {
+            appendList.add(indent + line);
+        }
+        appendList.add(indent);
+        String content = String.join("\n", appendList);
+
+        WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().insertString(offset, content));
+        VisualPosition visualPosition = caret.getVisualPosition();
+        caret.moveToVisualPosition(new VisualPosition(visualPosition.getLine() + split.length + 1, visualPosition.getColumn()));
     }
 
 

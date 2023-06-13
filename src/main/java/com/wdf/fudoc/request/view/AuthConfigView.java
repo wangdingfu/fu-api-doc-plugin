@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.FuActionListener;
+import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
@@ -23,7 +24,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2023-02-20 23:54:03
  */
-public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfigData> {
+public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfigData>, SendHttpListener {
 
     @Getter
     private final JPanel rootPanel;
@@ -40,7 +41,7 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
     private final ResponseTabView responseTabView;
 
     /**
-     * java代码tab
+     * 通用配置tab
      */
     private final GeneralAuthTab generalAuthTab;
 
@@ -50,20 +51,21 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
     private final JavaCodeAuthTab javaCodeAuthTab;
 
     /**
-     * java代码tab
+     * javaScript代码tab
      */
     private final JavaScriptCodeAuthTab javaScriptCodeAuthTab;
+
 
     public AuthConfigView(Project project) {
         this.rootPanel = new JPanel(new BorderLayout());
         Splitter splitter = new Splitter(true, 0.6F);
-        this.requestTabView = new RequestTabView(project, this);
-        this.responseTabView = new ResponseTabView(project);
+        this.requestTabView = new RequestTabView(project, this, null);
+        this.responseTabView = new ResponseTabView(project, null);
         this.generalAuthTab = new GeneralAuthTab(project);
         this.javaCodeAuthTab = new JavaCodeAuthTab();
         this.javaScriptCodeAuthTab = new JavaScriptCodeAuthTab();
-        splitter.setFirstComponent(FuTabBuilder.getInstance().addTab(this.requestTabView).addTab(this.responseTabView).build());
-        splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.javaCodeAuthTab).addTab(this.javaScriptCodeAuthTab).build());
+        splitter.setFirstComponent(FuTabBuilder.getInstance().addTab(this.javaScriptCodeAuthTab).build());
+        splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.requestTabView).addTab(this.responseTabView).build());
         this.rootPanel.add(splitter, BorderLayout.CENTER);
     }
 
@@ -85,8 +87,10 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
     }
 
 
+
     @Override
     public void doAction(AuthConfigData data) {
+
         initData(formatHttpData(data));
         generalAuthTab.doAction(data);
         javaCodeAuthTab.doAction(data);
@@ -107,5 +111,10 @@ public class AuthConfigView implements HttpCallback, FuActionListener<AuthConfig
             data.setHttpRequestData(FuHttpRequestDataFactory.buildEmptyHttpRequestData());
         }
         return data.getHttpRequestData();
+    }
+
+    @Override
+    public void doSendHttp() {
+
     }
 }

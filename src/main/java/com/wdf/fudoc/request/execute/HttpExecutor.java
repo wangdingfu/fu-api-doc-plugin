@@ -3,6 +3,7 @@ package com.wdf.fudoc.request.execute;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.constants.enumtype.RequestStatus;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -24,10 +25,10 @@ public class HttpExecutor {
      *
      * @param fuHttpRequestData 发起http所需的数据对象
      */
-    public static void execute(FuHttpRequestData fuHttpRequestData) {
+    public static void execute(Project project, FuHttpRequestData fuHttpRequestData) {
         long start = System.currentTimeMillis();
         //将【Fu Request】请求数据对象转换为http请求数据
-        HttpRequest httpRequest = FuHttpRequestBuilder.getInstance(fuHttpRequestData).builder();
+        HttpRequest httpRequest = FuHttpRequestBuilder.getInstance(project, fuHttpRequestData).builder();
         RequestStatus requestStatus = RequestStatus.FAIL;
         String requestUrl = fuHttpRequestData.getRequest().getBaseUrl();
         httpRequest.setUrl(URLUtil.encode(requestUrl));

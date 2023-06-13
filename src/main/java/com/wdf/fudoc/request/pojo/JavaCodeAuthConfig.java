@@ -15,4 +15,14 @@ public class JavaCodeAuthConfig extends BaseAuthConfig{
      * java代码
      */
     private String javaCode;
+
+    @Override
+    public String getSuffix() {
+        return "java";
+    }
+
+    @Override
+    public String getScript() {
+        return javaCode;
+    }
 }

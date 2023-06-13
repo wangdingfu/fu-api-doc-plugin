@@ -1,18 +1,31 @@
 package com.wdf.fudoc.request.view;
 
+import com.google.common.collect.Lists;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.util.ActionCallback;
+import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
-import com.wdf.fudoc.request.data.FuRequestSettingData;
-import com.wdf.fudoc.request.state.FuRequestSettingState;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
 import com.wdf.fudoc.request.tab.settings.GlobalHeaderTab;
+import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
 import com.wdf.fudoc.request.tab.settings.GlobalVariableTab;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 【Fu Request】设置面板
@@ -36,17 +49,24 @@ public class FuRequestSettingView extends DialogWrapper {
      */
     private final FuTabBuilder fuTabBuilder = FuTabBuilder.getInstance();
 
+    private final Project project;
 
     private GlobalConfigTab globalConfigTab;
     private GlobalVariableTab globalVariableTab;
     private GlobalHeaderTab globalHeaderTab;
 
 
+    private final AtomicInteger preScriptIndex = new AtomicInteger(0);
+
+    private final List<GlobalPreScriptTab> preScriptTabs = Lists.newArrayList();
+
+
     public FuRequestSettingView(@Nullable Project project) {
         super(project, true);
+        this.project = project;
         this.rootPanel = new JPanel(new BorderLayout());
         setTitle("【Fu Request】设置");
-        initSettingPanel();
+        initPanel();
         init();
     }
 
@@ -54,14 +74,23 @@ public class FuRequestSettingView extends DialogWrapper {
     /**
      * 初始化设置面板
      */
-    private void initSettingPanel() {
+    private void initPanel() {
         this.globalConfigTab = new GlobalConfigTab();
-        this.globalVariableTab = new GlobalVariableTab();
-        this.globalHeaderTab = new GlobalHeaderTab();
-        //添加tab页
-        fuTabBuilder.addTab(this.globalHeaderTab).addTab(this.globalConfigTab).addTab(this.globalVariableTab);
-        this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
+        this.globalVariableTab = new GlobalVariableTab(project);
+        this.globalHeaderTab = new GlobalHeaderTab(project);
+        //初始化数据
         initData();
+        //添加tab页
+        fuTabBuilder
+                //全局请求头
+                .addTab(this.globalHeaderTab)
+                //请求配置
+                .addTab(this.globalConfigTab)
+                //全局变量
+                .addTab(this.globalVariableTab);
+        //添加前置脚本tab
+        this.preScriptTabs.forEach(fuTabBuilder::addTab);
+        this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
     }
 
 
@@ -69,17 +98,91 @@ public class FuRequestSettingView extends DialogWrapper {
      * 初始化数据
      */
     public void initData() {
-        FuRequestSettingData data = FuRequestSettingState.getData();
-        globalHeaderTab.initData(data.getCommonHeaderList());
+        FuRequestConfigPO configPO = FuRequestConfigStorageFactory.get(project).readData();
+        //初始化全局请求头
+        this.globalHeaderTab.initData(configPO);
+        //初始化全局变量
+        this.globalVariableTab.initData(configPO);
+        //初始化全局前置脚本
+        Map<String, GlobalPreScriptPO> preScriptMap = configPO.getPreScriptMap();
+        //如果不存在默认前置脚本数据 则需要添加上默认的前置脚本数据
+        GlobalPreScriptPO globalPreScriptPO = preScriptMap.get(GlobalPreScriptTab.TITLE);
+        if (Objects.isNull(globalPreScriptPO)) {
+            globalPreScriptPO = new GlobalPreScriptPO();
+            preScriptMap.put(GlobalPreScriptTab.TITLE, globalPreScriptPO);
+        }
+        //对前置脚本排序(为了展示顺序性) 创建前置脚本tab 并 初始化数据
+        Lists.newArrayList(preScriptMap.keySet()).stream().sorted().forEach(f -> this.preScriptTabs.add(new GlobalPreScriptTab(project, f, configPO)));
+
     }
 
 
     /**
-     * 保存数据
+     * 点击ok按钮时触发保存
      */
+    @Override
+    protected void doOKAction() {
+        this.apply();
+        super.doOKAction();
+    }
+
     public void apply() {
-        FuRequestSettingData data = FuRequestSettingState.getData();
-        data.setCommonHeaderList(globalHeaderTab.getData());
+        FuRequestConfigStorage storage = FuRequestConfigStorageFactory.get(project);
+        FuRequestConfigPO configPO = storage.readData();
+        //持久化配置数据
+        this.preScriptTabs.forEach(f -> f.saveData(configPO));
+        this.globalHeaderTab.saveData(configPO);
+        this.globalVariableTab.saveData(configPO);
+        storage.saveData(configPO);
+    }
+
+    @Override
+    protected Action @NotNull [] createActions() {
+        List<Action> actionList = Lists.newArrayList(super.createActions());
+        actionList.add(new CreateTabAction("新增前置脚本"));
+        actionList.add(new RemoveTabAction("删除前置脚本"));
+        return actionList.toArray(new Action[]{});
+    }
+
+
+    protected class CreateTabAction extends DialogWrapperAction {
+        protected CreateTabAction(String title) {
+            super(title);
+            putValue(Action.SMALL_ICON, AllIcons.General.Add);
+        }
+
+        @Override
+        protected void doAction(ActionEvent e) {
+            //新增前置脚本
+            GlobalPreScriptTab globalPreScriptTab = new GlobalPreScriptTab(project, GlobalPreScriptTab.TITLE + preScriptIndex.incrementAndGet(), null);
+            preScriptTabs.add(globalPreScriptTab);
+            fuTabBuilder.addTab(globalPreScriptTab);
+        }
+    }
+
+    protected class RemoveTabAction extends DialogWrapperAction {
+        protected RemoveTabAction(String title) {
+            super(title);
+            putValue(Action.SMALL_ICON, AllIcons.General.Remove);
+        }
+
+        @Override
+        protected void doAction(ActionEvent e) {
+//            //新增前置脚本
+//            FuTab selected = fuTabBuilder.getSelected();
+//            if (Objects.nonNull(selected)) {
+//                String text = selected.getTabInfo().getText();
+//                if (GlobalPreScriptTab.TITLE.equals(text)) {
+//                    return;
+//                }
+//                boolean isDelete = preScriptTabs.removeIf(f -> f.getTabInfo().getText().equals(text));
+//                if (isDelete) {
+//                    fuTabBuilder.removeTab(text);
+//                    Map<String, GlobalPreScriptPO> preScriptMap = configPO.getPreScriptMap();
+//                    preScriptMap.remove(text);
+//                }
+//            }
+        }
     }
 
 

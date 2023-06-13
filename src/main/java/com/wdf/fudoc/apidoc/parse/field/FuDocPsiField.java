@@ -65,6 +65,10 @@ public class FuDocPsiField extends AbstractFuDocField {
         return psiField.getAnnotations();
     }
 
+    @Override
+    public String getParamType() {
+        return psiField.getType().getPresentableText();
+    }
 
     /**
      * 字段是否被指定修饰符修饰

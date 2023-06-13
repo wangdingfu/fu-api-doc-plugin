@@ -1,7 +1,6 @@
 package com.wdf.fudoc.apidoc.view.tab;
 
 import com.google.common.collect.Lists;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
 import com.intellij.ui.IdeBorderFactory;
@@ -30,9 +29,7 @@ import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.components.listener.FuViewListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
 import com.wdf.fudoc.util.ObjectUtils;
-import com.wdf.fudoc.util.ProjectUtils;
 import icons.FuDocIcons;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -127,12 +124,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
      */
     @Override
     public boolean isCanDelete(YApiProjectTableData data) {
-        List<String> projectKeyList = data.getProjectKeyList();
-        String currentProjectPath = ProjectUtils.getCurrentProjectPath();
-        if (CollectionUtils.isEmpty(projectKeyList) || (projectKeyList.size() == 1 && currentProjectPath.equals(projectKeyList.get(0)))) {
-            return true;
-        }
-        return Messages.showYesNoDialog(DELETE_CONFIG_TIP, CONFIRM_DELETE_TITLE, Messages.getQuestionIcon()) == Messages.YES;
+        return true;
     }
 
     @Override
@@ -201,7 +193,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         yapi.setYapiPwd(this.yapiPwd.getText());
         //获取当前需要保存的项目配置
         FuDocSyncProjectSetting instance = FuDocSyncProjectSetting.getInstance();
-        if(Objects.nonNull(instance)){
+        if (Objects.nonNull(instance)) {
             SyncApiConfigData configData = instance.getState();
             configData.setYapiConfigList(this.fuTableComponent.getDataList());
             instance.loadState(configData);

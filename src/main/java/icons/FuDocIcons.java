@@ -33,6 +33,9 @@ public interface FuDocIcons {
     Icon FU_API_YAPI = IconLoader.getIcon("icon/yapi.svg", FuDocIcons.class);
     Icon FU_API_SHOW_DOC = IconLoader.getIcon("icon/showdoc.svg", FuDocIcons.class);
     Icon FU_API_FOX = IconLoader.getIcon("icon/apifox.svg", FuDocIcons.class);
+    Icon FU_AUTH = IconLoader.getIcon("icon/auth.svg", FuDocIcons.class);
+    Icon FU_SCRIPT = IconLoader.getIcon("icon/script.svg", FuDocIcons.class);
+    Icon FU_VARIABLE = IconLoader.getIcon("icon/variable.svg", FuDocIcons.class);
 
 
     Icon GET_DARK = IconLoader.getIcon("icon/http/get_dark.svg", FuDocIcons.class);

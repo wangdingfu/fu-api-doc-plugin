@@ -69,6 +69,8 @@ public class CustomerValueHelper {
             fuDocMap.put(FuDocConstants.PATH_VARIABLE, true);
         }
 
+        //设置参数类型
+        fuDocMap.put(FuDocConstants.ExtInfo.PARAM_TYPE, baseInfoDesc.getParamType());
         return fuDocMap;
     }
 

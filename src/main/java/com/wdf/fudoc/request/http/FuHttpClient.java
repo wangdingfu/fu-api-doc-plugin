@@ -13,9 +13,5 @@ public interface FuHttpClient {
 
     Project getProject();
 
-    PsiClass getPsiClass();
-
-    PsiMethod getPsiMethod();
-
     HttpRequest getHttpRequest();
 }

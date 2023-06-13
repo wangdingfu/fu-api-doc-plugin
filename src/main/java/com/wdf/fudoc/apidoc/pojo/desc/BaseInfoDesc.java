@@ -34,6 +34,11 @@ public class BaseInfoDesc {
     private ApiDocCommentData commentData;
 
 
+    public String getParamType(){
+        return org.apache.commons.lang.StringUtils.EMPTY;
+    }
+
+
     /**
      * 获取注解
      *

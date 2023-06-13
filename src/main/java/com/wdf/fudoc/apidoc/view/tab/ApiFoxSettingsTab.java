@@ -18,6 +18,7 @@ public class ApiFoxSettingsTab implements FuTab, FuViewListener {
 
     private final JPanel rootPanel;
 
+
     public ApiFoxSettingsTab() {
         this.rootPanel = new JPanel(new BorderLayout());
     }

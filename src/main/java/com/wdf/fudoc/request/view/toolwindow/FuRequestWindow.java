@@ -2,6 +2,9 @@ package com.wdf.fudoc.request.view.toolwindow;
 
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.ui.Splitter;
@@ -9,12 +12,16 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.common.datakey.FuDocDataKey;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
+import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
+import com.wdf.fudoc.request.callback.FuRequestCallback;
+import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseHeaderTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
+import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NonNls;
@@ -23,12 +30,14 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author wangdingfu
  * @date 2022-08-25 22:07:47
  */
-public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvider, HttpCallback {
+public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvider, HttpCallback, SendHttpListener, FuRequestCallback {
 
     /**
      * 根面板
@@ -68,6 +77,16 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     @Getter
     private PsiElement psiElement;
 
+    @Getter
+    private ProgressIndicator progressIndicator;
+
+    private FuHttpRequestData httpRequestData;
+
+    private final AtomicBoolean sendStatus = new AtomicBoolean(false);
+
+    public boolean getSendStatus() {
+        return sendStatus.get();
+    }
 
     public FuRequestWindow(@NotNull Project project, ToolWindow toolWindow) {
         super(Boolean.TRUE, Boolean.TRUE);
@@ -75,8 +94,9 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.toolWindow = toolWindow;
         this.rootPanel = new JPanel(new BorderLayout());
         Splitter splitter = new Splitter(true, 0.6F);
-        this.requestTabView = new RequestTabView(project, this);
-        this.responseTabView = new ResponseTabView(project);
+        FuRequestStatusInfoView fuRequestStatusInfoView = new FuRequestStatusInfoView();
+        this.requestTabView = new RequestTabView(project, this, fuRequestStatusInfoView);
+        this.responseTabView = new ResponseTabView(project, fuRequestStatusInfoView);
         this.responseHeaderTabView = new ResponseHeaderTabView();
         splitter.setFirstComponent(this.requestTabView.getRootPane());
         splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).build());
@@ -98,6 +118,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
 
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
+        this.httpRequestData = httpRequestData;
         this.requestTabView.initData(httpRequestData);
         this.responseTabView.initData(httpRequestData);
         this.responseHeaderTabView.initData(httpRequestData);
@@ -126,4 +147,23 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     }
 
 
+    @Override
+    public void doSendHttp() {
+        if (Objects.isNull(httpRequestData)) {
+            return;
+        }
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "execute " + httpRequestData.getApiName()) {
+            @Override
+            public void run(@NotNull ProgressIndicator indicator) {
+                sendStatus.set(true);
+                progressIndicator = indicator;
+                doSendBefore(httpRequestData);
+                //发起请求
+                HttpApiExecutor.doSendRequest(project, httpRequestData);
+                doSendAfter(httpRequestData);
+                progressIndicator = null;
+                sendStatus.set(false);
+            }
+        });
+    }
 }

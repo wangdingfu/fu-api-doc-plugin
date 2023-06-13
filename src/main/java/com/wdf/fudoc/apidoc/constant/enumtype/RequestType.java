@@ -16,21 +16,23 @@ import java.util.stream.Collectors;
 @Getter
 public enum RequestType {
 
-    ALL("ALL", FuDocIcons.ALL_DARK,new String[]{AnnotationConstants.REQUEST_MAPPING}),
-    GET("GET", FuDocIcons.GET_DARK,new String[]{AnnotationConstants.GET_MAPPING}),
-    POST("POST", FuDocIcons.POST_DARK,new String[]{AnnotationConstants.POST_MAPPING}),
-    PUT("PUT", FuDocIcons.PUT_DARK,new String[]{AnnotationConstants.PUT_MAPPING, AnnotationConstants.PATCH_MAPPING}),
-    DELETE("DELETE", FuDocIcons.DELETE_DARK,new String[]{AnnotationConstants.DELETE_MAPPING});
+    ALL("ALL", FuDocIcons.ALL_DARK,AnnotationConstants.REQUEST_MAPPING),
+    GET("GET", FuDocIcons.GET_DARK,AnnotationConstants.GET_MAPPING),
+    POST("POST", FuDocIcons.POST_DARK,AnnotationConstants.POST_MAPPING),
+    PUT("PUT", FuDocIcons.PUT_DARK,AnnotationConstants.PUT_MAPPING),
+    PATCH("PATCH", FuDocIcons.PUT_DARK,AnnotationConstants.PATCH_MAPPING),
+    DELETE("DELETE", FuDocIcons.DELETE_DARK,AnnotationConstants.DELETE_MAPPING);
 
 
     private final String requestType;
 
     private final Icon icon;
 
-    private final String[] annotations;
+    private final String annotations;
 
 
-    RequestType(String requestType, Icon icon, String[] annotations) {
+
+    RequestType(String requestType, Icon icon, String annotations) {
         this.requestType = requestType;
         this.icon = icon;
         this.annotations = annotations;
@@ -38,11 +40,9 @@ public enum RequestType {
 
     public static RequestType getByAnnotationName(String annotationName) {
         for (RequestType value : RequestType.values()) {
-            String[] annotations = value.getAnnotations();
-            for (String annotation : annotations) {
-                if (annotation.equals(annotationName)) {
-                    return value;
-                }
+            String annotation = value.getAnnotations();
+            if (annotation.equals(annotationName)) {
+                return value;
             }
         }
         return RequestType.ALL;
@@ -59,6 +59,6 @@ public enum RequestType {
 
 
     public static String[] getItems(){
-        return Arrays.stream(RequestType.values()).map(RequestType::getRequestType).collect(Collectors.toList()).toArray(new String[]{});
+        return Arrays.stream(RequestType.values()).filter(f->!RequestType.ALL.equals(f)).map(RequestType::getRequestType).toList().toArray(new String[]{});
     }
 }

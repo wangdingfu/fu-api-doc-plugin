@@ -9,6 +9,7 @@ import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.util.ToolBarUtils;
 import icons.FuDocIcons;
+import k.p.D;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
@@ -244,6 +245,17 @@ public class FuTabComponent {
     }
 
 
+    public FuTabComponent addAction(AnAction action) {
+        DefaultActionGroup defaultActionGroup = actionGroupMap.get(DEFAULT);
+        if (Objects.isNull(defaultActionGroup)) {
+            defaultActionGroup = new DefaultActionGroup();
+            actionGroupMap.put(DEFAULT, defaultActionGroup);
+        }
+        defaultActionGroup.add(action);
+        return this;
+    }
+
+
     /**
      * 构建一个批量编辑的动作参数
      *
@@ -401,6 +413,7 @@ public class FuTabComponent {
         public @NotNull ActionUpdateThread getActionUpdateThread() {
             return ActionUpdateThread.BGT;
         }
+
         public TabToggleAction(String parentTitle, TabActionBO tabActionBO) {
             super(tabActionBO.getTitle(), tabActionBO.getTitle(), tabActionBO.getIcon());
             this.parentTitle = parentTitle;

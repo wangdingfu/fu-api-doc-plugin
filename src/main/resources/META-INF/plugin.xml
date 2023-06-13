@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>fudoc</name>
-    <version>222.1.6.0</version>
+    <version>222.1.6.5</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -44,10 +44,12 @@
 
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.sync.strategy.SyncToYApiStrategy"/>
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.sync.strategy.SyncShowDocStrategy"/>
+        <applicationService serviceImplementation="com.wdf.fudoc.apidoc.sync.strategy.SyncToApiFoxStrategy"/>
 
         <applicationService serviceImplementation="com.wdf.fudoc.apidoc.mock.FuDocObjectJMockData"/>
 
         <applicationService serviceInterface="com.wdf.fudoc.apidoc.sync.service.YApiService" serviceImplementation="com.wdf.fudoc.apidoc.sync.service.YApiServiceImpl"/>
+        <applicationService serviceInterface="com.wdf.fudoc.apidoc.sync.service.ApiFoxService" serviceImplementation="com.wdf.fudoc.apidoc.sync.service.ApiFoxServiceImpl"/>
 
         <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSettingConfigurable"
                              id="fu.doc.setting"
@@ -104,11 +106,11 @@
                 text="Navigation Api" description="Navigation api" icon="AllIcons.Actions.Search">
             <add-to-group group-id="GoToTargetEx" anchor="first"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH" />
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt BACK_SLASH" />
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
         </action>
 
-        <!-- 接口文档相关动作 -->
-        <group id="wdf.fudoc.apidoc" popup="true" text="Fu Doc">
+        <!-- 接口文档相关动作 -->        <group id="wdf.fudoc.apidoc" popup="true" text="Fu Doc">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <action id="fudoc.gen.api.doc" class="com.wdf.fudoc.apidoc.action.GenFuDocAction" text="Gen Doc">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt D"/>
@@ -140,14 +142,12 @@
 
         <!-- 测试功能点相关动作 -->
 
-<!--
         <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test" description="Test"/>
             <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
                     description="Test table"/>
         </group>
--->
 
 
 

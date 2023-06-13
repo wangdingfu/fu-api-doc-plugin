@@ -22,9 +22,6 @@ public class FuRequestImpl implements FuRequest {
 
     private final Project project;
 
-    public FuRequestImpl(FuHttpClient fuHttpClient) {
-        this(fuHttpClient.getPsiClass(), fuHttpClient.getPsiMethod(), fuHttpClient, fuHttpClient.getProject());
-    }
 
     public FuRequestImpl(PsiClass psiClass, PsiMethod psiMethod, FuHttpClient fuHttpClient, Project project) {
         this.psiClass = psiClass;

@@ -4,7 +4,9 @@ import com.google.common.collect.Sets;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -15,8 +17,10 @@ import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -138,6 +142,13 @@ public class FuDocUtils {
      */
     public static String getModuleId(Module module) {
         return FuRequestManager.getModuleId(ProjectUtils.getCurrProject(), getModulePath(module));
+    }
+
+
+
+    public static List<String> getAllModuleNameList(Project project){
+        Module[] modules = ModuleManager.getInstance(project).getModules();
+        return Arrays.stream(modules).map(Module::getName).collect(Collectors.toList());
     }
 
 

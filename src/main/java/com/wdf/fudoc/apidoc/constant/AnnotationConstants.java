@@ -20,6 +20,10 @@ public interface AnnotationConstants {
     String DELETE_MAPPING = "org.springframework.web.bind.annotation.DeleteMapping";
     String PATCH_MAPPING = "org.springframework.web.bind.annotation.PatchMapping";
 
+
+
+    String HTTP_METHOD = "org.springframework.web.bind.annotation.RequestMethod";
+
     String REQUEST_BODY = "org.springframework.web.bind.annotation.RequestBody";
     String REQUEST_PARAM = "org.springframework.web.bind.annotation.RequestParam";
     String PATH_VARIABLE = "org.springframework.web.bind.annotation.PathVariable";

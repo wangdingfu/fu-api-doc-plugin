@@ -14,6 +14,7 @@ import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
+import com.wdf.fudoc.apidoc.sync.strategy.SyncCategory;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncFuDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncStrategyFactory;
 import com.wdf.fudoc.common.FuDocMessageBundle;
@@ -86,7 +87,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
     /**
      * 同步策略接口
      */
-    private SyncFuDocStrategy strategy;
+    private SyncCategory syncCategory;
 
     /**
      * 第三方接口文档系统配置数据
@@ -129,8 +130,8 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
         this.configData = settingData.getEnableConfigData();
         //获取
-        this.strategy = SyncStrategyFactory.getInstance(settingData.getEnable());
-        if (Objects.isNull(this.strategy)) {
+        this.syncCategory = SyncStrategyFactory.getInstance(settingData.getEnable());
+        if (Objects.isNull(this.syncCategory)) {
             //提示异常
             return;
         }
@@ -229,7 +230,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
             //初始化当前项目下的接口分类
             List<ApiCategoryDTO> apiCategoryList = initCategoryList();
             //调用创建分类接口
-            ApiCategoryDTO apiCategoryDTO = this.strategy.createCategory(this.configData, this.apiProjectDTO, value);
+            ApiCategoryDTO apiCategoryDTO = this.syncCategory.createCategory(this.configData, this.apiProjectDTO, value);
             if (Objects.isNull(apiCategoryDTO) || StringUtils.isBlank(apiCategoryDTO.getCategoryName()) || StringUtils.isBlank(apiCategoryDTO.getCategoryId())) {
                 //创建分类接口失败
                 return;
@@ -288,7 +289,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
      * 查询当前选中项目下的接口分类集合
      */
     private List<ApiCategoryDTO> listCategory() {
-        List<ApiCategoryDTO> categoryList = this.strategy.categoryList(this.apiProjectDTO, this.configData);
+        List<ApiCategoryDTO> categoryList = this.syncCategory.categoryList(this.apiProjectDTO, this.configData);
         //对接口分类排序
         return Objects.isNull(categoryList) ? Lists.newArrayList() : categoryList;
     }

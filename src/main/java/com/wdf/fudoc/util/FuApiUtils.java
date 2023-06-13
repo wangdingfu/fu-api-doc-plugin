@@ -8,6 +8,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
+import com.wdf.fudoc.apidoc.pojo.data.annotation.AnnotationArrayValueData;
 import com.wdf.fudoc.common.enumtype.ControllerAnnotation;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -65,7 +66,22 @@ public class FuApiUtils {
                 continue;
             }
             urlList.addAll(annotationData.array().constant().stringValue());
-            return RequestType.getByAnnotationName(mapping);
+            RequestType requestType = RequestType.getByAnnotationName(mapping);
+            if(AnnotationConstants.REQUEST_MAPPING.equals(mapping)){
+                //分析RequestMapping注解
+                AnnotationArrayValueData.ArrayEnumValue enumValue = annotationData.array("method").enumValue();
+                if(!AnnotationConstants.HTTP_METHOD.equals(enumValue.enumClassName())){
+                    return requestType;
+                }
+                List<String> enumValueList = enumValue.enumValueList();
+                if(enumValue.isEmpty() || CollectionUtils.isEmpty(enumValueList)){
+                    //如果没有指定请求方法 则默认为GET
+                    requestType = RequestType.GET;
+                }else{
+                    requestType = RequestType.getRequestType(enumValueList.get(0));
+                }
+            }
+            return requestType;
         }
         return null;
     }

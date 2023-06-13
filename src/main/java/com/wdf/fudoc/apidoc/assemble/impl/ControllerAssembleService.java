@@ -108,12 +108,12 @@ public class ControllerAssembleService extends AbstractAssembleService {
         if (CollectionUtils.isNotEmpty(requestList)) {
             ObjectInfoDesc objectInfoDesc = requestList.stream().filter(a -> a.exists(AnnotationConstants.REQUEST_BODY)).findFirst().orElse(null);
             if (Objects.nonNull(objectInfoDesc)) {
-                return CollectionUtils.isNotEmpty(objectInfoDesc.getChildList()) ? ContentType.RAW : ContentType.JSON;
+                return ContentType.JSON;
             } else {
                 return requestList.stream().anyMatch(a -> FuDocObjectType.MULTIPART_FILE.equals(a.getFuDocObjectType())) ? ContentType.FORM_DATA : ContentType.URLENCODED;
             }
         }
-        return null;
+        return ContentType.URLENCODED;
     }
 
 }
