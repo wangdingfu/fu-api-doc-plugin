@@ -129,7 +129,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                 .addAction(new DumbAwareAction("执行脚本", "", AllIcons.Actions.Execute) {
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent e) {
-                        ProgressManager.getInstance().run(new Task.Backgroundable(project,title) {
+                        ProgressManager.getInstance().run(new Task.Backgroundable(project, title) {
                             @Override
                             public void run(@NotNull ProgressIndicator indicator) {
                                 progressIndicator = indicator;
@@ -162,7 +162,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent e) {
                         //停止执行脚本
-                        if(Objects.nonNull(progressIndicator)){
+                        if (Objects.nonNull(progressIndicator)) {
                             progressIndicator.stop();
                             isExecute.set(false);
                         }
@@ -180,9 +180,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
             }
             //弹框配置http请求
             HttpDialogView httpDialogView = new HttpDialogView(project, null, this.fuHttpRequestData, true);
-            if (httpDialogView.showAndGet()) {
-                httpDialogView.doSendBefore(this.fuHttpRequestData);
-            }
+            httpDialogView.show();
             return;
         }
         String cmd = scriptCmd.getCmd();

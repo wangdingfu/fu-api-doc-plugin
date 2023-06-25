@@ -3,8 +3,6 @@ package com.wdf.fudoc.request.view;
 import cn.hutool.core.util.IdUtil;
 import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiElement;
@@ -230,21 +228,20 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     }
 
     @Override
-    public void doSendHttp() {
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "execute " + httpRequestData.getApiName()) {
-            @Override
-            public void run(@NotNull ProgressIndicator indicator) {
-                sendStatus.set(true);
-                progressIndicator = indicator;
-                doSendBefore(httpRequestData);
-                //发起请求
-                HttpApiExecutor.doSendRequest(project, httpRequestData);
-                doSendAfter(httpRequestData);
-                progressIndicator = null;
-                sendStatus.set(false);
-            }
-        });
+    protected void doOKAction() {
+        //保存数据
+        doSendBefore(this.httpRequestData);
+        super.doOKAction();
     }
 
+    @Override
+    public void doSendHttp() {
+        sendStatus.set(true);
+        doSendBefore(httpRequestData);
+        //发起请求
+        HttpApiExecutor.doSendRequest(project, httpRequestData);
+        sendStatus.set(false);
+        doSendAfter(httpRequestData);
+    }
 
 }

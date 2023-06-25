@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -84,8 +85,9 @@ public class FuContext {
         if (StringUtils.isBlank(variableName) || Objects.isNull(value)) {
             return;
         }
-        configPO.addVariable(variableName, value.toString(), this.scope);
+        configPO.addVariable(variableName, value instanceof Double ? formatDouble((double) value) : value.toString(), this.scope);
     }
+
 
 
     /**
@@ -128,5 +130,20 @@ public class FuContext {
         return null;
     }
 
+
+
+
+    /**
+     * 将double数字转换成正常数字
+     */
+    private static String formatDouble(double d) {
+        NumberFormat nf = NumberFormat.getInstance();
+        //设置保留多少位小数
+        nf.setMaximumFractionDigits(0);
+        // 取消科学计数法
+        nf.setGroupingUsed(false);
+        //返回结果
+        return nf.format(d);
+    }
 
 }

@@ -163,12 +163,12 @@ public class RequestTabView implements FuTab, HttpCallback {
      */
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
+        FuRequestData request = httpRequestData.getRequest();
+        this.requestTypeComponent.setSelectedItem(request.getRequestType().getRequestType());
         this.fuHttpRequestData = httpRequestData;
         this.httpHeaderTab.initData(httpRequestData);
         this.httpGetParamsTab.initData(httpRequestData);
         this.httpRequestBodyTab.initData(httpRequestData);
-        FuRequestData request = httpRequestData.getRequest();
-        this.requestTypeComponent.setSelectedItem(request.getRequestType().getRequestType());
         this.apiUrl = request.getRequestUrl();
         //自动选中tab页
         autoSelectTab(httpRequestData);
@@ -177,7 +177,7 @@ public class RequestTabView implements FuTab, HttpCallback {
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         //设置请求类型
-        setRequestType(requestTypeComponent.getSelectedItem() + StringUtils.EMPTY);
+        setRequestType(requestTypeComponent.getSelectedItem() + StringUtils.EMPTY, false);
         httpHeaderTab.doSendBefore(fuHttpRequestData);
         httpGetParamsTab.doSendBefore(fuHttpRequestData);
         httpRequestBodyTab.doSendBefore(fuHttpRequestData);
@@ -216,7 +216,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.sendBtn.addActionListener(e -> httpListener.doSendHttp());
 
         //对请求类型按钮添加选项选中事件
-        this.requestTypeComponent.addItemListener(e -> setRequestType(String.valueOf(e.getItem())));
+        this.requestTypeComponent.addItemListener(e -> setRequestType(String.valueOf(e.getItem()), true));
 
         //对请求地址添加属性内容变更事件
         this.requestUrlComponent.addFocusListener(new FocusListener() {
@@ -291,17 +291,20 @@ public class RequestTabView implements FuTab, HttpCallback {
      *
      * @param requestType 请求类型
      */
-    private void setRequestType(String requestType) {
+    private void setRequestType(String requestType, boolean isCombo) {
         if (Objects.nonNull(this.fuHttpRequestData)) {
             FuRequestData request = fuHttpRequestData.getRequest();
             request.setRequestType(RequestType.getRequestType(requestType));
-            //切换请求参数
-            if (RequestType.GET.getRequestType().equals(requestType)) {
-                this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
-                this.httpRequestBodyTab.clear();
-            } else {
-                if (Objects.nonNull(this.fuHttpRequestData)) {
-                    initData(this.fuHttpRequestData);
+            if (isCombo) {
+                //切换请求参数
+                if (RequestType.GET.getRequestType().equals(requestType)) {
+                    this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
+                    this.httpRequestBodyTab.clear();
+                } else {
+                    if (Objects.nonNull(this.fuHttpRequestData)) {
+                        doSendBefore(this.fuHttpRequestData);
+                        initData(this.fuHttpRequestData);
+                    }
                 }
             }
         }
