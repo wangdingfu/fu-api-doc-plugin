@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.tab.request;
 
+import com.google.common.collect.Lists;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
@@ -72,6 +73,14 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
                 .addAction(JSON, FuDocIcons.FU_REQUEST_JSON, this.jsonComponent.getMainPanel())
                 .addAction(BINARY, FuDocIcons.FU_REQUEST_FILE_BINARY, this.binaryComponent)
                 .switchTab(JSON).builder();
+    }
+
+    public void clear(){
+        this.jsonComponent.setContent(StringUtils.EMPTY);
+        this.urlencodedComponent.setDataList(Lists.newArrayList());
+        this.formDataComponent.setDataList(Lists.newArrayList());
+        this.rawComponent.setContent(StringUtils.EMPTY);
+
     }
 
 

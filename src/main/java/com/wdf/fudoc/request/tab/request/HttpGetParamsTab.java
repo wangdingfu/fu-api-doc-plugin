@@ -115,8 +115,10 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
     @Override
     public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
         //切换到当前tab
-        FuRequestData request = httpRequestData.getRequest();
-        request.removeHeader(FuDocConstants.CONTENT_TYPE);
+        if(Objects.nonNull(this.httpRequestData)){
+            FuRequestData request = httpRequestData.getRequest();
+            request.removeHeader(FuDocConstants.CONTENT_TYPE);
+        }
     }
 
     /**

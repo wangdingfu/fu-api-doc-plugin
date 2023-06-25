@@ -1,8 +1,5 @@
 package com.wdf.fudoc.request.tab.request;
 
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
@@ -14,13 +11,11 @@ import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.request.HttpCallback;
-import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -169,12 +164,12 @@ public class RequestTabView implements FuTab, HttpCallback {
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
         this.fuHttpRequestData = httpRequestData;
-        FuRequestData request = httpRequestData.getRequest();
-        this.requestTypeComponent.setSelectedItem(request.getRequestType().getRequestType());
-        this.apiUrl = request.getRequestUrl();
         this.httpHeaderTab.initData(httpRequestData);
         this.httpGetParamsTab.initData(httpRequestData);
         this.httpRequestBodyTab.initData(httpRequestData);
+        FuRequestData request = httpRequestData.getRequest();
+        this.requestTypeComponent.setSelectedItem(request.getRequestType().getRequestType());
+        this.apiUrl = request.getRequestUrl();
         //自动选中tab页
         autoSelectTab(httpRequestData);
     }
@@ -197,6 +192,9 @@ public class RequestTabView implements FuTab, HttpCallback {
      * 自动定位tab页
      */
     private void autoSelectTab(FuHttpRequestData httpRequestData) {
+        if (Objects.isNull(httpRequestData)) {
+            return;
+        }
         FuRequestData request = httpRequestData.getRequest();
         RequestType requestType = request.getRequestType();
         //没有文件上传 且请求类型是GET请求
@@ -297,6 +295,15 @@ public class RequestTabView implements FuTab, HttpCallback {
         if (Objects.nonNull(this.fuHttpRequestData)) {
             FuRequestData request = fuHttpRequestData.getRequest();
             request.setRequestType(RequestType.getRequestType(requestType));
+            //切换请求参数
+            if (RequestType.GET.getRequestType().equals(requestType)) {
+                this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
+                this.httpRequestBodyTab.clear();
+            } else {
+                if (Objects.nonNull(this.fuHttpRequestData)) {
+                    initData(this.fuHttpRequestData);
+                }
+            }
         }
     }
 
