@@ -66,6 +66,11 @@ public class FuRequestConfigPO {
         return globalVariableList.stream().filter(KeyValueTableBO::getSelect).filter(f -> f.getKey().equals(variableName)).filter(f -> contains(scope, f.getScope().getSelectPathList())).map(KeyValueTableBO::getValue).findFirst().orElse(StringUtils.EMPTY);
     }
 
+    public String variable(String variableName) {
+        return globalVariableList.stream().filter(KeyValueTableBO::getSelect).filter(f -> f.getKey().equals(variableName)).map(KeyValueTableBO::getValue).findFirst().orElse(StringUtils.EMPTY);
+    }
+
+
 
     private boolean contains(List<String> scope1, List<String> scope2) {
         if (CollectionUtils.isEmpty(scope1) || CollectionUtils.isEmpty(scope2)) {

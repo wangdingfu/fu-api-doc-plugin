@@ -4,6 +4,8 @@ import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.apidoc.data.FuDocData;
+import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.execute.HttpExecutor;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
@@ -64,6 +66,7 @@ public class FuContext {
         if (Objects.isNull(fuHttpRequestData)) {
             return StringUtils.EMPTY;
         }
+
         //发起请求
         HttpExecutor.execute(project, fuHttpRequestData);
 

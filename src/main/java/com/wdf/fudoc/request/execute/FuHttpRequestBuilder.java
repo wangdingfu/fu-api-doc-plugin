@@ -90,10 +90,12 @@ public class FuHttpRequestBuilder {
 
 
     private String formatValue(String value) {
-        if (StringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}") && Objects.nonNull(module)) {
+        if (StringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}")) {
             String name = StringUtils.substringBetween(value, "{{", "}}");
-            List<String> scope = Lists.newArrayList(module.getName());
-            return configPO.variable(name, scope);
+            if(Objects.isNull(this.module)){
+                return configPO.variable(name);
+            }
+            return configPO.variable(name, Lists.newArrayList(module.getName()));
         }
         return value;
     }

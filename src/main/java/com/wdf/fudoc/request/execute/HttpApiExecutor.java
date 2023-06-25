@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.execute;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.apidoc.data.FuDocData;
 import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.js.JsExecutor;
@@ -33,7 +34,8 @@ public class HttpApiExecutor {
         FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
         List<GlobalPreScriptPO> preScriptPOList;
         Module module = FuDocDataContent.getFuDocData().getModule();
-        if (Objects.nonNull(module) && Objects.nonNull(fuRequestConfigPO) && CollectionUtils.isNotEmpty(preScriptPOList = fuRequestConfigPO.getPreScriptList(module.getName()))) {
+        if (Objects.nonNull(module) && Objects.nonNull(fuRequestConfigPO)
+                && CollectionUtils.isNotEmpty(preScriptPOList = fuRequestConfigPO.getPreScriptList(module.getName()))) {
             for (GlobalPreScriptPO globalPreScriptPO : preScriptPOList) {
                 JsExecutor.execute(new FuContext(project, fuRequestConfigPO, globalPreScriptPO));
             }

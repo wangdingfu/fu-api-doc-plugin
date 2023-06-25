@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.intellij.openapi.module.Module;
 import lombok.Getter;
 import lombok.Setter;
 
