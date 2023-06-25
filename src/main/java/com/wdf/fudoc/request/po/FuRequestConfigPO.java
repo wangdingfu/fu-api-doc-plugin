@@ -4,6 +4,7 @@ package com.wdf.fudoc.request.po;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.bo.TreePathBO;
+import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 @Setter
 public class FuRequestConfigPO {
+
+    /**
+     * 【Fu Request】展示模式
+     */
+    private String viewMode = ViewMode.SINGLE_PINNED.myActionID;
 
     /**
      * 全局请求头

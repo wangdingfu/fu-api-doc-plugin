@@ -2,7 +2,10 @@ package com.wdf.fudoc.request.manager;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
+import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
+import com.intellij.openapi.actionSystem.impl.MenuItemPresentationFactory;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -15,7 +18,9 @@ import com.wdf.fudoc.apidoc.sync.SyncFuDocExecutor;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.fudoc.components.action.FuRequestViewModeAction;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
+import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
@@ -27,7 +32,10 @@ import com.wdf.fudoc.util.PsiClassUtils;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 /**
@@ -45,6 +53,8 @@ public class FuRequestToolBarManager {
     private final DefaultActionGroup defaultActionGroup;
 
     private final FuRequestCallback fuRequestCallback;
+
+    private final AtomicBoolean isSelect = new AtomicBoolean(false);
 
 
     public FuRequestToolBarManager(FuRequestCallback fuRequestCallback) {
@@ -167,7 +177,7 @@ public class FuRequestToolBarManager {
 
 
         //添加设置按钮
-        defaultActionGroup.add(new AnAction("Setting", "Setting", AllIcons.General.Settings) {
+        defaultActionGroup.add(new AnAction("全局配置", "全局配置", AllIcons.General.Settings) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //展示设置界面
@@ -191,6 +201,30 @@ public class FuRequestToolBarManager {
                     //跳转到该方法
                     targetMethod.navigate(true);
                 }
+            }
+        });
+
+
+        //添加设置按钮
+        defaultActionGroup.add(new AnAction("设置", "Setting", AllIcons.General.GearPlain) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "View Mode");
+                for (ViewMode value : ViewMode.values()) {
+                    viewModeGroup.add(new FuRequestViewModeAction(value));
+                }
+                DefaultActionGroup actionGroup = new DefaultActionGroup();
+                actionGroup.add(viewModeGroup);
+                int x = 0, y = 0;
+                InputEvent inputEvent = e.getInputEvent();
+                if (inputEvent instanceof MouseEvent mouseEvent) {
+                    x = mouseEvent.getX();
+                    y = mouseEvent.getY();
+                }
+                ActionPopupMenu popupMenu =
+                        ((ActionManagerImpl) ActionManager.getInstance())
+                                .createActionPopupMenu("fudoc.request.settings", actionGroup, new MenuItemPresentationFactory());
+                popupMenu.getComponent().show(e.getInputEvent().getComponent(), x, y);
             }
         });
 

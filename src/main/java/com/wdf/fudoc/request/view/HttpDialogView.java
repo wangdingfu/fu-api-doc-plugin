@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.view;
 
+import cn.hutool.core.util.IdUtil;
 import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -16,6 +17,7 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.execute.HttpApiExecutor;
+import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
@@ -40,12 +42,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class HttpDialogView extends DialogWrapper implements HttpCallback, SendHttpListener, FuRequestCallback {
 
-
     /**
      * 当前项目
      */
     @Getter
-    private final Project project;
+    public final Project project;
 
     /**
      * tab页构建器
@@ -70,7 +71,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     private final JPanel statusInfoPanel;
 
     @Getter
-    private final PsiElement psiElement;
+    private PsiElement psiElement;
 
     private final JPanel toolBarPanel;
 
@@ -80,12 +81,23 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     @Getter
     private ProgressIndicator progressIndicator;
 
-    private final FuHttpRequestData httpRequestData;
+    @Getter
+    public FuHttpRequestData httpRequestData;
 
     private final AtomicBoolean sendStatus = new AtomicBoolean(false);
 
-    public boolean getSendStatus(){
+    @Getter
+    public final String httpId;
+
+    public boolean getSendStatus() {
         return sendStatus.get();
+    }
+
+    @Override
+    protected void dispose() {
+        //当前窗体被销毁了 需要手动移除
+        FuRequestManager.remove(this.project, this.httpId);
+        super.dispose();
     }
 
 
@@ -96,9 +108,8 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     public HttpDialogView(Project project, PsiElement psiElement, FuHttpRequestData httpRequestData, boolean isSave) {
         super(project, true);
         this.project = project;
+        this.httpId = IdUtil.getSnowflakeNextIdStr();
         this.isSave = isSave;
-        this.httpRequestData = httpRequestData;
-        this.psiElement = psiElement;
         this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance());
         this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance());
         this.messageComponent = new MessageComponent(true);
@@ -106,11 +117,19 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.toolBarPanel = initToolBarUI();
         initRequestUI();
         initResponseUI();
-        initData(httpRequestData);
         setModal(isSave);
         init();
-        setTitle((Objects.isNull(httpRequestData) || StringUtils.isBlank(httpRequestData.getApiName())) ? "Send Http Request" : httpRequestData.getApiName());
+        reset(psiElement, httpRequestData);
     }
+
+
+    public void reset(PsiElement psiElement, FuHttpRequestData fuHttpRequestData) {
+        this.psiElement = psiElement;
+        this.httpRequestData = fuHttpRequestData;
+        initData(fuHttpRequestData);
+        setTitle((Objects.isNull(fuHttpRequestData) || StringUtils.isBlank(fuHttpRequestData.getApiName())) ? "Send Http Request" : fuHttpRequestData.getApiName());
+    }
+
 
     @Override
     protected @Nullable Border createContentPaneBorder() {
@@ -125,7 +144,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
 
     @Override
     protected @Nullable JComponent createTitlePane() {
-        if (Objects.nonNull(this.psiElement)) {
+        if (!this.isSave && Objects.nonNull(this.toolBarPanel)) {
             //如果不是在代码中弹出的接口 则不需要添加工具栏面板
             return this.toolBarPanel;
         }
@@ -226,4 +245,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
             }
         });
     }
+
+
 }
