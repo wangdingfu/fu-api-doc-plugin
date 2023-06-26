@@ -284,12 +284,11 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      * @param dataList 数据集合
      */
     public void setDataList(List<T> dataList) {
+        List<T> list = Lists.newArrayList(dataList);
         // 清空数据
         removeAllRow();
-        //填充数据
-        for (T entity : dataList) {
-            addRowData(entity);
-        }
+        //将新的数据添加到表格中
+        list.forEach(this::addRowData);
     }
 
     /**
