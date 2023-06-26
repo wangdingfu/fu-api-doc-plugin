@@ -72,6 +72,13 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<GlobalKeyValuePO
     }
 
     @Override
+    public void moveOff() {
+        //离开当前tab时 保存数据
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
+        fuRequestConfigPO.setGlobalHeaderList(this.fuTableComponent.getDataList());
+    }
+
+    @Override
     public void initData(FuRequestConfigPO configPO) {
         fuTableComponent.setDataList(configPO.getGlobalHeaderList());
     }
