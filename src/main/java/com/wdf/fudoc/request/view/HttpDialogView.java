@@ -22,6 +22,7 @@ import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author wangdingfu
  * @date 2022-09-17 18:06:24
  */
+@Slf4j
 public class HttpDialogView extends DialogWrapper implements HttpCallback, SendHttpListener, FuRequestCallback {
 
     /**
@@ -237,12 +239,14 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
 
     @Override
     public void doSendHttp() {
+        long start = System.currentTimeMillis();
         sendStatus.set(true);
         doSendBefore(httpRequestData);
         //发起请求
         HttpApiExecutor.doSendRequest(project, httpRequestData);
         sendStatus.set(false);
         doSendAfter(httpRequestData);
+        log.info("请求【{}】接口共计耗时{}ms", getTitle(), System.currentTimeMillis() - start);
     }
 
 }

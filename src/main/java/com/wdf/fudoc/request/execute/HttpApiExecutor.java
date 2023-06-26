@@ -43,14 +43,14 @@ public class HttpApiExecutor {
             }
         }
         log.info("执行脚本共计耗时:{}ms", System.currentTimeMillis() - start);
-        start = System.currentTimeMillis();
         //发起请求
+        long start1 = System.currentTimeMillis();
         HttpExecutor.execute(project, fuHttpRequestData, fuRequestConfigPO);
-        log.info("发起请求共计耗时:{}ms", System.currentTimeMillis() - start);
-        start = System.currentTimeMillis();
+        log.info("发起请求共计耗时:{}ms", System.currentTimeMillis() - start1);
         //持久化数据
+        long start2 = System.currentTimeMillis();
         fuRequestConfigStorage.saveData(fuRequestConfigPO);
-        log.info("持久化数据共计耗时:{}ms", System.currentTimeMillis() - start);
+        log.info("持久化数据共计耗时:{}ms", System.currentTimeMillis() - start2);
 
     }
 }
