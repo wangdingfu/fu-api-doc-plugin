@@ -25,6 +25,7 @@ import com.wdf.fudoc.components.action.FuFiltersAction;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuFiltersListener;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
+import com.wdf.fudoc.request.constants.enumtype.ScriptCmdType;
 import com.wdf.fudoc.request.js.JsExecutor;
 import com.wdf.fudoc.request.js.context.FuContext;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
@@ -84,7 +85,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
 
     private ProgressIndicator progressIndicator;
 
-    private HttpCmdView httpCmdView;
+    private final HttpCmdView httpCmdView;
 
     public GlobalPreScriptTab(Project project) {
         this(project, TITLE, null);
@@ -99,6 +100,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
         this.scopeModuleList = FuDocUtils.getAllModuleNameList(project);
         this.fuFiltersAction = new FuFiltersAction<>("配置生效Module", this, () -> {
         });
+        this.httpCmdView = new HttpCmdView(project);
         this.leftPanel = new JPanel(new BorderLayout());
         this.leftPanel.add(FuEditorEmptyTextPainter.createFramePreview(), BorderLayout.CENTER);
         JPanel rightPanel = new JPanel(new BorderLayout());
@@ -116,13 +118,11 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
     /**
      * 右侧指令面板
      */
-    private JPanel createRightPanel() {
+    private JComponent createRightPanel() {
         FuCmdComponent fuCmdComponent = FuCmdComponent.getInstance(this);
-        ScriptCmd.execute((cmdType, list) -> fuCmdComponent.addCmd(cmdType.getDesc(), list));
+        ScriptCmd.execute((cmdType, list) -> fuCmdComponent.addCmd(cmdType.getDesc(), list, ScriptCmdType.HTTP.equals(cmdType) ? httpCmdView.getVerticalBox() : null));
         fuCmdComponent.addStrut(20);
-        JPanel cmdRootPanel = fuCmdComponent.getRootPanel();
-        this.httpCmdView = new HttpCmdView(cmdRootPanel, project, "Http请求配置");
-        return cmdRootPanel;
+        return fuCmdComponent.getVerticalBox();
     }
 
 
@@ -184,7 +184,8 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
     @Override
     public void doAction(ScriptCmd scriptCmd) {
         switchPanel();
-        if (ScriptCmd.HTTP_CONFIG.equals(scriptCmd)) {
+        if (ScriptCmd.ADD_HTTP_CONFIG.equals(scriptCmd)) {
+            httpCmdView.addHttp();
             return;
         }
         String cmd = scriptCmd.getCmd();
@@ -238,7 +239,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
             }
             Map<String, FuHttpRequestData> httpRequestDataMap = globalPreScriptPO.getFuHttpRequestDataMap();
             if (MapUtils.isNotEmpty(httpRequestDataMap)) {
-                httpRequestDataMap.forEach((key, value) -> this.httpCmdView.addHttp(value));
+                httpRequestDataMap.forEach(this.httpCmdView::addHttp);
             }
         }
     }

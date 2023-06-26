@@ -37,7 +37,7 @@ public class HttpExecutor {
     public static void execute(Project project, FuHttpRequestData fuHttpRequestData, FuRequestConfigPO fuRequestConfigPO) {
         long start = System.currentTimeMillis();
         //将【Fu Request】请求数据对象转换为http请求数据
-        HttpRequest httpRequest = FuHttpRequestBuilder.getInstance(project, fuHttpRequestData).builder();
+        HttpRequest httpRequest = FuHttpRequestBuilder.getInstance(project, fuHttpRequestData,fuRequestConfigPO).builder();
         RequestStatus requestStatus = RequestStatus.FAIL;
         String requestUrl = fuHttpRequestData.getRequest().getBaseUrl();
         try {

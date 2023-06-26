@@ -1,6 +1,7 @@
 package com.wdf.fudoc.components;
 
 import com.intellij.ui.components.ActionLink;
+import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
@@ -10,6 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 import static com.intellij.ui.ScrollPaneFactory.createScrollPane;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
@@ -21,7 +23,7 @@ import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 public class FuCmdComponent {
 
     @Getter
-    private final JPanel rootPanel;
+    private final VerticalBox verticalBox;
 
 
     private final FuActionListener<ScriptCmd> fuActionListener;
@@ -29,14 +31,13 @@ public class FuCmdComponent {
 
     public FuCmdComponent(FuActionListener<ScriptCmd> listener) {
         this.fuActionListener = listener;
-        this.rootPanel = new JPanel();
-        this.rootPanel.setBorder(JBUI.Borders.empty(10, 0, 16, 16));
-        this.rootPanel.setLayout(new BoxLayout(this.rootPanel, BoxLayout.Y_AXIS));
+        this.verticalBox = new VerticalBox();
+        this.verticalBox.setBorder(JBUI.Borders.empty(10, 0, 16, 16));
     }
 
 
     public JScrollPane build() {
-        JScrollPane pane = createScrollPane(this.rootPanel, true);
+        JScrollPane pane = createScrollPane(this.verticalBox, true);
         pane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
         return pane;
     }
@@ -52,25 +53,28 @@ public class FuCmdComponent {
      * @param component 组件
      */
     public void addComponent(JComponent component) {
-        this.rootPanel.add(component);
-        this.rootPanel.add(Box.createVerticalStrut(5));
+        this.verticalBox.add(component);
+        this.verticalBox.add(Box.createVerticalStrut(5));
     }
 
-    public void addStrut(int size){
-        this.rootPanel.add(Box.createVerticalStrut(size));
+    public void addStrut(int size) {
+        this.verticalBox.add(Box.createVerticalStrut(size));
     }
 
-    public void addCmd(String title, List<ScriptCmd> tipCmdList) {
+    public void addCmd(String title, List<ScriptCmd> tipCmdList, JComponent component) {
         JLabel titleLabel = new JLabel();
         Font font = titleLabel.getFont();
         titleLabel.setFont(new Font(font.getFontName(), Font.BOLD, 14));
         titleLabel.setText(title);
-        this.rootPanel.add(titleLabel);
-        this.rootPanel.add(Box.createVerticalStrut(5));
+        this.verticalBox.add(titleLabel);
+        this.verticalBox.add(Box.createVerticalStrut(5));
         if (CollectionUtils.isNotEmpty(tipCmdList)) {
             tipCmdList.forEach(this::addCmd);
         }
-        this.rootPanel.add(Box.createVerticalStrut(20));
+        if (Objects.nonNull(component)) {
+            addComponent(component);
+        }
+        this.verticalBox.add(Box.createVerticalStrut(20));
     }
 
 
@@ -83,9 +87,10 @@ public class FuCmdComponent {
     }
 
 
-    public void addAction(ActionLink actionLink){
+    public void addAction(ActionLink actionLink) {
         actionLink.setBorder(JBUI.Borders.empty(1, 14, 3, 1));
-        this.rootPanel.add(actionLink);
+        this.verticalBox.add(actionLink);
+        this.verticalBox.add(Box.createVerticalStrut(5));
     }
 
 }

@@ -2,9 +2,6 @@ package com.wdf.fudoc.request.view;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.PopupHandler;
 import com.intellij.ui.components.ActionLink;
@@ -12,14 +9,11 @@ import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,7 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class HttpCmdView {
 
     private final Project project;
-    private final JPanel rootPanel;
+    @Getter
+    private final VerticalBox verticalBox;
     private final List<String> indexList = Lists.newArrayList();
     @Getter
     private final Map<String, FuHttpRequestData> fuHttpRequestDataMap = new ConcurrentHashMap<>();
@@ -39,42 +34,21 @@ public class HttpCmdView {
     private final Map<String, ActionLink> actionLinkMap = new ConcurrentHashMap<>();
 
 
-    public HttpCmdView(JPanel rootPanel, Project project, String title) {
+    public HttpCmdView(Project project) {
         this.project = project;
-        this.rootPanel = rootPanel;
-        this.rootPanel.add(buildTitle(title));
-        this.rootPanel.add(Box.createVerticalStrut(5));
+        this.verticalBox = new VerticalBox();
     }
 
-
-    private JComponent buildTitle(String title) {
-        VerticalBox verticalBox = new VerticalBox();
-        JLabel titleLabel = new JLabel();
-        Font font = titleLabel.getFont();
-        titleLabel.setFont(new Font(font.getFontName(), Font.BOLD, 14));
-        titleLabel.setText(title);
-        verticalBox.add(titleLabel);
-        verticalBox.add(Box.createVerticalStrut(10));
-        JLabel addLabel = new JLabel(AllIcons.General.Add);
-        // 更改光标类型为小手
-        addLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        addLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                addHttp();
-            }
-        });
-        verticalBox.add(addLabel);
-        return verticalBox;
-    }
 
     public void addHttp() {
-        addHttp(FuHttpRequestDataFactory.buildEmptyHttpRequestData());
+        addHttp(null, FuHttpRequestDataFactory.buildEmptyHttpRequestData());
     }
 
-    public void addHttp(FuHttpRequestData fuHttpRequestData) {
-        int index = indexList.size() + 1;
-        String key = "#" + index;
+    public void addHttp(String key, FuHttpRequestData fuHttpRequestData) {
+        if (StringUtils.isBlank(key)) {
+            int index = indexList.size() + 1;
+            key = "#" + index;
+        }
         indexList.add(key);
         fuHttpRequestDataMap.put(key, fuHttpRequestData);
         ActionLink actionLink = new ActionLink("配置http请求 ( " + key + " )", e -> {
@@ -92,9 +66,9 @@ public class HttpCmdView {
             }
         });
         this.actionLinkMap.put(key, actionLink);
-        this.rootPanel.add(actionLink);
-        this.rootPanel.add(Box.createVerticalStrut(5));
-        this.rootPanel.revalidate();
+        this.verticalBox.add(actionLink);
+        this.verticalBox.add(Box.createVerticalStrut(5));
+        this.verticalBox.revalidate();
     }
 
 
@@ -106,8 +80,8 @@ public class HttpCmdView {
             indexList.remove(key);
             fuHttpRequestDataMap.remove(key);
             ActionLink actionLink = this.actionLinkMap.remove(key);
-            this.rootPanel.remove(actionLink);
-            this.rootPanel.revalidate();
+            this.verticalBox.remove(actionLink);
+            this.verticalBox.revalidate();
         });
         return popupMenu;
     }

@@ -236,6 +236,7 @@ public class FuEditorComponent {
 
 
     public void append(String appendContent) {
+        appendContent = appendContent.replaceAll("\r", "");
         Project currProject = ProjectUtils.getCurrProject();
         // 获取当前光标所在位置并添加一段文本
         Caret caret = this.editor.getCaretModel().getCurrentCaret();

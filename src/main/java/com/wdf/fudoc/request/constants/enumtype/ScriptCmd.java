@@ -25,7 +25,7 @@ public enum ScriptCmd {
     PROJECT_GET_PARAM("code_get_variable.js", "获取全局变量", JBColor.PINK, ScriptCmdType.SCRIPT_DEMO, false),
     PROJECT_SET_HEADER("code_set_header.js", "设置全局请求头", FuColor.color1.color(), ScriptCmdType.SCRIPT_DEMO, false),
     PROJECT_GET_HEADER("code_get_header.js", "获取全局请求头", FuColor.color1.color(), ScriptCmdType.SCRIPT_DEMO, false),
-    HTTP_CONFIG("", "配置http请求", FuColor.color4.color(), ScriptCmdType.HTTP, false),
+    ADD_HTTP_CONFIG("", "新增http请求配置", FuColor.ORANGE.color(), ScriptCmdType.HTTP, false),
     HTTP_REQUEST("code_http.js", "调用http接口", FuColor.color4.color(), ScriptCmdType.HTTP, false),
     ;
     private final String cmd;
