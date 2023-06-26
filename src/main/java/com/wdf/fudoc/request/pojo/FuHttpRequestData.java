@@ -32,6 +32,10 @@ public class FuHttpRequestData {
      */
     private String moduleId;
 
+
+    @JsonIgnore
+    private Module module;
+
     /**
      * 接口名称
      */

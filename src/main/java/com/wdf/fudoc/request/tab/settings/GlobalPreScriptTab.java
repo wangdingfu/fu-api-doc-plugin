@@ -5,6 +5,7 @@ import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
@@ -12,7 +13,6 @@ import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.tabs.TabInfo;
-import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.common.FuDataTab;
 import com.wdf.fudoc.common.FuDocMessageBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
@@ -25,14 +25,12 @@ import com.wdf.fudoc.components.action.FuFiltersAction;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuFiltersListener;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
-import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
-import com.wdf.fudoc.request.global.FuRequest;
 import com.wdf.fudoc.request.js.JsExecutor;
 import com.wdf.fudoc.request.js.context.FuContext;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.view.HttpDialogView;
+import com.wdf.fudoc.request.view.HttpCmdView;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import com.wdf.fudoc.util.FuDocUtils;
@@ -40,6 +38,7 @@ import com.wdf.fudoc.util.ResourceUtils;
 import groovy.util.logging.Slf4j;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,6 +57,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionListener<ScriptCmd>, FuFiltersListener<String> {
+    private static final Logger logger = Logger.getInstance(GlobalPreScriptTab.class);
 
     public static final String TITLE = "前置脚本";
 
@@ -78,13 +78,13 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
 
     private final String title;
 
-    private FuHttpRequestData fuHttpRequestData;
-
     private final FuFiltersAction fuFiltersAction;
 
     private final AtomicBoolean isExecute = new AtomicBoolean(false);
 
     private ProgressIndicator progressIndicator;
+
+    private HttpCmdView httpCmdView;
 
     public GlobalPreScriptTab(Project project) {
         this(project, TITLE, null);
@@ -119,7 +119,10 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
     private JPanel createRightPanel() {
         FuCmdComponent fuCmdComponent = FuCmdComponent.getInstance(this);
         ScriptCmd.execute((cmdType, list) -> fuCmdComponent.addCmd(cmdType.getDesc(), list));
-        return fuCmdComponent.getRootPanel();
+        fuCmdComponent.addStrut(20);
+        JPanel cmdRootPanel = fuCmdComponent.getRootPanel();
+        this.httpCmdView = new HttpCmdView(cmdRootPanel, project, "Http请求配置");
+        return cmdRootPanel;
     }
 
 
@@ -133,16 +136,23 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                             @Override
                             public void run(@NotNull ProgressIndicator indicator) {
                                 progressIndicator = indicator;
-                                FuRequestConfigPO configPO = FuRequestConfigStorageFactory.get(project).readData();
+                                FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(project);
+                                FuRequestConfigPO configPO = fuRequestConfigStorage.readData();
                                 saveData(configPO);
                                 GlobalPreScriptPO globalPreScriptPO = configPO.getPreScriptMap().get(title);
                                 String script = globalPreScriptPO.getScript();
                                 if (StringUtils.isBlank(script)) {
                                     FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.REQUEST_SCRIPT_NO));
                                 }
-                                JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO));
+                                //执行脚本
+                                try {
+                                    JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO));
+                                } catch (Exception e) {
+                                    logger.error("执行脚本失败", e);
+                                    FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.REQUEST_SCRIPT_EXECUTE_FAIL));
+                                }
                                 progressIndicator = null;
-                                System.out.println("执行js完成");
+                                fuRequestConfigStorage.saveData(configPO);
                             }
                         });
                     }
@@ -175,12 +185,6 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
     public void doAction(ScriptCmd scriptCmd) {
         switchPanel();
         if (ScriptCmd.HTTP_CONFIG.equals(scriptCmd)) {
-            if (Objects.isNull(this.fuHttpRequestData)) {
-                this.fuHttpRequestData = FuHttpRequestDataFactory.buildEmptyHttpRequestData();
-            }
-            //弹框配置http请求
-            HttpDialogView httpDialogView = new HttpDialogView(project, null, this.fuHttpRequestData, true);
-            httpDialogView.show();
             return;
         }
         String cmd = scriptCmd.getCmd();
@@ -232,7 +236,10 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                 switchPanel();
                 this.fuEditorComponent.setContent(script);
             }
-            this.fuHttpRequestData = globalPreScriptPO.getFuHttpRequestData();
+            Map<String, FuHttpRequestData> httpRequestDataMap = globalPreScriptPO.getFuHttpRequestDataMap();
+            if (MapUtils.isNotEmpty(httpRequestDataMap)) {
+                httpRequestDataMap.forEach((key, value) -> this.httpCmdView.addHttp(value));
+            }
         }
     }
 
@@ -253,7 +260,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
         globalPreScriptPO.setScript(this.fuEditorComponent.getContent());
         globalPreScriptPO.setScope(this.scopeModuleList);
         globalPreScriptPO.setTitle(this.title);
-        globalPreScriptPO.setFuHttpRequestData(this.fuHttpRequestData);
+        globalPreScriptPO.setFuHttpRequestDataMap(this.httpCmdView.getFuHttpRequestDataMap());
     }
 
 

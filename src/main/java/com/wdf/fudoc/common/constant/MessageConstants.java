@@ -93,6 +93,7 @@ public interface MessageConstants {
 
 
     String REQUEST_SCRIPT_NO = "fudoc.request.script.no";
+    String REQUEST_SCRIPT_EXECUTE_FAIL = "fudoc.request.script.execute.fail";
 
 
 }

@@ -25,13 +25,18 @@ public class ToolBarUtils {
      * @param layout       工具栏面板布局
      */
     public static void addActionToToolBar(JPanel toolBarPanel, String place, ActionGroup actionGroup, String layout) {
+        toolBarPanel.add(addActionToToolBar(toolBarPanel, place, actionGroup), layout);
+    }
+
+
+    public static JComponent addActionToToolBar(JPanel toolBarPanel, String place, ActionGroup actionGroup) {
         ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
         toolbar.setTargetComponent(toolBarPanel);
         toolbar.setForceMinimumSize(true);
         toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
         Utils.setSmallerFontForChildren(toolbar);
         toolbar.getComponent().setBackground(toolBarPanel.getBackground());
-        toolBarPanel.add(toolbar.getComponent(), layout);
+        return toolbar.getComponent();
     }
 
 

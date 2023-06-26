@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.execute;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
@@ -54,9 +55,6 @@ public class FuHttpRequestBuilder {
             body = new FuRequestBodyData();
             request.setBody(body);
         }
-
-        //添加GET请求
-        addForm(request.getParams(), false);
         //添加form-data
         addForm(body.getFormDataList(), true);
         //添加x-www-form-urlencoded
@@ -67,6 +65,8 @@ public class FuHttpRequestBuilder {
         addBody(body.getJson());
         //添加binary
         addBody(body.getBinary());
+        //设置请求地址(GET请求参数直接在请求地址中)
+        httpRequest.setUrl(request.getRequestUrl());
     }
 
 
@@ -92,7 +92,7 @@ public class FuHttpRequestBuilder {
     private String formatValue(String value) {
         if (StringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}")) {
             String name = StringUtils.substringBetween(value, "{{", "}}");
-            if(Objects.isNull(this.module)){
+            if (Objects.isNull(this.module)) {
                 return configPO.variable(name);
             }
             return configPO.variable(name, Lists.newArrayList(module.getName()));

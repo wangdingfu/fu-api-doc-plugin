@@ -1,12 +1,7 @@
 package com.wdf.fudoc.request.js.context;
 
-import cn.hutool.json.JSON;
-import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.apidoc.data.FuDocData;
-import com.wdf.fudoc.apidoc.data.FuDocDataContent;
-import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.execute.HttpExecutor;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
@@ -19,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -62,14 +58,15 @@ public class FuContext {
     /**
      * 发起接口请求 并返回响应结果
      */
-    public String doHttpRequest() {
-        FuHttpRequestData fuHttpRequestData = preScriptPO.getFuHttpRequestData();
+    public String doSend(String key) {
+        Map<String, FuHttpRequestData> fuHttpRequestDataMap = preScriptPO.getFuHttpRequestDataMap();
+        FuHttpRequestData fuHttpRequestData = fuHttpRequestDataMap.get(key);
         if (Objects.isNull(fuHttpRequestData)) {
             return StringUtils.EMPTY;
         }
 
         //发起请求
-        HttpExecutor.execute(project, fuHttpRequestData);
+        HttpExecutor.execute(project, fuHttpRequestData, this.configPO);
 
         FuResponseData response = fuHttpRequestData.getResponse();
         return response.getContent();
@@ -87,7 +84,6 @@ public class FuContext {
         }
         configPO.addVariable(variableName, value instanceof Double ? formatDouble((double) value) : value.toString(), this.scope);
     }
-
 
 
     /**
@@ -129,8 +125,6 @@ public class FuContext {
         }
         return null;
     }
-
-
 
 
     /**

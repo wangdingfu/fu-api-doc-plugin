@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.action;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -37,10 +38,12 @@ public class RequestAction extends AbstractClassAction {
         if (!JavaClassType.CONTROLLER.equals(JavaClassType.get(psiClass))
                 || Objects.isNull(request = FuHttpRequestDataFactory.build(e.getProject(), psiClass, fuDocContext))) {
             //获取最近一次请求记录
-            request = FuRequestManager.getRecent(e.getProject(), FuDocUtils.getModuleId(ModuleUtil.findModuleForPsiElement(psiClass)));
+            Module module = ModuleUtil.findModuleForPsiElement(fuDocContext.getTargetElement());
+            request = FuRequestManager.getRecent(e.getProject(), FuDocUtils.getModuleId(module));
             if (Objects.isNull(request)) {
                 return;
             }
+            request.setModule(module);
         }
         HttpDialogView httpDialogView = null;
         Project project = e.getProject();

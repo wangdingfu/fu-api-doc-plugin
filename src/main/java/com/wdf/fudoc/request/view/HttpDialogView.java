@@ -62,6 +62,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
      */
     private final ResponseTabView responseTabView;
 
+
     /**
      * 状态信息面板
      */

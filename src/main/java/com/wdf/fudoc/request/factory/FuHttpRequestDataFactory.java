@@ -79,6 +79,9 @@ public class FuHttpRequestDataFactory {
         if (Objects.isNull(request)) {
             request = build(fuDocContext, psiClass, module);
         }
+        if(Objects.nonNull(request)){
+            request.setModule(module);
+        }
         return request;
     }
 

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * [Fu Request]配置持久化对象
@@ -47,6 +48,11 @@ public class FuRequestConfigPO {
     private Map<String, GlobalPreScriptPO> preScriptMap = new ConcurrentHashMap<>();
 
 
+    /**
+     * cookie集合
+     */
+    private List<FuCookiePO> cookies = Lists.newArrayList();
+
     public List<GlobalPreScriptPO> getPreScriptList(String scope) {
         List<GlobalPreScriptPO> preScriptPOList = Lists.newArrayList();
         preScriptMap.forEach((key, value) -> {
@@ -69,7 +75,6 @@ public class FuRequestConfigPO {
     public String variable(String variableName) {
         return globalVariableList.stream().filter(KeyValueTableBO::getSelect).filter(f -> f.getKey().equals(variableName)).map(KeyValueTableBO::getValue).findFirst().orElse(StringUtils.EMPTY);
     }
-
 
 
     private boolean contains(List<String> scope1, List<String> scope2) {
@@ -102,5 +107,16 @@ public class FuRequestConfigPO {
         globalKeyValuePO.setKey(variableName);
         globalKeyValuePO.setValue(variableValue);
         globalKeyValuePO.setSelect(true);
+    }
+
+
+    public void addCookies(List<FuCookiePO> cookies) {
+        if (CollectionUtils.isEmpty(cookies)) {
+            return;
+        }
+        List<String> nameList = cookies.stream().map(FuCookiePO::getName).toList();
+        //移除重复的cookie
+        this.cookies.removeIf(f -> nameList.contains(f.getName()));
+        this.cookies.addAll(cookies);
     }
 }

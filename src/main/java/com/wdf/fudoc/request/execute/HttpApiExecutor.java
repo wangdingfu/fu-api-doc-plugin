@@ -2,14 +2,12 @@ package com.wdf.fudoc.request.execute;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.apidoc.data.FuDocData;
-import com.wdf.fudoc.apidoc.data.FuDocDataContent;
-import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.js.JsExecutor;
 import com.wdf.fudoc.request.js.context.FuContext;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -31,9 +29,10 @@ public class HttpApiExecutor {
      */
     public static void doSendRequest(Project project, FuHttpRequestData fuHttpRequestData) {
         //执行前置脚本
-        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
+        FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(project);
+        FuRequestConfigPO fuRequestConfigPO = fuRequestConfigStorage.readData();
         List<GlobalPreScriptPO> preScriptPOList;
-        Module module = FuDocDataContent.getFuDocData().getModule();
+        Module module = fuHttpRequestData.getModule();
         if (Objects.nonNull(module) && Objects.nonNull(fuRequestConfigPO)
                 && CollectionUtils.isNotEmpty(preScriptPOList = fuRequestConfigPO.getPreScriptList(module.getName()))) {
             for (GlobalPreScriptPO globalPreScriptPO : preScriptPOList) {
@@ -41,6 +40,8 @@ public class HttpApiExecutor {
             }
         }
         //发起请求
-        HttpExecutor.execute(project, fuHttpRequestData);
+        HttpExecutor.execute(project, fuHttpRequestData, fuRequestConfigPO);
+        //持久化数据
+        fuRequestConfigStorage.saveData(fuRequestConfigPO);
     }
 }
