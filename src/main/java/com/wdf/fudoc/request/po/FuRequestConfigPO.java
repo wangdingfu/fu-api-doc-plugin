@@ -94,7 +94,6 @@ public class FuRequestConfigPO {
         globalKeyValuePO.setKey(headerName);
         globalKeyValuePO.setValue(headerValue);
         globalKeyValuePO.setSelect(true);
-        this.globalHeaderList.add(globalKeyValuePO);
     }
 
     public void addVariable(String variableName, String variableValue, List<String> scope) {
