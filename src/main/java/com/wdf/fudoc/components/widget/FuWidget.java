@@ -10,8 +10,8 @@ import javax.swing.*;
  */
 public interface FuWidget {
 
-    default boolean isRight(){
-        return false;
+    default boolean isRight() {
+        return true;
     }
 
     JComponent getComponent();

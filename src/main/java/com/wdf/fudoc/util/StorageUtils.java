@@ -72,7 +72,7 @@ public class StorageUtils {
     }
 
     public static void writeJson(String path, String fileName, Object value) {
-        write(path, fileName, JSONUtil.formatJsonStr(JsonUtil.toJson(value)));
+        write(path, fileName, JsonUtil.toJson(value));
     }
 
     /**
