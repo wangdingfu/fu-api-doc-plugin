@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.tab.request;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.project.Project;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuTabComponent;
@@ -37,8 +38,8 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
      */
     private final FuRequestStatusInfoView fuRequestStatusInfoView;
 
-    public ResponseHeaderTabView() {
-        this.fuRequestStatusInfoView = new FuRequestStatusInfoView();
+    public ResponseHeaderTabView(Project project) {
+        this.fuRequestStatusInfoView = new FuRequestStatusInfoView(project);
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class);
         this.fuTableComponent.addListener(new FuTableDisableListener<>());
     }

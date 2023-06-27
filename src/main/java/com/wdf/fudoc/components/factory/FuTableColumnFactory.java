@@ -12,6 +12,7 @@ import com.wdf.fudoc.apidoc.sync.renderer.SyncStatusCellRenderer;
 import com.wdf.fudoc.components.ButtonTableCellEditor;
 import com.wdf.fudoc.components.bo.*;
 import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
+import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.pojo.CommonHeader;
 
@@ -87,6 +88,19 @@ public class FuTableColumnFactory {
         columns.add(new StringColumn<>(key, GlobalKeyValuePO::getKey, GlobalKeyValuePO::setKey));
         columns.add(new StringColumn<>(value, GlobalKeyValuePO::getValue, GlobalKeyValuePO::setValue));
         columns.add(new TreeModuleComboBoxColumn<>("作用范围", GlobalKeyValuePO::getScope, GlobalKeyValuePO::setScope));
+        return columns;
+    }
+
+
+    /**
+     * 过滤属性table列
+     */
+    public static List<Column> cookie() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new StringColumn<>("Name", FuCookiePO::getName, FuCookiePO::setName));
+        columns.add(new StringColumn<>("Value", FuCookiePO::getValue, FuCookiePO::setValue));
+        columns.add(new StringColumn<>("Domain", FuCookiePO::getDomain, FuCookiePO::setDomain));
+        columns.add(new StringColumn<>("Path", FuCookiePO::getPath, FuCookiePO::setPath));
         return columns;
     }
 
