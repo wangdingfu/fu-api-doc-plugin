@@ -87,7 +87,7 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> i
         if (CollectionUtils.isEmpty(headers)) {
             return;
         }
-        List<KeyValueTableBO> dataList = this.fuTableComponent.getDataList();
+        List<KeyValueTableBO> dataList = Lists.newArrayList(this.fuTableComponent.getDataList());
         if (CollectionUtils.isNotEmpty(dataList)) {
             //移除重复的
             dataList.removeIf(f -> headers.stream().anyMatch(a -> a.getKey().equals(f.getKey())));
