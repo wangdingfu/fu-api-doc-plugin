@@ -12,6 +12,7 @@ import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author wangdingfu
@@ -29,7 +30,7 @@ public class HttpCookieView extends DialogWrapper {
     public HttpCookieView(@Nullable Project project) {
         super(project, false);
         this.storage = FuRequestConfigStorageFactory.get(project);
-        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.cookie(), Lists.newArrayList(), FuCookiePO.class);
+        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.cookie(), storage.readData().getCookies(), FuCookiePO.class);
         setModal(true);
         init();
         setTitle("Cookie管理");
@@ -37,11 +38,10 @@ public class HttpCookieView extends DialogWrapper {
 
     @Override
     protected @Nullable JComponent createCenterPanel() {
-        return this.fuTableComponent.createPanel();
-    }
-
-    public void initData() {
-        this.fuTableComponent.setDataList(storage.readData().getCookies());
+        JPanel centerPanel = this.fuTableComponent.createPanel();
+        centerPanel.setMinimumSize(new Dimension(700, 440));
+        centerPanel.setPreferredSize(new Dimension(700, 440));
+        return centerPanel;
     }
 
     @Override

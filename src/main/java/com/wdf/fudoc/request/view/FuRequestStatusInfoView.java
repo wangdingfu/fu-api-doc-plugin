@@ -50,11 +50,11 @@ public class FuRequestStatusInfoView {
         initWidget(project);
     }
 
-    public static FuRequestStatusInfoView getInstance(Project project){
+    public static FuRequestStatusInfoView getInstance(Project project) {
         return new FuRequestStatusInfoView(project);
     }
 
-    public FuRequestStatusInfoView revalidate(){
+    public FuRequestStatusInfoView revalidate() {
         this.rootPanel.revalidate();
         return this;
     }
@@ -89,7 +89,7 @@ public class FuRequestStatusInfoView {
     private void initRightPanel() {
         if (this.rightPanel == null) {
             this.rightPanel = new JPanel();
-            this.rightPanel.setBorder(JBUI.Borders.emptyLeft(1));
+            this.rightPanel.setBorder(JBUI.Borders.empty(0, 1, 0, 5));
             this.rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.X_AXIS) {
                 @Override
                 public void layoutContainer(Container target) {
