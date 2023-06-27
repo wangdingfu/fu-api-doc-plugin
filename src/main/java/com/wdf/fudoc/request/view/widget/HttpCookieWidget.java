@@ -3,6 +3,7 @@ package com.wdf.fudoc.request.view.widget;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.ActionLink;
+import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.HttpCookieView;
@@ -44,6 +45,7 @@ public class HttpCookieWidget implements FuWidget {
 
     @Override
     public JComponent getComponent() {
+        actionLink.setBorder(JBUI.Borders.emptyLeft(15));
         return actionLink;
     }
 

@@ -67,7 +67,7 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> i
         FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(project);
         List<GlobalKeyValuePO> globalHeaderList = fuRequestConfigStorage.readData().getGlobalHeaderList();
         if (CollectionUtils.isNotEmpty(globalHeaderList)) {
-            addHeader(globalHeaderList.stream().filter(f -> f.getScope().getSelectPathList().contains(name)).collect(Collectors.toList()));
+            addHeader(globalHeaderList.stream().filter(f -> Objects.nonNull(f.getScope())).filter(f -> f.getScope().getSelectPathList().contains(name)).collect(Collectors.toList()));
         }
     }
 
@@ -88,7 +88,7 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> i
             return;
         }
         List<KeyValueTableBO> dataList = this.fuTableComponent.getDataList();
-        if(CollectionUtils.isNotEmpty(dataList)){
+        if (CollectionUtils.isNotEmpty(dataList)) {
             //移除重复的
             dataList.removeIf(f -> headers.stream().anyMatch(a -> a.getKey().equals(f.getKey())));
         }
