@@ -168,10 +168,7 @@ public class FuRequestToolBarManager {
             public void actionPerformed(@NotNull AnActionEvent e) {
                 Presentation presentation = e.getPresentation();
                 presentation.setEnabled(false);
-                ProgressIndicator progressIndicator = fuRequestCallback.getProgressIndicator();
-                if (Objects.nonNull(progressIndicator)) {
-                    progressIndicator.stop();
-                }
+                fuRequestCallback.stopHttp();
             }
         });
 

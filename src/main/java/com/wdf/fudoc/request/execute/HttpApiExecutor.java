@@ -46,11 +46,10 @@ public class HttpApiExecutor {
         //发起请求
         long start1 = System.currentTimeMillis();
         HttpExecutor.execute(project, fuHttpRequestData, fuRequestConfigPO);
-        log.info("发起请求共计耗时:{}ms", System.currentTimeMillis() - start1);
+        log.info("发起[{}]接口请求共计耗时:{}ms", fuHttpRequestData.getApiName(), System.currentTimeMillis() - start1);
         //持久化数据
         long start2 = System.currentTimeMillis();
         fuRequestConfigStorage.saveData(fuRequestConfigPO);
         log.info("持久化数据共计耗时:{}ms", System.currentTimeMillis() - start2);
-
     }
 }

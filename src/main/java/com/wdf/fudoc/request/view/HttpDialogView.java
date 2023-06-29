@@ -2,7 +2,6 @@ package com.wdf.fudoc.request.view;
 
 import cn.hutool.core.util.IdUtil;
 import com.intellij.find.editorHeaderActions.Utils;
-import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiElement;
@@ -31,6 +30,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -79,8 +79,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     private final boolean isSave;
 
 
-    @Getter
-    private ProgressIndicator progressIndicator;
+    private CompletableFuture<Void> sendHttpTask;
 
     @Getter
     public FuHttpRequestData httpRequestData;
@@ -95,7 +94,21 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     }
 
     @Override
+    public void stopHttp() {
+        if (Objects.isNull(sendHttpTask) || sendHttpTask.isCancelled() || sendHttpTask.isDone()) {
+            return;
+        }
+        try {
+            sendHttpTask.cancel(true);
+        } catch (Exception e) {
+            log.info("终止http请求", e);
+        }
+    }
+
+    @Override
     protected void dispose() {
+        //保存当前请求
+        FuRequestManager.saveRequest(project, httpRequestData);
         //当前窗体被销毁了 需要手动移除
         FuRequestManager.remove(this.project, this.httpId);
         super.dispose();
@@ -239,14 +252,19 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
 
     @Override
     public void doSendHttp() {
-        long start = System.currentTimeMillis();
-        sendStatus.set(true);
-        doSendBefore(httpRequestData);
-        //发起请求
-        HttpApiExecutor.doSendRequest(project, httpRequestData);
+        this.sendHttpTask = CompletableFuture.runAsync(() -> {
+            sendStatus.set(true);
+            doSendBefore(httpRequestData);
+            //发起请求
+            HttpApiExecutor.doSendRequest(project, httpRequestData);
+        });
+        //等待请求执行完成
+        this.sendHttpTask.join();
+
+        //执行后置逻辑
         sendStatus.set(false);
         doSendAfter(httpRequestData);
-        log.info("请求【{}】接口共计耗时{}ms", getTitle(), System.currentTimeMillis() - start);
+        this.sendHttpTask = null;
     }
 
 }

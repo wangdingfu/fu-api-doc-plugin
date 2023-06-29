@@ -24,6 +24,7 @@ import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,12 +32,14 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author wangdingfu
  * @date 2022-08-25 22:07:47
  */
+@Slf4j
 public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvider, HttpCallback, SendHttpListener, FuRequestCallback {
 
     /**
@@ -71,14 +74,12 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
      * 状态信息面板
      */
     private final MessageComponent messageComponent;
-
+    private CompletableFuture<Void> sendHttpTask;
 
     @Setter
     @Getter
     private PsiElement psiElement;
 
-    @Getter
-    private ProgressIndicator progressIndicator;
 
     private FuHttpRequestData httpRequestData;
 
@@ -117,6 +118,18 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     }
 
     @Override
+    public void stopHttp() {
+        if (Objects.isNull(sendHttpTask) || sendHttpTask.isCancelled() || sendHttpTask.isDone()) {
+            return;
+        }
+        try {
+            sendHttpTask.cancel(true);
+        } catch (Exception e) {
+            log.info("终止http请求", e);
+        }
+    }
+
+    @Override
     public void initData(FuHttpRequestData httpRequestData) {
         this.httpRequestData = httpRequestData;
         this.requestTabView.initData(httpRequestData);
@@ -149,21 +162,18 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
 
     @Override
     public void doSendHttp() {
-        if (Objects.isNull(httpRequestData)) {
-            return;
-        }
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "execute " + httpRequestData.getApiName()) {
-            @Override
-            public void run(@NotNull ProgressIndicator indicator) {
-                sendStatus.set(true);
-                progressIndicator = indicator;
-                doSendBefore(httpRequestData);
-                //发起请求
-                HttpApiExecutor.doSendRequest(project, httpRequestData);
-                doSendAfter(httpRequestData);
-                progressIndicator = null;
-                sendStatus.set(false);
-            }
+        this.sendHttpTask = CompletableFuture.runAsync(() -> {
+            sendStatus.set(true);
+            doSendBefore(httpRequestData);
+            //发起请求
+            HttpApiExecutor.doSendRequest(project, httpRequestData);
         });
+        //等待请求执行完成
+        this.sendHttpTask.join();
+
+        //执行后置逻辑
+        sendStatus.set(false);
+        doSendAfter(httpRequestData);
+        this.sendHttpTask = null;
     }
 }
