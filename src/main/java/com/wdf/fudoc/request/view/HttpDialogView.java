@@ -11,14 +11,15 @@ import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
+import com.wdf.fudoc.request.SendRequestHandler;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.constants.RequestConstants;
-import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -79,7 +79,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     private final boolean isSave;
 
 
-    private CompletableFuture<Void> sendHttpTask;
+    private final SendRequestHandler sendRequestHandler;
 
     @Getter
     public FuHttpRequestData httpRequestData;
@@ -95,22 +95,21 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
 
     @Override
     public void stopHttp() {
-        if (Objects.isNull(sendHttpTask) || sendHttpTask.isCancelled() || sendHttpTask.isDone()) {
-            return;
-        }
-        try {
-            sendHttpTask.cancel(true);
-        } catch (Exception e) {
-            log.info("终止http请求", e);
-        }
+        sendRequestHandler.stopHttp();
     }
 
     @Override
     protected void dispose() {
-        //保存当前请求
-        FuRequestManager.saveRequest(project, httpRequestData);
-        //当前窗体被销毁了 需要手动移除
-        FuRequestManager.remove(this.project, this.httpId);
+        try {
+            //当前窗体被销毁了 需要手动移除
+            FuRequestManager.remove(this.project, this.httpId);
+            //保存当前请求
+            FuRequestManager.saveRequest(project, httpRequestData);
+            //保存一些配置数据
+            FuRequestConfigStorage.getInstance(project).saveData();
+        } catch (Exception e) {
+            log.error("持久化请求数据异常", e);
+        }
         super.dispose();
     }
 
@@ -129,6 +128,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.toolBarPanel = initToolBarUI();
+        this.sendRequestHandler = new SendRequestHandler(project, this);
         initRequestUI();
         initResponseUI();
         setModal(isSave);
@@ -252,19 +252,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
 
     @Override
     public void doSendHttp() {
-        this.sendHttpTask = CompletableFuture.runAsync(() -> {
-            sendStatus.set(true);
-            doSendBefore(httpRequestData);
-            //发起请求
-            HttpApiExecutor.doSendRequest(project, httpRequestData);
-        });
-        //等待请求执行完成
-        this.sendHttpTask.join();
-
-        //执行后置逻辑
-        sendStatus.set(false);
-        doSendAfter(httpRequestData);
-        this.sendHttpTask = null;
+        sendRequestHandler.doSend(this.httpRequestData);
     }
 
 }

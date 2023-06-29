@@ -151,8 +151,6 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                                     logger.error("执行脚本失败", e);
                                     FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.REQUEST_SCRIPT_EXECUTE_FAIL));
                                 }
-                                progressIndicator = null;
-                                fuRequestConfigStorage.saveData(configPO);
                             }
                         });
                     }

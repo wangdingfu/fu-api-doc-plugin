@@ -1,10 +1,7 @@
 package com.wdf.fudoc.request.view.toolwindow;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.ui.Splitter;
@@ -15,13 +12,15 @@ import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
+import com.wdf.fudoc.request.SendRequestHandler;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
-import com.wdf.fudoc.request.execute.HttpApiExecutor;
+import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseHeaderTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author wangdingfu
@@ -74,7 +70,8 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
      * 状态信息面板
      */
     private final MessageComponent messageComponent;
-    private CompletableFuture<Void> sendHttpTask;
+
+    private final SendRequestHandler sendRequestHandler;
 
     @Setter
     @Getter
@@ -83,10 +80,9 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
 
     private FuHttpRequestData httpRequestData;
 
-    private final AtomicBoolean sendStatus = new AtomicBoolean(false);
 
     public boolean getSendStatus() {
-        return sendStatus.get();
+        return sendRequestHandler.getSendStatus();
     }
 
     public FuRequestWindow(@NotNull Project project, ToolWindow toolWindow) {
@@ -106,6 +102,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.messageComponent.switchInfo();
         this.rootPanel.add(this.messageComponent.getRootPanel(), BorderLayout.SOUTH);
         setContent(this.rootPanel);
+        this.sendRequestHandler = new SendRequestHandler(project, this);
     }
 
 
@@ -119,14 +116,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
 
     @Override
     public void stopHttp() {
-        if (Objects.isNull(sendHttpTask) || sendHttpTask.isCancelled() || sendHttpTask.isDone()) {
-            return;
-        }
-        try {
-            sendHttpTask.cancel(true);
-        } catch (Exception e) {
-            log.info("终止http请求", e);
-        }
+        this.sendRequestHandler.stopHttp();
     }
 
     @Override
@@ -162,18 +152,15 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
 
     @Override
     public void doSendHttp() {
-        this.sendHttpTask = CompletableFuture.runAsync(() -> {
-            sendStatus.set(true);
-            doSendBefore(httpRequestData);
-            //发起请求
-            HttpApiExecutor.doSendRequest(project, httpRequestData);
-        });
-        //等待请求执行完成
-        this.sendHttpTask.join();
+        sendRequestHandler.doSend(httpRequestData);
+        try {
+            //保存当前请求
+            FuRequestManager.saveRequest(project, httpRequestData);
+            //保存一些配置数据
+            FuRequestConfigStorage.getInstance(project).saveData();
+        } catch (Exception e) {
+            log.info("持久化请求数据异常", e);
+        }
 
-        //执行后置逻辑
-        sendStatus.set(false);
-        doSendAfter(httpRequestData);
-        this.sendHttpTask = null;
     }
 }

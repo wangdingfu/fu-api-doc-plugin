@@ -80,7 +80,7 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<GlobalKeyValuePO
 
     @Override
     public void initData(FuRequestConfigPO configPO) {
-        fuTableComponent.setDataList(configPO.getGlobalHeaderList());
+        fuTableComponent.setDataList(Lists.newArrayList(configPO.getGlobalHeaderList()));
     }
 
 

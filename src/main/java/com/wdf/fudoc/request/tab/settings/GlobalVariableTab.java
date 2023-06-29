@@ -87,7 +87,7 @@ public class GlobalVariableTab extends AbstractBulkEditTabLinkage<GlobalKeyValue
 
     @Override
     public void initData(FuRequestConfigPO configPO) {
-        fuTableComponent.setDataList(configPO.getGlobalVariableList());
+        fuTableComponent.setDataList(Lists.newArrayList(configPO.getGlobalVariableList()));
     }
 
 

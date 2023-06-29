@@ -98,12 +98,12 @@ public class FuRequestManager {
      * @param fuHttpRequestData http请求数据对象
      */
     public static void saveRequest(Project project, FuHttpRequestData fuHttpRequestData) {
-        if (Objects.isNull(fuHttpRequestData)) {
+        String apiKey;
+
+        if (Objects.isNull(fuHttpRequestData) || StringUtils.isBlank(apiKey = fuHttpRequestData.getApiKey())) {
             return;
         }
-
 //        FuStorageExecutor.saveRequest(fuHttpRequestData);
-        String apiKey = fuHttpRequestData.getApiKey();
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> requestDataMap = data.getRequestDataMap();
         requestDataMap.put(apiKey, JsonUtil.toJson(fuHttpRequestData));
