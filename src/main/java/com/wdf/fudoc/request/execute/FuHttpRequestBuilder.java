@@ -48,13 +48,17 @@ public class FuHttpRequestBuilder {
         this.configPO = fuRequestConfigPO;
         this.module = FuDocDataContent.getFuDocData().getModule();
         FuRequestData request = fuHttpRequestData.getRequest();
-        //添加请求头
-        this.addHeader(this.httpRequest, request.getHeaders());
         FuRequestBodyData body = request.getBody();
         if (Objects.isNull(body)) {
             body = new FuRequestBodyData();
             request.setBody(body);
         }
+
+        //添加请求头
+        this.addHeader(this.httpRequest, request.getHeaders());
+        //添加全局请求头
+        this.addHeader(this.httpRequest, configPO.getGlobalHeaderList());
+
         //添加Cookie
         List<FuCookiePO> cookies = configPO.getCookies();
         if (CollectionUtils.isNotEmpty(cookies)) {
@@ -160,7 +164,7 @@ public class FuHttpRequestBuilder {
      * @param httpRequest http请求对象
      * @param headers     请求头
      */
-    private void addHeader(HttpRequest httpRequest, List<KeyValueTableBO> headers) {
+    private <T extends KeyValueTableBO> void addHeader(HttpRequest httpRequest, List<T> headers) {
         if (CollectionUtils.isNotEmpty(headers)) {
             headers.stream().filter(KeyValueTableBO::getSelect).forEach(data -> httpRequest.header(data.getKey(), formatValue(data.getValue())));
         }
