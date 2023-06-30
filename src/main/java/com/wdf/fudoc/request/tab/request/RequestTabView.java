@@ -1,8 +1,5 @@
 package com.wdf.fudoc.request.tab.request;
 
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
@@ -14,13 +11,11 @@ import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.request.HttpCallback;
-import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -104,7 +99,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.requestTypeComponent = new ComboBox<>(RequestType.getItems());
         this.requestUrlComponent = new JTextField();
         this.sendBtn = new JButton("Send");
-        this.httpHeaderTab = new HttpHeaderTab();
+        this.httpHeaderTab = new HttpHeaderTab(project);
         this.httpGetParamsTab = new HttpGetParamsTab(this);
         this.httpRequestBodyTab = new HttpRequestBodyTab();
         this.rootPane = new JRootPane();
@@ -168,13 +163,13 @@ public class RequestTabView implements FuTab, HttpCallback {
      */
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
-        this.fuHttpRequestData = httpRequestData;
         FuRequestData request = httpRequestData.getRequest();
         this.requestTypeComponent.setSelectedItem(request.getRequestType().getRequestType());
-        this.apiUrl = request.getRequestUrl();
+        this.fuHttpRequestData = httpRequestData;
         this.httpHeaderTab.initData(httpRequestData);
         this.httpGetParamsTab.initData(httpRequestData);
         this.httpRequestBodyTab.initData(httpRequestData);
+        this.apiUrl = request.getRequestUrl();
         //自动选中tab页
         autoSelectTab(httpRequestData);
     }
@@ -182,7 +177,7 @@ public class RequestTabView implements FuTab, HttpCallback {
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         //设置请求类型
-        setRequestType(requestTypeComponent.getSelectedItem() + StringUtils.EMPTY);
+        setRequestType(requestTypeComponent.getSelectedItem() + StringUtils.EMPTY, false);
         httpHeaderTab.doSendBefore(fuHttpRequestData);
         httpGetParamsTab.doSendBefore(fuHttpRequestData);
         httpRequestBodyTab.doSendBefore(fuHttpRequestData);
@@ -197,6 +192,9 @@ public class RequestTabView implements FuTab, HttpCallback {
      * 自动定位tab页
      */
     private void autoSelectTab(FuHttpRequestData httpRequestData) {
+        if (Objects.isNull(httpRequestData)) {
+            return;
+        }
         FuRequestData request = httpRequestData.getRequest();
         RequestType requestType = request.getRequestType();
         //没有文件上传 且请求类型是GET请求
@@ -218,7 +216,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.sendBtn.addActionListener(e -> httpListener.doSendHttp());
 
         //对请求类型按钮添加选项选中事件
-        this.requestTypeComponent.addItemListener(e -> setRequestType(String.valueOf(e.getItem())));
+        this.requestTypeComponent.addItemListener(e -> setRequestType(String.valueOf(e.getItem()), true));
 
         //对请求地址添加属性内容变更事件
         this.requestUrlComponent.addFocusListener(new FocusListener() {
@@ -293,10 +291,22 @@ public class RequestTabView implements FuTab, HttpCallback {
      *
      * @param requestType 请求类型
      */
-    private void setRequestType(String requestType) {
+    private void setRequestType(String requestType, boolean isCombo) {
         if (Objects.nonNull(this.fuHttpRequestData)) {
             FuRequestData request = fuHttpRequestData.getRequest();
             request.setRequestType(RequestType.getRequestType(requestType));
+            if (isCombo) {
+                //切换请求参数
+                if (RequestType.GET.getRequestType().equals(requestType)) {
+                    this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
+                    this.httpRequestBodyTab.clear();
+                } else {
+                    if (Objects.nonNull(this.fuHttpRequestData)) {
+                        doSendBefore(this.fuHttpRequestData);
+                        initData(this.fuHttpRequestData);
+                    }
+                }
+            }
         }
     }
 

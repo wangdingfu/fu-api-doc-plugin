@@ -40,8 +40,10 @@ public class FuDocDataContent {
      * @return FuDoc数据对象
      */
     public static FuDocData getFuDocData() {
-        return FU_DOC_DATA_THREAD_LOCAL.get();
+        FuDocData fuDocData = FU_DOC_DATA_THREAD_LOCAL.get();
+        return Objects.isNull(fuDocData) ? FuDocData.builder().build() : fuDocData;
     }
+
 
 
     /**

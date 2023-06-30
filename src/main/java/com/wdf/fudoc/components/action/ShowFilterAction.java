@@ -12,6 +12,7 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.BadgeIconSupplier;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -25,11 +26,11 @@ import java.awt.event.HierarchyListener;
 
 public abstract class ShowFilterAction extends ToggleAction implements DumbAware {
     protected JBPopup myFilterPopup;
-    private final BadgeIconSupplier FILTER_ICON;
+    private final Icon icon;
 
     public ShowFilterAction(String text, String desc, Icon icon) {
         super(text, desc, icon);
-        this.FILTER_ICON = new BadgeIconSupplier(icon);
+        this.icon = icon;
     }
 
     @Override
@@ -50,7 +51,7 @@ public abstract class ShowFilterAction extends ToggleAction implements DumbAware
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        e.getPresentation().setIcon(FILTER_ICON.getLiveIndicatorIcon(isActive()));
+        e.getPresentation().setIcon(this.icon);
         e.getPresentation().setEnabled(isEnabled());
         Toggleable.setSelected(e.getPresentation(), isSelected(e));
     }

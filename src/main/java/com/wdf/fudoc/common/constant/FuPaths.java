@@ -9,11 +9,11 @@ import java.nio.file.Paths;
  * @date 2023-06-06 20:52:43
  */
 public interface FuPaths {
+    String FU_DOC = "fudoc";
+
     String EXTENSIONS = "extensions";
 
-    String BASE_PATH = Paths.get(PathManager.getConfigPath(), EXTENSIONS).toString();
-
-    String FU_DOC = "fudoc";
+    String BASE_PATH = Paths.get(PathManager.getConfigPath(), EXTENSIONS, FU_DOC).toString();
 
     String CONFIG = "config";
 

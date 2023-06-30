@@ -1,5 +1,7 @@
 package com.wdf.fudoc.test.action;
 
+import com.intellij.httpClient.actions.copyPaste.CurlCopyPastePreProcessor;
+import com.intellij.httpClient.actions.copyPaste.HttpRequestCopyAsCurlAction;
 import com.intellij.httpClient.converters.RequestBuilder;
 import com.intellij.httpClient.execution.HttpRequestConfig;
 import com.intellij.httpClient.execution.RestClientFormBodyPart;
@@ -101,6 +103,8 @@ public class TestAction extends AnAction {
         HttpRequestConfig requestConfig = HttpRequestPsiConverter.toRequestConfig(firstRequest);
         try {
             RestClientRequest restClientRequest = HttpRequestPsiConverter.convertFromHttpRequest(firstRequest, substitutor, requestBuilder);
+            CurlCopyPastePreProcessor preProcessor = new CurlCopyPastePreProcessor();
+            HttpRequestCopyAsCurlAction httpRequestCopyAsCurlAction = new HttpRequestCopyAsCurlAction();
             List<File> files = restClientRequest.getFiles();
             String url = restClientRequest.getURL();
             String textToSend = restClientRequest.getTextToSend();

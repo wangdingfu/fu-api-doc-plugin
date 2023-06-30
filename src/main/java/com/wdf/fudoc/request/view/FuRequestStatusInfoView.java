@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.view;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 import com.intellij.util.ui.JBUI;
@@ -8,6 +9,7 @@ import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.widget.HttpCodeWidget;
 import com.wdf.fudoc.request.view.widget.HttpContentSizeWidget;
+import com.wdf.fudoc.request.view.widget.HttpCookieWidget;
 import com.wdf.fudoc.request.view.widget.HttpTimeWidget;
 import lombok.Getter;
 
@@ -38,21 +40,21 @@ public class FuRequestStatusInfoView {
     private final List<FuWidget> widgetList = Lists.newArrayList();
 
 
-    public FuRequestStatusInfoView() {
+    public FuRequestStatusInfoView(Project project) {
         this.rootPanel = new JPanel(new BorderLayout());
         this.centerPanel = new JPanel();
         this.rootPanel.add(this.centerPanel, BorderLayout.CENTER);
         this.rootPanel.setOpaque(true);
         initLeftPanel();
         initRightPanel();
-        initWidget();
+        initWidget(project);
     }
 
-    public static FuRequestStatusInfoView getInstance(){
-        return new FuRequestStatusInfoView();
+    public static FuRequestStatusInfoView getInstance(Project project) {
+        return new FuRequestStatusInfoView(project);
     }
 
-    public FuRequestStatusInfoView revalidate(){
+    public FuRequestStatusInfoView revalidate() {
         this.rootPanel.revalidate();
         return this;
     }
@@ -61,7 +63,7 @@ public class FuRequestStatusInfoView {
     public FuRequestStatusInfoView addWidget(FuWidget fuWidget) {
         widgetList.add(fuWidget);
         if (fuWidget.isRight()) {
-            rightPanel.add(fuWidget.getComponent(), rightIndex++);
+            this.rightPanel.add(fuWidget.getComponent(), rightIndex++);
         } else {
             this.leftPanel.add(fuWidget.getComponent(), leftIndex++);
         }
@@ -69,11 +71,13 @@ public class FuRequestStatusInfoView {
     }
 
 
-    private void initWidget() {
+    private void initWidget(Project project) {
         //初始化响应状态码
         addWidget(new HttpCodeWidget());
         //初始化接口请求耗时
         addWidget(new HttpTimeWidget());
+        //初始化cookie面板
+        addWidget(new HttpCookieWidget(project));
     }
 
     public void initData(FuHttpRequestData fuHttpRequestData) {
@@ -85,7 +89,7 @@ public class FuRequestStatusInfoView {
     private void initRightPanel() {
         if (this.rightPanel == null) {
             this.rightPanel = new JPanel();
-            this.rightPanel.setBorder(JBUI.Borders.emptyLeft(1));
+            this.rightPanel.setBorder(JBUI.Borders.empty(0, 1, 0, 5));
             this.rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.X_AXIS) {
                 @Override
                 public void layoutContainer(Container target) {

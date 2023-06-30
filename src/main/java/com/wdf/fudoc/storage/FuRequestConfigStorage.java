@@ -49,7 +49,14 @@ public class FuRequestConfigStorage {
 
     public void saveData(FuRequestConfigPO configPO) {
         this.configPO = configPO;
-        StorageUtils.writeJson(path, FILE_NAME, configPO);
+        saveData();
+    }
+
+
+    public void saveData() {
+        if (Objects.nonNull(this.configPO)) {
+            StorageUtils.writeJson(path, FILE_NAME, configPO);
+        }
     }
 
 }

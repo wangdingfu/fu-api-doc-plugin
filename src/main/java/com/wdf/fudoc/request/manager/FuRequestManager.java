@@ -3,25 +3,70 @@ package com.wdf.fudoc.request.manager;
 import cn.hutool.core.util.IdUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.request.global.GlobalRequestData;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.state.FuRequestState;
+import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.storage.FuStorageExecutor;
 import com.wdf.fudoc.storage.handler.FuRequestStorage;
 import com.wdf.fudoc.util.JsonUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author wangdingfu
  * @date 2022-10-08 17:19:54
  */
 public class FuRequestManager {
+
+
+    private static final Map<Project, Map<String, HttpDialogView>> dialogViewMap = new ConcurrentHashMap<>();
+
+    public static void add(HttpDialogView httpDialogView) {
+
+        Map<String, HttpDialogView> map = dialogViewMap.get(httpDialogView.getProject());
+        if (Objects.isNull(map)) {
+            map = new HashMap<>();
+            dialogViewMap.put(httpDialogView.getProject(), map);
+        }
+        map.put(httpDialogView.getHttpId(), httpDialogView);
+    }
+
+    public static void remove(Project project, String httpId) {
+        Map<String, HttpDialogView> map = dialogViewMap.get(project);
+        if (Objects.nonNull(map)) {
+            map.remove(httpId);
+        }
+    }
+
+    public static HttpDialogView closeAll(Project project) {
+        Map<String, HttpDialogView> map = dialogViewMap.get(project);
+        if (MapUtils.isEmpty(map)) {
+            return null;
+        }
+        Set<String> httpIdSet = map.keySet();
+        if (httpIdSet.size() == 1) {
+            return map.get(httpIdSet.iterator().next());
+        }
+        List<String> httpIdList = Lists.newArrayList(httpIdSet);
+        //保留最后一个
+        HttpDialogView httpDialogView = map.remove(httpIdList.remove(httpIdList.size() - 1));
+        //其余弹框删除
+        for (String httpId : httpIdList) {
+            HttpDialogView remove = map.remove(httpId);
+            //保存请求数据
+            remove.doSendBefore(remove.getHttpRequestData());
+            //关闭弹框
+            remove.close(DialogWrapper.CANCEL_EXIT_CODE);
+        }
+        return httpDialogView;
+    }
 
 
     public static String getModuleId(Project project, String moduleName) {
@@ -53,12 +98,12 @@ public class FuRequestManager {
      * @param fuHttpRequestData http请求数据对象
      */
     public static void saveRequest(Project project, FuHttpRequestData fuHttpRequestData) {
-        if (Objects.isNull(fuHttpRequestData)) {
+        String apiKey;
+
+        if (Objects.isNull(fuHttpRequestData) || StringUtils.isBlank(apiKey = fuHttpRequestData.getApiKey())) {
             return;
         }
-
 //        FuStorageExecutor.saveRequest(fuHttpRequestData);
-        String apiKey = fuHttpRequestData.getApiKey();
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> requestDataMap = data.getRequestDataMap();
         requestDataMap.put(apiKey, JsonUtil.toJson(fuHttpRequestData));

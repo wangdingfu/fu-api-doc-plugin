@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.tab.auth;
 
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.PlatformIcons;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;

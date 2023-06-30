@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.intellij.openapi.module.Module;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +31,10 @@ public class FuHttpRequestData {
      * 当前接口所属的module
      */
     private String moduleId;
+
+
+    @JsonIgnore
+    private Module module;
 
     /**
      * 接口名称

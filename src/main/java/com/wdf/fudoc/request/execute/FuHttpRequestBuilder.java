@@ -10,19 +10,20 @@ import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.data.FuDocDataContent;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.net.HttpCookie;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -41,22 +42,28 @@ public class FuHttpRequestBuilder {
 
     private final Module module;
 
-    public FuHttpRequestBuilder(Project project, FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest) {
+    public FuHttpRequestBuilder(Project project, FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest, FuRequestConfigPO fuRequestConfigPO) {
         this.httpRequest = httpRequest;
         this.project = project;
-        this.configPO = FuRequestConfigStorageFactory.get(project).readData();
+        this.configPO = fuRequestConfigPO;
         this.module = FuDocDataContent.getFuDocData().getModule();
         FuRequestData request = fuHttpRequestData.getRequest();
-        //添加请求头
-        this.addHeader(this.httpRequest, request.getHeaders());
         FuRequestBodyData body = request.getBody();
         if (Objects.isNull(body)) {
             body = new FuRequestBodyData();
             request.setBody(body);
         }
 
-        //添加GET请求
-        addForm(request.getParams(), false);
+        //添加请求头
+        this.addHeader(this.httpRequest, request.getHeaders());
+        //添加全局请求头
+        this.addHeader(this.httpRequest, configPO.getGlobalHeaderList());
+
+        //添加Cookie
+        List<FuCookiePO> cookies = configPO.getCookies();
+        if (CollectionUtils.isNotEmpty(cookies)) {
+            httpRequest.cookie(cookies.stream().map(this::buildCookie).collect(Collectors.toList()));
+        }
         //添加form-data
         addForm(body.getFormDataList(), true);
         //添加x-www-form-urlencoded
@@ -67,6 +74,28 @@ public class FuHttpRequestBuilder {
         addBody(body.getJson());
         //添加binary
         addBody(body.getBinary());
+        //设置请求地址(GET请求参数直接在请求地址中)
+        httpRequest.setUrl(formatUrl(request.getRequestUrl()));
+    }
+
+
+    private String formatUrl(String url) {
+        if (url.contains("{{") && url.contains("}}")) {
+            String[] varList = StringUtils.substringsBetween(url, "{{", "}}");
+            if (Objects.nonNull(varList)) {
+                for (String variable : varList) {
+                    url = url.replace("{{" + variable + "}}", formatVariable(variable));
+                }
+            }
+        }
+        return url;
+    }
+
+
+    private HttpCookie buildCookie(FuCookiePO fuCookiePO) {
+        HttpCookie httpCookie = new HttpCookie(fuCookiePO.getName(), fuCookiePO.getValue());
+        httpCookie.setHttpOnly(fuCookiePO.isHttpOnly());
+        return httpCookie;
     }
 
 
@@ -90,12 +119,17 @@ public class FuHttpRequestBuilder {
 
 
     private String formatValue(String value) {
-        if (StringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}") && Objects.nonNull(module)) {
-            String name = StringUtils.substringBetween(value, "{{", "}}");
-            List<String> scope = Lists.newArrayList(module.getName());
-            return configPO.variable(name, scope);
+        if (StringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}")) {
+            return formatVariable(StringUtils.substringBetween(value, "{{", "}}"));
         }
         return value;
+    }
+
+    private String formatVariable(String variable) {
+        if (Objects.isNull(this.module)) {
+            return configPO.variable(variable);
+        }
+        return configPO.variable(variable, Lists.newArrayList(module.getName()));
     }
 
 
@@ -112,11 +146,11 @@ public class FuHttpRequestBuilder {
         }
     }
 
-    public static FuHttpRequestBuilder getInstance(Project project, FuHttpRequestData fuHttpRequestData) {
+    public static FuHttpRequestBuilder getInstance(Project project, FuHttpRequestData fuHttpRequestData, FuRequestConfigPO fuRequestConfigPO) {
         FuRequestData request = fuHttpRequestData.getRequest();
         String requestUrl = request.getRequestUrl();
         RequestType requestType = request.getRequestType();
-        return new FuHttpRequestBuilder(project, fuHttpRequestData, createHttpRequest(requestType, requestUrl));
+        return new FuHttpRequestBuilder(project, fuHttpRequestData, createHttpRequest(requestType, requestUrl), fuRequestConfigPO);
     }
 
     public HttpRequest builder() {
@@ -130,7 +164,7 @@ public class FuHttpRequestBuilder {
      * @param httpRequest http请求对象
      * @param headers     请求头
      */
-    private void addHeader(HttpRequest httpRequest, List<KeyValueTableBO> headers) {
+    private <T extends KeyValueTableBO> void addHeader(HttpRequest httpRequest, List<T> headers) {
         if (CollectionUtils.isNotEmpty(headers)) {
             headers.stream().filter(KeyValueTableBO::getSelect).forEach(data -> httpRequest.header(data.getKey(), formatValue(data.getValue())));
         }

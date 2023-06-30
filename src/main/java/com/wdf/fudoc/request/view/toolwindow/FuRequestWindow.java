@@ -1,10 +1,7 @@
 package com.wdf.fudoc.request.view.toolwindow;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.ui.Splitter;
@@ -15,28 +12,30 @@ import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
 import com.wdf.fudoc.request.HttpCallback;
+import com.wdf.fudoc.request.SendRequestHandler;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
-import com.wdf.fudoc.request.execute.HttpApiExecutor;
+import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseHeaderTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author wangdingfu
  * @date 2022-08-25 22:07:47
  */
+@Slf4j
 public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvider, HttpCallback, SendHttpListener, FuRequestCallback {
 
     /**
@@ -72,20 +71,18 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
      */
     private final MessageComponent messageComponent;
 
+    private final SendRequestHandler sendRequestHandler;
 
     @Setter
     @Getter
     private PsiElement psiElement;
 
-    @Getter
-    private ProgressIndicator progressIndicator;
 
     private FuHttpRequestData httpRequestData;
 
-    private final AtomicBoolean sendStatus = new AtomicBoolean(false);
 
     public boolean getSendStatus() {
-        return sendStatus.get();
+        return sendRequestHandler.getSendStatus();
     }
 
     public FuRequestWindow(@NotNull Project project, ToolWindow toolWindow) {
@@ -94,10 +91,10 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.toolWindow = toolWindow;
         this.rootPanel = new JPanel(new BorderLayout());
         Splitter splitter = new Splitter(true, 0.6F);
-        FuRequestStatusInfoView fuRequestStatusInfoView = new FuRequestStatusInfoView();
+        FuRequestStatusInfoView fuRequestStatusInfoView = new FuRequestStatusInfoView(project);
         this.requestTabView = new RequestTabView(project, this, fuRequestStatusInfoView);
         this.responseTabView = new ResponseTabView(project, fuRequestStatusInfoView);
-        this.responseHeaderTabView = new ResponseHeaderTabView();
+        this.responseHeaderTabView = new ResponseHeaderTabView(project);
         splitter.setFirstComponent(this.requestTabView.getRootPane());
         splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).build());
         this.rootPanel.add(splitter, BorderLayout.CENTER);
@@ -105,6 +102,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.messageComponent.switchInfo();
         this.rootPanel.add(this.messageComponent.getRootPanel(), BorderLayout.SOUTH);
         setContent(this.rootPanel);
+        this.sendRequestHandler = new SendRequestHandler(project, this);
     }
 
 
@@ -114,6 +112,11 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
             return this;
         }
         return super.getData(dataId);
+    }
+
+    @Override
+    public void stopHttp() {
+        this.sendRequestHandler.stopHttp();
     }
 
     @Override
@@ -149,21 +152,15 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
 
     @Override
     public void doSendHttp() {
-        if (Objects.isNull(httpRequestData)) {
-            return;
+        sendRequestHandler.doSend(httpRequestData);
+        try {
+            //保存当前请求
+            FuRequestManager.saveRequest(project, httpRequestData);
+            //保存一些配置数据
+            FuRequestConfigStorage.getInstance(project).saveData();
+        } catch (Exception e) {
+            log.info("持久化请求数据异常", e);
         }
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "execute " + httpRequestData.getApiName()) {
-            @Override
-            public void run(@NotNull ProgressIndicator indicator) {
-                sendStatus.set(true);
-                progressIndicator = indicator;
-                doSendBefore(httpRequestData);
-                //发起请求
-                HttpApiExecutor.doSendRequest(project, httpRequestData);
-                doSendAfter(httpRequestData);
-                progressIndicator = null;
-                sendStatus.set(false);
-            }
-        });
+
     }
 }

@@ -10,8 +10,10 @@ import com.wdf.fudoc.request.tab.request.RequestTabView;
  * @date 2023-06-12 22:15:44
  */
 public interface FuRequestCallback {
-
-    ProgressIndicator getProgressIndicator();
+    /**
+     * 停止正在发起的http请求
+     */
+    void stopHttp();
 
 
     boolean getSendStatus();

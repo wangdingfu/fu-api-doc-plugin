@@ -11,6 +11,7 @@ import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
+import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
@@ -76,9 +77,17 @@ public class GlobalVariableTab extends AbstractBulkEditTabLinkage<GlobalKeyValue
         initData(FuRequestConfigStorageFactory.get(project).readData());
     }
 
+
+    @Override
+    public void moveOff() {
+        //离开当前tab时 保存数据
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
+        fuRequestConfigPO.setGlobalVariableList(this.fuTableComponent.getDataList());
+    }
+
     @Override
     public void initData(FuRequestConfigPO configPO) {
-        fuTableComponent.setDataList(configPO.getGlobalVariableList());
+        fuTableComponent.setDataList(Lists.newArrayList(configPO.getGlobalVariableList()));
     }
 
 

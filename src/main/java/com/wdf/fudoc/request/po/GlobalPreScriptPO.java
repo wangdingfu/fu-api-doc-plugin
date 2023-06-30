@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 全局前置脚本持久化对象
@@ -34,5 +35,5 @@ public class GlobalPreScriptPO {
     /**
      * 接口请求配置
      */
-    private FuHttpRequestData fuHttpRequestData;
+    private Map<String, FuHttpRequestData> fuHttpRequestDataMap;
 }

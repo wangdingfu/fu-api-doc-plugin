@@ -2,6 +2,7 @@ package com.wdf.fudoc.start;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.TypeReference;
+import cn.hutool.http.HttpGlobalConfig;
 import cn.hutool.json.JSONUtil;
 import com.intellij.notification.*;
 import com.intellij.openapi.application.ApplicationManager;
@@ -47,8 +48,13 @@ public class FuDocStartUpListener implements StartupActivity {
 
     @Override
     public void runActivity(@NotNull Project project) {
-        //初始化持久目录
-        ApplicationManager.getApplication().invokeLater(()->FuStorageExecutor.init(project));
+        //
+        ApplicationManager.getApplication().invokeLater(()->{
+            //初始化持久目录
+            FuStorageExecutor.init(project);
+            //设置可重定向
+            HttpGlobalConfig.setMaxRedirectCount(1);
+        });
         if (reentrantLock.tryLock()) {
             try {
                 FuDocSecuritySetting instance = FuDocSecuritySetting.getInstance();
