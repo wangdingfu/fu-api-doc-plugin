@@ -84,13 +84,11 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     @Getter
     public FuHttpRequestData httpRequestData;
 
-    private final AtomicBoolean sendStatus = new AtomicBoolean(false);
-
     @Getter
     public final String httpId;
 
     public boolean getSendStatus() {
-        return sendStatus.get();
+        return sendRequestHandler.getSendStatus();
     }
 
     @Override
@@ -240,6 +238,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         JPanel centerPanel = fuTabBuilder.build();
         centerPanel.setMinimumSize(new Dimension(700, 440));
         centerPanel.setPreferredSize(new Dimension(700, 440));
+        centerPanel.setMaximumSize(new Dimension(1000, 840));
         return centerPanel;
     }
 

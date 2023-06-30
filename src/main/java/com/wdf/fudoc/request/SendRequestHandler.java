@@ -1,12 +1,14 @@
 package com.wdf.fudoc.request;
 
+import cn.hutool.core.thread.ThreadUtil;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -19,7 +21,7 @@ public class SendRequestHandler {
 
     private final Project project;
     private final HttpCallback httpCallback;
-    private CompletableFuture<Void> sendHttpTask;
+    private Future<?> sendHttpTask;
     private final AtomicBoolean sendStatus = new AtomicBoolean(false);
 
 
@@ -35,19 +37,21 @@ public class SendRequestHandler {
         if (Objects.isNull(httpRequestData)) {
             return;
         }
-        this.sendHttpTask = CompletableFuture.runAsync(() -> {
+        this.sendHttpTask = ThreadUtil.execAsync(() -> {
             sendStatus.set(true);
             httpCallback.doSendBefore(httpRequestData);
-            //发起请求
+            //发起http请求执行
             HttpApiExecutor.doSendRequest(project, httpRequestData);
+            ApplicationManager.getApplication().invokeLater(() -> {
+                if (Objects.isNull(this.sendHttpTask) || this.sendHttpTask.isCancelled()) {
+                    return;
+                }
+                httpCallback.doSendAfter(httpRequestData);
+                //执行后置逻辑
+                sendStatus.set(false);
+                this.sendHttpTask = null;
+            });
         });
-        //等待请求执行完成
-        this.sendHttpTask.join();
-
-        //执行后置逻辑
-        sendStatus.set(false);
-        httpCallback.doSendAfter(httpRequestData);
-        this.sendHttpTask = null;
     }
 
 
@@ -56,11 +60,13 @@ public class SendRequestHandler {
     }
 
     public void stopHttp() {
-        if (Objects.isNull(sendHttpTask) || sendHttpTask.isCancelled() || sendHttpTask.isDone()) {
+        if (Objects.isNull(this.sendHttpTask) || this.sendHttpTask.isCancelled()) {
             return;
         }
         try {
-            sendHttpTask.cancel(true);
+            this.sendHttpTask.cancel(true);
+            //执行后置逻辑
+            sendStatus.set(false);
         } catch (Exception e) {
             log.info("终止http请求", e);
         }
