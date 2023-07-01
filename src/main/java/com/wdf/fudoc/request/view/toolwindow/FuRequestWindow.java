@@ -129,6 +129,11 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     }
 
     @Override
+    public boolean isShowViewMode() {
+        return false;
+    }
+
+    @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         this.requestTabView.doSendBefore(fuHttpRequestData);
     }

@@ -213,6 +213,11 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         initResponseData(fuHttpRequestData);
     }
 
+    @Override
+    public boolean isShowViewMode() {
+        return true;
+    }
+
 
     public void initResponseData(FuHttpRequestData fuHttpRequestData) {
         this.responseTabView.initData(fuHttpRequestData);
