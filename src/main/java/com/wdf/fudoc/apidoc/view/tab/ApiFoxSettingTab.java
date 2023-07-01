@@ -25,8 +25,6 @@ import icons.FuDocIcons;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 
 /**
@@ -49,6 +47,7 @@ public class ApiFoxSettingTab implements FuTab, FuViewListener {
 
     public ApiFoxSettingTab() {
         this.basicPanel.setBorder(JBUI.Borders.emptyTop(10));
+        this.mainPanel.setBorder(JBUI.Borders.emptyTop(10));
         this.projectTable = FuTableComponent.create(FuTableColumnFactory.apiFox(), ApiFoxProjectTableData.class);
         this.mainPanel.add(this.projectTable.createPanel(), BorderLayout.CENTER);
         initRootPane();

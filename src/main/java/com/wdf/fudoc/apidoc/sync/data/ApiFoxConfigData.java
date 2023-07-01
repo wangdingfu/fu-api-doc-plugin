@@ -4,8 +4,10 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
+import com.wdf.fudoc.common.constant.UrlConstants;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -21,6 +23,16 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
      * 用户token APS-XHZBI2EJ2WWkV5fmGvfgUNGCLEO8xOL5
      */
     private String token;
+
+    @Override
+    public String getBaseUrl() {
+        return StringUtils.isBlank(super.baseUrl) ? UrlConstants.API_FOX : super.baseUrl;
+    }
+
+    @Override
+    public boolean isAutoGenCategory() {
+        return true;
+    }
 
     public ApiFoxConfigData() {
     }
@@ -50,7 +62,6 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
 
     @Override
     public String getApiDocUrl(SyncApiResultDTO syncApiResultDTO) {
-
         return null;
     }
 }

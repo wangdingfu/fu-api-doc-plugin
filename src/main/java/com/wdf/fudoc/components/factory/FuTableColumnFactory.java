@@ -74,7 +74,6 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", HeaderKeyValueBO::getSelect, HeaderKeyValueBO::setSelect));
         columns.add(new StringColumn<>("参数名", HeaderKeyValueBO::getKey, HeaderKeyValueBO::setKey));
         columns.add(new StringColumn<>("示例值", HeaderKeyValueBO::getValue, HeaderKeyValueBO::setValue));
-        columns.add(new StringColumn<>("描述信息", HeaderKeyValueBO::getDescription, HeaderKeyValueBO::setDescription));
         columns.add(new ComboBoxColumn<>("级别", HeaderKeyValueBO::getLevel, HeaderKeyValueBO::setLevel, HeaderLevel.getCodes()));
         return columns;
     }

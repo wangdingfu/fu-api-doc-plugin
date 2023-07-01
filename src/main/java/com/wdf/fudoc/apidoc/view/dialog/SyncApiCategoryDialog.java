@@ -147,7 +147,6 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         }
         this.projectNameComboBox.setSelectedItem(this.apiProjectDTO);
         this.projectPanel.add(new JLabel(PROJECT_LABEL), BorderLayout.WEST);
-        this.projectPanel.add(this.projectNameComboBox, BorderLayout.CENTER);
         //创建项目
         LinkLabel<String> projectLinkLabel = new LinkLabel<>(CREATE_PROJECT, null, (aSource, aLinkData) -> createProject(projectConfigList));
         //当前暂不提供创建项目入口-预留后期

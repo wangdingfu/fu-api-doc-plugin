@@ -12,8 +12,10 @@ import com.wdf.fudoc.apidoc.sync.data.ApiFoxConfigData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.*;
 import com.wdf.fudoc.apidoc.sync.service.ApiFoxService;
+import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
@@ -64,6 +66,26 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         //同步api
         service.syncApi(apiFoxDTO, apiProjectDTO, (ApiFoxConfigData) configData);
         return Lists.newArrayList();
+    }
+
+
+    /**
+     * 确认需要同步的分类
+     *
+     * @param apiProjectDTO 同步的项目
+     * @param configData    配置数据
+     * @param psiClass      当前api所在的java类
+     * @param projectRecord 同步记录
+     * @return api同步至哪个分类下
+     */
+    @Override
+    protected ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass, ProjectSyncApiRecordData projectRecord) {
+        SyncApiConfirmDialog syncApiConfirmDialog = new SyncApiConfirmDialog(ProjectUtils.getCurrProject(), psiClass);
+        if (!syncApiConfirmDialog.showAndGet()) {
+            //取消则不同步
+            return null;
+        }
+        return syncApiConfirmDialog.getSelected();
     }
 
 
@@ -150,25 +172,4 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         return Lists.newArrayList();
     }
 
-    /**
-     * 确认需要同步的分类
-     *
-     * @param apiProjectDTO 同步的项目
-     * @param configData    配置数据
-     * @param psiClass      当前api所在的java类
-     * @param projectRecord 同步记录
-     * @return api同步至哪个分类下
-     */
-    @Override
-    protected ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass, ProjectSyncApiRecordData projectRecord) {
-        if (Objects.isNull(apiProjectDTO)) {
-            apiProjectDTO = new ApiProjectDTO();
-            apiProjectDTO.setProjectId("1756101");
-            apiProjectDTO.setProjectName("测试项目");
-        }
-        ApiCategoryDTO apiCategoryDTO = new ApiCategoryDTO();
-        apiCategoryDTO.setCategoryName("测试");
-        apiProjectDTO.setSelectCategory(apiCategoryDTO);
-        return apiProjectDTO;
-    }
 }
