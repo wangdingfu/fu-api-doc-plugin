@@ -5,10 +5,12 @@ import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tabs.TabInfo;
+import com.wdf.fudoc.apidoc.constant.enumtype.HeaderLevel;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.HttpCallback;
@@ -30,13 +32,13 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-09-17 21:30:58
  */
-public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback {
+public class HttpHeaderTab extends AbstractBulkEditTabLinkage<HeaderKeyValueBO> implements FuTab, HttpCallback {
 
     private final Project project;
     /**
      * table组件
      */
-    private final FuTableComponent<KeyValueTableBO> fuTableComponent;
+    private final FuTableComponent<HeaderKeyValueBO> fuTableComponent;
     /**
      * 批量编辑请求参数组件
      */
@@ -46,7 +48,7 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> i
 
     public HttpHeaderTab(Project project) {
         this.project = project;
-        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class);
+        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.header(), HeaderKeyValueBO.class);
         //文本编辑器
         this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
     }
@@ -63,11 +65,10 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> i
         if (Objects.isNull(module)) {
             return;
         }
-        String name = module.getName();
         FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(project);
         List<GlobalKeyValuePO> globalHeaderList = fuRequestConfigStorage.readData().getGlobalHeaderList();
         if (CollectionUtils.isNotEmpty(globalHeaderList)) {
-            addHeader(globalHeaderList.stream().filter(f -> Objects.nonNull(f.getScope())).filter(f -> f.getScope().getSelectPathList().contains(name)).collect(Collectors.toList()));
+            addHeader(globalHeaderList.stream().filter(f -> f.isScope(module)).collect(Collectors.toList()));
         }
     }
 
@@ -83,11 +84,11 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> i
     }
 
 
-    private void addHeader(List<KeyValueTableBO> headers) {
+    private void addHeader(List<HeaderKeyValueBO> headers) {
         if (CollectionUtils.isEmpty(headers)) {
             return;
         }
-        List<KeyValueTableBO> dataList = Lists.newArrayList(this.fuTableComponent.getDataList());
+        List<HeaderKeyValueBO> dataList = Lists.newArrayList(this.fuTableComponent.getDataList());
         if (CollectionUtils.isNotEmpty(dataList)) {
             //移除重复的
             dataList.removeIf(f -> headers.stream().anyMatch(a -> a.getKey().equals(f.getKey())));
@@ -101,12 +102,17 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> i
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         FuRequestData request = fuHttpRequestData.getRequest();
         if (Objects.nonNull(request)) {
-            request.setHeaders(fuTableComponent.getDataList());
+            List<HeaderKeyValueBO> dataList = fuTableComponent.getDataList();
+            if (CollectionUtils.isNotEmpty(dataList)) {
+                //请求对象中无需保存全局请求头 在实际请求时会统一带上全局请求头
+                dataList.removeIf(f -> HeaderLevel.GLOBAL.getView().equals(f.getLevel()));
+            }
+            request.setHeaders(dataList);
         }
     }
 
     @Override
-    protected FuTableComponent<KeyValueTableBO> getTableComponent(String tab) {
+    protected FuTableComponent<HeaderKeyValueBO> getTableComponent(String tab) {
         return this.fuTableComponent;
     }
 

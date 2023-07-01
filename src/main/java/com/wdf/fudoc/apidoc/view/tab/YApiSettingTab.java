@@ -163,10 +163,19 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         return tableData;
     }
 
+    @Override
+    public void moveOff() {
+        FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
+        if (this.isEnable.isSelected()) {
+            //如果开启了就设置启用的为yapi 否则不设置（都没有设置情况会有默认值）
+            settingData.setEnable(ApiDocSystem.YAPI.getCode());
+        }
+    }
 
     @Override
     public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
         rootPane.setDefaultButton(this.loginBtn);
+        this.isEnable.setSelected(ApiDocSystem.YAPI.getCode().equals(FuDocSyncSetting.getSettingData().getEnable()));
     }
 
 
@@ -176,7 +185,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     }
 
     private void createUIComponents() {
-        this.baseUrl = new PlaceholderTextField("请输入你的YApi服务地址 例如:https://yapi.fudoc.com");
+        this.baseUrl = new PlaceholderTextField("请输入你的YApi服务地址 例如:http://yapi.fudoc.com");
     }
 
     @Override

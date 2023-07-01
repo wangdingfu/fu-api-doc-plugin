@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
-import com.wdf.fudoc.apidoc.view.tab.ApiFoxSettingsTab;
+import com.wdf.fudoc.apidoc.view.tab.ApiFoxSettingTab;
 import com.wdf.fudoc.apidoc.view.tab.ShowDocSettingsTab;
 import com.wdf.fudoc.apidoc.view.tab.YApiSettingTab;
 import com.wdf.fudoc.common.constant.UrlConstants;
@@ -47,13 +47,13 @@ public class FuDocSyncSettingForm {
     /**
      * apiFox配置页面
      */
-    private final ApiFoxSettingsTab apiFoxSettingsTab;
+    private final ApiFoxSettingTab apiFoxSettingsTab;
 
     public FuDocSyncSettingForm() {
         this.rootPanel = new JPanel(new BorderLayout());
         this.yApiSettingsTab = new YApiSettingTab();
         this.showDocSettingsTab = new ShowDocSettingsTab();
-        this.apiFoxSettingsTab = new ApiFoxSettingsTab();
+        this.apiFoxSettingsTab = new ApiFoxSettingTab();
         FuTabBuilder fuTabBuilder = FuTabBuilder.getInstance();
         fuTabBuilder.addTab(this.yApiSettingsTab).addTab(this.showDocSettingsTab).addTab(this.apiFoxSettingsTab);
         //需要判断是否展示提示信息

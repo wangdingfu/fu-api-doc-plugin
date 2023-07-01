@@ -38,6 +38,9 @@ public interface FuDocIcons {
     Icon FU_VARIABLE = IconLoader.getIcon("icon/variable.svg", FuDocIcons.class);
 
 
+    Icon MORE = IconLoader.getIcon("icon/more.svg", FuDocIcons.class);
+
+
     Icon GET_DARK = IconLoader.getIcon("icon/http/get_dark.svg", FuDocIcons.class);
     Icon POST_DARK = IconLoader.getIcon("icon/http/post_dark.svg", FuDocIcons.class);
     Icon PUT_DARK = IconLoader.getIcon("icon/http/put_dark.svg", FuDocIcons.class);

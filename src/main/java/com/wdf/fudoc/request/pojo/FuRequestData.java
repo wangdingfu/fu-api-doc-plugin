@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +50,7 @@ public class FuRequestData {
      * 请求头
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<KeyValueTableBO> headers;
+    private List<HeaderKeyValueBO> headers;
 
     /**
      * 请求参数（GET请求）
@@ -73,9 +74,9 @@ public class FuRequestData {
         if (Objects.isNull(this.headers)) {
             this.headers = Lists.newArrayList();
         }
-        KeyValueTableBO keyValueTableBO = this.headers.stream().filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
+        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
         if (Objects.isNull(keyValueTableBO)) {
-            keyValueTableBO = new KeyValueTableBO(true, key, value);
+            keyValueTableBO = new HeaderKeyValueBO(true, key, value);
             this.headers.add(keyValueTableBO);
         }
         keyValueTableBO.setValue(value);

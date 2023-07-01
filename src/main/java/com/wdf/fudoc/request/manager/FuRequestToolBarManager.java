@@ -203,7 +203,7 @@ public class FuRequestToolBarManager {
 
 
         //添加设置按钮
-        defaultActionGroup.add(new AnAction("设置", "Setting", AllIcons.General.GearPlain) {
+        defaultActionGroup.add(new AnAction("设置", "Setting", FuDocIcons.MORE) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "View Mode");

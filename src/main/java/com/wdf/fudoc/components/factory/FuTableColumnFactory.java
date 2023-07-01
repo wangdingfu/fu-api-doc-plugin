@@ -2,9 +2,11 @@ package com.wdf.fudoc.components.factory;
 
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.DynamicDataType;
+import com.wdf.fudoc.apidoc.constant.enumtype.HeaderLevel;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.apidoc.pojo.bo.FilterFieldBO;
+import com.wdf.fudoc.apidoc.sync.data.ApiFoxProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
@@ -64,6 +66,18 @@ public class FuTableColumnFactory {
         return columns;
     }
 
+    /**
+     * 过滤属性table列
+     */
+    public static List<Column> header() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", HeaderKeyValueBO::getSelect, HeaderKeyValueBO::setSelect));
+        columns.add(new StringColumn<>("参数名", HeaderKeyValueBO::getKey, HeaderKeyValueBO::setKey));
+        columns.add(new StringColumn<>("示例值", HeaderKeyValueBO::getValue, HeaderKeyValueBO::setValue));
+        columns.add(new StringColumn<>("描述信息", HeaderKeyValueBO::getDescription, HeaderKeyValueBO::setDescription));
+        columns.add(new ComboBoxColumn<>("级别", HeaderKeyValueBO::getLevel, HeaderKeyValueBO::setLevel, HeaderLevel.getCodes()));
+        return columns;
+    }
 
     /**
      * 过滤属性table列
@@ -114,6 +128,18 @@ public class FuTableColumnFactory {
         columns.add(new StringColumn<>("项目token", YApiProjectTableData::getProjectToken, YApiProjectTableData::setProjectToken));
         columns.add(new StringColumn<>("项目名称", YApiProjectTableData::getProjectName, YApiProjectTableData::setProjectName));
         columns.add(new TreeModuleComboBoxColumn<>("作用范围", YApiProjectTableData::getScope, YApiProjectTableData::setScope));
+        return columns;
+    }
+
+
+    /**
+     * YApi table列
+     */
+    public static List<Column> apiFox() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", ApiFoxProjectTableData::getSelect, ApiFoxProjectTableData::setSelect));
+        columns.add(new StringColumn<>("项目id", ApiFoxProjectTableData::getProjectId, ApiFoxProjectTableData::setProjectId));
+        columns.add(new TreeModuleComboBoxColumn<>("作用范围", ApiFoxProjectTableData::getScope, ApiFoxProjectTableData::setScope));
         return columns;
     }
 

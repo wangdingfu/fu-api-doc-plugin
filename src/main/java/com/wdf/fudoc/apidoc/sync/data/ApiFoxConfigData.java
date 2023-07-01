@@ -18,12 +18,11 @@ import java.util.List;
 public class ApiFoxConfigData extends BaseSyncConfigData {
 
     /**
-     * 用户token
+     * 用户token APS-XHZBI2EJ2WWkV5fmGvfgUNGCLEO8xOL5
      */
-    private String token = "APS-XHZBI2EJ2WWkV5fmGvfgUNGCLEO8xOL5";
+    private String token;
 
     public ApiFoxConfigData() {
-        setBaseUrl("https://api.apifox.cn");
     }
 
     @Override

@@ -18,4 +18,7 @@ public interface UrlConstants {
     String FU_DOC_URL = "http://150.158.164.160:9090";
 
     String FU_DOCUMENT_SYNC_URL = "https://wangdingfu.github.io/#/zh-cn/sync/quickstart";
+
+
+    String API_FOX = "https://api.apifox.cn";
 }
