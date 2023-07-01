@@ -175,7 +175,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     private JPanel initToolBarUI() {
         JPanel toolBarPanel = new JPanel(new BorderLayout());
         Utils.setSmallerFontForChildren(toolBarPanel);
-        toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
+//        toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
         FuRequestToolBarManager instance = FuRequestToolBarManager.getInstance(this);
         //创建及初始化工具栏
         ToolBarUtils.addActionToToolBar(toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, instance.initToolBar(), BorderLayout.EAST);

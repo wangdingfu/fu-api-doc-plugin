@@ -6,6 +6,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.base.KeyValueBO;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.request.http.data.HttpClientData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -59,7 +60,7 @@ public class HttpDataConvert {
             return null;
         }
         FuRequestBodyData body = fuRequestData.getBody();
-        List<KeyValueTableBO> headers = fuRequestData.getHeaders();
+        List<HeaderKeyValueBO> headers = fuRequestData.getHeaders();
         String contentType = headers.stream().filter(f -> f.getKey().equals(FuDocConstants.CONTENT_TYPE)).findFirst().map(KeyValueTableBO::getValue).orElse(null);
         if (StringUtils.isBlank(contentType)) {
             if (StringUtils.isNotBlank(body.getJson())) {

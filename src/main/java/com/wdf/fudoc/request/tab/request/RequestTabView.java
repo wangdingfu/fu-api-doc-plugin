@@ -177,7 +177,7 @@ public class RequestTabView implements FuTab, HttpCallback {
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         //设置请求类型
-        setRequestType(requestTypeComponent.getSelectedItem() + StringUtils.EMPTY, false);
+        setRequestType(requestTypeComponent.getSelectedItem() + StringUtils.EMPTY);
         httpHeaderTab.doSendBefore(fuHttpRequestData);
         httpGetParamsTab.doSendBefore(fuHttpRequestData);
         httpRequestBodyTab.doSendBefore(fuHttpRequestData);
@@ -216,7 +216,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.sendBtn.addActionListener(e -> httpListener.doSendHttp());
 
         //对请求类型按钮添加选项选中事件
-        this.requestTypeComponent.addItemListener(e -> setRequestType(String.valueOf(e.getItem()), true));
+        this.requestTypeComponent.addItemListener(e -> changeAction(String.valueOf(e.getItem())));
 
         //对请求地址添加属性内容变更事件
         this.requestUrlComponent.addFocusListener(new FocusListener() {
@@ -291,21 +291,25 @@ public class RequestTabView implements FuTab, HttpCallback {
      *
      * @param requestType 请求类型
      */
-    private void setRequestType(String requestType, boolean isCombo) {
+    private void setRequestType(String requestType) {
         if (Objects.nonNull(this.fuHttpRequestData)) {
             FuRequestData request = fuHttpRequestData.getRequest();
             request.setRequestType(RequestType.getRequestType(requestType));
-            if (isCombo) {
-                //切换请求参数
-                if (RequestType.GET.getRequestType().equals(requestType)) {
-                    this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
-                    this.httpRequestBodyTab.clear();
-                } else {
-                    if (Objects.nonNull(this.fuHttpRequestData)) {
-                        doSendBefore(this.fuHttpRequestData);
-                        initData(this.fuHttpRequestData);
-                    }
-                }
+        }
+    }
+
+    private void changeAction(String requestType){
+        //切换请求参数
+        if (RequestType.GET.getRequestType().equals(requestType)) {
+            this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
+            this.httpRequestBodyTab.clear();
+        } else {
+            if (Objects.nonNull(this.fuHttpRequestData)) {
+                //设置请求类型
+                setRequestType(requestType);
+                httpGetParamsTab.doSendBefore(fuHttpRequestData);
+                httpRequestBodyTab.doSendBefore(fuHttpRequestData);
+                this.fuTabBuilder.select(HttpRequestBodyTab.BODY);
             }
         }
     }

@@ -6,6 +6,7 @@ import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableDisableListener;
@@ -30,7 +31,7 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
     /**
      * table组件
      */
-    private final FuTableComponent<KeyValueTableBO> fuTableComponent;
+    private final FuTableComponent<HeaderKeyValueBO> fuTableComponent;
 
 
     /**
@@ -40,7 +41,7 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
 
     public ResponseHeaderTabView(Project project) {
         this.fuRequestStatusInfoView = new FuRequestStatusInfoView(project);
-        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class);
+        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(),  HeaderKeyValueBO.class);
         this.fuTableComponent.addListener(new FuTableDisableListener<>());
     }
 
