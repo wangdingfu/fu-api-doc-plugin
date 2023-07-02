@@ -77,6 +77,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
     private SyncApiResultDTO buildSyncApiResult(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiSyncStatus apiSyncStatus, String errorMsg) {
         SyncApiResultDTO syncApiResultDTO = new SyncApiResultDTO();
         syncApiResultDTO.setApiId(fuDocItemData.getApiKey());
+        syncApiResultDTO.setApiUrl(fuDocItemData.getUrlList().get(0));
         syncApiResultDTO.setApiName(fuDocItemData.getTitle());
         syncApiResultDTO.setSyncStatus(apiSyncStatus.getMessage());
         syncApiResultDTO.setProjectId(apiProjectDTO.getProjectId());
