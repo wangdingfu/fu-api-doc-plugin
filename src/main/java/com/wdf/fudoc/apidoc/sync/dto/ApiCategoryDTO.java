@@ -47,6 +47,15 @@ public class ApiCategoryDTO implements Serializable {
         this.categoryName = categoryName;
     }
 
+    public ApiCategoryDTO(String categoryId, List<ApiCategoryDTO> apiCategoryList) {
+        this.categoryId = categoryId;
+        this.apiCategoryList = apiCategoryList;
+    }
+
+    public ApiCategoryDTO(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
     @Override
     public String toString() {
         return this.categoryName;

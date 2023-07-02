@@ -68,7 +68,7 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<HeaderKeyValueBO> 
         FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(project);
         List<GlobalKeyValuePO> globalHeaderList = fuRequestConfigStorage.readData().getGlobalHeaderList();
         if (CollectionUtils.isNotEmpty(globalHeaderList)) {
-            addHeader(globalHeaderList.stream().filter(f -> f.isScope(module)).collect(Collectors.toList()));
+            addHeader(globalHeaderList.stream().filter(f -> Objects.isNull(f.getScope()) || f.getScope().isScope(module)).collect(Collectors.toList()));
         }
     }
 

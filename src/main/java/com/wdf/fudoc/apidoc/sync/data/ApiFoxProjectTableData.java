@@ -1,10 +1,12 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
+import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.components.bo.TreePathBO;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author wangdingfu
@@ -25,7 +27,17 @@ public class ApiFoxProjectTableData implements Serializable {
     private String projectId;
 
     /**
+     * 项目名称
+     */
+    private String projectName;
+
+    /**
      * 项目范围
      */
     private TreePathBO scope;
+
+    /**
+     * 分类集合
+     */
+    private List<ApiCategoryDTO> categoryList;
 }

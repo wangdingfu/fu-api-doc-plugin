@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.dto;
 
+import com.wdf.fudoc.components.bo.TreePathBO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,6 +51,9 @@ public class ApiProjectDTO {
      * java 模块名称
      */
     private String moduleName;
+
+
+    private TreePathBO scope;
 
     /**
      * 排序

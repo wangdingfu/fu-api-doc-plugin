@@ -1,41 +1,36 @@
-package com.wdf.fudoc.test.view;
+package com.wdf.fudoc.components.tree.old;
 
-import com.intellij.ide.util.treeView.AbstractTreeStructure;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tree.AsyncTreeModel;
 import com.intellij.ui.tree.StructureTreeModel;
 import com.intellij.ui.treeStructure.SimpleTree;
-import com.wdf.fudoc.components.tree.old.FuModuleTreeStructure;
 import lombok.Getter;
 
 import javax.swing.*;
-import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import java.awt.*;
 
 /**
+ * 树形组件
+ *
  * @author wangdingfu
- * @date 2023-01-07 19:54:31
+ * @date 2023-01-07 20:33:13
  */
-public class TestPanel {
+public class FuTreeComponent<T extends FuTreeNode> extends JComponent {
+
 
     @Getter
-    private JPanel rootPanel;
-
-    private final StructureTreeModel<AbstractTreeStructure> treeModel;
     private final SimpleTree catalogTree;
 
+    @Getter
+    private final T root;
 
-    public TestPanel(Project project) {
-        rootPanel = new JPanel(new BorderLayout());
-        treeModel = new StructureTreeModel<>(new FuModuleTreeStructure(project),null,project);
-        catalogTree = new SimpleTree(new AsyncTreeModel(treeModel, project));
+
+    public FuTreeComponent(Project project, T root) {
+        super();
+        this.root = root;
+        FuTreeStructure<FuTreeNode> fuTreeStructure = new FuTreeStructure<>(root);
+        catalogTree = new SimpleTree(new AsyncTreeModel(new StructureTreeModel<>(fuTreeStructure, null, project), project));
         initCatalogTree();
-        rootPanel.add(catalogTree);
-    }
-
-    public TreePath[] getSelected(){
-        return catalogTree.getSelectionPaths();
     }
 
     /**

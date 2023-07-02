@@ -15,12 +15,12 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncCategory;
-import com.wdf.fudoc.apidoc.sync.strategy.SyncFuDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncStrategyFactory;
 import com.wdf.fudoc.common.FuDocMessageBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
-import com.wdf.fudoc.components.tree.ApiCategoryTreeNode;
-import com.wdf.fudoc.components.tree.FuTreeComponent;
+import com.wdf.fudoc.components.tree.old.ApiCategoryTreeNode;
+import com.wdf.fudoc.components.tree.old.FuTreeComponent;
+import com.wdf.fudoc.components.validator.CreateCategoryValidator;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
@@ -224,7 +224,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
      */
     private void createCategory() {
         //弹框让用户输入分类名称
-        String value = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), StringUtils.EMPTY, new CreateCategoryValidator(this.apiProjectDTO));
+        String value = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), StringUtils.EMPTY, new CreateCategoryValidator(this.apiProjectDTO.getApiCategoryList()));
         if (StringUtils.isNotBlank(value)) {
             //初始化当前项目下的接口分类
             List<ApiCategoryDTO> apiCategoryList = initCategoryList();
@@ -335,39 +335,5 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         return this.rootPanel;
     }
 
-
-    /**
-     * 创建分类输入框校验器
-     */
-    private static class CreateCategoryValidator implements InputValidatorEx {
-        //当前选中的项目
-        private final ApiProjectDTO apiProjectDTO;
-        //错误消息
-        private String myErrorText;
-
-        CreateCategoryValidator(ApiProjectDTO apiProjectDTO) {
-            this.apiProjectDTO = apiProjectDTO;
-        }
-
-        @Override
-        public @Nullable String getErrorText(String inputString) {
-            return myErrorText;
-        }
-
-        @Override
-        public boolean checkInput(String inputString) {
-            if (StringUtils.isNotBlank(inputString)) {
-                //校验输入的内容
-                List<ApiCategoryDTO> categoryList = apiProjectDTO.getApiCategoryList();
-                if (CollectionUtils.isNotEmpty(categoryList) && categoryList.stream().anyMatch(a -> a.getCategoryName().equals(inputString))) {
-                    //当前项目中存在 则不创建
-                    myErrorText = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_REPEAT, apiProjectDTO.getProjectName());
-                    return false;
-                }
-            }
-            myErrorText = null;
-            return true;
-        }
-    }
 
 }

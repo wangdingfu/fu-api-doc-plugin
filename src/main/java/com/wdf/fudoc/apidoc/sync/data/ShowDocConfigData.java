@@ -19,6 +19,11 @@ public class ShowDocConfigData extends BaseSyncConfigData{
     }
 
     @Override
+    public void syncApiProjectList(String moduleName, List<ApiProjectDTO> apiProjectDTOList) {
+
+    }
+
+    @Override
     public boolean isExistsConfig() {
         return false;
     }

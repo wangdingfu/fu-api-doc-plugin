@@ -87,6 +87,14 @@ public abstract class BaseSyncConfigData implements Serializable {
 
 
     /**
+     * 同步项目配置数据
+     *
+     * @param apiProjectDTOList 项目配置数据
+     */
+    public abstract void syncApiProjectList(String moduleName, List<ApiProjectDTO> apiProjectDTOList);
+
+
+    /**
      * 是否存在当前项目配置
      */
     public abstract boolean isExistsConfig();

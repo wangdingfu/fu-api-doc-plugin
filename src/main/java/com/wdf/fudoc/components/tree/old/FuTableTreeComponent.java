@@ -1,4 +1,4 @@
-package com.wdf.fudoc.components.tree;
+package com.wdf.fudoc.components.tree.old;
 
 import com.intellij.ui.treeStructure.SimpleTree;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import javax.swing.plaf.ComboBoxUI;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.plaf.metal.MetalComboBoxUI;
 import javax.swing.tree.TreePath;
-import java.util.List;
 import java.util.Objects;
 
 /**
