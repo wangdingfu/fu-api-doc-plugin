@@ -29,7 +29,7 @@ public class FuDocTitleValueHandler implements ParamValueHandler {
     public String getParamValue(FuDocContext fuDocContext, BaseInfoDesc baseInfoDesc) {
         //获取swagger注解
         if(fuDocContext.isEnableSwagger()){
-            Optional<AnnotationData> annotation = baseInfoDesc.getAnnotation(AnnotationConstants.SWAGGER_API);
+            Optional<AnnotationData> annotation = baseInfoDesc.getAnnotation(AnnotationConstants.SWAGGER_API_OPERATION);
             String swaggerName = AnnotationUtils.getAnnotationValue(annotation, FuDocConstants.VALUE, FuDocConstants.AnnotationAttr.NAME);
             if (StringUtils.isNotBlank(swaggerName)) {
                 return swaggerName;

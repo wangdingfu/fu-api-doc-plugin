@@ -22,6 +22,7 @@ import com.wdf.fudoc.components.tree.FuTreeActionListener;
 import com.wdf.fudoc.components.tree.FuTreeComponent;
 import com.wdf.fudoc.components.tree.node.FuTreeNode;
 import com.wdf.fudoc.components.validator.CreateCategoryValidator;
+import com.wdf.fudoc.util.FuDocUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +63,16 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
     private final Module module;
 
     /**
+     * 当前同步文档的class
+     */
+    private final PsiClass psiClass;
+
+    /***
+     * 默认分类
+     */
+    private ApiCategoryDTO defaultApiCategory;
+
+    /**
      * 树形组件
      */
     private final FuTreeComponent<ApiCategoryDTO> fuTreeComponent;
@@ -75,6 +86,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
     public SyncApiConfirmDialog(@Nullable Project project, PsiClass psiClass) {
         super(project, true);
         this.project = project;
+        this.psiClass = psiClass;
         this.rootPanel = new JPanel(new BorderLayout());
         this.module = ModuleUtil.findModuleForPsiElement(psiClass);
         //初始化配置数据
@@ -95,6 +107,19 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         this.projectNameComboBox = new ComboBox<>(projectConfigList.toArray(new ApiProjectDTO[0]));
         if (Objects.isNull(this.apiProjectDTO) && CollectionUtils.isNotEmpty(this.projectConfigList)) {
             this.apiProjectDTO = projectConfigList.get(0);
+            //是否将当前类的注释信息作为分类
+            String title = FuDocUtils.classTitle(psiClass);
+            if (StringUtils.isNotBlank(title)) {
+                List<ApiCategoryDTO> apiCategoryList = this.apiProjectDTO.getApiCategoryList();
+                if (Objects.isNull(apiCategoryList)) {
+                    apiCategoryList = Lists.newArrayList();
+                    this.apiProjectDTO.setApiCategoryList(apiCategoryList);
+                }
+                if (apiCategoryList.stream().noneMatch(a -> title.equals(a.getCategoryName()))) {
+                    this.defaultApiCategory = new ApiCategoryDTO(title);
+                    apiCategoryList.add(this.defaultApiCategory);
+                }
+            }
         }
     }
 
@@ -119,9 +144,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
      */
     public ApiProjectDTO getSelected() {
         FuTreeNode<ApiCategoryDTO> selectedNode = fuTreeComponent.getSelectedNode();
-        if (Objects.nonNull(selectedNode)) {
-            apiProjectDTO.setSelectCategory(selectedNode.getData());
-        }
+        apiProjectDTO.setSelectCategory(Objects.isNull(selectedNode) ? this.defaultApiCategory : selectedNode.getData());
         return apiProjectDTO;
     }
 
@@ -227,7 +250,6 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         ApiCategoryDTO apiCategoryDTO = apiCategoryList.stream().filter(f -> nodeName.equals(f.getCategoryName())).findFirst().orElse(new ApiCategoryDTO(nodeName, parent));
         return recursionCategory(paths, ++index, apiCategoryDTO);
     }
-
 
 
     /**
