@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
@@ -25,7 +26,6 @@ import java.util.Objects;
  */
 public class FuTreeComponent<T> {
 
-    private final Project project;
     /**
      * 树
      */
@@ -41,12 +41,7 @@ public class FuTreeComponent<T> {
 
     private JMenuItem addBrotherNode;
 
-    public FuTreeComponent(Project project, T data, FuTreeActionListener<T> listener) {
-        this(project, new FuTreeNode<>(data), listener);
-    }
-
     public FuTreeComponent(Project project, FuTreeNode<T> root, FuTreeActionListener<T> listener) {
-        this.project = project;
         this.root = root;
         this.listener = listener;
         this.simpleTree = new SimpleTree();
@@ -95,8 +90,9 @@ public class FuTreeComponent<T> {
         if (Objects.isNull(parent)) {
             parent = root;
         }
-        if (!isChild) {
-            parent = (FuTreeNode<T>) parent.getParent();
+        TreeNode treeNode;
+        if (!isChild && Objects.nonNull(treeNode = parent.getParent()) && treeNode instanceof FuTreeNode<?>) {
+            parent = (FuTreeNode<T>) treeNode;
         }
         FuTreeNode<T> node = listener.createNode(parent);
         if (Objects.isNull(node)) {
@@ -175,7 +171,10 @@ public class FuTreeComponent<T> {
             return;
         }
         TreePath path = this.simpleTree.getPathForLocation(x, y);
-        addBrotherNode.setEnabled(true);
+        if (Objects.isNull(path)) {
+            return;
+        }
+        addBrotherNode.setEnabled(Objects.nonNull(path.getParentPath()));
         this.simpleTree.setSelectionPath(path);
         Rectangle rectangle = this.simpleTree.getUI().getPathBounds(this.simpleTree, path);
         if (rectangle != null && rectangle.contains(x, y)) {

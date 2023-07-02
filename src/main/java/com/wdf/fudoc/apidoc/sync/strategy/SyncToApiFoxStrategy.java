@@ -17,6 +17,7 @@ import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -92,16 +93,25 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
     private OpenApiItemDTO buildOpenApiItem(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO) {
         OpenApiItemDTO openApiItemDTO = new OpenApiItemDTO();
         openApiItemDTO.setSummary(fuDocItemData.getTitle());
-        openApiItemDTO.setStatus("developing");
+        openApiItemDTO.setStatus("released");
         openApiItemDTO.setDescription(fuDocItemData.getDetailInfo());
-        ApiCategoryDTO selectCategory = apiProjectDTO.getSelectCategory();
-        openApiItemDTO.setFolder(selectCategory.getCategoryName());
+        openApiItemDTO.setFolder(recursionPath(apiProjectDTO.getSelectCategory()));
         openApiItemDTO.setParameters(buildParameters(fuDocItemData));
         openApiItemDTO.setRequestBody(buildRequestBody(fuDocItemData));
         Map<String, OpenApiResponseDTO> response = new HashMap<>();
         response.put("200", buildApiResponse(fuDocItemData));
         openApiItemDTO.setResponses(response);
         return openApiItemDTO;
+    }
+
+
+    private String recursionPath(ApiCategoryDTO apiCategoryDTO) {
+        if (Objects.isNull(apiCategoryDTO)) {
+            return StringUtils.EMPTY;
+        }
+        String parentName = recursionPath(apiCategoryDTO.getParent());
+        String categoryName = apiCategoryDTO.getCategoryName();
+        return StringUtils.isBlank(parentName) ? categoryName : parentName + "/" + categoryName;
     }
 
 

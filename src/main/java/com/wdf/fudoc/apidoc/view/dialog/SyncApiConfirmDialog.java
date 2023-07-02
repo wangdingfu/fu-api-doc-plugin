@@ -31,7 +31,6 @@ import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * @author wangdingfu
@@ -148,14 +147,19 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
             return null;
         }
         //当前选中节点的子集分类
-        List<ApiCategoryDTO> apiCategoryList = findApiCategory(paths);
+        ApiCategoryDTO apiCategoryDTO = findApiCategory(paths);
+        if (Objects.isNull(apiCategoryDTO)) {
+            return null;
+        }
+        List<ApiCategoryDTO> apiCategoryList = apiCategoryDTO.getApiCategoryList();
         //弹框让用户输入分类名称
         String categoryName = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), StringUtils.EMPTY, new CreateCategoryValidator(apiCategoryList));
         if (StringUtils.isBlank(categoryName)) {
             return null;
         }
-        ApiCategoryDTO apiCategoryDTO = new ApiCategoryDTO(categoryName);
-        apiCategoryList.add(apiCategoryDTO);
+        ApiCategoryDTO addCategory = new ApiCategoryDTO(categoryName);
+        addCategory.setParent(apiCategoryDTO);
+        apiCategoryList.add(addCategory);
         //保存到持久化文件中
         configData.syncApiProjectList(module.getName(), this.projectConfigList);
         return new FuTreeNode<>(apiCategoryDTO, AllIcons.Nodes.Package);
@@ -171,10 +175,16 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
             //根目录无法删除
             return false;
         }
-        TreeNode[] nodes = new TreeNode[paths.length - 1];
-        System.arraycopy(paths, 0, nodes, 0, paths.length - 1);
         //当前选中节点的子集分类
-        List<ApiCategoryDTO> apiCategoryList = findApiCategory(nodes);
+        ApiCategoryDTO apiCategoryDTO = findApiCategory(paths);
+        ApiCategoryDTO parentCategory = apiCategoryDTO.getParent();
+        if (Objects.isNull(parentCategory)) {
+            return false;
+        }
+        List<ApiCategoryDTO> apiCategoryList = parentCategory.getApiCategoryList();
+        if (CollectionUtils.isEmpty(apiCategoryList)) {
+            return false;
+        }
         String removeNode = paths[paths.length - 1].toString();
         apiCategoryList.removeIf(f -> f.getCategoryName().equals(removeNode));
         //保存到持久化文件中
@@ -183,48 +193,41 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
     }
 
 
-    public List<ApiCategoryDTO> findApiCategory(TreeNode[] paths) {
+    public ApiCategoryDTO findApiCategory(TreeNode[] paths) {
         List<ApiCategoryDTO> apiCategoryList = apiProjectDTO.getApiCategoryList();
         if (Objects.isNull(apiCategoryList)) {
             apiCategoryList = Lists.newArrayList();
             apiProjectDTO.setApiCategoryList(apiCategoryList);
         }
-        if (Objects.isNull(paths) || paths.length == 0 || paths.length == 1) {
-            //在根目录下新增
-            return apiCategoryList;
-        }
-        //循环依次查找选中节点的分类对象
-        List<ApiCategoryDTO> childList = apiCategoryList;
-        for (int i = 1; i < paths.length; i++) {
-            //节点名称
-            String nodeName = paths[i].toString();
-            ApiCategoryDTO apiCategory = findApiCategory(nodeName, childList);
-            childList = apiCategory.getApiCategoryList();
-            if (Objects.isNull(childList)) {
-                childList = Lists.newArrayList();
-                apiCategory.setApiCategoryList(childList);
-            }
-        }
-        return childList;
+        //构建根节点
+        ApiCategoryDTO root = new ApiCategoryDTO("根目录", apiCategoryList);
+        //递归查找分类
+        return recursionCategory(paths, 0, root);
     }
 
 
     /**
-     * 从分类集合中获取指定节点
+     * 递归遍历分类树
      *
-     * @param nodeName  节点名称
-     * @param childList 分类集合
-     * @return 选中的分类
+     * @param paths  分类在树结构上的路径
+     * @param index  遍历的节点层级
+     * @param parent 父分类
+     * @return 选中节点的分类
      */
-    private ApiCategoryDTO findApiCategory(String nodeName, List<ApiCategoryDTO> childList) {
-        Optional<ApiCategoryDTO> first = childList.stream().filter(f -> nodeName.equals(f.getCategoryName())).findFirst();
-        if (first.isPresent()) {
-            return first.get();
+    private ApiCategoryDTO recursionCategory(TreeNode[] paths, int index, ApiCategoryDTO parent) {
+        if (index >= paths.length) {
+            return parent;
         }
-        ApiCategoryDTO apiCategoryDTO = new ApiCategoryDTO(nodeName);
-        childList.add(apiCategoryDTO);
-        return apiCategoryDTO;
+        List<ApiCategoryDTO> apiCategoryList = parent.getApiCategoryList();
+        if (CollectionUtils.isEmpty(apiCategoryList)) {
+            apiCategoryList = Lists.newArrayList();
+            parent.setApiCategoryList(apiCategoryList);
+        }
+        String nodeName = paths[index].toString();
+        ApiCategoryDTO apiCategoryDTO = apiCategoryList.stream().filter(f -> nodeName.equals(f.getCategoryName())).findFirst().orElse(new ApiCategoryDTO(nodeName, parent));
+        return recursionCategory(paths, ++index, apiCategoryDTO);
     }
+
 
 
     /**
@@ -256,6 +259,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         if (CollectionUtils.isNotEmpty(apiCategoryList)) {
             apiCategoryList.forEach(f -> buildNode(f, childNode));
         }
+        apiCategoryDTO.setParent(node.getData());
         node.add(childNode);
     }
 

@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApiFoxServiceImpl implements ApiFoxService {
 
-    private final static String SYNC_API = "/api/v1/projects/1756101/import-data";
+    private final static String SYNC_API = "/api/v1/projects/{}/import-data";
 
     @Override
     public void syncApi(ApiFoxDTO apiFoxDTO, ApiProjectDTO apiProjectDTO, ApiFoxConfigData apiFoxConfigData) {

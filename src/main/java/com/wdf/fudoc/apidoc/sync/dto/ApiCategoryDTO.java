@@ -38,6 +38,11 @@ public class ApiCategoryDTO implements Serializable {
     private Integer sort;
 
     /**
+     * 父节点
+     */
+    private ApiCategoryDTO parent;
+
+    /**
      * 子分类
      */
     private List<ApiCategoryDTO> apiCategoryList;
@@ -45,6 +50,11 @@ public class ApiCategoryDTO implements Serializable {
     public ApiCategoryDTO(String categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+    }
+
+    public ApiCategoryDTO(String categoryName, ApiCategoryDTO parent) {
+        this.categoryName = categoryName;
+        this.parent = parent;
     }
 
     public ApiCategoryDTO(String categoryId, List<ApiCategoryDTO> apiCategoryList) {
