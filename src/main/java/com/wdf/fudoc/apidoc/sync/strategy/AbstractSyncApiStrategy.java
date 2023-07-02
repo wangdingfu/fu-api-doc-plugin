@@ -80,17 +80,13 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
      */
     @Override
     public void syncFuDoc(FuDocContext fuDocContext, PsiClass psiClass, BaseSyncConfigData configData) {
-        //1、检查三方接口文档配置
-        if (!checkConfig(configData)) {
-            return;
-        }
         //2、检查三方接口文档系统是否能建立连接
 
         //3、确定当前要同步的项目配置
         Module module = ModuleUtil.findModuleForPsiElement(psiClass);
         String moduleName = Objects.isNull(module) ? org.apache.commons.lang3.StringUtils.EMPTY : module.getName();
         List<ApiProjectDTO> projectConfigList = configData.getProjectConfigList(moduleName);
-        if (StringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList)) {
+        if (StringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList) || checkConfig(configData)) {
             ApplicationManager.getApplication().invokeLater(() -> {
                 Project project = psiClass.getProject();
                 ShowSettingUtils.showConfigurable(project, new FuDocSyncSettingConfigurable(), 800, 600);

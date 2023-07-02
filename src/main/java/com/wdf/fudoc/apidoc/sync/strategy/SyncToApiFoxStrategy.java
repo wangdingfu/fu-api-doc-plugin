@@ -38,7 +38,9 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
 
     @Override
     protected boolean checkConfig(BaseSyncConfigData configData) {
-        return true;
+        ApiFoxConfigData apiFoxConfigData = (ApiFoxConfigData) configData;
+        String token = apiFoxConfigData.getToken();
+        return StringUtils.isBlank(token);
     }
 
     /**

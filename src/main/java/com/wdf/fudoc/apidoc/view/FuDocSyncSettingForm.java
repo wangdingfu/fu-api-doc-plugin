@@ -55,7 +55,7 @@ public class FuDocSyncSettingForm {
         this.showDocSettingsTab = new ShowDocSettingsTab();
         this.apiFoxSettingsTab = new ApiFoxSettingTab();
         FuTabBuilder fuTabBuilder = FuTabBuilder.getInstance();
-        fuTabBuilder.addTab(this.yApiSettingsTab).addTab(this.showDocSettingsTab).addTab(this.apiFoxSettingsTab);
+        fuTabBuilder.addTab(this.apiFoxSettingsTab).addTab(this.yApiSettingsTab).addTab(this.showDocSettingsTab);
         //需要判断是否展示提示信息
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
         BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();

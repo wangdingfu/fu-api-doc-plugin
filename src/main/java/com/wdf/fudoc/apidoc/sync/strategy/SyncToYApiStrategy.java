@@ -38,7 +38,7 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
     @Override
     protected boolean checkConfig(BaseSyncConfigData baseSyncConfigData) {
         //do nothing
-        return true;
+        return false;
     }
 
 

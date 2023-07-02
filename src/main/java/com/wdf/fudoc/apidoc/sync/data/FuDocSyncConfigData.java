@@ -63,7 +63,7 @@ public class FuDocSyncConfigData implements Serializable {
                 }
             }
         }
-        return this.yapi;
+        return this.apiFox;
     }
 
 
