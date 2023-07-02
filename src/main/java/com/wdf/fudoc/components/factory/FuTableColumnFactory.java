@@ -138,6 +138,7 @@ public class FuTableColumnFactory {
         List<Column> columns = Lists.newArrayList();
         columns.add(new BooleanColumn<>("", ApiFoxProjectTableData::getSelect, ApiFoxProjectTableData::setSelect));
         columns.add(new StringColumn<>("项目id", ApiFoxProjectTableData::getProjectId, ApiFoxProjectTableData::setProjectId));
+        columns.add(new StringColumn<>("项目名称", ApiFoxProjectTableData::getProjectName, ApiFoxProjectTableData::setProjectName));
         columns.add(new TreeModuleComboBoxColumn<>("作用范围", ApiFoxProjectTableData::getScope, ApiFoxProjectTableData::setScope));
         return columns;
     }

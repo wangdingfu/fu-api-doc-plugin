@@ -82,7 +82,7 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
 
     @Override
     public String getApiDocUrl(SyncApiResultDTO syncApiResultDTO) {
-        return null;
+        return "https://app.apifox.com/project/" + syncApiResultDTO.getProjectId();
     }
 
 

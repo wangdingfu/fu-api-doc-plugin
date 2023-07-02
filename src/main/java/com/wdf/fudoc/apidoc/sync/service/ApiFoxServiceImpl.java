@@ -20,7 +20,7 @@ public class ApiFoxServiceImpl implements ApiFoxService {
     private final static String SYNC_API = "/api/v1/projects/{}/import-data";
 
     @Override
-    public void syncApi(ApiFoxDTO apiFoxDTO, ApiProjectDTO apiProjectDTO, ApiFoxConfigData apiFoxConfigData) {
+    public boolean syncApi(ApiFoxDTO apiFoxDTO, ApiProjectDTO apiProjectDTO, ApiFoxConfigData apiFoxConfigData) {
         String baseUrl = apiFoxConfigData.getBaseUrl();
         String url = baseUrl + StrFormatter.format(SYNC_API, apiProjectDTO.getProjectId());
         try {
@@ -30,9 +30,10 @@ public class ApiFoxServiceImpl implements ApiFoxService {
             httpRequest.body(JsonUtil.toJson(apiFoxDTO));
             String postResult = httpRequest.execute().body();
             log.info("同步结果:{}", postResult);
+            return true;
         } catch (Exception e) {
             log.error("同步Api到ApiFox系统异常", e);
-            throw new FuDocException("同步Api到ApiFox系统异常");
         }
+        return false;
     }
 }

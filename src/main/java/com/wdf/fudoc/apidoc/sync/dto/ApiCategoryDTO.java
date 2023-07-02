@@ -40,7 +40,7 @@ public class ApiCategoryDTO implements Serializable {
     /**
      * 父节点
      */
-    private ApiCategoryDTO parent;
+    private transient ApiCategoryDTO parent;
 
     /**
      * 子分类

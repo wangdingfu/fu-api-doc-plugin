@@ -2,6 +2,7 @@ package com.wdf.fudoc.apidoc.sync.strategy;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
+import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
@@ -15,6 +16,7 @@ import com.wdf.fudoc.apidoc.sync.service.ApiFoxService;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -65,8 +67,23 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         openApiDTO.setPaths(paths);
         ApiFoxService service = ServiceHelper.getService(ApiFoxService.class);
         //同步api
-        service.syncApi(apiFoxDTO, apiProjectDTO, (ApiFoxConfigData) configData);
-        return Lists.newArrayList();
+        boolean isSuccess = service.syncApi(apiFoxDTO, apiProjectDTO, (ApiFoxConfigData) configData);
+        ApiSyncStatus syncStatus = isSuccess ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
+        String errorMsg = isSuccess ? StringUtils.EMPTY : "同步失败";
+        return ObjectUtils.listToList(fuDocItemDataList, f -> buildSyncApiResult(f, apiProjectDTO, syncStatus, errorMsg));
+    }
+
+
+    private SyncApiResultDTO buildSyncApiResult(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiSyncStatus apiSyncStatus, String errorMsg) {
+        SyncApiResultDTO syncApiResultDTO = new SyncApiResultDTO();
+        syncApiResultDTO.setApiId(fuDocItemData.getApiKey());
+        syncApiResultDTO.setApiName(fuDocItemData.getTitle());
+        syncApiResultDTO.setSyncStatus(apiSyncStatus.getMessage());
+        syncApiResultDTO.setProjectId(apiProjectDTO.getProjectId());
+        syncApiResultDTO.setProjectName(apiProjectDTO.getProjectName());
+        syncApiResultDTO.setCategoryName(apiProjectDTO.getSelectCategory().getCategoryName());
+        syncApiResultDTO.setErrorMsg(errorMsg);
+        return syncApiResultDTO;
     }
 
 
@@ -163,7 +180,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
             }
             OpenApiContentDTO openApiContentDTO = new OpenApiContentDTO();
             openApiContentDTO.setExample(isResponse ? fuDocItemData.getResponseExample() : fuDocItemData.getRequestExample());
-            openApiContentDTO.setSchema(JsonSchemaHelper.buildJsonSchema(isResponse ? fuDocItemData.getRequestParams() : fuDocItemData.getResponseParams()));
+            openApiContentDTO.setSchema(JsonSchemaHelper.buildJsonSchema(isResponse ? fuDocItemData.getResponseParams() : fuDocItemData.getRequestParams()));
             content.put(contentType.getType(), openApiContentDTO);
         }
         return content;
