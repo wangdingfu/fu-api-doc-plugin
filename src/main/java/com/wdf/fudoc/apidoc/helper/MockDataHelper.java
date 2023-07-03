@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.helper;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.json.JSONObject;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
@@ -12,6 +13,7 @@ import com.wdf.fudoc.util.MapListUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -156,10 +158,26 @@ public class MockDataHelper {
 
     private static String buildExpress(String name, Object value) {
         if (StringUtils.isNotBlank(name) && Objects.nonNull(value)) {
-            return name + "=" + value;
+            return name + "=" + mockStringValue(value);
         }
         return StringUtils.EMPTY;
     }
+
+
+    public static String mockStringValue(Object value) {
+        if (Objects.nonNull(value)) {
+            if (value instanceof Collection<?>) {
+                return StringUtils.join(Lists.newArrayList((Collection<?>) value), ",");
+            }
+            if (ArrayUtil.isArray(value)) {
+                String arrayStr = ArrayUtil.toString(value);
+                return StringUtils.substring(arrayStr, 1, arrayStr.length() - 2);
+            }
+            return value.toString();
+        }
+        return StringUtils.EMPTY;
+    }
+
 
     private static YesOrNo isSimpleType(FuDocObjectType fuDocObjectType) {
         if (Objects.isNull(fuDocObjectType)) {

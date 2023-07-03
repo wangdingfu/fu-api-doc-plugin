@@ -45,8 +45,7 @@ public class AssembleHelper {
                     fuDocParamData.setParamDesc(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_COMMENT, objectInfoDesc));
                     fuDocParamData.setParamType(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.PARAM_TYPE_VIEW, objectInfoDesc));
                     fuDocParamData.setChildParamType(objectInfoDesc.getChildTypeView());
-                    Object value = objectInfoDesc.getValue();
-                    fuDocParamData.setParamValue(Objects.nonNull(value) ? value.toString() : StringUtils.EMPTY);
+                    fuDocParamData.setParamValue(MockDataHelper.mockStringValue(objectInfoDesc.getValue()));
                     fuDocParamData.setExt(CustomerValueHelper.customerValue(objectInfoDesc, fuDocContext));
                     if (Objects.nonNull(parent) && StringUtils.isNotBlank(parent.getParamNo())) {
                         String paramPrefix = parent.getParamPrefix();

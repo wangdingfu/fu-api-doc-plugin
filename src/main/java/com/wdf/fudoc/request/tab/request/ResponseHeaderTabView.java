@@ -14,6 +14,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -59,8 +60,8 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
         FuResponseData response = httpRequestData.getResponse();
-        if (Objects.nonNull(response)) {
-            Map<String, List<String>> headers = response.getHeaders();
+        Map<String, List<String>> headers;
+        if (Objects.nonNull(response) && MapUtils.isNotEmpty(headers = response.getHeaders())) {
             List<HeaderKeyValueBO> keyValueTableBOList = Lists.newArrayList();
             headers.forEach((key, value) -> {
                 HeaderKeyValueBO headerKeyValueBO = new HeaderKeyValueBO();
