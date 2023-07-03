@@ -82,7 +82,7 @@ public class GlobalVariableTab extends AbstractBulkEditTabLinkage<GlobalKeyValue
     public void moveOff() {
         //离开当前tab时 保存数据
         FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
-        fuRequestConfigPO.setGlobalVariableList(this.fuTableComponent.getDataList());
+        fuRequestConfigPO.setGlobalVariableList(Lists.newArrayList(this.fuTableComponent.getDataList()));
     }
 
     @Override
@@ -98,6 +98,6 @@ public class GlobalVariableTab extends AbstractBulkEditTabLinkage<GlobalKeyValue
             //如果当前是编辑器状态 则需要从编辑器组件同步数据到table组件
             bulkEditToTableData(TITLE);
         }
-        configPO.setGlobalVariableList(fuTableComponent.getDataList());
+        configPO.setGlobalVariableList(Lists.newArrayList(fuTableComponent.getDataList()));
     }
 }

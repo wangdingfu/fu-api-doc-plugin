@@ -53,7 +53,7 @@ public class FuDocStartUpListener implements StartupActivity {
             //初始化持久目录
             FuStorageExecutor.init(project);
             //设置可重定向
-            HttpGlobalConfig.setMaxRedirectCount(1);
+            HttpGlobalConfig.setMaxRedirectCount(5);
         });
         if (reentrantLock.tryLock()) {
             try {
