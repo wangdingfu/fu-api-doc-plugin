@@ -66,6 +66,17 @@ public class FuTableColumnFactory {
         return columns;
     }
 
+
+    /**
+     * 过滤属性table列
+     */
+    public static List<Column> responseHeader() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new StringColumn<>("参数名", HeaderKeyValueBO::getKey, HeaderKeyValueBO::setKey));
+        columns.add(new StringColumn<>("示例值", HeaderKeyValueBO::getValue, HeaderKeyValueBO::setValue));
+        return columns;
+    }
+
     /**
      * 过滤属性table列
      */

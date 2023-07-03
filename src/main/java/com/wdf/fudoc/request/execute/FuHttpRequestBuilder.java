@@ -102,12 +102,14 @@ public class FuHttpRequestBuilder {
     private void addForm(List<KeyValueTableBO> formDataList, boolean isMultiFile) {
         if (CollectionUtils.isNotEmpty(formDataList)) {
             for (KeyValueTableBO keyValueTableBO : formDataList) {
+                String value = keyValueTableBO.getValue();
                 if (Objects.isNull(keyValueTableBO.getSelect()) || !keyValueTableBO.getSelect()) {
                     continue;
                 }
                 String requestParamType = keyValueTableBO.getRequestParamType();
-                if (isMultiFile && RequestParamType.FILE.getCode().equals(requestParamType)) {
-                    File file = new File(keyValueTableBO.getValue());
+
+                if (isMultiFile && RequestParamType.FILE.getCode().equals(requestParamType) && StringUtils.isNotBlank(value)) {
+                    File file = new File(value);
                     byte[] bytes = FileUtil.readBytes(file);
                     this.httpRequest.form(keyValueTableBO.getKey(), bytes, file.getName());
                 } else {
