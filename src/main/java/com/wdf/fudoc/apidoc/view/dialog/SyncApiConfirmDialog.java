@@ -16,7 +16,7 @@ import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.components.tree.FuTreeActionListener;
 import com.wdf.fudoc.components.tree.FuTreeComponent;
@@ -77,10 +77,10 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
      */
     private final FuTreeComponent<ApiCategoryDTO> fuTreeComponent;
 
-    private static final String PROJECT_LABEL = FuDocMessageBundle.message(MessageConstants.SYNC_API_PROJECT_LABEL);
-    private static final String CREATE_PROJECT = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT);
-    private static final String CREATE_CATEGORY_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_TITLE);
-    private static final String CATEGORY_LABEL = FuDocMessageBundle.message(MessageConstants.SYNC_API_CATEGORY_LABEL);
+    private static final String PROJECT_LABEL = FuBundle.message(MessageConstants.SYNC_API_PROJECT_LABEL);
+    private static final String CREATE_PROJECT = FuBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT);
+    private static final String CREATE_CATEGORY_TITLE = FuBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_TITLE);
+    private static final String CATEGORY_LABEL = FuBundle.message(MessageConstants.SYNC_API_CATEGORY_LABEL);
 
 
     public SyncApiConfirmDialog(@Nullable Project project, PsiClass psiClass) {

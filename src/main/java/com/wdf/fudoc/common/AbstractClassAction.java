@@ -71,7 +71,7 @@ public abstract class AbstractClassAction extends AnAction {
         long start = System.currentTimeMillis();
         PsiElement targetElement = PsiClassUtils.getTargetElement(e);
         if (Objects.isNull(targetElement)) {
-            FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.NOTIFY_NOT_FUND_CLASS));
+            FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.NOTIFY_NOT_FUND_CLASS));
             return;
         }
         //获取当前操作的类
@@ -88,7 +88,7 @@ public abstract class AbstractClassAction extends AnAction {
         } catch (Exception exception) {
             //发送失败通知
             log.info("【Fu Doc】执行动作失败", exception);
-            FuDocNotification.notifyError(FuDocMessageBundle.message(exceptionMsg()));
+            FuDocNotification.notifyError(FuBundle.message(exceptionMsg()));
         } finally {
             log.info("【Fu Doc】执行动作完成. 耗时:{}ms", System.currentTimeMillis() - start);
             FuDocDataContent.remove();

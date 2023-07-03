@@ -2,7 +2,7 @@ package com.wdf.fudoc.components.validator;
 
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +31,7 @@ public class CreateCategoryValidator implements InputValidatorEx {
             //校验输入的内容
             if (CollectionUtils.isNotEmpty(categoryList) && categoryList.stream().anyMatch(a -> a.getCategoryName().equals(inputString))) {
                 //当前项目中存在 则不创建
-                myErrorText = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_REPEAT);
+                myErrorText = FuBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_REPEAT);
                 return false;
             }
         }

@@ -14,7 +14,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuDataTab;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuCmdComponent;
@@ -60,7 +60,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionListener<ScriptCmd>, FuFiltersListener<String> {
     private static final Logger logger = Logger.getInstance(GlobalPreScriptTab.class);
 
-    public static final String TITLE = "前置脚本";
+    public static final String TITLE = FuBundle.message("fudoc.script.pre.title");
 
     private final JPanel rootPanel;
 
@@ -98,7 +98,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
         this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE);
         //当前脚本针对以下module所有的接口生效
         this.scopeModuleList = FuDocUtils.getAllModuleNameList(project);
-        this.fuFiltersAction = new FuFiltersAction<>("配置生效Module", this, () -> {
+        this.fuFiltersAction = new FuFiltersAction<>(FuBundle.message("fudoc.script.module.title"), this, () -> {
         });
         this.httpCmdView = new HttpCmdView(project);
         this.leftPanel = new JPanel(new BorderLayout());
@@ -129,7 +129,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
     @Override
     public TabInfo getTabInfo() {
         return FuTabComponent.getInstance(this.title, FuDocIcons.FU_SCRIPT, this.rootPanel)
-                .addAction(new DumbAwareAction("执行脚本", "", AllIcons.Actions.Execute) {
+                .addAction(new DumbAwareAction(FuBundle.message("fudoc.script.execute.title"), "", AllIcons.Actions.Execute) {
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent e) {
                         ProgressManager.getInstance().run(new Task.Backgroundable(project, title) {
@@ -142,14 +142,14 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                                 GlobalPreScriptPO globalPreScriptPO = configPO.getPreScriptMap().get(title);
                                 String script = globalPreScriptPO.getScript();
                                 if (StringUtils.isBlank(script)) {
-                                    FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.REQUEST_SCRIPT_NO));
+                                    FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.REQUEST_SCRIPT_NO));
                                 }
                                 //执行脚本
                                 try {
                                     JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO));
                                 } catch (Exception e) {
                                     logger.error("执行脚本失败", e);
-                                    FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.REQUEST_SCRIPT_EXECUTE_FAIL));
+                                    FuDocNotification.notifyError(FuBundle.message(MessageConstants.REQUEST_SCRIPT_EXECUTE_FAIL));
                                 }
                             }
                         });

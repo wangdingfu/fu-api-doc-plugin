@@ -66,12 +66,6 @@ public class FuHttpRequestDataFactory {
         if (Objects.isNull(targetMethod)) {
             return null;
         }
-        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(targetMethod.getDocComment());
-        String commentTitle = apiDocCommentData.getCommentTitle();
-//        FuHttpRequestData fuHttpRequestData = FuStorageExecutor.readFile(commentTitle);
-//        if (Objects.nonNull(fuHttpRequestData)) {
-//            return fuHttpRequestData;
-//        }
         String methodId = PsiClassUtils.getMethodId(targetMethod);
         //当前接口的唯一标识
         String apiKey = FuDocUtils.genApiKey(moduleId, methodId);
@@ -119,7 +113,9 @@ public class FuHttpRequestDataFactory {
         fuRequestData.setRequestType(RequestType.getRequestType(fuDocRootParamData.getRequestType()));
         //设置接口url
         String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
-        fuRequestData.setBaseUrl(URLUtil.completeUrl(domainUrl, fuDocRootParamData.getUrlList().get(0)));
+        List<String> urlList = fuDocRootParamData.getUrlList();
+        String url = CollectionUtils.isEmpty(urlList) ? StringUtils.EMPTY : urlList.get(0);
+        fuRequestData.setBaseUrl(URLUtil.completeUrl(domainUrl, url));
         //设置body内容
         fuRequestData.setBody(new FuRequestBodyData());
         fuHttpRequestData.setRequest(fuRequestData);

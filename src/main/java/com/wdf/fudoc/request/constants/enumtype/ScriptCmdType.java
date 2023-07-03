@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.constants.enumtype;
 
+import com.wdf.fudoc.common.FuBundle;
 import lombok.Getter;
 
 /**
@@ -8,10 +9,10 @@ import lombok.Getter;
  */
 @Getter
 public enum ScriptCmdType {
-    DEMO("demo","脚本编写教程",1),
-    SCRIPT_DEMO("script_demo","设置示例",2),
-    HTTP("http","http请求",3),
-    LOG("log","日志打印",4),
+    DEMO("demo", FuBundle.message("fudoc.script.study.title"), 1),
+    SCRIPT_DEMO("script_demo", FuBundle.message("fudoc.script.study.example"), 2),
+    HTTP("http", FuBundle.message("fudoc.script.study.http"), 3),
+    LOG("log", FuBundle.message("fudoc.script.study.log"), 4),
     ;
 
     private final String type;

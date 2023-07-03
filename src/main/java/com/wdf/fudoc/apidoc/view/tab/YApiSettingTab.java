@@ -16,7 +16,7 @@ import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.YapiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.YApiProjectInfoDTO;
 import com.wdf.fudoc.apidoc.sync.service.YApiService;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.MessageConstants;
@@ -59,15 +59,15 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     private JButton clearAllBtn;
     private JButton clearRecordBtn;
 
-    private static final TitledBorder baseInfoBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_BASE_TITLE));
-    private static final TitledBorder mainBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_MAIN_TITLE));
+    private static final TitledBorder baseInfoBorder = IdeBorderFactory.createTitledBorder(FuBundle.message(MessageConstants.SYNC_YAPI_BASE_TITLE));
+    private static final TitledBorder mainBorder = IdeBorderFactory.createTitledBorder(FuBundle.message(MessageConstants.SYNC_YAPI_MAIN_TITLE));
 
-    private static final String SYNC_TOKEN = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN);
-    private static final String SYNC_TOKEN_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE);
+    private static final String SYNC_TOKEN = FuBundle.message(MessageConstants.SYNC_YAPI_TOKEN);
+    private static final String SYNC_TOKEN_TITLE = FuBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE);
     // 当前项目配置存在其他项目在使用 确定要删除吗
-    private static final String DELETE_CONFIG_TIP = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG);
+    private static final String DELETE_CONFIG_TIP = FuBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG);
     // 确认删除项目配置
-    private static final String CONFIRM_DELETE_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG_TITLE);
+    private static final String CONFIRM_DELETE_TITLE = FuBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG_TITLE);
 
 
     /**
@@ -140,7 +140,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         String baseUrlText = baseUrl.getText();
         if (StringUtils.isBlank(baseUrlText)) {
             //提示需要填写YApi服务地址
-            Messages.showYesNoDialog(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_URL_TIP), "", Messages.getQuestionIcon());
+            Messages.showYesNoDialog(FuBundle.message(MessageConstants.SYNC_YAPI_URL_TIP), "", Messages.getQuestionIcon());
             return null;
         }
         List<String> projectTokenList = ObjectUtils.listToList(fuTableComponent.getDataList(), YApiProjectTableData::getProjectToken);
@@ -152,7 +152,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         YApiService yApiService = ServiceHelper.getService(YApiService.class);
         YApiProjectInfoDTO projectInfo = yApiService.findProjectInfo(baseUrlText, value);
         if (Objects.isNull(projectInfo)) {
-            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_GET_PROJECT_FAIL));
+            FuDocNotification.notifyError(FuBundle.message(MessageConstants.SYNC_YAPI_GET_PROJECT_FAIL));
             return null;
         }
         YApiProjectTableData tableData = new YApiProjectTableData();

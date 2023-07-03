@@ -2,7 +2,7 @@ package com.wdf.fudoc.common.notification;
 
 import com.intellij.notification.*;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.constant.UrlConstants;
@@ -39,11 +39,11 @@ public class FuDocNotification {
      */
     public static void notifySyncApiResult(NotificationType notificationType, String message, String apiSystemName, String url, JPanel showPanel, AtomicBoolean pinStatus) {
         //查看同步结果
-        String syncResult = FuDocMessageBundle.message(MessageConstants.SYNC_API_RECORD_READ);
+        String syncResult = FuBundle.message(MessageConstants.SYNC_API_RECORD_READ);
         //去接口文档系统查看文档(去YApi查看文档)
-        String apiSystem = FuDocMessageBundle.message(MessageConstants.SYNC_API_INTO_API_SYSTEM, apiSystemName);
+        String apiSystem = FuBundle.message(MessageConstants.SYNC_API_INTO_API_SYSTEM, apiSystemName);
         //给我点赞
-        String starAction = FuDocMessageBundle.message(MessageConstants.STAR_ACTION);
+        String starAction = FuBundle.message(MessageConstants.STAR_ACTION);
 
         NOTIFICATION_GROUP.createNotification(FuDocConstants.FU_DOC, message, notificationType)
                 //新增查看同步结果
@@ -60,9 +60,9 @@ public class FuDocNotification {
      * 接口文档生成通知
      */
     public static void genNotify(NotificationType notificationType, String message, Project project) {
-        String readDocAction = FuDocMessageBundle.message(MessageConstants.READ_DOC_ACTION);
-        String faqAction = FuDocMessageBundle.message(MessageConstants.FAQ_ACTION);
-        String starAction = FuDocMessageBundle.message(MessageConstants.STAR_ACTION);
+        String readDocAction = FuBundle.message(MessageConstants.READ_DOC_ACTION);
+        String faqAction = FuBundle.message(MessageConstants.FAQ_ACTION);
+        String starAction = FuBundle.message(MessageConstants.STAR_ACTION);
 
         NOTIFICATION_GROUP.createNotification(FuDocConstants.FU_DOC, message, notificationType)
                 //新增查看文档按钮

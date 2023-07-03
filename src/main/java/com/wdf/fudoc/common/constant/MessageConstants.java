@@ -96,4 +96,9 @@ public interface MessageConstants {
     String REQUEST_SCRIPT_EXECUTE_FAIL = "fudoc.request.script.execute.fail";
 
 
+
+    String SCRIPT_PRE_ADD = "fudoc.script.pre.add";
+    String SCRIPT_PRE_REMOVE = "fudoc.script.pre.remove";
+
+
 }

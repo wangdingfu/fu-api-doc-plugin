@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.labels.LinkLabel;
 import com.intellij.util.ui.JBUI;
@@ -16,7 +15,7 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncCategory;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncStrategyFactory;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.components.tree.old.ApiCategoryTreeNode;
 import com.wdf.fudoc.components.tree.old.FuTreeComponent;
@@ -100,13 +99,13 @@ public class SyncApiCategoryDialog extends DialogWrapper {
     private ProjectSyncApiRecordData projectRecordData;
 
 
-    private static final String TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_API_TITLE);
-    private static final String PROJECT_LABEL = FuDocMessageBundle.message(MessageConstants.SYNC_API_PROJECT_LABEL);
-    private static final String CATEGORY_LABEL = FuDocMessageBundle.message(MessageConstants.SYNC_API_CATEGORY_LABEL);
-    private static final String CREATE_PROJECT = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT);
-    private static final String CREATE_PROJECT_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT_TITLE);
-    private static final String CREATE_CATEGORY = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY);
-    private static final String CREATE_CATEGORY_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_TITLE);
+    private static final String TITLE = FuBundle.message(MessageConstants.SYNC_API_TITLE);
+    private static final String PROJECT_LABEL = FuBundle.message(MessageConstants.SYNC_API_PROJECT_LABEL);
+    private static final String CATEGORY_LABEL = FuBundle.message(MessageConstants.SYNC_API_CATEGORY_LABEL);
+    private static final String CREATE_PROJECT = FuBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT);
+    private static final String CREATE_PROJECT_TITLE = FuBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT_TITLE);
+    private static final String CREATE_CATEGORY = FuBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY);
+    private static final String CREATE_CATEGORY_TITLE = FuBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_TITLE);
 
 
     public SyncApiCategoryDialog(Project project, boolean isCategoryTree, String moduleName, ApiProjectDTO apiProjectDTO) {

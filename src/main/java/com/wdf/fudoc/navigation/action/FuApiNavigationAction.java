@@ -7,8 +7,7 @@ import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.common.FuDocMessageBundle;
-import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.navigation.FuApiNavigationContributor;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +23,7 @@ public class FuApiNavigationAction extends SearchEverywhereBaseAction implements
     public FuApiNavigationAction() {
         Presentation presentation = getTemplatePresentation();
         presentation.setText("Search Api");
-        presentation.setDescription(FuDocMessageBundle.message(MessageConstants.SEARCH_API_DESCRIPTION));
+        presentation.setDescription(FuBundle.message(MessageConstants.SEARCH_API_DESCRIPTION));
         addTextOverride(ActionPlaces.MAIN_MENU, "FuApi");
     }
 
