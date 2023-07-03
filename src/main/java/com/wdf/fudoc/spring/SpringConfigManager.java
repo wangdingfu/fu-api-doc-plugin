@@ -84,6 +84,7 @@ public class SpringConfigManager {
                 }
             }
         }
+        springConfigFile.setModule(module);
         return springConfigFile;
     }
 

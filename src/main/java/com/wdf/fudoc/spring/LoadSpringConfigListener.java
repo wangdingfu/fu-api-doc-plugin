@@ -24,7 +24,11 @@ public class LoadSpringConfigListener implements StartupActivity.Background {
      */
     @Override
     public void runActivity(@NotNull Project project) {
-        ThreadUtil.execAsync(() -> SpringConfigManager.initProjectSpringConfig(project));
+        try {
+            ThreadUtil.execAsync(() -> SpringConfigManager.initProjectSpringConfig(project));
+        } catch (Exception e) {
+            log.error("解析配置文件异常", e);
+        }
     }
 
 
