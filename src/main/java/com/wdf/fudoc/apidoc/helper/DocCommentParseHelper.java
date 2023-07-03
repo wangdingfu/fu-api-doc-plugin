@@ -60,8 +60,10 @@ public class DocCommentParseHelper {
         if (CommentTagType.SEE.getName().equals(tagName) || CommentTagType.LINK.getName().equals(tagName)) {
             //获取引用
             PsiElement elementFromTag = getElementFromTag(psiDocTag);
-            if (Objects.nonNull(elementFromTag)) {
-                commentTagData.setPsiElement(elementFromTag.getNode().getPsi());
+            ASTNode node;
+            // issue #6问题修复
+            if (Objects.nonNull(elementFromTag) && Objects.nonNull(node = elementFromTag.getNode())) {
+                commentTagData.setPsiElement(node.getPsi());
             }
         }
         return commentTagData;

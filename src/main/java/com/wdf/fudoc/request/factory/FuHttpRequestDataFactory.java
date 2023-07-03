@@ -1,7 +1,5 @@
 package com.wdf.fudoc.request.factory;
 
-import cn.hutool.core.util.URLUtil;
-import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -13,21 +11,20 @@ import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
-import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
-import com.wdf.fudoc.apidoc.pojo.annotation.*;
+import com.wdf.fudoc.apidoc.pojo.annotation.PathVariableData;
+import com.wdf.fudoc.apidoc.pojo.annotation.RequestBodyData;
+import com.wdf.fudoc.apidoc.pojo.annotation.SpringAnnotationData;
 import com.wdf.fudoc.apidoc.pojo.bo.RootParamBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
-import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.spring.SpringConfigManager;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
-import com.wdf.fudoc.storage.FuStorageExecutor;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -57,7 +54,7 @@ public class FuHttpRequestDataFactory {
 
 
     public static FuHttpRequestData build(Project project, PsiClass psiClass, FuDocContext fuDocContext) {
-        FuHttpRequestData request;
+        FuHttpRequestData fuHttpRequestData;
         //获取当前接口的唯一标识
         Module module = ModuleUtil.findModuleForPsiElement(psiClass);
         String moduleId = FuDocUtils.getModuleId(module);
@@ -66,17 +63,25 @@ public class FuHttpRequestDataFactory {
         if (Objects.isNull(targetMethod)) {
             return null;
         }
+
         String methodId = PsiClassUtils.getMethodId(targetMethod);
         //当前接口的唯一标识
         String apiKey = FuDocUtils.genApiKey(moduleId, methodId);
-        request = FuRequestManager.getRequest(project, apiKey);
-        if (Objects.isNull(request)) {
-            request = build(fuDocContext, psiClass, module);
+        fuHttpRequestData = FuRequestManager.getRequest(project, apiKey);
+        if (Objects.isNull(fuHttpRequestData)) {
+            fuHttpRequestData = build(fuDocContext, psiClass, module);
         }
-        if(Objects.nonNull(request)){
-            request.setModule(module);
+        if (Objects.nonNull(fuHttpRequestData)) {
+            //设置接口url
+            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
+            FuRequestData request = fuHttpRequestData.getRequest();
+            if (Objects.isNull(request)) {
+                request = new FuRequestData();
+            }
+            request.setDomain(domainUrl);
+            fuHttpRequestData.setModule(module);
         }
-        return request;
+        return fuHttpRequestData;
     }
 
     public static FuHttpRequestData build(FuDocContext fuDocContext, PsiClass psiClass) {
@@ -102,28 +107,30 @@ public class FuHttpRequestDataFactory {
         fuHttpRequestData.setModuleId(moduleId);
         //接口唯一标识
         fuHttpRequestData.setApiKey(moduleId + ":" + fuDocRootParamData.getApiId());
-        FuRequestData fuRequestData = new FuRequestData();
         //接口名称
         String title = fuDocRootParamData.getTitle();
         if (StringUtils.isBlank(title)) {
             title = PsiClassUtils.getMethodName(fuDocRootParamData.getPsiMethod());
         }
         fuHttpRequestData.setApiName(title);
-        //接口请求类型5
-        fuRequestData.setRequestType(RequestType.getRequestType(fuDocRootParamData.getRequestType()));
-        //设置接口url
-        String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
-        List<String> urlList = fuDocRootParamData.getUrlList();
-        String url = CollectionUtils.isEmpty(urlList) ? StringUtils.EMPTY : urlList.get(0);
-        fuRequestData.setBaseUrl(URLUtil.completeUrl(domainUrl, url));
-        //设置body内容
-        fuRequestData.setBody(new FuRequestBodyData());
-        fuHttpRequestData.setRequest(fuRequestData);
+        fuHttpRequestData.setRequest(buildFuRequestData(fuDocRootParamData));
         //构建请求参数
         buildRequestParamsData(fuHttpRequestData, fuDocRootParamData);
         //初始化response
         fuHttpRequestData.setResponse(new FuResponseData());
         return fuHttpRequestData;
+    }
+
+
+    private static FuRequestData buildFuRequestData(FuDocRootParamData fuDocRootParamData) {
+        FuRequestData fuRequestData = new FuRequestData();
+        List<String> urlList = fuDocRootParamData.getUrlList();
+        fuRequestData.setBaseUrl(CollectionUtils.isEmpty(urlList) ? StringUtils.EMPTY : urlList.get(0));
+        //接口请求类型
+        fuRequestData.setRequestType(RequestType.getRequestType(fuDocRootParamData.getRequestType()));
+        //设置body内容
+        fuRequestData.setBody(new FuRequestBodyData());
+        return fuRequestData;
     }
 
     public static void buildParamData(FuHttpRequestData fuHttpRequestData, FuDocRootParamData fuDocRootParamData, RequestType requestType) {
@@ -144,18 +151,18 @@ public class FuHttpRequestDataFactory {
         }
         FuRequestData request = fuHttpRequestData.getRequest();
         request.setPathVariables(pathVariableList);
-        if(RequestType.GET.equals(requestType)){
+        if (RequestType.GET.equals(requestType)) {
             request.setParams(paramList);
         }
-        if(RequestType.POST.equals(requestType)){
+        if (RequestType.POST.equals(requestType)) {
             ContentType contentType = fuDocRootParamData.getContentType();
             if (Objects.isNull(contentType)) {
                 return;
             }
             FuRequestBodyData body = request.getBody();
-            if(ContentType.FORM_DATA.equals(contentType)){
+            if (ContentType.FORM_DATA.equals(contentType)) {
                 body.setFormDataList(paramList);
-            }else {
+            } else {
                 body.setFormUrlEncodedList(paramList);
             }
         }
@@ -172,7 +179,7 @@ public class FuHttpRequestDataFactory {
             paddingBody(fuHttpRequestData, rootParamBO.getMockData());
             return;
         }
-        buildParamData(fuHttpRequestData, fuDocRootParamData,RequestType.POST);
+        buildParamData(fuHttpRequestData, fuDocRootParamData, RequestType.POST);
     }
 
 
@@ -189,7 +196,7 @@ public class FuHttpRequestDataFactory {
 
         switch (requestType) {
             case GET:
-                buildParamData(fuHttpRequestData, fuDocRootParamData,RequestType.GET);
+                buildParamData(fuHttpRequestData, fuDocRootParamData, RequestType.GET);
                 break;
             case POST:
                 buildPostParamData(fuHttpRequestData, fuDocRootParamData);

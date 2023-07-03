@@ -1,5 +1,6 @@
 package com.wdf.fudoc.spring;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSONUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -37,7 +38,6 @@ public class SpringConfigFile {
      * 配置文件内容
      */
     private final Map<String, ConfigFileHandler> configMap = new ConcurrentHashMap<>();
-
 
     /**
      * 从配置文件中获取默认配置
@@ -81,19 +81,10 @@ public class SpringConfigFile {
 
         if (SpringConfigFileConstants.YAML.equals(extension) || SpringConfigFileConstants.YML.equals(extension)) {
             //yml配置文件
-            readYamlConfigFile(name, inputStream);
+            addConfig(name, new YamlConfigFileHandler(inputStream));
         } else {
             //properties配置文件
             readPropertiesConfigFile(name, inputStream);
-        }
-    }
-
-
-    public void readYamlConfigFile(String fileName, InputStream inputStream) {
-        Yaml yaml = new Yaml();
-        Iterable<Object> configIterable = yaml.loadAll(inputStream);
-        for (Object object : configIterable) {
-            addConfig(fileName, new YamlConfigFileHandler(JSONUtil.parse(object)));
         }
     }
 

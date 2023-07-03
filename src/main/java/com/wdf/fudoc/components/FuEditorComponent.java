@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-08-17 11:22:33
  */
-public class FuEditorComponent {
+public class FuEditorComponent implements Disposable {
 
     /**
      * 主面板
@@ -269,5 +269,12 @@ public class FuEditorComponent {
     private void setFileType(FileType fileType) {
         this.fileType = fileType;
         this.lightVirtualFile = LightVirtualFileFactory.create(fileType);
+    }
+
+    @Override
+    public void dispose() {
+        if(Objects.nonNull(this.editor)){
+            EditorFactory.getInstance().releaseEditor(this.editor);
+        }
     }
 }

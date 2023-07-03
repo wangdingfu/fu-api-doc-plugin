@@ -8,6 +8,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.spring.SpringConfigManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
@@ -31,6 +32,10 @@ public class FuRequestData {
      */
     private RequestType requestType;
 
+    /**
+     * 域名地址
+     */
+    private String domain;
     /**
      * 接口请求地址
      */
@@ -104,7 +109,8 @@ public class FuRequestData {
         if (StringUtils.isBlank(this.baseUrl) && StringUtils.isBlank(this.paramUrl)) {
             return StringUtils.EMPTY;
         }
-        return URLUtil.normalize(this.baseUrl + params, false, true);
+        String apiUrl = URLUtil.completeUrl(this.domain, this.baseUrl);
+        return URLUtil.normalize(apiUrl + params, false, true);
     }
 
 }

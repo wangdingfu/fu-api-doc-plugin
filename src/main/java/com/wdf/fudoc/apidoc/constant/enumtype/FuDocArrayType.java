@@ -59,8 +59,8 @@ public enum FuDocArrayType {
     Float1(CommonClassNames.JAVA_LANG_FLOAT + "[]", Float[].class),
     Float2(CommonClassNames.JAVA_LANG_FLOAT + "[][]", Float[][].class),
 
-    string1("string[]", String[].class),
-    string2("string[][]", String[][].class),
+    string1("String[]", String[].class),
+    string2("String[][]", String[][].class),
 
     byte1("byte[]", byte[].class),
     byte2("byte[][]", byte[][].class),
