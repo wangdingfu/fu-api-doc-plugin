@@ -220,4 +220,9 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         this.yapiPwd.setText(yapi.getYapiPwd());
         this.fuTableComponent.setDataList(FuDocSyncProjectSetting.getYapiConfigList());
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

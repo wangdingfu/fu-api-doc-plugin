@@ -16,6 +16,7 @@ import com.wdf.fudoc.request.tab.settings.GlobalVariableTab;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import lombok.Getter;
+import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -185,6 +186,16 @@ public class FuRequestSettingView extends DialogWrapper {
         }
     }
 
+    @Override
+    protected void dispose() {
+        this.globalConfigTab.dispose();
+        this.globalHeaderTab.dispose();
+        this.globalVariableTab.dispose();
+        if(CollectionUtils.isNotEmpty(preScriptTabs)){
+            preScriptTabs.forEach(GlobalPreScriptTab::dispose);
+        }
+        super.dispose();
+    }
 
     @Override
     protected @Nullable JComponent createCenterPanel() {

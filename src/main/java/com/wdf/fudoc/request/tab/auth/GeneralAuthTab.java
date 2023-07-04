@@ -49,4 +49,9 @@ public class GeneralAuthTab implements FuTab, FuActionListener<AuthConfigData> {
     public void doActionAfter(AuthConfigData data) {
 
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

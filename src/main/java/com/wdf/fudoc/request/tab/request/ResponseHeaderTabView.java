@@ -76,4 +76,8 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
     }
 
 
+    @Override
+    public void dispose() {
+
+    }
 }

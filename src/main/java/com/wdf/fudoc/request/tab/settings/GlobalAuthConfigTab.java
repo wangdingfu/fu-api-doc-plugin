@@ -128,4 +128,9 @@ public class GlobalAuthConfigTab extends DefaultListModel<FuRequestAuthConfigPO>
             //当选中列表中指定项时触发
         });
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

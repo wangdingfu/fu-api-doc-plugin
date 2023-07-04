@@ -40,4 +40,9 @@ public class ShowDocSettingsTab implements FuTab, FuViewListener {
     public void reset() {
 
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

@@ -95,7 +95,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
         this.project = project;
         this.title = title;
         this.rootPanel = new JPanel(new BorderLayout());
-        this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE);
+        this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE,this);
         //当前脚本针对以下module所有的接口生效
         this.scopeModuleList = FuDocUtils.getAllModuleNameList(project);
         this.fuFiltersAction = new FuFiltersAction<>(FuBundle.message("fudoc.script.module.title"), this, () -> {
@@ -296,5 +296,10 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
     @Override
     public void moveOff() {
         this.fuFiltersAction.exit();
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

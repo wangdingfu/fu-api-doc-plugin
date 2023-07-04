@@ -25,7 +25,7 @@ public class JavaCodeAuthTab implements FuTab, FuActionListener<AuthConfigData> 
     public final static String TAB = "Java";
 
     public JavaCodeAuthTab() {
-        this.fuEditorComponent = FuEditorComponent.create(JavaFileType.INSTANCE);
+        this.fuEditorComponent = FuEditorComponent.create(JavaFileType.INSTANCE,this);
     }
 
     @Override
@@ -51,5 +51,10 @@ public class JavaCodeAuthTab implements FuTab, FuActionListener<AuthConfigData> 
             authConfig = new JavaCodeAuthConfig();
         }
         authConfig.setJavaCode(this.fuEditorComponent.getContent());
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

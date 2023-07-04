@@ -145,4 +145,8 @@ public class AuthSettingView implements FuTab, FuActionListener<AuthConfigData> 
         }
     }
 
+    @Override
+    public void dispose() {
+
+    }
 }
