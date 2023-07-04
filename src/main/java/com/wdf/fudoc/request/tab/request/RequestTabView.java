@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.tab.request;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
@@ -314,4 +315,10 @@ public class RequestTabView implements FuTab, HttpCallback {
         }
     }
 
+    @Override
+    public void dispose() {
+        this.httpHeaderTab.dispose();
+        this.httpGetParamsTab.dispose();
+        this.httpRequestBodyTab.dispose();
+    }
 }

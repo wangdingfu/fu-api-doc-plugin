@@ -3,6 +3,7 @@ package com.wdf.fudoc.apidoc.view;
 import cn.hutool.json.JSONUtil;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.json.JsonFileType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.apidoc.data.CustomerSettingData;
@@ -137,13 +138,14 @@ public class FuDocSettingForm extends DialogWrapper {
 
 
     private void createUIComponents() {
+        Disposable disposable = getDisposable();
         //初始化编辑器组件
-        this.mainEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
-        this.objectEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
-        this.enum1EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
-        this.enum2EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
-        this.settingEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, null);
-        this.yapiEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null);
+        this.mainEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null,disposable);
+        this.objectEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null,disposable);
+        this.enum1EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null,disposable);
+        this.enum2EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null,disposable);
+        this.settingEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, null,disposable);
+        this.yapiEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null,disposable);
 
         //初始化面板
         this.mainTemplatePanel = new JPanel(new BorderLayout());

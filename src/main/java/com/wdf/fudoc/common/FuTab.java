@@ -1,5 +1,6 @@
 package com.wdf.fudoc.common;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.TabsListener;
 import com.wdf.fudoc.components.bo.TabActionBO;
@@ -12,7 +13,7 @@ import java.util.Map;
  * @author wangdingfu
  * @date 2022-09-17 20:49:35
  */
-public interface FuTab extends TabsListener {
+public interface FuTab extends TabsListener, Disposable {
 
     /**
      * 获取tab

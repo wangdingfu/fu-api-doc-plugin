@@ -47,7 +47,7 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<GlobalKeyValuePO
         this.project = project;
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.globalConfig("请求头名称", "请求头值"), Lists.newArrayList(), GlobalKeyValuePO.class);
         //文本编辑器
-        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
+        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "",this);
     }
 
     @Override
@@ -92,5 +92,10 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<GlobalKeyValuePO
             bulkEditToTableData(TITLE);
         }
         configPO.setGlobalHeaderList(fuTableComponent.getDataList());
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

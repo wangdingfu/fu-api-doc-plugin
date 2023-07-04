@@ -91,11 +91,11 @@ public class FuEditorComponent implements Disposable {
     private FuEditorListener fuEditorListener;
 
 
-    public FuEditorComponent(FileType fileType, String content) {
-        this(fileType, content, null);
+    private FuEditorComponent(FileType fileType, String content, Disposable parent) {
+        this(fileType, content, null, parent);
     }
 
-    public FuEditorComponent(FileType fileType, String content, String description) {
+    private FuEditorComponent(FileType fileType, String content, String description, Disposable parent) {
         this.content = content;
         setFileType(fileType);
         if (Objects.nonNull(description)) {
@@ -108,6 +108,7 @@ public class FuEditorComponent implements Disposable {
         initEditor();
         //创建主面板
         createMainPanel();
+        Disposer.register(parent, this);
     }
 
 
@@ -118,12 +119,12 @@ public class FuEditorComponent implements Disposable {
      * @param description 描述信息
      * @return 编辑器组件
      */
-    public static FuEditorComponent create(String content, FileType fileType, String description) {
-        return new FuEditorComponent(fileType, content, description);
+    public static FuEditorComponent create(String content, FileType fileType, String description, Disposable parent) {
+        return new FuEditorComponent(fileType, content, description, parent);
     }
 
-    public static FuEditorComponent create(FileType fileType) {
-        return new FuEditorComponent(fileType, StringUtils.EMPTY);
+    public static FuEditorComponent create(FileType fileType, Disposable parent) {
+        return new FuEditorComponent(fileType, StringUtils.EMPTY, parent);
     }
 
     /**
@@ -132,8 +133,8 @@ public class FuEditorComponent implements Disposable {
      * @param content 编辑器显示的内容
      * @return 编辑器组件
      */
-    public static FuEditorComponent create(FileType fileType, String content) {
-        return new FuEditorComponent(fileType, content);
+    public static FuEditorComponent create(FileType fileType, String content, Disposable parent) {
+        return new FuEditorComponent(fileType, content, parent);
     }
 
     /**
@@ -273,7 +274,7 @@ public class FuEditorComponent implements Disposable {
 
     @Override
     public void dispose() {
-        if(Objects.nonNull(this.editor)){
+        if (Objects.nonNull(this.editor)) {
             EditorFactory.getInstance().releaseEditor(this.editor);
         }
     }

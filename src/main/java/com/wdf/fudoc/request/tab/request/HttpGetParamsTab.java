@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.tab.request;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-09-17 21:31:31
  */
-public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback {
+public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback, Disposable {
 
     public static final String PARAMS = "Params";
     /**
@@ -69,7 +70,7 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class);
         this.fuTableComponent.addListener(new HttpGetParamsTableListener(this));
         //文本编辑器
-        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
+        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "",this);
         this.fuEditorComponent.addListener(new HttpGetEditorListener(this));
     }
 
@@ -155,6 +156,11 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
     @Override
     protected FuEditorComponent getEditorComponent(String tab) {
         return this.fuEditorComponent;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 
 

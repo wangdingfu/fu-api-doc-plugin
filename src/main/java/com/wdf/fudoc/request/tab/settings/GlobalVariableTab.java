@@ -52,7 +52,7 @@ public class GlobalVariableTab extends AbstractBulkEditTabLinkage<GlobalKeyValue
         this.project = project;
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.globalConfig("变量名称", "变量值"), Lists.newArrayList(), GlobalKeyValuePO.class);
         //文本编辑器
-        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
+        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "",this);
     }
 
     @Override
@@ -99,5 +99,10 @@ public class GlobalVariableTab extends AbstractBulkEditTabLinkage<GlobalKeyValue
             bulkEditToTableData(TITLE);
         }
         configPO.setGlobalVariableList(Lists.newArrayList(fuTableComponent.getDataList()));
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

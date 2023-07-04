@@ -62,7 +62,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
         this.project = project;
         this.responseErrorView = new ResponseErrorView();
         this.responseFileView = new ResponseFileView();
-        this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "");
+        this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "",this);
         this.rootPanel = new JPanel(new BorderLayout());
         this.fuRequestStatusInfoView = fuRequestStatusInfoView;
         switchPanel(1, this.fuEditorComponent.getMainPanel());
@@ -160,4 +160,8 @@ public class ResponseTabView implements FuTab, HttpCallback {
         }
     }
 
+    @Override
+    public void dispose() {
+
+    }
 }

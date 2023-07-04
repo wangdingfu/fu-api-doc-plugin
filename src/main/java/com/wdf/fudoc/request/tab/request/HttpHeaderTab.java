@@ -50,7 +50,7 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<HeaderKeyValueBO> 
         this.project = project;
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.header(), HeaderKeyValueBO.class);
         //文本编辑器
-        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
+        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "", this);
     }
 
     @Override
@@ -119,5 +119,10 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<HeaderKeyValueBO> 
     @Override
     protected FuEditorComponent getEditorComponent(String tab) {
         return this.fuEditorComponent;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

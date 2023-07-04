@@ -57,11 +57,11 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
         this.formDataPanel = this.formDataComponent.createPanel();
         this.urlencodedComponent = FuTableComponent.createKeyValue();
         this.urlencodedPanel = this.urlencodedComponent.createPanel();
-        this.rawComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
-        this.jsonComponent = FuEditorComponent.create(JsonFileType.INSTANCE);
+        this.rawComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE,this);
+        this.jsonComponent = FuEditorComponent.create(JsonFileType.INSTANCE,this);
         this.binaryComponent = new JPanel();
-        this.formDataEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
-        this.urlencodedEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
+        this.formDataEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE,this);
+        this.urlencodedEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE,this);
     }
 
     @Override
@@ -173,5 +173,10 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
             return this.urlencodedEditorComponent;
         }
         return null;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

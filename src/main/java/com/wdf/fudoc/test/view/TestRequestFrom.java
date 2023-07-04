@@ -2,6 +2,7 @@ package com.wdf.fudoc.test.view;
 
 import com.google.common.collect.Lists;
 import com.intellij.json.JsonFileType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.GuiUtils;
 import com.intellij.ui.tabs.TabInfo;
@@ -22,7 +23,7 @@ import javax.swing.*;
  * @author wangdingfu
  * @date 2022-09-01 16:22:00
  */
-public class TestRequestFrom {
+public class TestRequestFrom implements Disposable {
     @Getter
     private JPanel rootPanel;
     private JSplitPane splitPane;
@@ -115,6 +116,11 @@ public class TestRequestFrom {
     }
 
     private JPanel createEditorPanel() {
-        return FuEditorComponent.create(JsonFileType.INSTANCE, "").getMainPanel();
+        return FuEditorComponent.create(JsonFileType.INSTANCE, "",this).getMainPanel();
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }
