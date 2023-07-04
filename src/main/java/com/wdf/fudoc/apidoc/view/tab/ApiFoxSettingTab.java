@@ -13,6 +13,7 @@ import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.data.ApiFoxConfigData;
 import com.wdf.fudoc.apidoc.sync.data.ApiFoxProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.common.enumtype.FuColor;
@@ -64,14 +65,14 @@ public class ApiFoxSettingTab implements FuTab, FuViewListener {
     }
 
     private void createUIComponents() {
-        this.domainField = new PlaceholderTextField("请输入你的ApiFox服务地址 默认: " + UrlConstants.API_FOX);
-        this.authTokenField = new PlaceholderTextField("请输入你的授权token");
+        this.domainField = new PlaceholderTextField(FuBundle.message("fudoc.sync.apifox.domain", UrlConstants.API_FOX));
+        this.authTokenField = new PlaceholderTextField(FuBundle.message("fudoc.sync.apifox.token"));
     }
 
     @Override
     public TabInfo getTabInfo() {
         JPanel slidePanel = new JPanel(new BorderLayout());
-        ActionLink actionLink = new ActionLink("查看如何获取个人访问令牌", e -> {
+        ActionLink actionLink = new ActionLink(FuBundle.message("fudoc.sync.apifox.token.link"), e -> {
             BrowserUtil.browse("https://www.apifox.cn/help/openapi/");
         });
         actionLink.setForeground(FuColor.color6.color());
