@@ -14,7 +14,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-26 16:00:32
  */
-public class ResponseErrorView implements Disposable {
+public class ResponseErrorView {
     @Getter
     private JPanel rootPanel;
     private JPanel imgPanel;
@@ -24,7 +24,10 @@ public class ResponseErrorView implements Disposable {
 
     private FuEditorComponent fuEditorComponent;
 
-    public ResponseErrorView() {
+    private final Disposable disposable;
+
+    public ResponseErrorView(Disposable disposable) {
+        this.disposable = disposable;
         iconLabel.setBorder(JBUI.Borders.empty(10, 0, 20, 0));
         tipLabel.setBorder(JBUI.Borders.emptyBottom(20));
         iconLabel.setIcon(FuDocIcons.FU_REQUEST);
@@ -32,7 +35,7 @@ public class ResponseErrorView implements Disposable {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "", this);
+        fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "", disposable);
         this.textPanel = fuEditorComponent.getMainPanel();
     }
 
@@ -43,8 +46,4 @@ public class ResponseErrorView implements Disposable {
         }
     }
 
-    @Override
-    public void dispose() {
-
-    }
 }

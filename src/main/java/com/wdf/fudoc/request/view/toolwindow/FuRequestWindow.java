@@ -92,8 +92,8 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.rootPanel = new JPanel(new BorderLayout());
         Splitter splitter = new Splitter(true, 0.6F);
         FuRequestStatusInfoView fuRequestStatusInfoView = new FuRequestStatusInfoView(project);
-        this.requestTabView = new RequestTabView(project, this, fuRequestStatusInfoView);
-        this.responseTabView = new ResponseTabView(project, fuRequestStatusInfoView);
+        this.requestTabView = new RequestTabView(project, this, fuRequestStatusInfoView, toolWindow.getDisposable());
+        this.responseTabView = new ResponseTabView(project, fuRequestStatusInfoView, toolWindow.getDisposable());
         this.responseHeaderTabView = new ResponseHeaderTabView(project);
         splitter.setFirstComponent(this.requestTabView.getRootPane());
         splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).build());

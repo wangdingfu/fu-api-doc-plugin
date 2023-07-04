@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.tab.request;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -46,11 +47,11 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<HeaderKeyValueBO> 
 
     private Module module;
 
-    public HttpHeaderTab(Project project) {
+    public HttpHeaderTab(Project project, Disposable disposable) {
         this.project = project;
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.header(), HeaderKeyValueBO.class);
         //文本编辑器
-        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "", this);
+        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "", disposable);
     }
 
     @Override
@@ -121,8 +122,5 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<HeaderKeyValueBO> 
         return this.fuEditorComponent;
     }
 
-    @Override
-    public void dispose() {
 
-    }
 }

@@ -126,8 +126,8 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.project = project;
         this.httpId = IdUtil.getSnowflakeNextIdStr();
         this.isSave = isSave;
-        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance(project));
-        this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance(project));
+        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance(project),getDisposable());
+        this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance(project),getDisposable());
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.toolBarPanel = initToolBarUI();

@@ -16,7 +16,6 @@ import com.wdf.fudoc.request.tab.settings.GlobalVariableTab;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import lombok.Getter;
-import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,8 +76,8 @@ public class FuRequestSettingView extends DialogWrapper {
      */
     private void initPanel() {
         this.globalConfigTab = new GlobalConfigTab();
-        this.globalVariableTab = new GlobalVariableTab(project);
-        this.globalHeaderTab = new GlobalHeaderTab(project);
+        this.globalVariableTab = new GlobalVariableTab(project, getDisposable());
+        this.globalHeaderTab = new GlobalHeaderTab(project, getDisposable());
         //初始化数据
         initData();
         //添加tab页
@@ -113,7 +112,7 @@ public class FuRequestSettingView extends DialogWrapper {
             preScriptMap.put(GlobalPreScriptTab.TITLE, globalPreScriptPO);
         }
         //对前置脚本排序(为了展示顺序性) 创建前置脚本tab 并 初始化数据
-        Lists.newArrayList(preScriptMap.keySet()).stream().sorted().forEach(f -> this.preScriptTabs.add(new GlobalPreScriptTab(project, f, configPO)));
+        Lists.newArrayList(preScriptMap.keySet()).stream().sorted().forEach(f -> this.preScriptTabs.add(new GlobalPreScriptTab(project, f, configPO, getDisposable())));
 
     }
 
@@ -155,7 +154,7 @@ public class FuRequestSettingView extends DialogWrapper {
         @Override
         protected void doAction(ActionEvent e) {
             //新增前置脚本
-            GlobalPreScriptTab globalPreScriptTab = new GlobalPreScriptTab(project, GlobalPreScriptTab.TITLE + preScriptIndex.incrementAndGet(), null);
+            GlobalPreScriptTab globalPreScriptTab = new GlobalPreScriptTab(project, GlobalPreScriptTab.TITLE + preScriptIndex.incrementAndGet(), null, getDisposable());
             preScriptTabs.add(globalPreScriptTab);
             fuTabBuilder.addTab(globalPreScriptTab);
         }
@@ -184,17 +183,6 @@ public class FuRequestSettingView extends DialogWrapper {
 //                }
 //            }
         }
-    }
-
-    @Override
-    protected void dispose() {
-        this.globalConfigTab.dispose();
-        this.globalHeaderTab.dispose();
-        this.globalVariableTab.dispose();
-        if(CollectionUtils.isNotEmpty(preScriptTabs)){
-            preScriptTabs.forEach(GlobalPreScriptTab::dispose);
-        }
-        super.dispose();
     }
 
     @Override

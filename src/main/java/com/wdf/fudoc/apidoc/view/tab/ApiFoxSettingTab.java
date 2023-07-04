@@ -129,9 +129,4 @@ public class ApiFoxSettingTab implements FuTab, FuViewListener {
             this.projectTable.setDataList(Lists.newArrayList(state.getApiFoxConfigList()));
         }
     }
-
-    @Override
-    public void dispose() {
-
-    }
 }

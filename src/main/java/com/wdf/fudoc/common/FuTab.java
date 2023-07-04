@@ -13,7 +13,7 @@ import java.util.Map;
  * @author wangdingfu
  * @date 2022-09-17 20:49:35
  */
-public interface FuTab extends TabsListener, Disposable {
+public interface FuTab extends TabsListener {
 
     /**
      * 获取tab

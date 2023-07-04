@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * @author wangdingfu
  * @date 2022-09-17 21:31:31
  */
-public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback, Disposable {
+public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback {
 
     public static final String PARAMS = "Params";
     /**
@@ -64,13 +64,13 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
      *
      * @param requestTabView 父容器对象
      */
-    public HttpGetParamsTab(RequestTabView requestTabView) {
+    public HttpGetParamsTab(RequestTabView requestTabView, Disposable disposable) {
         this.requestTabView = requestTabView;
         //请求参数表格组件初始化
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class);
         this.fuTableComponent.addListener(new HttpGetParamsTableListener(this));
         //文本编辑器
-        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "",this);
+        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "",disposable);
         this.fuEditorComponent.addListener(new HttpGetEditorListener(this));
     }
 
@@ -158,10 +158,6 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         return this.fuEditorComponent;
     }
 
-    @Override
-    public void dispose() {
-
-    }
 
 
     /**

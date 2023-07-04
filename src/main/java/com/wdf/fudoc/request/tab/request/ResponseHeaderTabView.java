@@ -11,7 +11,6 @@ import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableDisableListener;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import org.apache.commons.collections.MapUtils;
@@ -75,9 +74,4 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
         fuRequestStatusInfoView.initData(httpRequestData);
     }
 
-
-    @Override
-    public void dispose() {
-
-    }
 }

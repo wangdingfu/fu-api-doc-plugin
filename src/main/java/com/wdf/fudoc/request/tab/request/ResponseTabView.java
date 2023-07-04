@@ -7,6 +7,7 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.intellij.json.JsonFileType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
@@ -58,11 +59,11 @@ public class ResponseTabView implements FuTab, HttpCallback {
 
     private Integer tab = 0;
 
-    public ResponseTabView(Project project, FuRequestStatusInfoView fuRequestStatusInfoView) {
+    public ResponseTabView(Project project, FuRequestStatusInfoView fuRequestStatusInfoView, Disposable disposable) {
         this.project = project;
-        this.responseErrorView = new ResponseErrorView();
+        this.responseErrorView = new ResponseErrorView(disposable);
         this.responseFileView = new ResponseFileView();
-        this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "",this);
+        this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "", disposable);
         this.rootPanel = new JPanel(new BorderLayout());
         this.fuRequestStatusInfoView = fuRequestStatusInfoView;
         switchPanel(1, this.fuEditorComponent.getMainPanel());
@@ -88,7 +89,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
         if (Objects.isNull(response) || Objects.isNull(responseType = response.getResponseType())) {
             return;
         }
-        if(Objects.nonNull(this.fuRequestStatusInfoView)){
+        if (Objects.nonNull(this.fuRequestStatusInfoView)) {
             //设置响应信息
             this.fuRequestStatusInfoView.initData(httpRequestData);
         }
@@ -160,8 +161,4 @@ public class ResponseTabView implements FuTab, HttpCallback {
         }
     }
 
-    @Override
-    public void dispose() {
-
-    }
 }

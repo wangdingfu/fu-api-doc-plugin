@@ -27,8 +27,4 @@ public class GlobalConfigTab implements FuTab {
         return FuTabComponent.getInstance("全局配置", FuDocIcons.FU_SETTINGS, this.rootPanel).builder();
     }
 
-    @Override
-    public void dispose() {
-
-    }
 }

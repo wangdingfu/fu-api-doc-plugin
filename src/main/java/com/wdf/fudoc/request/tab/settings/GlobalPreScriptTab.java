@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.tab.settings;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.javascript.JavaScriptFileType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -87,15 +88,15 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
 
     private final HttpCmdView httpCmdView;
 
-    public GlobalPreScriptTab(Project project) {
-        this(project, TITLE, null);
+    public GlobalPreScriptTab(Project project, Disposable disposable) {
+        this(project, TITLE, null, disposable);
     }
 
-    public GlobalPreScriptTab(Project project, String title, FuRequestConfigPO configPO) {
+    public GlobalPreScriptTab(Project project, String title, FuRequestConfigPO configPO, Disposable disposable) {
         this.project = project;
         this.title = title;
         this.rootPanel = new JPanel(new BorderLayout());
-        this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE,this);
+        this.fuEditorComponent = FuEditorComponent.create(JavaScriptFileType.INSTANCE, disposable);
         //当前脚本针对以下module所有的接口生效
         this.scopeModuleList = FuDocUtils.getAllModuleNameList(project);
         this.fuFiltersAction = new FuFiltersAction<>(FuBundle.message("fudoc.script.module.title"), this, () -> {
@@ -298,8 +299,4 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
         this.fuFiltersAction.exit();
     }
 
-    @Override
-    public void dispose() {
-
-    }
 }

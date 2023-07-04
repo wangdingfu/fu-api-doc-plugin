@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.tab.settings;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tabs.TabInfo;
@@ -43,11 +44,11 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<GlobalKeyValuePO
     private static final String TITLE = "公共请求头";
 
 
-    public GlobalHeaderTab(Project project) {
+    public GlobalHeaderTab(Project project, Disposable disposable) {
         this.project = project;
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.globalConfig("请求头名称", "请求头值"), Lists.newArrayList(), GlobalKeyValuePO.class);
         //文本编辑器
-        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "",this);
+        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "",disposable);
     }
 
     @Override
@@ -94,8 +95,4 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<GlobalKeyValuePO
         configPO.setGlobalHeaderList(fuTableComponent.getDataList());
     }
 
-    @Override
-    public void dispose() {
-
-    }
 }

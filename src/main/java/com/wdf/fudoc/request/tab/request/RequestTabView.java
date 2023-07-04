@@ -92,7 +92,7 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     private final FuRequestStatusInfoView fuRequestStatusInfoView;
 
-    public RequestTabView(Project project, SendHttpListener httpListener, FuRequestStatusInfoView fuRequestStatusInfoView) {
+    public RequestTabView(Project project, SendHttpListener httpListener, FuRequestStatusInfoView fuRequestStatusInfoView, Disposable disposable) {
         this.project = project;
         this.fuRequestStatusInfoView = fuRequestStatusInfoView;
         this.httpListener = httpListener;
@@ -100,9 +100,9 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.requestTypeComponent = new ComboBox<>(RequestType.getItems());
         this.requestUrlComponent = new JTextField();
         this.sendBtn = new JButton("Send");
-        this.httpHeaderTab = new HttpHeaderTab(project);
-        this.httpGetParamsTab = new HttpGetParamsTab(this);
-        this.httpRequestBodyTab = new HttpRequestBodyTab();
+        this.httpHeaderTab = new HttpHeaderTab(project, disposable);
+        this.httpGetParamsTab = new HttpGetParamsTab(this, disposable);
+        this.httpRequestBodyTab = new HttpRequestBodyTab(disposable);
         this.rootPane = new JRootPane();
         initRootPane();
         initUI();
@@ -299,7 +299,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         }
     }
 
-    private void changeAction(String requestType){
+    private void changeAction(String requestType) {
         //切换请求参数
         if (RequestType.GET.getRequestType().equals(requestType)) {
             this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
@@ -315,10 +315,4 @@ public class RequestTabView implements FuTab, HttpCallback {
         }
     }
 
-    @Override
-    public void dispose() {
-        this.httpHeaderTab.dispose();
-        this.httpGetParamsTab.dispose();
-        this.httpRequestBodyTab.dispose();
-    }
 }
