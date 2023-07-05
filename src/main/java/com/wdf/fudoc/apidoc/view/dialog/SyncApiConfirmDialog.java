@@ -32,6 +32,7 @@ import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author wangdingfu
@@ -185,7 +186,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         apiCategoryList.add(addCategory);
         //保存到持久化文件中
         configData.syncApiProjectList(module.getName(), this.projectConfigList);
-        return new FuTreeNode<>(apiCategoryDTO, AllIcons.Nodes.Package);
+        return new FuTreeNode<>(addCategory, AllIcons.Nodes.Package);
     }
 
     @Override
@@ -225,7 +226,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         //构建根节点
         ApiCategoryDTO root = new ApiCategoryDTO("根目录", apiCategoryList);
         //递归查找分类
-        return recursionCategory(paths, 0, root);
+        return recursionCategory(paths, 1, root);
     }
 
 
@@ -239,7 +240,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
      */
     private ApiCategoryDTO recursionCategory(TreeNode[] paths, int index, ApiCategoryDTO parent) {
         List<ApiCategoryDTO> apiCategoryList = parent.getApiCategoryList();
-        if (CollectionUtils.isEmpty(apiCategoryList)) {
+        if (Objects.isNull(apiCategoryList)) {
             apiCategoryList = Lists.newArrayList();
             parent.setApiCategoryList(apiCategoryList);
         }
@@ -247,8 +248,13 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
             return parent;
         }
         String nodeName = paths[index].toString();
-        ApiCategoryDTO apiCategoryDTO = apiCategoryList.stream().filter(f -> nodeName.equals(f.getCategoryName())).findFirst().orElse(new ApiCategoryDTO(nodeName, parent));
-        return recursionCategory(paths, ++index, apiCategoryDTO);
+        Optional<ApiCategoryDTO> first = apiCategoryList.stream().filter(f -> nodeName.equals(f.getCategoryName())).findFirst();
+        if (first.isEmpty()) {
+            ApiCategoryDTO apiCategoryDTO = new ApiCategoryDTO(nodeName, parent);
+            apiCategoryList.add(apiCategoryDTO);
+            return recursionCategory(paths, ++index, apiCategoryDTO);
+        }
+        return recursionCategory(paths, ++index, first.get());
     }
 
 

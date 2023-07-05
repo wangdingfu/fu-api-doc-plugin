@@ -57,8 +57,8 @@ public class ApiCategoryDTO implements Serializable {
         this.parent = parent;
     }
 
-    public ApiCategoryDTO(String categoryId, List<ApiCategoryDTO> apiCategoryList) {
-        this.categoryId = categoryId;
+    public ApiCategoryDTO(String categoryName, List<ApiCategoryDTO> apiCategoryList) {
+        this.categoryName = categoryName;
         this.apiCategoryList = apiCategoryList;
     }
 
