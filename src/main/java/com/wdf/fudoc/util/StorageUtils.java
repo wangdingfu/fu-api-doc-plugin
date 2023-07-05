@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Objects;
 
@@ -94,6 +95,7 @@ public class StorageUtils {
                 }
                 //读取该文件
                 VirtualFile httpVirtualFile = virtualFile.findOrCreateChildData(null, fileName);
+                httpVirtualFile.setCharset(StandardCharsets.UTF_8);
                 VfsUtil.saveText(httpVirtualFile, value);
             } catch (Exception e) {
                 log.info("持久化{}文件异常", fileName, e);
@@ -106,7 +108,7 @@ public class StorageUtils {
         VirtualFile file = ApplicationManager.getApplication().runReadAction((Computable<VirtualFile>) () -> VfsUtil.findFile(Paths.get(path, fileName), false));
         if (Objects.nonNull(file) && file.exists()) {
             try {
-                return StringUtils.toEncodedString(file.contentsToByteArray(), Charset.defaultCharset());
+                return StringUtils.toEncodedString(file.contentsToByteArray(), StandardCharsets.UTF_8);
             } catch (Exception e) {
                 log.info("读取文件【{}】异常", file.getPath());
             }
