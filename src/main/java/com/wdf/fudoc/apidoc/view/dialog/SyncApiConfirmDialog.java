@@ -238,13 +238,13 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
      * @return 选中节点的分类
      */
     private ApiCategoryDTO recursionCategory(TreeNode[] paths, int index, ApiCategoryDTO parent) {
-        if (index >= paths.length) {
-            return parent;
-        }
         List<ApiCategoryDTO> apiCategoryList = parent.getApiCategoryList();
         if (CollectionUtils.isEmpty(apiCategoryList)) {
             apiCategoryList = Lists.newArrayList();
             parent.setApiCategoryList(apiCategoryList);
+        }
+        if (index >= paths.length) {
+            return parent;
         }
         String nodeName = paths[index].toString();
         ApiCategoryDTO apiCategoryDTO = apiCategoryList.stream().filter(f -> nodeName.equals(f.getCategoryName())).findFirst().orElse(new ApiCategoryDTO(nodeName, parent));
