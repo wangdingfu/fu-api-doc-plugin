@@ -229,11 +229,11 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
 
 
     protected String recursionPath(ApiCategoryDTO apiCategoryDTO) {
-        if (Objects.isNull(apiCategoryDTO)) {
-            return org.apache.commons.lang3.StringUtils.EMPTY;
+        if (Objects.isNull(apiCategoryDTO) || Objects.isNull(apiCategoryDTO.getParent())) {
+            return StringUtils.EMPTY;
         }
         String parentName = recursionPath(apiCategoryDTO.getParent());
         String categoryName = apiCategoryDTO.getCategoryName();
-        return org.apache.commons.lang3.StringUtils.isBlank(parentName) ? categoryName : parentName + "/" + categoryName;
+        return StringUtils.isBlank(parentName) ? categoryName : parentName + "/" + categoryName;
     }
 }
