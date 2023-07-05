@@ -6,6 +6,7 @@ import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.apidoc.sync.data.ApiFoxProjectTableData;
+import com.wdf.fudoc.apidoc.sync.data.ShowDocProjectTableData;
 import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.common.enumtype.FuColor;
@@ -36,12 +37,12 @@ public class ShowDocSettingTab implements FuTab, FuViewListener {
     private JButton loginBtn;
     private JPanel mainPanel;
 
-    private final FuTableComponent<> projectTable;
+    private final FuTableComponent<ShowDocProjectTableData> projectTable;
 
     public ShowDocSettingTab() {
         this.basicPanel.setBorder(JBUI.Borders.emptyTop(10));
         this.mainPanel.setBorder(JBUI.Borders.emptyTop(10));
-        this.projectTable = FuTableComponent.create(FuTableColumnFactory.apiFox(), ApiFoxProjectTableData.class);
+        this.projectTable = FuTableComponent.create(FuTableColumnFactory.showDoc(), ShowDocProjectTableData.class);
         this.mainPanel.add(this.projectTable.createPanel(), BorderLayout.CENTER);
         initRootPane();
     }

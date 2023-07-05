@@ -7,6 +7,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.data.SettingDynamicValueData;
 import com.wdf.fudoc.apidoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.apidoc.sync.data.ApiFoxProjectTableData;
+import com.wdf.fudoc.apidoc.sync.data.ShowDocProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
@@ -138,6 +139,20 @@ public class FuTableColumnFactory {
         columns.add(new StringColumn<>("项目token", YApiProjectTableData::getProjectToken, YApiProjectTableData::setProjectToken));
         columns.add(new StringColumn<>("项目名称", YApiProjectTableData::getProjectName, YApiProjectTableData::setProjectName));
         columns.add(new TreeModuleComboBoxColumn<>("作用范围", YApiProjectTableData::getScope, YApiProjectTableData::setScope));
+        return columns;
+    }
+
+
+    /**
+     * YApi table列
+     */
+    public static List<Column> showDoc() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", ShowDocProjectTableData::getSelect, ShowDocProjectTableData::setSelect));
+        columns.add(new StringColumn<>("apiKey", ShowDocProjectTableData::getApiKey, ShowDocProjectTableData::setApiKey));
+        columns.add(new StringColumn<>("apiToken", ShowDocProjectTableData::getApiToken, ShowDocProjectTableData::setApiToken));
+        columns.add(new StringColumn<>("项目名称", ShowDocProjectTableData::getProjectName, ShowDocProjectTableData::setProjectName));
+        columns.add(new TreeModuleComboBoxColumn<>("作用范围", ShowDocProjectTableData::getScope, ShowDocProjectTableData::setScope));
         return columns;
     }
 
