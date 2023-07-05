@@ -24,10 +24,10 @@ public class ShowDocServiceImpl implements ShowDocService {
     @Override
     public String syncApi(ShowDocDTO showDocDTO, ShowDocConfigData showDocConfigData) {
         String baseUrl = showDocConfigData.getBaseUrl();
-        String sync_api_url = StringUtils.equals(baseUrl, UrlConstants.SHOW_DOC)
-                ? UrlConstants.SHOW_DOC + UrlConstants.SHOW_DOC_SYNC_API
+        String syncApiUrl = StringUtils.equals(baseUrl, UrlConstants.SHOW_DOC)
+                ? UrlConstants.SHOW_DOC + UrlConstants.SHOW_DOC_DEFAULT
                 : URLUtil.completeUrl(baseUrl, UrlConstants.SHOW_DOC_PRIVATE_SYNC_API);
-        HttpRequest httpRequest = HttpUtil.createPost(baseUrl + sync_api_url);
+        HttpRequest httpRequest = HttpUtil.createPost(syncApiUrl);
         httpRequest.body(JsonUtil.toJson(showDocDTO));
         try {
             String body = httpRequest.execute().body();

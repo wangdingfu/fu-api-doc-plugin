@@ -26,6 +26,8 @@ import icons.FuDocIcons;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,7 +83,7 @@ public class ShowDocSettingTab implements FuTab, FuViewListener {
     }
 
     private void initEnableBox() {
-        this.enableBox.addChangeListener(e -> {
+        this.enableBox.addItemListener(e -> {
             FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
             if (this.enableBox.isSelected()) {
                 //如果开启了就设置启用的为showDoc 否则不设置（都没有设置情况会有默认值）

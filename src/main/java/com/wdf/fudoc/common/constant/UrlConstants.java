@@ -23,7 +23,11 @@ public interface UrlConstants {
     String API_FOX = "https://api.apifox.cn";
     String SHOW_DOC = "https://www.showdoc.cc";
 
+
     String SHOW_DOC_SYNC_API = "/api/item/updateByApi";
-    String SHOW_DOC_PRIVATE_SYNC_API = "/server/index.php?s=";
+
+    String SHOW_DOC_DEFAULT = "/server" + SHOW_DOC_SYNC_API;
+
+    String SHOW_DOC_PRIVATE_SYNC_API = "/server/index.php?s=" + SHOW_DOC_SYNC_API;
 
 }

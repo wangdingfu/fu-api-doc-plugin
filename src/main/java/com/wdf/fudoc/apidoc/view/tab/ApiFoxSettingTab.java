@@ -83,7 +83,7 @@ public class ApiFoxSettingTab implements FuTab, FuViewListener {
 
 
     private void initEnableBox() {
-        this.enableBox.addChangeListener(e -> {
+        this.enableBox.addItemListener(e -> {
             FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
             if (this.enableBox.isSelected()) {
                 //如果开启了就设置启用的为apifox 否则不设置（都没有设置情况会有默认值）
@@ -98,6 +98,7 @@ public class ApiFoxSettingTab implements FuTab, FuViewListener {
     @Override
     public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
         rootPane.setDefaultButton(this.loginBtn);
+        this.enableBox.setSelected(ApiDocSystem.API_FOX.getCode().equals(FuDocSyncSetting.getSettingData().getEnable()));
     }
 
 
