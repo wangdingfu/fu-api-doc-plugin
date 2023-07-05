@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
+import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.fudoc.util.JsonUtil;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -90,7 +92,7 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
         ApiProjectDTO apiProjectDTO = new ApiProjectDTO();
         apiProjectDTO.setProjectId(tableData.getProjectId());
         apiProjectDTO.setProjectName(tableData.getProjectName());
-        apiProjectDTO.setApiCategoryList(tableData.getCategoryList());
+        apiProjectDTO.setApiCategoryList(JsonUtil.toList(tableData.getCategories(), ApiCategoryDTO.class));
         apiProjectDTO.setScope(tableData.getScope());
         return apiProjectDTO;
     }
@@ -99,7 +101,7 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
         ApiFoxProjectTableData configData = new ApiFoxProjectTableData();
         configData.setProjectId(projectDTO.getProjectId());
         configData.setProjectName(projectDTO.getProjectName());
-        configData.setCategoryList(projectDTO.getApiCategoryList());
+        configData.setCategories(JsonUtil.toJson(projectDTO.getApiCategoryList()));
         configData.setScope(projectDTO.getScope());
         return configData;
     }

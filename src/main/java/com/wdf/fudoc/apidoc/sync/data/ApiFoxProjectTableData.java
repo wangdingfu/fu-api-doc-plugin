@@ -39,5 +39,5 @@ public class ApiFoxProjectTableData implements Serializable {
     /**
      * 分类集合
      */
-    private List<ApiCategoryDTO> categoryList;
+    private String categories;
 }
