@@ -65,6 +65,8 @@ public class ApiProjectDTO {
      */
     private List<ApiCategoryDTO> apiCategoryList;
 
+    private String title;
+
     @Override
     public String toString() {
         return this.projectName;

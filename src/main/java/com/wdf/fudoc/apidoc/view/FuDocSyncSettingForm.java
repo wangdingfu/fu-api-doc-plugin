@@ -5,6 +5,7 @@ import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.view.tab.ApiFoxSettingTab;
+import com.wdf.fudoc.apidoc.view.tab.ShowDocSettingTab;
 import com.wdf.fudoc.apidoc.view.tab.ShowDocSettingsTab;
 import com.wdf.fudoc.apidoc.view.tab.YApiSettingTab;
 import com.wdf.fudoc.common.constant.UrlConstants;
@@ -42,7 +43,7 @@ public class FuDocSyncSettingForm {
     /**
      * ShowDoc配置页面
      */
-    private final ShowDocSettingsTab showDocSettingsTab;
+    private final ShowDocSettingTab showDocSettingTab;
 
     /**
      * apiFox配置页面
@@ -52,10 +53,10 @@ public class FuDocSyncSettingForm {
     public FuDocSyncSettingForm() {
         this.rootPanel = new JPanel(new BorderLayout());
         this.yApiSettingsTab = new YApiSettingTab();
-        this.showDocSettingsTab = new ShowDocSettingsTab();
+        this.showDocSettingTab = new ShowDocSettingTab();
         this.apiFoxSettingsTab = new ApiFoxSettingTab();
         FuTabBuilder fuTabBuilder = FuTabBuilder.getInstance();
-        fuTabBuilder.addTab(this.apiFoxSettingsTab).addTab(this.yApiSettingsTab).addTab(this.showDocSettingsTab);
+        fuTabBuilder.addTab(this.apiFoxSettingsTab).addTab(this.yApiSettingsTab).addTab(this.showDocSettingTab);
         //需要判断是否展示提示信息
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
         BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
@@ -68,7 +69,7 @@ public class FuDocSyncSettingForm {
     public void apply() {
         yApiSettingsTab.apply();
 
-        showDocSettingsTab.apply();
+        showDocSettingTab.apply();
 
         apiFoxSettingsTab.apply();
     }
@@ -77,7 +78,7 @@ public class FuDocSyncSettingForm {
     public void reset() {
         yApiSettingsTab.reset();
 
-        showDocSettingsTab.reset();
+        showDocSettingTab.reset();
 
         apiFoxSettingsTab.reset();
     }

@@ -75,18 +75,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
     }
 
 
-    private SyncApiResultDTO buildSyncApiResult(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiSyncStatus apiSyncStatus, String errorMsg) {
-        SyncApiResultDTO syncApiResultDTO = new SyncApiResultDTO();
-        syncApiResultDTO.setApiId(fuDocItemData.getApiKey());
-        syncApiResultDTO.setApiUrl(fuDocItemData.getUrlList().get(0));
-        syncApiResultDTO.setApiName(fuDocItemData.getTitle());
-        syncApiResultDTO.setSyncStatus(apiSyncStatus.getMessage());
-        syncApiResultDTO.setProjectId(apiProjectDTO.getProjectId());
-        syncApiResultDTO.setProjectName(apiProjectDTO.getProjectName());
-        syncApiResultDTO.setCategoryName(apiProjectDTO.getSelectCategory().getCategoryName());
-        syncApiResultDTO.setErrorMsg(errorMsg);
-        return syncApiResultDTO;
-    }
+
 
 
     /**
@@ -123,15 +112,6 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         return openApiItemDTO;
     }
 
-
-    private String recursionPath(ApiCategoryDTO apiCategoryDTO) {
-        if (Objects.isNull(apiCategoryDTO)) {
-            return StringUtils.EMPTY;
-        }
-        String parentName = recursionPath(apiCategoryDTO.getParent());
-        String categoryName = apiCategoryDTO.getCategoryName();
-        return StringUtils.isBlank(parentName) ? categoryName : parentName + "/" + categoryName;
-    }
 
 
     private List<OpenApiParameterItemDTO> buildParameters(FuDocItemData fuDocItemData) {
