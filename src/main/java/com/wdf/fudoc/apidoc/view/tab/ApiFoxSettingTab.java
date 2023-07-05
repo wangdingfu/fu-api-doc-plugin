@@ -105,10 +105,6 @@ public class ApiFoxSettingTab implements FuTab, FuViewListener {
     @Override
     public void apply() {
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
-        if (this.enableBox.isSelected()) {
-            //如果开启了就设置启用的为apiFox 否则不设置（都没有设置情况会有默认值）
-            settingData.setEnable(ApiDocSystem.API_FOX.getCode());
-        }
         ApiFoxConfigData apiFox = settingData.getApiFox();
         apiFox.setBaseUrl(this.domainField.getText());
         apiFox.setToken(this.authTokenField.getText());

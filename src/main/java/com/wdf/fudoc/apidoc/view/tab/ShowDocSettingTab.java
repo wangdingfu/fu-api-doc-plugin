@@ -105,10 +105,6 @@ public class ShowDocSettingTab implements FuTab, FuViewListener {
     @Override
     public void apply() {
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
-        if (this.enableBox.isSelected()) {
-            //如果开启了就设置启用的为showDoc 否则不设置（都没有设置情况会有默认值）
-            settingData.setEnable(ApiDocSystem.SHOW_DOC.getCode());
-        }
         ShowDocConfigData showDoc = settingData.getShowDoc();
         showDoc.setBaseUrl(this.domainField.getText());
         //获取当前需要保存的项目配置
@@ -135,6 +131,6 @@ public class ShowDocSettingTab implements FuTab, FuViewListener {
     }
 
     private void createUIComponents() {
-        this.domainField = new PlaceholderTextField("请输入你的ShowDoc服务地址，例如:http://showdoc.fudoc.cn [不输入则默认ShowDoc官网地址]");
+        this.domainField = new PlaceholderTextField("请输入你的ShowDoc服务地址，例如:http://showdoc.fudoc.cn");
     }
 }
