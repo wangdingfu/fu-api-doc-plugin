@@ -16,5 +16,5 @@ public interface ApiFoxService {
      * @param apiFoxDTO        同步参数
      * @param apiFoxConfigData 配置数据
      */
-    boolean syncApi(ApiFoxDTO apiFoxDTO, ApiProjectDTO apiProjectDTO, ApiFoxConfigData apiFoxConfigData);
+    String syncApi(ApiFoxDTO apiFoxDTO, ApiProjectDTO apiProjectDTO, ApiFoxConfigData apiFoxConfigData);
 }

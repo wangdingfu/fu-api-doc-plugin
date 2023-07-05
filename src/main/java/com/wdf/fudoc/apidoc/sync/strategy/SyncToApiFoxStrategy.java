@@ -69,9 +69,8 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         openApiDTO.setPaths(paths);
         ApiFoxService service = ServiceHelper.getService(ApiFoxService.class);
         //同步api
-        boolean isSuccess = service.syncApi(apiFoxDTO, apiProjectDTO, (ApiFoxConfigData) configData);
-        ApiSyncStatus syncStatus = isSuccess ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
-        String errorMsg = isSuccess ? StringUtils.EMPTY : "同步失败";
+        String errorMsg = service.syncApi(apiFoxDTO, apiProjectDTO, (ApiFoxConfigData) configData);
+        ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
         return ObjectUtils.listToList(fuDocItemDataList, f -> buildSyncApiResult(f, apiProjectDTO, syncStatus, errorMsg));
     }
 
