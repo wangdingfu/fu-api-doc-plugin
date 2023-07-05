@@ -7,6 +7,7 @@ import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
+import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.util.JsonUtil;
 import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +22,10 @@ import java.util.stream.Collectors;
  */
 public class ShowDocConfigData extends BaseSyncConfigData{
 
+    @Override
+    public String getBaseUrl() {
+        return StringUtils.isBlank(super.baseUrl) ? UrlConstants.SHOW_DOC : super.baseUrl;
+    }
 
     @Override
     public List<ApiProjectDTO> getProjectConfigList(String moduleName) {
@@ -62,7 +67,7 @@ public class ShowDocConfigData extends BaseSyncConfigData{
 
     @Override
     public String getApiDocUrl(SyncApiResultDTO syncApiResultDTO) {
-        return StringUtils.EMPTY;
+        return super.baseUrl;
     }
 
 

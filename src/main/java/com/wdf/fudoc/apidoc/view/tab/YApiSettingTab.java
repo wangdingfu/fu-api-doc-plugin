@@ -34,6 +34,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
@@ -83,7 +85,20 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         this.rootPanel.setBorder(JBUI.Borders.emptyTop(10));
         this.baseInfoPanel.setBorder(baseInfoBorder);
         this.mainPanel.setBorder(mainBorder);
+        initEnableBox();
         initBtn();
+    }
+
+    private void initEnableBox() {
+        this.isEnable.addChangeListener(e -> {
+            FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
+            if (this.isEnable.isSelected()) {
+                //如果开启了就设置启用的为yapi 否则不设置（都没有设置情况会有默认值）
+                settingData.setEnable(ApiDocSystem.YAPI.getCode());
+            } else {
+                settingData.setEnable(settingData.getDefault());
+            }
+        });
     }
 
     public void initBtn() {
@@ -163,19 +178,10 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         return tableData;
     }
 
-    @Override
-    public void moveOff() {
-        FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
-        if (this.isEnable.isSelected()) {
-            //如果开启了就设置启用的为yapi 否则不设置（都没有设置情况会有默认值）
-            settingData.setEnable(ApiDocSystem.YAPI.getCode());
-        }
-    }
 
     @Override
     public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
         rootPane.setDefaultButton(this.loginBtn);
-        this.isEnable.setSelected(ApiDocSystem.YAPI.getCode().equals(FuDocSyncSetting.getSettingData().getEnable()));
     }
 
 

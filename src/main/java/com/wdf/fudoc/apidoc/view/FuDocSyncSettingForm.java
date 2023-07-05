@@ -6,7 +6,6 @@ import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.view.tab.ApiFoxSettingTab;
 import com.wdf.fudoc.apidoc.view.tab.ShowDocSettingTab;
-import com.wdf.fudoc.apidoc.view.tab.ShowDocSettingsTab;
 import com.wdf.fudoc.apidoc.view.tab.YApiSettingTab;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.common.enumtype.FuColor;
