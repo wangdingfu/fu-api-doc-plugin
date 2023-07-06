@@ -2,6 +2,7 @@ package com.wdf.fudoc.request;
 
 import cn.hutool.core.thread.ThreadUtil;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -42,15 +43,15 @@ public class SendRequestHandler {
             httpCallback.doSendBefore(httpRequestData);
             //发起http请求执行
             HttpApiExecutor.doSendRequest(project, httpRequestData);
+            if (Objects.isNull(this.sendHttpTask) || this.sendHttpTask.isCancelled()) {
+                return;
+            }
             ApplicationManager.getApplication().invokeLater(() -> {
-                if (Objects.isNull(this.sendHttpTask) || this.sendHttpTask.isCancelled()) {
-                    return;
-                }
                 httpCallback.doSendAfter(httpRequestData);
                 //执行后置逻辑
                 sendStatus.set(false);
                 this.sendHttpTask = null;
-            });
+            }, ModalityState.any());
         });
     }
 

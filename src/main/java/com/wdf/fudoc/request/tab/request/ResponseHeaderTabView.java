@@ -6,14 +6,15 @@ import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableDisableListener;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
     /**
      * table组件
      */
-    private final FuTableComponent<KeyValueTableBO> fuTableComponent;
+    private final FuTableComponent<HeaderKeyValueBO> fuTableComponent;
 
 
     /**
@@ -40,7 +41,7 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
 
     public ResponseHeaderTabView(Project project) {
         this.fuRequestStatusInfoView = new FuRequestStatusInfoView(project);
-        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class);
+        this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.responseHeader(), HeaderKeyValueBO.class);
         this.fuTableComponent.addListener(new FuTableDisableListener<>());
     }
 
@@ -58,19 +59,19 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
         FuResponseData response = httpRequestData.getResponse();
-        if (Objects.nonNull(response)) {
-            Map<String, List<String>> headers = response.getHeaders();
+        Map<String, List<String>> headers;
+        if (Objects.nonNull(response) && MapUtils.isNotEmpty(headers = response.getHeaders())) {
+            List<HeaderKeyValueBO> keyValueTableBOList = Lists.newArrayList();
+            headers.forEach((key, value) -> {
+                HeaderKeyValueBO headerKeyValueBO = new HeaderKeyValueBO();
+                headerKeyValueBO.setKey(key);
+                headerKeyValueBO.setValue(StringUtils.join(value, ";"));
+                keyValueTableBOList.add(headerKeyValueBO);
+            });
+            fuTableComponent.setDataList(keyValueTableBOList);
         }
         //设置响应信息
         fuRequestStatusInfoView.initData(httpRequestData);
-    }
-
-    @Override
-    public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
-        FuRequestData request = fuHttpRequestData.getRequest();
-        if (Objects.nonNull(request)) {
-            request.setHeaders(fuTableComponent.getDataList());
-        }
     }
 
 }

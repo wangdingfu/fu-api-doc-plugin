@@ -1,16 +1,13 @@
 package com.wdf.fudoc.request.view;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.StreamProgress;
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.http.HttpResponse;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.constant.PathConstants;
 import com.wdf.fudoc.common.notification.FuDocNotification;
@@ -25,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -54,7 +50,7 @@ public class ResponseFileView {
         //保存至指定路径
         this.saveOtherBtn.addActionListener(e -> {
             //选择路径
-            String title = FuDocMessageBundle.message(MessageConstants.FU_REQUEST_SELECT_DIR_TITLE);
+            String title = FuBundle.message(MessageConstants.FU_REQUEST_SELECT_DIR_TITLE);
             ChooseFileComponents chooseFileComponents = new ChooseFileComponents(RESPONSE_SELECT_DIR, title, null);
             chooseFileComponents.chooseFile(new ChooseFileListener() {
                 @Override
@@ -73,7 +69,7 @@ public class ResponseFileView {
 
     private void downloadFile(String filePath) {
         if (StringUtils.isBlank(filePath)) {
-            FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.FU_REQUEST_DOWNLOAD_FILE_FAIL));
+            FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.FU_REQUEST_DOWNLOAD_FILE_FAIL));
         }
         ProgressManager.getInstance().run(new Task.Backgroundable(ProjectUtils.getCurrProject(), "Download file", false) {
             @Override
@@ -87,7 +83,7 @@ public class ResponseFileView {
                 File srcFile = FileUtil.file(fuResponseData.getFilePath());
                 if (!srcFile.exists()) {
                     //提示用户 历史请求的文件遗失 无法保存
-                    FuDocNotification.notifyWarn(FuDocMessageBundle.message(MessageConstants.FU_REQUEST_DOWNLOAD_NOT_FILE));
+                    FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.FU_REQUEST_DOWNLOAD_NOT_FILE));
                     return;
                 }
                 //将源文件拷贝至目标文件

@@ -1,7 +1,11 @@
 package com.wdf.fudoc.apidoc.data;
 
 import com.google.common.collect.Lists;
+import com.wdf.fudoc.apidoc.sync.data.ApiFoxConfigData;
+import com.wdf.fudoc.apidoc.sync.data.ApiFoxProjectTableData;
+import com.wdf.fudoc.apidoc.sync.data.ShowDocProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
@@ -18,6 +22,17 @@ public class SyncApiConfigData {
      */
     private List<YApiProjectTableData> yapiConfigList;
 
+    /**
+     * YApi项目配置
+     */
+    @Getter
+    private List<ApiFoxProjectTableData> apiFoxConfigList = Lists.newArrayList();
+
+    /**
+     * ShowDoc项目配置
+     */
+    @Getter
+    private List<ShowDocProjectTableData> showDocConfigList = Lists.newArrayList();
 
     public List<YApiProjectTableData> getYapiConfigList() {
         if(Objects.isNull(this.yapiConfigList)){

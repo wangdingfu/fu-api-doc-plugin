@@ -24,4 +24,7 @@ public interface FuRequestCallback {
     PsiElement getPsiElement();
 
     RequestTabView getRequestTabView();
+
+
+    boolean isShowViewMode();
 }

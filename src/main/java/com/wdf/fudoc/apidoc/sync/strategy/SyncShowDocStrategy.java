@@ -1,9 +1,26 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
+import com.google.common.collect.Lists;
+import com.intellij.psi.PsiClass;
+import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
+import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
-import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
+import com.wdf.fudoc.apidoc.sync.data.ShowDocConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
+import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
+import com.wdf.fudoc.apidoc.sync.dto.ShowDocDTO;
+import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
+import com.wdf.fudoc.apidoc.sync.service.ShowDocService;
+import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
+import com.wdf.fudoc.common.FuBundle;
+import com.wdf.fudoc.common.FuDocRender;
+import com.wdf.fudoc.common.ServiceHelper;
+import com.wdf.fudoc.common.notification.FuDocNotification;
+import com.wdf.fudoc.util.FuDocUtils;
+import com.wdf.fudoc.util.ObjectUtils;
+import com.wdf.fudoc.util.ProjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -13,7 +30,7 @@ import java.util.List;
  * @author wangdingfu
  * @date 2022-12-31 22:48:07
  */
-public class SyncShowDocStrategy extends AbstractSyncSingleApiStrategy {
+public class SyncShowDocStrategy extends AbstractSyncApiStrategy {
 
 
     @Override
@@ -22,17 +39,37 @@ public class SyncShowDocStrategy extends AbstractSyncSingleApiStrategy {
     }
 
     @Override
-    protected String doSingleApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
-        return null;
+    protected List<SyncApiResultDTO> doSyncApi(List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData configData, ApiProjectDTO apiProjectDTO, ProjectSyncApiRecordData projectRecord) {
+        String projectId = apiProjectDTO.getProjectId();
+        String projectToken = apiProjectDTO.getProjectToken();
+        if (StringUtils.isBlank(projectId) || StringUtils.isBlank(projectToken)) {
+            FuDocNotification.notifyError(FuBundle.message("fudoc.sync.showdoc.tip"));
+            return Lists.newArrayList();
+        }
+        //将接口文档数据渲染成markdown格式接口文档
+        ShowDocDTO showDocDTO = new ShowDocDTO();
+        showDocDTO.setApiKey(apiProjectDTO.getProjectId());
+        showDocDTO.setApiToken(apiProjectDTO.getProjectToken());
+        showDocDTO.setCategoryName(recursionPath(apiProjectDTO.getSelectCategory()));
+        showDocDTO.setTitle(apiProjectDTO.getTitle());
+        showDocDTO.setContent(FuDocRender.markdownRender(FuDocSetting.getSettingData(), fuDocItemDataList));
+        ShowDocService service = ServiceHelper.getService(ShowDocService.class);
+        String errorMsg = service.syncApi(showDocDTO, (ShowDocConfigData) configData);
+        ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
+        return ObjectUtils.listToList(fuDocItemDataList, f -> buildSyncApiResult(f, apiProjectDTO, syncStatus, errorMsg));
+
     }
 
     @Override
-    public ApiCategoryDTO createCategory(BaseSyncConfigData configData, ApiProjectDTO apiProjectDTO, String categoryName) {
-        return null;
+    protected ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass, ProjectSyncApiRecordData projectRecord) {
+        SyncApiConfirmDialog syncApiConfirmDialog = new SyncApiConfirmDialog(ProjectUtils.getCurrProject(), psiClass);
+        if (!syncApiConfirmDialog.showAndGet()) {
+            //取消则不同步
+            return null;
+        }
+        ApiProjectDTO selected = syncApiConfirmDialog.getSelected();
+        selected.setTitle(FuDocUtils.classTitle(psiClass));
+        return selected;
     }
 
-    @Override
-    public List<ApiCategoryDTO> categoryList(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData) {
-        return null;
-    }
 }

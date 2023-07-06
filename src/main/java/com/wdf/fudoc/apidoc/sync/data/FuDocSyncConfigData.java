@@ -23,7 +23,7 @@ public class FuDocSyncConfigData implements Serializable {
     /**
      * 当前开启的三方接口文档系统 默认开启yapi
      */
-    private String enable = ApiDocSystem.API_FOX.getCode();
+    private String enable = getDefault();
 
     /**
      * yapi配置数据
@@ -48,6 +48,11 @@ public class FuDocSyncConfigData implements Serializable {
     }
 
 
+    public String getDefault() {
+        return ApiDocSystem.API_FOX.getCode();
+    }
+
+
     public BaseSyncConfigData getEnableConfigData() {
         ApiDocSystem instance;
         if (Objects.nonNull(instance = ApiDocSystem.getInstance(this.enable))) {
@@ -63,7 +68,7 @@ public class FuDocSyncConfigData implements Serializable {
                 }
             }
         }
-        return this.yapi;
+        return this.apiFox;
     }
 
 

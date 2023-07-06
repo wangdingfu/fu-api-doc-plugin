@@ -25,7 +25,9 @@ import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.FuDocUtils;
+import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -151,7 +153,8 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         //组装接口标题等参数
         ApiDocCommentData commentData = methodInfoDesc.getCommentData();
         if (Objects.nonNull(commentData)) {
-            commonItemData.setTitle(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_TITLE, methodInfoDesc));
+            String title = ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_TITLE, methodInfoDesc);
+            commonItemData.setTitle(StringUtils.isNotBlank(title) ? title : PsiClassUtils.getMethodName(methodInfoDesc.getPsiMethod()));
             commonItemData.setDetailInfo(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_DETAIL_INFO, methodInfoDesc));
         }
     }

@@ -6,7 +6,9 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.spring.SpringConfigManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
@@ -31,6 +33,10 @@ public class FuRequestData {
     private RequestType requestType;
 
     /**
+     * 域名地址
+     */
+    private String domain;
+    /**
      * 接口请求地址
      */
     private String baseUrl;
@@ -39,6 +45,8 @@ public class FuRequestData {
      * 请求路径上的参数拼接
      */
     private String paramUrl;
+
+    private String requestUrl;
 
     /**
      * 是否有文件上传
@@ -49,7 +57,7 @@ public class FuRequestData {
      * 请求头
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<KeyValueTableBO> headers;
+    private List<HeaderKeyValueBO> headers;
 
     /**
      * 请求参数（GET请求）
@@ -73,9 +81,9 @@ public class FuRequestData {
         if (Objects.isNull(this.headers)) {
             this.headers = Lists.newArrayList();
         }
-        KeyValueTableBO keyValueTableBO = this.headers.stream().filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
+        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
         if (Objects.isNull(keyValueTableBO)) {
-            keyValueTableBO = new KeyValueTableBO(true, key, value);
+            keyValueTableBO = new HeaderKeyValueBO(true, key, value);
             this.headers.add(keyValueTableBO);
         }
         keyValueTableBO.setValue(value);
@@ -95,15 +103,24 @@ public class FuRequestData {
         }
     }
 
+    public String getRequestUrl() {
+        return getRequestUrl(this.baseUrl);
+    }
+
     /**
      * 获取一个完整的请求地址
      */
-    public String getRequestUrl() {
+    public String getRequestUrl(String baseUrl) {
+        if (StringUtils.isNotBlank(this.requestUrl)) {
+            return this.requestUrl;
+        }
         String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
-        if (StringUtils.isBlank(this.baseUrl) && StringUtils.isBlank(this.paramUrl)) {
+        if (StringUtils.isBlank(baseUrl) && StringUtils.isBlank(this.paramUrl)) {
             return StringUtils.EMPTY;
         }
-        return URLUtil.normalize(this.baseUrl + params, false, true);
+        String apiUrl = URLUtil.completeUrl(this.domain, baseUrl);
+        return URLUtil.normalize(apiUrl + params, false, true);
     }
+
 
 }

@@ -32,6 +32,9 @@ public interface SpringConfigFileConstants {
     String SERVER_PORT_KEY = "server.port";
 
 
+    String MAVEN_PROFILES = "@profiles.active@";
+
+
     String DEFAULT_ENV = "default";
 
     int DEFAULT_SERVER_PORT = 8080;

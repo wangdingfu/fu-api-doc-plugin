@@ -2,12 +2,12 @@ package com.wdf.fudoc.apidoc.assemble.handler.impl;
 
 import com.wdf.fudoc.apidoc.assemble.handler.BaseParamFieldValueHandler;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashSet;
@@ -42,7 +42,8 @@ public class ParamRequireValueHandler extends BaseParamFieldValueHandler {
             return YesOrNo.NO.getDesc();
         }
         Optional<AnnotationData> annotation = rootInfoDesc.getAnnotation(AnnotationConstants.VALIDATED);
-        if (annotation.isPresent()) {
+        Optional<AnnotationData> valid = rootInfoDesc.getAnnotation(AnnotationConstants.VALID);
+        if (annotation.isPresent() || valid.isPresent()) {
             //标识了@Validated注解
             Integer referenceParamId = objectInfoDesc.getValue(FuDocConstants.ExtInfo.REFERENCE_DESC_ID, Integer.class);
             ObjectInfoDesc parentInfoDesc = fuDocContext.getByDescId(referenceParamId);
@@ -50,17 +51,19 @@ public class ParamRequireValueHandler extends BaseParamFieldValueHandler {
                 //存在父对象 且父对象没有标识@Valid 注解 则当前对象不受校验注解控制
                 return YesOrNo.NO.getDesc();
             }
-
             Optional<AnnotationData> annotationDataOptional = objectInfoDesc.getAnnotation(AnnotationConstants.VALID_NOT);
             if (annotationDataOptional.isPresent()) {
-                //有标识必填注解 需要进一步判断group
-                List<String> groupClassNameList = annotation.get().array().clazz().className();
-                if (CollectionUtils.isEmpty(groupClassNameList)) {
-                    //没指定哪一个group 则标识了必填注解的参数都为必填
-                    return YesOrNo.YES.getDesc();
-                }
                 List<String> groups = annotationDataOptional.get().array(FuDocConstants.AnnotationAttr.GROUPS).clazz().className();
-                return new HashSet<>(groups).containsAll(groupClassNameList) ? YesOrNo.YES.getDesc() : YesOrNo.NO.getDesc();
+                if (CollectionUtils.isNotEmpty(groups) && annotation.isPresent()) {
+                    //有标识必填注解 需要进一步判断group
+                    List<String> groupClassNameList = annotation.get().array().clazz().className();
+                    if (CollectionUtils.isEmpty(groupClassNameList)) {
+                        //没指定哪一个group 则标识了必填注解的参数都为必填
+                        return YesOrNo.YES.getDesc();
+                    }
+                    return new HashSet<>(groups).containsAll(groupClassNameList) ? YesOrNo.YES.getDesc() : YesOrNo.NO.getDesc();
+                }
+                return YesOrNo.YES.getDesc();
             }
         }
         //从@RequestParam注解中获取

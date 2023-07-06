@@ -1,18 +1,12 @@
 package com.wdf.fudoc.test.view;
 
 import com.intellij.ide.util.treeView.AbstractTreeStructure;
-import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.PopupHandler;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.tree.AsyncTreeModel;
 import com.intellij.ui.tree.StructureTreeModel;
 import com.intellij.ui.treeStructure.SimpleTree;
-import com.intellij.ui.treeStructure.SimpleTreeStructure;
-import com.wdf.fudoc.components.tree.FuModuleTreeStructure;
+import com.wdf.fudoc.components.tree.old.FuModuleTreeStructure;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;

@@ -1,12 +1,14 @@
 package com.wdf.fudoc.request.view;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.URLUtil;
 import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
@@ -19,10 +21,12 @@ import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
+import com.wdf.fudoc.spring.SpringConfigManager;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -106,7 +111,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
             //保存一些配置数据
             FuRequestConfigStorage.getInstance(project).saveData();
         } catch (Exception e) {
-            log.error("持久化请求数据异常", e);
+            log.info("持久化请求数据异常", e);
         }
         super.dispose();
     }
@@ -121,8 +126,8 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.project = project;
         this.httpId = IdUtil.getSnowflakeNextIdStr();
         this.isSave = isSave;
-        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance(project));
-        this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance(project));
+        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance(project), getDisposable());
+        this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance(project), getDisposable());
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.toolBarPanel = initToolBarUI();
@@ -175,7 +180,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     private JPanel initToolBarUI() {
         JPanel toolBarPanel = new JPanel(new BorderLayout());
         Utils.setSmallerFontForChildren(toolBarPanel);
-        toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
+//        toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
         FuRequestToolBarManager instance = FuRequestToolBarManager.getInstance(this);
         //创建及初始化工具栏
         ToolBarUtils.addActionToToolBar(toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, instance.initToolBar(), BorderLayout.EAST);
@@ -204,6 +209,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
      * @param fuHttpRequestData http请求数据
      */
     public void initData(FuHttpRequestData fuHttpRequestData) {
+        this.httpRequestData = fuHttpRequestData;
         //切换消息
         messageComponent.switchInfo();
         if (Objects.isNull(fuHttpRequestData)) {
@@ -211,6 +217,11 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         }
         this.requestTabView.initData(fuHttpRequestData);
         initResponseData(fuHttpRequestData);
+    }
+
+    @Override
+    public boolean isShowViewMode() {
+        return true;
     }
 
 

@@ -3,11 +3,10 @@ package com.wdf.fudoc.components;
 import com.google.common.collect.Lists;
 import com.intellij.util.ui.AbstractTableCellEditor;
 import com.wdf.fudoc.components.bo.TreePathBO;
-import com.wdf.fudoc.components.tree.FuModuleTreeComponent;
-import com.wdf.fudoc.components.tree.FuTableTreeComponent;
+import com.wdf.fudoc.components.tree.old.FuModuleTreeComponent;
+import com.wdf.fudoc.components.tree.old.FuTableTreeComponent;
 import com.wdf.fudoc.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;

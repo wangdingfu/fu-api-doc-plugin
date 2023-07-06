@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.labels.LinkLabel;
 import com.intellij.util.ui.JBUI;
@@ -15,12 +14,12 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncCategory;
-import com.wdf.fudoc.apidoc.sync.strategy.SyncFuDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncStrategyFactory;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
-import com.wdf.fudoc.components.tree.ApiCategoryTreeNode;
-import com.wdf.fudoc.components.tree.FuTreeComponent;
+import com.wdf.fudoc.components.tree.old.ApiCategoryTreeNode;
+import com.wdf.fudoc.components.tree.old.FuTreeComponent;
+import com.wdf.fudoc.components.validator.CreateCategoryValidator;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
@@ -100,13 +99,13 @@ public class SyncApiCategoryDialog extends DialogWrapper {
     private ProjectSyncApiRecordData projectRecordData;
 
 
-    private static final String TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_API_TITLE);
-    private static final String PROJECT_LABEL = FuDocMessageBundle.message(MessageConstants.SYNC_API_PROJECT_LABEL);
-    private static final String CATEGORY_LABEL = FuDocMessageBundle.message(MessageConstants.SYNC_API_CATEGORY_LABEL);
-    private static final String CREATE_PROJECT = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT);
-    private static final String CREATE_PROJECT_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT_TITLE);
-    private static final String CREATE_CATEGORY = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY);
-    private static final String CREATE_CATEGORY_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_TITLE);
+    private static final String TITLE = FuBundle.message(MessageConstants.SYNC_API_TITLE);
+    private static final String PROJECT_LABEL = FuBundle.message(MessageConstants.SYNC_API_PROJECT_LABEL);
+    private static final String CATEGORY_LABEL = FuBundle.message(MessageConstants.SYNC_API_CATEGORY_LABEL);
+    private static final String CREATE_PROJECT = FuBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT);
+    private static final String CREATE_PROJECT_TITLE = FuBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT_TITLE);
+    private static final String CREATE_CATEGORY = FuBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY);
+    private static final String CREATE_CATEGORY_TITLE = FuBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_TITLE);
 
 
     public SyncApiCategoryDialog(Project project, boolean isCategoryTree, String moduleName, ApiProjectDTO apiProjectDTO) {
@@ -147,7 +146,6 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         }
         this.projectNameComboBox.setSelectedItem(this.apiProjectDTO);
         this.projectPanel.add(new JLabel(PROJECT_LABEL), BorderLayout.WEST);
-        this.projectPanel.add(this.projectNameComboBox, BorderLayout.CENTER);
         //创建项目
         LinkLabel<String> projectLinkLabel = new LinkLabel<>(CREATE_PROJECT, null, (aSource, aLinkData) -> createProject(projectConfigList));
         //当前暂不提供创建项目入口-预留后期
@@ -225,7 +223,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
      */
     private void createCategory() {
         //弹框让用户输入分类名称
-        String value = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), StringUtils.EMPTY, new CreateCategoryValidator(this.apiProjectDTO));
+        String value = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), StringUtils.EMPTY, new CreateCategoryValidator(this.apiProjectDTO.getApiCategoryList()));
         if (StringUtils.isNotBlank(value)) {
             //初始化当前项目下的接口分类
             List<ApiCategoryDTO> apiCategoryList = initCategoryList();
@@ -336,39 +334,5 @@ public class SyncApiCategoryDialog extends DialogWrapper {
         return this.rootPanel;
     }
 
-
-    /**
-     * 创建分类输入框校验器
-     */
-    private static class CreateCategoryValidator implements InputValidatorEx {
-        //当前选中的项目
-        private final ApiProjectDTO apiProjectDTO;
-        //错误消息
-        private String myErrorText;
-
-        CreateCategoryValidator(ApiProjectDTO apiProjectDTO) {
-            this.apiProjectDTO = apiProjectDTO;
-        }
-
-        @Override
-        public @Nullable String getErrorText(String inputString) {
-            return myErrorText;
-        }
-
-        @Override
-        public boolean checkInput(String inputString) {
-            if (StringUtils.isNotBlank(inputString)) {
-                //校验输入的内容
-                List<ApiCategoryDTO> categoryList = apiProjectDTO.getApiCategoryList();
-                if (CollectionUtils.isNotEmpty(categoryList) && categoryList.stream().anyMatch(a -> a.getCategoryName().equals(inputString))) {
-                    //当前项目中存在 则不创建
-                    myErrorText = FuDocMessageBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_REPEAT, apiProjectDTO.getProjectName());
-                    return false;
-                }
-            }
-            myErrorText = null;
-            return true;
-        }
-    }
 
 }

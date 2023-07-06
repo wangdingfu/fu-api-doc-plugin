@@ -7,7 +7,6 @@ import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.wdf.fudoc.common.FuDocMessageBundle;
 import com.wdf.fudoc.components.listener.ChooseFileListener;
 import com.wdf.fudoc.util.ProjectUtils;
 

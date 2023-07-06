@@ -2,6 +2,7 @@ package com.wdf.fudoc.apidoc.sync.strategy;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
+import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
@@ -12,9 +13,13 @@ import com.wdf.fudoc.apidoc.sync.data.ApiFoxConfigData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.*;
 import com.wdf.fudoc.apidoc.sync.service.ApiFoxService;
+import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.util.ObjectUtils;
+import com.wdf.fudoc.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +38,9 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
 
     @Override
     protected boolean checkConfig(BaseSyncConfigData configData) {
-        return true;
+        ApiFoxConfigData apiFoxConfigData = (ApiFoxConfigData) configData;
+        String token = apiFoxConfigData.getToken();
+        return StringUtils.isBlank(token);
     }
 
     /**
@@ -62,18 +69,41 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         openApiDTO.setPaths(paths);
         ApiFoxService service = ServiceHelper.getService(ApiFoxService.class);
         //同步api
-        service.syncApi(apiFoxDTO, apiProjectDTO, (ApiFoxConfigData) configData);
-        return Lists.newArrayList();
+        String errorMsg = service.syncApi(apiFoxDTO, apiProjectDTO, (ApiFoxConfigData) configData);
+        ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
+        return ObjectUtils.listToList(fuDocItemDataList, f -> buildSyncApiResult(f, apiProjectDTO, syncStatus, errorMsg));
+    }
+
+
+
+
+
+    /**
+     * 确认需要同步的分类
+     *
+     * @param apiProjectDTO 同步的项目
+     * @param configData    配置数据
+     * @param psiClass      当前api所在的java类
+     * @param projectRecord 同步记录
+     * @return api同步至哪个分类下
+     */
+    @Override
+    protected ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass, ProjectSyncApiRecordData projectRecord) {
+        SyncApiConfirmDialog syncApiConfirmDialog = new SyncApiConfirmDialog(ProjectUtils.getCurrProject(), psiClass);
+        if (!syncApiConfirmDialog.showAndGet()) {
+            //取消则不同步
+            return null;
+        }
+        return syncApiConfirmDialog.getSelected();
     }
 
 
     private OpenApiItemDTO buildOpenApiItem(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO) {
         OpenApiItemDTO openApiItemDTO = new OpenApiItemDTO();
         openApiItemDTO.setSummary(fuDocItemData.getTitle());
-        openApiItemDTO.setStatus("developing");
+        openApiItemDTO.setStatus("released");
         openApiItemDTO.setDescription(fuDocItemData.getDetailInfo());
-        ApiCategoryDTO selectCategory = apiProjectDTO.getSelectCategory();
-        openApiItemDTO.setFolder(selectCategory.getCategoryName());
+        openApiItemDTO.setFolder(recursionPath(apiProjectDTO.getSelectCategory()));
         openApiItemDTO.setParameters(buildParameters(fuDocItemData));
         openApiItemDTO.setRequestBody(buildRequestBody(fuDocItemData));
         Map<String, OpenApiResponseDTO> response = new HashMap<>();
@@ -81,6 +111,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         openApiItemDTO.setResponses(response);
         return openApiItemDTO;
     }
+
 
 
     private List<OpenApiParameterItemDTO> buildParameters(FuDocItemData fuDocItemData) {
@@ -131,7 +162,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
             }
             OpenApiContentDTO openApiContentDTO = new OpenApiContentDTO();
             openApiContentDTO.setExample(isResponse ? fuDocItemData.getResponseExample() : fuDocItemData.getRequestExample());
-            openApiContentDTO.setSchema(JsonSchemaHelper.buildJsonSchema(isResponse ? fuDocItemData.getRequestParams() : fuDocItemData.getResponseParams()));
+            openApiContentDTO.setSchema(JsonSchemaHelper.buildJsonSchema(isResponse ? fuDocItemData.getResponseParams() : fuDocItemData.getRequestParams()));
             content.put(contentType.getType(), openApiContentDTO);
         }
         return content;
@@ -150,25 +181,4 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         return Lists.newArrayList();
     }
 
-    /**
-     * 确认需要同步的分类
-     *
-     * @param apiProjectDTO 同步的项目
-     * @param configData    配置数据
-     * @param psiClass      当前api所在的java类
-     * @param projectRecord 同步记录
-     * @return api同步至哪个分类下
-     */
-    @Override
-    protected ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass, ProjectSyncApiRecordData projectRecord) {
-        if (Objects.isNull(apiProjectDTO)) {
-            apiProjectDTO = new ApiProjectDTO();
-            apiProjectDTO.setProjectId("1756101");
-            apiProjectDTO.setProjectName("测试项目");
-        }
-        ApiCategoryDTO apiCategoryDTO = new ApiCategoryDTO();
-        apiCategoryDTO.setCategoryName("测试");
-        apiProjectDTO.setSelectCategory(apiCategoryDTO);
-        return apiProjectDTO;
-    }
 }

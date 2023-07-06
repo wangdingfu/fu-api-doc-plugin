@@ -12,10 +12,11 @@ import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
+import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuTableComponent;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
  * @date 2023-06-12 23:00:39
  */
 public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
-    private static final String NOT_SYNC_API = FuDocMessageBundle.message(MessageConstants.NOT_SYNC_API);
+    private static final String NOT_SYNC_API = FuBundle.message(MessageConstants.NOT_SYNC_API);
 
     /**
      * 检查配置
@@ -80,17 +81,13 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
      */
     @Override
     public void syncFuDoc(FuDocContext fuDocContext, PsiClass psiClass, BaseSyncConfigData configData) {
-        //1、检查三方接口文档配置
-        if (!checkConfig(configData)) {
-            return;
-        }
         //2、检查三方接口文档系统是否能建立连接
 
         //3、确定当前要同步的项目配置
         Module module = ModuleUtil.findModuleForPsiElement(psiClass);
         String moduleName = Objects.isNull(module) ? org.apache.commons.lang3.StringUtils.EMPTY : module.getName();
         List<ApiProjectDTO> projectConfigList = configData.getProjectConfigList(moduleName);
-        if (StringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList)) {
+        if (StringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList) || checkConfig(configData)) {
             ApplicationManager.getApplication().invokeLater(() -> {
                 Project project = psiClass.getProject();
                 ShowSettingUtils.showConfigurable(project, new FuDocSyncSettingConfigurable(), 800, 600);
@@ -187,24 +184,24 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
             //全部同步成功情况
             if (syncApiSize == 1) {
                 //成功同步{0}接口到{0}分类下
-                String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_ONE, resultDTO.getApiName(), resultDTO.getCategoryName());
+                String message = FuBundle.message(MessageConstants.SYNC_API_SUCCESS_ONE, resultDTO.getApiName(), resultDTO.getCategoryName());
                 FuDocNotification.notifySyncApiResult(NotificationType.INFORMATION, message, apiSystem, apiDocUrl, showPanel, pinStatus);
                 return;
             }
             //本次共计成功同步{0}个接口到{0}分类下
-            String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_ALL, syncApiSize, resultDTO.getCategoryName());
+            String message = FuBundle.message(MessageConstants.SYNC_API_SUCCESS_ALL, syncApiSize, resultDTO.getCategoryName());
             FuDocNotification.notifySyncApiResult(NotificationType.INFORMATION, message, apiSystem, apiDocUrl, showPanel, pinStatus);
             return;
         }
         if (faileList.size() == syncApiSize) {
             //全部同步失败情况 - 同步接口失败 失败原因:{0}
-            String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_FAILED_ALL, StringUtils.isNotBlank(resultDTO.getErrorMsg()) ? resultDTO.getErrorMsg() : "未知异常");
+            String message = FuBundle.message(MessageConstants.SYNC_API_FAILED_ALL, StringUtils.isNotBlank(resultDTO.getErrorMsg()) ? resultDTO.getErrorMsg() : "未知异常");
             FuDocNotification.notifySyncApiResult(NotificationType.ERROR, message, apiSystem, configData.getApiDocUrl(resultDTO), showPanel, pinStatus);
             return;
         }
         //部分成功 部分失败 - 本次成功同步{0}个接口到{1}分类下 同步失败{2}个接口
         SyncApiResultDTO successResultDTO = successList.get(0);
-        String message = FuDocMessageBundle.message(MessageConstants.SYNC_API_SUCCESS_FAILED, successList.size(), successResultDTO.getCategoryName(), faileList.size());
+        String message = FuBundle.message(MessageConstants.SYNC_API_SUCCESS_FAILED, successList.size(), successResultDTO.getCategoryName(), faileList.size());
         FuDocNotification.notifySyncApiResult(NotificationType.WARNING, message, apiSystem, configData.getApiDocUrl(successResultDTO), showPanel, pinStatus);
     }
 
@@ -216,4 +213,27 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
         return recordData;
     }
 
+
+    protected SyncApiResultDTO buildSyncApiResult(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiSyncStatus apiSyncStatus, String errorMsg) {
+        SyncApiResultDTO syncApiResultDTO = new SyncApiResultDTO();
+        syncApiResultDTO.setApiId(fuDocItemData.getApiKey());
+        syncApiResultDTO.setApiUrl(fuDocItemData.getUrlList().get(0));
+        syncApiResultDTO.setApiName(fuDocItemData.getTitle());
+        syncApiResultDTO.setSyncStatus(apiSyncStatus.getMessage());
+        syncApiResultDTO.setProjectId(apiProjectDTO.getProjectId());
+        syncApiResultDTO.setProjectName(apiProjectDTO.getProjectName());
+        syncApiResultDTO.setCategoryName(apiProjectDTO.getSelectCategory().getCategoryName());
+        syncApiResultDTO.setErrorMsg(errorMsg);
+        return syncApiResultDTO;
+    }
+
+
+    protected String recursionPath(ApiCategoryDTO apiCategoryDTO) {
+        if (Objects.isNull(apiCategoryDTO) || Objects.isNull(apiCategoryDTO.getParent())) {
+            return StringUtils.EMPTY;
+        }
+        String parentName = recursionPath(apiCategoryDTO.getParent());
+        String categoryName = apiCategoryDTO.getCategoryName();
+        return StringUtils.isBlank(parentName) ? categoryName : parentName + "/" + categoryName;
+    }
 }

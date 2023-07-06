@@ -54,7 +54,6 @@ public class FuRequestToolBarManager {
 
     private final FuRequestCallback fuRequestCallback;
 
-    private final AtomicBoolean isSelect = new AtomicBoolean(false);
 
 
     public FuRequestToolBarManager(FuRequestCallback fuRequestCallback) {
@@ -202,28 +201,30 @@ public class FuRequestToolBarManager {
         });
 
 
-        //添加设置按钮
-        defaultActionGroup.add(new AnAction("设置", "Setting", AllIcons.General.GearPlain) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "View Mode");
-                for (ViewMode value : ViewMode.values()) {
-                    viewModeGroup.add(new FuRequestViewModeAction(value));
+        if(fuRequestCallback.isShowViewMode()){
+            //添加设置按钮
+            defaultActionGroup.add(new AnAction("设置", "Setting", FuDocIcons.moreIcon()) {
+                @Override
+                public void actionPerformed(@NotNull AnActionEvent e) {
+                    DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "View Mode");
+                    for (ViewMode value : ViewMode.values()) {
+                        viewModeGroup.add(new FuRequestViewModeAction(value));
+                    }
+                    DefaultActionGroup actionGroup = new DefaultActionGroup();
+                    actionGroup.add(viewModeGroup);
+                    int x = 0, y = 0;
+                    InputEvent inputEvent = e.getInputEvent();
+                    if (inputEvent instanceof MouseEvent mouseEvent) {
+                        x = mouseEvent.getX();
+                        y = mouseEvent.getY();
+                    }
+                    ActionPopupMenu popupMenu =
+                            ((ActionManagerImpl) ActionManager.getInstance())
+                                    .createActionPopupMenu("fudoc.request.settings", actionGroup, new MenuItemPresentationFactory());
+                    popupMenu.getComponent().show(e.getInputEvent().getComponent(), x, y);
                 }
-                DefaultActionGroup actionGroup = new DefaultActionGroup();
-                actionGroup.add(viewModeGroup);
-                int x = 0, y = 0;
-                InputEvent inputEvent = e.getInputEvent();
-                if (inputEvent instanceof MouseEvent mouseEvent) {
-                    x = mouseEvent.getX();
-                    y = mouseEvent.getY();
-                }
-                ActionPopupMenu popupMenu =
-                        ((ActionManagerImpl) ActionManager.getInstance())
-                                .createActionPopupMenu("fudoc.request.settings", actionGroup, new MenuItemPresentationFactory());
-                popupMenu.getComponent().show(e.getInputEvent().getComponent(), x, y);
-            }
-        });
+            });
+        }
 
         defaultActionGroup.addSeparator();
 

@@ -1,4 +1,4 @@
-package com.wdf.fudoc.components.tree;
+package com.wdf.fudoc.components.tree.old;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
@@ -7,10 +7,7 @@ import com.intellij.ui.treeStructure.CachingSimpleNode;
 import com.intellij.ui.treeStructure.SimpleNode;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.tree.TreePath;
 import java.util.List;
 
 /**

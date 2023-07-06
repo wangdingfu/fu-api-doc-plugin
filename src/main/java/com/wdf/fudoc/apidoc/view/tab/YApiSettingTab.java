@@ -16,7 +16,7 @@ import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.YapiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.YApiProjectInfoDTO;
 import com.wdf.fudoc.apidoc.sync.service.YApiService;
-import com.wdf.fudoc.common.FuDocMessageBundle;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.MessageConstants;
@@ -34,6 +34,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
@@ -59,15 +61,15 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     private JButton clearAllBtn;
     private JButton clearRecordBtn;
 
-    private static final TitledBorder baseInfoBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_BASE_TITLE));
-    private static final TitledBorder mainBorder = IdeBorderFactory.createTitledBorder(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_MAIN_TITLE));
+    private static final TitledBorder baseInfoBorder = IdeBorderFactory.createTitledBorder(FuBundle.message(MessageConstants.SYNC_YAPI_BASE_TITLE));
+    private static final TitledBorder mainBorder = IdeBorderFactory.createTitledBorder(FuBundle.message(MessageConstants.SYNC_YAPI_MAIN_TITLE));
 
-    private static final String SYNC_TOKEN = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN);
-    private static final String SYNC_TOKEN_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE);
+    private static final String SYNC_TOKEN = FuBundle.message(MessageConstants.SYNC_YAPI_TOKEN);
+    private static final String SYNC_TOKEN_TITLE = FuBundle.message(MessageConstants.SYNC_YAPI_TOKEN_TITLE);
     // 当前项目配置存在其他项目在使用 确定要删除吗
-    private static final String DELETE_CONFIG_TIP = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG);
+    private static final String DELETE_CONFIG_TIP = FuBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG);
     // 确认删除项目配置
-    private static final String CONFIRM_DELETE_TITLE = FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG_TITLE);
+    private static final String CONFIRM_DELETE_TITLE = FuBundle.message(MessageConstants.SYNC_YAPI_DELETE_PROJECT_CONFIG_TITLE);
 
 
     /**
@@ -83,7 +85,20 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         this.rootPanel.setBorder(JBUI.Borders.emptyTop(10));
         this.baseInfoPanel.setBorder(baseInfoBorder);
         this.mainPanel.setBorder(mainBorder);
+        initEnableBox();
         initBtn();
+    }
+
+    private void initEnableBox() {
+        this.isEnable.addItemListener(e -> {
+            FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
+            if (this.isEnable.isSelected()) {
+                //如果开启了就设置启用的为yapi 否则不设置（都没有设置情况会有默认值）
+                settingData.setEnable(ApiDocSystem.YAPI.getCode());
+            } else {
+                settingData.setEnable(settingData.getDefault());
+            }
+        });
     }
 
     public void initBtn() {
@@ -140,7 +155,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         String baseUrlText = baseUrl.getText();
         if (StringUtils.isBlank(baseUrlText)) {
             //提示需要填写YApi服务地址
-            Messages.showYesNoDialog(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_URL_TIP), "", Messages.getQuestionIcon());
+            Messages.showYesNoDialog(FuBundle.message(MessageConstants.SYNC_YAPI_URL_TIP), "", Messages.getQuestionIcon());
             return null;
         }
         List<String> projectTokenList = ObjectUtils.listToList(fuTableComponent.getDataList(), YApiProjectTableData::getProjectToken);
@@ -152,7 +167,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         YApiService yApiService = ServiceHelper.getService(YApiService.class);
         YApiProjectInfoDTO projectInfo = yApiService.findProjectInfo(baseUrlText, value);
         if (Objects.isNull(projectInfo)) {
-            FuDocNotification.notifyError(FuDocMessageBundle.message(MessageConstants.SYNC_YAPI_GET_PROJECT_FAIL));
+            FuDocNotification.notifyError(FuBundle.message(MessageConstants.SYNC_YAPI_GET_PROJECT_FAIL));
             return null;
         }
         YApiProjectTableData tableData = new YApiProjectTableData();
@@ -167,6 +182,7 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     @Override
     public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
         rootPane.setDefaultButton(this.loginBtn);
+        this.isEnable.setSelected(ApiDocSystem.YAPI.getCode().equals(FuDocSyncSetting.getSettingData().getEnable()));
     }
 
 
@@ -176,17 +192,13 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     }
 
     private void createUIComponents() {
-        this.baseUrl = new PlaceholderTextField("请输入你的YApi服务地址 例如:https://yapi.fudoc.com");
+        this.baseUrl = new PlaceholderTextField("请输入你的YApi服务地址 例如:http://yapi.fudoc.com");
     }
 
     @Override
     public void apply() {
         //数据持久化
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
-        if (isEnable.isSelected()) {
-            //如果开启了就设置启用的为yapi 否则不设置（都没有设置情况会有默认值）
-            settingData.setEnable(ApiDocSystem.YAPI.getCode());
-        }
         YapiConfigData yapi = settingData.getYapi();
         yapi.setBaseUrl(this.baseUrl.getText());
         yapi.setUserName(this.userName.getText());
@@ -211,4 +223,5 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         this.yapiPwd.setText(yapi.getYapiPwd());
         this.fuTableComponent.setDataList(FuDocSyncProjectSetting.getYapiConfigList());
     }
+
 }

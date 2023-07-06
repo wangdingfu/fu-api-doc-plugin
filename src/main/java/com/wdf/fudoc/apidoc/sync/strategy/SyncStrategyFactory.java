@@ -1,6 +1,5 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
-import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.common.ServiceHelper;
 
@@ -13,8 +12,6 @@ public class SyncStrategyFactory {
     public static SyncCategory getInstance(String apiSystem) {
         if (ApiDocSystem.YAPI.getCode().equals(apiSystem)) {
             return ServiceHelper.getService(SyncToYApiStrategy.class);
-        } else if (ApiDocSystem.SHOW_DOC.getCode().equals(apiSystem)) {
-            return ServiceHelper.getService(SyncShowDocStrategy.class);
         }
         return null;
     }

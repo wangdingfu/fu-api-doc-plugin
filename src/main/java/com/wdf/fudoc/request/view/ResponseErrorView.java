@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.view;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.FuEditorComponent;
@@ -23,22 +24,26 @@ public class ResponseErrorView {
 
     private FuEditorComponent fuEditorComponent;
 
-    public ResponseErrorView() {
-        iconLabel.setBorder(JBUI.Borders.empty(10,0,20,0));
+    private final Disposable disposable;
+
+    public ResponseErrorView(Disposable disposable) {
+        this.disposable = disposable;
+        iconLabel.setBorder(JBUI.Borders.empty(10, 0, 20, 0));
         tipLabel.setBorder(JBUI.Borders.emptyBottom(20));
         iconLabel.setIcon(FuDocIcons.FU_REQUEST);
     }
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
+        fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "", disposable);
         this.textPanel = fuEditorComponent.getMainPanel();
     }
 
 
-    public void setErrorDetail(String errorDetail){
-        if(Objects.nonNull(errorDetail)){
+    public void setErrorDetail(String errorDetail) {
+        if (Objects.nonNull(errorDetail)) {
             fuEditorComponent.setContent(errorDetail);
         }
     }
+
 }

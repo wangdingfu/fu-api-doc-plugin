@@ -124,21 +124,27 @@ public class FuTabBuilder {
         return fuTabMap.get(selectedInfo.getText());
     }
 
+
+    public FuTab get(String text){
+        return fuTabMap.get(text);
+
+    }
+
     public void addListener() {
         this.tabs.addListener(new TabsListener() {
             @Override
             public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
+                if (Objects.nonNull(oldSelection)) {
+                    FuTab fuTab = fuTabMap.get(oldSelection.getText());
+                    if (Objects.nonNull(fuTab)) {
+                        fuTab.moveOff();
+                    }
+                }
                 String text = newSelection.getText();
                 if (StringUtils.isNotBlank(text)) {
                     FuTab fuTab = fuTabMap.get(text);
                     if (Objects.nonNull(fuTab)) {
                         fuTab.selectionChanged(oldSelection, newSelection);
-                    }
-                }
-                if (Objects.nonNull(oldSelection)) {
-                    FuTab fuTab = fuTabMap.get(oldSelection.getText());
-                    if (Objects.nonNull(fuTab)) {
-                        fuTab.moveOff();
                     }
                 }
             }

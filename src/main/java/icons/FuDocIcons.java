@@ -1,11 +1,13 @@
 package icons;
 
 import com.intellij.openapi.util.IconLoader;
+import com.wdf.fudoc.util.ProjectUtils;
 
 import javax.swing.*;
 
 /**
  * 图标管理
+ *
  * @author wangdingfu
  * @date 2022-08-21 00:44:26
  */
@@ -36,6 +38,14 @@ public interface FuDocIcons {
     Icon FU_AUTH = IconLoader.getIcon("icon/auth.svg", FuDocIcons.class);
     Icon FU_SCRIPT = IconLoader.getIcon("icon/script.svg", FuDocIcons.class);
     Icon FU_VARIABLE = IconLoader.getIcon("icon/variable.svg", FuDocIcons.class);
+
+
+    Icon MORE_DARK = IconLoader.getIcon("icon/more_dark.svg", FuDocIcons.class);
+    Icon MORE_STROKE = IconLoader.getIcon("icon/more_stroke.svg", FuDocIcons.class);
+
+    static Icon moreIcon() {
+        return ProjectUtils.getTheme().isDarcula() ? MORE_STROKE : MORE_DARK;
+    }
 
 
     Icon GET_DARK = IconLoader.getIcon("icon/http/get_dark.svg", FuDocIcons.class);

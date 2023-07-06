@@ -5,10 +5,14 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.wdf.fudoc.apidoc.sync.data.ApiFoxConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiFoxDTO;
+import com.wdf.fudoc.apidoc.sync.dto.ApiFoxResult;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -17,10 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApiFoxServiceImpl implements ApiFoxService {
 
-    private final static String SYNC_API = "/api/v1/projects/1756101/import-data";
+    private final static String SYNC_API = "/api/v1/projects/{}/import-data";
 
     @Override
-    public void syncApi(ApiFoxDTO apiFoxDTO, ApiProjectDTO apiProjectDTO, ApiFoxConfigData apiFoxConfigData) {
+    public String syncApi(ApiFoxDTO apiFoxDTO, ApiProjectDTO apiProjectDTO, ApiFoxConfigData apiFoxConfigData) {
         String baseUrl = apiFoxConfigData.getBaseUrl();
         String url = baseUrl + StrFormatter.format(SYNC_API, apiProjectDTO.getProjectId());
         try {
@@ -30,9 +34,19 @@ public class ApiFoxServiceImpl implements ApiFoxService {
             httpRequest.body(JsonUtil.toJson(apiFoxDTO));
             String postResult = httpRequest.execute().body();
             log.info("同步结果:{}", postResult);
+            ApiFoxResult result;
+            if (StringUtils.isBlank(postResult) || Objects.isNull(result = JsonUtil.toBean(postResult, ApiFoxResult.class))) {
+                return "ApiFox返回结果为空";
+            }
+            Boolean success = result.getSuccess();
+            if (Objects.nonNull(success) && success) {
+                return StringUtils.EMPTY;
+            }
+            String errorMessage = result.getErrorMessage();
+            return StringUtils.isBlank(errorMessage) ? "同步异常" : errorMessage;
         } catch (Exception e) {
-            log.error("同步Api到ApiFox系统异常", e);
-            throw new FuDocException("同步Api到ApiFox系统异常");
+            log.info("同步Api到ApiFox系统异常", e);
         }
+        return "同步失败";
     }
 }

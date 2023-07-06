@@ -15,7 +15,12 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
+import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
+import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
+import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
+import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.request.manager.FuRequestManager;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -106,6 +111,21 @@ public class FuDocUtils {
     }
 
 
+    public static String classTitle(PsiClass psiClass) {
+        //先获取swagger注解
+        AnnotationData annotationData = AnnotationUtils.parse(psiClass.getAnnotation(AnnotationConstants.SWAGGER_API));
+        if (Objects.nonNull(annotationData)) {
+            List<String> tags = annotationData.array("tags").constant().stringValue();
+            if (CollectionUtils.isNotEmpty(tags)) {
+                return tags.get(0);
+            }
+        }
+        //其次获取注释
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
+        return apiDocCommentData.getCommentTitle();
+    }
+
+
     /**
      * 是否为Controller有效的请求方法
      *
@@ -145,8 +165,7 @@ public class FuDocUtils {
     }
 
 
-
-    public static List<String> getAllModuleNameList(Project project){
+    public static List<String> getAllModuleNameList(Project project) {
         Module[] modules = ModuleManager.getInstance(project).getModules();
         return Arrays.stream(modules).map(Module::getName).collect(Collectors.toList());
     }

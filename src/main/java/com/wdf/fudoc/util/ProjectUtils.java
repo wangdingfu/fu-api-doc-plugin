@@ -1,5 +1,7 @@
 package com.wdf.fudoc.util;
 
+import com.intellij.openapi.editor.colors.EditorColorsManager;
+import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -8,6 +10,7 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.WindowManager;
+import com.wdf.fudoc.common.enumtype.Theme;
 
 import java.awt.*;
 
@@ -94,4 +97,15 @@ public class ProjectUtils {
         }
         return LocalFileSystem.getInstance().findFileByPath(basePath);
     }
+
+
+    public static Theme getTheme() {
+        EditorColorsScheme colorsScheme = EditorColorsManager.getInstance().getSchemeForCurrentUITheme();
+        String name = colorsScheme.getName();
+        return switch (name) {
+            case "Light", "IntelliJ Light", "Default" -> Theme.Light;
+            default -> Theme.Darcula;
+        };
+    }
+
 }

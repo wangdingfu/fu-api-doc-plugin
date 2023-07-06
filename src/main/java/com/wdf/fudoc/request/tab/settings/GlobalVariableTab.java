@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.tab.settings;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tabs.TabInfo;
@@ -48,11 +49,11 @@ public class GlobalVariableTab extends AbstractBulkEditTabLinkage<GlobalKeyValue
     private static final String TITLE = "全局变量";
 
 
-    public GlobalVariableTab(Project project) {
+    public GlobalVariableTab(Project project, Disposable disposable) {
         this.project = project;
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.globalConfig("变量名称", "变量值"), Lists.newArrayList(), GlobalKeyValuePO.class);
         //文本编辑器
-        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "");
+        this.fuEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE, "",disposable);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class GlobalVariableTab extends AbstractBulkEditTabLinkage<GlobalKeyValue
     public void moveOff() {
         //离开当前tab时 保存数据
         FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
-        fuRequestConfigPO.setGlobalVariableList(this.fuTableComponent.getDataList());
+        fuRequestConfigPO.setGlobalVariableList(Lists.newArrayList(this.fuTableComponent.getDataList()));
     }
 
     @Override
@@ -98,6 +99,7 @@ public class GlobalVariableTab extends AbstractBulkEditTabLinkage<GlobalKeyValue
             //如果当前是编辑器状态 则需要从编辑器组件同步数据到table组件
             bulkEditToTableData(TITLE);
         }
-        configPO.setGlobalVariableList(fuTableComponent.getDataList());
+        configPO.setGlobalVariableList(Lists.newArrayList(fuTableComponent.getDataList()));
     }
+
 }

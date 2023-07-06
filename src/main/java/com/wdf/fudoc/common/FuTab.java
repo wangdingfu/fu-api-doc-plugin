@@ -1,5 +1,6 @@
 package com.wdf.fudoc.common;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.TabsListener;
 import com.wdf.fudoc.components.bo.TabActionBO;

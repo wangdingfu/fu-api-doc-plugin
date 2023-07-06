@@ -1,4 +1,4 @@
-package com.wdf.fudoc.components.tree;
+package com.wdf.fudoc.components.tree.old;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.icons.AllIcons;
 import com.intellij.json.JsonFileType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
 import com.intellij.openapi.application.ApplicationManager;
@@ -26,7 +27,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-public class TestView1 {
+public class TestView1 implements Disposable {
     @Getter
     private JPanel rootPanel;
     private JPanel topPanel;
@@ -72,9 +73,9 @@ public class TestView1 {
     private void createUIComponents() {
         final JBTabsImpl tabs = new JBTabsImpl(ProjectUtils.getCurrProject());
         initToolbar();
-        tabs.addTab(new TabInfo(FuEditorComponent.create(JsonFileType.INSTANCE, "").getMainPanel()).setText("Body"));
-        tabs.addTab(new TabInfo(FuEditorComponent.create(JsonFileType.INSTANCE,"").getMainPanel()).setText("Params"));
-        tabs.addTab(new TabInfo(FuEditorComponent.create(JsonFileType.INSTANCE,"").getMainPanel()).setText("Header").setSideComponent(this.toolBarPanel));
+        tabs.addTab(new TabInfo(FuEditorComponent.create(JsonFileType.INSTANCE, "",this).getMainPanel()).setText("Body"));
+        tabs.addTab(new TabInfo(FuEditorComponent.create(JsonFileType.INSTANCE,"",this).getMainPanel()).setText("Params"));
+        tabs.addTab(new TabInfo(FuEditorComponent.create(JsonFileType.INSTANCE,"",this).getMainPanel()).setText("Header").setSideComponent(this.toolBarPanel));
         this.topPanel = new BorderLayoutPanel();
         this.topPanel.add(tabs.getComponent(),BorderLayout.CENTER);
         this.centerPanel = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
@@ -120,5 +121,10 @@ public class TestView1 {
         toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
         Utils.setSmallerFontForChildren(toolbar);
         toolBarPanel.add(toolbar.getComponent(), BorderLayout.EAST);
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

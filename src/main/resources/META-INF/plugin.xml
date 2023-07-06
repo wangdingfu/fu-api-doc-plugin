@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>fudoc</name>
-    <version>222.1.6.6</version>
+    <version>222.1.7.0</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -15,6 +15,7 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
     <depends>com.jetbrains.restClient</depends>
+    <depends>org.jetbrains.idea.maven</depends>
 <!--    <depends>com.intellij.spring</depends>-->
 
     <extensions defaultExtensionNs="com.intellij">
@@ -51,6 +52,7 @@
 
         <applicationService serviceInterface="com.wdf.fudoc.apidoc.sync.service.YApiService" serviceImplementation="com.wdf.fudoc.apidoc.sync.service.YApiServiceImpl"/>
         <applicationService serviceInterface="com.wdf.fudoc.apidoc.sync.service.ApiFoxService" serviceImplementation="com.wdf.fudoc.apidoc.sync.service.ApiFoxServiceImpl"/>
+        <applicationService serviceInterface="com.wdf.fudoc.apidoc.sync.service.ShowDocService" serviceImplementation="com.wdf.fudoc.apidoc.sync.service.ShowDocServiceImpl"/>
 
         <projectConfigurable instance="com.wdf.fudoc.apidoc.config.configurable.FuDocSettingConfigurable"
                              id="fu.doc.setting"
@@ -143,12 +145,12 @@
 
         <!-- 测试功能点相关动作 -->
 
-        <group id="wdf.fudoc.test" popup="false" compact="true">
+<!--        <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test" description="Test"/>
             <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
                     description="Test table"/>
-        </group>
+        </group>-->
 
 
 

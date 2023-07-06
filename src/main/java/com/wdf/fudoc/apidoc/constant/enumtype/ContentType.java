@@ -14,7 +14,7 @@ public enum ContentType {
     /**
      * POST 请求
      */
-    URLENCODED("x-www-form-urlencoded", ""),
+    URLENCODED("application/x-www-form-urlencoded", ""),
     FORM_DATA("multipart/form-data", "form"),
     JSON("application/json", "json"),
     RAW("application/raw", "raw"),

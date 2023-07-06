@@ -9,12 +9,12 @@ import org.jetbrains.annotations.NotNull;
  * @descption:
  * @date 2022-05-30 23:51:37
  */
-public class FuDocMessageBundle extends DynamicBundle {
+public class FuBundle extends DynamicBundle {
 
-    private static final FuDocMessageBundle INSTANCE = new FuDocMessageBundle(MessageConstants.MESSAGE_BUNDLE);
+    private static final FuBundle INSTANCE = new FuBundle(MessageConstants.MESSAGE_BUNDLE);
 
 
-    public FuDocMessageBundle(@NotNull String pathToBundle) {
+    public FuBundle(@NotNull String pathToBundle) {
         super(pathToBundle);
     }
 

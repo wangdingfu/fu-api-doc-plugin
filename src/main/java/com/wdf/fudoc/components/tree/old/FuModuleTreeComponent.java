@@ -1,6 +1,5 @@
-package com.wdf.fudoc.components.tree;
+package com.wdf.fudoc.components.tree.old;
 
-import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.tree.AsyncTreeModel;
 import com.intellij.ui.tree.StructureTreeModel;

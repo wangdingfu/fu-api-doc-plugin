@@ -1,6 +1,7 @@
 package com.wdf.fudoc.components.bo;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -35,6 +37,33 @@ public class TreePathBO implements Serializable {
     public boolean isNotNull() {
         return StringUtils.isNotBlank(this.view) && CollectionUtils.isNotEmpty(selectPathList);
     }
+
+    public boolean isScope(Module module) {
+        if (Objects.isNull(module) || CollectionUtils.isEmpty(selectPathList)) {
+            //没有指定范围 则默认全部有效
+            return true;
+        }
+        if (selectPathList.contains(module.getName())) {
+            return true;
+        }
+        Project project = module.getProject();
+        String name = project.getName();
+        return selectPathList.contains(name);
+    }
+
+    public boolean isScope(String moduleName) {
+        if (StringUtils.isBlank(moduleName) || CollectionUtils.isEmpty(selectPathList)) {
+            //没有指定范围 则默认全部有效
+            return true;
+        }
+        if (selectPathList.contains(moduleName)) {
+            return true;
+        }
+        Project currProject = ProjectUtils.getCurrProject();
+        return selectPathList.contains(currProject.getName());
+    }
+
+
 
     private static final Integer DEFAULT_SORT = 99;
     private static final Integer ONE_LEVEL_SORT = 1;
@@ -62,7 +91,7 @@ public class TreePathBO implements Serializable {
         }
         for (String path : selectPathList) {
             //选中的节点 循环是因为可能会存在多选的情况
-            if(StringUtils.isNotBlank(path) && (moduleName.equals(path) || currProjectName.equals(path))){
+            if (StringUtils.isNotBlank(path) && (moduleName.equals(path) || currProjectName.equals(path))) {
                 return ONE_LEVEL_SORT;
             }
         }

@@ -1,4 +1,4 @@
-package com.wdf.fudoc.components.tree;
+package com.wdf.fudoc.components.tree.old;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;

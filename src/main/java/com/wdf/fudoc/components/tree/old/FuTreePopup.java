@@ -1,4 +1,4 @@
-package com.wdf.fudoc.components.tree;
+package com.wdf.fudoc.components.tree.old;
 
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBScrollPane;

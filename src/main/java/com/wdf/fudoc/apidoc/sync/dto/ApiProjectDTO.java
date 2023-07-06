@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.dto;
 
+import com.wdf.fudoc.components.bo.TreePathBO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,6 +52,9 @@ public class ApiProjectDTO {
      */
     private String moduleName;
 
+
+    private TreePathBO scope;
+
     /**
      * 排序
      */
@@ -60,6 +64,8 @@ public class ApiProjectDTO {
      * 分类集合
      */
     private List<ApiCategoryDTO> apiCategoryList;
+
+    private String title;
 
     @Override
     public String toString() {

@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.ActionCallback;
-import com.wdf.fudoc.common.FuTab;
+import com.wdf.fudoc.common.FuBundle;
+import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
@@ -65,7 +65,7 @@ public class FuRequestSettingView extends DialogWrapper {
         super(project, true);
         this.project = project;
         this.rootPanel = new JPanel(new BorderLayout());
-        setTitle("【Fu Request】设置");
+        setTitle(FuBundle.message("fudoc.settings.title"));
         initPanel();
         init();
     }
@@ -76,8 +76,8 @@ public class FuRequestSettingView extends DialogWrapper {
      */
     private void initPanel() {
         this.globalConfigTab = new GlobalConfigTab();
-        this.globalVariableTab = new GlobalVariableTab(project);
-        this.globalHeaderTab = new GlobalHeaderTab(project);
+        this.globalVariableTab = new GlobalVariableTab(project, getDisposable());
+        this.globalHeaderTab = new GlobalHeaderTab(project, getDisposable());
         //初始化数据
         initData();
         //添加tab页
@@ -112,7 +112,7 @@ public class FuRequestSettingView extends DialogWrapper {
             preScriptMap.put(GlobalPreScriptTab.TITLE, globalPreScriptPO);
         }
         //对前置脚本排序(为了展示顺序性) 创建前置脚本tab 并 初始化数据
-        Lists.newArrayList(preScriptMap.keySet()).stream().sorted().forEach(f -> this.preScriptTabs.add(new GlobalPreScriptTab(project, f, configPO)));
+        Lists.newArrayList(preScriptMap.keySet()).stream().sorted().forEach(f -> this.preScriptTabs.add(new GlobalPreScriptTab(project, f, configPO, getDisposable())));
 
     }
 
@@ -139,8 +139,8 @@ public class FuRequestSettingView extends DialogWrapper {
     @Override
     protected Action @NotNull [] createActions() {
         List<Action> actionList = Lists.newArrayList(super.createActions());
-        actionList.add(new CreateTabAction("新增前置脚本"));
-        actionList.add(new RemoveTabAction("删除前置脚本"));
+        actionList.add(new CreateTabAction(FuBundle.message(MessageConstants.SCRIPT_PRE_ADD)));
+        actionList.add(new RemoveTabAction(FuBundle.message(MessageConstants.SCRIPT_PRE_REMOVE)));
         return actionList.toArray(new Action[]{});
     }
 
@@ -154,7 +154,7 @@ public class FuRequestSettingView extends DialogWrapper {
         @Override
         protected void doAction(ActionEvent e) {
             //新增前置脚本
-            GlobalPreScriptTab globalPreScriptTab = new GlobalPreScriptTab(project, GlobalPreScriptTab.TITLE + preScriptIndex.incrementAndGet(), null);
+            GlobalPreScriptTab globalPreScriptTab = new GlobalPreScriptTab(project, GlobalPreScriptTab.TITLE + preScriptIndex.incrementAndGet(), null, getDisposable());
             preScriptTabs.add(globalPreScriptTab);
             fuTabBuilder.addTab(globalPreScriptTab);
         }
@@ -184,7 +184,6 @@ public class FuRequestSettingView extends DialogWrapper {
 //            }
         }
     }
-
 
     @Override
     protected @Nullable JComponent createCenterPanel() {

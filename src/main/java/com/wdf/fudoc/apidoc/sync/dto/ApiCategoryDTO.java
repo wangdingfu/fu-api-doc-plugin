@@ -1,10 +1,10 @@
 package com.wdf.fudoc.apidoc.sync.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -38,12 +38,32 @@ public class ApiCategoryDTO implements Serializable {
     private Integer sort;
 
     /**
+     * 父节点
+     */
+    @JsonIgnore
+    private transient ApiCategoryDTO parent;
+
+    /**
      * 子分类
      */
     private List<ApiCategoryDTO> apiCategoryList;
 
     public ApiCategoryDTO(String categoryId, String categoryName) {
         this.categoryId = categoryId;
+        this.categoryName = categoryName;
+    }
+
+    public ApiCategoryDTO(String categoryName, ApiCategoryDTO parent) {
+        this.categoryName = categoryName;
+        this.parent = parent;
+    }
+
+    public ApiCategoryDTO(String categoryName, List<ApiCategoryDTO> apiCategoryList) {
+        this.categoryName = categoryName;
+        this.apiCategoryList = apiCategoryList;
+    }
+
+    public ApiCategoryDTO(String categoryName) {
         this.categoryName = categoryName;
     }
 

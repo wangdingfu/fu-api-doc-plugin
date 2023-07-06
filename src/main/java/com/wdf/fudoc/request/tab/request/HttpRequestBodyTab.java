@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.tab.request;
 
 import com.google.common.collect.Lists;
 import com.intellij.json.JsonFileType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
@@ -51,17 +52,17 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
     private final FuEditorComponent urlencodedEditorComponent;
     private FuTabComponent fuTabComponent;
 
-    public HttpRequestBodyTab() {
+    public HttpRequestBodyTab(Disposable disposable) {
         this.noneComponent = new JPanel();
         this.formDataComponent = ChooseFileTableUtils.createTableComponents();
         this.formDataPanel = this.formDataComponent.createPanel();
         this.urlencodedComponent = FuTableComponent.createKeyValue();
         this.urlencodedPanel = this.urlencodedComponent.createPanel();
-        this.rawComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
-        this.jsonComponent = FuEditorComponent.create(JsonFileType.INSTANCE);
+        this.rawComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE,disposable);
+        this.jsonComponent = FuEditorComponent.create(JsonFileType.INSTANCE,disposable);
         this.binaryComponent = new JPanel();
-        this.formDataEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
-        this.urlencodedEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE);
+        this.formDataEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE,disposable);
+        this.urlencodedEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE,disposable);
     }
 
     @Override
@@ -174,4 +175,5 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
         }
         return null;
     }
+
 }

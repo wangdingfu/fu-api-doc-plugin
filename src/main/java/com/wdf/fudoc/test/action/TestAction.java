@@ -1,7 +1,5 @@
 package com.wdf.fudoc.test.action;
 
-import com.intellij.httpClient.actions.copyPaste.CurlCopyPastePreProcessor;
-import com.intellij.httpClient.actions.copyPaste.HttpRequestCopyAsCurlAction;
 import com.intellij.httpClient.converters.RequestBuilder;
 import com.intellij.httpClient.execution.HttpRequestConfig;
 import com.intellij.httpClient.execution.RestClientFormBodyPart;
@@ -15,37 +13,22 @@ import com.intellij.httpClient.http.request.psi.HttpQuery;
 import com.intellij.httpClient.http.request.psi.HttpQueryParameter;
 import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
-import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.editor.impl.EditorComponentImpl;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.JBPopupListener;
-import com.intellij.openapi.ui.popup.LightweightWindowEvent;
-import com.intellij.psi.PsiElement;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.ui.UIUtil;
-import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
-import com.wdf.fudoc.components.FuEditorComponent;
-import com.wdf.fudoc.components.FuTableComponent;
-import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
 import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
-import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.view.AuthSettingView;
-import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
-import com.wdf.fudoc.test.view.TestTipPanel;
 import com.wdf.fudoc.util.FuRequestUtils;
-import com.wdf.fudoc.util.PopupUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.idea.maven.project.MavenProject;
+import org.jetbrains.idea.maven.project.MavenProjectsManager;
 
-import javax.swing.*;
-import java.io.File;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class TestAction extends AnAction {
@@ -53,8 +36,20 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
-        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
+        // 获取当前项目
+        Project project = e.getProject();
+
+        // 获取 Maven 项目管理器
+        MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(project);
+
+        // 获取 Maven 项目
+        MavenProject mavenProject = mavenProjectsManager.getProjects().get(0);
+
+        // 获取 Maven Model
+        Collection<String> profilesIds = mavenProject.getProfilesIds();
+
+//        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
+//        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
 //        request(e);
 //        apiTest(e);
     }
@@ -101,16 +96,16 @@ public class TestAction extends AnAction {
         }
         RequestBuilder<RestClientRequest, RestClientFormBodyPart> requestBuilder = new RestClientRequestBuilder();
         HttpRequestConfig requestConfig = HttpRequestPsiConverter.toRequestConfig(firstRequest);
-        try {
-            RestClientRequest restClientRequest = HttpRequestPsiConverter.convertFromHttpRequest(firstRequest, substitutor, requestBuilder);
-            CurlCopyPastePreProcessor preProcessor = new CurlCopyPastePreProcessor();
-            HttpRequestCopyAsCurlAction httpRequestCopyAsCurlAction = new HttpRequestCopyAsCurlAction();
-            List<File> files = restClientRequest.getFiles();
-            String url = restClientRequest.getURL();
-            String textToSend = restClientRequest.getTextToSend();
-        } catch (Exception exception) {
-            log.info("解析http请求错误", exception);
-        }
+//        try {
+//            RestClientRequest restClientRequest = HttpRequestPsiConverter.convertFromHttpRequest(firstRequest, substitutor, requestBuilder);
+//            CurlCopyPastePreProcessor preProcessor = new CurlCopyPastePreProcessor();
+//            HttpRequestCopyAsCurlAction httpRequestCopyAsCurlAction = new HttpRequestCopyAsCurlAction();
+//            List<File> files = restClientRequest.getFiles();
+//            String url = restClientRequest.getURL();
+//            String textToSend = restClientRequest.getTextToSend();
+//        } catch (Exception exception) {
+//            log.info("解析http请求错误", exception);
+//        }
     }
 
 

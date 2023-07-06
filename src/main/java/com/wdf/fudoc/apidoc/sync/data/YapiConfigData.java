@@ -1,14 +1,11 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
-import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
-import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.components.bo.TreePathBO;
-import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
@@ -48,6 +45,11 @@ public class YapiConfigData extends BaseSyncConfigData {
     }
 
     @Override
+    public void syncApiProjectList(String moduleName, List<ApiProjectDTO> apiProjectDTOList) {
+
+    }
+
+    @Override
     public boolean isExistsConfig() {
         return CollectionUtils.isNotEmpty(FuDocSyncProjectSetting.getYapiConfigList());
     }
@@ -84,6 +86,7 @@ public class YapiConfigData extends BaseSyncConfigData {
         apiProjectDTO.setProjectToken(tableData.getProjectToken());
         apiProjectDTO.setProjectId(tableData.getProjectId());
         apiProjectDTO.setProjectName(tableData.getProjectName());
+        apiProjectDTO.setScope(tableData.getScope());
         apiProjectDTO.setSort(calProjectSort(tableData, moduleName));
         return apiProjectDTO;
     }

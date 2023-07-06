@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.icons.AllIcons;
 import com.intellij.json.JsonFileType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
 import com.intellij.openapi.application.ApplicationManager;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.awt.*;
 
-public class ToolBarTestForm {
+public class ToolBarTestForm implements Disposable {
     @Getter
     private JPanel rootPanel;
     private JPanel toolBarPanel;
@@ -95,9 +96,14 @@ public class ToolBarTestForm {
 
     private void createUIComponents() {
         this.tablePanel = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
-        this.editPanel = FuEditorComponent.create(JsonFileType.INSTANCE, "").getMainPanel();
+        this.editPanel = FuEditorComponent.create(JsonFileType.INSTANCE, "",this).getMainPanel();
         this.bulkEditPanel = createBulkEditBar();
         this.toolBarPanel = new BorderLayoutPanel();
         this.toolBarPanel.add(createTabPanel(),BorderLayout.CENTER);
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

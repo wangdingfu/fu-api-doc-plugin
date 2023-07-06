@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.pojo.data.annotation;
 
+import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationValueData;
 import com.wdf.fudoc.util.ObjectUtils;
@@ -31,7 +32,7 @@ public class AnnotationArrayValueData extends AnnotationValueData {
     /**
      * 属性值集合
      */
-    private List<AnnotationValueData> values;
+    private List<AnnotationValueData> values = Lists.newArrayList();
 
 
     public ArrayConstantValue constant() {
@@ -85,18 +86,18 @@ public class AnnotationArrayValueData extends AnnotationValueData {
             this.valueDataList = valueDataList;
         }
 
-        public List<String> enumValueList(){
+        public List<String> enumValueList() {
             return valueDataList.stream().map(AnnotationEnumValueData::getEnumValue).collect(Collectors.toList());
         }
 
-        public String enumClassName(){
-            if(CollectionUtils.isNotEmpty(valueDataList)){
+        public String enumClassName() {
+            if (CollectionUtils.isNotEmpty(valueDataList)) {
                 return valueDataList.get(0).getEnumClassName();
             }
             return StringUtils.EMPTY;
         }
 
-        public boolean isEmpty(){
+        public boolean isEmpty() {
             return CollectionUtils.isEmpty(this.valueDataList);
         }
     }
