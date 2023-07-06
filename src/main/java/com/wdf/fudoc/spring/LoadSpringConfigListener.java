@@ -27,7 +27,7 @@ public class LoadSpringConfigListener implements StartupActivity.Background {
         try {
             ThreadUtil.execAsync(() -> SpringConfigManager.initProjectSpringConfig(project));
         } catch (Exception e) {
-            log.error("解析配置文件异常", e);
+            log.info("解析配置文件异常", e);
         }
     }
 

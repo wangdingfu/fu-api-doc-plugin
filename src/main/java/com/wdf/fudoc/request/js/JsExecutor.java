@@ -30,7 +30,7 @@ public class JsExecutor {
             ScriptableObject.putProperty(scriptableObject, "console", new FuConsole(fuContext.getProject()));
             cx.evaluateString(scriptableObject, fuContext.getScript(), "<cmd>", 1, null);
         } catch (Exception e) {
-            log.error("执行脚本【{}】异常", fuContext.getPreScriptPO().getTitle(), e);
+            log.info("执行脚本【{}】异常", fuContext.getPreScriptPO().getTitle(), e);
         } finally {
             Context.exit();
         }

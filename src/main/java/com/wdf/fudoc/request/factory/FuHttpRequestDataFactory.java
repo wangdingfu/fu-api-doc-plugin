@@ -70,16 +70,8 @@ public class FuHttpRequestDataFactory {
         fuHttpRequestData = FuRequestManager.getRequest(project, apiKey);
         if (Objects.isNull(fuHttpRequestData)) {
             fuHttpRequestData = build(fuDocContext, psiClass, module);
-        }
-        if (Objects.nonNull(fuHttpRequestData)) {
-            //设置接口url
-            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
-            FuRequestData request = fuHttpRequestData.getRequest();
-            if (Objects.isNull(request)) {
-                request = new FuRequestData();
-            }
-            request.setDomain(domainUrl);
-            fuHttpRequestData.setModule(module);
+        } else {
+            paddingDomain(fuHttpRequestData, module);
         }
         return fuHttpRequestData;
     }
@@ -96,7 +88,9 @@ public class FuHttpRequestDataFactory {
         }
         FuDocRootParamData fuDocRootParamData = fuDocRootParamDataList.get(0);
         //获取当前所属模块
-        return FuHttpRequestDataFactory.build(module, fuDocRootParamData);
+        FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(module, fuDocRootParamData);
+        paddingDomain(fuHttpRequestData, module);
+        return fuHttpRequestData;
     }
 
 
@@ -137,26 +131,52 @@ public class FuHttpRequestDataFactory {
         List<KeyValueTableBO> paramList = Lists.newArrayList();
         List<KeyValueTableBO> pathVariableList = Lists.newArrayList();
         List<RootParamBO> rootParamBOList = fuDocRootParamData.getRootParamBOList();
+        RootParamBO requestBodyParam = null;
         if (CollectionUtils.isNotEmpty(rootParamBOList)) {
             for (RootParamBO rootParamBO : rootParamBOList) {
                 SpringAnnotationData springAnnotationData = rootParamBO.getSpringAnnotationData();
-                List<KeyValueTableBO> tableBOList = paramConvertToTableData(rootParamBO.getFuDocParamDataList());
-                if (CollectionUtils.isNotEmpty(tableBOList)) {
-                    paramList.addAll(tableBOList);
+                if (Objects.nonNull(springAnnotationData) && springAnnotationData instanceof RequestBodyData) {
+                    requestBodyParam = rootParamBO;
+                    continue;
                 }
+                List<KeyValueTableBO> tableBOList = paramConvertToTableData(rootParamBO.getFuDocParamDataList());
                 if (springAnnotationData instanceof PathVariableData) {
                     pathVariableList.addAll(tableBOList);
+                    continue;
+                }
+                if (CollectionUtils.isNotEmpty(tableBOList)) {
+                    paramList.addAll(tableBOList);
                 }
             }
         }
         FuRequestData request = fuHttpRequestData.getRequest();
+        String baseUrl = request.getBaseUrl();
+        if (StringUtils.isNotBlank(baseUrl)) {
+            String[] split = baseUrl.split("/");
+            for (String urlItem : split) {
+                if (urlItem.contains("{{") || urlItem.contains("}}")) {
+                    continue;
+                }
+                if (StringUtils.startsWith(urlItem, "{") && StringUtils.endsWith(urlItem, "}")) {
+                    String name = urlItem.replace("{", "").replace("}", "");
+                    if (pathVariableList.stream().noneMatch(a -> a.getKey().equals(name))) {
+                        pathVariableList.add(new KeyValueTableBO(true, name, ""));
+                    }
+                }
+            }
+        }
         request.setPathVariables(pathVariableList);
         if (RequestType.GET.equals(requestType)) {
             request.setParams(paramList);
+            return;
         }
         if (RequestType.POST.equals(requestType)) {
             ContentType contentType = fuDocRootParamData.getContentType();
             if (Objects.isNull(contentType)) {
+                return;
+            }
+            if (Objects.nonNull(requestBodyParam)) {
+                paddingBody(fuHttpRequestData, requestBodyParam.getMockData());
                 return;
             }
             FuRequestBodyData body = request.getBody();
@@ -169,41 +189,12 @@ public class FuHttpRequestDataFactory {
     }
 
 
-    public static void buildPostParamData(FuHttpRequestData fuHttpRequestData, FuDocRootParamData fuDocRootParamData) {
-        List<RootParamBO> rootParamBOList = fuDocRootParamData.getRootParamBOList();
-        if (CollectionUtils.isEmpty(rootParamBOList)) {
-            return;
-        }
-        RootParamBO rootParamBO = rootParamBOList.stream().filter(f -> isJson(f.getSpringAnnotationData())).findFirst().orElse(null);
-        if (Objects.nonNull(rootParamBO)) {
-            paddingBody(fuHttpRequestData, rootParamBO.getMockData());
-            return;
-        }
-        buildParamData(fuHttpRequestData, fuDocRootParamData, RequestType.POST);
-    }
-
-
-    public static boolean isJson(SpringAnnotationData springAnnotationData) {
-        return Objects.nonNull(springAnnotationData) && springAnnotationData instanceof RequestBodyData;
-    }
-
-
     public static void buildRequestParamsData(FuHttpRequestData fuHttpRequestData, FuDocRootParamData fuDocRootParamData) {
         RequestType requestType = RequestType.getRequestType(fuDocRootParamData.getRequestType());
         if (Objects.isNull(requestType)) {
             return;
         }
-
-        switch (requestType) {
-            case GET:
-                buildParamData(fuHttpRequestData, fuDocRootParamData, RequestType.GET);
-                break;
-            case POST:
-                buildPostParamData(fuHttpRequestData, fuDocRootParamData);
-                break;
-            case PUT:
-            case DELETE:
-        }
+        buildParamData(fuHttpRequestData, fuDocRootParamData, requestType);
     }
 
     private static List<KeyValueTableBO> paramConvertToTableData(List<FuDocParamData> fuDocParamDataList) {
@@ -230,6 +221,23 @@ public class FuHttpRequestDataFactory {
         //body 参数
         body.setJson(paramValue);
     }
+
+
+
+
+    private static void paddingDomain(FuHttpRequestData fuHttpRequestData, Module module) {
+        if (Objects.nonNull(fuHttpRequestData)) {
+            //设置接口url
+            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
+            FuRequestData request = fuHttpRequestData.getRequest();
+            if (Objects.isNull(request)) {
+                request = new FuRequestData();
+            }
+            request.setDomain(domainUrl);
+            fuHttpRequestData.setModule(module);
+        }
+    }
+
 
 
 }

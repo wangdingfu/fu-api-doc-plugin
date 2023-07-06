@@ -39,7 +39,7 @@ public class YamlConfigFileHandler implements ConfigFileHandler {
             Iterable<Object> objects = yaml.loadAll(yamlContent);
             this.config = JSONUtil.parse(objects.iterator().next());
         } catch (Exception e) {
-            log.error("读取配置文件异常", e);
+            log.info("读取配置文件异常", e);
         }
     }
 

@@ -1,6 +1,8 @@
 package com.wdf.fudoc.request.tab.request;
 
+import cn.hutool.core.util.URLUtil;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
@@ -9,13 +11,17 @@ import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuTabComponent;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
+import groovy.util.logging.Slf4j;
 import lombok.Getter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -24,7 +30,9 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -34,8 +42,10 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 18:05:36
  */
+@Slf4j
 @Getter
 public class RequestTabView implements FuTab, HttpCallback {
+    private static final Logger logger = Logger.getInstance(RequestTabView.class);
 
     private final Project project;
 
@@ -66,6 +76,11 @@ public class RequestTabView implements FuTab, HttpCallback {
      * GET请求参数tab页
      */
     private final HttpGetParamsTab httpGetParamsTab;
+
+    /**
+     * Path请求参数tab页
+     */
+    private final HttpPathParamsTab httpPathParamsTab;
     /**
      * POST请求参数tab页
      */
@@ -102,6 +117,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.sendBtn = new JButton("Send");
         this.httpHeaderTab = new HttpHeaderTab(project, disposable);
         this.httpGetParamsTab = new HttpGetParamsTab(this, disposable);
+        this.httpPathParamsTab = new HttpPathParamsTab();
         this.httpRequestBodyTab = new HttpRequestBodyTab(disposable);
         this.rootPane = new JRootPane();
         initRootPane();
@@ -115,7 +131,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         //send区域
         this.mainPanel.add(initSendPanel(), BorderLayout.NORTH);
         //请求参数区域
-        this.mainPanel.add(fuTabBuilder.addTab(this.httpHeaderTab).addTab(this.httpGetParamsTab).addTab(this.httpRequestBodyTab).build(), BorderLayout.CENTER);
+        this.mainPanel.add(fuTabBuilder.addTab(this.httpHeaderTab).addTab(this.httpGetParamsTab).addTab(this.httpPathParamsTab).addTab(this.httpRequestBodyTab).build(), BorderLayout.CENTER);
     }
 
     private JPanel initSendPanel() {
@@ -169,6 +185,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.fuHttpRequestData = httpRequestData;
         this.httpHeaderTab.initData(httpRequestData);
         this.httpGetParamsTab.initData(httpRequestData);
+        this.httpPathParamsTab.initData(httpRequestData);
         this.httpRequestBodyTab.initData(httpRequestData);
         this.apiUrl = request.getRequestUrl();
         //自动选中tab页
@@ -181,6 +198,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         setRequestType(requestTypeComponent.getSelectedItem() + StringUtils.EMPTY);
         httpHeaderTab.doSendBefore(fuHttpRequestData);
         httpGetParamsTab.doSendBefore(fuHttpRequestData);
+        httpPathParamsTab.doSendBefore(fuHttpRequestData);
         httpRequestBodyTab.doSendBefore(fuHttpRequestData);
     }
 
@@ -198,14 +216,27 @@ public class RequestTabView implements FuTab, HttpCallback {
         }
         FuRequestData request = httpRequestData.getRequest();
         RequestType requestType = request.getRequestType();
+        List<KeyValueTableBO> pathVariables = request.getPathVariables();
         //没有文件上传 且请求类型是GET请求
         if (!request.isFile() && RequestType.GET.equals(requestType)) {
-            //定位到GET params tab页
-            this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
+            if (CollectionUtils.isEmpty(request.getParams()) && CollectionUtils.isNotEmpty(pathVariables)) {
+                this.fuTabBuilder.select(HttpPathParamsTab.TITLE);
+            } else {
+                //定位到GET params tab页
+                this.fuTabBuilder.select(HttpGetParamsTab.TITLE);
+            }
             return;
         }
-        //定位到body tab页
-        this.fuTabBuilder.select(HttpRequestBodyTab.BODY);
+        FuRequestBodyData body = request.getBody();
+        List<KeyValueTableBO> formDataList = body.getFormDataList();
+        List<KeyValueTableBO> formUrlEncodedList = body.getFormUrlEncodedList();
+        String json = body.getJson();
+        if (StringUtils.isBlank(json) && CollectionUtils.isEmpty(formUrlEncodedList) && CollectionUtils.isEmpty(formDataList)) {
+            this.fuTabBuilder.select(HttpPathParamsTab.TITLE);
+        } else {
+            //定位到body tab页
+            this.fuTabBuilder.select(HttpRequestBodyTab.BODY);
+        }
     }
 
     /**
@@ -259,30 +290,75 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     private void resetRequestUrl() {
         String requestUrl = this.requestUrlComponent.getText();
-        FuRequestData request = fuHttpRequestData.getRequest();
         if (StringUtils.isBlank(requestUrl)) {
-            request.setParamUrl(null);
             return;
         }
-        request.setBaseUrl(StringUtils.substringBefore(requestUrl, "?"));
-        request.setParamUrl(StringUtils.substringAfter(requestUrl, "?"));
+        FuRequestData request = fuHttpRequestData.getRequest();
+        URL url = parseHttpUrl(requestUrl);
+        if (Objects.isNull(url)) {
+            request.setDomain(StringUtils.EMPTY);
+            request.setBaseUrl(StringUtils.EMPTY);
+            request.setParamUrl(StringUtils.EMPTY);
+            request.setRequestUrl(requestUrl);
+            return;
+        }
+        String domain = url.getHost();
+        int port = url.getPort();
+        request.setDomain(port != -1 ? domain + ":" + port : domain);
+        request.setBaseUrl(url.getPath());
+        request.setParamUrl(url.getQuery());
+        request.setRequestUrl(StringUtils.EMPTY);
+    }
+
+
+    private URL parseHttpUrl(String requestUrl) {
+        try {
+            return URLUtil.toUrlForHttp(requestUrl);
+        } catch (Exception e) {
+            logger.info("请求地址格式错误", e);
+            return null;
+        }
     }
 
 
     private void resetRequestParam() {
         String requestUrl = this.requestUrlComponent.getText();
-        String paramUrl = StringUtils.substringAfter(requestUrl, "?");
-        FuTab selected = this.fuTabBuilder.getSelected();
-        if (Objects.nonNull(selected)) {
+        URL url;
+        String queryUrl;
+        if (StringUtils.isBlank(requestUrl)
+                || Objects.isNull(url = parseHttpUrl(requestUrl))
+                || StringUtils.isBlank(queryUrl = url.getQuery())) {
+            return;
+        }
+        String path = url.getPath();
+        if (StringUtils.isNotBlank(path)) {
+            FuTab httpPathTab = this.fuTabBuilder.get(HttpPathParamsTab.TITLE);
+            if (Objects.nonNull(httpPathTab)) {
+                String[] split = path.split("/");
+                Map<String, String> paramMap = new HashMap<>();
+                for (String urlItem : split) {
+                    if (urlItem.contains("{{") || urlItem.contains("}}")) {
+                        continue;
+                    }
+                    if (StringUtils.startsWith(urlItem, "{") && StringUtils.endsWith(urlItem, "}")) {
+                        String name = urlItem.replace("{", "").replace("}", "");
+                        paramMap.put(name, "");
+                    }
+                }
+                httpPathTab.resetParams(paramMap);
+            }
+        }
+        FuTab getParamTab = this.fuTabBuilder.get(HttpGetParamsTab.TITLE);
+        if (Objects.nonNull(getParamTab)) {
             Map<String, String> paramMap = new HashMap<>();
-            for (String params : paramUrl.split("&")) {
+            for (String params : queryUrl.split("&")) {
                 String[] param = params.split("=");
                 if (param.length == 2) {
                     paramMap.put(param[0], param[1]);
                 }
             }
             //根据请求url回填表格参数
-            selected.resetParams(paramMap);
+            getParamTab.resetParams(paramMap);
         }
     }
 
@@ -302,7 +378,7 @@ public class RequestTabView implements FuTab, HttpCallback {
     private void changeAction(String requestType) {
         //切换请求参数
         if (RequestType.GET.getRequestType().equals(requestType)) {
-            this.fuTabBuilder.select(HttpGetParamsTab.PARAMS);
+            this.fuTabBuilder.select(HttpGetParamsTab.TITLE);
             this.httpRequestBodyTab.clear();
         } else {
             if (Objects.nonNull(this.fuHttpRequestData)) {

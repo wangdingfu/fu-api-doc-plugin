@@ -46,6 +46,8 @@ public class FuRequestData {
      */
     private String paramUrl;
 
+    private String requestUrl;
+
     /**
      * 是否有文件上传
      */
@@ -101,16 +103,24 @@ public class FuRequestData {
         }
     }
 
+    public String getRequestUrl() {
+        return getRequestUrl(this.baseUrl);
+    }
+
     /**
      * 获取一个完整的请求地址
      */
-    public String getRequestUrl() {
+    public String getRequestUrl(String baseUrl) {
+        if (StringUtils.isNotBlank(this.requestUrl)) {
+            return this.requestUrl;
+        }
         String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
-        if (StringUtils.isBlank(this.baseUrl) && StringUtils.isBlank(this.paramUrl)) {
+        if (StringUtils.isBlank(baseUrl) && StringUtils.isBlank(this.paramUrl)) {
             return StringUtils.EMPTY;
         }
-        String apiUrl = URLUtil.completeUrl(this.domain, this.baseUrl);
+        String apiUrl = URLUtil.completeUrl(this.domain, baseUrl);
         return URLUtil.normalize(apiUrl + params, false, true);
     }
+
 
 }

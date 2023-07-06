@@ -124,6 +124,12 @@ public class FuTabBuilder {
         return fuTabMap.get(selectedInfo.getText());
     }
 
+
+    public FuTab get(String text){
+        return fuTabMap.get(text);
+
+    }
+
     public void addListener() {
         this.tabs.addListener(new TabsListener() {
             @Override
