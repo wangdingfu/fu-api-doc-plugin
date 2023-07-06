@@ -111,7 +111,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
             //保存一些配置数据
             FuRequestConfigStorage.getInstance(project).saveData();
         } catch (Exception e) {
-            log.error("持久化请求数据异常", e);
+            log.info("持久化请求数据异常", e);
         }
         super.dispose();
     }
@@ -126,8 +126,8 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.project = project;
         this.httpId = IdUtil.getSnowflakeNextIdStr();
         this.isSave = isSave;
-        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance(project),getDisposable());
-        this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance(project),getDisposable());
+        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance(project), getDisposable());
+        this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance(project), getDisposable());
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.toolBarPanel = initToolBarUI();
@@ -209,6 +209,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
      * @param fuHttpRequestData http请求数据
      */
     public void initData(FuHttpRequestData fuHttpRequestData) {
+        this.httpRequestData = fuHttpRequestData;
         //切换消息
         messageComponent.switchInfo();
         if (Objects.isNull(fuHttpRequestData)) {

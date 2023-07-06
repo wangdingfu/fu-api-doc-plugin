@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  */
 public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback {
 
-    public static final String PARAMS = "Query";
+    public static final String TITLE = "Query";
     /**
      * 请求参数table组件
      */
@@ -78,7 +78,7 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
      */
     @Override
     public TabInfo getTabInfo() {
-        this.fuTabComponent = FuTabComponent.getInstance(PARAMS, null, this.fuTableComponent.createPanel());
+        this.fuTabComponent = FuTabComponent.getInstance(TITLE, null, this.fuTableComponent.createPanel());
         return fuTabComponent.addBulkEditBar(fuEditorComponent.getMainPanel(), this).builder();
     }
 
@@ -104,7 +104,7 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         //将当前激活面板的数据同步到另一个面板 保证两个面板数据一致
-        onClick(null, fuTabComponent.getTabActionBO(PARAMS));
+        onClick(null, fuTabComponent.getTabActionBO(TITLE));
         //设置最新数据到请求对象中
         FuRequestData request = fuHttpRequestData.getRequest();
         request.setParams(this.fuTableComponent.getDataList());

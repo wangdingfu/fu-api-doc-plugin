@@ -16,12 +16,14 @@ import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
+import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.net.HttpCookie;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -74,8 +76,35 @@ public class FuHttpRequestBuilder {
         addBody(body.getJson());
         //添加binary
         addBody(body.getBinary());
+        //处理pathVariable
+        String baseUrl = formatBaseUrl(request.getBaseUrl(), request.getPathVariables());
         //设置请求地址(GET请求参数直接在请求地址中)
-        httpRequest.setUrl(formatUrl(request.getRequestUrl()));
+        httpRequest.setUrl(formatUrl(request.getRequestUrl(baseUrl)));
+    }
+
+
+    private String formatBaseUrl(String baseUrl, List<KeyValueTableBO> pathVariables) {
+        if (CollectionUtils.isEmpty(pathVariables)) {
+            return baseUrl;
+        }
+        Map<String, KeyValueTableBO> pathVariableMap = ObjectUtils.listToMap(pathVariables, KeyValueTableBO::getKey);
+        if (StringUtils.isNotBlank(baseUrl)) {
+            String[] split = baseUrl.split("/");
+            for (String urlItem : split) {
+                if (urlItem.contains("{{") || urlItem.contains("}}")) {
+                    continue;
+                }
+                if (StringUtils.startsWith(urlItem, "{") && StringUtils.endsWith(urlItem, "}")) {
+                    String name = urlItem.replace("{", "").replace("}", "");
+                    KeyValueTableBO keyValueTableBO = pathVariableMap.get(name);
+                    if (Objects.isNull(keyValueTableBO)) {
+                        continue;
+                    }
+                    baseUrl = baseUrl.replace(urlItem, keyValueTableBO.getValue());
+                }
+            }
+        }
+        return baseUrl;
     }
 
 

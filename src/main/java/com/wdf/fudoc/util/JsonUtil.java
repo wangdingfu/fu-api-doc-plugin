@@ -52,7 +52,7 @@ public final class JsonUtil {
         try {
             return object instanceof String ? (String) object : MAPPER.writeValueAsString(object);
         } catch (Exception e) {
-            log.error("method=toJson() is convert error, errorMsg:{}", e.getMessage(), e);
+            log.info("method=toJson() is convert error, errorMsg:{}", e.getMessage(), e);
             return null;
         }
     }
@@ -78,7 +78,7 @@ public final class JsonUtil {
             });
             return MAPPER.writeValueAsString(object);
         } catch (Exception e) {
-            log.error("method=toJsonEmpty() is convert error, errorMsg:{}", e.getMessage(), e);
+            log.info("method=toJsonEmpty() is convert error, errorMsg:{}", e.getMessage(), e);
         }
         return null;
     }
@@ -99,7 +99,7 @@ public final class JsonUtil {
         try {
             return MAPPER.readValue(text, clazz);
         } catch (Exception e) {
-            log.error("method=toBean() is convert error, errorMsg:{}", e.getMessage(), e);
+            log.info("method=toBean() is convert error, errorMsg:{}", e.getMessage(), e);
         }
         return null;
     }
@@ -121,7 +121,7 @@ public final class JsonUtil {
             return toObject(text, new TypeReference<Map<K, V>>() {
             });
         } catch (Exception e) {
-            log.error("method=toMap() is convert error, errorMsg:{}", e.getMessage(), e);
+            log.info("method=toMap() is convert error, errorMsg:{}", e.getMessage(), e);
         }
         return null;
     }
@@ -141,7 +141,7 @@ public final class JsonUtil {
         try {
             return MAPPER.readValue(text, getCollectionType(MAPPER, List.class, clazz));
         } catch (Exception e) {
-            log.error("method=toList() is convert error, errorMsg:{}", e.getMessage(), e);
+            log.info("method=toList() is convert error, errorMsg:{}", e.getMessage(), e);
         }
         return null;
     }
@@ -167,7 +167,7 @@ public final class JsonUtil {
             }
             return (T) (typeReference.getType().equals(String.class) ? text : MAPPER.readValue(text, typeReference));
         } catch (Exception e) {
-            log.error("method=toObject() is convert error, errorMsg:{}", e.getMessage(), e);
+            log.info("method=toObject() is convert error, errorMsg:{}", e.getMessage(), e);
         }
         return null;
     }

@@ -10,9 +10,12 @@ import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
+import k.K.K;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -20,6 +23,7 @@ import java.util.Objects;
  * @date 2023-07-06 14:19:59
  */
 public class HttpPathParamsTab implements FuTab, HttpCallback {
+    public static final String TITLE = "Path";
 
 
     private final FuTableComponent<KeyValueTableBO> pathTable;
@@ -30,7 +34,7 @@ public class HttpPathParamsTab implements FuTab, HttpCallback {
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Path", null, this.pathTable.createMainPanel()).builder();
+        return FuTabComponent.getInstance(TITLE, null, this.pathTable.createMainPanel()).builder();
     }
 
     @Override
@@ -43,6 +47,20 @@ public class HttpPathParamsTab implements FuTab, HttpCallback {
         if (CollectionUtils.isNotEmpty(pathVariables)) {
             this.pathTable.setDataList(Lists.newArrayList(pathVariables));
         }
+    }
+
+    @Override
+    public void resetParams(Map<String, String> param) {
+        if (MapUtils.isEmpty(param)) {
+            return;
+        }
+        List<KeyValueTableBO> dataList = pathTable.getDataList();
+        param.forEach((key, value) -> {
+            if (dataList.stream().noneMatch(a -> a.getKey().equals(key))) {
+                pathTable.addRowData(new KeyValueTableBO(true, key, value));
+            }
+        });
+
     }
 
     @Override

@@ -32,7 +32,7 @@ public class FuStorageAppender {
     public static FuStorageAppender getInstance(Project project, String fileName, String path) {
         File file = FileUtil.file(project.getBasePath(), FuDocConstants.IDEA_DIR, FuDocConstants.FU_DOC_DIR, path, fileName);
         if (FileUtilRt.createIfNotExists(file)) {
-            log.error("创建目录【{}】失败", file.getAbsolutePath());
+            log.info("创建目录【{}】失败", file.getAbsolutePath());
         }
         if (!file.isFile()) {
             throw new FuDocException("创建文件异常");
@@ -49,7 +49,7 @@ public class FuStorageAppender {
         try {
             FileUtil.appendUtf8Lines(Lists.newArrayList(content), this.file);
         } catch (Exception e) {
-            log.error("向文件{}追加内容{}失败", file.getAbsolutePath(), content, e);
+            log.info("向文件{}追加内容{}失败", file.getAbsolutePath(), content, e);
         }
     }
 
@@ -58,7 +58,7 @@ public class FuStorageAppender {
         try {
             FileUtil.writeUtf8Lines(contentList, this.file);
         } catch (Exception e) {
-            log.error("向文件{}重置内容失败", file.getAbsolutePath(), e);
+            log.info("向文件{}重置内容失败", file.getAbsolutePath(), e);
         }
     }
 
