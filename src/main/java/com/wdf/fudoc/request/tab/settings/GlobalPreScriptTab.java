@@ -238,7 +238,9 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
             }
             Map<String, FuHttpRequestData> httpRequestDataMap = globalPreScriptPO.getFuHttpRequestDataMap();
             if (MapUtils.isNotEmpty(httpRequestDataMap)) {
-                httpRequestDataMap.forEach(this.httpCmdView::addHttp);
+                httpRequestDataMap.keySet().stream().sorted().forEach(f -> this.httpCmdView.addHttp(f, httpRequestDataMap.get(f)));
+            } else {
+                this.httpCmdView.addHttp();
             }
         }
     }
