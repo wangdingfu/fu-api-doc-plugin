@@ -46,6 +46,8 @@ public class FuRequestData {
      */
     private String paramUrl;
 
+    private String requestUrl;
+
     /**
      * 是否有文件上传
      */
@@ -105,6 +107,9 @@ public class FuRequestData {
      * 获取一个完整的请求地址
      */
     public String getRequestUrl() {
+        if (StringUtils.isNotBlank(this.requestUrl)) {
+            return this.requestUrl;
+        }
         String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
         if (StringUtils.isBlank(this.baseUrl) && StringUtils.isBlank(this.paramUrl)) {
             return StringUtils.EMPTY;

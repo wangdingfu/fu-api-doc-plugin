@@ -9,15 +9,14 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
-import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
  */
 public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback {
 
-    public static final String PARAMS = "Params";
+    public static final String PARAMS = "Query";
     /**
      * 请求参数table组件
      */
@@ -98,8 +97,6 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
             this.fuTableComponent.setDataList(params);
             this.fuEditorComponent.setContent(buildBulkEditContent(params));
         }
-        //初始化请求地址
-        initRequestUrl(httpRequestData);
         //重置接口请求地址
         resetRequestUrlFromTable();
     }
@@ -208,29 +205,6 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         public void contentChange(String content) {
             //重置请求地址
             httpGetParamsTab.resetRequestUrlFromEditor();
-        }
-    }
-
-
-    /**
-     * 生成不携带请求参数的请求地址
-     *
-     * @param httpRequestData http请求数据对象
-     */
-    private void initRequestUrl(FuHttpRequestData httpRequestData) {
-        FuRequestData request = httpRequestData.getRequest();
-        String requestUrl = request.getRequestUrl();
-        if (StringUtils.isBlank(requestUrl)) {
-            String baseUrl = request.getBaseUrl();
-            //接口地址中参数替换
-            List<KeyValueTableBO> pathVariables = request.getPathVariables();
-            if (CollectionUtils.isNotEmpty(pathVariables)) {
-                for (KeyValueTableBO pathVariable : pathVariables) {
-                    String key = pathVariable.getKey();
-                    baseUrl = StringUtils.replace(baseUrl, "{" + key + "}", pathVariable.getValue());
-                }
-            }
-            request.setBaseUrl(baseUrl);
         }
     }
 

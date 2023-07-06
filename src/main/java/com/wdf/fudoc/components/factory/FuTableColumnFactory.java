@@ -68,6 +68,19 @@ public class FuTableColumnFactory {
     }
 
 
+
+    /**
+     * 过滤属性table列
+     */
+    public static List<Column> pathVariable() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new StringColumn<>("参数名", KeyValueTableBO::getKey, KeyValueTableBO::setKey));
+        columns.add(new StringColumn<>("参数值", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
+        columns.add(new StringColumn<>("描述信息", KeyValueTableBO::getDescription, KeyValueTableBO::setDescription));
+        return columns;
+    }
+
+
     /**
      * 过滤属性table列
      */

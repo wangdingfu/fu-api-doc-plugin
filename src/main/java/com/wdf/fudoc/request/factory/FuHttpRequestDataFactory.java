@@ -137,26 +137,52 @@ public class FuHttpRequestDataFactory {
         List<KeyValueTableBO> paramList = Lists.newArrayList();
         List<KeyValueTableBO> pathVariableList = Lists.newArrayList();
         List<RootParamBO> rootParamBOList = fuDocRootParamData.getRootParamBOList();
+        RootParamBO requestBodyParam = null;
         if (CollectionUtils.isNotEmpty(rootParamBOList)) {
             for (RootParamBO rootParamBO : rootParamBOList) {
                 SpringAnnotationData springAnnotationData = rootParamBO.getSpringAnnotationData();
-                List<KeyValueTableBO> tableBOList = paramConvertToTableData(rootParamBO.getFuDocParamDataList());
-                if (CollectionUtils.isNotEmpty(tableBOList)) {
-                    paramList.addAll(tableBOList);
+                if (Objects.nonNull(springAnnotationData) && springAnnotationData instanceof RequestBodyData) {
+                    requestBodyParam = rootParamBO;
+                    continue;
                 }
+                List<KeyValueTableBO> tableBOList = paramConvertToTableData(rootParamBO.getFuDocParamDataList());
                 if (springAnnotationData instanceof PathVariableData) {
                     pathVariableList.addAll(tableBOList);
+                    continue;
+                }
+                if (CollectionUtils.isNotEmpty(tableBOList)) {
+                    paramList.addAll(tableBOList);
                 }
             }
         }
         FuRequestData request = fuHttpRequestData.getRequest();
+        String baseUrl = request.getBaseUrl();
+        if (StringUtils.isNotBlank(baseUrl)) {
+            String[] split = baseUrl.split("/");
+            for (String urlItem : split) {
+                if (urlItem.contains("{{") || urlItem.contains("}}")) {
+                    continue;
+                }
+                if (StringUtils.startsWith(urlItem, "{") && StringUtils.endsWith(urlItem, "}")) {
+                    String name = urlItem.replace("{", "").replace("}", "");
+                    if (pathVariableList.stream().noneMatch(a -> a.getKey().equals(name))) {
+                        pathVariableList.add(new KeyValueTableBO(true, name, ""));
+                    }
+                }
+            }
+        }
         request.setPathVariables(pathVariableList);
         if (RequestType.GET.equals(requestType)) {
             request.setParams(paramList);
+            return;
         }
         if (RequestType.POST.equals(requestType)) {
             ContentType contentType = fuDocRootParamData.getContentType();
             if (Objects.isNull(contentType)) {
+                return;
+            }
+            if (Objects.nonNull(requestBodyParam)) {
+                paddingBody(fuHttpRequestData, requestBodyParam.getMockData());
                 return;
             }
             FuRequestBodyData body = request.getBody();
@@ -169,41 +195,12 @@ public class FuHttpRequestDataFactory {
     }
 
 
-    public static void buildPostParamData(FuHttpRequestData fuHttpRequestData, FuDocRootParamData fuDocRootParamData) {
-        List<RootParamBO> rootParamBOList = fuDocRootParamData.getRootParamBOList();
-        if (CollectionUtils.isEmpty(rootParamBOList)) {
-            return;
-        }
-        RootParamBO rootParamBO = rootParamBOList.stream().filter(f -> isJson(f.getSpringAnnotationData())).findFirst().orElse(null);
-        if (Objects.nonNull(rootParamBO)) {
-            paddingBody(fuHttpRequestData, rootParamBO.getMockData());
-            return;
-        }
-        buildParamData(fuHttpRequestData, fuDocRootParamData, RequestType.POST);
-    }
-
-
-    public static boolean isJson(SpringAnnotationData springAnnotationData) {
-        return Objects.nonNull(springAnnotationData) && springAnnotationData instanceof RequestBodyData;
-    }
-
-
     public static void buildRequestParamsData(FuHttpRequestData fuHttpRequestData, FuDocRootParamData fuDocRootParamData) {
         RequestType requestType = RequestType.getRequestType(fuDocRootParamData.getRequestType());
         if (Objects.isNull(requestType)) {
             return;
         }
-
-        switch (requestType) {
-            case GET:
-                buildParamData(fuHttpRequestData, fuDocRootParamData, RequestType.GET);
-                break;
-            case POST:
-                buildPostParamData(fuHttpRequestData, fuDocRootParamData);
-                break;
-            case PUT:
-            case DELETE:
-        }
+        buildParamData(fuHttpRequestData, fuDocRootParamData, requestType);
     }
 
     private static List<KeyValueTableBO> paramConvertToTableData(List<FuDocParamData> fuDocParamDataList) {
