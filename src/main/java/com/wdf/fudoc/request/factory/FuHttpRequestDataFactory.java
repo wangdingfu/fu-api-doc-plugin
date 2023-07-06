@@ -70,16 +70,8 @@ public class FuHttpRequestDataFactory {
         fuHttpRequestData = FuRequestManager.getRequest(project, apiKey);
         if (Objects.isNull(fuHttpRequestData)) {
             fuHttpRequestData = build(fuDocContext, psiClass, module);
-        }
-        if (Objects.nonNull(fuHttpRequestData)) {
-            //设置接口url
-            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
-            FuRequestData request = fuHttpRequestData.getRequest();
-            if (Objects.isNull(request)) {
-                request = new FuRequestData();
-            }
-            request.setDomain(domainUrl);
-            fuHttpRequestData.setModule(module);
+        } else {
+            paddingDomain(fuHttpRequestData, module);
         }
         return fuHttpRequestData;
     }
@@ -96,7 +88,9 @@ public class FuHttpRequestDataFactory {
         }
         FuDocRootParamData fuDocRootParamData = fuDocRootParamDataList.get(0);
         //获取当前所属模块
-        return FuHttpRequestDataFactory.build(module, fuDocRootParamData);
+        FuHttpRequestData fuHttpRequestData = FuHttpRequestDataFactory.build(module, fuDocRootParamData);
+        paddingDomain(fuHttpRequestData, module);
+        return fuHttpRequestData;
     }
 
 
@@ -227,6 +221,23 @@ public class FuHttpRequestDataFactory {
         //body 参数
         body.setJson(paramValue);
     }
+
+
+
+
+    private static void paddingDomain(FuHttpRequestData fuHttpRequestData, Module module) {
+        if (Objects.nonNull(fuHttpRequestData)) {
+            //设置接口url
+            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
+            FuRequestData request = fuHttpRequestData.getRequest();
+            if (Objects.isNull(request)) {
+                request = new FuRequestData();
+            }
+            request.setDomain(domainUrl);
+            fuHttpRequestData.setModule(module);
+        }
+    }
+
 
 
 }
