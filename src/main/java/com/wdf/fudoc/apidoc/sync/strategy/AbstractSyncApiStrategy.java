@@ -12,6 +12,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
+import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
@@ -212,4 +213,27 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
         return recordData;
     }
 
+
+    protected SyncApiResultDTO buildSyncApiResult(FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiSyncStatus apiSyncStatus, String errorMsg) {
+        SyncApiResultDTO syncApiResultDTO = new SyncApiResultDTO();
+        syncApiResultDTO.setApiId(fuDocItemData.getApiKey());
+        syncApiResultDTO.setApiUrl(fuDocItemData.getUrlList().get(0));
+        syncApiResultDTO.setApiName(fuDocItemData.getTitle());
+        syncApiResultDTO.setSyncStatus(apiSyncStatus.getMessage());
+        syncApiResultDTO.setProjectId(apiProjectDTO.getProjectId());
+        syncApiResultDTO.setProjectName(apiProjectDTO.getProjectName());
+        syncApiResultDTO.setCategoryName(apiProjectDTO.getSelectCategory().getCategoryName());
+        syncApiResultDTO.setErrorMsg(errorMsg);
+        return syncApiResultDTO;
+    }
+
+
+    protected String recursionPath(ApiCategoryDTO apiCategoryDTO) {
+        if (Objects.isNull(apiCategoryDTO) || Objects.isNull(apiCategoryDTO.getParent())) {
+            return StringUtils.EMPTY;
+        }
+        String parentName = recursionPath(apiCategoryDTO.getParent());
+        String categoryName = apiCategoryDTO.getCategoryName();
+        return StringUtils.isBlank(parentName) ? categoryName : parentName + "/" + categoryName;
+    }
 }
