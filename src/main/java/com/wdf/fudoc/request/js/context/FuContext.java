@@ -1,7 +1,11 @@
 package com.wdf.fudoc.request.js.context;
 
+import cn.hutool.core.text.StrFormatter;
+import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.components.FuConsole;
 import com.wdf.fudoc.request.execute.HttpExecutor;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
@@ -37,6 +41,7 @@ public class FuContext {
 
     private final List<String> scope;
 
+
     public FuContext(Project project, String scriptName) {
         this.project = project;
         this.configPO = FuRequestConfigStorage.getInstance(project).readData();
@@ -70,6 +75,13 @@ public class FuContext {
 
         FuResponseData response = fuHttpRequestData.getResponse();
         return response.getContent();
+    }
+
+    public String stringify(Object object) {
+        if (Objects.isNull(object)) {
+            return StringUtils.EMPTY;
+        }
+        return JSONUtil.toJsonPrettyStr(object);
     }
 
     /**

@@ -1,7 +1,9 @@
 package com.wdf.fudoc.request.view.toolwindow;
 
 import com.google.common.collect.Lists;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -40,6 +42,7 @@ public class FuDocToolWindowFactory implements ToolWindowFactory, DumbAware {
                 ToolWindowManagerListener.super.toolWindowShown(toolWindow);
             }
         });
+
     }
 
 

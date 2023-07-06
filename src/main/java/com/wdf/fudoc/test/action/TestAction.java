@@ -1,5 +1,7 @@
 package com.wdf.fudoc.test.action;
 
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.httpClient.converters.RequestBuilder;
 import com.intellij.httpClient.execution.HttpRequestConfig;
 import com.intellij.httpClient.execution.RestClientFormBodyPart;
@@ -15,6 +17,9 @@ import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.psi.PsiFile;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
@@ -36,24 +41,25 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        // 获取当前项目
-        Project project = e.getProject();
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(e.getProject());
+        ToolWindow toolWindow = toolWindowManager.getToolWindow("Fu Console");
 
-        // 获取 Maven 项目管理器
-        MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(project);
+        if (toolWindow != null) {
+            toolWindow.activate(null);
+            toolWindow.setType(ToolWindowType.DOCKED, null);
+        }
+        ConsoleView consoleView = (ConsoleView) toolWindow.getContentManager().getContent(0).getComponent();
 
-        // 获取 Maven 项目
-        MavenProject mavenProject = mavenProjectsManager.getProjects().get(0);
-
-        // 获取 Maven Model
-        Collection<String> profilesIds = mavenProject.getProfilesIds();
-
-//        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
-//        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
-//        request(e);
-//        apiTest(e);
+        consoleView.print("This is a custom message\n", ConsoleViewContentType.NORMAL_OUTPUT);
+        consoleView.print("This is a custom message\n", ConsoleViewContentType.ERROR_OUTPUT);
+        consoleView.print("This is a custom message\n", ConsoleViewContentType.SYSTEM_OUTPUT);
+        consoleView.print("This is a custom message\n", ConsoleViewContentType.USER_INPUT);
+        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_ERROR_OUTPUT);
+        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_WARNING_OUTPUT);
+        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_INFO_OUTPUT);
+        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_VERBOSE_OUTPUT);
+        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
     }
-
 
 
     private void apiTest(AnActionEvent e) {

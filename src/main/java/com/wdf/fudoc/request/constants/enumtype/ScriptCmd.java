@@ -28,6 +28,11 @@ public enum ScriptCmd {
     PROJECT_GET_HEADER("code_get_header.js", FuBundle.message("fudoc.script.study.get.header"), FuColor.color1.color(), ScriptCmdType.SCRIPT_DEMO, false),
     ADD_HTTP_CONFIG("", FuBundle.message("fudoc.script.study.http.add"), FuColor.ORANGE.color(), ScriptCmdType.HTTP, false),
     HTTP_REQUEST("code_http.js", FuBundle.message("fudoc.script.study.http.exec"), FuColor.color4.color(), ScriptCmdType.HTTP, false),
+    CONSOLE_ERROR("console.error();", FuBundle.message("fudoc.script.console.error.title"), FuColor.console_error.color(), ScriptCmdType.LOG, false),
+    CONSOLE_INFO("console.info();", FuBundle.message("fudoc.script.console.info.title"), FuColor.console_info.color(), ScriptCmdType.LOG, false),
+    CONSOLE_USERINFO("console.userInfo();", FuBundle.message("fudoc.script.console.userInfo.title"), FuColor.console_user_info.color(), ScriptCmdType.LOG, false),
+    CONSOLE_VERBOSE("console.verbose();", FuBundle.message("fudoc.script.console.verbose.title"), FuColor.console_verbose.color(), ScriptCmdType.LOG, false),
+    CONSOLE_DEBUG("console.debug();", FuBundle.message("fudoc.script.console.debug.title"), FuColor.console_debug.color(), ScriptCmdType.LOG, false),
     ;
     private final String cmd;
 

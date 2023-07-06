@@ -188,7 +188,9 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
             return;
         }
         String cmd = scriptCmd.getCmd();
-        String content = ResourceUtils.readResource("template/auth/" + cmd);
+        String content = ScriptCmdType.LOG.equals(scriptCmd.getCmdType())
+                ? cmd
+                : ResourceUtils.readResource("template/auth/" + cmd);
         if (scriptCmd.isReset()) {
             fuEditorComponent.setContent(content);
         } else {
