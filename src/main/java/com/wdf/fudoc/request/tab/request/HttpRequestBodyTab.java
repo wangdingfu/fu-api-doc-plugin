@@ -18,6 +18,7 @@ import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.ChooseFileTableUtils;
 import icons.FuDocIcons;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -31,8 +32,8 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2022-09-17 21:32:03
  */
+@Slf4j
 public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTableBO> implements FuTab, HttpCallback {
-
     public static final String BODY = "Body";
     public static final String FORM_DATA = "form-data";
     public static final String FORM_URLENCODED = "x-www-form-urlencoded";

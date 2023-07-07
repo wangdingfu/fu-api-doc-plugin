@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request;
 
+import com.wdf.fudoc.components.FuConsole;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 
 /**

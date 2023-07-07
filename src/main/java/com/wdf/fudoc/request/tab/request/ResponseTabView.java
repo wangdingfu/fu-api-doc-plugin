@@ -22,6 +22,7 @@ import com.wdf.fudoc.request.view.ResponseErrorView;
 import com.wdf.fudoc.request.view.ResponseFileView;
 import com.wdf.fudoc.util.HttpResponseUtil;
 import com.wdf.fudoc.util.ResourceUtils;
+import icons.FuDocIcons;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -73,7 +74,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
     @Override
     public TabInfo getTabInfo() {
         JPanel sidePanel = Objects.isNull(this.fuRequestStatusInfoView) ? null : this.fuRequestStatusInfoView.getRootPanel();
-        return FuTabComponent.getInstance("Response", null, this.rootPanel).builder(sidePanel);
+        return FuTabComponent.getInstance("Response", FuDocIcons.RESPONSE, this.rootPanel).builder(sidePanel);
     }
 
 

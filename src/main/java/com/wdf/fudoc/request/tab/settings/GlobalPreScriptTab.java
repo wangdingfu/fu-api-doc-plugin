@@ -18,10 +18,7 @@ import com.wdf.fudoc.common.FuDataTab;
 import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.notification.FuDocNotification;
-import com.wdf.fudoc.components.FuCmdComponent;
-import com.wdf.fudoc.components.FuEditorComponent;
-import com.wdf.fudoc.components.FuEditorEmptyTextPainter;
-import com.wdf.fudoc.components.FuTabComponent;
+import com.wdf.fudoc.components.*;
 import com.wdf.fudoc.components.action.FuFiltersAction;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuFiltersListener;
@@ -145,11 +142,15 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                                 if (StringUtils.isBlank(script)) {
                                     FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.REQUEST_SCRIPT_NO));
                                 }
+                                FuConsole fuConsole = FuConsoleManager.get(project);
                                 //执行脚本
                                 try {
-                                    JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO));
+                                    fuConsole.verbose("开始执行前置脚本");
+                                    JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO), fuConsole);
+                                    fuConsole.verbose("执行前置脚本完成");
                                 } catch (Exception e) {
                                     logger.error("执行脚本失败", e);
+                                    fuConsole.verbose("执行前置脚本异常:{}", e);
                                     FuDocNotification.notifyError(FuBundle.message(MessageConstants.REQUEST_SCRIPT_EXECUTE_FAIL));
                                 }
                             }
@@ -188,6 +189,9 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
             return;
         }
         String cmd = scriptCmd.getCmd();
+        if (StringUtils.isBlank(cmd)) {
+            return;
+        }
         String content = ScriptCmdType.LOG.equals(scriptCmd.getCmdType())
                 ? cmd
                 : ResourceUtils.readResource("template/auth/" + cmd);

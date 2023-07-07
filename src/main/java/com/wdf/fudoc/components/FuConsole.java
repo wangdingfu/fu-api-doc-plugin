@@ -11,6 +11,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.ui.content.Content;
 
+import javax.swing.*;
 import java.util.Objects;
 
 /**
@@ -23,8 +24,14 @@ public class FuConsole {
 
     public FuConsole(Project project) {
         this.consoleView = getConsoleView(project);
+        if (Objects.nonNull(this.consoleView)) {
+            this.consoleView.clear();
+        }
     }
 
+    public FuConsole(ConsoleView consoleView) {
+        this.consoleView = consoleView;
+    }
 
     /**
      * 打印日志
@@ -36,7 +43,7 @@ public class FuConsole {
     }
 
     public void info(String console, Object... params) {
-        this.log(StrFormatter.format(console, params), ConsoleViewContentType.LOG_INFO_OUTPUT);
+        this.log(StrFormatter.format(console, params), ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
     public void userInfo(String console, Object... params) {
@@ -69,6 +76,20 @@ public class FuConsole {
         this.consoleView.print(info + "\n", contentType);
     }
 
+
+    public JComponent getComponent() {
+        if (Objects.nonNull(this.consoleView)) {
+            return this.consoleView.getComponent();
+        }
+        return null;
+    }
+
+
+    public void clear() {
+        if (Objects.nonNull(this.consoleView)) {
+            this.consoleView.clear();
+        }
+    }
 
     private ConsoleView getConsoleView(Project project) {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);

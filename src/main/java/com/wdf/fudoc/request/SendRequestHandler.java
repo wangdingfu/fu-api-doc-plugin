@@ -4,6 +4,7 @@ import cn.hutool.core.thread.ThreadUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.components.FuConsole;
 import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +25,13 @@ public class SendRequestHandler {
     private final HttpCallback httpCallback;
     private Future<?> sendHttpTask;
     private final AtomicBoolean sendStatus = new AtomicBoolean(false);
+    private final FuConsole fuConsole;
 
 
-    public SendRequestHandler(Project project, HttpCallback httpCallback) {
+    public SendRequestHandler(Project project, HttpCallback httpCallback, FuConsole fuConsole) {
         this.project = project;
         this.httpCallback = httpCallback;
+        this.fuConsole = fuConsole;
     }
 
     /**
@@ -42,7 +45,7 @@ public class SendRequestHandler {
             sendStatus.set(true);
             httpCallback.doSendBefore(httpRequestData);
             //发起http请求执行
-            HttpApiExecutor.doSendRequest(project, httpRequestData);
+            HttpApiExecutor.doSendRequest(project, httpRequestData, fuConsole);
             if (Objects.isNull(this.sendHttpTask) || this.sendHttpTask.isCancelled()) {
                 return;
             }

@@ -20,6 +20,7 @@ import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import groovy.util.logging.Slf4j;
+import icons.FuDocIcons;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -150,7 +151,7 @@ public class RequestTabView implements FuTab, HttpCallback {
     @Override
     public TabInfo getTabInfo() {
         JPanel jPanel = Objects.isNull(this.fuRequestStatusInfoView) ? null : this.fuRequestStatusInfoView.getRootPanel();
-        return FuTabComponent.getInstance("Request", null, this.rootPane).builder(jPanel);
+        return FuTabComponent.getInstance("Request", FuDocIcons.HTTP, this.rootPane).builder(jPanel);
     }
 
 

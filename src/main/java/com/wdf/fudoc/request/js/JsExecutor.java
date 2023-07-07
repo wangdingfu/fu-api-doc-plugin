@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.js;
 
 import com.wdf.fudoc.components.FuConsole;
+import com.wdf.fudoc.components.FuConsoleManager;
 import com.wdf.fudoc.request.js.context.FuContext;
 import lombok.extern.slf4j.Slf4j;
 import org.mozilla.javascript.Context;
@@ -21,13 +22,13 @@ public class JsExecutor {
      *
      * @param fuContext 脚本中的上下文对象
      */
-    public static void execute(FuContext fuContext) {
+    public static void execute(FuContext fuContext,FuConsole fuConsole) {
         Context cx = Context.enter();
         try {
             // 将Java对象绑定到Rhino执行上下文中
             ScriptableObject scriptableObject = cx.initStandardObjects();
             ScriptableObject.putProperty(scriptableObject, "fu", fuContext);
-            ScriptableObject.putProperty(scriptableObject, "console", new FuConsole(fuContext.getProject()));
+            ScriptableObject.putProperty(scriptableObject, "console", fuConsole);
             cx.evaluateString(scriptableObject, fuContext.getScript(), "<cmd>", 1, null);
         } catch (Exception e) {
             log.info("执行脚本【{}】异常", fuContext.getPreScriptPO().getTitle(), e);

@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.components.FuConsole;
+import com.wdf.fudoc.components.FuConsoleManager;
 import com.wdf.fudoc.request.execute.HttpExecutor;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
@@ -71,7 +72,7 @@ public class FuContext {
         }
 
         //发起请求
-        HttpExecutor.execute(project, fuHttpRequestData, this.configPO);
+        HttpExecutor.execute(project, fuHttpRequestData, this.configPO, FuConsoleManager.get(project));
 
         FuResponseData response = fuHttpRequestData.getResponse();
         return response.getContent();

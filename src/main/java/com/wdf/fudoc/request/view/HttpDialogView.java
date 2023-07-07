@@ -19,6 +19,7 @@ import com.wdf.fudoc.request.constants.RequestConstants;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.manager.FuRequestToolBarManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.tab.request.RequestConsoleTabView;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.spring.SpringConfigManager;
@@ -68,6 +69,11 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
      * 响应页
      */
     private final ResponseTabView responseTabView;
+
+    /**
+     * 日志控制台
+     */
+    private final RequestConsoleTabView requestConsoleTabView;
 
 
     /**
@@ -128,12 +134,12 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.isSave = isSave;
         this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance(project), getDisposable());
         this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance(project), getDisposable());
+        this.requestConsoleTabView = new RequestConsoleTabView(this.project, getDisposable());
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.toolBarPanel = initToolBarUI();
-        this.sendRequestHandler = new SendRequestHandler(project, this);
-        initRequestUI();
-        initResponseUI();
+        this.sendRequestHandler = new SendRequestHandler(project, this, this.requestConsoleTabView.console());
+        initUI();
         setModal(isSave);
         init();
         reset(psiElement, httpRequestData);
@@ -191,17 +197,9 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     /**
      * 初始化请求部分面板
      */
-    private void initRequestUI() {
-        fuTabBuilder.addTab(this.requestTabView);
+    private void initUI() {
+        fuTabBuilder.addTab(this.requestTabView).addTab(this.responseTabView).addTab(this.requestConsoleTabView);
     }
-
-    /**
-     * 初始化响应部分面板
-     */
-    private void initResponseUI() {
-        fuTabBuilder.addTab(this.responseTabView);
-    }
-
 
     /**
      * 初始化请求数据
@@ -247,9 +245,9 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     @Override
     protected @Nullable JComponent createCenterPanel() {
         JPanel centerPanel = fuTabBuilder.build();
-        centerPanel.setMinimumSize(new Dimension(700, 440));
+        centerPanel.setMinimumSize(new Dimension(400, 340));
         centerPanel.setPreferredSize(new Dimension(700, 440));
-        centerPanel.setMaximumSize(new Dimension(1000, 840));
+        centerPanel.setMaximumSize(new Dimension(700, 840));
         return centerPanel;
     }
 

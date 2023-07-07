@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.execute;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.components.FuConsole;
 import com.wdf.fudoc.request.js.JsExecutor;
 import com.wdf.fudoc.request.js.context.FuContext;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
@@ -29,7 +30,7 @@ public class HttpApiExecutor {
      * @param project           当前项目
      * @param fuHttpRequestData 请求数据
      */
-    public static void doSendRequest(Project project, FuHttpRequestData fuHttpRequestData) {
+    public static void doSendRequest(Project project, FuHttpRequestData fuHttpRequestData, FuConsole fuConsole) {
         //执行前置脚本
         long start = System.currentTimeMillis();
         FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(project);
@@ -39,13 +40,16 @@ public class HttpApiExecutor {
         if (Objects.nonNull(module) && Objects.nonNull(fuRequestConfigPO)
                 && CollectionUtils.isNotEmpty(preScriptPOList = fuRequestConfigPO.getPreScriptList(module.getName()))) {
             for (GlobalPreScriptPO globalPreScriptPO : preScriptPOList) {
-                JsExecutor.execute(new FuContext(project, fuRequestConfigPO, globalPreScriptPO));
+                fuConsole.info("\n\n开始执行前置脚本【{}】", globalPreScriptPO.getTitle());
+                long scriptStart = System.currentTimeMillis();
+                JsExecutor.execute(new FuContext(project, fuRequestConfigPO, globalPreScriptPO), fuConsole);
+                fuConsole.info("执行前置脚本【{}】完成 共计耗时:{}ms\n\n", globalPreScriptPO.getTitle(), System.currentTimeMillis() - scriptStart);
             }
         }
         log.info("执行脚本共计耗时:{}ms", System.currentTimeMillis() - start);
         //发起请求
         long start1 = System.currentTimeMillis();
-        HttpExecutor.execute(project, fuHttpRequestData, fuRequestConfigPO);
+        HttpExecutor.execute(project, fuHttpRequestData, fuRequestConfigPO, fuConsole);
         log.info("发起[{}]接口请求共计耗时:{}ms", fuHttpRequestData.getApiName(), System.currentTimeMillis() - start1);
     }
 }

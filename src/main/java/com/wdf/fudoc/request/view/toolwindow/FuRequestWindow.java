@@ -16,6 +16,7 @@ import com.wdf.fudoc.request.SendRequestHandler;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.tab.request.RequestConsoleTabView;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseHeaderTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
@@ -60,7 +61,10 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
      * 响应面板
      */
     private final ResponseTabView responseTabView;
-
+    /**
+     * 日志控制台
+     */
+    private final RequestConsoleTabView requestConsoleTabView;
     /**
      * 响应头面板
      */
@@ -94,15 +98,16 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         FuRequestStatusInfoView fuRequestStatusInfoView = new FuRequestStatusInfoView(project);
         this.requestTabView = new RequestTabView(project, this, fuRequestStatusInfoView, toolWindow.getDisposable());
         this.responseTabView = new ResponseTabView(project, fuRequestStatusInfoView, toolWindow.getDisposable());
+        this.requestConsoleTabView = new RequestConsoleTabView(this.project, toolWindow.getDisposable());
         this.responseHeaderTabView = new ResponseHeaderTabView(project);
         splitter.setFirstComponent(this.requestTabView.getRootPane());
-        splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).build());
+        splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).addTab(this.requestConsoleTabView).build());
         this.rootPanel.add(splitter, BorderLayout.CENTER);
         this.messageComponent = new MessageComponent(true);
         this.messageComponent.switchInfo();
         this.rootPanel.add(this.messageComponent.getRootPanel(), BorderLayout.SOUTH);
         setContent(this.rootPanel);
-        this.sendRequestHandler = new SendRequestHandler(project, this);
+        this.sendRequestHandler = new SendRequestHandler(project, this, requestConsoleTabView.console());
     }
 
 
