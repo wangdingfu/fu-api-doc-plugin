@@ -40,10 +40,10 @@ public class HttpApiExecutor {
         if (Objects.nonNull(module) && Objects.nonNull(fuRequestConfigPO)
                 && CollectionUtils.isNotEmpty(preScriptPOList = fuRequestConfigPO.getPreScriptList(module.getName()))) {
             for (GlobalPreScriptPO globalPreScriptPO : preScriptPOList) {
-                fuConsole.info("\n\n开始执行前置脚本【{}】", globalPreScriptPO.getTitle());
+                fuConsole.info("\n开始执行前置脚本【{}】", globalPreScriptPO.getTitle());
                 long scriptStart = System.currentTimeMillis();
                 JsExecutor.execute(new FuContext(project, fuRequestConfigPO, globalPreScriptPO), fuConsole);
-                fuConsole.info("执行前置脚本【{}】完成 共计耗时:{}ms\n\n", globalPreScriptPO.getTitle(), System.currentTimeMillis() - scriptStart);
+                fuConsole.info("执行前置脚本【{}】完成 共计耗时:{}ms\n", globalPreScriptPO.getTitle(), System.currentTimeMillis() - scriptStart);
             }
         }
         log.info("执行脚本共计耗时:{}ms", System.currentTimeMillis() - start);

@@ -41,6 +41,7 @@ public class HttpExecutor {
         String requestUrl = fuHttpRequestData.getRequest().getRequestUrl();
         try {
             fuConsole.info("开始发起接口【{}】请求", requestUrl);
+            //todo 输出请求接口的详细信息
             HttpResponse httpResponse = httpRequest.execute();
             requestStatus = RequestStatus.SUCCESS;
             FuHttpResponseBuilder.buildSuccessResponse(fuHttpRequestData, httpResponse);

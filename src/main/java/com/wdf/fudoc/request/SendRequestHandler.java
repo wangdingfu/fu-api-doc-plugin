@@ -41,6 +41,7 @@ public class SendRequestHandler {
         if (Objects.isNull(httpRequestData)) {
             return;
         }
+        fuConsole.clear();
         this.sendHttpTask = ThreadUtil.execAsync(() -> {
             sendStatus.set(true);
             httpCallback.doSendBefore(httpRequestData);
