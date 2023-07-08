@@ -13,6 +13,7 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
+import icons.FuDocIcons;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -47,7 +48,7 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Header", null, fuTableComponent.createMainPanel()).builder(this.fuRequestStatusInfoView.getRootPanel());
+        return FuTabComponent.getInstance("Header", FuDocIcons.FU_REQUEST_HEADER, fuTableComponent.createMainPanel()).builder(this.fuRequestStatusInfoView.getRootPanel());
     }
 
 
