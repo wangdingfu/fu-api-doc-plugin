@@ -99,9 +99,11 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        Column column = this.columnList.get(columnIndex);
-        if (Objects.nonNull(column)) {
-            return column.getColumnClass();
+        if (columnIndex < this.columnList.size()) {
+            Column column = this.columnList.get(columnIndex);
+            if (Objects.nonNull(column)) {
+                return column.getColumnClass();
+            }
         }
         return String.class;
     }
@@ -248,7 +250,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
                             //移除动态表头
                             removeDynamicColumn();
                             //将列初始化到table
-                            columnList.addAll(ObjectUtils.listToList(customColumnList, data -> new DynamicColumn(data.getKey(), data.getValue())));
+                            columnList.addAll(ObjectUtils.listToList(customColumnList, data -> new DynamicColumn(data.getValue(), data.getKey())));
                             customColumnList.forEach(f -> addColumn(f.getKey()));
                             //格式化第一列
                             formatFirstColumn();
