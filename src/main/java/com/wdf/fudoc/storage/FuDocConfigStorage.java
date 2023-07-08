@@ -34,15 +34,11 @@ public class FuDocConfigStorage {
     }
 
     public FuDocConfigPO readData() {
-        if (Objects.nonNull(this.configPO)) {
-            return this.configPO;
+        if (Objects.isNull(this.configPO)) {
+            String content = StorageUtils.readContent(path, FILE_NAME);
+            this.configPO = StringUtils.isNotBlank(content) ? JsonUtil.toBean(content, FuDocConfigPO.class) : new FuDocConfigPO();
         }
-        String content = StorageUtils.readContent(path, FILE_NAME);
-        if (StringUtils.isNotBlank(content)) {
-            this.configPO = JsonUtil.toBean(content, FuDocConfigPO.class);
-            return this.configPO;
-        }
-        return new FuDocConfigPO();
+        return this.configPO;
     }
 
 

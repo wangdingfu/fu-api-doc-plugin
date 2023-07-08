@@ -1,5 +1,8 @@
 package com.wdf.fudoc.components.bo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,8 +10,11 @@ import java.util.Map;
  * @author wangdingfu
  * @date 2023-07-08 16:53:13
  */
+@Getter
+@Setter
 public class DynamicTableBO {
-    private final Map<String, Object> dataMap = new HashMap<>();
+
+    protected Map<String, Object> dataMap = new HashMap<>();
 
 
     public Object getValue(String name) {

@@ -12,6 +12,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -37,11 +38,13 @@ public class CustomTableSettingDialog extends DialogWrapper {
 
     private void initData() {
         FuDocConfigPO fuDocConfigPO = FuDocConfigStorage.INSTANCE.readData();
-        List<KeyValueTableBO> keyValueTableBOList = fuDocConfigPO.getCustomTableConfigMap().get(this.title);
+        Map<String, List<KeyValueTableBO>> customTableConfigMap = fuDocConfigPO.getCustomTableConfigMap();
+        List<KeyValueTableBO> keyValueTableBOList = customTableConfigMap.get(this.title);
         if (CollectionUtils.isEmpty(keyValueTableBOList)) {
-            return;
+            keyValueTableBOList = Lists.newArrayList();
+            customTableConfigMap.put(this.title, keyValueTableBOList);
         }
-        this.configTable.setDataList(Lists.newArrayList(keyValueTableBOList));
+        this.configTable.setDataList(keyValueTableBOList);
     }
 
 
@@ -52,19 +55,17 @@ public class CustomTableSettingDialog extends DialogWrapper {
     @Override
     protected void doOKAction() {
         //持久化数据
-        FuDocConfigStorage instance = FuDocConfigStorage.INSTANCE;
-        Map<String, List<KeyValueTableBO>> customTableConfigMap = instance.readData().getCustomTableConfigMap();
-        List<KeyValueTableBO> keyValueTableBOList = customTableConfigMap.get(this.title);
-        if (CollectionUtils.isEmpty(keyValueTableBOList)) {
-            keyValueTableBOList = Lists.newArrayList();
-            customTableConfigMap.put(this.title, keyValueTableBOList);
-        }
-        instance.saveData();
+        Map<String, List<KeyValueTableBO>> customTableConfigMap = FuDocConfigStorage.INSTANCE.readData().getCustomTableConfigMap();
+        customTableConfigMap.put(this.title, getColumnList());
+        FuDocConfigStorage.INSTANCE.saveData();
         super.doOKAction();
     }
 
     @Override
     protected @Nullable JComponent createCenterPanel() {
-        return configTable.createPanel();
+        JPanel panel = this.configTable.createPanel();
+        panel.setMinimumSize(new Dimension(300, 200));
+        panel.setPreferredSize(new Dimension(400, 300));
+        return panel;
     }
 }

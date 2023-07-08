@@ -103,6 +103,8 @@ public class FuRequestSettingView extends DialogWrapper {
         FuRequestConfigPO configPO = FuRequestConfigStorageFactory.get(project).readData();
         //初始化全局请求头
         this.globalHeaderTab.initData(configPO);
+        //初始化配置
+        this.globalConfigTab.initData(configPO);
         //初始化cookies
         this.globalCookiesTab.initData(configPO);
         //初始化全局变量
@@ -136,6 +138,7 @@ public class FuRequestSettingView extends DialogWrapper {
         //持久化配置数据
         this.preScriptTabs.forEach(f -> f.saveData(configPO));
         this.globalHeaderTab.saveData(configPO);
+        this.globalConfigTab.saveData(configPO);
         this.globalCookiesTab.saveData(configPO);
         this.globalVariableTab.saveData(configPO);
         storage.saveData(configPO);

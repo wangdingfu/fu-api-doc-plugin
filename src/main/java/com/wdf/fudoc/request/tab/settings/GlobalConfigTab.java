@@ -30,10 +30,8 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
     private final FuTableComponent<ConfigAuthTableBO> authTable;
 
     public GlobalConfigTab() {
-        this.envTable = FuTableComponent.create(FuTableColumnFactory.envConfig(), ConfigEnvTableBO.class);
-        this.authTable = FuTableComponent.create(FuTableColumnFactory.authConfig(), ConfigAuthTableBO.class);
-        this.envTable.setTableKey("env");
-        this.envTable.setTableKey("auth");
+        this.envTable = FuTableComponent.create("env", FuTableColumnFactory.envConfig(), ConfigEnvTableBO.class);
+        this.authTable = FuTableComponent.create("auth", FuTableColumnFactory.authConfig(), ConfigAuthTableBO.class);
         this.rootBox = new VerticalBox();
         JPanel envPanel = this.envTable.createPanel();
         JPanel authPanel = this.authTable.createPanel();
