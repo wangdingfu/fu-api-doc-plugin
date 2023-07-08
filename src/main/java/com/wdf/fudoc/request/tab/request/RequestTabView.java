@@ -18,7 +18,6 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import groovy.util.logging.Slf4j;
 import icons.FuDocIcons;
 import lombok.Getter;
@@ -105,13 +104,12 @@ public class RequestTabView implements FuTab, HttpCallback {
      */
     private final SendHttpListener httpListener;
 
+    private final JPanel slidePanel;
 
-    private final FuRequestStatusInfoView fuRequestStatusInfoView;
-
-    public RequestTabView(Project project, SendHttpListener httpListener, FuRequestStatusInfoView fuRequestStatusInfoView, Disposable disposable) {
+    public RequestTabView(Project project, SendHttpListener httpListener, JPanel slidePanel, Disposable disposable) {
         this.project = project;
-        this.fuRequestStatusInfoView = fuRequestStatusInfoView;
         this.httpListener = httpListener;
+        this.slidePanel = slidePanel;
         this.mainPanel = new JPanel(new BorderLayout());
         this.requestTypeComponent = new ComboBox<>(RequestType.getItems());
         this.requestUrlComponent = new JTextField();
@@ -150,13 +148,15 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     @Override
     public TabInfo getTabInfo() {
-        JPanel jPanel = Objects.isNull(this.fuRequestStatusInfoView) ? null : this.fuRequestStatusInfoView.getRootPanel();
-        return FuTabComponent.getInstance("Request", FuDocIcons.HTTP, this.rootPane).builder(jPanel);
+        return FuTabComponent.getInstance("Request", FuDocIcons.HTTP, this.rootPane).builder();
     }
 
 
     @Override
     public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
+        if(Objects.nonNull(this.slidePanel)){
+            newSelection.setSideComponent(this.slidePanel);
+        }
         rootPane.setDefaultButton(sendBtn);
     }
 
@@ -205,7 +205,6 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     @Override
     public void doSendAfter(FuHttpRequestData fuHttpRequestData) {
-        this.fuRequestStatusInfoView.initData(fuHttpRequestData);
     }
 
     /**

@@ -5,6 +5,8 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.bo.TreePathBO;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
+import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
+import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
 import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,6 +48,11 @@ public class FuRequestConfigPO {
      * 前置脚本集合
      */
     private Map<String, GlobalPreScriptPO> preScriptMap = new ConcurrentHashMap<>();
+
+
+    private List<ConfigEnvTableBO> envConfigList = Lists.newArrayList();
+
+    private List<ConfigAuthTableBO> authConfigList = Lists.newArrayList();
 
 
     /**

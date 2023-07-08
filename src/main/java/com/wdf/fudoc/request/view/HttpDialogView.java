@@ -1,14 +1,12 @@
 package com.wdf.fudoc.request.view;
 
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.URLUtil;
 import com.intellij.find.editorHeaderActions.Utils;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiElement;
-import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
@@ -22,12 +20,10 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestConsoleTabView;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
-import com.wdf.fudoc.spring.SpringConfigManager;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,9 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 发起http请求的窗口
@@ -85,8 +79,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     @Getter
     private PsiElement psiElement;
 
-    private final JPanel toolBarPanel;
-
     private final boolean isSave;
 
 
@@ -132,12 +124,13 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.project = project;
         this.httpId = IdUtil.getSnowflakeNextIdStr();
         this.isSave = isSave;
-        this.requestTabView = new RequestTabView(this.project, this, FuRequestStatusInfoView.getInstance(project), getDisposable());
-        this.responseTabView = new ResponseTabView(this.project, FuRequestStatusInfoView.getInstance(project), getDisposable());
-        this.requestConsoleTabView = new RequestConsoleTabView(this.project, getDisposable());
+        JPanel slidePanel = new JPanel(new BorderLayout());
+        slidePanel.add(initToolBarUI(), BorderLayout.EAST);
+        this.requestTabView = new RequestTabView(this.project, this, slidePanel, getDisposable());
+        this.responseTabView = new ResponseTabView(this.project, slidePanel, getDisposable());
+        this.requestConsoleTabView = new RequestConsoleTabView(this.project, slidePanel, getDisposable());
         this.messageComponent = new MessageComponent(true);
         this.statusInfoPanel = this.messageComponent.getRootPanel();
-        this.toolBarPanel = initToolBarUI();
         this.sendRequestHandler = new SendRequestHandler(project, this, this.requestConsoleTabView.console());
         initUI();
         setModal(isSave);
@@ -166,15 +159,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     }
 
     @Override
-    protected @Nullable JComponent createTitlePane() {
-        if (!this.isSave && Objects.nonNull(this.toolBarPanel)) {
-            //如果不是在代码中弹出的接口 则不需要添加工具栏面板
-            return this.toolBarPanel;
-        }
-        return super.createTitlePane();
-    }
-
-    @Override
     protected JComponent createSouthPanel() {
         return isSave ? super.createSouthPanel() : this.statusInfoPanel;
     }
@@ -186,7 +170,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     private JPanel initToolBarUI() {
         JPanel toolBarPanel = new JPanel(new BorderLayout());
         Utils.setSmallerFontForChildren(toolBarPanel);
-//        toolBarPanel.setBackground(new JBColor(new Color(55, 71, 82), new Color(55, 71, 82)));
         FuRequestToolBarManager instance = FuRequestToolBarManager.getInstance(this);
         //创建及初始化工具栏
         ToolBarUtils.addActionToToolBar(toolBarPanel, RequestConstants.PLACE_REQUEST_TOOLBAR, instance.initToolBar(), BorderLayout.EAST);
@@ -198,7 +181,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
      * 初始化请求部分面板
      */
     private void initUI() {
-        fuTabBuilder.addTab(this.requestTabView).addTab(this.responseTabView).addTab(this.requestConsoleTabView);
+        fuTabBuilder.addTab(this.requestTabView, initToolBarUI()).addTab(this.responseTabView, initToolBarUI()).addTab(this.requestConsoleTabView, initToolBarUI());
     }
 
     /**

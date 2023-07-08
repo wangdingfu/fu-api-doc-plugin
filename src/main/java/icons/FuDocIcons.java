@@ -45,6 +45,7 @@ public interface FuDocIcons {
     Icon CONSOLE = IconLoader.getIcon("icon/console.svg", FuDocIcons.class);
     Icon HTTP = IconLoader.getIcon("icon/http.svg", FuDocIcons.class);
     Icon RESPONSE = IconLoader.getIcon("icon/response.svg", FuDocIcons.class);
+    Icon COOKIE = IconLoader.getIcon("icon/cookie.svg", FuDocIcons.class);
 
     static Icon moreIcon() {
         return ProjectUtils.getTheme().isDarcula() ? MORE_STROKE : MORE_DARK;

@@ -2,24 +2,30 @@ package com.wdf.fudoc.components;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.google.common.collect.Lists;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
+import com.wdf.fudoc.components.bo.DynamicColumn;
+import com.wdf.fudoc.components.dialog.CustomTableSettingDialog;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.bo.Column;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.JTableUtils;
+import com.wdf.fudoc.util.ObjectUtils;
+import icons.FuDocIcons;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -56,6 +62,12 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     @Getter
     private FuTableListener<T> fuTableListener;
 
+    /**
+     * 表格key标识 如果设置则表示当前表头可以自定义配置
+     */
+    @Setter
+    private String tableKey;
+
     public List<T> getDataList() {
         return Objects.isNull(dataList) ? Lists.newArrayList() : dataList;
     }
@@ -80,6 +92,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
             this.fuTableView.setEnabled(enable);
         }
     }
+
 
     public void addListener(FuTableListener<T> fuTableListener) {
         this.fuTableListener = fuTableListener;
@@ -215,7 +228,24 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         if (Objects.isNull(this.fuTableView)) {
             return new JPanel();
         }
-        return ToolbarDecorator.createDecorator(this.fuTableView).createPanel();
+        ToolbarDecorator decorator = ToolbarDecorator.createDecorator(this.fuTableView);
+        if (StringUtils.isNotBlank(this.tableKey)) {
+            decorator.addExtraActions(new AnAction("Settings", "", FuDocIcons.FU_SETTINGS) {
+                @Override
+                public void actionPerformed(@NotNull AnActionEvent e) {
+                    CustomTableSettingDialog customTableSettingDialog = new CustomTableSettingDialog(e.getProject(), tableKey);
+                    if (customTableSettingDialog.showAndGet()) {
+                        List<KeyValueTableBO> customColumnList = customTableSettingDialog.getColumnList();
+                        if (CollectionUtils.isNotEmpty(customColumnList)) {
+                            //将列初始化到table
+                            customColumnList.forEach(f -> addColumn(f.getKey()));
+                            columnList.addAll(ObjectUtils.listToList(customColumnList, data -> new DynamicColumn(data.getKey(), data.getValue())));
+                        }
+                    }
+                }
+            });
+        }
+        return decorator.createPanel();
     }
 
 

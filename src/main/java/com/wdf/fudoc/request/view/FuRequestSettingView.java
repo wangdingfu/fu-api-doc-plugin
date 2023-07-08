@@ -9,10 +9,7 @@ import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
-import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
-import com.wdf.fudoc.request.tab.settings.GlobalHeaderTab;
-import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
-import com.wdf.fudoc.request.tab.settings.GlobalVariableTab;
+import com.wdf.fudoc.request.tab.settings.*;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import lombok.Getter;
@@ -54,6 +51,7 @@ public class FuRequestSettingView extends DialogWrapper {
     private GlobalConfigTab globalConfigTab;
     private GlobalVariableTab globalVariableTab;
     private GlobalHeaderTab globalHeaderTab;
+    private GlobalCookiesTab globalCookiesTab;
 
 
     private final AtomicInteger preScriptIndex = new AtomicInteger(0);
@@ -79,6 +77,7 @@ public class FuRequestSettingView extends DialogWrapper {
         this.globalConfigTab = new GlobalConfigTab();
         this.globalVariableTab = new GlobalVariableTab(project, getDisposable());
         this.globalHeaderTab = new GlobalHeaderTab(project, getDisposable());
+        this.globalCookiesTab = new GlobalCookiesTab();
         //初始化数据
         initData();
         //添加tab页
@@ -87,6 +86,8 @@ public class FuRequestSettingView extends DialogWrapper {
                 .addTab(this.globalHeaderTab)
                 //请求配置
                 .addTab(this.globalConfigTab)
+                //cookies
+                .addTab(this.globalCookiesTab)
                 //全局变量
                 .addTab(this.globalVariableTab);
         //添加前置脚本tab
@@ -102,6 +103,8 @@ public class FuRequestSettingView extends DialogWrapper {
         FuRequestConfigPO configPO = FuRequestConfigStorageFactory.get(project).readData();
         //初始化全局请求头
         this.globalHeaderTab.initData(configPO);
+        //初始化cookies
+        this.globalCookiesTab.initData(configPO);
         //初始化全局变量
         this.globalVariableTab.initData(configPO);
         //初始化全局前置脚本
@@ -133,6 +136,7 @@ public class FuRequestSettingView extends DialogWrapper {
         //持久化配置数据
         this.preScriptTabs.forEach(f -> f.saveData(configPO));
         this.globalHeaderTab.saveData(configPO);
+        this.globalCookiesTab.saveData(configPO);
         this.globalVariableTab.saveData(configPO);
         storage.saveData(configPO);
     }

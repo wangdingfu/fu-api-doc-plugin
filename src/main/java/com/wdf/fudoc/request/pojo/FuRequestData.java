@@ -99,7 +99,7 @@ public class FuRequestData {
 
     public void removeHeader(String key) {
         if (CollectionUtils.isNotEmpty(this.headers)) {
-            this.headers.removeIf(f -> f.getKey().equals(key));
+            this.headers.removeIf(f -> StringUtils.isBlank(f.getKey()) || f.getKey().equals(key));
         }
     }
 

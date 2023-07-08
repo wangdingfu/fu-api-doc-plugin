@@ -1,10 +1,6 @@
 package com.wdf.fudoc.request.tab.request;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.file.FileNameUtil;
-import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.URLUtil;
-import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.Disposable;
@@ -17,10 +13,8 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
-import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import com.wdf.fudoc.request.view.ResponseErrorView;
 import com.wdf.fudoc.request.view.ResponseFileView;
-import com.wdf.fudoc.util.HttpResponseUtil;
 import com.wdf.fudoc.util.ResourceUtils;
 import icons.FuDocIcons;
 import lombok.Getter;
@@ -29,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.nio.charset.Charset;
 import java.util.Objects;
 
 /**
@@ -53,28 +46,24 @@ public class ResponseTabView implements FuTab, HttpCallback {
 
     private final ResponseFileView responseFileView;
 
-    /**
-     * 状态信息面板
-     */
-    private final FuRequestStatusInfoView fuRequestStatusInfoView;
+    private final JPanel slidePanel;
 
     private Integer tab = 0;
 
-    public ResponseTabView(Project project, FuRequestStatusInfoView fuRequestStatusInfoView, Disposable disposable) {
+    public ResponseTabView(Project project, JPanel slidePanel, Disposable disposable) {
         this.project = project;
+        this.slidePanel = slidePanel;
         this.responseErrorView = new ResponseErrorView(disposable);
         this.responseFileView = new ResponseFileView();
         this.fuEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, "", disposable);
         this.rootPanel = new JPanel(new BorderLayout());
-        this.fuRequestStatusInfoView = fuRequestStatusInfoView;
         switchPanel(1, this.fuEditorComponent.getMainPanel());
     }
 
 
     @Override
     public TabInfo getTabInfo() {
-        JPanel sidePanel = Objects.isNull(this.fuRequestStatusInfoView) ? null : this.fuRequestStatusInfoView.getRootPanel();
-        return FuTabComponent.getInstance("Response", FuDocIcons.RESPONSE, this.rootPanel).builder(sidePanel);
+        return FuTabComponent.getInstance("Response", FuDocIcons.RESPONSE, this.rootPanel).builder();
     }
 
 
@@ -89,10 +78,6 @@ public class ResponseTabView implements FuTab, HttpCallback {
         ResponseType responseType;
         if (Objects.isNull(response) || Objects.isNull(responseType = response.getResponseType())) {
             return;
-        }
-        if (Objects.nonNull(this.fuRequestStatusInfoView)) {
-            //设置响应信息
-            this.fuRequestStatusInfoView.initData(httpRequestData);
         }
         //响应类型
         switch (responseType) {
@@ -135,6 +120,9 @@ public class ResponseTabView implements FuTab, HttpCallback {
         if (tab == 3 && Objects.nonNull(responseFileView)) {
             //是文件面板时
             responseFileView.resetDefaultBtn();
+        }
+        if(Objects.nonNull(this.slidePanel)){
+            newSelection.setSideComponent(this.slidePanel);
         }
     }
 

@@ -20,7 +20,6 @@ import com.wdf.fudoc.request.tab.request.RequestConsoleTabView;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseHeaderTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
-import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.Getter;
 import lombok.Setter;
@@ -62,10 +61,6 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
      */
     private final ResponseTabView responseTabView;
     /**
-     * 日志控制台
-     */
-    private final RequestConsoleTabView requestConsoleTabView;
-    /**
      * 响应头面板
      */
     private final ResponseHeaderTabView responseHeaderTabView;
@@ -95,13 +90,12 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.toolWindow = toolWindow;
         this.rootPanel = new JPanel(new BorderLayout());
         Splitter splitter = new Splitter(true, 0.6F);
-        FuRequestStatusInfoView fuRequestStatusInfoView = new FuRequestStatusInfoView(project);
-        this.requestTabView = new RequestTabView(project, this, fuRequestStatusInfoView, toolWindow.getDisposable());
-        this.responseTabView = new ResponseTabView(project, fuRequestStatusInfoView, toolWindow.getDisposable());
-        this.requestConsoleTabView = new RequestConsoleTabView(this.project, toolWindow.getDisposable());
+        this.requestTabView = new RequestTabView(project, this, null, toolWindow.getDisposable());
+        this.responseTabView = new ResponseTabView(project, null, toolWindow.getDisposable());
+        RequestConsoleTabView requestConsoleTabView = new RequestConsoleTabView(this.project, null, toolWindow.getDisposable());
         this.responseHeaderTabView = new ResponseHeaderTabView(project);
         splitter.setFirstComponent(this.requestTabView.getRootPane());
-        splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).addTab(this.requestConsoleTabView).build());
+        splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).addTab(requestConsoleTabView).build());
         this.rootPanel.add(splitter, BorderLayout.CENTER);
         this.messageComponent = new MessageComponent(true);
         this.messageComponent.switchInfo();

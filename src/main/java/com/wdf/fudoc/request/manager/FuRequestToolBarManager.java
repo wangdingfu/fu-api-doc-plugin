@@ -2,11 +2,9 @@ package com.wdf.fudoc.request.manager;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
-import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
 import com.intellij.openapi.actionSystem.impl.MenuItemPresentationFactory;
-import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -35,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 /**
@@ -53,7 +50,6 @@ public class FuRequestToolBarManager {
     private final DefaultActionGroup defaultActionGroup;
 
     private final FuRequestCallback fuRequestCallback;
-
 
 
     public FuRequestToolBarManager(FuRequestCallback fuRequestCallback) {
@@ -80,45 +76,13 @@ public class FuRequestToolBarManager {
 
     private void addCommonAction(DefaultActionGroup defaultActionGroup) {
 
-
         defaultActionGroup.addSeparator();
 
-        //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("同步接口文档-确认弹框", "", FuDocIcons.FU_API_SYNC_DIALOG) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                //获取同步接口文档配置
-                FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
-                BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
-                ApiDocSystem apiDocSystem = ApiDocSystem.getInstance(settingData.getEnable());
-                execute((fuDocContext, psiClass) -> {
-                    fuDocContext.setSyncDialog(false);
-                    //调用同步接口
-                    SyncFuDocExecutor.sync(apiDocSystem, enableConfigData, fuDocContext, psiClass);
-                    //加载配置
-                    FuDocSyncSetting.getInstance().loadState(settingData);
-                });
-            }
-        });
 
-        //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("同步接口文档", "", FuDocIcons.FU_API_SYNC) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                //获取同步接口文档配置
-                FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
-                BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
-                ApiDocSystem apiDocSystem = ApiDocSystem.getInstance(settingData.getEnable());
-                execute((fuDocContext, psiClass) -> {
-                    //调用同步接口
-                    SyncFuDocExecutor.sync(apiDocSystem, enableConfigData, fuDocContext, psiClass);
-                    //加载配置
-                    FuDocSyncSetting.getInstance().loadState(settingData);
-                });
-            }
-        });
+        if (!fuRequestCallback.isShowViewMode()) {
+            addSyncAction(defaultActionGroup);
+        }
 
-        defaultActionGroup.addSeparator();
 
         //添加保存事件
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
@@ -201,7 +165,7 @@ public class FuRequestToolBarManager {
         });
 
 
-        if(fuRequestCallback.isShowViewMode()){
+        if (fuRequestCallback.isShowViewMode()) {
             //添加设置按钮
             defaultActionGroup.add(new AnAction("设置", "Setting", FuDocIcons.moreIcon()) {
                 @Override
@@ -211,7 +175,10 @@ public class FuRequestToolBarManager {
                         viewModeGroup.add(new FuRequestViewModeAction(value));
                     }
                     DefaultActionGroup actionGroup = new DefaultActionGroup();
+                    //新增view mode
                     actionGroup.add(viewModeGroup);
+                    //新增同步文档事件
+                    addSyncAction(actionGroup);
                     int x = 0, y = 0;
                     InputEvent inputEvent = e.getInputEvent();
                     if (inputEvent instanceof MouseEvent mouseEvent) {
@@ -238,6 +205,26 @@ public class FuRequestToolBarManager {
         });
 
 
+    }
+
+
+    private void addSyncAction(DefaultActionGroup defaultActionGroup) {
+        //添加同步接口文档事件
+        defaultActionGroup.add(new AnAction("Sync Api", "", fuRequestCallback.isShowViewMode() ? null : FuDocIcons.FU_API_SYNC) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                //获取同步接口文档配置
+                FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
+                BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
+                ApiDocSystem apiDocSystem = ApiDocSystem.getInstance(settingData.getEnable());
+                execute((fuDocContext, psiClass) -> {
+                    //调用同步接口
+                    SyncFuDocExecutor.sync(apiDocSystem, enableConfigData, fuDocContext, psiClass);
+                    //加载配置
+                    FuDocSyncSetting.getInstance().loadState(settingData);
+                });
+            }
+        });
     }
 
 

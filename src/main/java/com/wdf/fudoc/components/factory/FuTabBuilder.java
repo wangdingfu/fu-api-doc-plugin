@@ -64,9 +64,10 @@ public class FuTabBuilder {
         return addTab(fuTab, null);
     }
 
-    public FuTabBuilder addTab(FuTab fuTab, JPanel sidePanel) {
+
+    public FuTabBuilder addTab(FuTab fuTab, JComponent sideComponent) {
         TabInfo tabInfo = fuTab.getTabInfo();
-        addSideComponent(tabInfo, sidePanel);
+        addSideComponent(tabInfo, sideComponent);
         fuTabMap.put(tabInfo.getText(), fuTab);
         return addTab(tabInfo);
     }
@@ -82,11 +83,11 @@ public class FuTabBuilder {
         this.tabInfoMap.forEach((key, value) -> addSideComponent(value, sideComponent));
     }
 
-    public void addSideComponent(String title, JPanel sideComponent) {
+    public void addSideComponent(String title, JComponent sideComponent) {
         addSideComponent(this.tabInfoMap.get(title), sideComponent);
     }
 
-    private void addSideComponent(TabInfo tabInfo, JPanel sideComponent) {
+    private void addSideComponent(TabInfo tabInfo, JComponent sideComponent) {
         if (Objects.nonNull(tabInfo) && Objects.nonNull(sideComponent)) {
             JComponent beforeSide = tabInfo.getSideComponent();
             if (Objects.isNull(beforeSide)) {

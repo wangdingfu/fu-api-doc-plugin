@@ -18,9 +18,13 @@ import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
 import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.pojo.CommonHeader;
+import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
+import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -67,6 +71,16 @@ public class FuTableColumnFactory {
         return columns;
     }
 
+    /**
+     * 自定义表头
+     */
+    public static List<Column> customConfig() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", KeyValueTableBO::getSelect, KeyValueTableBO::setSelect));
+        columns.add(new StringColumn<>("字段英文名", KeyValueTableBO::getKey, KeyValueTableBO::setKey));
+        columns.add(new StringColumn<>("字段中文名", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
+        return columns;
+    }
 
 
     /**
@@ -197,6 +211,7 @@ public class FuTableColumnFactory {
         return columns;
     }
 
+
     /**
      * api同步结果table
      */
@@ -214,8 +229,41 @@ public class FuTableColumnFactory {
     }
 
 
+    /**
+     * 环境配置数据
+     */
+    public static List<Column> envConfig() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", ConfigEnvTableBO::getSelect, ConfigEnvTableBO::setSelect));
+        columns.add(new StringColumn<>("环境名称", ConfigEnvTableBO::getEnvName, ConfigEnvTableBO::setEnvName));
+        columns.add(new StringColumn<>("域名", ConfigEnvTableBO::getDomain, ConfigEnvTableBO::setDomain));
+        return columns;
+    }
+
+    /**
+     * 鉴权用户信息
+     */
+    public static List<Column> authConfig() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", ConfigAuthTableBO::getSelect, ConfigAuthTableBO::setSelect));
+        columns.add(new StringColumn<>("用户名", ConfigAuthTableBO::getUserName, ConfigAuthTableBO::setUserName));
+        columns.add(new StringColumn<>("密码", ConfigAuthTableBO::getPassword, ConfigAuthTableBO::setPassword));
+        return columns;
+    }
+
+
     @SuppressWarnings("all")
     public static <T, R> R getValue(T data, Column column) {
+        if (column instanceof DynamicColumn dynamicColumn) {
+            //自定义字段名称
+            String fieldName = dynamicColumn.getFieldName();
+            if (Objects.nonNull(data)
+                    && data instanceof DynamicTableBO dynamicTableBO
+                    && StringUtils.isNotBlank(fieldName)) {
+                return (R) dynamicTableBO.getValue(fieldName);
+            }
+            return null;
+        }
         if (column instanceof StringColumn) {
             return (R) ((StringColumn) column).getGetFun().apply(data);
         }
@@ -236,6 +284,15 @@ public class FuTableColumnFactory {
 
     @SuppressWarnings("all")
     public static <T, R> void setValue(T data, R value, Column column) {
+        if (column instanceof DynamicColumn dynamicColumn) {
+            //自定义字段名称
+            String fieldName = dynamicColumn.getFieldName();
+            if (Objects.nonNull(data)
+                    && data instanceof DynamicTableBO dynamicTableBO
+                    && StringUtils.isNotBlank(fieldName)) {
+                dynamicTableBO.setValue(fieldName, value);
+            }
+        }
         if (column instanceof StringColumn) {
             ((StringColumn) column).getSetFun().accept(data, (String) value);
         }
