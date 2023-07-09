@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -13,6 +14,10 @@ import java.util.Map;
 @Getter
 @Setter
 public class DynamicTableBO {
+    /**
+     * 是否选中
+     */
+    private Boolean select = true;
 
     protected Map<String, Object> dataMap = new HashMap<>();
 
@@ -23,5 +28,10 @@ public class DynamicTableBO {
 
     public void setValue(String name, Object value) {
         dataMap.put(name, value);
+    }
+
+
+    public boolean isSelect() {
+        return Objects.nonNull(this.select) && this.select;
     }
 }

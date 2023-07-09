@@ -33,6 +33,9 @@ public enum FuColor {
     color5("#F75464", "#F75464", 0),
     color6("#56A8F5", "#56A8F5", 0),
     color7("#299999", "#299999", 0),
+    color8("#4C5052", "#4C5052", 0),
+    color9("#BBBBBB", "#BBBBBB", 0),
+    color10("#3C3F41", "#3C3F41", 0),
 
     console_error("ERROR_OUTPUT", "ERROR_OUTPUT", 1),
     console_info("NORMAL_OUTPUT", "NORMAL_OUTPUT", 1),

@@ -2,7 +2,6 @@ package com.wdf.fudoc.request.view;
 
 import cn.hutool.core.util.IdUtil;
 import com.intellij.find.editorHeaderActions.Utils;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiElement;
@@ -20,6 +19,8 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestConsoleTabView;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
+import com.wdf.fudoc.request.view.widget.EnvWidget;
+import com.wdf.fudoc.request.view.widget.UserWidget;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
@@ -68,7 +69,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
      * 日志控制台
      */
     private final RequestConsoleTabView requestConsoleTabView;
-
 
     /**
      * 状态信息面板
@@ -130,6 +130,8 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.responseTabView = new ResponseTabView(this.project, slidePanel, getDisposable());
         this.requestConsoleTabView = new RequestConsoleTabView(this.project, slidePanel, getDisposable());
         this.messageComponent = new MessageComponent(true);
+        this.messageComponent.addWidget(new EnvWidget(project));
+        this.messageComponent.addWidget(new UserWidget(project));
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.sendRequestHandler = new SendRequestHandler(project, this, this.requestConsoleTabView.console());
         initUI();

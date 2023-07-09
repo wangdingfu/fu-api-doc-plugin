@@ -143,6 +143,27 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     }
 
 
+    public void removeColumn(String columnName) {
+        super.columnIdentifiers.removeElement(columnName);
+        justifyRows(0, getRowCount());
+        fireTableStructureChanged();
+    }
+
+    private void justifyRows(int from, int to) {
+        // Sometimes the DefaultTableModel is subclassed
+        // instead of the AbstractTableModel by mistake.
+        // Set the number of rows for the case when getRowCount
+        // is overridden.
+        dataVector.setSize(getRowCount());
+
+        for (int i = from; i < to; i++) {
+            if (dataVector.elementAt(i) == null) {
+                dataVector.setElementAt(new Vector<>(), i);
+            }
+            dataVector.elementAt(i).setSize(getColumnCount());
+        }
+    }
+
     public void removeRowByIndex(int row) {
         //从持久化数据对象中移除
         this.dataList.remove(row);
@@ -247,11 +268,15 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
                     if (customTableSettingDialog.showAndGet()) {
                         List<KeyValueTableBO> customColumnList = customTableSettingDialog.getColumnList();
                         if (CollectionUtils.isNotEmpty(customColumnList)) {
+                            List<KeyValueTableBO> addColumnList = customColumnList.stream().filter(f -> Objects.nonNull(f.getSelect()) && f.getSelect()).toList();
                             //移除动态表头
                             removeDynamicColumn();
+                            if (CollectionUtils.isEmpty(addColumnList)) {
+                                return;
+                            }
                             //将列初始化到table
-                            columnList.addAll(ObjectUtils.listToList(customColumnList, data -> new DynamicColumn(data.getValue(), data.getKey())));
-                            customColumnList.forEach(f -> addColumn(f.getKey()));
+                            columnList.addAll(ObjectUtils.listToList(addColumnList, data -> new DynamicColumn(data.getValue(), data.getKey())));
+                            addColumnList.forEach(f -> addColumn(f.getValue()));
                             //格式化第一列
                             formatFirstColumn();
                         }
@@ -265,12 +290,9 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
 
     private void removeDynamicColumn() {
         this.columnList.removeIf(f -> {
-            if (f instanceof DynamicColumn) {
-                TableColumn column = fuTableView.getColumn(f.getName());
-                if (Objects.nonNull(column)) {
-                    fuTableView.removeColumn(column);
-                    return true;
-                }
+            if (f instanceof DynamicColumn dynamicColumn) {
+                removeColumn(dynamicColumn.getName());
+                return true;
             }
             return false;
         });
@@ -327,7 +349,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         if (CollectionUtils.isEmpty(keyValueTableBOList)) {
             return;
         }
-        keyValueTableBOList.forEach(f -> this.columnList.add(new DynamicColumn(f.getKey(), f.getValue())));
+        keyValueTableBOList.forEach(f -> this.columnList.add(new DynamicColumn(f.getValue(), f.getKey())));
     }
 
 

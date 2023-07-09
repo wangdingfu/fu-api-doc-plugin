@@ -13,11 +13,6 @@ import lombok.Setter;
 public class ConfigEnvTableBO extends DynamicTableBO {
 
     /**
-     * 是否选中
-     */
-    private Boolean select;
-
-    /**
      * 环境名称
      */
     private String envName;

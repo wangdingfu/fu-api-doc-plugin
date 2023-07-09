@@ -5,6 +5,7 @@ import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.components.bo.FuMsgBO;
+import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
 import com.wdf.fudoc.components.message.handler.FuMsgExecutor;
 import icons.FuDocIcons;
@@ -143,6 +144,13 @@ public class MessageComponent {
             });
             rightPanel.setOpaque(false);
             this.rootPanel.add(rightPanel, BorderLayout.EAST);
+        }
+    }
+
+
+    public void addWidget(FuWidget fuWidget) {
+        if (fuWidget.isShow()) {
+            this.rightPanel.add(fuWidget.getComponent());
         }
     }
 }

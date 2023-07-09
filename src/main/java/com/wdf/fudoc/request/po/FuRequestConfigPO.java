@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -54,11 +55,26 @@ public class FuRequestConfigPO {
 
     private List<ConfigAuthTableBO> authConfigList = Lists.newArrayList();
 
+    /**
+     * 自定义表格配置
+     */
+    private Map<String, List<KeyValueTableBO>> customTableConfigMap = new HashMap<>();
 
     /**
      * cookie集合
      */
     private List<FuCookiePO> cookies = Lists.newArrayList();
+
+    /**
+     * 当前选中的用户名
+     */
+    private String userName;
+
+    /**
+     * 当前选中的环境
+     */
+    private String envName;
+
 
     public List<GlobalPreScriptPO> getPreScriptList(String scope) {
         List<GlobalPreScriptPO> preScriptPOList = Lists.newArrayList();
