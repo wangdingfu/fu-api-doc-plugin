@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.pojo;
 
 import com.wdf.fudoc.components.bo.DynamicTableBO;
+import com.wdf.fudoc.components.bo.TreePathBO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,5 +22,10 @@ public class ConfigEnvTableBO extends DynamicTableBO {
      * 域名
      */
     private String domain;
+
+    /**
+     * 作用范围
+     */
+    private TreePathBO scope;
 
 }

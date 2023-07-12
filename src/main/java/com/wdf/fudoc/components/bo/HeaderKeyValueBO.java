@@ -12,7 +12,7 @@ import lombok.Setter;
 public class HeaderKeyValueBO extends KeyValueTableBO {
 
     public HeaderKeyValueBO(Boolean select, String requestParamType, String key, String value, String description) {
-        super(select, requestParamType, key, value, description);
+        super(select, requestParamType, key, value, description, true);
     }
 
     public HeaderKeyValueBO() {

@@ -17,27 +17,32 @@ public class KeyValueTableBO {
     /**
      * 默认选中
      */
-    protected Boolean select;
+    public Boolean select;
 
     /**
      * 请求参数类型 默认文本
      */
-    protected String requestParamType;
+    public String requestParamType;
 
     /**
      * key
      */
-    protected String key;
+    public String key;
 
     /**
      * value
      */
-    protected String value;
+    public String value;
 
     /**
      * 描述信息
      */
-    protected String description;
+    public String description;
+
+    /**
+     * 是否可编辑当前数据
+     */
+    public boolean isEditable = true;
 
     public KeyValueTableBO() {
         this.select = true;
@@ -50,6 +55,14 @@ public class KeyValueTableBO {
         this.requestParamType = RequestParamType.TEXT.getCode();
         this.key = key;
         this.value = value;
+    }
+
+    public KeyValueTableBO(Boolean select, String key, String value, boolean isEditable) {
+        this.select = select;
+        this.requestParamType = RequestParamType.TEXT.getCode();
+        this.key = key;
+        this.value = value;
+        this.isEditable = isEditable;
     }
 
     public KeyValueTableBO(Boolean select, String key, String value, String description) {

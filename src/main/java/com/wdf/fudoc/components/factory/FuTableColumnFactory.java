@@ -12,20 +12,16 @@ import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.sync.renderer.SyncStatusCellRenderer;
-import com.wdf.fudoc.components.ButtonTableCellEditor;
 import com.wdf.fudoc.components.bo.*;
-import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
+import com.wdf.fudoc.components.column.*;
 import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
-import com.wdf.fudoc.request.pojo.CommonHeader;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.table.DefaultTableCellRenderer;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * 创建FuTable的column的工厂类
@@ -237,6 +233,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", ConfigEnvTableBO::getSelect, ConfigEnvTableBO::setSelect));
         columns.add(new StringColumn<>("环境名称", ConfigEnvTableBO::getEnvName, ConfigEnvTableBO::setEnvName));
         columns.add(new StringColumn<>("域名", ConfigEnvTableBO::getDomain, ConfigEnvTableBO::setDomain));
+        columns.add(new TreeModuleComboBoxColumn<>("作用范围", ConfigEnvTableBO::getScope, ConfigEnvTableBO::setScope));
         return columns;
     }
 

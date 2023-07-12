@@ -3,6 +3,7 @@ package com.wdf.fudoc.components.listener;
 import com.wdf.fudoc.components.FuTableView;
 
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
 /**
  * 【Fu Table】组件监听器
@@ -91,4 +92,13 @@ public interface FuTableListener<T> {
         return true;
     }
 
+
+    default TableCellRenderer getTableCellRenderer() {
+        return null;
+    }
+
+
+    default boolean canExchangeRows(int oldIndex, int newIndex) {
+        return true;
+    }
 }

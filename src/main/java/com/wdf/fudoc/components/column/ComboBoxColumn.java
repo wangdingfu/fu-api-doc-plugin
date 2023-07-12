@@ -1,12 +1,14 @@
-package com.wdf.fudoc.components.bo;
+package com.wdf.fudoc.components.column;
 
+import com.wdf.fudoc.common.base.FuFunction;
 import com.wdf.fudoc.components.factory.TableCellEditorFactory;
+import com.wdf.fudoc.util.LambdaUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * @author wangdingfu
@@ -14,24 +16,24 @@ import java.util.function.Function;
  */
 @Getter
 @Setter
-public class ComboBoxColumn<T> extends Column{
+public class ComboBoxColumn<T> extends Column {
 
     /**
      * get方法
      */
-    private Function<T, String> getFun;
+    private FuFunction<T, String> getFun;
     /**
      * set方法
      */
     private BiConsumer<T, String> setFun;
 
-    public ComboBoxColumn(String name, Function<T, String> getFun, BiConsumer<T, String> setFun) {
+    public ComboBoxColumn(String name, FuFunction<T, String> getFun, BiConsumer<T, String> setFun) {
         super(name, TableCellEditorFactory.createTextFieldEditor());
         this.getFun = getFun;
         this.setFun = setFun;
     }
 
-    public ComboBoxColumn(String name, Function<T, String> getFun, BiConsumer<T, String> setFun, Set<String> items) {
+    public ComboBoxColumn(String name, FuFunction<T, String> getFun, BiConsumer<T, String> setFun, Set<String> items) {
         super(name, TableCellEditorFactory.createComboBoxEditor(false, items));
         this.getFun = getFun;
         this.setFun = setFun;
@@ -40,5 +42,10 @@ public class ComboBoxColumn<T> extends Column{
     @Override
     public Class<?> getColumnClass() {
         return Enum.class;
+    }
+
+    @Override
+    public String getFieldName() {
+        return LambdaUtils.getPropertyName(this.getFun);
     }
 }

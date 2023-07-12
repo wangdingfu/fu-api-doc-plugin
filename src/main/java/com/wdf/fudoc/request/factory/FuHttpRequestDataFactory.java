@@ -204,7 +204,7 @@ public class FuHttpRequestDataFactory {
                 String paramName = fuDocParamData.getParamName();
                 boolean isSelect = YesOrNo.getByDesc(fuDocParamData.getParamRequire());
                 RequestParamType requestParamType = FuDocConstants.FILE.equals(fuDocParamData.getParamType()) ? RequestParamType.FILE : RequestParamType.TEXT;
-                tableBOList.add(new KeyValueTableBO(isSelect, requestParamType.getCode(), paramName, fuDocParamData.getParamValue(), fuDocParamData.getParamDesc()));
+                tableBOList.add(new KeyValueTableBO(isSelect, requestParamType.getCode(), paramName, fuDocParamData.getParamValue(), fuDocParamData.getParamDesc(),true));
             }
         }
         return tableBOList;

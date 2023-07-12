@@ -1,4 +1,4 @@
-package com.wdf.fudoc.components.bo;
+package com.wdf.fudoc.components.column;
 
 import com.wdf.fudoc.components.factory.TableCellEditorFactory;
 import lombok.Getter;

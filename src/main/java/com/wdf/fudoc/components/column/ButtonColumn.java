@@ -1,13 +1,14 @@
-package com.wdf.fudoc.components.bo;
+package com.wdf.fudoc.components.column;
 
+import com.wdf.fudoc.common.base.FuFunction;
 import com.wdf.fudoc.components.ButtonTableCellEditor;
+import com.wdf.fudoc.util.LambdaUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.table.TableCellRenderer;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 
 /**
@@ -21,7 +22,7 @@ public class ButtonColumn<T> extends Column {
     /**
      * get方法
      */
-    private Function<T, String> getFun;
+    private FuFunction<T, String> getFun;
     /**
      * set方法
      */
@@ -29,7 +30,7 @@ public class ButtonColumn<T> extends Column {
 
     private ButtonTableCellEditor buttonTableCellEditor;
 
-    public ButtonColumn(String name, Function<T, String> getFun, BiConsumer<T, String> setFun, ButtonTableCellEditor cellEditor) {
+    public ButtonColumn(String name, FuFunction<T, String> getFun, BiConsumer<T, String> setFun, ButtonTableCellEditor cellEditor) {
         super(name, cellEditor);
         this.buttonTableCellEditor = cellEditor;
         this.getFun = getFun;
@@ -44,5 +45,10 @@ public class ButtonColumn<T> extends Column {
     @Override
     public Class<?> getColumnClass() {
         return String.class;
+    }
+
+    @Override
+    public String getFieldName() {
+        return LambdaUtils.getPropertyName(this.getFun);
     }
 }

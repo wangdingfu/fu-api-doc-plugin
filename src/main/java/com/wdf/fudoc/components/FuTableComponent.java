@@ -8,8 +8,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
-import com.wdf.fudoc.components.bo.Column;
-import com.wdf.fudoc.components.bo.DynamicColumn;
+import com.wdf.fudoc.components.column.Column;
+import com.wdf.fudoc.components.column.DynamicColumn;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.dialog.CustomTableSettingDialog;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -40,12 +41,12 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * table列集合
      */
-    private List<Column> columnList;
+    private final List<Column> columnList;
 
     /**
      * table数据集合
      */
-    private List<T> dataList;
+    private final List<T> dataList;
 
     /**
      * table对象
@@ -55,7 +56,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * table数据的class对象
      */
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     /**
      * table组件监听器
@@ -72,19 +73,15 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         return Objects.isNull(dataList) ? Lists.newArrayList() : dataList;
     }
 
-    public FuTableComponent(String tableKey, List<Column> columnList, List<T> dataList, Class<T> clazz) {
+    public FuTableComponent(String tableKey, List<Column> columnList, List<T> dataList, Class<T> clazz, FuTableListener<T> fuTableListener) {
         this.tableKey = tableKey;
-        init(columnList, dataList, clazz);
-    }
-
-
-    public JPanel init(List<Column> columnList, List<T> dataList, Class<T> clazz) {
+        this.fuTableListener = fuTableListener;
         this.columnList = columnList;
         this.dataList = dataList;
         this.clazz = clazz;
         this.initTable();
-        return createPanel();
     }
+
 
     public void setEnable(boolean enable) {
         if (Objects.nonNull(this.fuTableView)) {
@@ -150,12 +147,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     }
 
     private void justifyRows(int from, int to) {
-        // Sometimes the DefaultTableModel is subclassed
-        // instead of the AbstractTableModel by mistake.
-        // Set the number of rows for the case when getRowCount
-        // is overridden.
         dataVector.setSize(getRowCount());
-
         for (int i = from; i < to; i++) {
             if (dataVector.elementAt(i) == null) {
                 dataVector.setElementAt(new Vector<>(), i);
@@ -179,12 +171,14 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      */
     @Override
     public void exchangeRows(int oldIndex, int newIndex) {
-        //table中移动
-        super.moveRow(oldIndex, oldIndex, newIndex);
-        //持久化数据集合中移动
-        this.dataList.add(newIndex, this.dataList.remove(oldIndex));
-        if (Objects.nonNull(this.fuTableListener)) {
-            this.fuTableListener.exchangeRows(oldIndex, newIndex);
+        if (canExchangeRows(oldIndex, newIndex)) {
+            //table中移动
+            super.moveRow(oldIndex, oldIndex, newIndex);
+            //持久化数据集合中移动
+            this.dataList.add(newIndex, this.dataList.remove(oldIndex));
+            if (Objects.nonNull(this.fuTableListener)) {
+                this.fuTableListener.exchangeRows(oldIndex, newIndex);
+            }
         }
     }
 
@@ -197,6 +191,9 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      */
     @Override
     public boolean canExchangeRows(int oldIndex, int newIndex) {
+        if (Objects.nonNull(this.fuTableListener)) {
+            return this.fuTableListener.canExchangeRows(oldIndex, newIndex);
+        }
         return true;
     }
 
@@ -231,12 +228,16 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         return create(FuTableColumnFactory.formDataColumns(), KeyValueTableBO.class);
     }
 
+    public static <T> FuTableComponent<T> create(String tableKey, List<Column> columnList, Class<T> clazz, FuTableListener<T> fuTableListener) {
+        return new FuTableComponent<>(tableKey, columnList, Lists.newArrayList(), clazz, fuTableListener);
+    }
+
     public static <T> FuTableComponent<T> create(List<Column> columnList, Class<T> clazz) {
-        return new FuTableComponent<>(null, columnList, Lists.newArrayList(), clazz);
+        return create(null, columnList, clazz, null);
     }
 
     public static <T> FuTableComponent<T> create(String tableKey, List<Column> columnList, Class<T> clazz) {
-        return new FuTableComponent<>(tableKey, columnList, Lists.newArrayList(), clazz);
+        return create(tableKey, columnList, clazz, null);
     }
 
     /**
@@ -248,7 +249,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      * @return 一个已经渲染好了table数据面板 可用于挂在在根面板上直接显示
      */
     public static <T> FuTableComponent<T> create(List<Column> columnList, List<T> dataList, Class<T> clazz) {
-        return new FuTableComponent<>(null, columnList, dataList, clazz);
+        return new FuTableComponent<>(null, columnList, dataList, clazz, null);
     }
 
 
@@ -264,7 +265,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
             decorator.addExtraActions(new AnAction("Settings", "", AllIcons.General.Settings) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
-                    CustomTableSettingDialog customTableSettingDialog = new CustomTableSettingDialog(e.getProject(), tableKey);
+                    CustomTableSettingDialog customTableSettingDialog = new CustomTableSettingDialog(e.getProject(), tableKey, columnToDataList());
                     if (customTableSettingDialog.showAndGet()) {
                         List<KeyValueTableBO> customColumnList = customTableSettingDialog.getColumnList();
                         if (CollectionUtils.isNotEmpty(customColumnList)) {
@@ -285,6 +286,11 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
             });
         }
         return decorator.createPanel();
+    }
+
+
+    private List<KeyValueTableBO> columnToDataList() {
+        return columnList.stream().map(m -> new KeyValueTableBO(true, m.getFieldName(), m.getName(), m instanceof DynamicColumn)).collect(Collectors.toList());
     }
 
 
@@ -318,6 +324,10 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         this.fuTableView = new FuTableView<>(this);
         //只支持单选
         this.fuTableView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        //设置table渲染器
+        if (Objects.nonNull(this.fuTableListener) && Objects.nonNull(this.fuTableListener.getTableCellRenderer())) {
+            this.fuTableView.setDefaultRenderer(Object.class, this.fuTableListener.getTableCellRenderer());
+        }
         //初始化columnList
         initColumn();
         //将列初始化到table
