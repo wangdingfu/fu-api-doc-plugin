@@ -29,8 +29,8 @@ public class DisableCellRenderer<T> extends DefaultTableCellRenderer {
         if (fuTableListener.isCellEditable(row, column)) {
             component.setBackground(JBUI.CurrentTheme.Table.background(false, false));
         } else {
-            setForeground(JBUI.CurrentTheme.Table.foreground(false, true));
-            setBackground(JBUI.CurrentTheme.Table.background(false, true));
+            component.setForeground(JBUI.CurrentTheme.Table.foreground(false, true));
+            component.setBackground(JBUI.CurrentTheme.Table.background(false, true));
         }
         return component;
     }
