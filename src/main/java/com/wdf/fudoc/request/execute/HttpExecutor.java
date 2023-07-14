@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.components.FuConsole;
 import com.wdf.fudoc.request.constants.enumtype.RequestStatus;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
+import com.wdf.fudoc.request.manager.FuRequestConsoleManager;
 import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -40,24 +41,19 @@ public class HttpExecutor {
         RequestStatus requestStatus = RequestStatus.FAIL;
         String requestUrl = fuHttpRequestData.getRequest().getRequestUrl();
         try {
-            fuConsole.info("开始发起接口【{}】请求", requestUrl);
-            //todo 输出请求接口的详细信息
             HttpResponse httpResponse = httpRequest.execute();
             requestStatus = RequestStatus.SUCCESS;
             FuHttpResponseBuilder.buildSuccessResponse(fuHttpRequestData, httpResponse);
-            String content = fuHttpRequestData.getResponse().getContent();
-            fuConsole.info("发起接口【{}】请求成功. 共计耗时:{}ms. 响应结果:\n{}",
-                    requestUrl, System.currentTimeMillis() - start,
-                    JSONUtil.isTypeJSON(content) ? JSONUtil.toJsonPrettyStr(content) : content);
             //将cookie保存在当前项目下
             List<HttpCookie> cookies = httpResponse.getCookies();
             if (CollectionUtils.isNotEmpty(cookies)) {
                 fuRequestConfigPO.addCookies(cookies.stream().map(HttpExecutor::buildCookie).collect(Collectors.toList()));
             }
+            //记录日志到Console中展示
+            FuRequestConsoleManager.requestConsole(fuConsole, httpRequest, httpResponse);
         } catch (Exception e) {
             FuResponseData fuResponseData = FuHttpResponseBuilder.ifNecessaryCreateResponse(fuHttpRequestData);
             log.info("请求接口【{}】异常", requestUrl, e);
-            fuConsole.error("请求接口【{}】异常. 异常信息:\n{}", requestUrl, e);
             if (e.getCause() instanceof ConnectException) {
                 fuResponseData.setErrorDetail("错误：connect ECONNREFUSED " + httpRequest.getConnection().getUrl().getAuthority());
                 fuResponseData.setResponseType(ResponseType.ERR_CONNECTION_REFUSED);
@@ -65,10 +61,13 @@ public class HttpExecutor {
                 fuResponseData.setErrorDetail(e.getCause().getMessage());
                 fuResponseData.setResponseType(ResponseType.ERR_UNKNOWN);
             }
+            //记录日志到Console中展示
+            FuRequestConsoleManager.requestConsole(fuConsole, httpRequest, e);
         } finally {
             long time = System.currentTimeMillis() - start;
             log.info("请求接口【{}】完成. 请求状态码：{}. 共计耗时:{}ms", requestUrl, requestStatus, time);
             fuHttpRequestData.setTime(time);
+            FuRequestConsoleManager.logResult(fuConsole,fuHttpRequestData,requestStatus);
         }
     }
 

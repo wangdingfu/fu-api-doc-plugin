@@ -1,11 +1,8 @@
 package com.wdf.fudoc.request.js.context;
 
-import cn.hutool.core.text.StrFormatter;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
-import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.components.FuConsole;
 import com.wdf.fudoc.components.FuConsoleManager;
 import com.wdf.fudoc.request.execute.HttpExecutor;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
@@ -42,9 +39,12 @@ public class FuContext {
 
     private final List<String> scope;
 
+    private final String scriptName;
+
 
     public FuContext(Project project, String scriptName) {
         this.project = project;
+        this.scriptName = scriptName;
         this.configPO = FuRequestConfigStorage.getInstance(project).readData();
         this.preScriptPO = this.configPO.getPreScriptMap().get(scriptName);
         this.scope = Objects.isNull(preScriptPO) ? Lists.newArrayList() : this.preScriptPO.getScope();
@@ -54,6 +54,7 @@ public class FuContext {
         this.project = project;
         this.configPO = configPO;
         this.preScriptPO = preScriptPO;
+        this.scriptName = Objects.isNull(preScriptPO) ? StringUtils.EMPTY : preScriptPO.getTitle();
         this.scope = Objects.isNull(preScriptPO) ? Lists.newArrayList() : this.preScriptPO.getScope();
     }
 

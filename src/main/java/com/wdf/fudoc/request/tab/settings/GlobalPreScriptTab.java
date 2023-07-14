@@ -145,12 +145,9 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                                 FuConsole fuConsole = FuConsoleManager.get(project);
                                 //执行脚本
                                 try {
-                                    fuConsole.verbose("开始执行前置脚本");
                                     JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO), fuConsole);
-                                    fuConsole.verbose("执行前置脚本完成");
                                 } catch (Exception e) {
                                     logger.error("执行脚本失败", e);
-                                    fuConsole.verbose("执行前置脚本异常:{}", e);
                                     FuDocNotification.notifyError(FuBundle.message(MessageConstants.REQUEST_SCRIPT_EXECUTE_FAIL));
                                 }
                             }

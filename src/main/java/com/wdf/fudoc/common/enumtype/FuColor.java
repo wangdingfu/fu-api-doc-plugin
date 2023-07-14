@@ -37,8 +37,8 @@ public enum FuColor {
     color9("#BBBBBB", "#BBBBBB", 0),
     color10("#3C3F41", "#3C3F41", 0),
 
-    console_error("ERROR_OUTPUT", "ERROR_OUTPUT", 1),
-    console_info("NORMAL_OUTPUT", "NORMAL_OUTPUT", 1),
+    console_error("CONSOLE_ERROR_OUTPUT", "CONSOLE_ERROR_OUTPUT", 1),
+    console_info("CONSOLE_NORMAL_OUTPUT", "CONSOLE_NORMAL_OUTPUT", 1),
     console_user_info("CONSOLE_USER_INPUT", "CONSOLE_USER_INPUT", 1),
     console_warn("LOG_WARNING_OUTPUT", "LOG_WARNING_OUTPUT", 1),
     console_verbose("LOG_VERBOSE_OUTPUT", "LOG_VERBOSE_OUTPUT", 1),

@@ -10,6 +10,9 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.ui.content.Content;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.util.Objects;
@@ -20,7 +23,11 @@ import java.util.Objects;
  */
 public class FuConsole {
 
+    @Getter
     private final ConsoleView consoleView;
+
+    @Setter
+    private String prefix;
 
     public FuConsole(Project project) {
         this.consoleView = getConsoleView(project);
@@ -40,10 +47,20 @@ public class FuConsole {
      */
     public void error(String console, Object... params) {
         this.log(StrFormatter.format(console, params), ConsoleViewContentType.ERROR_OUTPUT);
+        this.println();
+    }
+
+    public void println() {
+        this.consoleView.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
+    }
+
+    public void infoLog(String console, Object... params) {
+        this.log(StrFormatter.format(console, params), ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
     public void info(String console, Object... params) {
-        this.log(StrFormatter.format(console, params), ConsoleViewContentType.NORMAL_OUTPUT);
+        infoLog(console, params);
+        this.println();
     }
 
     public void userInfo(String console, Object... params) {
@@ -52,10 +69,16 @@ public class FuConsole {
 
     public void verbose(String console, Object... params) {
         this.log(StrFormatter.format(console, params), ConsoleViewContentType.LOG_VERBOSE_OUTPUT);
+        this.println();
+    }
+
+    public void debugLog(String console, Object... params) {
+        this.log(StrFormatter.format(console, params), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
     }
 
     public void debug(String console, Object... params) {
-        this.log(StrFormatter.format(console, params), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        debugLog(console, params);
+        this.println();
     }
 
     public void warn(String console, Object... params) {
@@ -73,7 +96,10 @@ public class FuConsole {
         if (Objects.isNull(this.consoleView)) {
             return;
         }
-        this.consoleView.print(info + "\n", contentType);
+        if (StringUtils.isNotBlank(this.prefix)) {
+            this.consoleView.print("[" + this.prefix + "] ", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        }
+        this.consoleView.print(info, contentType);
     }
 
 

@@ -3,6 +3,7 @@ package com.wdf.fudoc.request.tab.settings;
 import com.google.common.collect.Lists;
 import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.ui.tabs.TabInfo;
+import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.common.FuDataTab;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
@@ -14,6 +15,7 @@ import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.util.List;
 
 /**
@@ -35,8 +37,12 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
         this.rootBox = new VerticalBox();
         JPanel envPanel = this.envTable.createPanel();
         JPanel authPanel = this.authTable.createPanel();
-        envPanel.setBorder(BorderFactory.createTitledBorder("环境配置"));
-        authPanel.setBorder(BorderFactory.createTitledBorder("用户授权配置"));
+        TitledBorder envBorder = BorderFactory.createTitledBorder("环境配置");
+        envBorder.setBorder(JBUI.Borders.empty());
+        envPanel.setBorder(envBorder);
+        TitledBorder authBorder = BorderFactory.createTitledBorder("用户授权配置");
+        authBorder.setBorder(JBUI.Borders.empty());
+        authPanel.setBorder(authBorder);
         this.rootBox.add(envPanel);
         this.rootBox.add(authPanel);
     }
