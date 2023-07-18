@@ -1,5 +1,6 @@
 package com.wdf.fudoc.test.action;
 
+import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.httpClient.converters.RequestBuilder;
@@ -16,6 +17,7 @@ import com.intellij.httpClient.http.request.psi.HttpQueryParameter;
 import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -38,9 +40,20 @@ import java.util.Objects;
 @Slf4j
 public class TestAction extends AnAction {
 
-
+    private static final Logger LOG = Logger.getInstance(TestAction.class);
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
+        LogConsoleRunner logConsoleRunner = new LogConsoleRunner(e.getProject(),"测试",e.getProject().getBasePath());
+        try {
+            logConsoleRunner.initAndRun();
+        } catch (ExecutionException ex) {
+            throw new RuntimeException(ex);
+        }
+        LOG.debug("这是一个调试级别的日志消息");
+        LOG.info("这是一个信息级别的日志消息");
+        LOG.warn("这是一个警告级别的日志消息");
+        LOG.error("这是一个错误级别的日志消息");
+
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(e.getProject());
         ToolWindow toolWindow = toolWindowManager.getToolWindow("Fu Console");
 
