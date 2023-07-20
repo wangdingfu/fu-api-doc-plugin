@@ -43,7 +43,7 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
         JPanel envPanel = this.envTable.createPanel();
         JPanel authPanel = this.authTable.createPanel();
         envPanel.setBorder(envBorder);
-        envPanel.setBorder(authBorder);
+        authPanel.setBorder(authBorder);
         this.rootBox.add(envPanel);
         this.rootBox.add(authPanel);
     }
