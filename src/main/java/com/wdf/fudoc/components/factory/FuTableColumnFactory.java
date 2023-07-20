@@ -18,6 +18,7 @@ import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
+import icons.FuDocIcons;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class FuTableColumnFactory {
         List<Column> columns = Lists.newArrayList();
         columns.add(new StringColumn<>("别名", SettingDynamicValueData::getAlias, SettingDynamicValueData::setAlias));
         //类型列为下拉框编辑器
-        columns.add(new ComboBoxColumn<>("类型", SettingDynamicValueData::getType, SettingDynamicValueData::setType, DynamicDataType.getCodes()));
+        columns.add(new ComboBoxColumn<>("类型", null, SettingDynamicValueData::getType, SettingDynamicValueData::setType, DynamicDataType.getCodes()));
         columns.add(new StringColumn<>("值", SettingDynamicValueData::getValue, SettingDynamicValueData::setValue));
         return columns;
     }
@@ -109,7 +110,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", HeaderKeyValueBO::getSelect, HeaderKeyValueBO::setSelect));
         columns.add(new StringColumn<>("参数名", HeaderKeyValueBO::getKey, HeaderKeyValueBO::setKey));
         columns.add(new StringColumn<>("参数值", HeaderKeyValueBO::getValue, HeaderKeyValueBO::setValue));
-        columns.add(new ComboBoxColumn<>("级别", HeaderKeyValueBO::getLevel, HeaderKeyValueBO::setLevel, HeaderLevel.getCodes()));
+        columns.add(new ComboBoxColumn<>("级别", null, HeaderKeyValueBO::getLevel, HeaderKeyValueBO::setLevel, HeaderLevel.getCodes()));
         return columns;
     }
 
@@ -120,7 +121,7 @@ public class FuTableColumnFactory {
         List<Column> columns = Lists.newArrayList();
         columns.add(new BooleanColumn<>("", KeyValueTableBO::getSelect, KeyValueTableBO::setSelect));
         columns.add(new StringColumn<>("参数名", KeyValueTableBO::getKey, KeyValueTableBO::setKey));
-        columns.add(new ComboBoxColumn<>("类型", KeyValueTableBO::getRequestParamType, KeyValueTableBO::setRequestParamType, RequestParamType.getCodes()));
+        columns.add(new ComboBoxColumn<>("类型", null, KeyValueTableBO::getRequestParamType, KeyValueTableBO::setRequestParamType, RequestParamType.getCodes()));
         columns.add(new StringColumn<>("参数值", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
         columns.add(new StringColumn<>("描述信息", KeyValueTableBO::getDescription, KeyValueTableBO::setDescription));
         return columns;
@@ -233,7 +234,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", ConfigEnvTableBO::getSelect, ConfigEnvTableBO::setSelect));
         columns.add(new StringColumn<>("环境名称", ConfigEnvTableBO::getEnvName, ConfigEnvTableBO::setEnvName));
         columns.add(new StringColumn<>("域名", ConfigEnvTableBO::getDomain, ConfigEnvTableBO::setDomain));
-        columns.add(new TreeModuleComboBoxColumn<>("作用范围", ConfigEnvTableBO::getScope, ConfigEnvTableBO::setScope));
+        columns.add(new SpringBootColumn<>("作用范围", ConfigEnvTableBO::getApplication, ConfigEnvTableBO::setApplication));
         return columns;
     }
 

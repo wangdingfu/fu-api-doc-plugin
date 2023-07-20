@@ -36,6 +36,11 @@ public class FuRequestConfigPO {
     private String viewMode = ViewMode.SINGLE_PINNED.myActionID;
 
     /**
+     * 是否自动从配置文件读取启动端口
+     */
+    private boolean autoPort = true;
+
+    /**
      * 全局请求头
      */
     private List<GlobalKeyValuePO> globalHeaderList = Lists.newArrayList();
@@ -64,6 +69,8 @@ public class FuRequestConfigPO {
      * cookie集合
      */
     private List<FuCookiePO> cookies = Lists.newArrayList();
+
+
 
     /**
      * 当前选中的用户名

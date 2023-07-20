@@ -28,4 +28,9 @@ public class ConfigEnvTableBO extends DynamicTableBO {
      */
     private TreePathBO scope;
 
+    /**
+     * 应用
+     */
+    private String application;
+
 }

@@ -55,6 +55,11 @@ public class CustomTableSettingDialog extends DialogWrapper implements FuTableLi
         return isCellEditable(oldIndex, 0) && isCellEditable(newIndex, 0);
     }
 
+    @Override
+    public boolean isCanDelete(KeyValueTableBO data) {
+        return Objects.nonNull(data) && data.isEditable;
+    }
+
     public List<KeyValueTableBO> getColumnList() {
         List<KeyValueTableBO> dataList = this.configTable.getDataList();
         return dataList.stream().filter(KeyValueTableBO::isEditable).collect(Collectors.toList());

@@ -1,18 +1,23 @@
 package com.wdf.fudoc.components.factory;
 
+import com.google.common.collect.Sets;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.BooleanTableCellEditor;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.LocalPathCellEditor;
+import com.wdf.fudoc.components.FuIconListRendererComponent;
+import com.wdf.fudoc.components.JLabelListRendererComponent;
 import com.wdf.fudoc.components.TreeTableCellEditor;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -36,8 +41,11 @@ public class TableCellEditorFactory {
      * @param editable 可编辑的
      * @return {@link TableCellEditor}
      */
-    public static TableCellEditor createComboBoxEditor(boolean editable, Set<String> items) {
-        return createComboBoxEditor(editable, items.toArray(new String[]{}));
+    public static TableCellEditor createComboBoxEditor(boolean editable, Icon icon, Set<String> items) {
+        if (Objects.isNull(items)) {
+            items = Sets.newHashSet();
+        }
+        return createComboBoxEditor(editable, icon, items.toArray(new String[]{}));
     }
 
 
@@ -57,9 +65,12 @@ public class TableCellEditorFactory {
      * @param items    选项
      * @return {@link TableCellEditor}
      */
-    public static TableCellEditor createComboBoxEditor(boolean editable, String... items) {
+    public static TableCellEditor createComboBoxEditor(boolean editable, Icon icon, String... items) {
         ComboBox<String> comboBox = new ComboBox<>(items);
         comboBox.setEditable(editable);
+        if (Objects.nonNull(icon)) {
+            comboBox.setRenderer(new FuIconListRendererComponent(icon));
+        }
         if (!editable) {
             transmitFocusEvent(comboBox);
         }
