@@ -27,8 +27,6 @@ public class FuRequestConsoleToolWindowFactory implements ToolWindowFactory, Dum
         ConsoleView consoleView = new ConsoleViewImpl(project, false);
         Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
         toolWindow.getContentManager().addContent(content);
-        toolWindow.setToHideOnEmptyContent(true);
-
     }
 
 

@@ -39,7 +39,6 @@ public class FuDocToolWindowFactory implements ToolWindowFactory, DumbAware {
                 if ("Fu Request".equals(toolWindow.getId())) {
                     fuRequestWindow.initRootPane();
                 }
-                ToolWindowManagerListener.super.toolWindowShown(toolWindow);
             }
         });
 

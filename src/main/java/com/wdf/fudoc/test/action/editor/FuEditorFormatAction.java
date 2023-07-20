@@ -1,10 +1,7 @@
 package com.wdf.fudoc.test.action.editor;
 
 import com.intellij.json.JsonFileType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -24,6 +21,10 @@ import java.util.Objects;
  */
 public class FuEditorFormatAction extends AnAction {
 
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
 
     public FuEditorFormatAction() {
         super("美化json", "Format", FuDocIcons.FU_REQUEST_MAGIC);

@@ -85,14 +85,14 @@
                     order="last"
                     factoryClass="com.wdf.fudoc.request.view.toolwindow.FuDocToolWindowFactory"/>
 
-
+<!--
         <toolWindow id="Fu Console"
                     icon="FuDocIcons.FU_DOC"
                     anchor="bottom"
                     secondary="false"
                     doNotActivateOnStart="false"
                     order="last"
-                    factoryClass="com.wdf.fudoc.request.view.toolwindow.FuRequestConsoleToolWindowFactory"/>
+                    factoryClass="com.wdf.fudoc.request.view.toolwindow.FuRequestConsoleToolWindowFactory"/>-->
 
 
         <!-- provider -->
