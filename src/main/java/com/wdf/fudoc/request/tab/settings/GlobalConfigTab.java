@@ -1,10 +1,13 @@
 package com.wdf.fudoc.request.tab.settings;
 
 import com.google.common.collect.Lists;
+import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
+import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.FuDataTab;
+import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
@@ -30,6 +33,8 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
 
     private final FuTableComponent<ConfigEnvTableBO> envTable;
     private final FuTableComponent<ConfigAuthTableBO> authTable;
+    private static final TitledBorder envBorder = IdeBorderFactory.createTitledBorder(FuBundle.message(MessageConstants.REQUEST_GLOBAL_CONFIG_ENV_TITLE));
+    private static final TitledBorder authBorder = IdeBorderFactory.createTitledBorder(FuBundle.message(MessageConstants.REQUEST_GLOBAL_CONFIG_AUTH_TITLE));
 
     public GlobalConfigTab() {
         this.envTable = FuTableComponent.create("env", FuTableColumnFactory.envConfig(), ConfigEnvTableBO.class);
@@ -37,12 +42,8 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
         this.rootBox = new VerticalBox();
         JPanel envPanel = this.envTable.createPanel();
         JPanel authPanel = this.authTable.createPanel();
-        TitledBorder envBorder = BorderFactory.createTitledBorder("环境配置");
-        envBorder.setBorder(JBUI.Borders.empty());
         envPanel.setBorder(envBorder);
-        TitledBorder authBorder = BorderFactory.createTitledBorder("用户授权配置");
-        authBorder.setBorder(JBUI.Borders.empty());
-        authPanel.setBorder(authBorder);
+        envPanel.setBorder(authBorder);
         this.rootBox.add(envPanel);
         this.rootBox.add(authPanel);
     }

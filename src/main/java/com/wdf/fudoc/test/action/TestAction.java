@@ -26,6 +26,7 @@ import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
 import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.util.FuRequestUtils;
+import com.wdf.fudoc.util.MavenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.project.MavenProject;
@@ -41,6 +42,10 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
+        // 获取 Maven 项目管理器
+        MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(e.getProject());
+
+
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(e.getProject());
         ToolWindow toolWindow = toolWindowManager.getToolWindow("Fu Console");
 
