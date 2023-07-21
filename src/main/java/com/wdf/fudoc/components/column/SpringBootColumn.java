@@ -18,6 +18,6 @@ import java.util.function.BiConsumer;
 public class SpringBootColumn<T> extends ComboBoxColumn<T> {
 
     public SpringBootColumn(String name, FuFunction<T, String> getFun, BiConsumer<T, String> setFun) {
-        super(name, FuDocIcons.SPRING_BOOT, getFun, setFun, SpringConfigManager.getApplicationList(ProjectUtils.getCurrProject()));
+        super(name, FuDocIcons.SPRING, getFun, setFun, SpringConfigManager.getApplicationList(ProjectUtils.getCurrProject()));
     }
 }

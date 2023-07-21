@@ -35,10 +35,24 @@ public class SpringConfigManager {
 
     private static final Map<Module, SpringConfigFile> MODULE_SPRING_CONFIG_MAP = new ConcurrentHashMap<>();
 
-    private static final Map<Project, Set<String>> SPRING_APPLICATION_MAP = new ConcurrentHashMap<>();
+    private static final Map<Project, Map<Module, String>> SPRING_APPLICATION_MAP = new ConcurrentHashMap<>();
 
     public static Set<String> getApplicationList(Project project) {
-        return SPRING_APPLICATION_MAP.get(project);
+        Map<Module, String> moduleStringMap = SPRING_APPLICATION_MAP.get(project);
+        if (MapUtils.isEmpty(moduleStringMap)) {
+            return Sets.newHashSet();
+        }
+        return Sets.newHashSet(moduleStringMap.values());
+    }
+
+
+    public static String getApplication(Module module) {
+        Map<Module, String> moduleStringMap = SPRING_APPLICATION_MAP.get(module.getProject());
+        if (MapUtils.isEmpty(moduleStringMap)) {
+            return StringUtils.EMPTY;
+        }
+        String applicationName = moduleStringMap.get(module);
+        return Objects.isNull(applicationName) ? StringUtils.EMPTY : applicationName;
     }
 
     /**
@@ -59,7 +73,8 @@ public class SpringConfigManager {
         Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(AnnotationConstants.SPRING_BOOT_APPLICATION, project, GlobalSearchScope.projectScope(project));
         if (CollectionUtils.isNotEmpty(psiAnnotations)) {
             Map<Module, PsiClass> springBootApplicationMap = new HashMap<>();
-            Set<String> applicationList = Sets.newHashSet("ExampleApplication");
+            Map<Module, String> moduleApplicationMap = new HashMap<>();
+            SPRING_APPLICATION_MAP.put(project, moduleApplicationMap);
             for (PsiAnnotation psiAnnotation : psiAnnotations) {
                 if (!AnnotationConstants.SPRING_BOOT_APPLICATION_ANNOTATION.equals(psiAnnotation.getQualifiedName())) {
                     continue;
@@ -70,14 +85,13 @@ public class SpringConfigManager {
                     continue;
                 }
                 Module module = ModuleUtil.findModuleForPsiElement(psiElement);
-                applicationList.add(psiClass.getName());
                 springBootApplicationMap.put(module, psiClass);
+                moduleApplicationMap.put(module, psiClass.getName());
             }
-            SPRING_APPLICATION_MAP.put(project, applicationList);
+
             if (MapUtils.isEmpty(springBootApplicationMap)) {
                 return;
             }
-
             FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
             if (!fuRequestConfigPO.isAutoPort()) {
                 //不自动读取端口信息
@@ -91,7 +105,10 @@ public class SpringConfigManager {
                 SpringConfigFile springConfigFile = initSpringConfig(module);
                 Set<String> envs = springConfigFile.getEnvs();
                 if (CollectionUtils.isEmpty(envs)) {
-                    envs = Sets.newHashSet("application");
+                    envs = Sets.newHashSet(SpringConfigFileConstants.DEFAULT_ENV);
+                }
+                if (envs.size() > 1) {
+                    envs.remove(SpringConfigFileConstants.DEFAULT_ENV);
                 }
                 for (String env : envs) {
                     if (envConfigList.stream().anyMatch(a -> a.getEnvName().equals(env) && a.getApplication().equals(springBootName))) {

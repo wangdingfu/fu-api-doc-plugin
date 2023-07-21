@@ -23,7 +23,10 @@ public class FuStatusLabel {
 
     private final FuStatusLabelListener listener;
 
+    private final Icon icon;
+
     public FuStatusLabel(String text, Icon icon, FuStatusLabelListener listener) {
+        this.icon = icon;
         this.label = new JLabel(text, icon, SwingConstants.LEFT);
         this.label.setBorder(JBUI.Borders.empty(0, 10));
         this.listener = listener;
@@ -80,6 +83,7 @@ public class FuStatusLabel {
 
     private JMenuItem buildMenuItem(String text) {
         JMenuItem menuItem = new JMenuItem(text);
+        menuItem.setIcon(this.icon);
         menuItem.addActionListener(e -> {
             listener.select(text);
             label.setText(text);

@@ -17,6 +17,7 @@ import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.storage.FuDocConfigStorage;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import com.wdf.fudoc.util.JTableUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.ProjectUtils;
@@ -270,17 +271,11 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
                 public void actionPerformed(@NotNull AnActionEvent e) {
                     CustomTableSettingDialog customTableSettingDialog = new CustomTableSettingDialog(e.getProject(), tableKey, columnToDataList());
                     if (customTableSettingDialog.showAndGet()) {
-                        List<KeyValueTableBO> customColumnList = customTableSettingDialog.getColumnList();
-                        //移除动态表头
-                        removeDynamicColumn();
-                        List<KeyValueTableBO> addColumnList;
-                        if (CollectionUtils.isNotEmpty(customColumnList) && CollectionUtils.isNotEmpty(addColumnList = customColumnList.stream().filter(f -> Objects.nonNull(f.getSelect()) && f.getSelect()).toList())) {
-                            //将列初始化到table
-                            columnList.addAll(ObjectUtils.listToList(addColumnList, data -> new DynamicColumn(data.getValue(), data.getKey())));
-                            addColumnList.forEach(f -> addColumn(f.getValue()));
-                        }
-                        //格式化第一列
-                        formatFirstColumn();
+                        //重置表格
+                        resetColumn();
+                        //初始化表格的列
+                        initTableColumn();
+
                     }
                 }
             });
@@ -294,14 +289,13 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     }
 
 
-    private void removeDynamicColumn() {
-        this.columnList.removeIf(f -> {
-            if (f instanceof DynamicColumn dynamicColumn) {
-                removeColumn(dynamicColumn.getName());
-                return true;
-            }
-            return false;
-        });
+    private void resetColumn() {
+        columnList.forEach(f -> removeColumn(f.getName()));
+        columnList.removeIf(f -> f instanceof DynamicColumn);
+        int rowCount = super.getRowCount();
+        for (int i = rowCount - 1; i >= 0; i--) {
+            super.removeRow(i);
+        }
     }
 
 
@@ -328,6 +322,11 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         if (Objects.nonNull(this.fuTableListener) && Objects.nonNull(this.fuTableListener.getTableCellRenderer())) {
             this.fuTableView.setDefaultRenderer(Object.class, this.fuTableListener.getTableCellRenderer());
         }
+        initTableColumn();
+    }
+
+
+    private void initTableColumn() {
         //初始化columnList
         initColumn();
         //将列初始化到table
@@ -354,7 +353,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         if (StringUtils.isBlank(this.tableKey)) {
             return;
         }
-        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.getInstance(ProjectUtils.getCurrProject()).readData();
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(ProjectUtils.getCurrProject()).readData();
         Map<String, List<KeyValueTableBO>> customTableConfigMap = fuRequestConfigPO.getCustomTableConfigMap();
         List<KeyValueTableBO> keyValueTableBOList = customTableConfigMap.get(this.tableKey);
         if (CollectionUtils.isEmpty(keyValueTableBOList)) {

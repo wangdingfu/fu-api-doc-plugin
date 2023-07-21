@@ -1,7 +1,5 @@
 package com.wdf.fudoc.spring;
 
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.json.JSONUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.wdf.fudoc.spring.handler.ConfigFileHandler;
@@ -13,7 +11,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
