@@ -2,7 +2,6 @@ package com.wdf.fudoc.spring;
 
 import com.google.common.collect.Sets;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -40,13 +39,16 @@ public class SpringConfigManager {
     public static Set<String> getApplicationList(Project project) {
         Map<Module, String> moduleStringMap = SPRING_APPLICATION_MAP.get(project);
         if (MapUtils.isEmpty(moduleStringMap)) {
-            return Sets.newHashSet();
+            return Sets.newHashSet("Application");
         }
         return Sets.newHashSet(moduleStringMap.values());
     }
 
 
     public static String getApplication(Module module) {
+        if (Objects.isNull(module)) {
+            return StringUtils.EMPTY;
+        }
         Map<Module, String> moduleStringMap = SPRING_APPLICATION_MAP.get(module.getProject());
         if (MapUtils.isEmpty(moduleStringMap)) {
             return StringUtils.EMPTY;
@@ -61,7 +63,7 @@ public class SpringConfigManager {
      * @param project 当前项目
      */
     public static void initProjectSpringConfig(Project project) {
-        ApplicationManager.getApplication().runReadAction(() -> {
+        ApplicationManager.getApplication().invokeLater(() -> {
             //初始化Springboot应用
             initSpringBoot(project);
         });
@@ -111,15 +113,18 @@ public class SpringConfigManager {
                     envs.remove(SpringConfigFileConstants.DEFAULT_ENV);
                 }
                 for (String env : envs) {
-                    if (envConfigList.stream().anyMatch(a -> a.getEnvName().equals(env) && a.getApplication().equals(springBootName))) {
-                        continue;
+                    Optional<ConfigEnvTableBO> first = envConfigList.stream().filter(f -> f.getEnvName().equals(env) && f.getApplication().equals(springBootName)).findFirst();
+                    ConfigEnvTableBO configEnvTableBO;
+                    if (first.isEmpty()) {
+                        configEnvTableBO = new ConfigEnvTableBO();
+                        envConfigList.add(configEnvTableBO);
+                    } else {
+                        configEnvTableBO = first.get();
                     }
-                    ConfigEnvTableBO envTableBO = new ConfigEnvTableBO();
-                    envTableBO.setApplication(springBootName);
-                    envTableBO.setEnvName(env);
-                    envTableBO.setSelect(true);
-                    envTableBO.setDomain("http://localhost:" + springConfigFile.getConfig(SpringConfigFileConstants.SERVER_PORT_KEY));
-                    envConfigList.add(envTableBO);
+                    configEnvTableBO.setApplication(springBootName);
+                    configEnvTableBO.setEnvName(env);
+                    configEnvTableBO.setSelect(true);
+                    configEnvTableBO.setDomain("http://localhost:" + springConfigFile.getConfig(env, SpringConfigFileConstants.SERVER_PORT_KEY));
                 }
             });
         }

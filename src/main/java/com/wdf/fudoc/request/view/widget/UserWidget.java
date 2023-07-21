@@ -7,6 +7,7 @@ import com.wdf.fudoc.components.bo.DynamicTableBO;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
 import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import icons.FuDocIcons;
@@ -15,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -23,15 +25,18 @@ import java.util.stream.Collectors;
  */
 public class UserWidget implements FuWidget, FuStatusLabelListener {
 
-    private final FuStatusLabel fuStatusLabel;
+    private FuStatusLabel fuStatusLabel;
     private final FuRequestConfigPO configPO;
 
     public UserWidget(Project project) {
         this.configPO = FuRequestConfigStorageFactory.get(project).readData();
         String userName = configPO.getUserName();
-        if (StringUtils.isBlank(userName)) {
-            List<String> authConfigList = getList();
-            userName = CollectionUtils.isNotEmpty(authConfigList) ? authConfigList.get(0) : StringUtils.EMPTY;
+        List<BasePopupMenuItem> authConfigList;
+        if (StringUtils.isBlank(userName) && CollectionUtils.isNotEmpty(authConfigList = getList())) {
+            userName = authConfigList.stream().filter(BasePopupMenuItem::isCanSelect).map(BasePopupMenuItem::getShowName).filter(StringUtils::isNotBlank).findFirst().orElse(StringUtils.EMPTY);
+            if (StringUtils.isBlank(userName)) {
+                return;
+            }
         }
         this.fuStatusLabel = new FuStatusLabel(userName, FuDocIcons.USER, this);
     }
@@ -48,16 +53,16 @@ public class UserWidget implements FuWidget, FuStatusLabelListener {
 
     @Override
     public boolean isShow() {
-        return CollectionUtils.isNotEmpty(configPO.getAuthConfigList());
+        return Objects.nonNull(fuStatusLabel) && CollectionUtils.isNotEmpty(configPO.getAuthConfigList());
     }
 
     @Override
-    public List<String> getList() {
+    public List<BasePopupMenuItem> getList() {
         List<ConfigAuthTableBO> authConfigList = configPO.getAuthConfigList();
         if (CollectionUtils.isEmpty(authConfigList)) {
             return Lists.newArrayList();
         }
-        return authConfigList.stream().filter(DynamicTableBO::isSelect).map(ConfigAuthTableBO::getUserName).collect(Collectors.toList());
+        return authConfigList.stream().filter(DynamicTableBO::isSelect).map(f -> new BasePopupMenuItem(FuDocIcons.USER, f.getUserName())).collect(Collectors.toList());
     }
 
     @Override

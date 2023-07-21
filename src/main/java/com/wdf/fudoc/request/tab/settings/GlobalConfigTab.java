@@ -29,6 +29,8 @@ import java.util.List;
  */
 public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
 
+    public static final String TITLE = "全局配置";
+
     private final VerticalBox rootBox;
 
     private final FuTableComponent<ConfigEnvTableBO> envTable;
@@ -50,7 +52,7 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("全局配置", FuDocIcons.FU_SETTINGS, this.rootBox).builder();
+        return FuTabComponent.getInstance(TITLE, FuDocIcons.FU_SETTINGS, this.rootBox).builder();
     }
 
     @Override

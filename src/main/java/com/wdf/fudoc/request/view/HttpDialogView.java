@@ -130,7 +130,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.responseTabView = new ResponseTabView(this.project, slidePanel, getDisposable());
         this.requestConsoleTabView = new RequestConsoleTabView(this.project, slidePanel, getDisposable());
         this.messageComponent = new MessageComponent(true);
-        this.messageComponent.addWidget(new EnvWidget(httpRequestData.getModule()));
+        this.messageComponent.addWidget(new EnvWidget(this.project, this.requestTabView));
         this.messageComponent.addWidget(new UserWidget(project));
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.sendRequestHandler = new SendRequestHandler(project, this, this.requestConsoleTabView.console());

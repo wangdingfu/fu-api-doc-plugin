@@ -2,6 +2,7 @@ package com.wdf.fudoc.components;
 
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
+import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -23,10 +24,7 @@ public class FuStatusLabel {
 
     private final FuStatusLabelListener listener;
 
-    private final Icon icon;
-
     public FuStatusLabel(String text, Icon icon, FuStatusLabelListener listener) {
-        this.icon = icon;
         this.label = new JLabel(text, icon, SwingConstants.LEFT);
         this.label.setBorder(JBUI.Borders.empty(0, 10));
         this.listener = listener;
@@ -72,7 +70,7 @@ public class FuStatusLabel {
 
     private JPopupMenu buildPopupMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
-        List<String> dataList = listener.getList();
+        List<BasePopupMenuItem> dataList = listener.getList();
         if (CollectionUtils.isEmpty(dataList)) {
             return null;
         }
@@ -81,12 +79,14 @@ public class FuStatusLabel {
     }
 
 
-    private JMenuItem buildMenuItem(String text) {
-        JMenuItem menuItem = new JMenuItem(text);
-        menuItem.setIcon(this.icon);
+    private JMenuItem buildMenuItem(BasePopupMenuItem item) {
+        JMenuItem menuItem = new JMenuItem(item.getShowName());
+        menuItem.setIcon(item.getIcon());
         menuItem.addActionListener(e -> {
-            listener.select(text);
-            label.setText(text);
+            listener.select(item.getShowName());
+            if (item.isCanSelect()) {
+                label.setText(item.getShowName());
+            }
         });
         return menuItem;
     }

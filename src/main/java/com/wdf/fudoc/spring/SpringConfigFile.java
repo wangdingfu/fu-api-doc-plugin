@@ -50,14 +50,7 @@ public class SpringConfigFile {
      * @return 配置的值
      */
     public String getConfig(String key) {
-        String env = activeEnv;
-        if (SpringConfigFileConstants.MAVEN_PROFILES.equals(this.activeEnv)) {
-            //issues #6 @profiles.active@ 场景处理 从maven中获取当前激活的环境
-            List<String> activeProfiles = MavenUtils.getActiveProfiles(module);
-            if (CollectionUtils.isNotEmpty(activeProfiles)) {
-                env = activeProfiles.stream().filter(configMap::containsKey).findFirst().orElse(activeProfiles.get(0));
-            }
-        }
+        String env = getDefaultEnv();
         //第一步 优先从当前激活的环境中获取
         String config = getConfig(configMap.get(env), key);
         if (StringUtils.isEmpty(config)) {
@@ -65,6 +58,31 @@ public class SpringConfigFile {
             return getConfig(configMap.get(SpringConfigFileConstants.DEFAULT_ENV), key);
         }
         return config;
+    }
+
+
+    public String getConfig(String env, String key) {
+        //第一步 优先从当前激活的环境中获取
+        String config = getConfig(configMap.get(env), key);
+        if (StringUtils.isEmpty(config)) {
+            //第二步 从默认环境中获取
+            config = getConfig(configMap.get(getDefaultEnv()), key);
+            if (StringUtils.isBlank(config)) {
+                return SpringConfigFileConstants.DEFAULT_SERVER_PORT + "";
+            }
+        }
+        return config;
+    }
+
+    private String getDefaultEnv() {
+        if (SpringConfigFileConstants.MAVEN_PROFILES.equals(this.activeEnv)) {
+            //issues #6 @profiles.active@ 场景处理 从maven中获取当前激活的环境
+            List<String> activeProfiles = MavenUtils.getActiveProfiles(module);
+            if (CollectionUtils.isNotEmpty(activeProfiles)) {
+                return activeProfiles.stream().filter(configMap::containsKey).findFirst().orElse(activeProfiles.get(0));
+            }
+        }
+        return activeEnv;
     }
 
 

@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.view;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.common.FuBundle;
@@ -95,6 +96,9 @@ public class FuRequestSettingView extends DialogWrapper {
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
     }
 
+    public void select(String tab){
+        ApplicationManager.getApplication().invokeLater(()->fuTabBuilder.select(tab));
+    }
 
     /**
      * 初始化数据

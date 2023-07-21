@@ -1,5 +1,7 @@
 package com.wdf.fudoc.components.listener;
 
+import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
+
 import java.util.List;
 
 /**
@@ -11,7 +13,7 @@ public interface FuStatusLabelListener {
     /**
      * 获取需要弹框展示的列表集合
      */
-    List<String> getList();
+    List<BasePopupMenuItem> getList();
 
 
     void select(String text);
