@@ -8,6 +8,7 @@ import com.wdf.fudoc.spring.handler.ConfigFileHandler;
 import com.wdf.fudoc.spring.handler.PropertiesConfigFileHandler;
 import com.wdf.fudoc.spring.handler.YamlConfigFileHandler;
 import com.wdf.fudoc.util.MavenUtils;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -32,12 +33,18 @@ public class SpringConfigFile {
     /**
      * 当前激活的环境
      */
+    @Getter
     private String activeEnv = SpringConfigFileConstants.DEFAULT_ENV;
 
     /**
      * 配置文件内容
      */
     private final Map<String, ConfigFileHandler> configMap = new ConcurrentHashMap<>();
+
+
+    public Set<String> getEnvs() {
+        return configMap.keySet();
+    }
 
     /**
      * 从配置文件中获取默认配置

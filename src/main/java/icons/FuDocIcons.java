@@ -59,6 +59,7 @@ public interface FuDocIcons {
     Icon PUT_DARK = IconLoader.getIcon("icon/http/put_dark.svg", FuDocIcons.class);
     Icon DELETE_DARK = IconLoader.getIcon("icon/http/delete_dark.svg", FuDocIcons.class);
     Icon ALL_DARK = IconLoader.getIcon("icon/http/all_dark.svg", FuDocIcons.class);
+    Icon SPRING_BOOT = IconLoader.getIcon("icon/SpringBoot.svg", FuDocIcons.class);
 
 
 }

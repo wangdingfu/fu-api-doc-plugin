@@ -54,6 +54,8 @@ public interface MessageConstants {
     String SYNC_YAPI_BASE_TITLE = "fudoc.sync.yapi.base.title";
     String SYNC_YAPI_MAIN_TITLE = "fudoc.sync.yapi.main.title";
 
+    String REQUEST_GLOBAL_CONFIG_ENV_TITLE = "fudoc.request.global.config.title.env";
+    String REQUEST_GLOBAL_CONFIG_AUTH_TITLE = "fudoc.request.global.config.title.auth";
 
     String SYNC_YAPI_TOKEN = "fodoc.sync.yapi.token";
     String SYNC_YAPI_TOKEN_TITLE = "fodoc.sync.yapi.token.title";

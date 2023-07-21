@@ -1,16 +1,28 @@
 package com.wdf.fudoc.spring;
 
+import com.google.common.collect.Sets;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
+import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -23,15 +35,76 @@ public class SpringConfigManager {
 
     private static final Map<Module, SpringConfigFile> MODULE_SPRING_CONFIG_MAP = new ConcurrentHashMap<>();
 
+    private static final Map<Project, Set<String>> SPRING_APPLICATION_MAP = new ConcurrentHashMap<>();
+
+    public static Set<String> getApplicationList(Project project) {
+        return SPRING_APPLICATION_MAP.get(project);
+    }
+
     /**
      * 初始化执行项目下所有的spring配置文件到内存中
      *
      * @param project 当前项目
      */
     public static void initProjectSpringConfig(Project project) {
-        Collection<Module> modules = ModuleUtil.getModulesOfType(project, JavaModuleType.getModuleType());
-        for (Module module : modules) {
-            MODULE_SPRING_CONFIG_MAP.put(module, initSpringConfig(module));
+        ApplicationManager.getApplication().runReadAction(() -> {
+            //初始化Springboot应用
+            initSpringBoot(project);
+        });
+
+    }
+
+
+    private static void initSpringBoot(Project project) {
+        Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(AnnotationConstants.SPRING_BOOT_APPLICATION, project, GlobalSearchScope.projectScope(project));
+        if (CollectionUtils.isNotEmpty(psiAnnotations)) {
+            Map<Module, PsiClass> springBootApplicationMap = new HashMap<>();
+            Set<String> applicationList = Sets.newHashSet("ExampleApplication");
+            for (PsiAnnotation psiAnnotation : psiAnnotations) {
+                if (!AnnotationConstants.SPRING_BOOT_APPLICATION_ANNOTATION.equals(psiAnnotation.getQualifiedName())) {
+                    continue;
+                }
+                PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
+                PsiElement psiElement = psiModifierList.getParent();
+                if (Objects.isNull(psiElement) || !(psiElement instanceof PsiClass psiClass)) {
+                    continue;
+                }
+                Module module = ModuleUtil.findModuleForPsiElement(psiElement);
+                applicationList.add(psiClass.getName());
+                springBootApplicationMap.put(module, psiClass);
+            }
+            SPRING_APPLICATION_MAP.put(project, applicationList);
+            if (MapUtils.isEmpty(springBootApplicationMap)) {
+                return;
+            }
+
+            FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
+            if (!fuRequestConfigPO.isAutoPort()) {
+                //不自动读取端口信息
+                return;
+            }
+
+            List<ConfigEnvTableBO> envConfigList = fuRequestConfigPO.getEnvConfigList();
+            springBootApplicationMap.forEach((module, springFile) -> {
+                //Spring启动类名称
+                String springBootName = springFile.getName();
+                SpringConfigFile springConfigFile = initSpringConfig(module);
+                Set<String> envs = springConfigFile.getEnvs();
+                if (CollectionUtils.isEmpty(envs)) {
+                    envs = Sets.newHashSet("application");
+                }
+                for (String env : envs) {
+                    if (envConfigList.stream().anyMatch(a -> a.getEnvName().equals(env) && a.getApplication().equals(springBootName))) {
+                        continue;
+                    }
+                    ConfigEnvTableBO envTableBO = new ConfigEnvTableBO();
+                    envTableBO.setApplication(springBootName);
+                    envTableBO.setEnvName(env);
+                    envTableBO.setSelect(true);
+                    envTableBO.setDomain("http://localhost:" + springConfigFile.getConfig(SpringConfigFileConstants.SERVER_PORT_KEY));
+                    envConfigList.add(envTableBO);
+                }
+            });
         }
     }
 
@@ -106,7 +179,7 @@ public class SpringConfigManager {
     }
 
 
-    public static VirtualFile getFile(Module module,String fileName){
+    public static VirtualFile getFile(Module module, String fileName) {
         VirtualFile[] rootList = ModuleRootManager.getInstance(module).getSourceRoots(false);
         for (VirtualFile virtualFile : rootList) {
             if (SpringConfigFileConstants.RESOURCE.equals(virtualFile.getName())) {

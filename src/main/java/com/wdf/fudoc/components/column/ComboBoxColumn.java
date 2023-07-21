@@ -1,12 +1,17 @@
 package com.wdf.fudoc.components.column;
 
 import com.wdf.fudoc.common.base.FuFunction;
+import com.wdf.fudoc.components.FuTableComboBoxRenderer;
+import com.wdf.fudoc.components.JLabelListRendererComponent;
 import com.wdf.fudoc.components.factory.TableCellEditorFactory;
 import com.wdf.fudoc.util.LambdaUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -27,16 +32,29 @@ public class ComboBoxColumn<T> extends Column {
      */
     private BiConsumer<T, String> setFun;
 
-    public ComboBoxColumn(String name, FuFunction<T, String> getFun, BiConsumer<T, String> setFun) {
+    private final Icon icon;
+
+    public ComboBoxColumn(String name, Icon icon, FuFunction<T, String> getFun, BiConsumer<T, String> setFun) {
         super(name, TableCellEditorFactory.createTextFieldEditor());
+        this.icon = icon;
         this.getFun = getFun;
         this.setFun = setFun;
     }
 
-    public ComboBoxColumn(String name, FuFunction<T, String> getFun, BiConsumer<T, String> setFun, Set<String> items) {
-        super(name, TableCellEditorFactory.createComboBoxEditor(false, items));
+    public ComboBoxColumn(String name, Icon icon, FuFunction<T, String> getFun, BiConsumer<T, String> setFun, Set<String> items) {
+        super(name, TableCellEditorFactory.createComboBoxEditor(false, icon, items));
+        this.icon = icon;
         this.getFun = getFun;
         this.setFun = setFun;
+    }
+
+    @Override
+    public TableCellRenderer getCellRenderer() {
+        //AllIcons.Nodes.Module
+        if (Objects.nonNull(this.icon)) {
+            return new FuTableComboBoxRenderer(icon);
+        }
+        return null;
     }
 
     @Override

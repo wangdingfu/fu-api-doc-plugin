@@ -14,9 +14,12 @@ import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.dialog.CustomTableSettingDialog;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableListener;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.storage.FuDocConfigStorage;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.JTableUtils;
 import com.wdf.fudoc.util.ObjectUtils;
+import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -268,19 +271,16 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
                     CustomTableSettingDialog customTableSettingDialog = new CustomTableSettingDialog(e.getProject(), tableKey, columnToDataList());
                     if (customTableSettingDialog.showAndGet()) {
                         List<KeyValueTableBO> customColumnList = customTableSettingDialog.getColumnList();
-                        if (CollectionUtils.isNotEmpty(customColumnList)) {
-                            List<KeyValueTableBO> addColumnList = customColumnList.stream().filter(f -> Objects.nonNull(f.getSelect()) && f.getSelect()).toList();
-                            //移除动态表头
-                            removeDynamicColumn();
-                            if (CollectionUtils.isEmpty(addColumnList)) {
-                                return;
-                            }
+                        //移除动态表头
+                        removeDynamicColumn();
+                        List<KeyValueTableBO> addColumnList;
+                        if (CollectionUtils.isNotEmpty(customColumnList) && CollectionUtils.isNotEmpty(addColumnList = customColumnList.stream().filter(f -> Objects.nonNull(f.getSelect()) && f.getSelect()).toList())) {
                             //将列初始化到table
                             columnList.addAll(ObjectUtils.listToList(addColumnList, data -> new DynamicColumn(data.getValue(), data.getKey())));
                             addColumnList.forEach(f -> addColumn(f.getValue()));
-                            //格式化第一列
-                            formatFirstColumn();
                         }
+                        //格式化第一列
+                        formatFirstColumn();
                     }
                 }
             });
@@ -354,7 +354,8 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         if (StringUtils.isBlank(this.tableKey)) {
             return;
         }
-        Map<String, List<KeyValueTableBO>> customTableConfigMap = FuDocConfigStorage.INSTANCE.readData().getCustomTableConfigMap();
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.getInstance(ProjectUtils.getCurrProject()).readData();
+        Map<String, List<KeyValueTableBO>> customTableConfigMap = fuRequestConfigPO.getCustomTableConfigMap();
         List<KeyValueTableBO> keyValueTableBOList = customTableConfigMap.get(this.tableKey);
         if (CollectionUtils.isEmpty(keyValueTableBOList)) {
             return;

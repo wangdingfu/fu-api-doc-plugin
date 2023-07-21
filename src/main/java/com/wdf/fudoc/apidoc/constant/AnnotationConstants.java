@@ -46,6 +46,10 @@ public interface AnnotationConstants {
     String SWAGGER_API_PARAM = "io.swagger.annotations.ApiParam";
 
 
+
+    String SPRING_BOOT_APPLICATION = "SpringBootApplication";
+    String SPRING_BOOT_APPLICATION_ANNOTATION = "org.springframework.boot.autoconfigure.SpringBootApplication";
+
     String[] VALID_NOT = new String[]{JAVAX_VALID_NOT_NULL, JAVAX_VALID_NOT_EMPTY, JAVAX_VALID_NOT_BLANK, VALID_NOT_BLANK, VALID_NOT_EMPTY};
 
     String[] MAPPING = new String[]{POST_MAPPING, GET_MAPPING, REQUEST_MAPPING, PUT_MAPPING, DELETE_MAPPING, PATCH_MAPPING};
