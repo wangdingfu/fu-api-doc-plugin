@@ -1,27 +1,12 @@
 package com.wdf.fudoc.spring;
 
-import com.google.common.collect.Sets;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
-import com.wdf.fudoc.request.po.FuRequestConfigPO;
-import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -33,102 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SpringConfigManager {
 
     private static final Map<Module, SpringConfigFile> MODULE_SPRING_CONFIG_MAP = new ConcurrentHashMap<>();
-
-    private static final Map<Project, Map<Module, String>> SPRING_APPLICATION_MAP = new ConcurrentHashMap<>();
-
-    public static Set<String> getApplicationList(Project project) {
-        Map<Module, String> moduleStringMap = SPRING_APPLICATION_MAP.get(project);
-        if (MapUtils.isEmpty(moduleStringMap)) {
-            return Sets.newHashSet("Application");
-        }
-        return Sets.newHashSet(moduleStringMap.values());
-    }
-
-
-    public static String getApplication(Module module) {
-        if (Objects.isNull(module)) {
-            return StringUtils.EMPTY;
-        }
-        Map<Module, String> moduleStringMap = SPRING_APPLICATION_MAP.get(module.getProject());
-        if (MapUtils.isEmpty(moduleStringMap)) {
-            return StringUtils.EMPTY;
-        }
-        String applicationName = moduleStringMap.get(module);
-        return Objects.isNull(applicationName) ? StringUtils.EMPTY : applicationName;
-    }
-
-    /**
-     * 初始化执行项目下所有的spring配置文件到内存中
-     *
-     * @param project 当前项目
-     */
-    public static void initProjectSpringConfig(Project project) {
-        ApplicationManager.getApplication().invokeLater(() -> {
-            //初始化Springboot应用
-            initSpringBoot(project);
-        });
-
-    }
-
-
-    private static void initSpringBoot(Project project) {
-        Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(AnnotationConstants.SPRING_BOOT_APPLICATION, project, GlobalSearchScope.projectScope(project));
-        if (CollectionUtils.isNotEmpty(psiAnnotations)) {
-            Map<Module, PsiClass> springBootApplicationMap = new HashMap<>();
-            Map<Module, String> moduleApplicationMap = new HashMap<>();
-            SPRING_APPLICATION_MAP.put(project, moduleApplicationMap);
-            for (PsiAnnotation psiAnnotation : psiAnnotations) {
-                if (!AnnotationConstants.SPRING_BOOT_APPLICATION_ANNOTATION.equals(psiAnnotation.getQualifiedName())) {
-                    continue;
-                }
-                PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
-                PsiElement psiElement = psiModifierList.getParent();
-                if (Objects.isNull(psiElement) || !(psiElement instanceof PsiClass psiClass)) {
-                    continue;
-                }
-                Module module = ModuleUtil.findModuleForPsiElement(psiElement);
-                springBootApplicationMap.put(module, psiClass);
-                moduleApplicationMap.put(module, psiClass.getName());
-            }
-
-            if (MapUtils.isEmpty(springBootApplicationMap)) {
-                return;
-            }
-            FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
-            if (!fuRequestConfigPO.isAutoPort()) {
-                //不自动读取端口信息
-                return;
-            }
-
-            List<ConfigEnvTableBO> envConfigList = fuRequestConfigPO.getEnvConfigList();
-            springBootApplicationMap.forEach((module, springFile) -> {
-                //Spring启动类名称
-                String springBootName = springFile.getName();
-                SpringConfigFile springConfigFile = initSpringConfig(module);
-                Set<String> envs = springConfigFile.getEnvs();
-                if (CollectionUtils.isEmpty(envs)) {
-                    envs = Sets.newHashSet(SpringConfigFileConstants.DEFAULT_ENV);
-                }
-                if (envs.size() > 1) {
-                    envs.remove(SpringConfigFileConstants.DEFAULT_ENV);
-                }
-                for (String env : envs) {
-                    Optional<ConfigEnvTableBO> first = envConfigList.stream().filter(f -> f.getEnvName().equals(env) && f.getApplication().equals(springBootName)).findFirst();
-                    ConfigEnvTableBO configEnvTableBO;
-                    if (first.isEmpty()) {
-                        configEnvTableBO = new ConfigEnvTableBO();
-                        envConfigList.add(configEnvTableBO);
-                    } else {
-                        configEnvTableBO = first.get();
-                    }
-                    configEnvTableBO.setApplication(springBootName);
-                    configEnvTableBO.setEnvName(env);
-                    configEnvTableBO.setSelect(true);
-                    configEnvTableBO.setDomain("http://localhost:" + springConfigFile.getConfig(env, SpringConfigFileConstants.SERVER_PORT_KEY));
-                }
-            });
-        }
-    }
 
 
     /**
@@ -144,11 +33,9 @@ public class SpringConfigManager {
 
 
     public static String getConfigValue(Module module, String configKey) {
-        SpringConfigFile springConfigFile = MODULE_SPRING_CONFIG_MAP.get(module);
+        SpringConfigFile springConfigFile = initSpringConfig(module);
         if (Objects.isNull(springConfigFile)) {
-            //初始化当前模块的配置文件到内存中
-            springConfigFile = initSpringConfig(module);
-            MODULE_SPRING_CONFIG_MAP.put(module, springConfigFile);
+            return StringUtils.EMPTY;
         }
         return springConfigFile.getConfig(configKey);
     }
@@ -161,25 +48,29 @@ public class SpringConfigManager {
      * @return 初始化后的配置文件
      */
     public static SpringConfigFile initSpringConfig(Module module) {
-        SpringConfigFile springConfigFile = new SpringConfigFile();
-        //获取当前模块下的resource目录
-        VirtualFile resourceDir = getResourceDir(module);
-        if (Objects.nonNull(resourceDir)) {
-            //获取resource目录下所有的文件
-            for (VirtualFile child : resourceDir.getChildren()) {
-                if (!child.isDirectory() && SpringConfigFileConstants.EXTENSIONS.contains(child.getExtension())) {
-                    String configFileName = StringUtils.substringBeforeLast(child.getName(), ".");
-                    if (configFileName.contains(SpringConfigFileConstants.SPLIT)) {
-                        configFileName = StringUtils.substringBeforeLast(configFileName, SpringConfigFileConstants.SPLIT);
-                    }
-                    if (SpringConfigFileConstants.CONFIG_FILE_NAMES.contains(configFileName)) {
-                        //配置文件
-                        springConfigFile.addConfigFile(child);
+        SpringConfigFile springConfigFile = MODULE_SPRING_CONFIG_MAP.get(module);
+        if (Objects.isNull(springConfigFile)) {
+            springConfigFile = new SpringConfigFile();
+            //获取当前模块下的resource目录
+            VirtualFile resourceDir = getResourceDir(module);
+            if (Objects.nonNull(resourceDir)) {
+                //获取resource目录下所有的文件
+                for (VirtualFile child : resourceDir.getChildren()) {
+                    if (!child.isDirectory() && SpringConfigFileConstants.EXTENSIONS.contains(child.getExtension())) {
+                        String configFileName = StringUtils.substringBeforeLast(child.getName(), ".");
+                        if (configFileName.contains(SpringConfigFileConstants.SPLIT)) {
+                            configFileName = StringUtils.substringBeforeLast(configFileName, SpringConfigFileConstants.SPLIT);
+                        }
+                        if (SpringConfigFileConstants.CONFIG_FILE_NAMES.contains(configFileName)) {
+                            //配置文件
+                            springConfigFile.addConfigFile(child);
+                        }
                     }
                 }
             }
+            springConfigFile.setModule(module);
+            MODULE_SPRING_CONFIG_MAP.put(module, springConfigFile);
         }
-        springConfigFile.setModule(module);
         return springConfigFile;
     }
 

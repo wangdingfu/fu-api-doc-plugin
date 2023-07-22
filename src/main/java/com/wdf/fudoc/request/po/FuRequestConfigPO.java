@@ -71,7 +71,6 @@ public class FuRequestConfigPO {
     private List<FuCookiePO> cookies = Lists.newArrayList();
 
 
-
     /**
      * 当前选中的用户名
      */
@@ -80,7 +79,21 @@ public class FuRequestConfigPO {
     /**
      * 当前选中的环境
      */
-    private String envName;
+    private Map<String, String> defaultEnvMap = new HashMap<>();
+
+    public void addDefaultEnv(String moduleName, String defaultEnv) {
+        if (StringUtils.isBlank(moduleName) || StringUtils.isBlank(defaultEnv)) {
+            return;
+        }
+        defaultEnvMap.put(moduleName, defaultEnv);
+    }
+
+    public String getEnv(String moduleName) {
+        if (StringUtils.isBlank(moduleName)) {
+            return StringUtils.EMPTY;
+        }
+        return defaultEnvMap.get(moduleName);
+    }
 
 
     public List<GlobalPreScriptPO> getPreScriptList(String scope) {

@@ -24,6 +24,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.spring.SpringConfigManager;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
@@ -228,7 +229,7 @@ public class FuHttpRequestDataFactory {
     private static void paddingDomain(FuHttpRequestData fuHttpRequestData, Module module) {
         if (Objects.nonNull(fuHttpRequestData)) {
             //设置接口url
-            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
+            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringBootEnvLoader.getServerPort(module);
             FuRequestData request = fuHttpRequestData.getRequest();
             if (Objects.isNull(request)) {
                 request = new FuRequestData();

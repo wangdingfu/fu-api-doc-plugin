@@ -25,20 +25,12 @@ import java.util.stream.Collectors;
  */
 public class UserWidget implements FuWidget, FuStatusLabelListener {
 
-    private FuStatusLabel fuStatusLabel;
+    private final FuStatusLabel fuStatusLabel;
     private final FuRequestConfigPO configPO;
 
     public UserWidget(Project project) {
         this.configPO = FuRequestConfigStorageFactory.get(project).readData();
-        String userName = configPO.getUserName();
-        List<BasePopupMenuItem> authConfigList;
-        if (StringUtils.isBlank(userName) && CollectionUtils.isNotEmpty(authConfigList = getList())) {
-            userName = authConfigList.stream().filter(BasePopupMenuItem::isCanSelect).map(BasePopupMenuItem::getShowName).filter(StringUtils::isNotBlank).findFirst().orElse(StringUtils.EMPTY);
-            if (StringUtils.isBlank(userName)) {
-                return;
-            }
-        }
-        this.fuStatusLabel = new FuStatusLabel(userName, FuDocIcons.USER, this);
+        this.fuStatusLabel = new FuStatusLabel(configPO.getUserName(), FuDocIcons.USER, this);
     }
 
     @Override

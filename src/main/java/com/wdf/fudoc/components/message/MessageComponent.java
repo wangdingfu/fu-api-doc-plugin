@@ -148,9 +148,8 @@ public class MessageComponent {
     }
 
 
+
     public void addWidget(FuWidget fuWidget) {
-        if (fuWidget.isShow()) {
-            this.rightPanel.add(fuWidget.getComponent());
-        }
+        this.rightPanel.add(fuWidget.getComponent());
     }
 }

@@ -61,12 +61,21 @@ public class SpringConfigFile {
     }
 
 
+    public Integer getServerPort(String env) {
+        String config = getConfig(env, SpringConfigFileConstants.SERVER_PORT_KEY);
+        if (StringUtils.isNotBlank(config) && StringUtils.isNumeric(config)) {
+            return Integer.parseInt(config);
+        }
+        return SpringConfigFileConstants.DEFAULT_SERVER_PORT;
+    }
+
+
     public String getConfig(String env, String key) {
         //第一步 优先从当前激活的环境中获取
         String config = getConfig(configMap.get(env), key);
         if (StringUtils.isEmpty(config)) {
             //第二步 从默认环境中获取
-            config = getConfig(configMap.get(getDefaultEnv()), key);
+            config = getConfig(configMap.get(SpringConfigFileConstants.DEFAULT_ENV), key);
             if (StringUtils.isBlank(config)) {
                 return SpringConfigFileConstants.DEFAULT_SERVER_PORT + "";
             }

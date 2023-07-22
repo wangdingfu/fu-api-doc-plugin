@@ -76,6 +76,9 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     private final MessageComponent messageComponent;
     private final JPanel statusInfoPanel;
 
+    private final EnvWidget envWidget;
+    private final UserWidget userWidget;
+
     @Getter
     private PsiElement psiElement;
 
@@ -101,9 +104,16 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
 
     @Override
     protected void dispose() {
+        //当前窗体被销毁了 需要手动移除
+        FuRequestManager.remove(this.project, this.httpId);
+        //持久化数据
+        saveData();
+        super.dispose();
+    }
+
+
+    public void saveData() {
         try {
-            //当前窗体被销毁了 需要手动移除
-            FuRequestManager.remove(this.project, this.httpId);
             //保存当前请求
             FuRequestManager.saveRequest(project, httpRequestData);
             //保存一些配置数据
@@ -111,7 +121,6 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         } catch (Exception e) {
             log.info("持久化请求数据异常", e);
         }
-        super.dispose();
     }
 
 
@@ -130,10 +139,12 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.responseTabView = new ResponseTabView(this.project, slidePanel, getDisposable());
         this.requestConsoleTabView = new RequestConsoleTabView(this.project, slidePanel, getDisposable());
         this.messageComponent = new MessageComponent(true);
-        this.messageComponent.addWidget(new EnvWidget(this.project, this.requestTabView));
-        this.messageComponent.addWidget(new UserWidget(project));
         this.statusInfoPanel = this.messageComponent.getRootPanel();
         this.sendRequestHandler = new SendRequestHandler(project, this, this.requestConsoleTabView.console());
+        this.envWidget = new EnvWidget(this.project, this.requestTabView);
+        this.userWidget = new UserWidget(project);
+        this.messageComponent.addWidget(this.envWidget);
+        this.messageComponent.addWidget(this.userWidget);
         initUI();
         setModal(isSave);
         init();
@@ -146,6 +157,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.httpRequestData = fuHttpRequestData;
         initData(fuHttpRequestData);
         setTitle((Objects.isNull(fuHttpRequestData) || StringUtils.isBlank(fuHttpRequestData.getApiName())) ? "Send Http Request" : fuHttpRequestData.getApiName());
+        refresh();
     }
 
 
@@ -165,6 +177,12 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         return isSave ? super.createSouthPanel() : this.statusInfoPanel;
     }
 
+
+    @Override
+    public void refresh() {
+        this.envWidget.refresh();
+        this.userWidget.refresh();
+    }
 
     /**
      * 初始化工具栏面板

@@ -28,4 +28,9 @@ public interface FuWidget {
     default boolean isShow() {
         return true;
     }
+
+
+    default void refresh() {
+
+    }
 }

@@ -75,6 +75,9 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
 
     private final SendRequestHandler sendRequestHandler;
 
+    private final EnvWidget envWidget;
+    private final UserWidget userWidget;
+
     @Setter
     @Getter
     private PsiElement psiElement;
@@ -95,11 +98,13 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         Splitter splitter = new Splitter(true, 0.6F);
         this.requestTabView = new RequestTabView(project, this, null, toolWindow.getDisposable());
         this.responseTabView = new ResponseTabView(project, null, toolWindow.getDisposable());
+        this.envWidget = new EnvWidget(this.project, this.requestTabView);
+        this.userWidget = new UserWidget(project);
         RequestConsoleTabView requestConsoleTabView = new RequestConsoleTabView(this.project, null, toolWindow.getDisposable());
         this.responseHeaderTabView = new ResponseHeaderTabView(project);
         splitter.setFirstComponent(this.requestTabView.getRootPane());
         FuRequestStatusInfoView statusInfoView = new FuRequestStatusInfoView(project);
-        statusInfoView.addWidget(new EnvWidget(this.project, this.requestTabView)).addWidget(new UserWidget(project));
+        statusInfoView.addWidget(this.envWidget).addWidget(this.userWidget);
         FuTabBuilder fuTabBuilder = FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).addTab(requestConsoleTabView);
         fuTabBuilder.addSideComponent(statusInfoView.getRootPanel());
         splitter.setSecondComponent(fuTabBuilder.build());
@@ -111,6 +116,12 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.sendRequestHandler = new SendRequestHandler(project, this, requestConsoleTabView.console());
     }
 
+
+    @Override
+    public void refresh() {
+        this.envWidget.refresh();
+        this.userWidget.refresh();
+    }
 
     @Override
     public @Nullable Object getData(@NotNull @NonNls String dataId) {
@@ -132,6 +143,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.responseTabView.initData(httpRequestData);
         this.responseHeaderTabView.initData(httpRequestData);
         this.messageComponent.switchInfo();
+        refresh();
     }
 
     @Override

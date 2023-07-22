@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.collections.CollectionUtils;
+import org.jetbrains.idea.maven.model.MavenArtifact;
 import org.jetbrains.idea.maven.model.MavenExplicitProfiles;
 import org.jetbrains.idea.maven.model.MavenProfile;
 import org.jetbrains.idea.maven.project.MavenProject;
@@ -35,4 +36,25 @@ public class MavenUtils {
         Collection<String> enabledProfiles = activatedProfilesIds.getEnabledProfiles();
         return Lists.newArrayList(enabledProfiles);
     }
+
+
+    public static List<Module> getChildModule(Module module, Collection<Module> allModules) {
+        if (Objects.isNull(module) || CollectionUtils.isNotEmpty(allModules)) {
+            return Lists.newArrayList();
+        }
+        MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(module.getProject());
+        MavenProject mavenProject = mavenProjectsManager.findProject(module);
+        if (Objects.isNull(mavenProject)) {
+            return Lists.newArrayList();
+        }
+        List<Module> childList = Lists.newArrayList();
+        for (Module moduleInfo : allModules) {
+            MavenProject project = mavenProjectsManager.findProject(module);
+            if (Objects.nonNull(project) && Objects.nonNull(mavenProject.findDependencies(project.getMavenId()))) {
+                childList.add(moduleInfo);
+            }
+        }
+        return childList;
+    }
+
 }

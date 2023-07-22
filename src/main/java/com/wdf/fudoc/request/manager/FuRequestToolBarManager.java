@@ -137,19 +137,21 @@ public class FuRequestToolBarManager {
 
 
         //添加设置按钮
-        defaultActionGroup.add(new AnAction("全局配置", "全局配置", AllIcons.General.Settings) {
+        defaultActionGroup.add(new AnAction("Config", "全局配置", AllIcons.General.Settings) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //展示设置界面
                 FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(e.getProject());
                 fuRequestSettingView.setSize(800, 800);
                 fuRequestSettingView.show();
+                //刷新状态
+                fuRequestCallback.refresh();
             }
         });
 
 
         //添加保存事件
-        defaultActionGroup.add(new AnAction("定位到该方法", "(Alt+Q)", AllIcons.General.Locate) {
+        defaultActionGroup.add(new AnAction("Navigation Api", "(Alt+Q)", AllIcons.General.Locate) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 PsiElement psiElement = fuRequestCallback.getPsiElement();
@@ -167,7 +169,7 @@ public class FuRequestToolBarManager {
 
         if (fuRequestCallback.isShowViewMode()) {
             //添加设置按钮
-            defaultActionGroup.add(new AnAction("设置", "Setting", FuDocIcons.moreIcon()) {
+            defaultActionGroup.add(new AnAction("Settings", "Setting", FuDocIcons.moreIcon()) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
                     DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "View Mode");
@@ -197,7 +199,7 @@ public class FuRequestToolBarManager {
 
 
         //添加帮助文档按钮
-        defaultActionGroup.add(new AnAction("帮助文档", "Help", FuDocIcons.FU_DOC) {
+        defaultActionGroup.add(new AnAction("Help", "Help", FuDocIcons.FU_DOC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 BrowserUtil.browse(UrlConstants.DOCUMENT);

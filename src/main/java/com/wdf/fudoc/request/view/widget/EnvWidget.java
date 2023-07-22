@@ -16,9 +16,9 @@ import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
 import com.wdf.fudoc.request.view.FuRequestSettingView;
-import com.wdf.fudoc.spring.SpringConfigManager;
+import com.wdf.fudoc.spring.SpringBootEnvLoader;
+import com.wdf.fudoc.spring.SpringBootEnvModuleInfo;
 import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
-import com.wdf.fudoc.util.ProjectUtils;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -34,7 +34,7 @@ import java.util.Optional;
  */
 public class EnvWidget implements FuWidget, FuStatusLabelListener {
 
-    private FuStatusLabel fuStatusLabel;
+    private final FuStatusLabel fuStatusLabel;
     private final FuRequestConfigPO configPO;
     private final RequestTabView requestTabView;
 
@@ -43,15 +43,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
     public EnvWidget(Project project, RequestTabView requestTabView) {
         this.requestTabView = requestTabView;
         this.configPO = FuRequestConfigStorageFactory.get(project).readData();
-        String envName = configPO.getEnvName();
-        List<BasePopupMenuItem> envConfigList;
-        if (StringUtils.isBlank(envName) && CollectionUtils.isNotEmpty(envConfigList = getList())) {
-            Optional<BasePopupMenuItem> first = envConfigList.stream().filter(BasePopupMenuItem::isCanSelect).findFirst();
-            if (first.isEmpty() || StringUtils.isBlank(envName = first.get().getShowName())) {
-                return;
-            }
-        }
-        this.fuStatusLabel = new FuStatusLabel(envName, FuDocIcons.SPRING_BOOT, this);
+        this.fuStatusLabel = new FuStatusLabel(getEnvName(), FuDocIcons.SPRING_BOOT, this);
     }
 
 
@@ -72,16 +64,8 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
 
     @Override
     public List<BasePopupMenuItem> getList() {
-        List<ConfigEnvTableBO> envConfigList = configPO.getEnvConfigList();
-        if (CollectionUtils.isEmpty(envConfigList)) {
-            return Lists.newArrayList();
-        }
-        String application = SpringConfigManager.getApplication(getModule());
-        if (StringUtils.isBlank(application)) {
-            return Lists.newArrayList();
-        }
         List<BasePopupMenuItem> envList = Lists.newArrayList(new BasePopupMenuItem(AllIcons.General.Settings, CONFIG_ENV, false));
-        envConfigList.stream().filter(DynamicTableBO::isSelect).filter(f -> StringUtils.isNotBlank(f.getApplication())).filter(f -> f.getApplication().equals(application)).forEach(f -> envList.add(new BasePopupMenuItem(FuDocIcons.SPRING_BOOT, f.getEnvName())));
+        getEnvConfigList().forEach(f -> envList.add(new BasePopupMenuItem(FuDocIcons.SPRING_BOOT, f.getEnvName())));
         return envList;
     }
 
@@ -99,19 +83,56 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
             fuRequestSettingView.show();
             return;
         }
-        configPO.setEnvName(text);
+        configPO.addDefaultEnv(module.getName(), text);
         //更新http请求地址
-        List<ConfigEnvTableBO> envConfigList = configPO.getEnvConfigList();
+        List<ConfigEnvTableBO> envConfigList = getEnvConfigList();
         if (CollectionUtils.isEmpty(envConfigList)) {
             return;
         }
-        String application = SpringConfigManager.getApplication(module);
-        envConfigList.stream().filter(f -> StringUtils.isNotBlank(f.getApplication()) && StringUtils.isNotBlank(f.getEnvName()) && StringUtils.isNotBlank(f.getDomain())).filter(f -> f.getApplication().equals(application)).filter(f -> f.getEnvName().equals(text)).findFirst().ifPresent(env -> {
+        envConfigList.stream().filter(f -> f.getEnvName().equals(text)).findFirst().ifPresent(env -> {
             FuHttpRequestData fuHttpRequestData = requestTabView.getFuHttpRequestData();
             FuRequestData request = fuHttpRequestData.getRequest();
             request.setDomain(env.getDomain());
             requestTabView.setRequestUrl(request.getRequestUrl());
         });
+    }
+
+
+    @Override
+    public void refresh() {
+        //每次刷新时都需要检查下是否需要加载下配置
+        SpringBootEnvLoader.doLoad(requestTabView.getProject());
+        String text = this.fuStatusLabel.getText();
+        if (StringUtils.isBlank(text)) {
+            this.fuStatusLabel.setText(getEnvName());
+            return;
+        }
+        List<ConfigEnvTableBO> envConfigList = getEnvConfigList();
+        if (CollectionUtils.isEmpty(envConfigList)) {
+            this.fuStatusLabel.setText(null);
+            return;
+        }
+        if (envConfigList.stream().noneMatch(a -> a.getEnvName().equals(text))) {
+            this.fuStatusLabel.setText(getEnvName());
+        }
+    }
+
+    private List<ConfigEnvTableBO> getEnvConfigList() {
+        List<ConfigEnvTableBO> envConfigList = configPO.getEnvConfigList();
+        if (CollectionUtils.isEmpty(envConfigList)) {
+            return Lists.newArrayList();
+        }
+        SpringBootEnvModuleInfo.SpringBootEnvInfo envInfo = SpringBootEnvLoader.getEnvInfo(getModule());
+        if (Objects.isNull(envInfo)) {
+            return Lists.newArrayList();
+        }
+        String applicationName = envInfo.getApplicationName();
+        return envConfigList.stream()
+                .filter(f -> StringUtils.isNotBlank(f.getApplication()))
+                .filter(DynamicTableBO::isSelect)
+                .filter(f -> StringUtils.isNotBlank(f.getDomain()))
+                .filter(f -> StringUtils.isNotBlank(f.getEnvName()))
+                .filter(f -> f.getApplication().equals(applicationName)).collect(Collectors.toList());
     }
 
 
@@ -121,5 +142,12 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
             return fuHttpRequestData.getModule();
         }
         return null;
+    }
+
+
+    private String getEnvName() {
+        Module module = getModule();
+        String moduleName = Objects.isNull(module) ? null : module.getName();
+        return configPO.getEnv(moduleName);
     }
 }

@@ -1,7 +1,7 @@
 package com.wdf.fudoc.components.column;
 
 import com.wdf.fudoc.common.base.FuFunction;
-import com.wdf.fudoc.spring.SpringConfigManager;
+import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.util.ProjectUtils;
 import icons.FuDocIcons;
 import jdk.jfr.StackTrace;
@@ -18,6 +18,6 @@ import java.util.function.BiConsumer;
 public class SpringBootColumn<T> extends ComboBoxColumn<T> {
 
     public SpringBootColumn(String name, FuFunction<T, String> getFun, BiConsumer<T, String> setFun) {
-        super(name, FuDocIcons.SPRING, getFun, setFun, SpringConfigManager.getApplicationList(ProjectUtils.getCurrProject()));
+        super(name, FuDocIcons.SPRING, getFun, setFun, SpringBootEnvLoader.getApplication(ProjectUtils.getCurrProject()));
     }
 }

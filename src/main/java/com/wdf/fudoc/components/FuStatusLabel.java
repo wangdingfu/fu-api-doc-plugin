@@ -5,6 +5,7 @@ import com.wdf.fudoc.components.listener.FuStatusLabelListener;
 import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,11 +26,17 @@ public class FuStatusLabel {
     private final FuStatusLabelListener listener;
 
     public FuStatusLabel(String text, Icon icon, FuStatusLabelListener listener) {
-        this.label = new JLabel(text, icon, SwingConstants.LEFT);
+        this.label = new JLabel(icon, SwingConstants.LEFT);
         this.label.setBorder(JBUI.Borders.empty(0, 10));
         this.listener = listener;
         this.label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        setText(text);
         initLabel();
+    }
+
+    public void setText(String text) {
+        this.label.setText(Objects.isNull(text) ? StringUtils.EMPTY : text);
+        this.label.setEnabled(StringUtils.isNotBlank(text));
     }
 
 

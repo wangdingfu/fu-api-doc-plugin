@@ -27,4 +27,9 @@ public interface FuRequestCallback {
 
 
     boolean isShowViewMode();
+
+
+    default void refresh() {
+
+    }
 }
