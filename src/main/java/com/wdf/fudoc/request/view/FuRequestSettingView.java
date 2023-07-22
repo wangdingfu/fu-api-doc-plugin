@@ -11,9 +11,11 @@ import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.tab.settings.*;
+import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.Getter;
+import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -104,7 +107,7 @@ public class FuRequestSettingView extends DialogWrapper {
      * 初始化数据
      */
     public void initData() {
-        FuRequestConfigPO configPO = FuRequestConfigStorageFactory.get(project).readData();
+        FuRequestConfigPO configPO = FuRequestConfigStorage.get(project).readData();
         //初始化全局请求头
         this.globalHeaderTab.initData(configPO);
         //初始化配置
@@ -116,6 +119,10 @@ public class FuRequestSettingView extends DialogWrapper {
         //初始化全局前置脚本
         Map<String, GlobalPreScriptPO> preScriptMap = configPO.getPreScriptMap();
         //如果不存在默认前置脚本数据 则需要添加上默认的前置脚本数据
+        Set<String> applicationList = SpringBootEnvLoader.getApplication(project);
+        if(CollectionUtils.isNotEmpty(applicationList)){
+
+        }
         GlobalPreScriptPO globalPreScriptPO = preScriptMap.get(GlobalPreScriptTab.TITLE);
         if (Objects.isNull(globalPreScriptPO)) {
             globalPreScriptPO = new GlobalPreScriptPO();
@@ -137,7 +144,7 @@ public class FuRequestSettingView extends DialogWrapper {
     }
 
     public void apply() {
-        FuRequestConfigStorage storage = FuRequestConfigStorageFactory.get(project);
+        FuRequestConfigStorage storage = FuRequestConfigStorage.get(project);
         FuRequestConfigPO configPO = storage.readData();
         //持久化配置数据
         this.preScriptTabs.forEach(f -> f.saveData(configPO));
@@ -148,13 +155,6 @@ public class FuRequestSettingView extends DialogWrapper {
         storage.saveData(configPO);
     }
 
-    @Override
-    protected Action @NotNull [] createActions() {
-        List<Action> actionList = Lists.newArrayList(super.createActions());
-        actionList.add(new CreateTabAction(FuBundle.message(MessageConstants.SCRIPT_PRE_ADD)));
-        actionList.add(new RemoveTabAction(FuBundle.message(MessageConstants.SCRIPT_PRE_REMOVE)));
-        return actionList.toArray(new Action[]{});
-    }
 
 
     protected class CreateTabAction extends DialogWrapperAction {

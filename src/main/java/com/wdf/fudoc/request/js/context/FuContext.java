@@ -10,6 +10,7 @@ import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +46,7 @@ public class FuContext {
     public FuContext(Project project, String scriptName) {
         this.project = project;
         this.scriptName = scriptName;
-        this.configPO = FuRequestConfigStorage.getInstance(project).readData();
+        this.configPO = FuRequestConfigStorage.get(project).readData();
         this.preScriptPO = this.configPO.getPreScriptMap().get(scriptName);
         this.scope = Objects.isNull(preScriptPO) ? Lists.newArrayList() : this.preScriptPO.getScope();
     }

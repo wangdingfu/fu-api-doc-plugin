@@ -9,7 +9,7 @@ import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,7 @@ public class UserWidget implements FuWidget, FuStatusLabelListener {
     private final FuRequestConfigPO configPO;
 
     public UserWidget(Project project) {
-        this.configPO = FuRequestConfigStorageFactory.get(project).readData();
+        this.configPO = FuRequestConfigStorage.get(project).readData();
         this.fuStatusLabel = new FuStatusLabel(configPO.getUserName(), FuDocIcons.USER, this);
     }
 

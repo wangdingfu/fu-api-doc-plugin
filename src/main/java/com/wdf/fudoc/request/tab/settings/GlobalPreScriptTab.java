@@ -31,7 +31,7 @@ import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.HttpCmdView;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.ResourceUtils;
 import groovy.util.logging.Slf4j;
@@ -134,7 +134,7 @@ public class GlobalPreScriptTab implements FuDataTab<FuRequestConfigPO>, FuActio
                             @Override
                             public void run(@NotNull ProgressIndicator indicator) {
                                 progressIndicator = indicator;
-                                FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(project);
+                                FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorage.get(project);
                                 FuRequestConfigPO configPO = fuRequestConfigStorage.readData();
                                 saveData(configPO);
                                 GlobalPreScriptPO globalPreScriptPO = configPO.getPreScriptMap().get(title);

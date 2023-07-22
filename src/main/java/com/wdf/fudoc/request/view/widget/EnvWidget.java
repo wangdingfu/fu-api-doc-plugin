@@ -18,7 +18,7 @@ import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
 import com.wdf.fudoc.request.view.FuRequestSettingView;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.spring.SpringBootEnvModuleInfo;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +42,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
 
     public EnvWidget(Project project, RequestTabView requestTabView) {
         this.requestTabView = requestTabView;
-        this.configPO = FuRequestConfigStorageFactory.get(project).readData();
+        this.configPO = FuRequestConfigStorage.get(project).readData();
         this.fuStatusLabel = new FuStatusLabel(getEnvName(), FuDocIcons.SPRING_BOOT, this);
     }
 
@@ -104,7 +104,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
         SpringBootEnvLoader.doLoad(requestTabView.getProject());
         String text = this.fuStatusLabel.getText();
         if (StringUtils.isBlank(text)) {
-            this.fuStatusLabel.setText(getEnvName());
+            setText(getEnvName());
             return;
         }
         List<ConfigEnvTableBO> envConfigList = getEnvConfigList();
@@ -113,7 +113,16 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
             return;
         }
         if (envConfigList.stream().noneMatch(a -> a.getEnvName().equals(text))) {
-            this.fuStatusLabel.setText(getEnvName());
+            setText(getEnvName());
+            return;
+        }
+        select(text);
+    }
+
+    private void setText(String text) {
+        this.fuStatusLabel.setText(text);
+        if (StringUtils.isNotBlank(text)) {
+            select(text);
         }
     }
 

@@ -8,18 +8,15 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.column.Column;
 import com.wdf.fudoc.components.column.DynamicColumn;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.dialog.CustomTableSettingDialog;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
-import com.wdf.fudoc.storage.FuDocConfigStorage;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
 import com.wdf.fudoc.util.JTableUtils;
-import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.ProjectUtils;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
@@ -353,7 +350,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         if (StringUtils.isBlank(this.tableKey)) {
             return;
         }
-        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(ProjectUtils.getCurrProject()).readData();
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(ProjectUtils.getCurrProject()).readData();
         Map<String, List<KeyValueTableBO>> customTableConfigMap = fuRequestConfigPO.getCustomTableConfigMap();
         List<KeyValueTableBO> keyValueTableBOList = customTableConfigMap.get(this.tableKey);
         if (CollectionUtils.isEmpty(keyValueTableBOList)) {

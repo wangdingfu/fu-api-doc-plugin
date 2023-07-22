@@ -36,7 +36,7 @@ public class FuStatusLabel {
 
     public void setText(String text) {
         this.label.setText(Objects.isNull(text) ? StringUtils.EMPTY : text);
-        this.label.setEnabled(StringUtils.isNotBlank(text));
+        this.label.setVisible(StringUtils.isNotBlank(text));
     }
 
 

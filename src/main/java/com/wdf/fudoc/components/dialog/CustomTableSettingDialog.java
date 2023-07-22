@@ -7,7 +7,7 @@ import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -68,7 +68,7 @@ public class CustomTableSettingDialog extends DialogWrapper implements FuTableLi
     @Override
     protected void doOKAction() {
         //持久化数据
-        FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(this.project);
+        FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorage.get(this.project);
         Map<String, List<KeyValueTableBO>> customTableConfigMap = fuRequestConfigStorage.readData().getCustomTableConfigMap();
         customTableConfigMap.put(this.title, getColumnList());
         super.doOKAction();

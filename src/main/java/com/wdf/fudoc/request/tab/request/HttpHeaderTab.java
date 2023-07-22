@@ -20,7 +20,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -66,7 +66,7 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<HeaderKeyValueBO> 
         if (Objects.isNull(module)) {
             return;
         }
-        FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(project);
+        FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorage.get(project);
         List<GlobalKeyValuePO> globalHeaderList = fuRequestConfigStorage.readData().getGlobalHeaderList();
         if (CollectionUtils.isNotEmpty(globalHeaderList)) {
             addHeader(globalHeaderList.stream().filter(f -> Objects.isNull(f.getScope()) || f.getScope().isScope(module)).collect(Collectors.toList()));

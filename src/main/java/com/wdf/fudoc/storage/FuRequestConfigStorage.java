@@ -8,7 +8,9 @@ import com.wdf.fudoc.util.StorageUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * [Fu Request]配置持久化
@@ -26,12 +28,19 @@ public class FuRequestConfigStorage {
 
     private FuRequestConfigPO configPO;
 
-    public FuRequestConfigStorage(Project project) {
+    private FuRequestConfigStorage(Project project) {
         this.path = Paths.get(FuPaths.BASE_PATH, project.getName(), FuPaths.CONFIG).toString();
     }
 
-    public static FuRequestConfigStorage getInstance(Project project) {
-        return new FuRequestConfigStorage(project);
+    private static final Map<Project, FuRequestConfigStorage> storageMap = new ConcurrentHashMap<>();
+
+    public static FuRequestConfigStorage get(Project project) {
+        FuRequestConfigStorage fuRequestConfigStorage = storageMap.get(project);
+        if (Objects.isNull(fuRequestConfigStorage)) {
+            fuRequestConfigStorage = new FuRequestConfigStorage(project);
+            storageMap.put(project, fuRequestConfigStorage);
+        }
+        return fuRequestConfigStorage;
     }
 
     public FuRequestConfigPO readData() {

@@ -11,7 +11,7 @@ import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -35,7 +35,7 @@ public class HttpApiExecutor {
     public static void doSendRequest(Project project, FuHttpRequestData fuHttpRequestData, FuConsole fuConsole) {
         //执行前置脚本
         long start = System.currentTimeMillis();
-        FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorageFactory.get(project);
+        FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorage.get(project);
         FuRequestConfigPO fuRequestConfigPO = fuRequestConfigStorage.readData();
         List<GlobalPreScriptPO> preScriptPOList;
         Module module = fuHttpRequestData.getModule();

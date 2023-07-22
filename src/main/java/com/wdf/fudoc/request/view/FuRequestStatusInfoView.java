@@ -61,9 +61,6 @@ public class FuRequestStatusInfoView {
 
 
     public FuRequestStatusInfoView addWidget(FuWidget fuWidget) {
-        if(!fuWidget.isShow()){
-            return this;
-        }
         widgetList.add(fuWidget);
         if (fuWidget.isRight()) {
             this.rightPanel.add(fuWidget.getComponent(), rightIndex++);

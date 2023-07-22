@@ -180,7 +180,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
             //保存当前请求
             FuRequestManager.saveRequest(project, httpRequestData);
             //保存一些配置数据
-            FuRequestConfigStorage.getInstance(project).saveData();
+            FuRequestConfigStorage.get(project).saveData();
         } catch (Exception e) {
             log.info("持久化请求数据异常", e);
         }

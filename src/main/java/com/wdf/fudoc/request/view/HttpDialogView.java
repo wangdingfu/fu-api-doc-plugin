@@ -22,6 +22,7 @@ import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.request.view.widget.EnvWidget;
 import com.wdf.fudoc.request.view.widget.UserWidget;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -117,7 +118,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
             //保存当前请求
             FuRequestManager.saveRequest(project, httpRequestData);
             //保存一些配置数据
-            FuRequestConfigStorage.getInstance(project).saveData();
+            FuRequestConfigStorage.get(project).saveData();
         } catch (Exception e) {
             log.info("持久化请求数据异常", e);
         }

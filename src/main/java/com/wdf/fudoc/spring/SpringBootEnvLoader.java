@@ -16,7 +16,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.MavenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -161,12 +161,12 @@ public class SpringBootEnvLoader {
 
 
     public static void loadSpringBootConfig(Project project) {
-        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(project).readData();
         if (!fuRequestConfigPO.isAutoPort()) {
             return;
         }
         //自动读取springboot配置并使用
-        SpringBootEnvModuleInfo springBootEnvModuleInfo = initSpringBoot(project);
+        SpringBootEnvModuleInfo springBootEnvModuleInfo = SPRING_BOOT_MODULE.get(project);
         if (Objects.isNull(springBootEnvModuleInfo)) {
             //读取配置异常
             log.error("读取SpringBoot配置文件失败");

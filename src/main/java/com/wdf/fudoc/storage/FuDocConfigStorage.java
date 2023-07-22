@@ -1,6 +1,5 @@
 package com.wdf.fudoc.storage;
 
-import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.common.constant.FuPaths;
 import com.wdf.fudoc.common.po.FuDocConfigPO;
 import com.wdf.fudoc.util.JsonUtil;
@@ -29,9 +28,6 @@ public class FuDocConfigStorage {
         this.path = Paths.get(FuPaths.BASE_PATH, FuPaths.CONFIG).toString();
     }
 
-    public static FuRequestConfigStorage getInstance(Project project) {
-        return new FuRequestConfigStorage(project);
-    }
 
     public FuDocConfigPO readData() {
         if (Objects.isNull(this.configPO)) {

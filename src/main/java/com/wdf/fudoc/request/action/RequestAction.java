@@ -17,7 +17,7 @@ import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.HttpDialogView;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,7 @@ public class RequestAction extends AbstractClassAction {
         }
         HttpDialogView httpDialogView = null;
         Project project = e.getProject();
-        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(project).readData();
         if (ViewMode.SINGLE_PINNED.myActionID.equals(fuRequestConfigPO.getViewMode())) {
             //指定了只展示单个窗体 将当前激活的窗体都手动给关闭
             httpDialogView = FuRequestManager.closeAll(project);

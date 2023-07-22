@@ -8,7 +8,7 @@ import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -29,7 +29,7 @@ public class HttpCookieView extends DialogWrapper {
 
     public HttpCookieView(@Nullable Project project) {
         super(project, false);
-        this.storage = FuRequestConfigStorageFactory.get(project);
+        this.storage = FuRequestConfigStorage.get(project);
         this.fuTableComponent = FuTableComponent.create(FuTableColumnFactory.cookie(), storage.readData().getCookies(), FuCookiePO.class);
         setModal(true);
         init();
