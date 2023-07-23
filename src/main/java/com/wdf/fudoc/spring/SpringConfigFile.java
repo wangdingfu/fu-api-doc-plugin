@@ -1,5 +1,6 @@
 package com.wdf.fudoc.spring;
 
+import com.google.common.collect.Sets;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.wdf.fudoc.spring.handler.ConfigFileHandler;
@@ -40,7 +41,7 @@ public class SpringConfigFile {
 
 
     public Set<String> getEnvs() {
-        return configMap.keySet();
+        return Sets.newHashSet(configMap.keySet());
     }
 
     /**
@@ -75,10 +76,7 @@ public class SpringConfigFile {
         String config = getConfig(configMap.get(env), key);
         if (StringUtils.isEmpty(config)) {
             //第二步 从默认环境中获取
-            config = getConfig(configMap.get(SpringConfigFileConstants.DEFAULT_ENV), key);
-            if (StringUtils.isBlank(config)) {
-                return SpringConfigFileConstants.DEFAULT_SERVER_PORT + "";
-            }
+            return getConfig(configMap.get(SpringConfigFileConstants.DEFAULT_ENV), key);
         }
         return config;
     }

@@ -1,6 +1,9 @@
 package com.wdf.fudoc.request.tab.settings;
 
 import com.google.common.collect.Lists;
+import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.ui.tabs.TabInfo;
@@ -13,8 +16,11 @@ import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
+import com.wdf.fudoc.spring.SpringBootEnvLoader;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -40,6 +46,7 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
     public GlobalConfigTab() {
         this.envTable = FuTableComponent.create("env", FuTableColumnFactory.envConfig(), ConfigEnvTableBO.class);
         this.authTable = FuTableComponent.create("auth", FuTableColumnFactory.authConfig(), ConfigAuthTableBO.class);
+        addReloadAction();
         this.rootBox = new VerticalBox();
         JPanel envPanel = this.envTable.createPanel();
         JPanel authPanel = this.authTable.createPanel();
@@ -47,6 +54,18 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
         authPanel.setBorder(authBorder);
         this.rootBox.add(envPanel);
         this.rootBox.add(authPanel);
+    }
+
+
+    private void addReloadAction() {
+        this.envTable.addAnAction(new AnAction("Refresh", "", AllIcons.Actions.Refresh) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                SpringBootEnvLoader.doLoad(e.getProject(), true);
+                FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(e.getProject()).readData();
+                envTable.setDataList(Lists.newArrayList(fuRequestConfigPO.getEnvConfigList()));
+            }
+        });
     }
 
     @Override

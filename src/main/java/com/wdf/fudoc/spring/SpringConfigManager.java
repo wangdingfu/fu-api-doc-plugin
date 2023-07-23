@@ -50,27 +50,33 @@ public class SpringConfigManager {
     public static SpringConfigFile initSpringConfig(Module module) {
         SpringConfigFile springConfigFile = MODULE_SPRING_CONFIG_MAP.get(module);
         if (Objects.isNull(springConfigFile)) {
-            springConfigFile = new SpringConfigFile();
-            //获取当前模块下的resource目录
-            VirtualFile resourceDir = getResourceDir(module);
-            if (Objects.nonNull(resourceDir)) {
-                //获取resource目录下所有的文件
-                for (VirtualFile child : resourceDir.getChildren()) {
-                    if (!child.isDirectory() && SpringConfigFileConstants.EXTENSIONS.contains(child.getExtension())) {
-                        String configFileName = StringUtils.substringBeforeLast(child.getName(), ".");
-                        if (configFileName.contains(SpringConfigFileConstants.SPLIT)) {
-                            configFileName = StringUtils.substringBeforeLast(configFileName, SpringConfigFileConstants.SPLIT);
-                        }
-                        if (SpringConfigFileConstants.CONFIG_FILE_NAMES.contains(configFileName)) {
-                            //配置文件
-                            springConfigFile.addConfigFile(child);
-                        }
+            return doLoadSpringConfig(module);
+        }
+        return springConfigFile;
+    }
+
+
+    public static SpringConfigFile doLoadSpringConfig(Module module) {
+        SpringConfigFile springConfigFile = new SpringConfigFile();
+        //获取当前模块下的resource目录
+        VirtualFile resourceDir = getResourceDir(module);
+        if (Objects.nonNull(resourceDir)) {
+            //获取resource目录下所有的文件
+            for (VirtualFile child : resourceDir.getChildren()) {
+                if (!child.isDirectory() && SpringConfigFileConstants.EXTENSIONS.contains(child.getExtension())) {
+                    String configFileName = StringUtils.substringBeforeLast(child.getName(), ".");
+                    if (configFileName.contains(SpringConfigFileConstants.SPLIT)) {
+                        configFileName = StringUtils.substringBeforeLast(configFileName, SpringConfigFileConstants.SPLIT);
+                    }
+                    if (SpringConfigFileConstants.CONFIG_FILE_NAMES.contains(configFileName)) {
+                        //配置文件
+                        springConfigFile.addConfigFile(child);
                     }
                 }
             }
-            springConfigFile.setModule(module);
-            MODULE_SPRING_CONFIG_MAP.put(module, springConfigFile);
         }
+        springConfigFile.setModule(module);
+        MODULE_SPRING_CONFIG_MAP.put(module, springConfigFile);
         return springConfigFile;
     }
 

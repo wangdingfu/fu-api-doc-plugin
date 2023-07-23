@@ -252,6 +252,7 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
         if (Objects.isNull(globalPreScriptPO)) {
             globalPreScriptPO = new GlobalPreScriptPO();
             globalPreScriptPO.setApplication(this.application);
+            globalPreScriptPO.setScriptType(this.scriptType);
             preScriptMap.put(this.application, globalPreScriptPO);
         }
 
@@ -301,6 +302,7 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
         }
         globalPreScriptPO.setScript(this.fuEditorComponent.getContent());
         globalPreScriptPO.setApplication(this.application);
+        globalPreScriptPO.setScriptType(this.scriptType);
         globalPreScriptPO.setFuHttpRequestDataMap(this.httpCmdView.getFuHttpRequestDataMap());
     }
 

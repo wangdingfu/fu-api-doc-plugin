@@ -70,6 +70,11 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
      */
     private final String tableKey;
 
+    /**
+     * 自定义动作列表
+     */
+    private final List<AnAction> actionList = Lists.newArrayList();
+
     public List<T> getDataList() {
         return Objects.isNull(dataList) ? Lists.newArrayList() : dataList;
     }
@@ -88,6 +93,11 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         if (Objects.nonNull(this.fuTableView)) {
             this.fuTableView.setEnabled(enable);
         }
+    }
+
+    public FuTableComponent<T> addAnAction(AnAction anAction) {
+        this.actionList.add(anAction);
+        return this;
     }
 
 
@@ -276,6 +286,9 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
                     }
                 }
             });
+        }
+        if (CollectionUtils.isNotEmpty(this.actionList)) {
+            decorator.addExtraActions(this.actionList.toArray(new AnAction[0]));
         }
         return decorator.createPanel();
     }

@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiAnnotation;
@@ -43,11 +44,15 @@ public class SpringBootEnvLoader {
      *
      * @param project 当前项目
      */
-    public static void doLoad(Project project) {
-        if (Objects.isNull(SPRING_BOOT_MODULE.get(project))) {
+    public static void doLoad(Project project, boolean isForceLoad) {
+        if (isForceLoad) {
             initSpringBoot(project);
+        } else {
+            if (Objects.isNull(SPRING_BOOT_MODULE.get(project))) {
+                initSpringBoot(project);
+            }
         }
-        ApplicationManager.getApplication().invokeLater(() -> loadSpringBootConfig(project));
+        ApplicationManager.getApplication().invokeLater(() -> loadSpringBootConfig(project, isForceLoad));
     }
 
 
@@ -122,7 +127,7 @@ public class SpringBootEnvLoader {
     public static SpringBootEnvModuleInfo initSpringBoot(Project project) {
         SpringBootEnvModuleInfo springBootEnvModuleInfo = ApplicationManager.getApplication().runReadAction((Computable<SpringBootEnvModuleInfo>) () -> doInitSpringBoot(project));
         if (Objects.nonNull(springBootEnvModuleInfo)) {
-            ApplicationManager.getApplication().invokeLater(() -> loadSpringBootConfig(project));
+            ApplicationManager.getApplication().invokeLater(() -> loadSpringBootConfig(project, true));
             SPRING_BOOT_MODULE.put(project, springBootEnvModuleInfo);
         }
         return springBootEnvModuleInfo;
@@ -135,7 +140,17 @@ public class SpringBootEnvLoader {
      * @param project 指定项目
      */
     private static SpringBootEnvModuleInfo doInitSpringBoot(Project project) {
-        Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(AnnotationConstants.SPRING_BOOT_APPLICATION, project, GlobalSearchScope.projectScope(project));
+        Collection<PsiAnnotation> psiAnnotations;
+        try {
+            psiAnnotations = JavaAnnotationIndex.getInstance().get(AnnotationConstants.SPRING_BOOT_APPLICATION, project, GlobalSearchScope.projectScope(project));
+        } catch (IndexNotReadyException e) {
+            //缓存还未加载完毕 后续在加载
+            log.error("缓存还未加载完成......");
+            return null;
+        } catch (Exception e) {
+            log.error("加载SpringBoot配置异常", e);
+            return null;
+        }
         if (CollectionUtils.isEmpty(psiAnnotations)) {
             return null;
         }
@@ -153,7 +168,7 @@ public class SpringBootEnvLoader {
             }
             String applicationName = psiClass.getName();
             Module module = ModuleUtil.findModuleForPsiElement(psiElement);
-            SpringConfigFile springConfigFile = SpringConfigManager.initSpringConfig(module);
+            SpringConfigFile springConfigFile = SpringConfigManager.doLoadSpringConfig(module);
             Set<String> envs = springConfigFile.getEnvs();
             if (CollectionUtils.isEmpty(envs)) {
                 envs = Sets.newHashSet(SpringConfigFileConstants.DEFAULT_ENV);
@@ -173,9 +188,15 @@ public class SpringBootEnvLoader {
     }
 
 
-    public static void loadSpringBootConfig(Project project) {
+    /**
+     * 加载Spring环境信息
+     *
+     * @param project     当前项目
+     * @param isForceLoad 是否强制加载（不看配置 如果为true则必须加载）
+     */
+    public static void loadSpringBootConfig(Project project, boolean isForceLoad) {
         FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(project).readData();
-        if (!fuRequestConfigPO.isAutoPort()) {
+        if (!isForceLoad && !fuRequestConfigPO.isAutoPort()) {
             return;
         }
         //自动读取springboot配置并使用
@@ -185,7 +206,7 @@ public class SpringBootEnvLoader {
             log.error("读取SpringBoot配置文件失败");
             return;
         }
-        if (springBootEnvModuleInfo.isLoad()) {
+        if (!isForceLoad && springBootEnvModuleInfo.isLoad()) {
             //已加载 无需重复加载
             return;
         }

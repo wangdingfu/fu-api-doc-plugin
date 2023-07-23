@@ -25,7 +25,7 @@ public class LoadSpringConfigListener implements StartupActivity.Background {
     @Override
     public void runActivity(@NotNull Project project) {
         try {
-            SpringBootEnvLoader.doLoad(project);
+            SpringBootEnvLoader.doLoad(project, true);
         } catch (Exception e) {
             log.error("读取SpringBoot配置文件异常", e);
         }

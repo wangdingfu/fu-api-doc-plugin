@@ -44,7 +44,7 @@ public class FuRequestSettingView extends DialogWrapper {
     private GlobalHeaderTab globalHeaderTab;
     private GlobalCookiesTab globalCookiesTab;
     private GlobalScriptTab globalPreScriptTab;
-    private GlobalScriptTab globalPostScriptTab;
+//    private GlobalScriptTab globalPostScriptTab;
 
 
     public FuRequestSettingView(@Nullable Project project) {
@@ -67,7 +67,7 @@ public class FuRequestSettingView extends DialogWrapper {
         this.globalHeaderTab = new GlobalHeaderTab(project, getDisposable());
         this.globalCookiesTab = new GlobalCookiesTab();
         this.globalPreScriptTab = new GlobalScriptTab(project, ScriptType.PRE_SCRIPT, getDisposable());
-        this.globalPostScriptTab = new GlobalScriptTab(project, ScriptType.POST_SCRIPT, getDisposable());
+//        this.globalPostScriptTab = new GlobalScriptTab(project, ScriptType.POST_SCRIPT, getDisposable());
         //初始化数据
         initData();
         //添加tab页
@@ -81,9 +81,7 @@ public class FuRequestSettingView extends DialogWrapper {
                 //全局变量
                 .addTab(this.globalVariableTab)
                 //添加前置脚本
-                .addTab(this.globalPreScriptTab)
-                //添加后置脚本
-                .addTab(this.globalPostScriptTab);
+                .addTab(this.globalPreScriptTab);
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);
     }
 
@@ -107,7 +105,7 @@ public class FuRequestSettingView extends DialogWrapper {
         //初始化全局前置脚本
         this.globalPreScriptTab.initData(configPO);
         //初始化全局后置脚本
-        this.globalPostScriptTab.initData(configPO);
+//        this.globalPostScriptTab.initData(configPO);
     }
 
 
@@ -128,7 +126,7 @@ public class FuRequestSettingView extends DialogWrapper {
         this.globalCookiesTab.saveData(configPO);
         this.globalVariableTab.saveData(configPO);
         this.globalPreScriptTab.saveData(configPO);
-        this.globalPostScriptTab.saveData(configPO);
+//        this.globalPostScriptTab.saveData(configPO);?
         storage.saveData(configPO);
     }
 

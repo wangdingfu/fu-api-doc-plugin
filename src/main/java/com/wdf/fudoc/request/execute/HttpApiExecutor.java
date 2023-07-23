@@ -41,6 +41,7 @@ public class HttpApiExecutor {
         GlobalPreScriptPO globalPreScriptPO;
         if (Objects.nonNull(module) && StringUtils.isNotBlank(application = SpringBootEnvLoader.getApplication(module))
                 && Objects.nonNull(globalPreScriptPO = fuRequestConfigPO.getScript(ScriptType.PRE_SCRIPT, application))) {
+            globalPreScriptPO.setScriptType(ScriptType.PRE_SCRIPT);
             JsExecutor.execute(new FuContext(project, fuRequestConfigPO, globalPreScriptPO), fuConsole);
         }
         log.info("执行脚本共计耗时:{}ms", System.currentTimeMillis() - start);
