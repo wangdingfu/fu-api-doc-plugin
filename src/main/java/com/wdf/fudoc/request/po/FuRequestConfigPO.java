@@ -149,7 +149,7 @@ public class FuRequestConfigPO {
         GlobalKeyValuePO globalConfig = findGlobalConfig(list, configKey, applicationName);
         if (Objects.isNull(globalConfig)) {
             globalConfig = new GlobalKeyValuePO();
-            this.globalHeaderList.add(globalConfig);
+            list.add(globalConfig);
         }
         globalConfig.setKey(configKey);
         globalConfig.setValue(configValue);

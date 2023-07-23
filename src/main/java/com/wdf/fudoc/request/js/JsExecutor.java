@@ -28,9 +28,10 @@ public class JsExecutor {
         if (StringUtils.isBlank(script)) {
             return;
         }
+        Context cx = Context.enter();
         long start = System.currentTimeMillis();
         boolean success = false;
-        try (Context cx = Context.enter()) {
+        try {
             // 将Java对象绑定到Rhino执行上下文中
             ScriptableObject scriptableObject = cx.initStandardObjects();
             ScriptableObject.putProperty(scriptableObject, "fu", fuContext);
