@@ -1,1 +1,1 @@
-rootProject.name = "fu-api-doc-plugin"
+rootProject.name = "FuApi"
