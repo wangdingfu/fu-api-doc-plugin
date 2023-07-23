@@ -115,11 +115,7 @@ public class FuRequestData {
             return this.requestUrl;
         }
         String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
-        if (StringUtils.isBlank(baseUrl) && StringUtils.isBlank(this.paramUrl)) {
-            return StringUtils.EMPTY;
-        }
-        String apiUrl = URLUtil.completeUrl(this.domain, baseUrl);
-        return URLUtil.normalize(apiUrl + params, false, true);
+        return URLUtil.normalize(URLUtil.completeUrl(this.domain, baseUrl) + params, false, true);
     }
 
 

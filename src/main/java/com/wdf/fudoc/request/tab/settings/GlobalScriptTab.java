@@ -262,9 +262,9 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
             this.httpCmdView.addHttp();
         }
 
+        this.isEditor = false;
         String script = globalPreScriptPO.getScript();
         if (StringUtils.isNotBlank(script)) {
-            this.isEditor = false;
             switchPanel();
             this.fuEditorComponent.setContent(script);
         } else {

@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class ConfigAuthTableBO extends DynamicTableBO {
 
-    private Boolean select;
+    private Boolean select = true;
 
     private String userName;
 

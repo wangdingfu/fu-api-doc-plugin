@@ -17,8 +17,8 @@ public class FuRequestViewModeAction extends DumbAwareToggleAction {
 
     public FuRequestViewModeAction(@NotNull ViewMode mode) {
         myMode = mode;
-        getTemplatePresentation().setText(myMode.myActionID);
-        getTemplatePresentation().setDescription(myMode.myActionID);
+        getTemplatePresentation().setText(myMode.myActionName);
+        getTemplatePresentation().setDescription(myMode.myActionName);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class FuRequestViewModeAction extends DumbAwareToggleAction {
 
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.EDT;
+        return ActionUpdateThread.BGT;
     }
 
 }

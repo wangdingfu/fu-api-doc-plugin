@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.tab.settings;
 
 import com.google.common.collect.Lists;
+import com.intellij.icons.AllIcons;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.ui.tabs.TabInfo;

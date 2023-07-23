@@ -147,9 +147,10 @@ public class FuRequestToolBarManager {
                 //展示设置界面
                 FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(e.getProject());
                 fuRequestSettingView.setSize(900, 800);
-                fuRequestSettingView.show();
-                //刷新状态
-                fuRequestCallback.refresh();
+                if (fuRequestSettingView.showAndGet()) {
+                    //刷新状态
+                    fuRequestCallback.refresh();
+                }
             }
         });
 
@@ -176,7 +177,7 @@ public class FuRequestToolBarManager {
             defaultActionGroup.add(new AnAction("Settings", "Setting", FuDocIcons.moreIcon()) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
-                    DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "View Mode");
+                    DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "窗体展示方式");
                     for (ViewMode value : ViewMode.values()) {
                         viewModeGroup.add(new FuRequestViewModeAction(value));
                     }
@@ -186,7 +187,7 @@ public class FuRequestToolBarManager {
                     //新增同步文档事件
                     addSyncAction(actionGroup);
                     //新增配置是否自动同步端口号
-                    addConfigServerPortAction(defaultActionGroup);
+                    addConfigServerPortAction(actionGroup);
                     int x = 0, y = 0;
                     InputEvent inputEvent = e.getInputEvent();
                     if (inputEvent instanceof MouseEvent mouseEvent) {
@@ -217,7 +218,7 @@ public class FuRequestToolBarManager {
 
     private void addConfigServerPortAction(DefaultActionGroup defaultActionGroup) {
         //添加同步接口文档事件
-        defaultActionGroup.add(new ToggleAction("是否自动读取SpringBoot配置", "", FuDocIcons.SPRING_BOOT) {
+        defaultActionGroup.add(new ToggleAction("自动读取Spring环境配置", "", FuDocIcons.SPRING_BOOT) {
 
             @Override
             public @NotNull ActionUpdateThread getActionUpdateThread() {
@@ -246,7 +247,7 @@ public class FuRequestToolBarManager {
 
     private void addSyncAction(DefaultActionGroup defaultActionGroup) {
         //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("Sync Api", "", fuRequestCallback.isWindow() ? FuDocIcons.FU_API_SYNC : null) {
+        defaultActionGroup.add(new AnAction("同步接口文档", "", fuRequestCallback.isWindow() ? FuDocIcons.FU_API_SYNC : null) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //获取同步接口文档配置
