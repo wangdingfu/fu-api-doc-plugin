@@ -36,6 +36,10 @@ public class FuConsole {
         }
     }
 
+    public boolean isEmpty() {
+        return Objects.isNull(this.consoleView);
+    }
+
     public FuConsole(ConsoleView consoleView) {
         this.consoleView = consoleView;
     }
@@ -51,6 +55,9 @@ public class FuConsole {
     }
 
     public void println() {
+        if (Objects.isNull(this.consoleView)) {
+            return;
+        }
         this.consoleView.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
     }
 

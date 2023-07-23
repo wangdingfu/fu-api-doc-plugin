@@ -33,18 +33,27 @@ public class FuRequestConsoleManager {
 
 
     public static void requestConsole(FuConsole fuConsole, HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (Objects.isNull(fuConsole) || fuConsole.isEmpty()) {
+            return;
+        }
         logRequest(fuConsole, httpRequest);
         logResponse(fuConsole, httpResponse);
     }
 
 
     public static void requestConsole(FuConsole fuConsole, HttpRequest httpRequest, Exception e) {
+        if (Objects.isNull(fuConsole) || fuConsole.isEmpty()) {
+            return;
+        }
         logRequest(fuConsole, httpRequest);
         logResponse(fuConsole, e);
     }
 
 
     public static void logResult(FuConsole fuConsole, FuHttpRequestData fuHttpRequestData, RequestStatus result) {
+        if (Objects.isNull(fuConsole) || fuConsole.isEmpty()) {
+            return;
+        }
         fuConsole.println();
 
         //第一行
@@ -57,7 +66,7 @@ public class FuRequestConsoleManager {
         fuConsole.println();
 
         Integer httpCode = fuHttpRequestData.getHttpCode();
-        if(Objects.nonNull(httpCode)){
+        if (Objects.nonNull(httpCode)) {
             //第三行 状态码
             fuConsole.debugLog("[FU REQUEST] ");
             fuConsole.infoLog("Status Code: ");

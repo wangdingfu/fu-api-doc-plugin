@@ -81,7 +81,7 @@ public class FuRequestData {
         if (Objects.isNull(this.headers)) {
             this.headers = Lists.newArrayList();
         }
-        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
+        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> StringUtils.isNotBlank(f.getKey())).filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
         if (Objects.isNull(keyValueTableBO)) {
             keyValueTableBO = new HeaderKeyValueBO(true, key, value);
             this.headers.add(keyValueTableBO);
