@@ -28,10 +28,9 @@ public class JsExecutor {
         if (StringUtils.isBlank(script)) {
             return;
         }
-        Context cx = Context.enter();
         long start = System.currentTimeMillis();
         boolean success = false;
-        try {
+        try (Context cx = Context.enter()) {
             // 将Java对象绑定到Rhino执行上下文中
             ScriptableObject scriptableObject = cx.initStandardObjects();
             ScriptableObject.putProperty(scriptableObject, "fu", fuContext);
@@ -41,7 +40,7 @@ public class JsExecutor {
             cx.evaluateString(scriptableObject, fuContext.getScript(), "<cmd>", 1, null);
             success = true;
         } catch (Exception e) {
-            log.info("执行脚本【{}】异常", fuContext.getPreScriptPO().getTitle(), e);
+            log.info("执行脚本【{}】异常", fuContext.getScriptName(), e);
             fuConsole.info(e.toString());
         } finally {
             logResult(fuConsole, System.currentTimeMillis() - start, success);

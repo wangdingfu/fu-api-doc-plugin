@@ -12,13 +12,15 @@ import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.sync.renderer.SyncStatusCellRenderer;
-import com.wdf.fudoc.components.bo.*;
+import com.wdf.fudoc.components.bo.DynamicTableBO;
+import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.TreePathBO;
 import com.wdf.fudoc.components.column.*;
 import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
-import icons.FuDocIcons;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -136,7 +138,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", GlobalKeyValuePO::getSelect, GlobalKeyValuePO::setSelect));
         columns.add(new StringColumn<>(key, GlobalKeyValuePO::getKey, GlobalKeyValuePO::setKey));
         columns.add(new StringColumn<>(value, GlobalKeyValuePO::getValue, GlobalKeyValuePO::setValue));
-        columns.add(new TreeModuleComboBoxColumn<>("作用范围", GlobalKeyValuePO::getScope, GlobalKeyValuePO::setScope));
+        columns.add(new SpringBootColumn<>("作用范围", GlobalKeyValuePO::getApplicationName, GlobalKeyValuePO::setApplicationName));
         return columns;
     }
 
@@ -162,7 +164,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", YApiProjectTableData::getSelect, YApiProjectTableData::setSelect));
         columns.add(new StringColumn<>("项目token", YApiProjectTableData::getProjectToken, YApiProjectTableData::setProjectToken));
         columns.add(new StringColumn<>("项目名称", YApiProjectTableData::getProjectName, YApiProjectTableData::setProjectName));
-        columns.add(new TreeModuleComboBoxColumn<>("作用范围", YApiProjectTableData::getScope, YApiProjectTableData::setScope));
+        columns.add(new SpringBootColumn<>("作用范围", YApiProjectTableData::getApplicationName, YApiProjectTableData::setApplicationName));
         return columns;
     }
 
@@ -176,7 +178,7 @@ public class FuTableColumnFactory {
         columns.add(new StringColumn<>("apiKey", ShowDocProjectTableData::getApiKey, ShowDocProjectTableData::setApiKey));
         columns.add(new StringColumn<>("apiToken", ShowDocProjectTableData::getApiToken, ShowDocProjectTableData::setApiToken));
         columns.add(new StringColumn<>("项目名称", ShowDocProjectTableData::getProjectName, ShowDocProjectTableData::setProjectName));
-        columns.add(new TreeModuleComboBoxColumn<>("作用范围", ShowDocProjectTableData::getScope, ShowDocProjectTableData::setScope));
+        columns.add(new SpringBootColumn<>("作用范围", ShowDocProjectTableData::getApplicationName, ShowDocProjectTableData::setApplicationName));
         return columns;
     }
 
@@ -189,7 +191,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", ApiFoxProjectTableData::getSelect, ApiFoxProjectTableData::setSelect));
         columns.add(new StringColumn<>("项目id", ApiFoxProjectTableData::getProjectId, ApiFoxProjectTableData::setProjectId));
         columns.add(new StringColumn<>("项目名称", ApiFoxProjectTableData::getProjectName, ApiFoxProjectTableData::setProjectName));
-        columns.add(new TreeModuleComboBoxColumn<>("作用范围", ApiFoxProjectTableData::getScope, ApiFoxProjectTableData::setScope));
+        columns.add(new SpringBootColumn<>("作用范围", ApiFoxProjectTableData::getApplicationName, ApiFoxProjectTableData::setApplicationName));
         return columns;
     }
 

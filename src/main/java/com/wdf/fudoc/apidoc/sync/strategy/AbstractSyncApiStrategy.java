@@ -3,7 +3,6 @@ package com.wdf.fudoc.apidoc.sync.strategy;
 import com.google.common.collect.Lists;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -82,11 +81,8 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
     @Override
     public void syncFuDoc(FuDocContext fuDocContext, PsiClass psiClass, BaseSyncConfigData configData) {
         //2、检查三方接口文档系统是否能建立连接
-
         //3、确定当前要同步的项目配置
-        Module module = ModuleUtil.findModuleForPsiElement(psiClass);
-        String moduleName = Objects.isNull(module) ? org.apache.commons.lang3.StringUtils.EMPTY : module.getName();
-        List<ApiProjectDTO> projectConfigList = configData.getProjectConfigList(moduleName);
+        List<ApiProjectDTO> projectConfigList = configData.getProjectConfigList(ModuleUtil.findModuleForPsiElement(psiClass));
         if (StringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList) || checkConfig(configData)) {
             ApplicationManager.getApplication().invokeLater(() -> {
                 Project project = psiClass.getProject();
@@ -171,7 +167,7 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
             return;
         }
         String apiSystem = configData.getApiSystem().getCode();
-        List<SyncApiResultDTO> successList = resultDTOList.stream().filter(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus())).collect(Collectors.toList());
+        List<SyncApiResultDTO> successList = resultDTOList.stream().filter(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus())).toList();
         List<SyncApiResultDTO> faileList = resultDTOList.stream().filter(a -> ApiSyncStatus.FAIL.getMessage().equals(a.getSyncStatus())).collect(Collectors.toList());
         FuTableComponent<SyncApiResultDTO> tableComponent = FuTableComponent.create(FuTableColumnFactory.syncApiResult(CollectionUtils.isNotEmpty(faileList)), resultDTOList, SyncApiResultDTO.class);
         tableComponent.addListener(new FuTableDisableListener<>());

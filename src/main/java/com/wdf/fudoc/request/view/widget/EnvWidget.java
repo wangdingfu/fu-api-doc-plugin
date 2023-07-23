@@ -78,7 +78,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
         if (CONFIG_ENV.equals(text)) {
             //跳转弹框配置环境
             FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(module.getProject());
-            fuRequestSettingView.setSize(800, 800);
+            fuRequestSettingView.setSize(900, 800);
             fuRequestSettingView.select(GlobalConfigTab.TITLE);
             fuRequestSettingView.show();
             return;
@@ -116,7 +116,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
             setText(getEnvName());
             return;
         }
-        select(text);
+        setText(text);
     }
 
     private void setText(String text) {

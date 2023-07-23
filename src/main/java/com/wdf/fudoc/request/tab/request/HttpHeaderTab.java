@@ -12,16 +12,16 @@ import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
-import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -66,10 +66,11 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<HeaderKeyValueBO> 
         if (Objects.isNull(module)) {
             return;
         }
+        String application = SpringBootEnvLoader.getApplication(module);
         FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorage.get(project);
         List<GlobalKeyValuePO> globalHeaderList = fuRequestConfigStorage.readData().getGlobalHeaderList();
         if (CollectionUtils.isNotEmpty(globalHeaderList)) {
-            addHeader(globalHeaderList.stream().filter(f -> Objects.isNull(f.getScope()) || f.getScope().isScope(module)).collect(Collectors.toList()));
+            addHeader(globalHeaderList.stream().filter(f -> StringUtils.isNotBlank(f.getApplicationName()) && application.equals(f.getApplicationName())).collect(Collectors.toList()));
         }
     }
 

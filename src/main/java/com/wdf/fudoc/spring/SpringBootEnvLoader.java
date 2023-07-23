@@ -69,6 +69,19 @@ public class SpringBootEnvLoader {
     }
 
 
+    public static String getApplication(Module module) {
+        SpringBootEnvModuleInfo.SpringBootEnvInfo envInfo = getEnvInfo(module);
+        if (Objects.isNull(envInfo)) {
+            Set<String> application = getApplication(module.getProject());
+            if (application.size() == 1) {
+                return application.iterator().next();
+            }
+            return SpringConfigFileConstants.APPLICATION;
+        }
+        return envInfo.getApplicationName();
+    }
+
+
     public static Integer getServerPort(Module module) {
         SpringBootEnvModuleInfo.SpringBootEnvInfo envInfo = getEnvInfo(module);
         if (Objects.isNull(envInfo)) {

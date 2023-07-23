@@ -1,21 +1,19 @@
 package com.wdf.fudoc.request.execute;
 
-import cn.hutool.core.text.StrFormatter;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.common.constant.FuConsoleConstants;
 import com.wdf.fudoc.components.FuConsole;
+import com.wdf.fudoc.request.constants.enumtype.ScriptType;
 import com.wdf.fudoc.request.js.JsExecutor;
 import com.wdf.fudoc.request.js.context.FuContext;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,13 +35,13 @@ public class HttpApiExecutor {
         long start = System.currentTimeMillis();
         FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorage.get(project);
         FuRequestConfigPO fuRequestConfigPO = fuRequestConfigStorage.readData();
-        List<GlobalPreScriptPO> preScriptPOList;
+
         Module module = fuHttpRequestData.getModule();
-        if (Objects.nonNull(module) && Objects.nonNull(fuRequestConfigPO)
-                && CollectionUtils.isNotEmpty(preScriptPOList = fuRequestConfigPO.getPreScriptList(module.getName()))) {
-            for (GlobalPreScriptPO globalPreScriptPO : preScriptPOList) {
-                JsExecutor.execute(new FuContext(project, fuRequestConfigPO, globalPreScriptPO), fuConsole);
-            }
+        String application;
+        GlobalPreScriptPO globalPreScriptPO;
+        if (Objects.nonNull(module) && StringUtils.isNotBlank(application = SpringBootEnvLoader.getApplication(module))
+                && Objects.nonNull(globalPreScriptPO = fuRequestConfigPO.getScript(ScriptType.PRE_SCRIPT, application))) {
+            JsExecutor.execute(new FuContext(project, fuRequestConfigPO, globalPreScriptPO), fuConsole);
         }
         log.info("执行脚本共计耗时:{}ms", System.currentTimeMillis() - start);
         //发起请求

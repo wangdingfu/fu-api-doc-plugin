@@ -147,8 +147,8 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     }
 
     @Override
-    public boolean isShowViewMode() {
-        return false;
+    public boolean isWindow() {
+        return true;
     }
 
     @Override

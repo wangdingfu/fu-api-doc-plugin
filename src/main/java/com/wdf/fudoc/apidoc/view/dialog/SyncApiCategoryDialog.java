@@ -1,6 +1,7 @@
 package com.wdf.fudoc.apidoc.view.dialog;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -34,7 +35,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 选择接口分类弹框
@@ -75,7 +75,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
     /**
      * 生成的接口文档所处的module
      */
-    private final String moduleName;
+    private final Module module;
 
     /**
      * 当前选中的项目
@@ -108,11 +108,11 @@ public class SyncApiCategoryDialog extends DialogWrapper {
     private static final String CREATE_CATEGORY_TITLE = FuBundle.message(MessageConstants.SYNC_API_CREATE_CATEGORY_TITLE);
 
 
-    public SyncApiCategoryDialog(Project project, boolean isCategoryTree, String moduleName, ApiProjectDTO apiProjectDTO) {
+    public SyncApiCategoryDialog(Project project, boolean isCategoryTree, Module module, ApiProjectDTO apiProjectDTO) {
         super(project, true);
         this.project = project;
         this.isCategoryTree = isCategoryTree;
-        this.moduleName = moduleName;
+        this.module = module;
         this.apiProjectDTO = apiProjectDTO;
         setTitle(TITLE);
         this.rootPanel.setPreferredSize(new Dimension(400, 100));
@@ -134,7 +134,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
             //提示异常
             return;
         }
-        List<ApiProjectDTO> projectConfigList = this.configData.getProjectConfigList(this.moduleName);
+        List<ApiProjectDTO> projectConfigList = this.configData.getProjectConfigList(this.module);
         this.projectNameComboBox = new ComboBox<>(projectConfigList.toArray(new ApiProjectDTO[0]));
         if (Objects.isNull(this.apiProjectDTO)) {
             this.apiProjectDTO = projectConfigList.get(0);
@@ -276,8 +276,8 @@ public class SyncApiCategoryDialog extends DialogWrapper {
                 }
             }
             //将剩余没有在排序中的分类加入到排序分类集合中
-            List<String> categoryIdList = sortList.stream().map(ApiCategoryDTO::getCategoryId).distinct().collect(Collectors.toList());
-            sortList.addAll(categoryDTOList.stream().filter(f -> !categoryIdList.contains(f.getCategoryId())).collect(Collectors.toList()));
+            List<String> categoryIdList = sortList.stream().map(ApiCategoryDTO::getCategoryId).distinct().toList();
+            sortList.addAll(categoryDTOList.stream().filter(f -> !categoryIdList.contains(f.getCategoryId())).toList());
             return sortList;
         }
         return categoryDTOList;

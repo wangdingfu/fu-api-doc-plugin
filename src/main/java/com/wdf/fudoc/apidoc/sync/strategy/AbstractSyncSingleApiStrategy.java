@@ -1,6 +1,8 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
 import cn.hutool.core.date.DateUtil;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
@@ -76,7 +78,7 @@ public abstract class AbstractSyncSingleApiStrategy extends AbstractSyncApiStrat
             return apiProjectDTO;
         }
         //弹框让用户选择要同步的分类
-        SyncApiCategoryDialog dialog = new SyncApiCategoryDialog(ProjectUtils.getCurrProject(), false, apiProjectDTO.getModuleName(), apiProjectDTO);
+        SyncApiCategoryDialog dialog = new SyncApiCategoryDialog(ProjectUtils.getCurrProject(), false, ModuleUtil.findModuleForPsiElement(psiClass), apiProjectDTO);
         if (dialog.showAndGet()) {
             //弹框点OK时获取选中的分类数据
             ApiProjectDTO selected = dialog.getSelected();

@@ -34,8 +34,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
@@ -207,8 +205,10 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
         FuDocSyncProjectSetting instance = FuDocSyncProjectSetting.getInstance();
         if (Objects.nonNull(instance)) {
             SyncApiConfigData configData = instance.getState();
-            configData.setYapiConfigList(this.fuTableComponent.getDataList());
-            instance.loadState(configData);
+            if (Objects.nonNull(configData)) {
+                configData.setYapiConfigList(this.fuTableComponent.getDataList());
+                instance.loadState(configData);
+            }
         }
     }
 

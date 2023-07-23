@@ -4,13 +4,14 @@ package com.wdf.fudoc.request.po;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.bo.TreePathBO;
+import com.wdf.fudoc.request.constants.enumtype.ScriptType;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
-import com.wdf.fudoc.request.tab.settings.GlobalPreScriptTab;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * [Fu Request]配置持久化对象
@@ -55,6 +55,10 @@ public class FuRequestConfigPO {
      */
     private Map<String, GlobalPreScriptPO> preScriptMap = new ConcurrentHashMap<>();
 
+    /**
+     * 后置脚本集合
+     */
+    private Map<String, GlobalPreScriptPO> postScriptMap = new ConcurrentHashMap<>();
 
     private List<ConfigEnvTableBO> envConfigList = Lists.newArrayList();
 
@@ -96,59 +100,70 @@ public class FuRequestConfigPO {
     }
 
 
-    public List<GlobalPreScriptPO> getPreScriptList(String scope) {
-        List<GlobalPreScriptPO> preScriptPOList = Lists.newArrayList();
-        preScriptMap.forEach((key, value) -> {
-            if (value.getScope().contains(scope)) {
-                preScriptPOList.add(value);
-            }
-        });
-        return preScriptPOList;
-    }
-
-
-    public String header(String headerName, List<String> scope) {
-        return globalHeaderList.stream().filter(KeyValueTableBO::getSelect).filter(f -> f.getKey().equals(headerName)).filter(f -> contains(scope, f.getScope().getSelectPathList())).map(KeyValueTableBO::getValue).findFirst().orElse(StringUtils.EMPTY);
-    }
-
-    public String variable(String variableName, List<String> scope) {
-        return globalVariableList.stream().filter(KeyValueTableBO::getSelect).filter(f -> f.getKey().equals(variableName)).filter(f -> contains(scope, f.getScope().getSelectPathList())).map(KeyValueTableBO::getValue).findFirst().orElse(StringUtils.EMPTY);
-    }
-
-    public String variable(String variableName) {
-        return globalVariableList.stream().filter(KeyValueTableBO::getSelect).filter(f -> f.getKey().equals(variableName)).map(KeyValueTableBO::getValue).findFirst().orElse(StringUtils.EMPTY);
-    }
-
-
-    private boolean contains(List<String> scope1, List<String> scope2) {
-        if (CollectionUtils.isEmpty(scope1) || CollectionUtils.isEmpty(scope2)) {
-            return false;
+    public Map<String, GlobalPreScriptPO> getScript(ScriptType scriptType) {
+        if (ScriptType.PRE_SCRIPT.equals(scriptType)) {
+            return this.preScriptMap;
         }
-        return scope1.stream().anyMatch(scope2::contains);
+        if (ScriptType.POST_SCRIPT.equals(scriptType)) {
+            return this.postScriptMap;
+        }
+        return null;
     }
 
-    public void addHeader(String headerName, String headerValue, List<String> scope) {
-        GlobalKeyValuePO globalKeyValuePO = globalHeaderList.stream().filter(f -> f.getKey().equals(headerName)).findFirst().orElse(null);
-        if (Objects.isNull(globalKeyValuePO)) {
-            globalKeyValuePO = new GlobalKeyValuePO();
-            this.globalHeaderList.add(globalKeyValuePO);
+
+    public GlobalPreScriptPO getScript(ScriptType scriptType, String applicationName) {
+        Map<String, GlobalPreScriptPO> script = getScript(scriptType);
+        if (MapUtils.isNotEmpty(script)) {
+            return script.get(applicationName);
         }
-        globalKeyValuePO.setScope(new TreePathBO(scope));
-        globalKeyValuePO.setKey(headerName);
-        globalKeyValuePO.setValue(headerValue);
-        globalKeyValuePO.setSelect(true);
+        return null;
     }
 
-    public void addVariable(String variableName, String variableValue, List<String> scope) {
-        GlobalKeyValuePO globalKeyValuePO = globalVariableList.stream().filter(f -> f.getKey().equals(variableName)).findFirst().orElse(null);
-        if (Objects.isNull(globalKeyValuePO)) {
-            globalKeyValuePO = new GlobalKeyValuePO();
-            this.globalVariableList.add(globalKeyValuePO);
+
+    public String header(String headerName, String applicationName) {
+        return getValue(findGlobalConfig(this.globalHeaderList, headerName, applicationName));
+
+    }
+
+    public String variable(String variableName, String applicationName) {
+        return getValue(findGlobalConfig(this.globalVariableList, variableName, applicationName));
+    }
+
+    private String getValue(GlobalKeyValuePO globalKeyValuePO) {
+        return Objects.isNull(globalKeyValuePO) ? StringUtils.EMPTY : globalKeyValuePO.getValue();
+    }
+
+
+    private GlobalKeyValuePO findGlobalConfig(List<GlobalKeyValuePO> list, String variableName, String applicationName) {
+        return list.stream()
+                .filter(KeyValueTableBO::getSelect)
+                .filter(f -> StringUtils.isNotBlank(f.getApplicationName()))
+                .filter(f -> StringUtils.isNotBlank(f.getKey()))
+                .filter(f -> f.getKey().equals(variableName))
+                .filter(f -> applicationName.equals(f.getApplicationName()))
+                .findFirst().orElse(null);
+    }
+
+
+    private void addGlobalConfig(List<GlobalKeyValuePO> list, String applicationName, String configKey, String configValue) {
+        GlobalKeyValuePO globalConfig = findGlobalConfig(list, configKey, applicationName);
+        if (Objects.isNull(globalConfig)) {
+            globalConfig = new GlobalKeyValuePO();
+            this.globalHeaderList.add(globalConfig);
         }
-        globalKeyValuePO.setScope(new TreePathBO(scope));
-        globalKeyValuePO.setKey(variableName);
-        globalKeyValuePO.setValue(variableValue);
-        globalKeyValuePO.setSelect(true);
+        globalConfig.setKey(configKey);
+        globalConfig.setValue(configValue);
+        globalConfig.setApplicationName(applicationName);
+        globalConfig.setSelect(true);
+    }
+
+
+    public void addHeader(String headerName, String headerValue, String applicationName) {
+        addGlobalConfig(this.globalHeaderList, applicationName, headerName, headerValue);
+    }
+
+    public void addVariable(String variableName, String variableValue, String applicationName) {
+        addGlobalConfig(this.globalVariableList, applicationName, variableName, variableValue);
     }
 
 

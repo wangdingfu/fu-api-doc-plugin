@@ -1,7 +1,6 @@
 package com.wdf.fudoc.request.js.context;
 
 import cn.hutool.json.JSONUtil;
-import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.components.FuConsoleManager;
 import com.wdf.fudoc.request.execute.HttpExecutor;
@@ -9,14 +8,11 @@ import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
-import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.NumberFormat;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,25 +34,17 @@ public class FuContext {
 
     private final GlobalPreScriptPO preScriptPO;
 
-    private final List<String> scope;
-
     private final String scriptName;
 
+    private final String applicationName;
 
-    public FuContext(Project project, String scriptName) {
-        this.project = project;
-        this.scriptName = scriptName;
-        this.configPO = FuRequestConfigStorage.get(project).readData();
-        this.preScriptPO = this.configPO.getPreScriptMap().get(scriptName);
-        this.scope = Objects.isNull(preScriptPO) ? Lists.newArrayList() : this.preScriptPO.getScope();
-    }
 
     public FuContext(Project project, FuRequestConfigPO configPO, GlobalPreScriptPO preScriptPO) {
         this.project = project;
         this.configPO = configPO;
         this.preScriptPO = preScriptPO;
-        this.scriptName = Objects.isNull(preScriptPO) ? StringUtils.EMPTY : preScriptPO.getTitle();
-        this.scope = Objects.isNull(preScriptPO) ? Lists.newArrayList() : this.preScriptPO.getScope();
+        this.scriptName = preScriptPO.getScriptType().getView();
+        this.applicationName = preScriptPO.getApplication();
     }
 
     public String getScript() {
@@ -97,7 +85,7 @@ public class FuContext {
         if (StringUtils.isBlank(variableName) || Objects.isNull(value)) {
             return;
         }
-        configPO.addVariable(variableName, value instanceof Double ? formatDouble((double) value) : value.toString(), this.scope);
+        configPO.addVariable(variableName, value instanceof Double ? formatDouble((double) value) : value.toString(), this.applicationName);
     }
 
 
@@ -109,7 +97,7 @@ public class FuContext {
      */
     public Object variable(String variableName) {
         if (StringUtils.isNotBlank(variableName)) {
-            return configPO.variable(variableName, this.scope);
+            return configPO.variable(variableName, this.applicationName);
         }
         return null;
     }
@@ -125,7 +113,7 @@ public class FuContext {
         if (StringUtils.isBlank(headerName) || Objects.isNull(value)) {
             return;
         }
-        configPO.addHeader(headerName, value.toString(), scope);
+        configPO.addHeader(headerName, value.toString(), this.applicationName);
     }
 
     /**
@@ -136,7 +124,7 @@ public class FuContext {
      */
     public Object header(String headerName) {
         if (StringUtils.isNotBlank(headerName)) {
-            return configPO.header(headerName, this.scope);
+            return configPO.header(headerName, this.applicationName);
         }
         return null;
     }

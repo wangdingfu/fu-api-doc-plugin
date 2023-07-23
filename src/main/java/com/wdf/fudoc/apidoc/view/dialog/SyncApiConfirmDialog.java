@@ -104,7 +104,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         //填充项目名称下拉框
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
         this.configData = settingData.getEnableConfigData();
-        this.projectConfigList = this.configData.getProjectConfigList(Objects.isNull(module) ? StringUtils.EMPTY : module.getName());
+        this.projectConfigList = this.configData.getProjectConfigList(module);
         this.projectNameComboBox = new ComboBox<>(projectConfigList.toArray(new ApiProjectDTO[0]));
         if (Objects.isNull(this.apiProjectDTO) && CollectionUtils.isNotEmpty(this.projectConfigList)) {
             this.apiProjectDTO = projectConfigList.get(0);
@@ -185,7 +185,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         addCategory.setParent(apiCategoryDTO);
         apiCategoryList.add(addCategory);
         //保存到持久化文件中
-        configData.syncApiProjectList(module.getName(), this.projectConfigList);
+        configData.syncApiProjectList(module, this.projectConfigList);
         return new FuTreeNode<>(addCategory, AllIcons.Nodes.Package);
     }
 
@@ -212,7 +212,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         String removeNode = paths[paths.length - 1].toString();
         apiCategoryList.removeIf(f -> f.getCategoryName().equals(removeNode));
         //保存到持久化文件中
-        configData.syncApiProjectList(module.getName(), this.projectConfigList);
+        configData.syncApiProjectList(module, this.projectConfigList);
         return true;
     }
 

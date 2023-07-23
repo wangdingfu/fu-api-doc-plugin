@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
+import com.intellij.openapi.module.Module;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
@@ -80,10 +81,10 @@ public abstract class BaseSyncConfigData implements Serializable {
     /**
      * 获取当前module对应到第三方接口文档的项目名称
      *
-     * @param moduleName 代码中的java module名称
+     * @param module 代码中的java module名称
      * @return 第三方接口文档系统的项目名称
      */
-    public abstract List<ApiProjectDTO> getProjectConfigList(String moduleName);
+    public abstract List<ApiProjectDTO> getProjectConfigList(Module module);
 
 
     /**
@@ -91,7 +92,7 @@ public abstract class BaseSyncConfigData implements Serializable {
      *
      * @param apiProjectDTOList 项目配置数据
      */
-    public abstract void syncApiProjectList(String moduleName, List<ApiProjectDTO> apiProjectDTOList);
+    public abstract void syncApiProjectList(Module module, List<ApiProjectDTO> apiProjectDTOList);
 
 
     /**

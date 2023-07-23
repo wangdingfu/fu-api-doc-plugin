@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.po;
 
+import com.wdf.fudoc.request.constants.enumtype.ScriptType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,19 +19,19 @@ import java.util.Map;
 public class GlobalPreScriptPO {
 
     /**
-     * 脚本tab名称
-     */
-    private String title;
-
-    /**
      * 脚本内容
      */
     private String script;
 
     /**
-     * 作用范围
+     * springboot应用
      */
-    private List<String> scope;
+    private String application;
+
+    /**
+     * 脚本类型
+     */
+    private ScriptType scriptType;
 
     /**
      * 接口请求配置
