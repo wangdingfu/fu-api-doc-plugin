@@ -1,5 +1,6 @@
-package com.wdf.fudoc.test.action;
+package com.wdf.fudoc.console;
 
+import com.wdf.fudoc.console.holder.ValueHolder;
 import lombok.Getter;
 import org.apache.commons.io.IOUtils;
 
@@ -7,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.Objects;
 
 /**
  * @author wangdingfu
@@ -25,6 +27,8 @@ public class PipedProcess extends Process {
     private PipedOutputStream outForInputStream;
     @Getter
     private PipedOutputStream outForErrorInputStream;
+
+    private final ValueHolder<Integer> valueHolder = new ValueHolder<>();
 
     public PipedProcess() {
         try {
@@ -57,14 +61,22 @@ public class PipedProcess extends Process {
     }
 
     @Override
-    public int waitFor() throws InterruptedException {
-        return 0;
+    public int waitFor() {
+        Integer value = valueHolder.value();
+        return Objects.isNull(value) ? 0 : value;
     }
 
     @Override
     public int exitValue() {
-        return 0;
+        Integer value = valueHolder.value();
+        return Objects.isNull(value) ? 0 : value;
     }
+
+    public void setExitValue(Integer exitValue) {
+        valueHolder.success(exitValue);
+        destroy();
+    }
+
 
     @Override
     public void destroy() {

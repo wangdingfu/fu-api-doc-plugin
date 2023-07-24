@@ -10,6 +10,8 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.ui.content.Content;
+import com.wdf.fudoc.console.BaseFuLogger;
+import com.wdf.fudoc.console.FuLogger;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +23,7 @@ import java.util.Objects;
  * @author wangdingfu
  * @date 2023-07-06 22:09:21
  */
-public class FuConsole {
+public class FuConsole extends BaseFuLogger {
 
     @Getter
     private final ConsoleView consoleView;
@@ -63,6 +65,11 @@ public class FuConsole {
 
     public void infoLog(String console, Object... params) {
         this.log(StrFormatter.format(console, params), ConsoleViewContentType.NORMAL_OUTPUT);
+    }
+
+    @Override
+    protected void log(String logContent) {
+        this.log(logContent, ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
     public void info(String console, Object... params) {

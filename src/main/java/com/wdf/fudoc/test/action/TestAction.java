@@ -23,6 +23,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.psi.PsiFile;
+import com.wdf.fudoc.console.FuConsoleLogger;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
@@ -52,6 +53,11 @@ public class TestAction extends AnAction {
         ConsoleRunnerLogger consoleRunnerLogger = new ConsoleRunnerLogger(e.getProject());
         consoleRunnerLogger.log("这是一条日志消息");
         consoleRunnerLogger.log("这是一条日志消息2");
+
+
+        FuConsoleLogger fuConsoleLogger = new FuConsoleLogger(e.getProject());
+        fuConsoleLogger.info("测试日志消息");
+        fuConsoleLogger.info("测试日志消息2");
 
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(e.getProject());
         ToolWindow toolWindow = toolWindowManager.getToolWindow("Fu Console");

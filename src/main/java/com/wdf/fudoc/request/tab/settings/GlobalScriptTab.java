@@ -23,6 +23,8 @@ import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.*;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
+import com.wdf.fudoc.console.FuConsoleLogger;
+import com.wdf.fudoc.console.FuLogger;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmdType;
 import com.wdf.fudoc.request.constants.enumtype.ScriptType;
@@ -137,16 +139,17 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
                         }
                         progressIndicator = indicator;
                         isExecute.set(true);
-                        FuConsole fuConsole = FuConsoleManager.get(project);
+                        FuConsoleLogger fuLogger = new FuConsoleLogger(project);
                         //执行脚本
                         try {
-                            JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO), fuConsole);
+                            JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO), fuLogger);
                         } catch (Exception e) {
                             logger.error("执行脚本失败", e);
                             FuDocNotification.notifyError(FuBundle.message(MessageConstants.REQUEST_SCRIPT_EXECUTE_FAIL));
                         } finally {
                             progressIndicator = null;
                             isExecute.set(false);
+                            fuLogger.close();
                         }
                     }
                 });

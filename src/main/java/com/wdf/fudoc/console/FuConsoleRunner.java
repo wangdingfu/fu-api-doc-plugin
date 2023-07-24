@@ -1,52 +1,59 @@
-package com.wdf.fudoc.test.action;
+package com.wdf.fudoc.console;
 
+import com.intellij.execution.ExecutionException;
 import com.intellij.execution.console.LanguageConsoleImpl;
 import com.intellij.execution.console.LanguageConsoleView;
 import com.intellij.execution.console.ProcessBackedConsoleExecuteActionHandler;
-import com.intellij.execution.process.ColoredProcessHandler;
 import com.intellij.execution.process.KillableProcessHandler;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.AbstractConsoleRunnerWithHistory;
 import com.intellij.openapi.fileTypes.PlainTextLanguage;
 import com.intellij.openapi.project.Project;
-import com.intellij.util.io.BaseOutputReader;
-import lombok.SneakyThrows;
-import org.jetbrains.annotations.Nls;
+import com.wdf.fudoc.common.constant.FuDocConstants;
+import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+
 /**
  * @author wangdingfu
- * @date 2023-07-18 15:52:05
+ * @date 2023-07-24 19:44:55
  */
-public class LogConsoleRunner extends AbstractConsoleRunnerWithHistory<LanguageConsoleView> {
+public class FuConsoleRunner extends AbstractConsoleRunnerWithHistory<LanguageConsoleView> {
 
     private final Project project;
-    private final Process logProcess;
 
-    public LogConsoleRunner(@NotNull Project project, @NotNull @Nls(capitalization = Nls.Capitalization.Title) String consoleTitle, Process process) {
-        super(project, consoleTitle, project.getBasePath());
+    private final PipedProcess logProcess;
+
+    public FuConsoleRunner(@NotNull Project project, PipedProcess logProcess) {
+        super(project, FuDocConstants.FU_DOC, project.getBasePath());
         this.project = project;
-        this.logProcess = process;
+        this.logProcess = logProcess;
     }
 
     @Override
     protected LanguageConsoleView createConsoleView() {
-        LanguageConsoleImpl consoleView = new LanguageConsoleImpl(project, "Bash", PlainTextLanguage.INSTANCE);
+        LanguageConsoleImpl consoleView = new LanguageConsoleImpl(this.project, "", PlainTextLanguage.INSTANCE);
         consoleView.setEditable(false);
         return consoleView;
     }
 
+
     @Override
-    protected @Nullable Process createProcess() {
+    protected @Nullable Icon getConsoleIcon() {
+        return FuDocIcons.FU_DOC;
+    }
+
+    @Override
+    protected @Nullable Process createProcess() throws ExecutionException {
         return this.logProcess;
     }
 
-    @SneakyThrows
     @Override
     protected OSProcessHandler createProcessHandler(Process process) {
-        return new MyColoredProcessHandler(process, "run " + "fu_api");
+        return new FuColoredProcessHandler(process, "");
     }
 
     @Override
@@ -55,24 +62,12 @@ public class LogConsoleRunner extends AbstractConsoleRunnerWithHistory<LanguageC
     }
 
 
-
     public void close() {
         ProcessHandler processHandler = getProcessHandler();
         if (processHandler instanceof KillableProcessHandler killableProcessHandler) {
             killableProcessHandler.killProcess();
         } else {
             processHandler.destroyProcess();
-        }
-    }
-
-    private static class MyColoredProcessHandler extends ColoredProcessHandler {
-        public MyColoredProcessHandler(Process process, @NotNull String commandLine) {
-            super(process, commandLine);
-        }
-
-        @Override
-        protected BaseOutputReader.@NotNull Options readerOptions() {
-            return BaseOutputReader.Options.forMostlySilentProcess();
         }
     }
 }
