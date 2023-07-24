@@ -27,24 +27,26 @@ public class FuConsoleLogger extends BaseFuLogger {
 
     private final ReentrantLock lock = new ReentrantLock();
 
-    private final AtomicBoolean close = new AtomicBoolean(false);
+    private final String commandLine;
 
-    public FuConsoleLogger(Project project) {
+    public FuConsoleLogger(Project project, String commandLine) {
         this.project = project;
+        this.commandLine = commandLine;
     }
 
     @Override
     protected void log(String logContent) {
-        if (StringUtils.isBlank(logContent)) {
+        if (Objects.isNull(logContent)) {
             return;
-        }
-        if (StringUtils.isNotBlank(prefix)) {
-            logContent = "[" + prefix + "] " + logContent;
         }
         PipedProcess pipedProcess = getProcess();
         if (Objects.isNull(pipedProcess)) {
             return;
         }
+        if (StringUtils.isNotBlank(prefix)) {
+            logContent = "[" + prefix + "] " + logContent;
+        }
+        logContent = logContent + "\r\n";
         try {
             pipedProcess.getOutForInputStream().write(logContent.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
@@ -54,10 +56,14 @@ public class FuConsoleLogger extends BaseFuLogger {
 
 
     public void close() {
-        close.set(true);
         if (Objects.nonNull(process)) {
+            try {
+                //等待100ms在关闭
+                Thread.sleep(100);
+            } catch (Exception e) {
+                LOGGER.info("关闭异常");
+            }
             process.setExitValue(0);
-            fuConsoleRunner.close();
             process = null;
             fuConsoleRunner = null;
         }
@@ -68,15 +74,12 @@ public class FuConsoleLogger extends BaseFuLogger {
         if (Objects.isNull(process) || Objects.isNull(fuConsoleRunner)) {
             try {
                 if (lock.tryLock(3, TimeUnit.SECONDS)) {
-                    if (close.get()) {
-                        return null;
-                    }
                     if (process == null) {
                         process = new PipedProcess();
                     }
                     if (fuConsoleRunner == null) {
                         try {
-                            fuConsoleRunner = new FuConsoleRunner(project, process);
+                            fuConsoleRunner = new FuConsoleRunner(project, process, commandLine);
                             fuConsoleRunner.initAndRun();
                         } catch (Exception e) {
                             return null;

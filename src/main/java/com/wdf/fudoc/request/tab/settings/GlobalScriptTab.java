@@ -88,6 +88,8 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
     private String application;
 
     private final ScriptType scriptType;
+    private final FuConsoleLogger fuLogger;
+
 
     public GlobalScriptTab(Project project, ScriptType scriptType, Disposable disposable) {
         this.project = project;
@@ -102,6 +104,7 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
         splitter.setSecondComponent(this.rightPanel);
         this.application = getApplication();
         this.rootPanel.add(splitter, BorderLayout.CENTER);
+        this.fuLogger = new FuConsoleLogger(project, "Run preScript...");
     }
 
     private String getApplication() {
@@ -139,7 +142,6 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
                         }
                         progressIndicator = indicator;
                         isExecute.set(true);
-                        FuConsoleLogger fuLogger = new FuConsoleLogger(project);
                         //执行脚本
                         try {
                             JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO), fuLogger);

@@ -14,7 +14,6 @@ public abstract class BaseFuLogger implements FuLogger {
     @Override
     public void info(String console, Object... params) {
         log(StrFormatter.format(console, params));
-        println();
     }
 
 

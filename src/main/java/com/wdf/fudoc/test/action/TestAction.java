@@ -55,10 +55,6 @@ public class TestAction extends AnAction {
         consoleRunnerLogger.log("这是一条日志消息2");
 
 
-        FuConsoleLogger fuConsoleLogger = new FuConsoleLogger(e.getProject());
-        fuConsoleLogger.info("测试日志消息");
-        fuConsoleLogger.info("测试日志消息2");
-
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(e.getProject());
         ToolWindow toolWindow = toolWindowManager.getToolWindow("Fu Console");
 

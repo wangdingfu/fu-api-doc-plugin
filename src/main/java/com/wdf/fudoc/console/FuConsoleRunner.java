@@ -27,10 +27,13 @@ public class FuConsoleRunner extends AbstractConsoleRunnerWithHistory<LanguageCo
 
     private final PipedProcess logProcess;
 
-    public FuConsoleRunner(@NotNull Project project, PipedProcess logProcess) {
+    private final String commandLine;
+
+    public FuConsoleRunner(@NotNull Project project, PipedProcess logProcess, String commandLine) {
         super(project, FuDocConstants.FU_DOC, project.getBasePath());
         this.project = project;
         this.logProcess = logProcess;
+        this.commandLine = commandLine;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class FuConsoleRunner extends AbstractConsoleRunnerWithHistory<LanguageCo
 
     @Override
     protected OSProcessHandler createProcessHandler(Process process) {
-        return new FuColoredProcessHandler(process, "");
+        return new FuColoredProcessHandler(process, commandLine);
     }
 
     @Override
