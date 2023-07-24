@@ -1,14 +1,17 @@
 package com.wdf.fudoc.test.action;
 
-import com.intellij.execution.ExecutionException;
 import com.intellij.execution.console.LanguageConsoleImpl;
 import com.intellij.execution.console.LanguageConsoleView;
 import com.intellij.execution.console.ProcessBackedConsoleExecuteActionHandler;
+import com.intellij.execution.process.ColoredProcessHandler;
+import com.intellij.execution.process.KillableProcessHandler;
 import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.AbstractConsoleRunnerWithHistory;
-import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.fileTypes.PlainTextLanguage;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.io.BaseOutputReader;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,10 +23,12 @@ import org.jetbrains.annotations.Nullable;
 public class LogConsoleRunner extends AbstractConsoleRunnerWithHistory<LanguageConsoleView> {
 
     private final Project project;
+    private final Process logProcess;
 
-    public LogConsoleRunner(@NotNull Project project, @NotNull @Nls(capitalization = Nls.Capitalization.Title) String consoleTitle, @Nullable String workingDir) {
-        super(project, consoleTitle, workingDir);
+    public LogConsoleRunner(@NotNull Project project, @NotNull @Nls(capitalization = Nls.Capitalization.Title) String consoleTitle, Process process) {
+        super(project, consoleTitle, project.getBasePath());
         this.project = project;
+        this.logProcess = process;
     }
 
     @Override
@@ -34,17 +39,41 @@ public class LogConsoleRunner extends AbstractConsoleRunnerWithHistory<LanguageC
     }
 
     @Override
-    protected @Nullable Process createProcess() throws ExecutionException {
-        return null;
+    protected @Nullable Process createProcess() {
+        return this.logProcess;
     }
 
+    @SneakyThrows
     @Override
     protected OSProcessHandler createProcessHandler(Process process) {
-        return null;
+        return new MyColoredProcessHandler(process, "run " + "fu_api");
     }
 
     @Override
     protected @NotNull ProcessBackedConsoleExecuteActionHandler createExecuteActionHandler() {
-        return null;
+        return new ProcessBackedConsoleExecuteActionHandler(getProcessHandler(), true);
+    }
+
+
+
+    public void close() {
+        ProcessHandler processHandler = getProcessHandler();
+        if (processHandler instanceof KillableProcessHandler killableProcessHandler) {
+            killableProcessHandler.killProcess();
+        } else {
+            processHandler.destroyProcess();
+        }
+
+    }
+
+    private static class MyColoredProcessHandler extends ColoredProcessHandler {
+        public MyColoredProcessHandler(Process process, @NotNull String commandLine) {
+            super(process, commandLine);
+        }
+
+        @Override
+        protected BaseOutputReader.@NotNull Options readerOptions() {
+            return BaseOutputReader.Options.forMostlySilentProcess();
+        }
     }
 }

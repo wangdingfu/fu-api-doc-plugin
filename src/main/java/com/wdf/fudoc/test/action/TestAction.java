@@ -41,18 +41,17 @@ import java.util.Objects;
 public class TestAction extends AnAction {
 
     private static final Logger LOG = Logger.getInstance(TestAction.class);
+
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        LogConsoleRunner logConsoleRunner = new LogConsoleRunner(e.getProject(),"测试",e.getProject().getBasePath());
-        try {
-            logConsoleRunner.initAndRun();
-        } catch (ExecutionException ex) {
-            throw new RuntimeException(ex);
-        }
         LOG.debug("这是一个调试级别的日志消息");
         LOG.info("这是一个信息级别的日志消息");
         LOG.warn("这是一个警告级别的日志消息");
         LOG.error("这是一个错误级别的日志消息");
+
+        ConsoleRunnerLogger consoleRunnerLogger = new ConsoleRunnerLogger(e.getProject());
+        consoleRunnerLogger.log("这是一条日志消息");
+        consoleRunnerLogger.log("这是一条日志消息2");
 
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(e.getProject());
         ToolWindow toolWindow = toolWindowManager.getToolWindow("Fu Console");
