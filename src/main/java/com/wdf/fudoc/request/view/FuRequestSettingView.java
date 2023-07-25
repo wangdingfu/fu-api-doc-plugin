@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
+import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.constants.enumtype.ScriptType;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.tab.settings.*;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * 【Fu Request】设置面板
@@ -44,10 +46,15 @@ public class FuRequestSettingView extends DialogWrapper {
     private GlobalHeaderTab globalHeaderTab;
     private GlobalCookiesTab globalCookiesTab;
     private GlobalScriptTab globalPreScriptTab;
+    private final FuRequestCallback requestCallback;
 //    private GlobalScriptTab globalPostScriptTab;
 
-
     public FuRequestSettingView(@Nullable Project project) {
+        this(project, null);
+    }
+
+
+    public FuRequestSettingView(@Nullable Project project, FuRequestCallback requestCallback) {
         super(project, true);
         this.project = project;
         this.rootPanel = new JPanel(new BorderLayout());
@@ -55,8 +62,16 @@ public class FuRequestSettingView extends DialogWrapper {
         initPanel();
         setModal(false);
         init();
+        this.requestCallback = requestCallback;
     }
 
+    @Override
+    protected void dispose() {
+        if (Objects.nonNull(requestCallback)) {
+            requestCallback.refresh();
+        }
+        super.dispose();
+    }
 
     /**
      * 初始化设置面板

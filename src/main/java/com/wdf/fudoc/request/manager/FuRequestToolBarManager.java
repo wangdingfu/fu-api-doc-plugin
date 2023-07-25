@@ -147,10 +147,7 @@ public class FuRequestToolBarManager {
                 //展示设置界面
                 FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(e.getProject());
                 fuRequestSettingView.setSize(900, 800);
-                if (fuRequestSettingView.showAndGet()) {
-                    //刷新状态
-                    fuRequestCallback.refresh();
-                }
+                fuRequestSettingView.show();
             }
         });
 
