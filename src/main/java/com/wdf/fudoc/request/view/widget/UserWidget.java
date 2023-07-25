@@ -3,11 +3,11 @@ package com.wdf.fudoc.request.view.widget;
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.IconManager;
 import com.wdf.fudoc.components.FuStatusLabel;
 import com.wdf.fudoc.components.bo.DynamicTableBO;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
 import com.wdf.fudoc.components.widget.FuWidget;
+import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
@@ -31,11 +31,13 @@ public class UserWidget implements FuWidget, FuStatusLabelListener {
     private final FuStatusLabel fuStatusLabel;
     private final FuRequestConfigPO configPO;
     private final Project project;
+    private final FuRequestCallback fuRequestCallback;
 
-    public UserWidget(Project project) {
+    public UserWidget(Project project, FuRequestCallback fuRequestCallback) {
         this.project = project;
         this.configPO = FuRequestConfigStorage.get(project).readData();
         this.fuStatusLabel = new FuStatusLabel(configPO.getUserName(), FuDocIcons.USER, this);
+        this.fuRequestCallback = fuRequestCallback;
     }
 
     private static final String ADD_AUTH = "新增鉴权用户";
@@ -61,8 +63,7 @@ public class UserWidget implements FuWidget, FuStatusLabelListener {
         if (CollectionUtils.isEmpty(authConfigList)) {
             return Lists.newArrayList();
         }
-        Icon icon = IconManager.getInstance().getIcon("expui/general/User.svg", AllIcons.class);
-        List<BasePopupMenuItem> resultList = Lists.newArrayList(new BasePopupMenuItem(icon, ADD_AUTH));
+        List<BasePopupMenuItem> resultList = Lists.newArrayList(new BasePopupMenuItem(AllIcons.General.Add, ADD_AUTH));
         authConfigList.stream().filter(DynamicTableBO::isSelect).forEach(f -> resultList.add(new BasePopupMenuItem(FuDocIcons.USER, f.getUserName())));
         return resultList;
     }
@@ -97,7 +98,7 @@ public class UserWidget implements FuWidget, FuStatusLabelListener {
     public void select(String text) {
         if (ADD_AUTH.equals(text)) {
             //跳转弹框配置环境
-            FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(project);
+            FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(project, fuRequestCallback);
             fuRequestSettingView.setSize(900, 800);
             fuRequestSettingView.select(GlobalConfigTab.TITLE);
             fuRequestSettingView.show();

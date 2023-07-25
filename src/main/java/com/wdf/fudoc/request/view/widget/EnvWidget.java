@@ -8,6 +8,8 @@ import com.wdf.fudoc.components.FuStatusLabel;
 import com.wdf.fudoc.components.bo.DynamicTableBO;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
 import com.wdf.fudoc.components.widget.FuWidget;
+import com.wdf.fudoc.request.callback.FuRequestCallback;
+import com.wdf.fudoc.request.http.FuRequest;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
@@ -37,13 +39,15 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
     private final FuStatusLabel fuStatusLabel;
     private final FuRequestConfigPO configPO;
     private final RequestTabView requestTabView;
+    private final FuRequestCallback fuRequestCallback;
 
     private static final String CONFIG_ENV = "配置环境";
 
-    public EnvWidget(Project project, RequestTabView requestTabView) {
+    public EnvWidget(Project project, RequestTabView requestTabView, FuRequestCallback fuRequestCallback) {
         this.requestTabView = requestTabView;
         this.configPO = FuRequestConfigStorage.get(project).readData();
         this.fuStatusLabel = new FuStatusLabel(getEnvName(), FuDocIcons.SPRING_BOOT, this);
+        this.fuRequestCallback = fuRequestCallback;
     }
 
 
@@ -77,7 +81,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
         }
         if (CONFIG_ENV.equals(text)) {
             //跳转弹框配置环境
-            FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(module.getProject());
+            FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(module.getProject(), fuRequestCallback);
             fuRequestSettingView.setSize(900, 800);
             fuRequestSettingView.select(GlobalConfigTab.TITLE);
             fuRequestSettingView.show();
@@ -101,7 +105,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
     @Override
     public void refresh() {
         //每次刷新时都需要检查下是否需要加载下配置
-        SpringBootEnvLoader.doLoad(requestTabView.getProject(),false);
+        SpringBootEnvLoader.doLoad(requestTabView.getProject(), false);
         String text = this.fuStatusLabel.getText();
         if (StringUtils.isBlank(text)) {
             setText(getEnvName());

@@ -82,9 +82,9 @@ public class FuRequestToolBarManager {
 
         defaultActionGroup.addSeparator();
 
+        addSyncAction(defaultActionGroup);
 
         if (fuRequestCallback.isWindow()) {
-            addSyncAction(defaultActionGroup);
             addConfigServerPortAction(defaultActionGroup);
         }
 
@@ -146,7 +146,7 @@ public class FuRequestToolBarManager {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //展示设置界面
-                FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(e.getProject());
+                FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(e.getProject(), fuRequestCallback);
                 fuRequestSettingView.setSize(900, 800);
                 fuRequestSettingView.show();
             }
@@ -182,8 +182,6 @@ public class FuRequestToolBarManager {
                     DefaultActionGroup actionGroup = new DefaultActionGroup();
                     //新增view mode
                     actionGroup.add(viewModeGroup);
-                    //新增同步文档事件
-                    addSyncAction(actionGroup);
                     //新增配置是否自动同步端口号
                     addConfigServerPortAction(actionGroup);
                     int x = 0, y = 0;
@@ -245,7 +243,7 @@ public class FuRequestToolBarManager {
 
     private void addSyncAction(DefaultActionGroup defaultActionGroup) {
         //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("上传接口文档", "", IconManager.getInstance().getIcon("expui/general/Upload.svg", AllIcons.class)) {
+        defaultActionGroup.add(new AnAction("上传接口文档", "", FuDocIcons.uploadIcon()) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //获取同步接口文档配置

@@ -48,7 +48,13 @@ public interface FuDocIcons {
     Icon COOKIE = IconLoader.getIcon("icon/cookie.svg", FuDocIcons.class);
     Icon ENV = IconLoader.getIcon("icon/enviroment.svg", FuDocIcons.class);
     Icon USER = IconLoader.getIcon("icon/user.svg", FuDocIcons.class);
+    Icon UPLOAD = IconLoader.getIcon("icon/upload.svg", FuDocIcons.class);
+    Icon UPLOAD_DARK = IconLoader.getIcon("icon/upload_dark.svg", FuDocIcons.class);
 
+
+    static Icon uploadIcon() {
+        return ProjectUtils.getTheme().isDarcula() ? UPLOAD : UPLOAD_DARK;
+    }
     static Icon moreIcon() {
         return ProjectUtils.getTheme().isDarcula() ? MORE_STROKE : MORE_DARK;
     }

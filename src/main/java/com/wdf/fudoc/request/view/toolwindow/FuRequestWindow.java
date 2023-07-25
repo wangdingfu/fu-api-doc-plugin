@@ -97,8 +97,8 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         Splitter splitter = new Splitter(true, 0.6F);
         this.requestTabView = new RequestTabView(project, this, null, toolWindow.getDisposable());
         this.responseTabView = new ResponseTabView(project, null, toolWindow.getDisposable());
-        this.envWidget = new EnvWidget(this.project, this.requestTabView);
-        this.userWidget = new UserWidget(project);
+        this.envWidget = new EnvWidget(this.project, this.requestTabView, this);
+        this.userWidget = new UserWidget(project, this);
         RequestConsoleTabView requestConsoleTabView = new RequestConsoleTabView(this.project, null, toolWindow.getDisposable());
         this.responseHeaderTabView = new ResponseHeaderTabView(project);
         splitter.setFirstComponent(this.requestTabView.getRootPane());
