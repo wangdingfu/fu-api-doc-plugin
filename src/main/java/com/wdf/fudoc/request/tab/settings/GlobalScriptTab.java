@@ -1,6 +1,8 @@
 package com.wdf.fudoc.request.tab.settings;
 
 import com.google.common.collect.Lists;
+import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.ui.ConsoleView;
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.openapi.Disposable;
@@ -15,6 +17,8 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.ui.components.panels.HorizontalBox;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.FuDataTab;
@@ -23,8 +27,9 @@ import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.*;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
-import com.wdf.fudoc.console.FuConsoleLogger;
+import com.wdf.fudoc.console.FuConsoleManager;
 import com.wdf.fudoc.console.FuLogger;
+import com.wdf.fudoc.console.FuConsoleLogger;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmdType;
 import com.wdf.fudoc.request.constants.enumtype.ScriptType;
@@ -88,7 +93,10 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
     private String application;
 
     private final ScriptType scriptType;
-    private final FuConsoleLogger fuLogger;
+
+    private ConsoleView consoleView;
+
+    private Disposable parentDisposable;
 
 
     public GlobalScriptTab(Project project, ScriptType scriptType, Disposable disposable) {
@@ -104,7 +112,7 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
         splitter.setSecondComponent(this.rightPanel);
         this.application = getApplication();
         this.rootPanel.add(splitter, BorderLayout.CENTER);
-        this.fuLogger = new FuConsoleLogger(project, "Run preScript...");
+        this.parentDisposable = disposable;
     }
 
     private String getApplication() {
@@ -119,7 +127,6 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
     @Override
     public TabInfo getTabInfo() {
         //构建右侧环境组件
-        JPanel slidePanel = new JPanel(new BorderLayout());
         DefaultActionGroup defaultActionGroup = new DefaultActionGroup();
         defaultActionGroup.addAction(new DumbAwareAction(FuBundle.message("fudoc.script.execute.title"), "", AllIcons.Actions.Execute) {
             @Override
@@ -140,18 +147,23 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
                             FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.REQUEST_SCRIPT_NO));
                             return;
                         }
+                        initConsoleView();
+                        consoleView.clear();
+                        FuLogger fuLogger = new FuConsoleLogger(consoleView);
                         progressIndicator = indicator;
                         isExecute.set(true);
                         //执行脚本
                         try {
-                            JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO), fuLogger);
+                            fuLogger.setPrefix(scriptType.getView());
+                            JsExecutor.execute(new FuContext(project, configPO, globalPreScriptPO, fuLogger));
                         } catch (Exception e) {
                             logger.error("执行脚本失败", e);
                             FuDocNotification.notifyError(FuBundle.message(MessageConstants.REQUEST_SCRIPT_EXECUTE_FAIL));
+                            fuLogger.error("执行脚本异常:{}", e.toString());
                         } finally {
                             progressIndicator = null;
                             isExecute.set(false);
-                            fuLogger.close();
+                            fuLogger.setPrefix(null);
                         }
                     }
                 });
@@ -178,11 +190,26 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
                 }
             }
         });
-        ToolBarUtils.addActionToToolBar(slidePanel, "fudoc.request.config.script", defaultActionGroup, BorderLayout.CENTER);
+        HorizontalBox horizontalBox = new HorizontalBox();
+        JComponent component = ToolBarUtils.addActionToToolBar(horizontalBox, "fudoc.request.config.script", defaultActionGroup);
+        horizontalBox.add(component);
+        horizontalBox.add(Box.createHorizontalStrut(5));
         FuStatusLabel fuStatusLabel = new FuStatusLabel(null, FuDocIcons.SPRING_BOOT, this);
         fuStatusLabel.setText(getList().size() > 1 ? application : null);
-        slidePanel.add(fuStatusLabel.getLabel(), BorderLayout.EAST);
+        horizontalBox.add(fuStatusLabel.getLabel());
+        JPanel slidePanel = new JPanel(new BorderLayout());
+        slidePanel.add(horizontalBox, BorderLayout.EAST);
         return FuTabComponent.getInstance(this.scriptType.getView(), FuDocIcons.FU_SCRIPT, this.rootPanel).builder(slidePanel);
+    }
+
+
+    private void initConsoleView() {
+        if (Objects.isNull(this.consoleView)) {
+            this.consoleView = new ConsoleViewImpl(project, true);
+            Disposer.register(parentDisposable, consoleView);
+            //将当前控制台注册到Run窗体中
+            FuConsoleManager.registerRunWindow(project, consoleView);
+        }
     }
 
     @Override

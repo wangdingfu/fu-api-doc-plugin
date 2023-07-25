@@ -1,102 +1,95 @@
 package com.wdf.fudoc.console;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
-import org.apache.commons.lang.StringUtils;
+import cn.hutool.core.text.StrFormatter;
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
+import com.wdf.fudoc.common.constant.FuDocConstants;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
-import java.nio.charset.StandardCharsets;
+import javax.swing.*;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 控制台输出日志
+ *
  * @author wangdingfu
- * @date 2023-07-24 20:28:45
+ * @date 2023-07-25 10:22:00
  */
-public class FuConsoleLogger extends BaseFuLogger {
-    private static final Logger LOGGER = Logger.getInstance(FuConsoleLogger.class);
+public class FuConsoleLogger implements FuLogger {
 
+    @Getter
+    private final ConsoleView consoleView;
+
+    @Getter
+    @Setter
     private String prefix;
 
-    private final Project project;
+    public boolean isEmpty() {
+        return Objects.isNull(this.consoleView);
+    }
 
-    private PipedProcess process;
+    public FuConsoleLogger(ConsoleView consoleView) {
+        this.consoleView = consoleView;
+    }
 
-    private FuConsoleRunner fuConsoleRunner;
 
-    private final ReentrantLock lock = new ReentrantLock();
-
-    private final String commandLine;
-
-    public FuConsoleLogger(Project project, String commandLine) {
-        this.project = project;
-        this.commandLine = commandLine;
+    @Override
+    public void infoLog(String console, Object... params) {
+        this.log(StrFormatter.format(console, params), ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
     @Override
-    protected void log(String logContent) {
-        if (Objects.isNull(logContent)) {
-            return;
-        }
-        PipedProcess pipedProcess = getProcess();
-        if (Objects.isNull(pipedProcess)) {
-            return;
-        }
-        if (StringUtils.isNotBlank(prefix)) {
-            logContent = "[" + prefix + "] " + logContent;
-        }
-        logContent = logContent + "\r\n";
-        try {
-            pipedProcess.getOutForInputStream().write(logContent.getBytes(StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            LOGGER.error("打印日志【" + logContent + "】异常", e);
-        }
+    public void errorLog(String console, Object... params) {
+        this.log(StrFormatter.format(console, params), ConsoleViewContentType.ERROR_OUTPUT);
     }
 
+    @Override
+    public void debugLog(String console, Object... params) {
+        this.log(StrFormatter.format(console, params), ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+    }
 
+    @Override
+    public void println() {
+        this.consoleView.print(FuDocConstants.LINE, ConsoleViewContentType.NORMAL_OUTPUT);
+    }
+
+    @Override
     public void close() {
-        if (Objects.nonNull(process)) {
-            try {
-                //等待100ms在关闭
-                Thread.sleep(100);
-            } catch (Exception e) {
-                LOGGER.info("关闭异常");
-            }
-            process.setExitValue(0);
-            process = null;
-            fuConsoleRunner = null;
+        consoleView.clear();
+        consoleView.dispose();
+    }
+
+
+    /**
+     * 打印日志
+     *
+     * @param info        日志内容
+     * @param contentType 内容渲染样式
+     */
+    public void log(String info, ConsoleViewContentType contentType) {
+        if (Objects.isNull(this.consoleView)) {
+            return;
+        }
+        if (StringUtils.isNotBlank(this.prefix)) {
+            this.consoleView.print("[" + this.prefix + "] ", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        }
+        this.consoleView.print(info, contentType);
+    }
+
+
+    public void clear() {
+        if (Objects.nonNull(this.consoleView)) {
+            this.consoleView.clear();
         }
     }
 
 
-    private PipedProcess getProcess() {
-        if (Objects.isNull(process) || Objects.isNull(fuConsoleRunner)) {
-            try {
-                if (lock.tryLock(3, TimeUnit.SECONDS)) {
-                    if (process == null) {
-                        process = new PipedProcess();
-                    }
-                    if (fuConsoleRunner == null) {
-                        try {
-                            fuConsoleRunner = new FuConsoleRunner(project, process, commandLine);
-                            fuConsoleRunner.initAndRun();
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                return null;
-            } finally {
-                lock.unlock();
-            }
+    public JComponent getComponent() {
+        if (Objects.nonNull(this.consoleView)) {
+            return this.consoleView.getComponent();
         }
-        return process;
-    }
-
-    @Override
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
+        return null;
     }
 }

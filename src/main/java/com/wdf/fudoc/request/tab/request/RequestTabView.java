@@ -295,11 +295,11 @@ public class RequestTabView implements FuTab, HttpCallback {
         }
         FuRequestData request = fuHttpRequestData.getRequest();
         URL url = parseHttpUrl(requestUrl);
-        if (Objects.isNull(url)) {
+        if (Objects.isNull(url) || StringUtils.isBlank(url.getHost()) || "null".equals(url.getHost())) {
             request.setDomain(StringUtils.EMPTY);
             request.setBaseUrl(StringUtils.EMPTY);
             request.setParamUrl(StringUtils.EMPTY);
-            request.setRequestUrl(requestUrl);
+            request.setRequestUrl(StringUtils.EMPTY);
             return;
         }
         String domain = url.getHost();

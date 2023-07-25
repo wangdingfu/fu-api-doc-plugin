@@ -111,7 +111,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.messageComponent.switchInfo();
         this.rootPanel.add(this.messageComponent.getRootPanel(), BorderLayout.SOUTH);
         setContent(this.rootPanel);
-        this.sendRequestHandler = new SendRequestHandler(project, this, requestConsoleTabView.console());
+        this.sendRequestHandler = new SendRequestHandler(project, this, requestConsoleTabView.getFuLogger());
     }
 
 

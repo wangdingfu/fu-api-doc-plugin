@@ -5,5 +5,3 @@ ${methodName} ${url}
 ${header.key!''}: ${header.value!''}
     </#list>
 </#if>
-
-

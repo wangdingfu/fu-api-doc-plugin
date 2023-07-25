@@ -114,7 +114,13 @@ public class FuRequestData {
         if (StringUtils.isNotBlank(this.requestUrl)) {
             return this.requestUrl;
         }
+        if (StringUtils.isBlank(this.domain)) {
+            return StringUtils.EMPTY;
+        }
         String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
+        if (Objects.isNull(baseUrl)) {
+            baseUrl = StringUtils.EMPTY;
+        }
         return URLUtil.normalize(URLUtil.completeUrl(this.domain, baseUrl) + params, false, true);
     }
 

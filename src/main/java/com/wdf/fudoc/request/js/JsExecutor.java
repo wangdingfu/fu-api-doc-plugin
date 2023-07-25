@@ -1,7 +1,6 @@
 package com.wdf.fudoc.request.js;
 
 import com.wdf.fudoc.common.constant.FuConsoleConstants;
-import com.wdf.fudoc.components.FuConsole;
 import com.wdf.fudoc.console.FuLogger;
 import com.wdf.fudoc.request.js.context.FuContext;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ public class JsExecutor {
      *
      * @param fuContext 脚本中的上下文对象
      */
-    public static void execute(FuContext fuContext, FuLogger fuLogger) {
+    public static void execute(FuContext fuContext) {
         String script = fuContext.getScript();
         if (StringUtils.isBlank(script)) {
             return;
@@ -32,21 +31,21 @@ public class JsExecutor {
         Context cx = Context.enter();
         long start = System.currentTimeMillis();
         boolean success = false;
+        FuLogger fuLogger = fuContext.getFuLogger();
         try {
             // 将Java对象绑定到Rhino执行上下文中
             ScriptableObject scriptableObject = cx.initStandardObjects();
             ScriptableObject.putProperty(scriptableObject, "fu", fuContext);
-            fuLogger.setPrefix(fuContext.getScriptName());
             ScriptableObject.putProperty(scriptableObject, "console", fuLogger);
-            fuLogger.info(FuConsoleConstants.START);
             cx.evaluateString(scriptableObject, fuContext.getScript(), "<cmd>", 1, null);
             success = true;
         } catch (Exception e) {
             log.info("执行脚本【{}】异常", fuContext.getScriptName(), e);
-            fuLogger.info(e.toString());
+            fuLogger.println();
+            fuLogger.error("脚本执行失败: {}", e);
+            fuLogger.println();
         } finally {
             logResult(fuLogger, System.currentTimeMillis() - start, success);
-            fuLogger.setPrefix(null);
             Context.exit();
         }
     }

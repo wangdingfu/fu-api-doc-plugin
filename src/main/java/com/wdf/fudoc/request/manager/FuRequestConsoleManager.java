@@ -13,7 +13,8 @@ import com.intellij.json.JsonFileType;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.base.KeyValueBO;
 import com.wdf.fudoc.common.constant.FuConsoleConstants;
-import com.wdf.fudoc.components.FuConsole;
+import com.wdf.fudoc.console.FuConsoleLogger;
+import com.wdf.fudoc.console.FuLogger;
 import com.wdf.fudoc.request.constants.enumtype.RequestStatus;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestConsoleData;
@@ -32,88 +33,97 @@ import java.util.Objects;
 public class FuRequestConsoleManager {
 
 
-    public static void requestConsole(FuConsole fuConsole, HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (Objects.isNull(fuConsole) || fuConsole.isEmpty()) {
+    public static void requestConsole(FuLogger fuLogger, HttpRequest httpRequest, HttpResponse httpResponse) {
+        if (Objects.isNull(fuLogger) || fuLogger.isEmpty()) {
             return;
         }
-        logRequest(fuConsole, httpRequest);
-        logResponse(fuConsole, httpResponse);
+        logRequest(fuLogger, httpRequest);
+        logResponse(fuLogger, httpResponse);
     }
 
 
-    public static void requestConsole(FuConsole fuConsole, HttpRequest httpRequest, Exception e) {
-        if (Objects.isNull(fuConsole) || fuConsole.isEmpty()) {
+    public static void requestConsole(FuLogger fuLogger, HttpRequest httpRequest, Exception e) {
+        if (Objects.isNull(fuLogger) || fuLogger.isEmpty()) {
             return;
         }
-        logRequest(fuConsole, httpRequest);
-        logResponse(fuConsole, e);
+        logRequest(fuLogger, httpRequest);
+        logResponse(fuLogger, e);
     }
 
 
-    public static void logResult(FuConsole fuConsole, FuHttpRequestData fuHttpRequestData, RequestStatus result) {
-        if (Objects.isNull(fuConsole) || fuConsole.isEmpty()) {
+    public static void logResult(FuLogger fuLogger, FuHttpRequestData fuHttpRequestData, RequestStatus result) {
+        if (Objects.isNull(fuLogger) || fuLogger.isEmpty()) {
             return;
         }
-        fuConsole.println();
+        fuLogger.println();
 
         //第一行
-        fuConsole.debugLog("[FU REQUEST] ");
-        fuConsole.debug(FuConsoleConstants.LINE);
+        fuLogger.debugLog("[FU REQUEST] ");
+        fuLogger.debug(FuConsoleConstants.LINE);
         //第二行 请求结果
-        fuConsole.debugLog("[FU REQUEST] ");
-        fuConsole.infoLog("REQUEST ");
-        fuConsole.log(result.getName(), RequestStatus.SUCCESS.equals(result) ? ConsoleViewContentType.USER_INPUT : ConsoleViewContentType.ERROR_OUTPUT);
-        fuConsole.println();
+        fuLogger.debugLog("[FU REQUEST] ");
+        fuLogger.infoLog("REQUEST ");
+        log(fuLogger, result.getName(), RequestStatus.SUCCESS.equals(result));
+        fuLogger.println();
 
         Integer httpCode = fuHttpRequestData.getHttpCode();
         if (Objects.nonNull(httpCode)) {
             //第三行 状态码
-            fuConsole.debugLog("[FU REQUEST] ");
-            fuConsole.infoLog("Status Code: ");
-            fuConsole.log(String.valueOf(httpCode), fuHttpRequestData.isOk() ? ConsoleViewContentType.USER_INPUT : ConsoleViewContentType.ERROR_OUTPUT);
-            fuConsole.println();
+            fuLogger.debugLog("[FU REQUEST] ");
+            fuLogger.infoLog("Status Code: ");
+            log(fuLogger, String.valueOf(httpCode), fuHttpRequestData.isOk());
+            fuLogger.println();
         }
 
         //第三行 耗时
-        fuConsole.debugLog("[FU REQUEST] ");
-        fuConsole.infoLog("Total time: ");
-        fuConsole.log(fuHttpRequestData.getTime() + " ms", fuHttpRequestData.getTime() < 3000 ? ConsoleViewContentType.USER_INPUT : ConsoleViewContentType.ERROR_OUTPUT);
-        fuConsole.println();
+        fuLogger.debugLog("[FU REQUEST] ");
+        fuLogger.infoLog("Total time: ");
+        log(fuLogger, fuHttpRequestData.getTime() + " ms", fuHttpRequestData.getTime() < 3000);
+        fuLogger.println();
 
         //第四行
-        fuConsole.debugLog("[FU REQUEST] ");
-        fuConsole.debugLog(FuConsoleConstants.LINE);
-        fuConsole.println();
+        fuLogger.debugLog("[FU REQUEST] ");
+        fuLogger.debugLog(FuConsoleConstants.LINE);
+        fuLogger.println();
+        fuLogger.println();
     }
 
 
-    private static void logRequest(FuConsole fuConsole, HttpRequest httpRequest) {
-        fuConsole.debug(FuConsoleConstants.LINE);
-        fuConsole.debug(FuConsoleConstants.lineContent("REQUEST"));
-        fuConsole.debug(FuConsoleConstants.LINE);
+    private static void log(FuLogger fuLogger, String logContent, boolean isSuccess) {
+        if (fuLogger instanceof FuConsoleLogger fuConsoleLogger) {
+            fuConsoleLogger.log(logContent, isSuccess ? ConsoleViewContentType.USER_INPUT : ConsoleViewContentType.ERROR_OUTPUT);
+        } else {
+            fuLogger.info(logContent);
+        }
+    }
+
+
+    private static void logRequest(FuLogger fuLogger, HttpRequest httpRequest) {
+        fuLogger.debug(FuConsoleConstants.LINE);
+        fuLogger.debug(FuConsoleConstants.lineContent("REQUEST"));
+        fuLogger.debug(FuConsoleConstants.LINE);
 
         FuRequestConsoleData requestConsoleData = new FuRequestConsoleData();
         requestConsoleData.setMethodName(httpRequest.getMethod().name());
         requestConsoleData.setUrl(httpRequest.getUrl());
         requestConsoleData.setHeaders(buildHeaderList(httpRequest.headers()));
-        ConsoleViewUtil.printAsFileType(fuConsole.getConsoleView(), FuDocRender.render(requestConsoleData, "console/request_console.ftl"), HttpRequestFileType.INSTANCE);
+        ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), FuDocRender.render(requestConsoleData, "console/request_console.ftl"), HttpRequestFileType.INSTANCE);
         String bodyContent = buildRequestBody(httpRequest);
         if (JSONUtil.isTypeJSON(bodyContent)) {
-            ConsoleViewUtil.printAsFileType(fuConsole.getConsoleView(), bodyContent, JsonFileType.INSTANCE);
-            fuConsole.println();
+            ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), bodyContent, JsonFileType.INSTANCE);
         } else {
-            fuConsole.info(bodyContent);
+            fuLogger.info(bodyContent);
         }
-        fuConsole.println();
+        fuLogger.println();
 
     }
 
 
-    private static void logResponse(FuConsole fuConsole, HttpResponse httpResponse) {
-        fuConsole.println();
-        fuConsole.debug(FuConsoleConstants.LINE);
-        fuConsole.debug(FuConsoleConstants.lineContent("RESPONSE"));
-        fuConsole.debug(FuConsoleConstants.LINE);
+    private static void logResponse(FuLogger fuLogger, HttpResponse httpResponse) {
+        fuLogger.println();
+        fuLogger.debug(FuConsoleConstants.LINE);
+        fuLogger.debug(FuConsoleConstants.lineContent("RESPONSE"));
+        fuLogger.debug(FuConsoleConstants.LINE);
 
         FuResponseConsoleData responseConsoleData = new FuResponseConsoleData();
         responseConsoleData.setHttpType(httpResponse.httpVersion());
@@ -121,21 +131,21 @@ public class FuRequestConsoleManager {
         responseConsoleData.setHeaders(buildHeaderList(httpResponse.headers()));
         String bodyContent = httpResponse.body();
         responseConsoleData.setResponseBody(bodyContent);
-        ConsoleViewUtil.printAsFileType(fuConsole.getConsoleView(), FuDocRender.render(responseConsoleData, "console/response_console.ftl"), HttpRequestFileType.INSTANCE);
+        ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), FuDocRender.render(responseConsoleData, "console/response_console.ftl"), HttpRequestFileType.INSTANCE);
         if (StringUtils.isBlank(bodyContent)) {
             return;
         }
         if (JSONUtil.isTypeJSON(bodyContent)) {
-            ConsoleViewUtil.printAsFileType(fuConsole.getConsoleView(), JSONUtil.toJsonPrettyStr(bodyContent), JsonFileType.INSTANCE);
-            fuConsole.println();
+            ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), JSONUtil.toJsonPrettyStr(bodyContent), JsonFileType.INSTANCE);
+            fuLogger.println();
         } else {
-            fuConsole.info(bodyContent);
+            fuLogger.info(bodyContent);
         }
     }
 
-    private static void logResponse(FuConsole fuConsole, Exception e) {
-        fuConsole.println();
-        fuConsole.error(e.toString());
+    private static void logResponse(FuLogger fuLogger, Exception e) {
+        fuLogger.println();
+        fuLogger.error("请求接口异常:" + e.toString());
     }
 
 

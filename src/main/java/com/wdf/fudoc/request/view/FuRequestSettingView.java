@@ -53,7 +53,7 @@ public class FuRequestSettingView extends DialogWrapper {
         this.rootPanel = new JPanel(new BorderLayout());
         setTitle(FuBundle.message("fudoc.settings.title"));
         initPanel();
-        setModal(true);
+        setModal(false);
         init();
     }
 

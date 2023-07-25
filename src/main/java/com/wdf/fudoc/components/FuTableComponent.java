@@ -273,7 +273,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         }
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(this.fuTableView);
         if (StringUtils.isNotBlank(this.tableKey)) {
-            decorator.addExtraActions(new AnAction("Settings", "", AllIcons.General.Settings) {
+            decorator.addExtraAction(new AnAction("Settings", "", AllIcons.General.Settings) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
                     CustomTableSettingDialog customTableSettingDialog = new CustomTableSettingDialog(e.getProject(), tableKey, columnToDataList());
@@ -288,7 +288,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
             });
         }
         if (CollectionUtils.isNotEmpty(this.actionList)) {
-            decorator.addExtraActions(this.actionList.toArray(new AnAction[0]));
+            this.actionList.forEach(decorator::addExtraAction);
         }
         return decorator.createPanel();
     }

@@ -1,6 +1,5 @@
 package com.wdf.fudoc.test.action;
 
-import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.httpClient.converters.RequestBuilder;
@@ -18,12 +17,10 @@ import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.psi.PsiFile;
-import com.wdf.fudoc.console.FuConsoleLogger;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
@@ -31,10 +28,7 @@ import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.util.FuRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.idea.maven.project.MavenProject;
-import org.jetbrains.idea.maven.project.MavenProjectsManager;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,30 +43,6 @@ public class TestAction extends AnAction {
         LOG.info("这是一个信息级别的日志消息");
         LOG.warn("这是一个警告级别的日志消息");
         LOG.error("这是一个错误级别的日志消息");
-
-        ConsoleRunnerLogger consoleRunnerLogger = new ConsoleRunnerLogger(e.getProject());
-        consoleRunnerLogger.log("这是一条日志消息");
-        consoleRunnerLogger.log("这是一条日志消息2");
-
-
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(e.getProject());
-        ToolWindow toolWindow = toolWindowManager.getToolWindow("Fu Console");
-
-        if (toolWindow != null) {
-            toolWindow.activate(null);
-            toolWindow.setType(ToolWindowType.DOCKED, null);
-        }
-        ConsoleView consoleView = (ConsoleView) toolWindow.getContentManager().getContent(0).getComponent();
-
-        consoleView.print("This is a custom message\n", ConsoleViewContentType.NORMAL_OUTPUT);
-        consoleView.print("This is a custom message\n", ConsoleViewContentType.ERROR_OUTPUT);
-        consoleView.print("This is a custom message\n", ConsoleViewContentType.SYSTEM_OUTPUT);
-        consoleView.print("This is a custom message\n", ConsoleViewContentType.USER_INPUT);
-        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_ERROR_OUTPUT);
-        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_WARNING_OUTPUT);
-        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_INFO_OUTPUT);
-        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_VERBOSE_OUTPUT);
-        consoleView.print("This is a custom message\n", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
     }
 
 

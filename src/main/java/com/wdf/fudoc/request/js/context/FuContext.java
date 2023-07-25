@@ -2,7 +2,7 @@ package com.wdf.fudoc.request.js.context;
 
 import cn.hutool.json.JSONUtil;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.components.FuConsoleManager;
+import com.wdf.fudoc.console.FuLogger;
 import com.wdf.fudoc.request.execute.HttpExecutor;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
@@ -38,13 +38,16 @@ public class FuContext {
 
     private final String applicationName;
 
+    private final FuLogger fuLogger;
 
-    public FuContext(Project project, FuRequestConfigPO configPO, GlobalPreScriptPO preScriptPO) {
+
+    public FuContext(Project project, FuRequestConfigPO configPO, GlobalPreScriptPO preScriptPO, FuLogger fuLogger) {
         this.project = project;
         this.configPO = configPO;
         this.preScriptPO = preScriptPO;
         this.scriptName = preScriptPO.getScriptType().getView();
         this.applicationName = preScriptPO.getApplication();
+        this.fuLogger = fuLogger;
     }
 
     public String getScript() {
@@ -60,10 +63,12 @@ public class FuContext {
         if (Objects.isNull(fuHttpRequestData)) {
             return StringUtils.EMPTY;
         }
-
+        String prefix = fuLogger.getPrefix();
+        fuLogger.setPrefix(null);
         //发起请求
-        HttpExecutor.execute(project, fuHttpRequestData, this.configPO, FuConsoleManager.get(project));
+        HttpExecutor.execute(project, fuHttpRequestData, this.configPO, fuLogger);
 
+        fuLogger.setPrefix(prefix);
         FuResponseData response = fuHttpRequestData.getResponse();
         return response.getContent();
     }

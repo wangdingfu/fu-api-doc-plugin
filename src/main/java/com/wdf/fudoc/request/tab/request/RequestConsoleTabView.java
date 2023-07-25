@@ -6,11 +6,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
-import com.wdf.fudoc.components.FuConsole;
 import com.wdf.fudoc.components.FuTabComponent;
+import com.wdf.fudoc.console.FuLogger;
+import com.wdf.fudoc.console.FuConsoleLogger;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import icons.FuDocIcons;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.util.Objects;
@@ -21,35 +23,31 @@ import java.util.Objects;
  */
 public class RequestConsoleTabView implements FuTab, HttpCallback {
 
-    private final FuConsole fuConsole;
+    @Getter
+    private final FuLogger fuLogger;
     private final JPanel slidePanel;
 
     public RequestConsoleTabView(Project project, JPanel slidePanel, Disposable disposable) {
         this.slidePanel = slidePanel;
         ConsoleViewImpl consoleView = new ConsoleViewImpl(project, true);
         Disposer.register(disposable, consoleView);
-        this.fuConsole = new FuConsole(consoleView);
+        this.fuLogger = new FuConsoleLogger(consoleView);
     }
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("Console", FuDocIcons.CONSOLE, fuConsole.getComponent()).builder();
+        return FuTabComponent.getInstance("Console", FuDocIcons.CONSOLE, fuLogger.getConsoleView().getComponent()).builder();
     }
 
     @Override
     public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
-        if(Objects.nonNull(this.slidePanel)){
+        if (Objects.nonNull(this.slidePanel)) {
             newSelection.setSideComponent(this.slidePanel);
         }
     }
 
     @Override
     public void initData(FuHttpRequestData httpRequestData) {
-        fuConsole.clear();
-    }
-
-
-    public FuConsole console() {
-        return this.fuConsole;
+        fuLogger.clear();
     }
 }
