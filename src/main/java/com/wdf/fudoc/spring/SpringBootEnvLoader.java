@@ -52,7 +52,6 @@ public class SpringBootEnvLoader {
                 initSpringBoot(project);
             }
         }
-        ApplicationManager.getApplication().invokeLater(() -> loadSpringBootConfig(project, isForceLoad));
     }
 
 
