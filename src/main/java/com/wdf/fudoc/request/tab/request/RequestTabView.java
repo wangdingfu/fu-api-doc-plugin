@@ -154,7 +154,7 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     @Override
     public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
-        if(Objects.nonNull(this.slidePanel)){
+        if (Objects.nonNull(this.slidePanel)) {
             newSelection.setSideComponent(this.slidePanel);
         }
         rootPane.setDefaultButton(sendBtn);
@@ -290,10 +290,11 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     private void resetRequestUrl() {
         String requestUrl = this.requestUrlComponent.getText();
+        FuRequestData request = fuHttpRequestData.getRequest();
         if (StringUtils.isBlank(requestUrl)) {
+            request.setRequestUrl(StringUtils.EMPTY);
             return;
         }
-        FuRequestData request = fuHttpRequestData.getRequest();
         URL url = parseHttpUrl(requestUrl);
         if (Objects.isNull(url) || StringUtils.isBlank(url.getHost()) || "null".equals(url.getHost())) {
             request.setDomain(StringUtils.EMPTY);

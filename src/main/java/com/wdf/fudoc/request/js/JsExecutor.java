@@ -54,6 +54,6 @@ public class JsExecutor {
         fuLogger.info(FuConsoleConstants.LINE);
         fuLogger.info("EXECUTE " + (success ? "SUCCESS" : "FAIL"));
         fuLogger.info("Total time: " + time + " ms");
-        fuLogger.info(FuConsoleConstants.END + "\n");
+        fuLogger.info(FuConsoleConstants.LINE + "\n");
     }
 }

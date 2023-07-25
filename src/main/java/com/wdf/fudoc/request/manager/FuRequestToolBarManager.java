@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import com.intellij.ui.IconManager;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
@@ -244,7 +245,7 @@ public class FuRequestToolBarManager {
 
     private void addSyncAction(DefaultActionGroup defaultActionGroup) {
         //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("同步接口文档", "", fuRequestCallback.isWindow() ? FuDocIcons.FU_API_SYNC : null) {
+        defaultActionGroup.add(new AnAction("上传接口文档", "", IconManager.getInstance().getIcon("expui/general/Upload.svg", AllIcons.class)) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //获取同步接口文档配置

@@ -1,7 +1,9 @@
 package com.wdf.fudoc.request.view.widget;
 
 import com.google.common.collect.Lists;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.IconManager;
 import com.wdf.fudoc.components.FuStatusLabel;
 import com.wdf.fudoc.components.bo.DynamicTableBO;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
@@ -19,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu
@@ -37,7 +38,7 @@ public class UserWidget implements FuWidget, FuStatusLabelListener {
         this.fuStatusLabel = new FuStatusLabel(configPO.getUserName(), FuDocIcons.USER, this);
     }
 
-    private static final String CONFIG_AUTH = "配置鉴权用户";
+    private static final String ADD_AUTH = "新增鉴权用户";
 
     @Override
     public String getCurrent() {
@@ -60,7 +61,10 @@ public class UserWidget implements FuWidget, FuStatusLabelListener {
         if (CollectionUtils.isEmpty(authConfigList)) {
             return Lists.newArrayList();
         }
-        return authConfigList.stream().filter(DynamicTableBO::isSelect).map(f -> new BasePopupMenuItem(FuDocIcons.USER, f.getUserName())).collect(Collectors.toList());
+        Icon icon = IconManager.getInstance().getIcon("expui/general/User.svg", AllIcons.class);
+        List<BasePopupMenuItem> resultList = Lists.newArrayList(new BasePopupMenuItem(icon, ADD_AUTH));
+        authConfigList.stream().filter(DynamicTableBO::isSelect).forEach(f -> resultList.add(new BasePopupMenuItem(FuDocIcons.USER, f.getUserName())));
+        return resultList;
     }
 
     @Override
@@ -91,7 +95,7 @@ public class UserWidget implements FuWidget, FuStatusLabelListener {
 
     @Override
     public void select(String text) {
-        if (CONFIG_AUTH.equals(text)) {
+        if (ADD_AUTH.equals(text)) {
             //跳转弹框配置环境
             FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(project);
             fuRequestSettingView.setSize(900, 800);

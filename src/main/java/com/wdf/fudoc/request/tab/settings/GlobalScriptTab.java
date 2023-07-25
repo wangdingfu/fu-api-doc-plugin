@@ -192,12 +192,14 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
         });
         HorizontalBox horizontalBox = new HorizontalBox();
         JComponent component = ToolBarUtils.addActionToToolBar(horizontalBox, "fudoc.request.config.script", defaultActionGroup);
+        FuStatusLabel fuStatusLabel = new FuStatusLabel(null, FuDocIcons.SPRING, this);
+        fuStatusLabel.setText(getList().size() > 1 ? application : null);
+        JPanel applicationPanel = new JPanel(new BorderLayout());
+        applicationPanel.add(fuStatusLabel.getLabel(), BorderLayout.CENTER);
+        JPanel slidePanel = new JPanel(new BorderLayout());
         horizontalBox.add(component);
         horizontalBox.add(Box.createHorizontalStrut(5));
-        FuStatusLabel fuStatusLabel = new FuStatusLabel(null, FuDocIcons.SPRING_BOOT, this);
-        fuStatusLabel.setText(getList().size() > 1 ? application : null);
-        horizontalBox.add(fuStatusLabel.getLabel());
-        JPanel slidePanel = new JPanel(new BorderLayout());
+        horizontalBox.add(applicationPanel);
         slidePanel.add(horizontalBox, BorderLayout.EAST);
         return FuTabComponent.getInstance(this.scriptType.getView(), FuDocIcons.FU_SCRIPT, this.rootPanel).builder(slidePanel);
     }
