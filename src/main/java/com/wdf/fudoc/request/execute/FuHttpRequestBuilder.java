@@ -198,7 +198,7 @@ public class FuHttpRequestBuilder {
             return authTableBO.getPassword();
         }
         Map<String, Object> dataMap = authTableBO.getDataMap();
-        Object value = dataMap.get(userName);
+        Object value = dataMap.get(authName);
         if (Objects.isNull(value)) {
             fuLogger.error("解析变量失败. 鉴权用户[{}]未配置变量[{}]", userName, authVariableName);
             return StringUtils.EMPTY;

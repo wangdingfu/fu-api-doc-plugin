@@ -3,6 +3,7 @@ package com.wdf.fudoc.request.tab.settings;
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.project.Project;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.panels.VerticalBox;
@@ -38,12 +39,15 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
 
     private final VerticalBox rootBox;
 
+    private final Project project;
+
     private final FuTableComponent<ConfigEnvTableBO> envTable;
     private final FuTableComponent<ConfigAuthTableBO> authTable;
     private static final TitledBorder envBorder = IdeBorderFactory.createTitledBorder(FuBundle.message(MessageConstants.REQUEST_GLOBAL_CONFIG_ENV_TITLE));
     private static final TitledBorder authBorder = IdeBorderFactory.createTitledBorder(FuBundle.message(MessageConstants.REQUEST_GLOBAL_CONFIG_AUTH_TITLE));
 
-    public GlobalConfigTab() {
+    public GlobalConfigTab(Project project) {
+        this.project = project;
         this.envTable = FuTableComponent.create("env", FuTableColumnFactory.envConfig(), ConfigEnvTableBO.class);
         this.authTable = FuTableComponent.create("auth", FuTableColumnFactory.authConfig(), ConfigAuthTableBO.class);
         addReloadAction();
@@ -83,6 +87,11 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
         if (CollectionUtils.isNotEmpty(authConfigList)) {
             this.authTable.setDataList(Lists.newArrayList(authConfigList));
         }
+    }
+
+    @Override
+    public void moveOff() {
+        saveData(FuRequestConfigStorage.get(project).readData());
     }
 
     @Override

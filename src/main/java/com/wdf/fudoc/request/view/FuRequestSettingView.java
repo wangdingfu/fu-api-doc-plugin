@@ -77,7 +77,7 @@ public class FuRequestSettingView extends DialogWrapper {
      * 初始化设置面板
      */
     private void initPanel() {
-        this.globalConfigTab = new GlobalConfigTab();
+        this.globalConfigTab = new GlobalConfigTab(project);
         this.globalVariableTab = new GlobalVariableTab(project, getDisposable());
         this.globalHeaderTab = new GlobalHeaderTab(project, getDisposable());
         this.globalCookiesTab = new GlobalCookiesTab();
