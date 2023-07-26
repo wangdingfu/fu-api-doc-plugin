@@ -1,6 +1,5 @@
 package com.wdf.fudoc.spring;
 
-import cn.hutool.core.thread.ThreadUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import lombok.extern.slf4j.Slf4j;
