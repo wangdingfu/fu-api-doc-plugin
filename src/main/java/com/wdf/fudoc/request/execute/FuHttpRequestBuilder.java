@@ -173,12 +173,12 @@ public class FuHttpRequestBuilder {
     private String getAuthVariable(String authVariableName) {
         String authName = StringUtils.substringAfterLast(authVariableName, FuDocConstants.FU_AUTH);
         if (StringUtils.isBlank(authName)) {
-            fuLogger.debug("鉴权用户变量[{}]未正确填写. 无法解析", authVariableName);
+            fuLogger.error("鉴权用户变量[{}]未正确填写. 无法解析", authVariableName);
             return authVariableName;
         }
         List<ConfigAuthTableBO> authConfigList = this.configPO.getAuthConfigList();
         if (CollectionUtils.isEmpty(authConfigList)) {
-            fuLogger.debug("未配置鉴权用户信息. 无法解析鉴权用户变量[{}]", authVariableName);
+            fuLogger.error("未配置鉴权用户信息. 无法解析鉴权用户变量[{}]", authVariableName);
             return authVariableName;
         }
         String userName = this.configPO.getUserName();
@@ -187,20 +187,20 @@ public class FuHttpRequestBuilder {
                     : authConfigList.stream().filter(f -> StringUtils.isNotBlank(f.getUserName()))
                     .filter(f -> f.getUserName().equals(userName)).findFirst().orElse(null);
             if (Objects.isNull(authTableBO)) {
-                fuLogger.debug("鉴权用户[{}]已不存在. 请重新选择一个已经存在的用户", userName);
+                fuLogger.error("鉴权用户[{}]已不存在. 请重新选择一个已经存在的用户", userName);
                 return authVariableName;
             }
         }
-        if (userName.equals(FuDocConstants.FU_AUTH_USER_NAME)) {
+        if (authName.equals(FuDocConstants.FU_AUTH_USER_NAME)) {
             return authTableBO.getUserName();
         }
-        if (userName.equals(FuDocConstants.FU_AUTH_PASSWORD)) {
+        if (authName.equals(FuDocConstants.FU_AUTH_PASSWORD)) {
             return authTableBO.getPassword();
         }
         Map<String, Object> dataMap = authTableBO.getDataMap();
         Object value = dataMap.get(userName);
         if (Objects.isNull(value)) {
-            fuLogger.debug("解析变量失败. 鉴权用户[{}]未配置变量[{}]", userName, authVariableName);
+            fuLogger.error("解析变量失败. 鉴权用户[{}]未配置变量[{}]", userName, authVariableName);
             return StringUtils.EMPTY;
         }
         return value.toString();
