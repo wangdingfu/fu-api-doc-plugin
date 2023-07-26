@@ -145,7 +145,7 @@ public class FuRequestConsoleManager {
 
     private static void logResponse(FuLogger fuLogger, Exception e) {
         fuLogger.println();
-        fuLogger.error("请求接口异常:" + e.toString());
+        fuLogger.error("请求接口异常:" + e.getMessage());
     }
 
 
