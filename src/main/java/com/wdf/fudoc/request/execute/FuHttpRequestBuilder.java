@@ -4,9 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
-import cn.hutool.json.JSON;
-import cn.hutool.json.JSONUtil;
-import com.google.common.collect.Lists;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
@@ -24,7 +21,6 @@ import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -32,7 +28,6 @@ import java.net.HttpCookie;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -46,7 +41,6 @@ public class FuHttpRequestBuilder {
      */
     private final HttpRequest httpRequest;
 
-    private final Project project;
 
     private final FuRequestConfigPO configPO;
 
@@ -56,10 +50,9 @@ public class FuHttpRequestBuilder {
 
     private ConfigAuthTableBO authTableBO;
 
-    public FuHttpRequestBuilder(Project project, FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
+    public FuHttpRequestBuilder(FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
         this.httpRequest = httpRequest;
         this.fuLogger = fuLogger;
-        this.project = project;
         this.configPO = fuRequestConfigPO;
         this.module = FuDocDataContent.getFuDocData().getModule();
         FuRequestData request = fuHttpRequestData.getRequest();
@@ -227,11 +220,11 @@ public class FuHttpRequestBuilder {
         }
     }
 
-    public static FuHttpRequestBuilder getInstance(Project project, FuHttpRequestData fuHttpRequestData, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
+    public static FuHttpRequestBuilder getInstance(FuHttpRequestData fuHttpRequestData, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
         FuRequestData request = fuHttpRequestData.getRequest();
         String requestUrl = request.getRequestUrl();
         RequestType requestType = request.getRequestType();
-        return new FuHttpRequestBuilder(project, fuHttpRequestData, createHttpRequest(requestType, requestUrl), fuRequestConfigPO, fuLogger);
+        return new FuHttpRequestBuilder(fuHttpRequestData, createHttpRequest(requestType, requestUrl), fuRequestConfigPO, fuLogger);
     }
 
     public HttpRequest builder() {

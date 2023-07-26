@@ -50,7 +50,7 @@ public class HttpExecutor {
             return;
         }
         //将【Fu Request】请求数据对象转换为http请求数据
-        HttpRequest httpRequest = FuHttpRequestBuilder.getInstance(project, fuHttpRequestData, fuRequestConfigPO,fuLogger).builder();
+        HttpRequest httpRequest = FuHttpRequestBuilder.getInstance(fuHttpRequestData, fuRequestConfigPO, fuLogger).builder();
         RequestStatus requestStatus = RequestStatus.FAIL;
         try {
             HttpResponse httpResponse = httpRequest.execute();
