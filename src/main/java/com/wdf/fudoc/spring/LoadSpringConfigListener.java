@@ -1,5 +1,6 @@
 package com.wdf.fudoc.spring;
 
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,13 @@ public class LoadSpringConfigListener implements StartupActivity.Background {
     @Override
     public void runActivity(@NotNull Project project) {
         try {
-            SpringBootEnvLoader.doLoad(project, true);
+            project.getMessageBus().connect().subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
+                @Override
+                public void exitDumbMode() {
+                    log.info("开始加载Spring环境信息...");
+                    SpringBootEnvLoader.doLoad(project, true);
+                }
+            });
         } catch (Exception e) {
             log.info("读取SpringBoot配置文件异常");
         }

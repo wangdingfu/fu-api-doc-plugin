@@ -15,6 +15,6 @@ public class FormatActionProvider  implements InspectionWidgetActionProvider {
     @Nullable
     @Override
     public AnAction createAction(@NotNull Editor editor) {
-        return (FuEditorFormatAction) ActionManager.getInstance().getAction("fu.doc.format");
+        return ActionManager.getInstance().getAction("fu.doc.format");
     }
 }

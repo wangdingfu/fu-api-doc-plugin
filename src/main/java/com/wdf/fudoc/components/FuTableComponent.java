@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.ui.AnActionButton;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.EditableModel;
@@ -73,7 +74,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     /**
      * 自定义动作列表
      */
-    private final List<AnAction> actionList = Lists.newArrayList();
+    private final List<AnActionButton> actionList = Lists.newArrayList();
 
     public List<T> getDataList() {
         return Objects.isNull(dataList) ? Lists.newArrayList() : dataList;
@@ -95,7 +96,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         }
     }
 
-    public FuTableComponent<T> addAnAction(AnAction anAction) {
+    public FuTableComponent<T> addAnAction(AnActionButton anAction) {
         this.actionList.add(anAction);
         return this;
     }
@@ -273,7 +274,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         }
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(this.fuTableView);
         if (StringUtils.isNotBlank(this.tableKey)) {
-            decorator.addExtraAction(new AnAction("Settings", "", AllIcons.General.Settings) {
+            decorator.addExtraAction(new AnActionButton("Settings", "", AllIcons.General.Settings) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
                     CustomTableSettingDialog customTableSettingDialog = new CustomTableSettingDialog(e.getProject(), tableKey, columnToDataList());

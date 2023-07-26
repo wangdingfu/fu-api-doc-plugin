@@ -18,7 +18,10 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.FuHtmlComponent;
 import com.wdf.fudoc.components.bo.FuMsgBO;
 import com.wdf.fudoc.components.message.FuMsgManager;
-import com.wdf.fudoc.start.dto.*;
+import com.wdf.fudoc.start.dto.AnnouncementDTO;
+import com.wdf.fudoc.start.dto.FuDocResultDTO;
+import com.wdf.fudoc.start.dto.NotificationActionDTO;
+import com.wdf.fudoc.start.dto.NotifyInfoDTO;
 import com.wdf.fudoc.storage.FuStorageExecutor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -48,8 +51,7 @@ public class FuDocStartUpListener implements StartupActivity {
 
     @Override
     public void runActivity(@NotNull Project project) {
-        //
-        ApplicationManager.getApplication().invokeLater(()->{
+        ApplicationManager.getApplication().invokeLater(() -> {
             //初始化持久目录
             FuStorageExecutor.init(project);
             //设置可重定向

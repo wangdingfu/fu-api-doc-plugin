@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
@@ -45,6 +46,10 @@ public class SpringBootEnvLoader {
      * @param project 当前项目
      */
     public static void doLoad(Project project, boolean isForceLoad) {
+        if (DumbService.isDumb(project)) {
+            log.info("当前正在加载索引....");
+            return;
+        }
         if (isForceLoad) {
             initSpringBoot(project);
         } else {
@@ -126,8 +131,8 @@ public class SpringBootEnvLoader {
     public static SpringBootEnvModuleInfo initSpringBoot(Project project) {
         SpringBootEnvModuleInfo springBootEnvModuleInfo = ApplicationManager.getApplication().runReadAction((Computable<SpringBootEnvModuleInfo>) () -> doInitSpringBoot(project));
         if (Objects.nonNull(springBootEnvModuleInfo)) {
-            ApplicationManager.getApplication().invokeLater(() -> loadSpringBootConfig(project, true));
             SPRING_BOOT_MODULE.put(project, springBootEnvModuleInfo);
+            loadSpringBootConfig(project, true);
         }
         return springBootEnvModuleInfo;
     }

@@ -48,11 +48,8 @@ public class FuRequestConfigStorage {
             return this.configPO;
         }
         String content = StorageUtils.readContent(path, FILE_NAME);
-        if (StringUtils.isNotBlank(content)) {
-            this.configPO = JsonUtil.toBean(content, FuRequestConfigPO.class);
-            return this.configPO;
-        }
-        return new FuRequestConfigPO();
+        this.configPO = StringUtils.isNotBlank(content) ? JsonUtil.toBean(content, FuRequestConfigPO.class) : new FuRequestConfigPO();
+        return this.configPO;
     }
 
 

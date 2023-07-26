@@ -8,7 +8,7 @@
         <![CDATA[ Description will be added by gradle build]]>
     </description>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="223"/>
+    <idea-version since-build="222.3345.118"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>JavaScript</depends>
@@ -106,10 +106,7 @@
 
         <!--        <iw.actionProvider implementation="com.wdf.fudoc.request.action.editor.FormatActionProvider"/>-->
 
-        <editorFloatingToolbarProvider
-                order="after DefaultFloatingToolbarProvider"
-                implementation="com.wdf.fudoc.test.action.editor.FuDocEditorFloatingToolbarProvider"
-                id="FuDocEditorFloatingToolbarProvider"/>
+        <editorFloatingToolbarProvider implementation="com.wdf.fudoc.test.action.editor.FuEditorFloatingToolbarProvider" id="FuDocEditorFloatingToolbarProvider"/>
 
 
         <searchEverywhereContributor implementation="com.wdf.fudoc.navigation.FuNavigationApiEveryWhereFactory"/>

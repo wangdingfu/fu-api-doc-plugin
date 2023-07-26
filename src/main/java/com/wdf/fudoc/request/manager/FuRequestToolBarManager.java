@@ -9,7 +9,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.ui.IconManager;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
@@ -31,6 +30,7 @@ import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
+import icons.ExpUiIcons;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;
 
@@ -122,11 +122,6 @@ public class FuRequestToolBarManager {
         defaultActionGroup.add(new AnAction("Stop", "Stop", AllIcons.Actions.Suspend) {
 
             @Override
-            public @NotNull ActionUpdateThread getActionUpdateThread() {
-                return ActionUpdateThread.BGT;
-            }
-
-            @Override
             public void update(@NotNull AnActionEvent e) {
                 Presentation presentation = e.getPresentation();
                 presentation.setEnabled(fuRequestCallback.getSendStatus());
@@ -172,7 +167,7 @@ public class FuRequestToolBarManager {
 
         if (!fuRequestCallback.isWindow()) {
             //添加设置按钮
-            defaultActionGroup.add(new AnAction("Settings", "Setting", FuDocIcons.moreIcon()) {
+            defaultActionGroup.add(new AnAction("Settings", "Setting", ExpUiIcons.General.MoreVertical) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
                     DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "窗体展示方式");
@@ -215,12 +210,6 @@ public class FuRequestToolBarManager {
     private void addConfigServerPortAction(DefaultActionGroup defaultActionGroup) {
         //添加同步接口文档事件
         defaultActionGroup.add(new ToggleAction("自动读取Spring环境配置", "", FuDocIcons.SPRING_BOOT) {
-
-            @Override
-            public @NotNull ActionUpdateThread getActionUpdateThread() {
-                return ActionUpdateThread.BGT;
-            }
-
             @Override
             public boolean isSelected(@NotNull AnActionEvent e) {
                 Project project = e.getProject();
@@ -243,7 +232,7 @@ public class FuRequestToolBarManager {
 
     private void addSyncAction(DefaultActionGroup defaultActionGroup) {
         //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("上传接口文档", "", FuDocIcons.uploadIcon()) {
+        defaultActionGroup.add(new AnAction("上传接口文档", "", ExpUiIcons.General.Upload) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //获取同步接口文档配置

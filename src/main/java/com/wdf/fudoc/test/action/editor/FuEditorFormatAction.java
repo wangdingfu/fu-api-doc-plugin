@@ -21,13 +21,9 @@ import java.util.Objects;
  */
 public class FuEditorFormatAction extends AnAction {
 
-    @Override
-    public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.BGT;
-    }
 
     public FuEditorFormatAction() {
-        super("美化json", "Format", FuDocIcons.FU_REQUEST_MAGIC);
+        super("格式化json", "Format", FuDocIcons.FU_DOC);
     }
 
     @Override

@@ -104,8 +104,6 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
 
     @Override
     public void refresh() {
-        //每次刷新时都需要检查下是否需要加载下配置
-        SpringBootEnvLoader.doLoad(requestTabView.getProject(), false);
         String text = this.fuStatusLabel.getText();
         if (StringUtils.isBlank(text)) {
             setText(getEnvName());

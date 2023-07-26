@@ -2,8 +2,8 @@ package com.wdf.fudoc.request.tab.settings;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.ui.AnActionButton;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.ui.tabs.TabInfo;
@@ -58,7 +58,7 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
 
 
     private void addReloadAction() {
-        this.envTable.addAnAction(new AnAction("Refresh", "", AllIcons.Actions.Refresh) {
+        this.envTable.addAnAction(new AnActionButton("Refresh", "", AllIcons.Actions.Refresh) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 SpringBootEnvLoader.doLoad(e.getProject(), true);
