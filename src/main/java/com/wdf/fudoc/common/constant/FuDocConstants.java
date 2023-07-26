@@ -18,6 +18,11 @@ public interface FuDocConstants {
 
     String FU_DOC_FILE = "FuDocFile.";
 
+
+    String FU_AUTH = "fuAuth.";
+    String FU_AUTH_USER_NAME = "userName";
+    String FU_AUTH_PASSWORD = "password";
+
     String ROOT = "root";
     String FU_DOC_DIR = "fudoc";
 
