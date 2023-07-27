@@ -22,6 +22,11 @@ public interface MessageConstants {
      */
     String NOTIFY_COPY_OK = "notify.copy.ok";
 
+    /**
+     * 通知拷贝消息至剪贴板成功的key
+     */
+    String NOTIFY_COPY_CURL_OK = "notify.copy.curl.ok";
+
     String NOTIFY_TO_JSON_OK = "notify.toJson.ok";
 
 
@@ -30,6 +35,8 @@ public interface MessageConstants {
      */
     String NOTIFY_GEN_FAIL = "notify.gen.fail";
     String NOTIFY_TO_JSON_FAIL = "notify.toJson.fail";
+
+    String NOTIFY_GEN_CURL_FAIL = "notify.gen.curl.fail";
     /**
      * 没有内容可以生成
      */

@@ -18,6 +18,7 @@ import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.components.action.FuRequestViewModeAction;
+import com.wdf.fudoc.request.action.toolbar.CopyCurlAction;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
@@ -83,6 +84,8 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
         addSyncAction(defaultActionGroup);
+        //复制curl命令
+        defaultActionGroup.add(new CopyCurlAction(fuRequestCallback));
 
         if (fuRequestCallback.isWindow()) {
             addConfigServerPortAction(defaultActionGroup);
