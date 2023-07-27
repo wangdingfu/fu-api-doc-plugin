@@ -2,6 +2,8 @@ package com.wdf.fudoc.start;
 
 import com.intellij.ide.plugins.DynamicPluginListener;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.wdf.fudoc.common.FuBundle;
+import com.wdf.fudoc.common.notification.FuDocNotification;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +16,7 @@ public class FuDocListener implements DynamicPluginListener {
 
     @Override
     public void pluginLoaded(@NotNull IdeaPluginDescriptor pluginDescriptor) {
-        log.info("插件被加载了....");
+        log.info("fudoc插件被加载了....");
+        FuDocNotification.notifyInfo(FuBundle.message("fudoc.loaded.message"));
     }
 }
