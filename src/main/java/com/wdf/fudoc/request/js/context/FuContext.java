@@ -65,8 +65,9 @@ public class FuContext {
         }
         String prefix = fuLogger.getPrefix();
         fuLogger.setPrefix(null);
+        fuHttpRequestData.setScript(true);
         //发起请求
-        HttpExecutor.execute(project, fuHttpRequestData, this.configPO, fuLogger);
+        HttpExecutor.execute(fuHttpRequestData, this.configPO, fuLogger);
 
         fuLogger.setPrefix(prefix);
         FuResponseData response = fuHttpRequestData.getResponse();

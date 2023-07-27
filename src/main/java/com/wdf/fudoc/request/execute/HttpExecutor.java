@@ -37,7 +37,7 @@ public class HttpExecutor {
      *
      * @param fuHttpRequestData 发起http所需的数据对象
      */
-    public static void execute(Project project, FuHttpRequestData fuHttpRequestData, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
+    public static void execute(FuHttpRequestData fuHttpRequestData, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
         long start = System.currentTimeMillis();
         String requestUrl = fuHttpRequestData.getRequest().getRequestUrl();
         if (StringUtils.isBlank(requestUrl)) {

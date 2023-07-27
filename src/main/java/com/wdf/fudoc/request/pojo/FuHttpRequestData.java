@@ -69,6 +69,11 @@ public class FuHttpRequestData {
     @JsonIgnore
     private Integer httpCode;
 
+    /**
+     * 是否脚本请求
+     */
+    private boolean isScript;
+
 
     /**
      * 请求是否成功，判断依据为：状态码范围在200~299内。

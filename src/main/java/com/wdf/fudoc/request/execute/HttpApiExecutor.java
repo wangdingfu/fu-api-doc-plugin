@@ -49,7 +49,7 @@ public class HttpApiExecutor {
         log.info("执行脚本共计耗时:{}ms", System.currentTimeMillis() - start);
         //发起请求
         long start1 = System.currentTimeMillis();
-        HttpExecutor.execute(project, fuHttpRequestData, fuRequestConfigPO, fuLogger);
+        HttpExecutor.execute(fuHttpRequestData, fuRequestConfigPO, fuLogger);
         log.info("发起[{}]接口请求共计耗时:{}ms", fuHttpRequestData.getApiName(), System.currentTimeMillis() - start1);
     }
 }

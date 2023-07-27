@@ -4,8 +4,9 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.data.FuDocDataContent;
@@ -50,11 +51,14 @@ public class FuHttpRequestBuilder {
 
     private ConfigAuthTableBO authTableBO;
 
+    private final boolean isScript;
+
     public FuHttpRequestBuilder(FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
         this.httpRequest = httpRequest;
         this.fuLogger = fuLogger;
         this.configPO = fuRequestConfigPO;
         this.module = FuDocDataContent.getFuDocData().getModule();
+        this.isScript = fuHttpRequestData.isScript();
         FuRequestData request = fuHttpRequestData.getRequest();
         FuRequestBodyData body = request.getBody();
         if (Objects.isNull(body)) {
@@ -209,7 +213,51 @@ public class FuHttpRequestBuilder {
 
     private void addBody(String content) {
         if (StringUtils.isNotBlank(content)) {
-            this.httpRequest.body(content);
+            this.httpRequest.body(formatJsonContent(content));
+        }
+    }
+
+    private String formatJsonContent(String json) {
+        if (!this.isScript || StringUtils.isBlank(json) || !(json.contains("{{") && json.contains("}}"))) {
+            return json;
+        }
+        try {
+            // 创建ObjectMapper对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 解析JSON字符串为JsonNode对象
+            JsonNode rootNode = objectMapper.readTree(json);
+            // 遍历JsonNode对象
+            traverseJson(rootNode);
+            return rootNode.toString();
+        } catch (Exception e) {
+            return json;
+        }
+    }
+
+    private void traverseJson(JsonNode node) {
+        if (node.isObject()) {
+            // 处理JSON对象
+            node.fields().forEachRemaining(entry -> {
+                String key = entry.getKey();
+                JsonNode value = entry.getValue();
+                if (value.isValueNode()) {
+                    String text = value.asText();
+                    String formatValue = formatValue(text);
+                    if (!text.equals(formatValue)) {
+                        ((com.fasterxml.jackson.databind.node.ObjectNode) node).put(key, formatValue);
+                    }
+                } else {
+                    // 递归遍历子节点
+                    traverseJson(value);
+                }
+            });
+        } else if (node.isArray()) {
+            // 处理JSON数组
+            for (JsonNode arrayElement : node) {
+                // 递归遍历数组元素
+                traverseJson(arrayElement);
+            }
         }
     }
 
