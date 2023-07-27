@@ -17,6 +17,7 @@
     <depends>com.jetbrains.restClient</depends>
     <depends>org.jetbrains.idea.maven</depends>
 
+
     <extensions defaultExtensionNs="com.intellij">
 
         <!-- 应用启动时通知类 -->
@@ -112,6 +113,12 @@
         <searchEverywhereContributor implementation="com.wdf.fudoc.navigation.FuNavigationApiEveryWhereFactory"/>
 
     </extensions>
+
+
+    <applicationListeners>
+        <listener class="com.wdf.fudoc.start.FuDocListener" topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+    </applicationListeners>
+
 
     <actions>
 

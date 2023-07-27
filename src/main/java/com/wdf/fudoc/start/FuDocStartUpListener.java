@@ -4,6 +4,8 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.http.HttpGlobalConfig;
 import cn.hutool.json.JSONUtil;
+import com.intellij.ide.plugins.DynamicPluginListener;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.notification.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -51,6 +53,12 @@ public class FuDocStartUpListener implements StartupActivity {
 
     @Override
     public void runActivity(@NotNull Project project) {
+        ApplicationManager.getApplication().getMessageBus().connect().subscribe(DynamicPluginListener.TOPIC, new DynamicPluginListener() {
+            @Override
+            public void pluginLoaded(@NotNull IdeaPluginDescriptor pluginDescriptor) {
+                LOGGER.info("fudoc插件被加载了...");
+            }
+        });
         ApplicationManager.getApplication().invokeLater(() -> {
             //初始化持久目录
             FuStorageExecutor.init(project);
