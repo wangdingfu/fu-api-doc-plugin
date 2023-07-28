@@ -149,10 +149,10 @@ public class SpringBootEnvLoader {
             psiAnnotations = JavaAnnotationIndex.getInstance().get(AnnotationConstants.SPRING_BOOT_APPLICATION, project, GlobalSearchScope.projectScope(project));
         } catch (IndexNotReadyException e) {
             //缓存还未加载完毕 后续在加载
-            log.error("缓存还未加载完成......");
+            log.info("缓存还未加载完成......");
             return null;
         } catch (Exception e) {
-            log.error("加载SpringBoot配置异常", e);
+            log.info("加载SpringBoot配置异常", e);
             return null;
         }
         if (CollectionUtils.isEmpty(psiAnnotations)) {
@@ -207,7 +207,7 @@ public class SpringBootEnvLoader {
         SpringBootEnvModuleInfo springBootEnvModuleInfo = SPRING_BOOT_MODULE.get(project);
         if (Objects.isNull(springBootEnvModuleInfo)) {
             //读取配置异常
-            log.error("读取SpringBoot配置文件失败");
+            log.info("读取SpringBoot配置文件失败");
             return;
         }
         if (!isForceLoad && springBootEnvModuleInfo.isLoad()) {
