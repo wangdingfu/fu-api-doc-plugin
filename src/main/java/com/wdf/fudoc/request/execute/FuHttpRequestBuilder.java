@@ -305,6 +305,14 @@ public class FuHttpRequestBuilder {
                 case DELETE -> {
                     return HttpUtil.createRequest(Method.DELETE, requestUrl);
                 }
+
+                case PUT -> {
+                    return HttpUtil.createRequest(Method.PUT, requestUrl);
+                }
+
+                case PATCH -> {
+                    return HttpUtil.createRequest(Method.PATCH, requestUrl);
+                }
             }
         }
         return HttpUtil.createGet(requestUrl);

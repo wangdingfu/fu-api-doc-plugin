@@ -166,26 +166,24 @@ public class FuHttpRequestDataFactory {
                 }
             }
         }
+        request.setParams(paramList);
         request.setPathVariables(pathVariableList);
         if (RequestType.GET.equals(requestType)) {
-            request.setParams(paramList);
             return;
         }
-        if (RequestType.POST.equals(requestType)) {
-            ContentType contentType = fuDocRootParamData.getContentType();
-            if (Objects.isNull(contentType)) {
-                return;
-            }
-            if (Objects.nonNull(requestBodyParam)) {
-                paddingBody(fuHttpRequestData, requestBodyParam.getMockData());
-                return;
-            }
-            FuRequestBodyData body = request.getBody();
-            if (ContentType.FORM_DATA.equals(contentType)) {
-                body.setFormDataList(paramList);
-            } else {
-                body.setFormUrlEncodedList(paramList);
-            }
+        ContentType contentType = fuDocRootParamData.getContentType();
+        if (Objects.isNull(contentType)) {
+            return;
+        }
+        if (Objects.nonNull(requestBodyParam)) {
+            paddingBody(fuHttpRequestData, requestBodyParam.getMockData());
+            return;
+        }
+        FuRequestBodyData body = request.getBody();
+        if (ContentType.FORM_DATA.equals(contentType)) {
+            body.setFormDataList(paramList);
+        } else {
+            body.setFormUrlEncodedList(paramList);
         }
     }
 

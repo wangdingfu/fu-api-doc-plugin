@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.console.FuLogger;
 import com.wdf.fudoc.request.constants.enumtype.RequestStatus;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
