@@ -17,7 +17,7 @@ public class FuDocIssueSubmitter extends AbstractGithubErrorReportSubmitter {
 
     @Override
     protected String getGithubToken() {
-        return "Bearer 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";
+        return "Bearer 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";
     }
 
     @Override

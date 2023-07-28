@@ -10,11 +10,11 @@ import com.wdf.fudoc.request.http.data.HttpClientData;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -30,13 +30,14 @@ public class HttpDataConvert {
         FuRequestData request = fuHttpRequestData.getRequest();
         httpClientData.setMethodName(request.getRequestType().getRequestType());
         httpClientData.setUrl(buildUrl(request));
-        httpClientData.setHeaders(ObjectUtils.listToList(request.getHeaders(), data -> new KeyValueBO(data.getKey(), data.getValue())));
+        List<HeaderKeyValueBO> headers = request.getHeaders();
+        if (CollectionUtils.isNotEmpty(headers)) {
+            httpClientData.setHeaders(headers.stream().filter(HttpDataConvert::isHeader)
+                    .map(m -> new KeyValueBO(m.getKey(), m.getValue())).collect(Collectors.toList()));
+        }
         httpClientData.setRequestBody(buildRequestBody(request));
         return httpClientData;
     }
-
-
-
 
 
     public static String buildUrl(FuRequestData fuRequestData) {
@@ -58,8 +59,7 @@ public class HttpDataConvert {
             return null;
         }
         FuRequestBodyData body = fuRequestData.getBody();
-        List<HeaderKeyValueBO> headers = fuRequestData.getHeaders();
-        String contentType = headers.stream().filter(f -> f.getKey().equals(FuDocConstants.CONTENT_TYPE)).findFirst().map(KeyValueTableBO::getValue).orElse(null);
+        String contentType = getContentType(fuRequestData.getHeaders());
         if (StringUtils.isBlank(contentType)) {
             if (StringUtils.isNotBlank(body.getJson())) {
                 return body.getJson();
@@ -75,6 +75,17 @@ public class HttpDataConvert {
             return body.getJson();
         }
         return toParams(body.getFormUrlEncodedList());
+    }
+
+    private static String getContentType(List<HeaderKeyValueBO> headers) {
+        if (CollectionUtils.isEmpty(headers)) {
+            return null;
+        }
+        return headers.stream().filter(HttpDataConvert::isHeader).filter(f -> f.getKey().equals(FuDocConstants.CONTENT_TYPE)).findFirst().map(KeyValueTableBO::getValue).orElse(null);
+    }
+
+    private static boolean isHeader(HeaderKeyValueBO f) {
+        return Objects.nonNull(f) && StringUtils.isNotBlank(f.getKey()) && StringUtils.isNotBlank(f.getValue());
     }
 
 

@@ -64,19 +64,24 @@ public class CopyCurlAction extends AbstractRequestAction {
         if (Objects.isNull(this.fuRequestCallback)) {
             super.actionPerformed(e);
         } else {
-            String curl = genCurl(e.getProject(), getRequestData());
-            InputEvent inputEvent = e.getInputEvent();
-            if (inputEvent instanceof MouseEvent mouseEvent) {
-                int flags = HintManager.HIDE_BY_ANY_KEY | HintManager.HIDE_BY_TEXT_CHANGE | HintManager.HIDE_BY_SCROLLING | HintManager.HIDE_BY_OTHER_HINT | HintManager.HIDE_BY_MOUSEOVER;
-                JRootPane rootPane = fuRequestCallback.getRequestTabView().getRootPane();
-                RelativePoint relativePoint = new RelativePoint(rootPane, new Point(mouseEvent.getX(), mouseEvent.getY()));
-                JComponent label = HintUtil.createInformationLabel(curl, null, new MouseAdapter() {
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                        HintManager.getInstance().hideHints(HintManager.HIDE_BY_MOUSEOVER, true, false);
-                    }
-                }, null);
-                HintManager.getInstance().showHint(label, relativePoint, flags, -1);
+            try {
+                String curl = genCurl(e.getProject(), getRequestData());
+                InputEvent inputEvent = e.getInputEvent();
+                if (inputEvent instanceof MouseEvent mouseEvent) {
+                    int flags = HintManager.HIDE_BY_ANY_KEY | HintManager.HIDE_BY_TEXT_CHANGE | HintManager.HIDE_BY_SCROLLING | HintManager.HIDE_BY_OTHER_HINT | HintManager.HIDE_BY_MOUSEOVER;
+                    JRootPane rootPane = fuRequestCallback.getRequestTabView().getRootPane();
+                    RelativePoint relativePoint = new RelativePoint(rootPane, new Point(mouseEvent.getX(), mouseEvent.getY()));
+                    JComponent label = HintUtil.createInformationLabel(curl, null, new MouseAdapter() {
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                            HintManager.getInstance().hideHints(HintManager.HIDE_BY_MOUSEOVER, true, false);
+                        }
+                    }, null);
+                    HintManager.getInstance().showHint(label, relativePoint, flags, 15000);
+                }
+            } catch (Exception exception) {
+                log.error("生成curl命令失败", exception);
+                FuDocNotification.notifyError(FuBundle.message(exceptionMsg()));
             }
         }
     }
