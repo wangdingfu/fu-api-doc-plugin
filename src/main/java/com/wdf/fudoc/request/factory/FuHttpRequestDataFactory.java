@@ -166,9 +166,9 @@ public class FuHttpRequestDataFactory {
                 }
             }
         }
-        request.setParams(paramList);
         request.setPathVariables(pathVariableList);
         if (RequestType.GET.equals(requestType)) {
+            request.setParams(paramList);
             return;
         }
         ContentType contentType = fuDocRootParamData.getContentType();
@@ -203,7 +203,7 @@ public class FuHttpRequestDataFactory {
                 String paramName = fuDocParamData.getParamName();
                 boolean isSelect = YesOrNo.getByDesc(fuDocParamData.getParamRequire());
                 RequestParamType requestParamType = FuDocConstants.FILE.equals(fuDocParamData.getParamType()) ? RequestParamType.FILE : RequestParamType.TEXT;
-                tableBOList.add(new KeyValueTableBO(isSelect, requestParamType.getCode(), paramName, fuDocParamData.getParamValue(), fuDocParamData.getParamDesc(),true));
+                tableBOList.add(new KeyValueTableBO(isSelect, requestParamType.getCode(), paramName, fuDocParamData.getParamValue(), fuDocParamData.getParamDesc(), true));
             }
         }
         return tableBOList;
@@ -222,8 +222,6 @@ public class FuHttpRequestDataFactory {
     }
 
 
-
-
     private static void paddingDomain(FuHttpRequestData fuHttpRequestData, Module module) {
         if (Objects.nonNull(fuHttpRequestData)) {
             //设置接口url
@@ -236,7 +234,6 @@ public class FuHttpRequestDataFactory {
             fuHttpRequestData.setModule(module);
         }
     }
-
 
 
 }
