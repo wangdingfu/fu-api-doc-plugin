@@ -1,7 +1,5 @@
 package com.wdf.fudoc.request.http.convert;
 
-import com.google.common.collect.Lists;
-import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.base.KeyValueBO;
