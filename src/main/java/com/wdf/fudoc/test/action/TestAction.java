@@ -1,5 +1,6 @@
 package com.wdf.fudoc.test.action;
 
+import cn.hutool.core.util.RandomUtil;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.httpClient.converters.RequestBuilder;
@@ -20,6 +21,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.psi.PsiFile;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
@@ -38,7 +40,7 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        curlTest(e);
+        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
     }
 
 
@@ -95,7 +97,6 @@ public class TestAction extends AnAction {
             for (HttpQueryParameter httpQueryParameter : queryParameterList) {
                 String value = httpQueryParameter.getValue(substitutor);
                 String key = httpQueryParameter.getKey(substitutor);
-                log.info("key:" + key + "=" + value);
             }
         }
         RequestBuilder<RestClientRequest, RestClientFormBodyPart> requestBuilder = new RestClientRequestBuilder();

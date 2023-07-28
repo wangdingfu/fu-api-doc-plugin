@@ -30,7 +30,7 @@ public abstract class AbstractErrorReportSubmitter extends ErrorReportSubmitter 
     @Override
     @Nullable
     public String getPrivacyNoticeText() {
-        return String.format("由于作者偷懒, 未接入 GitHub 登录, 请在上报异常时, 在上方输入框内填入您的联系信息, 或 issue 生成后<a href='%s'>点击进入</a>页面留言以获得 issue 进展通知!<br/>" + "请在下方按钮选择 %s, 先不要 Clear, 这样上报后可以通过链接(例如 <a href='%s'>%s</a>) 点击进入该 Issue", getIssueListPageUrl(), getReportActionText(), generateUrlByIssueId(getExampleIssueId()), generateTextByIssueId(getExampleIssueId()));
+        return String.format("由于未接入github登录, 建议在提交issue之后 <a href='%s'>点击进入</a> 页面留言以获得 issue 进展通知!<br/>", generateUrlByIssueId(getExampleIssueId()));
     }
 
     protected String getAuthorName() {
@@ -48,13 +48,6 @@ public abstract class AbstractErrorReportSubmitter extends ErrorReportSubmitter 
      * @return 示例 issue id
      */
     protected abstract String getExampleIssueId();
-
-    /**
-     * 获取 issue 列表页链接
-     *
-     * @return issue 列表页链接
-     */
-    protected abstract String getIssueListPageUrl();
 
     /**
      * 根据 issue id 生成展示文字
@@ -101,6 +94,7 @@ public abstract class AbstractErrorReportSubmitter extends ErrorReportSubmitter 
             } else {
                 reportInfo = new SubmittedReportInfo(generateUrlByIssueId(issueId), generateTextByIssueId(issueId), SubmittedReportInfo.SubmissionStatus.DUPLICATE);
             }
+            //TODO issue提交成功 发送通知
             consumer.consume(reportInfo);
             return true;
         } catch (Exception e) {

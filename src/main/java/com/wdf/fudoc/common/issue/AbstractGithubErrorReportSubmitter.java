@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -43,10 +42,6 @@ public abstract class AbstractGithubErrorReportSubmitter extends AbstractErrorRe
      */
     protected abstract String getGithubToken();
 
-    @Override
-    protected String getIssueListPageUrl() {
-        return UrlConstants.ISSUE;
-    }
 
     @NotNull
     @Override
