@@ -3,6 +3,7 @@ package com.wdf.fudoc.common;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.util.NlsActions;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
@@ -15,7 +16,9 @@ import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.util.PsiClassUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.Objects;
 
 /**
@@ -24,6 +27,13 @@ import java.util.Objects;
  */
 @Slf4j
 public abstract class AbstractClassAction extends AnAction {
+
+    public AbstractClassAction() {
+    }
+
+    public AbstractClassAction(@Nullable @NlsActions.ActionText String text, @Nullable @NlsActions.ActionDescription String description, @Nullable Icon icon) {
+        super(text, description, icon);
+    }
 
     protected boolean isShow(JavaClassType javaClassType) {
         return true;

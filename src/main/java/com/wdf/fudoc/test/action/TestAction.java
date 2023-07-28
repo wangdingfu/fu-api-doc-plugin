@@ -3,18 +3,17 @@ package com.wdf.fudoc.test.action;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.httpClient.converters.RequestBuilder;
+import com.intellij.httpClient.converters.curl.CurlRequestBuilder;
 import com.intellij.httpClient.execution.HttpRequestConfig;
 import com.intellij.httpClient.execution.RestClientFormBodyPart;
 import com.intellij.httpClient.execution.RestClientRequest;
 import com.intellij.httpClient.execution.RestClientRequestBuilder;
-import com.intellij.httpClient.http.request.HttpRequestPsiConverter;
-import com.intellij.httpClient.http.request.HttpRequestPsiFile;
-import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
-import com.intellij.httpClient.http.request.HttpRequestVariableSubstitutor;
+import com.intellij.httpClient.http.request.*;
 import com.intellij.httpClient.http.request.psi.HttpQuery;
 import com.intellij.httpClient.http.request.psi.HttpQueryParameter;
 import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
+import com.intellij.httpClient.http.request.run.HttpRequestValidationException;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.wm.ToolWindow;
@@ -39,10 +38,7 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        LOG.debug("这是一个调试级别的日志消息");
-        LOG.info("这是一个信息级别的日志消息");
-        LOG.warn("这是一个警告级别的日志消息");
-        LOG.error("这是一个错误级别的日志消息");
+        curlTest(e);
     }
 
 
@@ -53,6 +49,20 @@ public class TestAction extends AnAction {
         System.out.println("读取api【" + apiList.size() + "】条 共计耗时:" + (System.currentTimeMillis() - start) + "ms");
     }
 
+    private void curlTest(AnActionEvent e) {
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
+        //读取http文件
+        PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
+
+        HttpRequest httpRequest = FuRequestUtils.getHttpRequest((HttpRequestPsiFile) psiFile, e.getData(LangDataKeys.EDITOR));
+        try {
+            Object o = HttpRequestPsiConverter.convertFromHttpRequest(httpRequest, substitutor, (RequestBuilder) (new CurlRequestBuilder()));
+            System.out.println(o);
+        } catch (HttpRequestValidationException e3) {
+            log.error("aaa", e3);
+        }
+    }
+
 
     private void request(AnActionEvent e) {
         HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
@@ -60,7 +70,11 @@ public class TestAction extends AnAction {
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 
         HttpRequest httpRequest = FuRequestUtils.getHttpRequest((HttpRequestPsiFile) psiFile, e.getData(LangDataKeys.EDITOR));
-
+        try {
+            Object o = HttpRequestPsiConverter.convertFromHttpRequest(httpRequest, substitutor, (RequestBuilder) (new CurlRequestBuilder()));
+        } catch (HttpRequestValidationException e3) {
+            log.error("aaa", e3);
+        }
         if (Objects.isNull(psiFile)) {
             return;
         }
