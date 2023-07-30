@@ -34,7 +34,7 @@ public abstract class AbstractErrorReportSubmitter extends ErrorReportSubmitter 
     }
 
     protected String getAuthorName() {
-        return "wangdingfu";
+        return "WangDingFu";
     }
 
     @Override

@@ -1,26 +1,27 @@
 package com.wdf.fudoc.test.action;
 
 import cn.hutool.core.util.RandomUtil;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.httpClient.converters.RequestBuilder;
 import com.intellij.httpClient.converters.curl.CurlRequestBuilder;
 import com.intellij.httpClient.execution.HttpRequestConfig;
 import com.intellij.httpClient.execution.RestClientFormBodyPart;
 import com.intellij.httpClient.execution.RestClientRequest;
 import com.intellij.httpClient.execution.RestClientRequestBuilder;
-import com.intellij.httpClient.http.request.*;
+import com.intellij.httpClient.http.request.HttpRequestPsiConverter;
+import com.intellij.httpClient.http.request.HttpRequestPsiFile;
+import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
+import com.intellij.httpClient.http.request.HttpRequestVariableSubstitutor;
 import com.intellij.httpClient.http.request.psi.HttpQuery;
 import com.intellij.httpClient.http.request.psi.HttpQueryParameter;
 import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.httpClient.http.request.run.HttpRequestValidationException;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.psi.PsiFile;
+import com.wdf.fudoc.common.exception.ErrorMessageComponent;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
@@ -40,7 +41,7 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
+        ErrorMessageComponent.addErrorLog(e.getProject(), "测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
     }
 
 
