@@ -21,7 +21,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiFile;
-import com.wdf.fudoc.common.exception.ErrorMessageComponent;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
@@ -41,7 +40,7 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        ErrorMessageComponent.addErrorLog(e.getProject(), "测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
+        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
     }
 
 

@@ -12,6 +12,7 @@ import com.intellij.openapi.extensions.PluginId;
 import com.wdf.fudoc.apidoc.config.state.FuDocSecuritySetting;
 import com.wdf.fudoc.apidoc.view.FuDocGeneralForm;
 import com.wdf.fudoc.common.CommonResult;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class RequestManager {
 
 
     private static String getPluginVersion() {
-        IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId("com.wdf.api"));
+        IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId(FuDocConstants.ID));
         if (Objects.nonNull(plugin)) {
             return plugin.getVersion();
         }

@@ -10,7 +10,10 @@ ${throwableText}
 
 **环境（请填写以下信息）：**
 
+<#if pluginName??>
 插件信息: ${pluginName} - ${pluginVersion}
+</#if>
+
 ${fullApplicationName} ${(editionName??)?string('(${editionName})', '')}
 Build ${build}, built on ${buildDate}
 Runtime version: ${javaRuntimeVersion} ${osArch}

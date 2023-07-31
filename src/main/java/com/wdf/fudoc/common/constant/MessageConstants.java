@@ -110,4 +110,7 @@ public interface MessageConstants {
     String SCRIPT_PRE_REMOVE = "fudoc.script.pre.remove";
 
 
+    String ISSUE_LINK_TEXT = "fudoc.issue.link";
+
+
 }

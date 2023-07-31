@@ -1,12 +1,8 @@
 package com.wdf.fudoc.common.po;
 
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.request.constants.enumtype.IssueSource;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * [fudoc]配置信息持久化
@@ -18,10 +14,9 @@ import java.util.Map;
 @Setter
 public class FuDocConfigPO {
 
-
     /**
-     * 自定义表格配置
+     * issue同步 默认同步至Github
      */
-    private Map<String, List<KeyValueTableBO>> customTableConfigMap = new HashMap<>();
+    private String issueTo = IssueSource.GITHUB.myActionID;
 
 }

@@ -18,8 +18,10 @@ import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.components.action.FuRequestViewModeAction;
+import com.wdf.fudoc.components.action.IssueAction;
 import com.wdf.fudoc.request.action.toolbar.CopyCurlAction;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
+import com.wdf.fudoc.request.constants.enumtype.IssueSource;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
@@ -182,6 +184,8 @@ public class FuRequestToolBarManager {
                     actionGroup.add(viewModeGroup);
                     //新增配置是否自动同步端口号
                     addConfigServerPortAction(actionGroup);
+                    //新增提交issue mode
+                    addIssueAction(actionGroup);
                     int x = 0, y = 0;
                     InputEvent inputEvent = e.getInputEvent();
                     if (inputEvent instanceof MouseEvent mouseEvent) {
@@ -208,6 +212,15 @@ public class FuRequestToolBarManager {
         });
 
 
+    }
+
+
+    private void addIssueAction(DefaultActionGroup defaultActionGroup) {
+        DefaultActionGroup issueActionGroup = DefaultActionGroup.createPopupGroup(() -> "提交Issue");
+        for (IssueSource value : IssueSource.values()) {
+            issueActionGroup.add(new IssueAction(value));
+        }
+        defaultActionGroup.add(issueActionGroup);
     }
 
     private void addConfigServerPortAction(DefaultActionGroup defaultActionGroup) {

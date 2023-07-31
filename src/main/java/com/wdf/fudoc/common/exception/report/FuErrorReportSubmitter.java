@@ -1,25 +1,51 @@
 package com.wdf.fudoc.common.exception.report;
 
+import cn.hutool.core.text.StrFormatter;
+import com.intellij.notification.BrowseNotificationAction;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.ErrorReportSubmitter;
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.util.Consumer;
 import com.wdf.fudoc.common.FuBundle;
-import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.fudoc.common.exception.IssueException;
+import com.wdf.fudoc.common.exception.report.issue.GiteeIssueSubmitter;
+import com.wdf.fudoc.common.exception.report.issue.GithubIssueSubmitter;
+import com.wdf.fudoc.common.exception.report.issue.IssueSubmitter;
 import com.wdf.fudoc.common.notification.FuDocNotification;
+import com.wdf.fudoc.request.constants.enumtype.IssueSource;
+import com.wdf.fudoc.storage.FuDocConfigStorage;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author wangdingfu
  * @date 2023-07-30 21:07:09
  */
+@Slf4j
 public class FuErrorReportSubmitter extends ErrorReportSubmitter {
 
+    private final IssueSubmitter giteeIssueSubmitter = new GiteeIssueSubmitter();
+    private final IssueSubmitter githubIssueSubmitter = new GithubIssueSubmitter();
+
+    private final Map<String, String> issueIdMap = new ConcurrentHashMap<>();
+
+    @Override
+    @Nullable
+    public String getPrivacyNoticeText() {
+        String issueTo = FuDocConfigStorage.INSTANCE.readData().getIssueTo();
+        return StrFormatter.format("由于未接入{}登录, 建议在提交issue之后 <a href='{}'>点击进入</a> 页面留言以获得 issue 进展通知!<br/>", issueTo, getIssueSubmitter(issueTo).issueUrl(issueIdMap.get(issueTo)));
+    }
 
     /**
      * 获取报告问题按钮名称
@@ -75,62 +101,58 @@ public class FuErrorReportSubmitter extends ErrorReportSubmitter {
      * @return 提交issue id
      */
     private SubmittedReportInfo createOrFindIssue(String throwableText, String message, String additionalInfo) {
-        String issueId = findIssue(throwableText);
+        String issueTo = FuDocConfigStorage.INSTANCE.readData().getIssueTo();
+        IssueSubmitter issueSubmitter = getIssueSubmitter(issueTo);
+        String issueId = issueSubmitter.findIssue(throwableText);
         if (StringUtils.isNotBlank(issueId)) {
-            FuDocNotification.notifyInfo("fudoc.issue.repeat");
-            return new SubmittedReportInfo(issueUrl(issueId), issueText(issueId), SubmittedReportInfo.SubmissionStatus.DUPLICATE);
+            issueIdMap.put(issueTo, issueId);
+            String issueUrl = issueSubmitter.issueUrl(issueId);
+            String linkText = FuBundle.message(MessageConstants.ISSUE_LINK_TEXT);
+            FuDocNotification.notifyInfo(FuBundle.message("fudoc.issue.repeat"), new BrowseNotificationAction(linkText, issueUrl));
+            return new SubmittedReportInfo(issueSubmitter.issueUrl(issueId), issueSubmitter.issueText(issueId), SubmittedReportInfo.SubmissionStatus.DUPLICATE);
         }
-        //提交问题
-        issueId = doCreateIssue(throwableText, message, additionalInfo);
-        if (StringUtils.isBlank(issueId)) {
-            return new SubmittedReportInfo(issueUrl(issueId), issueText(issueId), SubmittedReportInfo.SubmissionStatus.NEW_ISSUE);
+        String errorText = "submit issue timeout";
+        try {
+            //提交问题
+            issueId = issueSubmitter.createIssue(throwableText, message, additionalInfo);
+        } catch (IssueException e) {
+            log.info("提交Issue失败", e);
+            errorText = e.getMessage();
+            if (issueSubmitter instanceof GithubIssueSubmitter) {
+                ifNecessarySubmitToGitee(throwableText, message, additionalInfo);
+            }
         }
-        return new SubmittedReportInfo("", "submit issue timeout", SubmittedReportInfo.SubmissionStatus.FAILED);
+        if (StringUtils.isNotBlank(issueId)) {
+            issueIdMap.put(issueTo, issueId);
+            return new SubmittedReportInfo(issueSubmitter.issueUrl(issueId), issueSubmitter.issueText(issueId), SubmittedReportInfo.SubmissionStatus.NEW_ISSUE);
+        }
+        return new SubmittedReportInfo("", errorText, SubmittedReportInfo.SubmissionStatus.FAILED);
     }
 
 
-    /**
-     * 创建issue
-     *
-     * @param throwableText  错误栈信息
-     * @param message        一般为栈的第一行信息
-     * @param additionalInfo 用户输入信息
-     * @return 提交issue id
-     */
-    private String doCreateIssue(String throwableText, String message, String additionalInfo) {
-        return StringUtils.EMPTY;
+    private void ifNecessarySubmitToGitee(String throwableText, String message, String additionalInfo) {
+        String actionText = FuBundle.message("fudoc.issue.gitee");
+        String errorMessage = FuBundle.message("fudoc.issue.github.fail");
+        FuDocNotification.notifyError(errorMessage, new AnAction(actionText) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                FuDocConfigStorage instance = FuDocConfigStorage.INSTANCE;
+                instance.readData().setIssueTo(FuDocConstants.GITEE);
+                instance.saveData();
+                String issue = giteeIssueSubmitter.createIssue(throwableText, message, additionalInfo);
+                if (StringUtils.isNotBlank(issue)) {
+                    String issueUrl = giteeIssueSubmitter.issueUrl(issue);
+                    String title = FuBundle.message("fudoc.issue.gitee.success");
+                    String linkText = FuBundle.message(MessageConstants.ISSUE_LINK_TEXT);
+                    FuDocNotification.notifyInfo(title, new BrowseNotificationAction(linkText, issueUrl));
+                }
+            }
+        });
+    }
+
+    protected IssueSubmitter getIssueSubmitter(String issueTo) {
+        return IssueSource.GITHUB.myActionID.equals(issueTo) ? githubIssueSubmitter : giteeIssueSubmitter;
     }
 
 
-    /**
-     * 根据错误信息查询问题是否已经提交过
-     *
-     * @param throwableText 错误堆栈信息
-     * @return 问题issueId
-     */
-    private String findIssue(String throwableText) {
-        return StringUtils.EMPTY;
-    }
-
-
-    /**
-     * issue页面url
-     *
-     * @param issueId 问题id
-     * @return issue页面地址
-     */
-    private String issueUrl(String issueId) {
-        return UrlConstants.ISSUE + "/" + issueId;
-    }
-
-
-    /**
-     * issue展示的文本
-     *
-     * @param issueId 问题id
-     * @return 报告问题页面展示问题的文本
-     */
-    private String issueText(String issueId) {
-        return "Github Issue#" + issueId;
-    }
 }
