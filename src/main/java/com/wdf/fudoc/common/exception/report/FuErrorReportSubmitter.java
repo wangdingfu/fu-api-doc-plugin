@@ -137,7 +137,7 @@ public class FuErrorReportSubmitter extends ErrorReportSubmitter {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 FuDocConfigStorage instance = FuDocConfigStorage.INSTANCE;
-                instance.readData().setIssueTo(FuDocConstants.GITEE);
+                instance.readData().setIssueTo(IssueSource.GITEE.myActionID);
                 instance.saveData();
                 String issue = giteeIssueSubmitter.createIssue(throwableText, message, additionalInfo);
                 if (StringUtils.isNotBlank(issue)) {
