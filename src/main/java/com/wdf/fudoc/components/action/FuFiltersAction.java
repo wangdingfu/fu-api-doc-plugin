@@ -1,7 +1,6 @@
 package com.wdf.fudoc.components.action;
 
 import com.intellij.ide.util.ElementsChooser;
-import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.wdf.fudoc.components.listener.FuFiltersListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,10 +9,7 @@ import javax.swing.*;
 
 public class FuFiltersAction<T> extends ShowFilterAction {
 
-    @Override
-    public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.BGT;
-    }
+
 
     final Runnable rebuildRunnable;
 

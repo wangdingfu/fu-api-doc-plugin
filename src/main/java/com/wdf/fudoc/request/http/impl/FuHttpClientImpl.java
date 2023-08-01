@@ -1,7 +1,7 @@
 package com.wdf.fudoc.request.http.impl;
 
 
-import com.intellij.httpClient.http.request.psi.HttpRequest;
+import com.intellij.ws.http.request.psi.HttpRequest;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;

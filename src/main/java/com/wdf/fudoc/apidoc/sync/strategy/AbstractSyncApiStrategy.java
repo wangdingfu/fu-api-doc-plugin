@@ -167,7 +167,7 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
             return;
         }
         String apiSystem = configData.getApiSystem().getCode();
-        List<SyncApiResultDTO> successList = resultDTOList.stream().filter(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus())).toList();
+        List<SyncApiResultDTO> successList = resultDTOList.stream().filter(a -> ApiSyncStatus.SUCCESS.getMessage().equals(a.getSyncStatus())).collect(Collectors.toList());
         List<SyncApiResultDTO> faileList = resultDTOList.stream().filter(a -> ApiSyncStatus.FAIL.getMessage().equals(a.getSyncStatus())).collect(Collectors.toList());
         FuTableComponent<SyncApiResultDTO> tableComponent = FuTableComponent.create(FuTableColumnFactory.syncApiResult(CollectionUtils.isNotEmpty(faileList)), resultDTOList, SyncApiResultDTO.class);
         tableComponent.addListener(new FuTableDisableListener<>());

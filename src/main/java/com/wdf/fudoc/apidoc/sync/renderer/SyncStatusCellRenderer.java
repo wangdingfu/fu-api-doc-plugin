@@ -23,8 +23,12 @@ public class SyncStatusCellRenderer extends DefaultTableCellRenderer {
         ApiSyncStatus syncStatus;
         if (column == 4 && Objects.nonNull(value) && Objects.nonNull(syncStatus = ApiSyncStatus.getInstance(value.toString()))) {
             switch (syncStatus) {
-                case SUCCESS -> c.setForeground(JBColor.GREEN);
-                case FAIL -> c.setForeground(JBColor.RED);
+                case SUCCESS:
+                    c.setForeground(JBColor.GREEN);
+                    break;
+                case FAIL:
+                    c.setForeground(JBColor.RED);
+                    break;
             }
         }
         return c;

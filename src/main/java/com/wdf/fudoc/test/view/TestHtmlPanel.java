@@ -4,16 +4,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.util.ui.HTMLEditorKitBuilder;
-import com.intellij.util.ui.HtmlPanel;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author wangdingfu
@@ -88,7 +82,7 @@ public class TestHtmlPanel extends DialogWrapper{
         JEditorPane editorPane = new JEditorPane();
         editorPane.setContentType("text/html");
         editorPane.setEditable(false);
-        editorPane.setEditorKit(HTMLEditorKitBuilder.simple());
+//        editorPane.setEditorKit(HTMLEditorKitBuilder.simple());
         editorPane.addHyperlinkListener(BrowserHyperlinkListener.INSTANCE);
         UIUtil.doNotScrollToCaret(editorPane);
         editorPane.setText(html);

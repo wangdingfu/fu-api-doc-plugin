@@ -59,8 +59,8 @@ public class FuStatusLabel {
             public void mouseEntered(MouseEvent e) {
                 //鼠标滑入时 设置背景色
                 label.setOpaque(true);
-                label.setBackground(JBUI.CurrentTheme.StatusBar.Widget.HOVER_BACKGROUND);
-                label.setForeground(JBUI.CurrentTheme.StatusBar.Widget.HOVER_FOREGROUND);
+                //TODO 背景色
+                label.setBackground(JBUI.CurrentTheme.StatusBar.hoverBackground());
             }
 
 
@@ -68,8 +68,7 @@ public class FuStatusLabel {
             public void mouseExited(MouseEvent e) {
                 // 鼠标滑出时，恢复背景色和边框
                 label.setOpaque(false);
-                label.setBackground(JBUI.CurrentTheme.StatusBar.BACKGROUND);
-                label.setForeground(JBUI.CurrentTheme.StatusBar.Widget.FOREGROUND);
+                label.setBackground(JBUI.CurrentTheme.ToolWindow.headerBackground(false));
             }
         });
     }

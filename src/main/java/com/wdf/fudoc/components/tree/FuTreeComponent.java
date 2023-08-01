@@ -189,8 +189,8 @@ public class FuTreeComponent<T> {
         if (Objects.isNull(selectedPathComponent)) {
             return null;
         }
-        if (selectedPathComponent instanceof FuTreeNode<?> parent) {
-            return (FuTreeNode<T>) parent;
+        if (selectedPathComponent instanceof FuTreeNode<?> ) {
+            return (FuTreeNode<T>) selectedPathComponent;
         }
         return null;
     }

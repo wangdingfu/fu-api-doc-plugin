@@ -1,7 +1,10 @@
 package com.wdf.fudoc.components;
 
 import cn.hutool.core.map.MapUtil;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.apidoc.constant.enumtype.ActionType;
 import com.wdf.fudoc.common.FuTab;
@@ -9,7 +12,6 @@ import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.util.ToolBarUtils;
 import icons.FuDocIcons;
-import k.p.D;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
@@ -409,10 +411,6 @@ public class FuTabComponent {
 
         private final TabActionBO tabActionBO;
 
-        @Override
-        public @NotNull ActionUpdateThread getActionUpdateThread() {
-            return ActionUpdateThread.BGT;
-        }
 
         public TabToggleAction(String parentTitle, TabActionBO tabActionBO) {
             super(tabActionBO.getTitle(), tabActionBO.getTitle(), tabActionBO.getIcon());

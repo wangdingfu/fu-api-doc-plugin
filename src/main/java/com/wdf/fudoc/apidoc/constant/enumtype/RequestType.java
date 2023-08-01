@@ -59,6 +59,6 @@ public enum RequestType {
 
 
     public static String[] getItems(){
-        return Arrays.stream(RequestType.values()).filter(f->!RequestType.ALL.equals(f)).map(RequestType::getRequestType).toList().toArray(new String[]{});
+        return Arrays.stream(RequestType.values()).filter(f->!RequestType.ALL.equals(f)).map(RequestType::getRequestType).collect(Collectors.toList()).toArray(new String[]{});
     }
 }

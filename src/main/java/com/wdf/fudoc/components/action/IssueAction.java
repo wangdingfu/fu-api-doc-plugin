@@ -1,14 +1,10 @@
 package com.wdf.fudoc.components.action;
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbAwareToggleAction;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.constants.enumtype.IssueSource;
-import com.wdf.fudoc.request.constants.enumtype.ViewMode;
-import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.storage.FuDocConfigStorage;
-import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import org.jetbrains.annotations.NotNull;
 
 public class IssueAction extends DumbAwareToggleAction {
@@ -41,11 +37,6 @@ public class IssueAction extends DumbAwareToggleAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
-    }
-
-    @Override
-    public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.BGT;
     }
 
 }

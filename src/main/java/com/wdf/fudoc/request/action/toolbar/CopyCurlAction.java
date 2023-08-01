@@ -67,7 +67,8 @@ public class CopyCurlAction extends AbstractRequestAction {
             try {
                 String curl = genCurl(e.getProject(), getRequestData());
                 InputEvent inputEvent = e.getInputEvent();
-                if (inputEvent instanceof MouseEvent mouseEvent) {
+                if (inputEvent instanceof MouseEvent) {
+                    MouseEvent mouseEvent = (MouseEvent) inputEvent;
                     int flags = HintManager.HIDE_BY_ANY_KEY | HintManager.HIDE_BY_TEXT_CHANGE | HintManager.HIDE_BY_SCROLLING | HintManager.HIDE_BY_OTHER_HINT | HintManager.HIDE_BY_MOUSEOVER;
                     JRootPane rootPane = fuRequestCallback.getRequestTabView().getRootPane();
                     RelativePoint relativePoint = new RelativePoint(rootPane, new Point(mouseEvent.getX(), mouseEvent.getY()));

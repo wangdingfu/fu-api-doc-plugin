@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * [Fu Request]配置持久化对象
@@ -171,7 +172,7 @@ public class FuRequestConfigPO {
         if (CollectionUtils.isEmpty(cookies)) {
             return;
         }
-        List<String> nameList = cookies.stream().map(FuCookiePO::getName).toList();
+        List<String> nameList = cookies.stream().map(FuCookiePO::getName).collect(Collectors.toList());
         //移除重复的cookie
         this.cookies.removeIf(f -> nameList.contains(f.getName()));
         this.cookies.addAll(cookies);

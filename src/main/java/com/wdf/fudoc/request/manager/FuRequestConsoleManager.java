@@ -8,8 +8,8 @@ import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.intellij.execution.impl.ConsoleViewUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.httpClient.http.request.HttpRequestFileType;
 import com.intellij.json.JsonFileType;
+import com.intellij.ws.http.request.HttpRequestFileType;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.base.KeyValueBO;
 import com.wdf.fudoc.common.constant.FuConsoleConstants;
@@ -90,7 +90,8 @@ public class FuRequestConsoleManager {
 
 
     private static void log(FuLogger fuLogger, String logContent, boolean isSuccess) {
-        if (fuLogger instanceof FuConsoleLogger fuConsoleLogger) {
+        if (fuLogger instanceof FuConsoleLogger) {
+            FuConsoleLogger fuConsoleLogger = (FuConsoleLogger) fuLogger;
             fuConsoleLogger.log(logContent, isSuccess ? ConsoleViewContentType.USER_INPUT : ConsoleViewContentType.ERROR_OUTPUT);
         } else {
             fuLogger.info(logContent);

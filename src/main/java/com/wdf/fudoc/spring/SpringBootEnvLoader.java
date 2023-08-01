@@ -167,9 +167,10 @@ public class SpringBootEnvLoader {
             }
             PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
             PsiElement psiElement = psiModifierList.getParent();
-            if (Objects.isNull(psiElement) || !(psiElement instanceof PsiClass psiClass)) {
+            if (Objects.isNull(psiElement) || !(psiElement instanceof PsiClass)) {
                 continue;
             }
+            PsiClass psiClass = (PsiClass) psiElement;
             String applicationName = psiClass.getName();
             Module module = ModuleUtil.findModuleForPsiElement(psiElement);
             SpringConfigFile springConfigFile = SpringConfigManager.doLoadSpringConfig(module);

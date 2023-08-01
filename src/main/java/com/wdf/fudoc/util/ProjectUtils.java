@@ -99,13 +99,4 @@ public class ProjectUtils {
     }
 
 
-    public static Theme getTheme() {
-        EditorColorsScheme colorsScheme = EditorColorsManager.getInstance().getSchemeForCurrentUITheme();
-        String name = colorsScheme.getName();
-        return switch (name) {
-            case "Light", "IntelliJ Light", "Default" -> Theme.Light;
-            default -> Theme.Darcula;
-        };
-    }
-
 }

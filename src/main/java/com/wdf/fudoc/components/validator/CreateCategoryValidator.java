@@ -1,6 +1,7 @@
 package com.wdf.fudoc.components.validator;
 
 import com.intellij.openapi.ui.InputValidatorEx;
+import com.intellij.openapi.util.NlsSafe;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
@@ -36,6 +37,11 @@ public class CreateCategoryValidator implements InputValidatorEx {
             }
         }
         myErrorText = null;
+        return true;
+    }
+
+    @Override
+    public boolean canClose(@NlsSafe String inputString) {
         return true;
     }
 }

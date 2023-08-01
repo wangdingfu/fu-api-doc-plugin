@@ -1,14 +1,14 @@
 package com.wdf.fudoc.request.http.helper;
 
 import com.google.common.collect.Lists;
-import com.intellij.httpClient.http.request.HttpRequestPsiFile;
-import com.intellij.httpClient.http.request.HttpRequestVariableSubstitutor;
-import com.intellij.httpClient.http.request.psi.HttpRequest;
-import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.ws.http.request.HttpRequestPsiFile;
+import com.intellij.ws.http.request.HttpRequestVariableSubstitutor;
+import com.intellij.ws.http.request.psi.HttpRequest;
+import com.intellij.ws.http.request.psi.HttpRequestTarget;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.request.http.FuHttpClient;

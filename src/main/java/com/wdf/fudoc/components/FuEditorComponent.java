@@ -20,7 +20,6 @@ import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.ErrorStripeEditorCustomization;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SeparatorFactory;
-import com.intellij.util.ui.HTMLEditorKitBuilder;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.factory.LightVirtualFileFactory;
 import com.wdf.fudoc.components.listener.FuEditorListener;
@@ -35,7 +34,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 编辑器组件
@@ -182,8 +180,8 @@ public class FuEditorComponent implements Disposable {
         if (this.showDescription) {
             // 描述信息
             JEditorPane editorPane = new JEditorPane();
-            // html形式展示
-            editorPane.setEditorKit(HTMLEditorKitBuilder.simple());
+            // html形式展示 TODO 待处理
+//            editorPane.setEditorKit(HTMLEditorKitBuilder.simple());
             // 仅查看
             editorPane.setEditable(false);
             editorPane.setText(this.description);

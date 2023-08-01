@@ -6,7 +6,6 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -27,9 +26,9 @@ import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.*;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
+import com.wdf.fudoc.console.FuConsoleLogger;
 import com.wdf.fudoc.console.FuConsoleManager;
 import com.wdf.fudoc.console.FuLogger;
-import com.wdf.fudoc.console.FuConsoleLogger;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmd;
 import com.wdf.fudoc.request.constants.enumtype.ScriptCmdType;
 import com.wdf.fudoc.request.constants.enumtype.ScriptType;
@@ -170,10 +169,6 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
             }
         });
         defaultActionGroup.addAction(new DumbAwareAction("Stop Execute" + scriptType.getView(), "", AllIcons.Actions.Suspend) {
-            @Override
-            public @NotNull ActionUpdateThread getActionUpdateThread() {
-                return ActionUpdateThread.BGT;
-            }
 
             @Override
             public void update(@NotNull AnActionEvent e) {

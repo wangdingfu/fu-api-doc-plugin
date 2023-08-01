@@ -33,17 +33,18 @@ public class TreeTableCellEditor extends AbstractTableCellEditor {
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        if (Objects.nonNull(value) && value instanceof TreePathBO treePathBO) {
+        if (Objects.nonNull(value) && value instanceof TreePathBO) {
+            TreePathBO treePathBO = (TreePathBO) value;
             List<String> selectPathList = treePathBO.getSelectPathList();
-            if(CollectionUtils.isNotEmpty(selectPathList)){
+            if (CollectionUtils.isNotEmpty(selectPathList)) {
                 TreePath[] treePaths = new TreePath[selectPathList.size()];
                 for (int i = 0; i < selectPathList.size(); i++) {
                     Integer moduleIndex = this.fuModuleTreeComponent.getModuleIndex(selectPathList.get(i));
-                    if(Objects.isNull(moduleIndex)){
+                    if (Objects.isNull(moduleIndex)) {
                         break;
                     }
                     TreePath treePath = this.fuTableTreeComponent.getSimpleTree().getPathForRow(moduleIndex);
-                    if(Objects.isNull(treePath)){
+                    if (Objects.isNull(treePath)) {
                         break;
                     }
                     treePaths[i] = treePath;

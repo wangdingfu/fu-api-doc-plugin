@@ -57,15 +57,12 @@ public class FuDocSyncConfigData implements Serializable {
         ApiDocSystem instance;
         if (Objects.nonNull(instance = ApiDocSystem.getInstance(this.enable))) {
             switch (instance) {
-                case YAPI -> {
+                case YAPI:
                     return this.yapi;
-                }
-                case SHOW_DOC -> {
+                case SHOW_DOC:
                     return this.showDoc;
-                }
-                case API_FOX -> {
+                case API_FOX:
                     return this.apiFox;
-                }
             }
         }
         return this.apiFox;

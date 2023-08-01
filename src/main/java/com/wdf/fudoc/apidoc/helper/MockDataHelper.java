@@ -112,24 +112,21 @@ public class MockDataHelper {
     private static String mock(RequestType requestType, MapListUtil<String, ObjectInfoDesc> instance) {
         if (Objects.nonNull(requestType)) {
             switch (requestType) {
-                case GET -> {
+                case GET:
                     //只mock RequestParam注解标识的请求参数
                     return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM));
-                }
-                case DELETE -> {
+                case DELETE:
                     List<ObjectInfoDesc> getList = instance.get(AnnotationConstants.REQUEST_PARAM);
                     if (CollectionUtils.isNotEmpty(getList)) {
                         return mockGetData(getList);
                     }
                     return mockJsonData(instance.get(AnnotationConstants.REQUEST_BODY));
-                }
-                default -> {
+                default:
                     List<ObjectInfoDesc> postList = instance.get(AnnotationConstants.REQUEST_BODY);
                     if (CollectionUtils.isNotEmpty(postList)) {
                         return mockJsonData(postList);
                     }
                     return mockGetData(instance.get(AnnotationConstants.REQUEST_PARAM));
-                }
             }
         }
 
@@ -145,7 +142,8 @@ public class MockDataHelper {
             if (YesOrNo.YES.equals(isSimpleType(fuDocObjectType))) {
                 return buildExpress(objectInfoDesc.getName(), value.toString());
             }
-            if (value instanceof JSONObject data) {
+            if (value instanceof JSONObject) {
+                JSONObject data = (JSONObject) value;
                 List<String> expressList = Lists.newArrayList();
                 data.forEach((k, v) -> expressList.add(buildExpress(k, v)));
                 return CollectionUtils.isEmpty(expressList) ? StringUtils.EMPTY
@@ -183,9 +181,13 @@ public class MockDataHelper {
         if (Objects.isNull(fuDocObjectType)) {
             return YesOrNo.NO;
         }
-        return switch (fuDocObjectType) {
-            case ARRAY, PRIMITIVE, COMMON_OBJECT -> YesOrNo.YES;
-            default -> YesOrNo.NO;
-        };
+        switch (fuDocObjectType) {
+            case ARRAY:
+            case PRIMITIVE:
+            case COMMON_OBJECT:
+                return YesOrNo.YES;
+            default:
+                return YesOrNo.NO;
+        }
     }
 }

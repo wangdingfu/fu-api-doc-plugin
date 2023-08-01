@@ -254,12 +254,14 @@ public class FuTableColumnFactory {
 
     @SuppressWarnings("all")
     public static <T, R> R getValue(T data, Column column) {
-        if (column instanceof DynamicColumn dynamicColumn) {
+        if (column instanceof DynamicColumn) {
+            DynamicColumn dynamicColumn = (DynamicColumn) column;
             //自定义字段名称
             String fieldName = dynamicColumn.getFieldName();
             if (Objects.nonNull(data)
-                    && data instanceof DynamicTableBO dynamicTableBO
+                    && data instanceof DynamicTableBO
                     && StringUtils.isNotBlank(fieldName)) {
+                DynamicTableBO dynamicTableBO = (DynamicTableBO) data;
                 return (R) dynamicTableBO.getValue(fieldName);
             }
             return null;
@@ -284,12 +286,14 @@ public class FuTableColumnFactory {
 
     @SuppressWarnings("all")
     public static <T, R> void setValue(T data, R value, Column column) {
-        if (column instanceof DynamicColumn dynamicColumn) {
+        if (column instanceof DynamicColumn) {
+            DynamicColumn dynamicColumn = (DynamicColumn) column;
             //自定义字段名称
             String fieldName = dynamicColumn.getFieldName();
             if (Objects.nonNull(data)
-                    && data instanceof DynamicTableBO dynamicTableBO
+                    && data instanceof DynamicTableBO
                     && StringUtils.isNotBlank(fieldName)) {
+                DynamicTableBO dynamicTableBO = (DynamicTableBO) data;
                 dynamicTableBO.setValue(fieldName, value);
             }
         }

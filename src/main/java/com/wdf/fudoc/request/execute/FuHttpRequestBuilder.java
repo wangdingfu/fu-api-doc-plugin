@@ -296,23 +296,17 @@ public class FuHttpRequestBuilder {
     private static HttpRequest createHttpRequest(RequestType requestType, String requestUrl) {
         if (Objects.nonNull(requestType)) {
             switch (requestType) {
-                case GET -> {
+                case GET:
                     return HttpUtil.createGet(requestUrl);
-                }
-                case POST -> {
+                case POST:
                     return HttpUtil.createPost(requestUrl);
-                }
-                case DELETE -> {
+                case DELETE:
                     return HttpUtil.createRequest(Method.DELETE, requestUrl);
-                }
 
-                case PUT -> {
+                case PUT:
                     return HttpUtil.createRequest(Method.PUT, requestUrl);
-                }
-
-                case PATCH -> {
+                case PATCH:
                     return HttpUtil.createRequest(Method.PATCH, requestUrl);
-                }
             }
         }
         return HttpUtil.createGet(requestUrl);

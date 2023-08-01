@@ -18,7 +18,8 @@ public class FuTreeCellRenderer extends ColoredTreeCellRenderer {
 
     @Override
     public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-        if (value instanceof FuTreeNode<?> fuTreeNode) {
+        if (value instanceof FuTreeNode<?>) {
+            FuTreeNode<?> fuTreeNode = (FuTreeNode<?>) value;
             Object data = fuTreeNode.getData();
             Icon icon = fuTreeNode.getIcon();
             if (Objects.nonNull(icon)) {

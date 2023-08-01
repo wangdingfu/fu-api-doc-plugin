@@ -81,7 +81,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
         }
         //响应类型
         switch (responseType) {
-            case SUCCESS -> {
+            case SUCCESS:
                 String fileName = response.getFileName();
                 if (StringUtils.isNotBlank(fileName)) {
                     //响应结果是文件
@@ -101,12 +101,11 @@ public class ResponseTabView implements FuTab, HttpCallback {
                     fuEditorComponent.setContent(JSONUtil.formatJsonStr(response.getContent()));
                     switchPanel(1, fuEditorComponent.getMainPanel());
                 }
-            }
-            case ERR_CONNECTION_REFUSED -> {
+                return;
+            case ERR_CONNECTION_REFUSED:
                 //请求连接被拒绝
                 responseErrorView.setErrorDetail(response.getErrorDetail());
                 switchPanel(2, responseErrorView.getRootPanel());
-            }
         }
     }
 
@@ -121,7 +120,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
             //是文件面板时
             responseFileView.resetDefaultBtn();
         }
-        if(Objects.nonNull(this.slidePanel)){
+        if (Objects.nonNull(this.slidePanel)) {
             newSelection.setSideComponent(this.slidePanel);
         }
     }

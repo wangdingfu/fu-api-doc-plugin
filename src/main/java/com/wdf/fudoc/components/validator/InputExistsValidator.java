@@ -38,4 +38,9 @@ public class InputExistsValidator implements InputValidatorEx {
         return true;
     }
 
+    @Override
+    public boolean canClose(@NlsSafe String inputString) {
+        return true;
+    }
+
 }

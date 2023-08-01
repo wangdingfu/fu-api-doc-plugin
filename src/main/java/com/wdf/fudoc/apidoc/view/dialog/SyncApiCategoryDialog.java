@@ -35,6 +35,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 选择接口分类弹框
@@ -276,8 +277,8 @@ public class SyncApiCategoryDialog extends DialogWrapper {
                 }
             }
             //将剩余没有在排序中的分类加入到排序分类集合中
-            List<String> categoryIdList = sortList.stream().map(ApiCategoryDTO::getCategoryId).distinct().toList();
-            sortList.addAll(categoryDTOList.stream().filter(f -> !categoryIdList.contains(f.getCategoryId())).toList());
+            List<String> categoryIdList = sortList.stream().map(ApiCategoryDTO::getCategoryId).distinct().collect(Collectors.toList());
+            sortList.addAll(categoryDTOList.stream().filter(f -> !categoryIdList.contains(f.getCategoryId())).collect(Collectors.toList()));
             return sortList;
         }
         return categoryDTOList;

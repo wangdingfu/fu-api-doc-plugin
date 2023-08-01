@@ -1,26 +1,22 @@
 package com.wdf.fudoc.test.action;
 
 import cn.hutool.core.util.RandomUtil;
-import com.intellij.httpClient.converters.RequestBuilder;
-import com.intellij.httpClient.converters.curl.CurlRequestBuilder;
-import com.intellij.httpClient.execution.HttpRequestConfig;
-import com.intellij.httpClient.execution.RestClientFormBodyPart;
-import com.intellij.httpClient.execution.RestClientRequest;
-import com.intellij.httpClient.execution.RestClientRequestBuilder;
-import com.intellij.httpClient.http.request.HttpRequestPsiConverter;
-import com.intellij.httpClient.http.request.HttpRequestPsiFile;
-import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
-import com.intellij.httpClient.http.request.HttpRequestVariableSubstitutor;
-import com.intellij.httpClient.http.request.psi.HttpQuery;
-import com.intellij.httpClient.http.request.psi.HttpQueryParameter;
-import com.intellij.httpClient.http.request.psi.HttpRequest;
-import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
-import com.intellij.httpClient.http.request.run.HttpRequestValidationException;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiFile;
+import com.intellij.ws.converters.RequestBuilder;
+import com.intellij.ws.converters.curl.CurlRequestBuilder;
+import com.intellij.ws.http.request.HttpRequestPsiConverter;
+import com.intellij.ws.http.request.HttpRequestPsiFile;
+import com.intellij.ws.http.request.HttpRequestPsiUtils;
+import com.intellij.ws.http.request.HttpRequestVariableSubstitutor;
+import com.intellij.ws.http.request.psi.HttpQuery;
+import com.intellij.ws.http.request.psi.HttpQueryParameter;
+import com.intellij.ws.http.request.psi.HttpRequest;
+import com.intellij.ws.http.request.psi.HttpRequestTarget;
+import com.intellij.ws.http.request.run.HttpRequestValidationException;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
@@ -99,8 +95,6 @@ public class TestAction extends AnAction {
                 String key = httpQueryParameter.getKey(substitutor);
             }
         }
-        RequestBuilder<RestClientRequest, RestClientFormBodyPart> requestBuilder = new RestClientRequestBuilder();
-        HttpRequestConfig requestConfig = HttpRequestPsiConverter.toRequestConfig(firstRequest);
 //        try {
 //            RestClientRequest restClientRequest = HttpRequestPsiConverter.convertFromHttpRequest(firstRequest, substitutor, requestBuilder);
 //            CurlCopyPastePreProcessor preProcessor = new CurlCopyPastePreProcessor();

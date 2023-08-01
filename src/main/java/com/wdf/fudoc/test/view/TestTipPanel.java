@@ -1,12 +1,7 @@
 package com.wdf.fudoc.test.view;
 
-import com.intellij.application.options.colors.ReaderModeStatsCollector;
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.options.ex.Settings;
 import com.intellij.ui.HyperlinkLabel;
 import com.intellij.ui.components.labels.LinkLabel;
-import com.intellij.ui.components.labels.LinkListener;
 import com.intellij.util.ui.UIUtil;
 import lombok.Getter;
 

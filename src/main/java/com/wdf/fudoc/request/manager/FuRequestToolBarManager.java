@@ -188,7 +188,8 @@ public class FuRequestToolBarManager {
                     addIssueAction(actionGroup);
                     int x = 0, y = 0;
                     InputEvent inputEvent = e.getInputEvent();
-                    if (inputEvent instanceof MouseEvent mouseEvent) {
+                    if (inputEvent instanceof MouseEvent) {
+                        MouseEvent mouseEvent = (MouseEvent) inputEvent;
                         x = mouseEvent.getX();
                         y = mouseEvent.getY();
                     }

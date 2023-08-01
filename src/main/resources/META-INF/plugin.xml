@@ -1,14 +1,14 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>FuDoc</name>
-    <version>222.1.7.4</version>
+    <version>203.1.7.4</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
         <![CDATA[ Description will be added by gradle build]]>
     </description>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="222.3345.118"/>
+    <idea-version since-build="203.5981.155"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>JavaScript</depends>
@@ -91,15 +91,6 @@
                     doNotActivateOnStart="true"
                     order="last"
                     factoryClass="com.wdf.fudoc.request.view.toolwindow.FuDocToolWindowFactory"/>
-
-        <!--
-                <toolWindow id="Fu Console"
-                            icon="FuDocIcons.FU_DOC"
-                            anchor="bottom"
-                            secondary="false"
-                            doNotActivateOnStart="false"
-                            order="last"
-                            factoryClass="com.wdf.fudoc.request.view.toolwindow.FuRequestConsoleToolWindowFactory"/>-->
 
 
         <!-- provider -->

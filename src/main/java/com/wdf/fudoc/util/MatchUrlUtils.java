@@ -39,7 +39,7 @@ public class MatchUrlUtils {
 
     public static FindSymbolParameters createParameters(Project project, String matchText) {
         GlobalSearchScope searchScope = FindSymbolParameters.searchScopeFor(project, true);
-        return new FindSymbolParameters(matchText, matchText, searchScope);
+        return new FindSymbolParameters(matchText, matchText, searchScope, null);
     }
 
 
