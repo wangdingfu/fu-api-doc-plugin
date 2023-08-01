@@ -4,8 +4,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.http.HttpGlobalConfig;
 import cn.hutool.json.JSONUtil;
-import com.intellij.ide.plugins.DynamicPluginListener;
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.notification.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;

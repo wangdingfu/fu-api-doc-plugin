@@ -3,20 +3,15 @@ package com.wdf.fudoc.common.exception.report.issue;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.wdf.fudoc.common.constant.ApiUrl;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.common.exception.IssueException;
 import com.wdf.fudoc.common.exception.report.issue.param.GithubIssueBody;
 import com.wdf.fudoc.request.constants.enumtype.IssueSource;
-import com.wdf.fudoc.start.RequestManager;
 import com.wdf.fudoc.util.JsonUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.deft.Obj;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
