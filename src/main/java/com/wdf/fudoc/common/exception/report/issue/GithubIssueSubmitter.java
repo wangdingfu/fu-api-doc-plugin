@@ -46,7 +46,7 @@ public class GithubIssueSubmitter extends AbstractIssueSubmitter {
         HttpRequest httpRequest = HttpUtil.createPost(API_BASE_URL + CREATE_ISSUE);
         try {
             String result = httpRequest.header("Authorization", getAccessToken(IssueSource.GITHUB.myActionID))
-                    .body(JsonUtil.toJson(issueBody)).timeout(6000).execute().body();
+                    .body(JsonUtil.toJson(issueBody)).timeout(10000).execute().body();
             if (StringUtils.isBlank(result)) {
                 return StringUtils.EMPTY;
             }
@@ -63,7 +63,7 @@ public class GithubIssueSubmitter extends AbstractIssueSubmitter {
 
     @Override
     protected String getAccessToken() {
-        return "Bearer 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";
+        return "Bearer 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";
     }
 
 

@@ -15,5 +15,5 @@ public interface ApiUrl {
     String SEND_IS_READ_API_URL = "/fu_doc_plugin/announcement/read";
 
 
-    String ACCESS_TOKEN = "/fu_doc_plugin/access_token";
+    String ACCESS_TOKEN = "/fu_doc_plugin/access-token";
 }
