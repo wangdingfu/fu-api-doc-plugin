@@ -3,14 +3,20 @@ package com.wdf.fudoc.common.exception.report.issue;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+import com.wdf.fudoc.common.constant.ApiUrl;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.common.exception.IssueException;
 import com.wdf.fudoc.common.exception.report.issue.param.GithubIssueBody;
+import com.wdf.fudoc.request.constants.enumtype.IssueSource;
+import com.wdf.fudoc.start.RequestManager;
 import com.wdf.fudoc.util.JsonUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.deft.Obj;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -23,8 +29,6 @@ public class GithubIssueSubmitter extends AbstractIssueSubmitter {
     private static final String API_BASE_URL = "https://api.github.com";
 
     private static final String CREATE_ISSUE = "/repos/wangdingfu/fudoc/issues";
-
-    private static final String ACCESS_TOKEN = "Bearer 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";
 
 
     /**
@@ -41,7 +45,7 @@ public class GithubIssueSubmitter extends AbstractIssueSubmitter {
         issueBody.setBody(body);
         HttpRequest httpRequest = HttpUtil.createPost(API_BASE_URL + CREATE_ISSUE);
         try {
-            String result = httpRequest.header("Authorization", ACCESS_TOKEN)
+            String result = httpRequest.header("Authorization", getAccessToken(IssueSource.GITHUB.myActionID))
                     .body(JsonUtil.toJson(issueBody)).timeout(6000).execute().body();
             if (StringUtils.isBlank(result)) {
                 return StringUtils.EMPTY;
@@ -56,6 +60,12 @@ public class GithubIssueSubmitter extends AbstractIssueSubmitter {
             throw new IssueException("提交Issue至Github网络超时");
         }
     }
+
+    @Override
+    protected String getAccessToken() {
+        return "Bearer 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";
+    }
+
 
     /**
      * 查询issue

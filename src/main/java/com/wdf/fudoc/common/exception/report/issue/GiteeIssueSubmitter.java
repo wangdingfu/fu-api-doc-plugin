@@ -4,6 +4,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.fudoc.request.constants.enumtype.IssueSource;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -17,8 +18,6 @@ import java.util.Objects;
 public class GiteeIssueSubmitter extends AbstractIssueSubmitter {
 
     private static final String CREATE_ISSUE_URL = "https://gitee.com/api/v5/repos/wdfu/issues";
-
-    private static final String ACCESS_TOKEN = "5de56c1ca1c71bd295da6eae84eb7419";
 
     /**
      * 创建issue
@@ -34,12 +33,17 @@ public class GiteeIssueSubmitter extends AbstractIssueSubmitter {
                 .form("title", title)
                 .form("body", body)
                 .form("labels", "bug")
-                .form("access_token", ACCESS_TOKEN).execute().body();
+                .form("access_token", getAccessToken(IssueSource.GITEE.myActionID)).execute().body();
         if (StringUtils.isBlank(result) || !JSONUtil.isTypeJSON(result)) {
             return StringUtils.EMPTY;
         }
         Object number = JSONUtil.parse(result).getByPath("number");
         return Objects.isNull(number) ? StringUtils.EMPTY : number.toString();
+    }
+
+    @Override
+    protected String getAccessToken() {
+        return "5de56c1ca1c71bd295da6eae84eb7419";
     }
 
     /**

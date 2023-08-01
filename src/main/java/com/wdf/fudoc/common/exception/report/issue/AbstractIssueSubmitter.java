@@ -7,12 +7,17 @@ import com.intellij.openapi.application.ex.ApplicationInfoEx;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.util.SystemInfo;
 import com.wdf.fudoc.common.FuDocRender;
+import com.wdf.fudoc.common.constant.ApiUrl;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.report.issue.param.IssueBody;
+import com.wdf.fudoc.start.RequestManager;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -31,6 +36,11 @@ public abstract class AbstractIssueSubmitter implements IssueSubmitter {
      * @return issueId
      */
     protected abstract String doCreateIssue(String title, String body);
+
+    /**
+     * 获取默认授权token
+     */
+    protected abstract String getAccessToken();
 
 
     /**
@@ -84,6 +94,15 @@ public abstract class AbstractIssueSubmitter implements IssueSubmitter {
             issueBody.setPluginVersion(pluginDescriptor.getVersion());
         }
         return FuDocRender.render(issueBody, "issue.ftl");
+    }
+
+
+    protected String getAccessToken(String type) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("type", type);
+        String result = RequestManager.doSendRequest(ApiUrl.ACCESS_TOKEN, param);
+        String accessToken = RequestManager.getData(result);
+        return StringUtils.isBlank(accessToken) ? getAccessToken() : accessToken;
     }
 
 
