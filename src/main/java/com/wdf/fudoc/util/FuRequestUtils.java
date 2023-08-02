@@ -1,23 +1,20 @@
 package com.wdf.fudoc.util;
 
 import cn.hutool.core.io.FileUtil;
-
+import com.intellij.ws.http.request.HttpRequestPsiFile;
+import com.intellij.ws.http.request.HttpRequestPsiUtils;
+import com.intellij.ws.http.request.psi.HttpRequest;
+import com.intellij.ws.http.request.psi.HttpRequestBlock;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.ws.http.request.HttpRequestPsiFile;
-import com.intellij.ws.http.request.HttpRequestPsiUtils;
-import com.intellij.ws.http.request.psi.HttpRequest;
-import com.intellij.ws.http.request.psi.HttpRequestBlock;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.apache.commons.lang3.StringUtils;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
