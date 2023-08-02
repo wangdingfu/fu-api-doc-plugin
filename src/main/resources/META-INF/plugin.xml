@@ -1,14 +1,14 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>FuDoc</name>
-    <version>211.1.7.4</version>
+    <version>222.1.7.4</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
         <![CDATA[ Description will be added by gradle build]]>
     </description>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="211.6693.111"/>
+    <idea-version since-build="222.3345.118"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>JavaScript</depends>
