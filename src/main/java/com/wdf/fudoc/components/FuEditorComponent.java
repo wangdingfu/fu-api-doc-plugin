@@ -21,6 +21,7 @@ import com.intellij.ui.ErrorStripeEditorCustomization;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SeparatorFactory;
 import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.UIUtil;
 import com.wdf.fudoc.components.factory.LightVirtualFileFactory;
 import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.util.EditorUtils;
@@ -180,8 +181,8 @@ public class FuEditorComponent implements Disposable {
         if (this.showDescription) {
             // 描述信息
             JEditorPane editorPane = new JEditorPane();
-            // html形式展示 TODO 待处理
-//            editorPane.setEditorKit(HTMLEditorKitBuilder.simple());
+            // html形式展示
+            editorPane.setEditorKit(UIUtil.getHTMLEditorKit());
             // 仅查看
             editorPane.setEditable(false);
             editorPane.setText(this.description);

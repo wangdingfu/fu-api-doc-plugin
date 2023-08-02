@@ -60,8 +60,7 @@ public class FuHtmlComponent extends DialogWrapper {
     private void initPanel() {
         this.editorPane.setContentType("text/html");
         this.editorPane.setEditable(false);
-        //TODO html编辑器
-//        this.editorPane.setEditorKit(HTMLEditorKitBuilder.simple());
+        this.editorPane.setEditorKit(UIUtil.getHTMLEditorKit());
         this.editorPane.addHyperlinkListener(BrowserHyperlinkListener.INSTANCE);
         UIUtil.doNotScrollToCaret(this.editorPane);
         this.editorPane.setText(this.html);
