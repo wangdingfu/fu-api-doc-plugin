@@ -1,10 +1,10 @@
 package com.wdf.fudoc.request.manager;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.ws.converters.RequestBuilder;
-import com.intellij.ws.converters.curl.CurlRequestBuilder;
-import com.intellij.ws.http.request.*;
-import com.intellij.ws.http.request.psi.HttpRequest;
+import com.intellij.httpClient.converters.RequestBuilder;
+import com.intellij.httpClient.converters.curl.CurlRequestBuilder;
+import com.intellij.httpClient.http.request.*;
+import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
