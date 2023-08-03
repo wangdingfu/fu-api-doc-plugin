@@ -1,20 +1,14 @@
 package com.wdf.fudoc.util;
 
 import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.system.SystemUtil;
-import com.ibm.icu.util.LocaleData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 
 /**

@@ -1,14 +1,14 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>FuDoc</name>
-    <version>193.1.7.4</version>
+    <version>202.1.7.4</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
         <![CDATA[ Description will be added by gradle build]]>
     </description>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="201.7223.91" until-build="203.8084.24"/>
+    <idea-version since-build="202.6948.69" until-build="203.8084.24"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>JavaScript</depends>
@@ -27,9 +27,6 @@
         <backgroundPostStartupActivity implementation="com.wdf.fudoc.spring.LoadSpringConfigListener"/>
         <backgroundPostStartupActivity implementation="com.wdf.fudoc.components.message.LoadFuMsgHandler"/>
 
-        <!-- Add your extensions here -->
-        <notificationGroup id="com.wdf.fudoc.notification.group" displayType="BALLOON"/>
-        <notificationGroup id="com.wdf.fudoc.notification.start.group" displayType="BALLOON"/>
 
         <projectService serviceImplementation="com.wdf.fudoc.request.state.FuRequestState"/>
         <projectService serviceImplementation="com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting"/>

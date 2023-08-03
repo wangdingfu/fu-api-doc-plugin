@@ -2,7 +2,6 @@ package com.wdf.fudoc.components.tree.old;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.util.NlsSafe;
 import com.intellij.ui.treeStructure.CachingSimpleNode;
 import com.intellij.ui.treeStructure.SimpleNode;
 import lombok.Getter;
@@ -37,7 +36,7 @@ public class ModuleNode extends CachingSimpleNode {
 
 
     @Override
-    public @NlsSafe String getName() {
+    public String getName() {
         return moduleName;
     }
 

@@ -2,7 +2,6 @@ package com.wdf.fudoc.components.tree.old;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.util.NlsSafe;
 import com.intellij.ui.treeStructure.SimpleNode;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +33,7 @@ public class ApiCategoryTreeNode extends FuTreeNode {
     }
 
     @Override
-    public @NlsSafe String getName() {
+    public String getName() {
         return this.categoryName;
     }
 

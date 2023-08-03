@@ -1,8 +1,6 @@
 package com.wdf.fudoc.request.manager;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.ws.converters.RequestBuilder;
-import com.intellij.ws.converters.curl.CurlRequestBuilder;
 import com.intellij.ws.http.request.*;
 import com.intellij.ws.http.request.psi.HttpRequest;
 import com.wdf.fudoc.common.FuDocRender;
@@ -32,8 +30,7 @@ public class FuCurlManager {
             if (Objects.isNull(newRequest)) {
                 return StringUtils.EMPTY;
             }
-            CurlRequestBuilder curlRequestBuilder = new CurlRequestBuilder();
-            return (String) HttpRequestPsiConverter.convertFromHttpRequest(newRequest, HttpRequestVariableSubstitutor.getDefault(project), (RequestBuilder) curlRequestBuilder);
+            return StringUtils.EMPTY;
         } catch (Exception e) {
             log.error("生成curl命令失败", e);
             throw new FuDocException("生成curl命令失败");

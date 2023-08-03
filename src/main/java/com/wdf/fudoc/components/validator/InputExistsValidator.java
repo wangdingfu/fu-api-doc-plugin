@@ -1,7 +1,6 @@
 package com.wdf.fudoc.components.validator;
 
 import com.intellij.openapi.ui.InputValidatorEx;
-import com.intellij.openapi.util.NlsSafe;
 import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +28,7 @@ public class InputExistsValidator implements InputValidatorEx {
     }
 
     @Override
-    public boolean checkInput(@NlsSafe String inputString) {
+    public boolean checkInput(String inputString) {
         if (StringUtils.isNotBlank(inputString) && itemList.contains(inputString)) {
             errorTest = FuBundle.message(MessageConstants.VALIDATOR_INPUT_REPEAT);
             return false;
@@ -39,7 +38,7 @@ public class InputExistsValidator implements InputValidatorEx {
     }
 
     @Override
-    public boolean canClose(@NlsSafe String inputString) {
+    public boolean canClose( String inputString) {
         return true;
     }
 
