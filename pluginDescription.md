@@ -12,7 +12,7 @@
 
 ### generate api doc
 - 1、press `alt+D` or right click `Fu Doc` in java class
-- 2、paste in api doc system(`Show doc` or `YApi` or `MarkDown` or `others` )
+- 2、paste in api doc system(`Show doc` or `YApi` or `ApiFox` or `MarkDown` or `others` )
 
 ### debug api
 - press `alt+R` or right click `Fu Request` in java class
@@ -51,12 +51,14 @@
 
 
 ## 支持功能
-- 1、当前只支持Intellij idea 2020.3.4 之后的版本
+- 1、当前只支持Intellij idea 2020.2.1 之后的版本
 - 2、支持根据 `Controller` `Interface` `Object` `Enum` 生成markdown格式的接口文档
 - 3、支持动态配置接口文档模板
 - 4、支持自定义配置你需要的数据
 - 5、支持调式接口（一键发起http请求）
-- 6、支持同步接口文档至第三方文档系统(目前支持YApi. ShowDoc和ApiFox和语雀正在适配中)
+- 6、支持自定义前置脚本
+- 7、支持全局搜索api（双击shift点击[Fu Api]）
+- 8、支持同步接口文档至第三方文档系统(目前已支持YApi、ShowDoc、ApiFox)
 
 
 ### 其他
