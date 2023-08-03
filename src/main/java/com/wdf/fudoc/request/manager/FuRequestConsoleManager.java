@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 import com.intellij.execution.impl.ConsoleViewUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.json.JsonFileType;
-import com.intellij.httpClient.http.request.HttpRequestFileType;
+import com.intellij.ws.http.request.HttpRequestFileType;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.base.KeyValueBO;
 import com.wdf.fudoc.common.constant.FuConsoleConstants;
