@@ -85,8 +85,6 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
         addSyncAction(defaultActionGroup);
-        //复制curl命令
-        defaultActionGroup.add(new CopyCurlAction(fuRequestCallback));
 
         if (fuRequestCallback.isWindow()) {
             addConfigServerPortAction(defaultActionGroup);
