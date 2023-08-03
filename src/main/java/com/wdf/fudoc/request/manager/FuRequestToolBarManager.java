@@ -171,7 +171,7 @@ public class FuRequestToolBarManager {
 
         if (!fuRequestCallback.isWindow()) {
             //添加设置按钮
-            defaultActionGroup.add(new AnAction("Settings", "Setting", AllIcons.General.Settings) {
+            defaultActionGroup.add(new AnAction("Settings", "Setting", AllIcons.Actions.More) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
                     DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "窗体展示方式");
