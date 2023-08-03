@@ -12,6 +12,7 @@ import com.intellij.openapi.extensions.PluginId;
 import com.wdf.fudoc.apidoc.config.state.FuDocSecuritySetting;
 import com.wdf.fudoc.apidoc.view.FuDocGeneralForm;
 import com.wdf.fudoc.common.CommonResult;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ import java.util.Objects;
 public class RequestManager {
     private static final Logger LOGGER = Logger.getInstance(FuDocGeneralForm.class);
 
-        private static final String BASE_URL = "http://150.158.164.160:9090";
+    private static final String BASE_URL = "http://150.158.164.160:9090";
     private static final String PRIMARY_KEY = "dfe68b77d54943fc8d481c6ae80a2a9d";
 
     public static String doSendRequest(String apiUrl) {
@@ -55,7 +56,7 @@ public class RequestManager {
 
 
     private static String getPluginVersion() {
-        IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId("com.wdf.api"));
+        IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId(FuDocConstants.ID));
         if (Objects.nonNull(plugin)) {
             return plugin.getVersion();
         }
@@ -66,7 +67,7 @@ public class RequestManager {
     public static <T> T getData(String result) {
         CommonResult<T> commonResult = JSONUtil.toBean(result, new TypeReference<>() {
         }, true);
-        if (Objects.nonNull(commonResult) && commonResult.getCode() == 1) {
+        if (Objects.nonNull(commonResult) && commonResult.getCode() == 200) {
             return commonResult.getData();
         }
         return null;

@@ -24,6 +24,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.spring.SpringConfigManager;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
@@ -170,21 +171,19 @@ public class FuHttpRequestDataFactory {
             request.setParams(paramList);
             return;
         }
-        if (RequestType.POST.equals(requestType)) {
-            ContentType contentType = fuDocRootParamData.getContentType();
-            if (Objects.isNull(contentType)) {
-                return;
-            }
-            if (Objects.nonNull(requestBodyParam)) {
-                paddingBody(fuHttpRequestData, requestBodyParam.getMockData());
-                return;
-            }
-            FuRequestBodyData body = request.getBody();
-            if (ContentType.FORM_DATA.equals(contentType)) {
-                body.setFormDataList(paramList);
-            } else {
-                body.setFormUrlEncodedList(paramList);
-            }
+        ContentType contentType = fuDocRootParamData.getContentType();
+        if (Objects.isNull(contentType)) {
+            return;
+        }
+        if (Objects.nonNull(requestBodyParam)) {
+            paddingBody(fuHttpRequestData, requestBodyParam.getMockData());
+            return;
+        }
+        FuRequestBodyData body = request.getBody();
+        if (ContentType.FORM_DATA.equals(contentType)) {
+            body.setFormDataList(paramList);
+        } else {
+            body.setFormUrlEncodedList(paramList);
         }
     }
 
@@ -204,7 +203,7 @@ public class FuHttpRequestDataFactory {
                 String paramName = fuDocParamData.getParamName();
                 boolean isSelect = YesOrNo.getByDesc(fuDocParamData.getParamRequire());
                 RequestParamType requestParamType = FuDocConstants.FILE.equals(fuDocParamData.getParamType()) ? RequestParamType.FILE : RequestParamType.TEXT;
-                tableBOList.add(new KeyValueTableBO(isSelect, requestParamType.getCode(), paramName, fuDocParamData.getParamValue(), fuDocParamData.getParamDesc()));
+                tableBOList.add(new KeyValueTableBO(isSelect, requestParamType.getCode(), paramName, fuDocParamData.getParamValue(), fuDocParamData.getParamDesc(), true));
             }
         }
         return tableBOList;
@@ -223,12 +222,10 @@ public class FuHttpRequestDataFactory {
     }
 
 
-
-
     private static void paddingDomain(FuHttpRequestData fuHttpRequestData, Module module) {
         if (Objects.nonNull(fuHttpRequestData)) {
             //设置接口url
-            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringConfigManager.getServerPort(module);
+            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringBootEnvLoader.getServerPort(module);
             FuRequestData request = fuHttpRequestData.getRequest();
             if (Objects.isNull(request)) {
                 request = new FuRequestData();
@@ -237,7 +234,6 @@ public class FuHttpRequestDataFactory {
             fuHttpRequestData.setModule(module);
         }
     }
-
 
 
 }

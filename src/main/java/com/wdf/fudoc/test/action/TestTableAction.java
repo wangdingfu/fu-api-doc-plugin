@@ -1,5 +1,6 @@
 package com.wdf.fudoc.test.action;
 
+import cn.hutool.core.util.RandomUtil;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -12,7 +13,9 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.util.*;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author wangdingfu
  * @date 2022-09-05 19:39:54
  */
+@Slf4j
 public class TestTableAction extends AnAction {
 
     private static final String TEST_JAVA = "package com.wdf.fudoc;\n" +
@@ -40,6 +44,8 @@ public class TestTableAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
+        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
+
         EditorFactory editorFactory = EditorFactory.getInstance();
         PsiElement targetElement = PsiClassUtils.getTargetElement(e);
         PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
@@ -49,15 +55,15 @@ public class TestTableAction extends AnAction {
 //
 //        Editor editor = editorFactory.createEditor(document, e.getProject(), JavaFileType.INSTANCE, false);
 //        PopupUtils.create(editor.getComponent(),null,new AtomicBoolean(true));
-        PsiFileFactory instance = PsiFileFactory.getInstance(e.getProject());
-        PsiFile fileFromText = instance.createFileFromText("testJava.java", JavaFileType.INSTANCE, TEST_JAVA);
-        Document document = PsiDocumentManager.getInstance(e.getProject()).getDocument(fileFromText);
-                Editor editor = editorFactory.createEditor(document, e.getProject(), JavaFileType.INSTANCE, false);
-        PopupUtils.create(editor.getComponent(),null,new AtomicBoolean(true));
+//        PsiFileFactory instance = PsiFileFactory.getInstance(e.getProject());
+//        PsiFile fileFromText = instance.createFileFromText("testJava.java", JavaFileType.INSTANCE, TEST_JAVA);
+//        Document document = PsiDocumentManager.getInstance(e.getProject()).getDocument(fileFromText);
+//                Editor editor = editorFactory.createEditor(document, e.getProject(), JavaFileType.INSTANCE, false);
+//        PopupUtils.create(editor.getComponent(),null,new AtomicBoolean(true));
     }
 
     private static EditorImpl createEditor(@NotNull Project project, @NotNull VirtualFile file) {
         Document document = FileDocumentManager.getInstance().getDocument(file);
-        return (EditorImpl)EditorFactory.getInstance().createEditor(document, project, EditorKind.MAIN_EDITOR);
+        return (EditorImpl) EditorFactory.getInstance().createEditor(document, project, EditorKind.MAIN_EDITOR);
     }
 }

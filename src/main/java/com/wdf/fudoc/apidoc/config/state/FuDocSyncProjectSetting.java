@@ -35,6 +35,9 @@ public class FuDocSyncProjectSetting implements PersistentStateComponent<SyncApi
 
     @Override
     public SyncApiConfigData getState() {
+        if (Objects.isNull(this.syncApiConfigData)) {
+            this.syncApiConfigData = new SyncApiConfigData();
+        }
         return this.syncApiConfigData;
     }
 

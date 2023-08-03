@@ -16,10 +16,12 @@ import com.wdf.fudoc.request.SendRequestHandler;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import com.wdf.fudoc.request.tab.request.RequestConsoleTabView;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.tab.request.ResponseHeaderTabView;
 import com.wdf.fudoc.request.tab.request.ResponseTabView;
-import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
+import com.wdf.fudoc.request.view.widget.EnvWidget;
+import com.wdf.fudoc.request.view.widget.UserWidget;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,7 +62,6 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
      * 响应面板
      */
     private final ResponseTabView responseTabView;
-
     /**
      * 响应头面板
      */
@@ -72,6 +73,9 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
     private final MessageComponent messageComponent;
 
     private final SendRequestHandler sendRequestHandler;
+
+    private final EnvWidget envWidget;
+    private final UserWidget userWidget;
 
     @Setter
     @Getter
@@ -91,20 +95,31 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.toolWindow = toolWindow;
         this.rootPanel = new JPanel(new BorderLayout());
         Splitter splitter = new Splitter(true, 0.6F);
-        FuRequestStatusInfoView fuRequestStatusInfoView = new FuRequestStatusInfoView(project);
-        this.requestTabView = new RequestTabView(project, this, fuRequestStatusInfoView, toolWindow.getDisposable());
-        this.responseTabView = new ResponseTabView(project, fuRequestStatusInfoView, toolWindow.getDisposable());
+        this.requestTabView = new RequestTabView(project, this, null, toolWindow.getDisposable());
+        this.responseTabView = new ResponseTabView(project, null, toolWindow.getDisposable());
+        this.envWidget = new EnvWidget(this.project, this.requestTabView, this);
+        this.userWidget = new UserWidget(project, this);
+        RequestConsoleTabView requestConsoleTabView = new RequestConsoleTabView(this.project, null, toolWindow.getDisposable());
         this.responseHeaderTabView = new ResponseHeaderTabView(project);
         splitter.setFirstComponent(this.requestTabView.getRootPane());
-        splitter.setSecondComponent(FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).build());
+        FuTabBuilder fuTabBuilder = FuTabBuilder.getInstance().addTab(this.responseTabView).addTab(this.responseHeaderTabView).addTab(requestConsoleTabView);
+        splitter.setSecondComponent(fuTabBuilder.build());
         this.rootPanel.add(splitter, BorderLayout.CENTER);
         this.messageComponent = new MessageComponent(true);
+        this.messageComponent.addWidget(this.envWidget);
+        this.messageComponent.addWidget(this.userWidget);
         this.messageComponent.switchInfo();
         this.rootPanel.add(this.messageComponent.getRootPanel(), BorderLayout.SOUTH);
         setContent(this.rootPanel);
-        this.sendRequestHandler = new SendRequestHandler(project, this);
+        this.sendRequestHandler = new SendRequestHandler(project, this, requestConsoleTabView.getFuLogger());
     }
 
+
+    @Override
+    public void refresh() {
+        this.envWidget.refresh();
+        this.userWidget.refresh();
+    }
 
     @Override
     public @Nullable Object getData(@NotNull @NonNls String dataId) {
@@ -126,11 +141,12 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
         this.responseTabView.initData(httpRequestData);
         this.responseHeaderTabView.initData(httpRequestData);
         this.messageComponent.switchInfo();
+        refresh();
     }
 
     @Override
-    public boolean isShowViewMode() {
-        return false;
+    public boolean isWindow() {
+        return true;
     }
 
     @Override
@@ -162,7 +178,7 @@ public class FuRequestWindow extends SimpleToolWindowPanel implements DataProvid
             //保存当前请求
             FuRequestManager.saveRequest(project, httpRequestData);
             //保存一些配置数据
-            FuRequestConfigStorage.getInstance(project).saveData();
+            FuRequestConfigStorage.get(project).saveData();
         } catch (Exception e) {
             log.info("持久化请求数据异常", e);
         }

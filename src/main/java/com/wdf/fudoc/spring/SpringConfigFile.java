@@ -1,18 +1,17 @@
 package com.wdf.fudoc.spring;
 
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Sets;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.wdf.fudoc.spring.handler.ConfigFileHandler;
 import com.wdf.fudoc.spring.handler.PropertiesConfigFileHandler;
 import com.wdf.fudoc.spring.handler.YamlConfigFileHandler;
 import com.wdf.fudoc.util.MavenUtils;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,12 +31,18 @@ public class SpringConfigFile {
     /**
      * 当前激活的环境
      */
+    @Getter
     private String activeEnv = SpringConfigFileConstants.DEFAULT_ENV;
 
     /**
      * 配置文件内容
      */
     private final Map<String, ConfigFileHandler> configMap = new ConcurrentHashMap<>();
+
+
+    public Set<String> getEnvs() {
+        return Sets.newHashSet(configMap.keySet());
+    }
 
     /**
      * 从配置文件中获取默认配置
@@ -46,14 +51,7 @@ public class SpringConfigFile {
      * @return 配置的值
      */
     public String getConfig(String key) {
-        String env = activeEnv;
-        if (SpringConfigFileConstants.MAVEN_PROFILES.equals(this.activeEnv)) {
-            //issues #6 @profiles.active@ 场景处理 从maven中获取当前激活的环境
-            List<String> activeProfiles = MavenUtils.getActiveProfiles(module);
-            if (CollectionUtils.isNotEmpty(activeProfiles)) {
-                env = activeProfiles.stream().filter(configMap::containsKey).findFirst().orElse(activeProfiles.get(0));
-            }
-        }
+        String env = getDefaultEnv();
         //第一步 优先从当前激活的环境中获取
         String config = getConfig(configMap.get(env), key);
         if (StringUtils.isEmpty(config)) {
@@ -61,6 +59,37 @@ public class SpringConfigFile {
             return getConfig(configMap.get(SpringConfigFileConstants.DEFAULT_ENV), key);
         }
         return config;
+    }
+
+
+    public Integer getServerPort(String env) {
+        String config = getConfig(env, SpringConfigFileConstants.SERVER_PORT_KEY);
+        if (StringUtils.isNotBlank(config) && StringUtils.isNumeric(config)) {
+            return Integer.parseInt(config);
+        }
+        return SpringConfigFileConstants.DEFAULT_SERVER_PORT;
+    }
+
+
+    public String getConfig(String env, String key) {
+        //第一步 优先从当前激活的环境中获取
+        String config = getConfig(configMap.get(env), key);
+        if (StringUtils.isEmpty(config)) {
+            //第二步 从默认环境中获取
+            return getConfig(configMap.get(SpringConfigFileConstants.DEFAULT_ENV), key);
+        }
+        return config;
+    }
+
+    private String getDefaultEnv() {
+        if (SpringConfigFileConstants.MAVEN_PROFILES.equals(this.activeEnv)) {
+            //issues #6 @profiles.active@ 场景处理 从maven中获取当前激活的环境
+            List<String> activeProfiles = MavenUtils.getActiveProfiles(module);
+            if (CollectionUtils.isNotEmpty(activeProfiles)) {
+                return activeProfiles.stream().filter(configMap::containsKey).findFirst().orElse(activeProfiles.get(0));
+            }
+        }
+        return activeEnv;
     }
 
 

@@ -17,11 +17,6 @@
     </#list>
 </#if>
 
-<#if fudoc.pms?? >
-**PmsKey权限**
-- ${fudoc.pms}
-</#if>
-
 
 **请求方式**
 - ${requestType!''}

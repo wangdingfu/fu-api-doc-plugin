@@ -13,4 +13,7 @@ public interface ApiUrl {
      * 已读公告
      */
     String SEND_IS_READ_API_URL = "/fu_doc_plugin/announcement/read";
+
+
+    String ACCESS_TOKEN = "/fu_doc_plugin/access-token";
 }

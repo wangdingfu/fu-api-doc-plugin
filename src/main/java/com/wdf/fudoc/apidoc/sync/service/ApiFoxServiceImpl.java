@@ -45,7 +45,7 @@ public class ApiFoxServiceImpl implements ApiFoxService {
             String errorMessage = result.getErrorMessage();
             return StringUtils.isBlank(errorMessage) ? "同步异常" : errorMessage;
         } catch (Exception e) {
-            log.info("同步Api到ApiFox系统异常", e);
+            log.error("同步Api到ApiFox系统异常", e);
         }
         return "同步失败";
     }

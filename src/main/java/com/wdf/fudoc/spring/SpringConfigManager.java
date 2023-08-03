@@ -1,14 +1,10 @@
 package com.wdf.fudoc.spring;
 
-import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,18 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SpringConfigManager {
 
     private static final Map<Module, SpringConfigFile> MODULE_SPRING_CONFIG_MAP = new ConcurrentHashMap<>();
-
-    /**
-     * 初始化执行项目下所有的spring配置文件到内存中
-     *
-     * @param project 当前项目
-     */
-    public static void initProjectSpringConfig(Project project) {
-        Collection<Module> modules = ModuleUtil.getModulesOfType(project, JavaModuleType.getModuleType());
-        for (Module module : modules) {
-            MODULE_SPRING_CONFIG_MAP.put(module, initSpringConfig(module));
-        }
-    }
 
 
     /**
@@ -49,11 +33,9 @@ public class SpringConfigManager {
 
 
     public static String getConfigValue(Module module, String configKey) {
-        SpringConfigFile springConfigFile = MODULE_SPRING_CONFIG_MAP.get(module);
+        SpringConfigFile springConfigFile = initSpringConfig(module);
         if (Objects.isNull(springConfigFile)) {
-            //初始化当前模块的配置文件到内存中
-            springConfigFile = initSpringConfig(module);
-            MODULE_SPRING_CONFIG_MAP.put(module, springConfigFile);
+            return StringUtils.EMPTY;
         }
         return springConfigFile.getConfig(configKey);
     }
@@ -66,6 +48,15 @@ public class SpringConfigManager {
      * @return 初始化后的配置文件
      */
     public static SpringConfigFile initSpringConfig(Module module) {
+        SpringConfigFile springConfigFile = MODULE_SPRING_CONFIG_MAP.get(module);
+        if (Objects.isNull(springConfigFile)) {
+            return doLoadSpringConfig(module);
+        }
+        return springConfigFile;
+    }
+
+
+    public static SpringConfigFile doLoadSpringConfig(Module module) {
         SpringConfigFile springConfigFile = new SpringConfigFile();
         //获取当前模块下的resource目录
         VirtualFile resourceDir = getResourceDir(module);
@@ -85,6 +76,7 @@ public class SpringConfigManager {
             }
         }
         springConfigFile.setModule(module);
+        MODULE_SPRING_CONFIG_MAP.put(module, springConfigFile);
         return springConfigFile;
     }
 
@@ -106,7 +98,7 @@ public class SpringConfigManager {
     }
 
 
-    public static VirtualFile getFile(Module module,String fileName){
+    public static VirtualFile getFile(Module module, String fileName) {
         VirtualFile[] rootList = ModuleRootManager.getInstance(module).getSourceRoots(false);
         for (VirtualFile virtualFile : rootList) {
             if (SpringConfigFileConstants.RESOURCE.equals(virtualFile.getName())) {

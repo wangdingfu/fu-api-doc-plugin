@@ -1,6 +1,8 @@
 package com.wdf.fudoc.test.action;
 
+import cn.hutool.core.util.RandomUtil;
 import com.intellij.httpClient.converters.RequestBuilder;
+import com.intellij.httpClient.converters.curl.CurlRequestBuilder;
 import com.intellij.httpClient.execution.HttpRequestConfig;
 import com.intellij.httpClient.execution.RestClientFormBodyPart;
 import com.intellij.httpClient.execution.RestClientRequest;
@@ -13,9 +15,13 @@ import com.intellij.httpClient.http.request.psi.HttpQuery;
 import com.intellij.httpClient.http.request.psi.HttpQueryParameter;
 import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
-import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.project.Project;
+import com.intellij.httpClient.http.request.run.HttpRequestValidationException;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiFile;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
@@ -23,37 +29,19 @@ import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.util.FuRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.idea.maven.project.MavenProject;
-import org.jetbrains.idea.maven.project.MavenProjectsManager;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 @Slf4j
 public class TestAction extends AnAction {
 
+    private static final Logger LOG = Logger.getInstance(TestAction.class);
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        // 获取当前项目
-        Project project = e.getProject();
-
-        // 获取 Maven 项目管理器
-        MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(project);
-
-        // 获取 Maven 项目
-        MavenProject mavenProject = mavenProjectsManager.getProjects().get(0);
-
-        // 获取 Maven Model
-        Collection<String> profilesIds = mavenProject.getProfilesIds();
-
-//        AuthSettingView authSettingView = new AuthSettingView(e.getProject());
-//        PopupUtils.create(authSettingView.getRootPanel(),null,new AtomicBoolean(true));
-//        request(e);
-//        apiTest(e);
+        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
     }
-
 
 
     private void apiTest(AnActionEvent e) {
@@ -63,6 +51,20 @@ public class TestAction extends AnAction {
         System.out.println("读取api【" + apiList.size() + "】条 共计耗时:" + (System.currentTimeMillis() - start) + "ms");
     }
 
+    private void curlTest(AnActionEvent e) {
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
+        //读取http文件
+        PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
+
+        HttpRequest httpRequest = FuRequestUtils.getHttpRequest((HttpRequestPsiFile) psiFile, e.getData(LangDataKeys.EDITOR));
+        try {
+            Object o = HttpRequestPsiConverter.convertFromHttpRequest(httpRequest, substitutor, (RequestBuilder) (new CurlRequestBuilder()));
+            System.out.println(o);
+        } catch (HttpRequestValidationException e3) {
+            log.error("aaa", e3);
+        }
+    }
+
 
     private void request(AnActionEvent e) {
         HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
@@ -70,7 +72,11 @@ public class TestAction extends AnAction {
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 
         HttpRequest httpRequest = FuRequestUtils.getHttpRequest((HttpRequestPsiFile) psiFile, e.getData(LangDataKeys.EDITOR));
-
+        try {
+            Object o = HttpRequestPsiConverter.convertFromHttpRequest(httpRequest, substitutor, (RequestBuilder) (new CurlRequestBuilder()));
+        } catch (HttpRequestValidationException e3) {
+            log.error("aaa", e3);
+        }
         if (Objects.isNull(psiFile)) {
             return;
         }
@@ -91,7 +97,6 @@ public class TestAction extends AnAction {
             for (HttpQueryParameter httpQueryParameter : queryParameterList) {
                 String value = httpQueryParameter.getValue(substitutor);
                 String key = httpQueryParameter.getKey(substitutor);
-                log.info("key:" + key + "=" + value);
             }
         }
         RequestBuilder<RestClientRequest, RestClientFormBodyPart> requestBuilder = new RestClientRequestBuilder();

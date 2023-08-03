@@ -29,13 +29,13 @@ public class ToolBarUtils {
     }
 
 
-    public static JComponent addActionToToolBar(JPanel toolBarPanel, String place, ActionGroup actionGroup) {
+    public static JComponent addActionToToolBar(JComponent targetComponent, String place, ActionGroup actionGroup) {
         ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
-        toolbar.setTargetComponent(toolBarPanel);
+        toolbar.setTargetComponent(targetComponent);
         toolbar.setForceMinimumSize(true);
         toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
         Utils.setSmallerFontForChildren(toolbar);
-        toolbar.getComponent().setBackground(toolBarPanel.getBackground());
+        toolbar.getComponent().setBackground(targetComponent.getBackground());
         return toolbar.getComponent();
     }
 

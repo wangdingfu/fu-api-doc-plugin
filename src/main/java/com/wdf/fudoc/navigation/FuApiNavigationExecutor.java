@@ -49,7 +49,6 @@ public class FuApiNavigationExecutor {
      * 获取所有的API
      */
     private List<ApiNavigationItem> getApiList(GlobalSearchScope globalSearchScope) {
-        log.info("开始读取所有api....");
         long start = System.currentTimeMillis();
         List<PsiClass> allController = FuApiUtils.findAllController(project, globalSearchScope);
         if (CollectionUtils.isEmpty(allController)) {

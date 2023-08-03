@@ -94,9 +94,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 commonItemData.setRequestType(requestType);
                 commonItemData.setUrlList(FuApiUtils.joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
                 //Content-Type
-                if (RequestType.POST.getRequestType().equals(requestType)) {
-                    commonItemData.setContentType(analysisContentType(methodInfoDesc.getRequestList()));
-                }
+                commonItemData.setContentType(analysisContentType(methodInfoDesc.getRequestList()));
                 return true;
             }
         }

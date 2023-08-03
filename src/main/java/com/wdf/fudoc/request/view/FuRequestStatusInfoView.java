@@ -73,11 +73,11 @@ public class FuRequestStatusInfoView {
 
     private void initWidget(Project project) {
         //初始化响应状态码
-        addWidget(new HttpCodeWidget());
+//        addWidget(new HttpCodeWidget());
         //初始化接口请求耗时
-        addWidget(new HttpTimeWidget());
+//        addWidget(new HttpTimeWidget());
         //初始化cookie面板
-        addWidget(new HttpCookieWidget(project));
+//        addWidget(new HttpCookieWidget(project));
     }
 
     public void initData(FuHttpRequestData fuHttpRequestData) {

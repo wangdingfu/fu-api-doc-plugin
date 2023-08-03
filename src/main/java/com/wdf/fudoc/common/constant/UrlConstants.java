@@ -9,11 +9,15 @@ public interface UrlConstants {
 
     String DOCUMENT = "https://wangdingfu.github.io/#/zh-cn/?id=fudoc";
 
-    String ISSUE = "https://github.com/wangdingfu/fu-api-doc-plugin/issues";
-
     String GITHUB = "https://github.com/wangdingfu/fu-api-doc-plugin";
 
-    String GITEE = "https://gitee.com/wdfu/fu-api-doc-plugin";
+
+    String ISSUE = GITHUB + "/issues";
+
+    String GITEE = "https://gitee.com/wdfu/fudoc";
+
+    String GITEE_ISSUE = GITEE + "/issues";
+
 
     String FU_DOC_URL = "http://150.158.164.160:9090";
 

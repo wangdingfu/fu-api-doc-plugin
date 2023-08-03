@@ -1,6 +1,7 @@
 package com.wdf.fudoc.components.widget;
 
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 
@@ -16,5 +17,20 @@ public interface FuWidget {
 
     JComponent getComponent();
 
-    void initData(FuHttpRequestData fuHttpRequestData);
+    default void initData(FuHttpRequestData fuHttpRequestData) {
+
+    }
+
+    default String getCurrent() {
+        return StringUtils.EMPTY;
+    }
+
+    default boolean isShow() {
+        return true;
+    }
+
+
+    default void refresh() {
+
+    }
 }

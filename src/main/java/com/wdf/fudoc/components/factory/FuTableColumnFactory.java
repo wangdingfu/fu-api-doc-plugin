@@ -12,16 +12,19 @@ import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.sync.renderer.SyncStatusCellRenderer;
-import com.wdf.fudoc.components.ButtonTableCellEditor;
-import com.wdf.fudoc.components.bo.*;
-import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
+import com.wdf.fudoc.components.bo.DynamicTableBO;
+import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.bo.TreePathBO;
+import com.wdf.fudoc.components.column.*;
 import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
-import com.wdf.fudoc.request.pojo.CommonHeader;
+import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
+import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.table.DefaultTableCellRenderer;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Objects;
 
 /**
  * 创建FuTable的column的工厂类
@@ -49,7 +52,7 @@ public class FuTableColumnFactory {
         List<Column> columns = Lists.newArrayList();
         columns.add(new StringColumn<>("别名", SettingDynamicValueData::getAlias, SettingDynamicValueData::setAlias));
         //类型列为下拉框编辑器
-        columns.add(new ComboBoxColumn<>("类型", SettingDynamicValueData::getType, SettingDynamicValueData::setType, DynamicDataType.getCodes()));
+        columns.add(new ComboBoxColumn<>("类型", null, SettingDynamicValueData::getType, SettingDynamicValueData::setType, DynamicDataType.getCodes()));
         columns.add(new StringColumn<>("值", SettingDynamicValueData::getValue, SettingDynamicValueData::setValue));
         return columns;
     }
@@ -67,6 +70,16 @@ public class FuTableColumnFactory {
         return columns;
     }
 
+    /**
+     * 自定义表头
+     */
+    public static List<Column> customConfig() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", KeyValueTableBO::getSelect, KeyValueTableBO::setSelect));
+        columns.add(new StringColumn<>("字段英文名", KeyValueTableBO::getKey, KeyValueTableBO::setKey));
+        columns.add(new StringColumn<>("字段中文名", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
+        return columns;
+    }
 
 
     /**
@@ -99,7 +112,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", HeaderKeyValueBO::getSelect, HeaderKeyValueBO::setSelect));
         columns.add(new StringColumn<>("参数名", HeaderKeyValueBO::getKey, HeaderKeyValueBO::setKey));
         columns.add(new StringColumn<>("参数值", HeaderKeyValueBO::getValue, HeaderKeyValueBO::setValue));
-        columns.add(new ComboBoxColumn<>("级别", HeaderKeyValueBO::getLevel, HeaderKeyValueBO::setLevel, HeaderLevel.getCodes()));
+        columns.add(new ComboBoxColumn<>("级别", null, HeaderKeyValueBO::getLevel, HeaderKeyValueBO::setLevel, HeaderLevel.getCodes()));
         return columns;
     }
 
@@ -110,7 +123,7 @@ public class FuTableColumnFactory {
         List<Column> columns = Lists.newArrayList();
         columns.add(new BooleanColumn<>("", KeyValueTableBO::getSelect, KeyValueTableBO::setSelect));
         columns.add(new StringColumn<>("参数名", KeyValueTableBO::getKey, KeyValueTableBO::setKey));
-        columns.add(new ComboBoxColumn<>("类型", KeyValueTableBO::getRequestParamType, KeyValueTableBO::setRequestParamType, RequestParamType.getCodes()));
+        columns.add(new ComboBoxColumn<>("类型", null, KeyValueTableBO::getRequestParamType, KeyValueTableBO::setRequestParamType, RequestParamType.getCodes()));
         columns.add(new StringColumn<>("参数值", KeyValueTableBO::getValue, KeyValueTableBO::setValue));
         columns.add(new StringColumn<>("描述信息", KeyValueTableBO::getDescription, KeyValueTableBO::setDescription));
         return columns;
@@ -125,7 +138,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", GlobalKeyValuePO::getSelect, GlobalKeyValuePO::setSelect));
         columns.add(new StringColumn<>(key, GlobalKeyValuePO::getKey, GlobalKeyValuePO::setKey));
         columns.add(new StringColumn<>(value, GlobalKeyValuePO::getValue, GlobalKeyValuePO::setValue));
-        columns.add(new TreeModuleComboBoxColumn<>("作用范围", GlobalKeyValuePO::getScope, GlobalKeyValuePO::setScope));
+        columns.add(new SpringBootColumn<>("作用范围", GlobalKeyValuePO::getApplicationName, GlobalKeyValuePO::setApplicationName));
         return columns;
     }
 
@@ -151,7 +164,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", YApiProjectTableData::getSelect, YApiProjectTableData::setSelect));
         columns.add(new StringColumn<>("项目token", YApiProjectTableData::getProjectToken, YApiProjectTableData::setProjectToken));
         columns.add(new StringColumn<>("项目名称", YApiProjectTableData::getProjectName, YApiProjectTableData::setProjectName));
-        columns.add(new TreeModuleComboBoxColumn<>("作用范围", YApiProjectTableData::getScope, YApiProjectTableData::setScope));
+        columns.add(new SpringBootColumn<>("作用范围", YApiProjectTableData::getApplicationName, YApiProjectTableData::setApplicationName));
         return columns;
     }
 
@@ -165,7 +178,7 @@ public class FuTableColumnFactory {
         columns.add(new StringColumn<>("apiKey", ShowDocProjectTableData::getApiKey, ShowDocProjectTableData::setApiKey));
         columns.add(new StringColumn<>("apiToken", ShowDocProjectTableData::getApiToken, ShowDocProjectTableData::setApiToken));
         columns.add(new StringColumn<>("项目名称", ShowDocProjectTableData::getProjectName, ShowDocProjectTableData::setProjectName));
-        columns.add(new TreeModuleComboBoxColumn<>("作用范围", ShowDocProjectTableData::getScope, ShowDocProjectTableData::setScope));
+        columns.add(new SpringBootColumn<>("作用范围", ShowDocProjectTableData::getApplicationName, ShowDocProjectTableData::setApplicationName));
         return columns;
     }
 
@@ -178,7 +191,7 @@ public class FuTableColumnFactory {
         columns.add(new BooleanColumn<>("", ApiFoxProjectTableData::getSelect, ApiFoxProjectTableData::setSelect));
         columns.add(new StringColumn<>("项目id", ApiFoxProjectTableData::getProjectId, ApiFoxProjectTableData::setProjectId));
         columns.add(new StringColumn<>("项目名称", ApiFoxProjectTableData::getProjectName, ApiFoxProjectTableData::setProjectName));
-        columns.add(new TreeModuleComboBoxColumn<>("作用范围", ApiFoxProjectTableData::getScope, ApiFoxProjectTableData::setScope));
+        columns.add(new SpringBootColumn<>("作用范围", ApiFoxProjectTableData::getApplicationName, ApiFoxProjectTableData::setApplicationName));
         return columns;
     }
 
@@ -197,6 +210,7 @@ public class FuTableColumnFactory {
         return columns;
     }
 
+
     /**
      * api同步结果table
      */
@@ -214,8 +228,42 @@ public class FuTableColumnFactory {
     }
 
 
+    /**
+     * 环境配置数据
+     */
+    public static List<Column> envConfig() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", ConfigEnvTableBO::getSelect, ConfigEnvTableBO::setSelect));
+        columns.add(new StringColumn<>("环境名称", ConfigEnvTableBO::getEnvName, ConfigEnvTableBO::setEnvName));
+        columns.add(new StringColumn<>("域名", ConfigEnvTableBO::getDomain, ConfigEnvTableBO::setDomain));
+        columns.add(new SpringBootColumn<>("作用范围", ConfigEnvTableBO::getApplication, ConfigEnvTableBO::setApplication));
+        return columns;
+    }
+
+    /**
+     * 鉴权用户信息
+     */
+    public static List<Column> authConfig() {
+        List<Column> columns = Lists.newArrayList();
+        columns.add(new BooleanColumn<>("", ConfigAuthTableBO::getSelect, ConfigAuthTableBO::setSelect));
+        columns.add(new StringColumn<>("用户名", ConfigAuthTableBO::getUserName, ConfigAuthTableBO::setUserName));
+        columns.add(new StringColumn<>("密码", ConfigAuthTableBO::getPassword, ConfigAuthTableBO::setPassword));
+        return columns;
+    }
+
+
     @SuppressWarnings("all")
     public static <T, R> R getValue(T data, Column column) {
+        if (column instanceof DynamicColumn dynamicColumn) {
+            //自定义字段名称
+            String fieldName = dynamicColumn.getFieldName();
+            if (Objects.nonNull(data)
+                    && data instanceof DynamicTableBO dynamicTableBO
+                    && StringUtils.isNotBlank(fieldName)) {
+                return (R) dynamicTableBO.getValue(fieldName);
+            }
+            return null;
+        }
         if (column instanceof StringColumn) {
             return (R) ((StringColumn) column).getGetFun().apply(data);
         }
@@ -236,6 +284,15 @@ public class FuTableColumnFactory {
 
     @SuppressWarnings("all")
     public static <T, R> void setValue(T data, R value, Column column) {
+        if (column instanceof DynamicColumn dynamicColumn) {
+            //自定义字段名称
+            String fieldName = dynamicColumn.getFieldName();
+            if (Objects.nonNull(data)
+                    && data instanceof DynamicTableBO dynamicTableBO
+                    && StringUtils.isNotBlank(fieldName)) {
+                dynamicTableBO.setValue(fieldName, value);
+            }
+        }
         if (column instanceof StringColumn) {
             ((StringColumn) column).getSetFun().accept(data, (String) value);
         }

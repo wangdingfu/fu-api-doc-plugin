@@ -21,13 +21,16 @@ import java.util.stream.Collectors;
 public enum ScriptCmd {
 
     DEMO("auth_config.js", FuBundle.message("fudoc.script.study.demo.text"), FuColor.GREEN.color(), ScriptCmdType.DEMO, true),
-    DOC("", FuBundle.message("fudoc.script.study.demo.doc"), FuColor.GREEN.color(), ScriptCmdType.DEMO, true),
-    PROJECT_SET_PARAM("code_set_variable.js", FuBundle.message("fudoc.script.study.set.variable"), JBColor.PINK, ScriptCmdType.SCRIPT_DEMO, false),
-    PROJECT_GET_PARAM("code_get_variable.js", FuBundle.message("fudoc.script.study.get.variable"), JBColor.PINK, ScriptCmdType.SCRIPT_DEMO, false),
-    PROJECT_SET_HEADER("code_set_header.js", FuBundle.message("fudoc.script.study.set.header"), FuColor.color1.color(), ScriptCmdType.SCRIPT_DEMO, false),
-    PROJECT_GET_HEADER("code_get_header.js", FuBundle.message("fudoc.script.study.get.header"), FuColor.color1.color(), ScriptCmdType.SCRIPT_DEMO, false),
-    ADD_HTTP_CONFIG("", FuBundle.message("fudoc.script.study.http.add"), FuColor.ORANGE.color(), ScriptCmdType.HTTP, false),
+    DOC("", FuBundle.message("fudoc.script.study.demo.doc"), FuColor.console_debug.color(), ScriptCmdType.DEMO, true),
+    PROJECT_SET_PARAM("code_set_variable.js", FuBundle.message("fudoc.script.study.set.variable"), FuColor.console_verbose.color(), ScriptCmdType.SCRIPT_DEMO, false),
+    PROJECT_GET_PARAM("code_get_variable.js", FuBundle.message("fudoc.script.study.get.variable"), FuColor.console_user_info.color(), ScriptCmdType.SCRIPT_DEMO, false),
+    PROJECT_SET_HEADER("code_set_header.js", FuBundle.message("fudoc.script.study.set.header"), FuColor.color6.color(), ScriptCmdType.SCRIPT_DEMO, false),
+    PROJECT_GET_HEADER("code_get_header.js", FuBundle.message("fudoc.script.study.get.header"), FuColor.console_user_info.color(), ScriptCmdType.SCRIPT_DEMO, false),
+    ADD_HTTP_CONFIG("", FuBundle.message("fudoc.script.study.http.add"), FuColor.RED.color(), ScriptCmdType.HTTP, false),
     HTTP_REQUEST("code_http.js", FuBundle.message("fudoc.script.study.http.exec"), FuColor.color4.color(), ScriptCmdType.HTTP, false),
+    CONSOLE_ERROR("console.error('这是一条{}级别日志','error');", FuBundle.message("fudoc.script.console.error.title"), FuColor.console_error.color(), ScriptCmdType.LOG, false),
+    CONSOLE_INFO("console.info('这是一条{}级别日志','info');", FuBundle.message("fudoc.script.console.info.title"), FuColor.console_info.color(), ScriptCmdType.LOG, false),
+    CONSOLE_DEBUG("console.debug('这是一条{}级别日志','debug');", FuBundle.message("fudoc.script.console.debug.title"), FuColor.console_verbose.color(), ScriptCmdType.LOG, false),
     ;
     private final String cmd;
 

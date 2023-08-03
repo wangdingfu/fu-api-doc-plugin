@@ -14,7 +14,7 @@ import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
-import com.wdf.fudoc.storage.factory.FuRequestConfigStorageFactory;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import icons.FuDocIcons;
 
 import java.util.Objects;
@@ -69,13 +69,13 @@ public class GlobalHeaderTab extends AbstractBulkEditTabLinkage<GlobalKeyValuePO
 
     @Override
     public void selectionChanged(TabInfo oldSelection, TabInfo newSelection) {
-        initData(FuRequestConfigStorageFactory.get(project).readData());
+        initData(FuRequestConfigStorage.get(project).readData());
     }
 
     @Override
     public void moveOff() {
         //离开当前tab时 保存数据
-        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorageFactory.get(project).readData();
+        FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(project).readData();
         fuRequestConfigPO.setGlobalHeaderList(this.fuTableComponent.getDataList());
     }
 

@@ -42,7 +42,7 @@ public class YApiProjectTableData implements Serializable {
     /**
      * 项目范围
      */
-    private TreePathBO scope;
+    private String applicationName;
 
 
 }

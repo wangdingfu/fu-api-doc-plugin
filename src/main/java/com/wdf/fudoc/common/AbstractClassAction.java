@@ -3,6 +3,7 @@ package com.wdf.fudoc.common;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.util.NlsActions;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
@@ -11,11 +12,14 @@ import com.wdf.fudoc.apidoc.data.FuDocData;
 import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.util.PsiClassUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.Objects;
 
 /**
@@ -24,6 +28,13 @@ import java.util.Objects;
  */
 @Slf4j
 public abstract class AbstractClassAction extends AnAction {
+
+    public AbstractClassAction() {
+    }
+
+    public AbstractClassAction(@Nullable @NlsActions.ActionText String text, @Nullable @NlsActions.ActionDescription String description, @Nullable Icon icon) {
+        super(text, description, icon);
+    }
 
     protected boolean isShow(JavaClassType javaClassType) {
         return true;
@@ -87,8 +98,8 @@ public abstract class AbstractClassAction extends AnAction {
             execute(e, psiClass, fuDocContext);
         } catch (Exception exception) {
             //发送失败通知
-            log.info("【Fu Doc】执行动作失败", exception);
-            FuDocNotification.notifyError(FuBundle.message(exceptionMsg()));
+            log.error("【Fu Doc】执行动作失败", exception);
+            FuDocNotification.notifyError((exception instanceof FuDocException) ? exception.getMessage() : FuBundle.message(exceptionMsg()));
         } finally {
             log.info("【Fu Doc】执行动作完成. 耗时:{}ms", System.currentTimeMillis() - start);
             FuDocDataContent.remove();

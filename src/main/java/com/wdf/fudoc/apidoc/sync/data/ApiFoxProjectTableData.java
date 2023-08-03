@@ -34,7 +34,7 @@ public class ApiFoxProjectTableData implements Serializable {
     /**
      * 项目范围
      */
-    private TreePathBO scope;
+    private String applicationName;
 
     /**
      * 分类集合

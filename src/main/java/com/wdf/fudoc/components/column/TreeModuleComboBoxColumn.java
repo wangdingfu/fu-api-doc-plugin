@@ -1,6 +1,9 @@
-package com.wdf.fudoc.components.bo;
+package com.wdf.fudoc.components.column;
 
+import com.wdf.fudoc.common.base.FuFunction;
+import com.wdf.fudoc.components.bo.TreePathBO;
 import com.wdf.fudoc.components.factory.TableCellEditorFactory;
+import com.wdf.fudoc.util.LambdaUtils;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.function.BiConsumer;
@@ -17,13 +20,13 @@ public class TreeModuleComboBoxColumn<T> extends Column {
     /**
      * get方法
      */
-    private Function<T, TreePathBO> getFun;
+    private FuFunction<T, TreePathBO> getFun;
     /**
      * set方法
      */
     private BiConsumer<T, TreePathBO> setFun;
 
-    public TreeModuleComboBoxColumn(String name, Function<T, TreePathBO> getFun, BiConsumer<T, TreePathBO> setFun) {
+    public TreeModuleComboBoxColumn(String name, FuFunction<T, TreePathBO> getFun, BiConsumer<T, TreePathBO> setFun) {
         super(name, TableCellEditorFactory.createModuleTreeEditor());
         this.getFun = getFun;
         this.setFun = setFun;
@@ -32,5 +35,10 @@ public class TreeModuleComboBoxColumn<T> extends Column {
     @Override
     public Class<?> getColumnClass() {
         return String.class;
+    }
+
+    @Override
+    public String getFieldName() {
+        return LambdaUtils.getPropertyName(this.getFun);
     }
 }

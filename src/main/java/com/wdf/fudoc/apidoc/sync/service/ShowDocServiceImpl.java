@@ -41,7 +41,7 @@ public class ShowDocServiceImpl implements ShowDocService {
             String message = showDocResult.getMessage();
             return StringUtils.isBlank(message) ? "同步文档至ShowDoc异常" : message;
         } catch (Exception e) {
-            log.info("同步文档至ShowDoc异常", e);
+            log.error("同步文档至ShowDoc异常", e);
             return "同步文档至ShowDoc异常";
         }
     }

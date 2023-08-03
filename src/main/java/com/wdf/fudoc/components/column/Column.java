@@ -1,4 +1,4 @@
-package com.wdf.fudoc.components.bo;
+package com.wdf.fudoc.components.column;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +15,8 @@ import javax.swing.table.TableCellRenderer;
 public abstract class Column {
 
     public abstract Class<?> getColumnClass();
+
+    public abstract String getFieldName();
 
     public TableCellRenderer getCellRenderer() {
         return null;

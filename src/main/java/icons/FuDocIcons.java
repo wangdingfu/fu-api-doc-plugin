@@ -40,12 +40,16 @@ public interface FuDocIcons {
     Icon FU_VARIABLE = IconLoader.getIcon("icon/variable.svg", FuDocIcons.class);
 
 
-    Icon MORE_DARK = IconLoader.getIcon("icon/more_dark.svg", FuDocIcons.class);
-    Icon MORE_STROKE = IconLoader.getIcon("icon/more_stroke.svg", FuDocIcons.class);
-
-    static Icon moreIcon() {
-        return ProjectUtils.getTheme().isDarcula() ? MORE_STROKE : MORE_DARK;
-    }
+    Icon MORE_DARK = IconLoader.getIcon("icon/moreVertical_dark.svg", FuDocIcons.class);
+    Icon MORE_STROKE = IconLoader.getIcon("icon/moreVertical.svg", FuDocIcons.class);
+    Icon CONSOLE = IconLoader.getIcon("icon/console.svg", FuDocIcons.class);
+    Icon HTTP = IconLoader.getIcon("icon/http.svg", FuDocIcons.class);
+    Icon RESPONSE = IconLoader.getIcon("icon/response.svg", FuDocIcons.class);
+    Icon COOKIE = IconLoader.getIcon("icon/cookie.svg", FuDocIcons.class);
+    Icon ENV = IconLoader.getIcon("icon/enviroment.svg", FuDocIcons.class);
+    Icon USER = IconLoader.getIcon("icon/user.svg", FuDocIcons.class);
+    Icon UPLOAD = IconLoader.getIcon("icon/upload.svg", FuDocIcons.class);
+    Icon UPLOAD_DARK = IconLoader.getIcon("icon/upload_dark.svg", FuDocIcons.class);
 
 
     Icon GET_DARK = IconLoader.getIcon("icon/http/get_dark.svg", FuDocIcons.class);
@@ -53,6 +57,8 @@ public interface FuDocIcons {
     Icon PUT_DARK = IconLoader.getIcon("icon/http/put_dark.svg", FuDocIcons.class);
     Icon DELETE_DARK = IconLoader.getIcon("icon/http/delete_dark.svg", FuDocIcons.class);
     Icon ALL_DARK = IconLoader.getIcon("icon/http/all_dark.svg", FuDocIcons.class);
+    Icon SPRING_BOOT = IconLoader.getIcon("icon/SpringBoot.svg", FuDocIcons.class);
+    Icon SPRING = IconLoader.getIcon("icon/spring.svg", FuDocIcons.class);
 
 
 }

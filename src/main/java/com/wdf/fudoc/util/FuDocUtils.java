@@ -19,6 +19,7 @@ import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -172,6 +173,9 @@ public class FuDocUtils {
 
 
     private static String getModulePath(Module module) {
+        if (Objects.isNull(module)) {
+            throw new FuDocException("当前版本暂时无法解析sdk中的接口");
+        }
         VirtualFile[] contentRoots = ModuleRootManager.getInstance(module).getContentRoots();
         if (contentRoots.length > 0) {
             return contentRoots[0].getPath();

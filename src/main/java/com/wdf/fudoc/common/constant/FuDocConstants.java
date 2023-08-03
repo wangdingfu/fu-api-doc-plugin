@@ -9,6 +9,8 @@ package com.wdf.fudoc.common.constant;
 public interface FuDocConstants {
 
 
+    String ID = "com.wdf.api";
+
     String KEY = "key";
     String VALUE = "value";
 
@@ -18,8 +20,15 @@ public interface FuDocConstants {
 
     String FU_DOC_FILE = "FuDocFile.";
 
+
+    String FU_AUTH = "fuAuth.";
+    String FU_AUTH_USER_NAME = "userName";
+    String FU_AUTH_PASSWORD = "password";
+
     String ROOT = "root";
     String FU_DOC_DIR = "fudoc";
+
+    String LINE = "\r\n";
 
 
     String API_ID = "apiId";
@@ -41,6 +50,11 @@ public interface FuDocConstants {
 
 
     String DEFAULT_HOST = "http://localhost";
+
+
+    String GITHUB = "Github";
+
+    String GITEE = "Gitee";
 
     interface AnnotationAttr {
         String MESSAGE = "message";
@@ -130,7 +144,7 @@ public interface FuDocConstants {
     }
 
 
-    interface SearchApi{
+    interface SearchApi {
         String TITLE = "Fu Api";
     }
 

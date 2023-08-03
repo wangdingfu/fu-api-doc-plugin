@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.IconManager;
 import com.intellij.ui.PopupHandler;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.components.panels.VerticalBox;
@@ -75,7 +76,7 @@ public class HttpCmdView {
 
     private JPopupMenu buildPopupMenu(String key) {
         JPopupMenu popupMenu = new JPopupMenu();
-        JMenuItem removeHttp = new JMenuItem("删除http配置", AllIcons.General.Remove);
+        JMenuItem removeHttp = new JMenuItem("删除http配置", IconManager.getInstance().getIcon("expui/general/delete.svg", AllIcons.class));
         popupMenu.add(removeHttp);
         removeHttp.addActionListener(e -> {
             indexList.remove(key);

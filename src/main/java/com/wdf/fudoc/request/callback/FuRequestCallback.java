@@ -26,5 +26,12 @@ public interface FuRequestCallback {
     RequestTabView getRequestTabView();
 
 
-    boolean isShowViewMode();
+    default boolean isWindow() {
+        return false;
+    }
+
+
+    default void refresh() {
+
+    }
 }

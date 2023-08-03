@@ -2,11 +2,10 @@ package com.wdf.fudoc.request.manager;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
-import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
 import com.intellij.openapi.actionSystem.impl.MenuItemPresentationFactory;
-import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -19,23 +18,28 @@ import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.components.action.FuRequestViewModeAction;
+import com.wdf.fudoc.components.action.IssueAction;
+import com.wdf.fudoc.request.action.toolbar.CopyCurlAction;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
+import com.wdf.fudoc.request.constants.enumtype.IssueSource;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.view.FuRequestSettingView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
+import icons.ExpUiIcons;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 /**
@@ -53,7 +57,6 @@ public class FuRequestToolBarManager {
     private final DefaultActionGroup defaultActionGroup;
 
     private final FuRequestCallback fuRequestCallback;
-
 
 
     public FuRequestToolBarManager(FuRequestCallback fuRequestCallback) {
@@ -80,45 +83,16 @@ public class FuRequestToolBarManager {
 
     private void addCommonAction(DefaultActionGroup defaultActionGroup) {
 
-
         defaultActionGroup.addSeparator();
 
-        //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("同步接口文档-确认弹框", "", FuDocIcons.FU_API_SYNC_DIALOG) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                //获取同步接口文档配置
-                FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
-                BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
-                ApiDocSystem apiDocSystem = ApiDocSystem.getInstance(settingData.getEnable());
-                execute((fuDocContext, psiClass) -> {
-                    fuDocContext.setSyncDialog(false);
-                    //调用同步接口
-                    SyncFuDocExecutor.sync(apiDocSystem, enableConfigData, fuDocContext, psiClass);
-                    //加载配置
-                    FuDocSyncSetting.getInstance().loadState(settingData);
-                });
-            }
-        });
+        addSyncAction(defaultActionGroup);
+        //复制curl命令
+        defaultActionGroup.add(new CopyCurlAction(fuRequestCallback));
 
-        //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("同步接口文档", "", FuDocIcons.FU_API_SYNC) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                //获取同步接口文档配置
-                FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
-                BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
-                ApiDocSystem apiDocSystem = ApiDocSystem.getInstance(settingData.getEnable());
-                execute((fuDocContext, psiClass) -> {
-                    //调用同步接口
-                    SyncFuDocExecutor.sync(apiDocSystem, enableConfigData, fuDocContext, psiClass);
-                    //加载配置
-                    FuDocSyncSetting.getInstance().loadState(settingData);
-                });
-            }
-        });
+        if (fuRequestCallback.isWindow()) {
+            addConfigServerPortAction(defaultActionGroup);
+        }
 
-        defaultActionGroup.addSeparator();
 
         //添加保存事件
         defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
@@ -153,11 +127,6 @@ public class FuRequestToolBarManager {
         defaultActionGroup.add(new AnAction("Stop", "Stop", AllIcons.Actions.Suspend) {
 
             @Override
-            public @NotNull ActionUpdateThread getActionUpdateThread() {
-                return ActionUpdateThread.BGT;
-            }
-
-            @Override
             public void update(@NotNull AnActionEvent e) {
                 Presentation presentation = e.getPresentation();
                 presentation.setEnabled(fuRequestCallback.getSendStatus());
@@ -173,19 +142,19 @@ public class FuRequestToolBarManager {
 
 
         //添加设置按钮
-        defaultActionGroup.add(new AnAction("全局配置", "全局配置", AllIcons.General.Settings) {
+        defaultActionGroup.add(new AnAction("Config", "全局配置", AllIcons.General.Settings) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //展示设置界面
-                FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(e.getProject());
-                fuRequestSettingView.setSize(800, 800);
+                FuRequestSettingView fuRequestSettingView = new FuRequestSettingView(e.getProject(), fuRequestCallback);
+                fuRequestSettingView.setSize(900, 800);
                 fuRequestSettingView.show();
             }
         });
 
 
         //添加保存事件
-        defaultActionGroup.add(new AnAction("定位到该方法", "(Alt+Q)", AllIcons.General.Locate) {
+        defaultActionGroup.add(new AnAction("Navigation Api", "(Alt+Q)", AllIcons.General.Locate) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 PsiElement psiElement = fuRequestCallback.getPsiElement();
@@ -201,17 +170,22 @@ public class FuRequestToolBarManager {
         });
 
 
-        if(fuRequestCallback.isShowViewMode()){
+        if (!fuRequestCallback.isWindow()) {
             //添加设置按钮
-            defaultActionGroup.add(new AnAction("设置", "Setting", FuDocIcons.moreIcon()) {
+            defaultActionGroup.add(new AnAction("Settings", "Setting", ExpUiIcons.General.MoreVertical) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
-                    DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "View Mode");
+                    DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "窗体展示方式");
                     for (ViewMode value : ViewMode.values()) {
                         viewModeGroup.add(new FuRequestViewModeAction(value));
                     }
                     DefaultActionGroup actionGroup = new DefaultActionGroup();
+                    //新增view mode
                     actionGroup.add(viewModeGroup);
+                    //新增配置是否自动同步端口号
+                    addConfigServerPortAction(actionGroup);
+                    //新增提交issue mode
+                    addIssueAction(actionGroup);
                     int x = 0, y = 0;
                     InputEvent inputEvent = e.getInputEvent();
                     if (inputEvent instanceof MouseEvent mouseEvent) {
@@ -230,7 +204,7 @@ public class FuRequestToolBarManager {
 
 
         //添加帮助文档按钮
-        defaultActionGroup.add(new AnAction("帮助文档", "Help", FuDocIcons.FU_DOC) {
+        defaultActionGroup.add(new AnAction("Help", "Help", FuDocIcons.FU_DOC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 BrowserUtil.browse(UrlConstants.DOCUMENT);
@@ -238,6 +212,57 @@ public class FuRequestToolBarManager {
         });
 
 
+    }
+
+
+    private void addIssueAction(DefaultActionGroup defaultActionGroup) {
+        DefaultActionGroup issueActionGroup = DefaultActionGroup.createPopupGroup(() -> "提交Issue");
+        for (IssueSource value : IssueSource.values()) {
+            issueActionGroup.add(new IssueAction(value));
+        }
+        defaultActionGroup.add(issueActionGroup);
+    }
+
+    private void addConfigServerPortAction(DefaultActionGroup defaultActionGroup) {
+        //添加同步接口文档事件
+        defaultActionGroup.add(new ToggleAction("自动读取Spring环境配置", "", FuDocIcons.SPRING_BOOT) {
+            @Override
+            public boolean isSelected(@NotNull AnActionEvent e) {
+                Project project = e.getProject();
+                if (project == null || project.isDisposed()) {
+                    return false;
+                }
+                return FuRequestConfigStorage.get(e.getProject()).readData().isAutoPort();
+            }
+
+            @Override
+            public void setSelected(@NotNull AnActionEvent e, boolean state) {
+                FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorage.get(e.getProject());
+                FuRequestConfigPO fuRequestConfigPO = fuRequestConfigStorage.readData();
+                fuRequestConfigPO.setAutoPort(state);
+                fuRequestConfigStorage.saveData(fuRequestConfigPO);
+            }
+        });
+    }
+
+
+    private void addSyncAction(DefaultActionGroup defaultActionGroup) {
+        //添加同步接口文档事件
+        defaultActionGroup.add(new AnAction("上传接口文档", "", ExpUiIcons.General.Upload) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                //获取同步接口文档配置
+                FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
+                BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
+                ApiDocSystem apiDocSystem = ApiDocSystem.getInstance(settingData.getEnable());
+                execute((fuDocContext, psiClass) -> {
+                    //调用同步接口
+                    SyncFuDocExecutor.sync(apiDocSystem, enableConfigData, fuDocContext, psiClass);
+                    //加载配置
+                    FuDocSyncSetting.getInstance().loadState(settingData);
+                });
+            }
+        });
     }
 
 

@@ -11,6 +11,7 @@ import java.awt.*;
  */
 public class JLabelListRendererComponent extends DefaultListCellRenderer {
 
+
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         JLabel jLabel = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);

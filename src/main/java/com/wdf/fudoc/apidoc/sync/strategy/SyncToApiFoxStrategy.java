@@ -75,9 +75,6 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
     }
 
 
-
-
-
     /**
      * 确认需要同步的分类
      *
@@ -111,7 +108,6 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         openApiItemDTO.setResponses(response);
         return openApiItemDTO;
     }
-
 
 
     private List<OpenApiParameterItemDTO> buildParameters(FuDocItemData fuDocItemData) {
@@ -153,18 +149,18 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
     }
 
     private Map<String, OpenApiContentDTO> buildContent(FuDocItemData fuDocItemData, boolean isResponse) {
-        String requestType = fuDocItemData.getRequestType();
-        Map<String, OpenApiContentDTO> content = new HashMap<>();
-        if (RequestType.POST.getRequestType().equals(requestType)) {
-            ContentType contentType = fuDocItemData.getContentType();
-            if (Objects.isNull(contentType)) {
-                contentType = ContentType.JSON;
-            }
-            OpenApiContentDTO openApiContentDTO = new OpenApiContentDTO();
-            openApiContentDTO.setExample(isResponse ? fuDocItemData.getResponseExample() : fuDocItemData.getRequestExample());
-            openApiContentDTO.setSchema(JsonSchemaHelper.buildJsonSchema(isResponse ? fuDocItemData.getResponseParams() : fuDocItemData.getRequestParams()));
-            content.put(contentType.getType(), openApiContentDTO);
+        if (!isResponse && RequestType.GET.getRequestType().equals(fuDocItemData.getRequestType())) {
+            return new HashMap<>();
         }
+        Map<String, OpenApiContentDTO> content = new HashMap<>();
+        ContentType contentType = fuDocItemData.getContentType();
+        if (Objects.isNull(contentType)) {
+            contentType = ContentType.JSON;
+        }
+        OpenApiContentDTO openApiContentDTO = new OpenApiContentDTO();
+        openApiContentDTO.setExample(isResponse ? fuDocItemData.getResponseExample() : fuDocItemData.getRequestExample());
+        openApiContentDTO.setSchema(JsonSchemaHelper.buildJsonSchema(isResponse ? fuDocItemData.getResponseParams() : fuDocItemData.getRequestParams()));
+        content.put(contentType.getType(), openApiContentDTO);
         return content;
     }
 

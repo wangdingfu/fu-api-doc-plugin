@@ -81,7 +81,7 @@ public class FuRequestData {
         if (Objects.isNull(this.headers)) {
             this.headers = Lists.newArrayList();
         }
-        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
+        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> StringUtils.isNotBlank(f.getKey())).filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
         if (Objects.isNull(keyValueTableBO)) {
             keyValueTableBO = new HeaderKeyValueBO(true, key, value);
             this.headers.add(keyValueTableBO);
@@ -99,7 +99,7 @@ public class FuRequestData {
 
     public void removeHeader(String key) {
         if (CollectionUtils.isNotEmpty(this.headers)) {
-            this.headers.removeIf(f -> f.getKey().equals(key));
+            this.headers.removeIf(f -> StringUtils.isBlank(f.getKey()) || f.getKey().equals(key));
         }
     }
 
@@ -114,12 +114,14 @@ public class FuRequestData {
         if (StringUtils.isNotBlank(this.requestUrl)) {
             return this.requestUrl;
         }
-        String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
-        if (StringUtils.isBlank(baseUrl) && StringUtils.isBlank(this.paramUrl)) {
+        if (StringUtils.isBlank(this.domain)) {
             return StringUtils.EMPTY;
         }
-        String apiUrl = URLUtil.completeUrl(this.domain, baseUrl);
-        return URLUtil.normalize(apiUrl + params, false, true);
+        String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
+        if (Objects.isNull(baseUrl)) {
+            baseUrl = StringUtils.EMPTY;
+        }
+        return URLUtil.normalize(URLUtil.completeUrl(this.domain, baseUrl) + params, false, true);
     }
 
 

@@ -4,18 +4,22 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
-import com.google.common.collect.Lists;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.data.FuDocDataContent;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.console.FuLogger;
 import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
+import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,17 +42,23 @@ public class FuHttpRequestBuilder {
      */
     private final HttpRequest httpRequest;
 
-    private final Project project;
 
     private final FuRequestConfigPO configPO;
 
     private final Module module;
 
-    public FuHttpRequestBuilder(Project project, FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest, FuRequestConfigPO fuRequestConfigPO) {
+    private final FuLogger fuLogger;
+
+    private ConfigAuthTableBO authTableBO;
+
+    private final boolean isScript;
+
+    public FuHttpRequestBuilder(FuHttpRequestData fuHttpRequestData, HttpRequest httpRequest, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
         this.httpRequest = httpRequest;
-        this.project = project;
+        this.fuLogger = fuLogger;
         this.configPO = fuRequestConfigPO;
         this.module = FuDocDataContent.getFuDocData().getModule();
+        this.isScript = fuHttpRequestData.isScript();
         FuRequestData request = fuHttpRequestData.getRequest();
         FuRequestBodyData body = request.getBody();
         if (Objects.isNull(body)) {
@@ -157,16 +167,97 @@ public class FuHttpRequestBuilder {
     }
 
     private String formatVariable(String variable) {
-        if (Objects.isNull(this.module)) {
-            return configPO.variable(variable);
+        if (variable.startsWith(FuDocConstants.FU_AUTH)) {
+            return getAuthVariable(variable);
         }
-        return configPO.variable(variable, Lists.newArrayList(module.getName()));
+        return configPO.variable(variable, SpringBootEnvLoader.getApplication(this.module));
+    }
+
+
+    private String getAuthVariable(String authVariableName) {
+        String authName = StringUtils.substringAfterLast(authVariableName, FuDocConstants.FU_AUTH);
+        if (StringUtils.isBlank(authName)) {
+            fuLogger.error("鉴权用户变量[{}]未正确填写. 无法解析", authVariableName);
+            return authVariableName;
+        }
+        List<ConfigAuthTableBO> authConfigList = this.configPO.getAuthConfigList();
+        if (CollectionUtils.isEmpty(authConfigList)) {
+            fuLogger.error("未配置鉴权用户信息. 无法解析鉴权用户变量[{}]", authVariableName);
+            return authVariableName;
+        }
+        String userName = this.configPO.getUserName();
+        if (Objects.isNull(authTableBO)) {
+            this.authTableBO = StringUtils.isBlank(userName) ? authConfigList.get(0)
+                    : authConfigList.stream().filter(f -> StringUtils.isNotBlank(f.getUserName()))
+                    .filter(f -> f.getUserName().equals(userName)).findFirst().orElse(null);
+            if (Objects.isNull(authTableBO)) {
+                fuLogger.error("鉴权用户[{}]已不存在. 请重新选择一个已经存在的用户", userName);
+                return authVariableName;
+            }
+        }
+        if (authName.equals(FuDocConstants.FU_AUTH_USER_NAME)) {
+            return authTableBO.getUserName();
+        }
+        if (authName.equals(FuDocConstants.FU_AUTH_PASSWORD)) {
+            return authTableBO.getPassword();
+        }
+        Map<String, Object> dataMap = authTableBO.getDataMap();
+        Object value = dataMap.get(authName);
+        if (Objects.isNull(value)) {
+            fuLogger.error("解析变量失败. 鉴权用户[{}]未配置变量[{}]", userName, authVariableName);
+            return StringUtils.EMPTY;
+        }
+        return value.toString();
     }
 
 
     private void addBody(String content) {
         if (StringUtils.isNotBlank(content)) {
-            this.httpRequest.body(content);
+            this.httpRequest.body(formatJsonContent(content));
+        }
+    }
+
+    private String formatJsonContent(String json) {
+        if (!this.isScript || StringUtils.isBlank(json) || !(json.contains("{{") && json.contains("}}"))) {
+            return json;
+        }
+        try {
+            // 创建ObjectMapper对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 解析JSON字符串为JsonNode对象
+            JsonNode rootNode = objectMapper.readTree(json);
+            // 遍历JsonNode对象
+            traverseJson(rootNode);
+            return rootNode.toString();
+        } catch (Exception e) {
+            return json;
+        }
+    }
+
+    private void traverseJson(JsonNode node) {
+        if (node.isObject()) {
+            // 处理JSON对象
+            node.fields().forEachRemaining(entry -> {
+                String key = entry.getKey();
+                JsonNode value = entry.getValue();
+                if (value.isValueNode()) {
+                    String text = value.asText();
+                    String formatValue = formatValue(text);
+                    if (!text.equals(formatValue)) {
+                        ((com.fasterxml.jackson.databind.node.ObjectNode) node).put(key, formatValue);
+                    }
+                } else {
+                    // 递归遍历子节点
+                    traverseJson(value);
+                }
+            });
+        } else if (node.isArray()) {
+            // 处理JSON数组
+            for (JsonNode arrayElement : node) {
+                // 递归遍历数组元素
+                traverseJson(arrayElement);
+            }
         }
     }
 
@@ -177,11 +268,11 @@ public class FuHttpRequestBuilder {
         }
     }
 
-    public static FuHttpRequestBuilder getInstance(Project project, FuHttpRequestData fuHttpRequestData, FuRequestConfigPO fuRequestConfigPO) {
+    public static FuHttpRequestBuilder getInstance(FuHttpRequestData fuHttpRequestData, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
         FuRequestData request = fuHttpRequestData.getRequest();
         String requestUrl = request.getRequestUrl();
         RequestType requestType = request.getRequestType();
-        return new FuHttpRequestBuilder(project, fuHttpRequestData, createHttpRequest(requestType, requestUrl), fuRequestConfigPO);
+        return new FuHttpRequestBuilder(fuHttpRequestData, createHttpRequest(requestType, requestUrl), fuRequestConfigPO, fuLogger);
     }
 
     public HttpRequest builder() {
@@ -205,12 +296,23 @@ public class FuHttpRequestBuilder {
     private static HttpRequest createHttpRequest(RequestType requestType, String requestUrl) {
         if (Objects.nonNull(requestType)) {
             switch (requestType) {
-                case GET:
+                case GET -> {
                     return HttpUtil.createGet(requestUrl);
-                case POST:
+                }
+                case POST -> {
                     return HttpUtil.createPost(requestUrl);
-                case DELETE:
+                }
+                case DELETE -> {
                     return HttpUtil.createRequest(Method.DELETE, requestUrl);
+                }
+
+                case PUT -> {
+                    return HttpUtil.createRequest(Method.PUT, requestUrl);
+                }
+
+                case PATCH -> {
+                    return HttpUtil.createRequest(Method.PATCH, requestUrl);
+                }
             }
         }
         return HttpUtil.createGet(requestUrl);
