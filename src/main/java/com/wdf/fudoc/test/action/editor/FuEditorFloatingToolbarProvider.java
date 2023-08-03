@@ -16,9 +16,4 @@ public class FuEditorFloatingToolbarProvider extends AbstractFloatingToolbarProv
     public boolean getAutoHideable() {
         return true;
     }
-
-    @Override
-    public int getPriority() {
-        return 0;
-    }
 }

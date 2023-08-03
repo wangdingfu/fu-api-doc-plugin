@@ -1,6 +1,5 @@
 package com.wdf.fudoc.common.notification;
 
-import com.google.common.collect.Lists;
 import com.intellij.notification.*;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.project.Project;
@@ -48,7 +47,7 @@ public class FuDocNotification {
         //给我点赞
         String starAction = FuBundle.message(MessageConstants.STAR_ACTION);
 
-        NOTIFICATION_GROUP.createNotification(FuDocConstants.FU_DOC, message, notificationType,((notification, event) -> {}))
+        NOTIFICATION_GROUP.createNotification(FuDocConstants.FU_DOC, message, notificationType)
                 //新增查看同步结果
                 .addAction(new PanelNotificationAction(syncResult, pinStatus, showPanel))
                 //去接口文档系统查看文档(去YApi查看文档)
@@ -67,7 +66,7 @@ public class FuDocNotification {
         String faqAction = FuBundle.message(MessageConstants.FAQ_ACTION);
         String starAction = FuBundle.message(MessageConstants.STAR_ACTION);
 
-        Notification notification = NOTIFICATION_GROUP.createNotification(FuDocConstants.FU_DOC, message, notificationType,((notify, event) -> {}));
+        Notification notification = NOTIFICATION_GROUP.createNotification(FuDocConstants.FU_DOC, message, notificationType);
         if (Objects.nonNull(actions)) {
             for (AnAction action : actions) {
                 notification.addAction(action);
