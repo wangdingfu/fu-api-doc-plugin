@@ -174,7 +174,7 @@ public class FuDocUtils {
 
     private static String getModulePath(Module module) {
         if (Objects.isNull(module)) {
-            throw new FuDocException("无法解析该接口");
+            throw new FuDocException("当前版本暂时无法解析sdk中的接口");
         }
         VirtualFile[] contentRoots = ModuleRootManager.getInstance(module).getContentRoots();
         if (contentRoots.length > 0) {
