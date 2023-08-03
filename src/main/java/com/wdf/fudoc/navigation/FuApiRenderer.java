@@ -25,7 +25,7 @@ import java.awt.*;
 public class FuApiRenderer extends SearchEverywherePsiRenderer {
 
     public FuApiRenderer(Disposable parent) {
-        super(parent);
+        super();
     }
 
     @Override
