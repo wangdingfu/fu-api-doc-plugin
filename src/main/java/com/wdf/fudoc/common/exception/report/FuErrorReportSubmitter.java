@@ -10,7 +10,6 @@ import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.util.Consumer;
 import com.wdf.fudoc.common.FuBundle;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.common.exception.IssueException;
 import com.wdf.fudoc.common.exception.report.issue.GiteeIssueSubmitter;
@@ -67,7 +66,7 @@ public class FuErrorReportSubmitter extends ErrorReportSubmitter {
      * @return 是否提交成功
      */
     @Override
-    public boolean submit(IdeaLoggingEvent @NotNull [] events, @Nullable String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<? super SubmittedReportInfo> consumer) {
+    public boolean submit(IdeaLoggingEvent @NotNull [] events, @Nullable String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
         try {
             IdeaLoggingEvent event = events[0];
             String throwableText = event.getThrowableText();

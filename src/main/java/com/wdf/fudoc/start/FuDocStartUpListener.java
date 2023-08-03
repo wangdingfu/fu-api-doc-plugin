@@ -45,7 +45,7 @@ public class FuDocStartUpListener implements StartupActivity {
     private static final int DAY = 60 * 60 * 24;
     private static final int ONE_HOUR = 60 * 60;
 
-    private static final NotificationGroup NOTIFICATION_GROUP = NotificationGroupManager.getInstance().getNotificationGroup(FuDocConstants.Notify.NOTIFY_GROUP);
+    private static final NotificationGroup NOTIFICATION_GROUP = new NotificationGroup(FuDocConstants.Notify.NOTIFY_GROUP, NotificationDisplayType.BALLOON, true);
 
     public static ReentrantLock reentrantLock = new ReentrantLock();
 

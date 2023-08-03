@@ -47,7 +47,7 @@ public class FuDocLineMarkerProvider implements LineMarkerProvider {
         FuDocContext fuDocContext = new FuDocContext();
         fuDocContext.setSettingData(FuDocSetting.getSettingData());
         fuDocContext.setTargetElement(element);
-        return new LineMarkerInfo<>(element, element.getTextRange(), FuDocIcons.FU_DOC, psiElement -> "发起请求", (e, elt) -> httpRequest(psiClass, project, fuDocContext), GutterIconRenderer.Alignment.LEFT, () -> "Fu Request");
+        return new LineMarkerInfo<>(element, element.getTextRange(), FuDocIcons.FU_DOC, psiElement -> "发起请求", (e, elt) -> httpRequest(psiClass, project, fuDocContext), GutterIconRenderer.Alignment.LEFT);
     }
 
 

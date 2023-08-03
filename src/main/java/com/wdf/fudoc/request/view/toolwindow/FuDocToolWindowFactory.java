@@ -35,7 +35,7 @@ public class FuDocToolWindowFactory implements ToolWindowFactory, DumbAware {
         //订阅工具栏窗体主题监听器
         project.getMessageBus().connect().subscribe(ToolWindowManagerListener.TOPIC, new ToolWindowManagerListener() {
             @Override
-            public void toolWindowShown(@NotNull ToolWindow toolWindow) {
+            public void toolWindowShown(@NotNull String id, @NotNull ToolWindow toolWindow) {
                 if ("Fu Request".equals(toolWindow.getId())) {
                     fuRequestWindow.initRootPane();
                 }

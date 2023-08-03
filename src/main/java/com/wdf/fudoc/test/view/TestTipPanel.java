@@ -33,7 +33,7 @@ public class TestTipPanel {
 
     private static HyperlinkLabel createReaderModeHyperLink() {
         HyperlinkLabel hyperlinkLabel = new HyperlinkLabel();
-        hyperlinkLabel.setTextWithHyperlink("这是一条测试消息 <hyperlink>给我点赞</hyperlink>");
+        hyperlinkLabel.setHyperlinkText("这是一条测试消息 <hyperlink>给我点赞</hyperlink>");
         hyperlinkLabel.setForeground(UIUtil.getLabelFontColor(UIUtil.FontColor.BRIGHTER));
         UIUtil.applyStyle(UIUtil.ComponentStyle.SMALL, hyperlinkLabel);
 

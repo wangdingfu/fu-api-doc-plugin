@@ -390,7 +390,6 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         Class<?> columnClass = firstColumn.getColumnClass();
         if (Objects.nonNull(columnClass) && columnClass == Boolean.class && StringUtils.isBlank(firstColumn.getName())) {
             JTableUtils.setupCheckboxColumn(this.fuTableView.getColumnModel().getColumn(0), 30);
-            JBTable.setupCheckboxShortcut(this.fuTableView, 0);
         }
     }
 
