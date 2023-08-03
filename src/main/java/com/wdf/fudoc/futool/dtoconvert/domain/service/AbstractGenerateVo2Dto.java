@@ -3,6 +3,8 @@ package com.wdf.fudoc.futool.dtoconvert.domain.service;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.wdf.fudoc.apidoc.parse.field.FuDocPsiField;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.futool.dtoconvert.application.IGenerateVo2Dto;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GenerateContext;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GetObjConfigDO;
@@ -61,6 +63,11 @@ public abstract class AbstractGenerateVo2Dto implements IGenerateVo2Dto {
             PsiField[] fields = psiClass.getFields();
             for (PsiField psiField : fields) {
                 String name = psiField.getName();
+                FuDocPsiField fuDocPsiField = new FuDocPsiField(psiField);
+                if (fuDocPsiField.hasProperty(FuDocConstants.ModifierProperty.STATIC)
+                        || fuDocPsiField.hasProperty(FuDocConstants.ModifierProperty.FINAL)) {
+                    continue;
+                }
                 methodList.add(typeStr + name.substring(0, 1).toUpperCase() + name.substring(1));
             }
 

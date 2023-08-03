@@ -1,6 +1,5 @@
 package com.wdf.fudoc.common.notification;
 
-import com.google.common.collect.Lists;
 import com.intellij.notification.*;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.project.Project;
@@ -23,7 +22,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class FuDocNotification {
 
 
-    private static final NotificationGroup NOTIFICATION_GROUP = NotificationGroupManager.getInstance().getNotificationGroup(FuDocConstants.Notify.NOTIFY_GROUP);
 
     public static void notifyInfo(String message, AnAction... actions) {
         genNotify(NotificationType.INFORMATION, message, ProjectUtils.getCurrProject(), actions);
@@ -47,8 +45,8 @@ public class FuDocNotification {
         String apiSystem = FuBundle.message(MessageConstants.SYNC_API_INTO_API_SYSTEM, apiSystemName);
         //给我点赞
         String starAction = FuBundle.message(MessageConstants.STAR_ACTION);
-
-        NOTIFICATION_GROUP.createNotification(FuDocConstants.FU_DOC, message, notificationType,((notification, event) -> {}))
+        Notification notification = createNotification(message, notificationType);
+        notification
                 //新增查看同步结果
                 .addAction(new PanelNotificationAction(syncResult, pinStatus, showPanel))
                 //去接口文档系统查看文档(去YApi查看文档)
@@ -67,7 +65,7 @@ public class FuDocNotification {
         String faqAction = FuBundle.message(MessageConstants.FAQ_ACTION);
         String starAction = FuBundle.message(MessageConstants.STAR_ACTION);
 
-        Notification notification = NOTIFICATION_GROUP.createNotification(FuDocConstants.FU_DOC, message, notificationType,((notify, event) -> {}));
+        Notification notification = createNotification(message, notificationType);
         if (Objects.nonNull(actions)) {
             for (AnAction action : actions) {
                 notification.addAction(action);
@@ -84,5 +82,8 @@ public class FuDocNotification {
         notification.notify(project);
     }
 
+    private static Notification createNotification(String message, NotificationType type) {
+        return new Notification(FuDocConstants.Notify.NOTIFY_GROUP, FuDocConstants.FU_DOC, message, type);
+    }
 
 }

@@ -166,7 +166,7 @@ public class FuMessageComponent extends FuHighlightComponent {
                 JBColor color = ColorUtils.getColor(fuMsgItemBO);
                 TextAttributes textAttributes = null;
                 if (MessageType.isUnNormal(fuMsgItemBO.getMsgType())) {
-                    textAttributes = Objects.isNull(color) ? defaultAttributes : new TextAttributes(color, color, JBUI.CurrentTheme.Link.linkPressedColor(), EffectType.LINE_UNDERSCORE, Font.PLAIN);
+                    textAttributes = Objects.isNull(color) ? defaultAttributes : new TextAttributes(color, color, JBUI.CurrentTheme.Link.Foreground.PRESSED, EffectType.LINE_UNDERSCORE, Font.PLAIN);
                 }
                 addHighlighter(fuMsgItemBO, textAttributes);
             }
@@ -254,7 +254,7 @@ public class FuMessageComponent extends FuHighlightComponent {
 
         @Override
         public Color getForegroundColor() {
-            return !isEnabled() ? UIManager.getColor("Label.disabledForeground") : myMousePressed ? JBUI.CurrentTheme.Link.linkPressedColor() : myMouseHover ? JBUI.CurrentTheme.Link.linkHoverColor() : JBUI.CurrentTheme.Link.linkColor();
+            return !isEnabled() ? UIManager.getColor("Label.disabledForeground") : myMousePressed ? JBUI.CurrentTheme.Link.Foreground.PRESSED : myMouseHover ? JBUI.CurrentTheme.Link.Foreground.HOVERED : JBUI.CurrentTheme.Link.Foreground.ENABLED;
         }
 
         @Override
