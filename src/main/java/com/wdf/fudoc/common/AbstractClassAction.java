@@ -12,6 +12,7 @@ import com.wdf.fudoc.apidoc.data.FuDocData;
 import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.util.PsiClassUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -98,7 +99,7 @@ public abstract class AbstractClassAction extends AnAction {
         } catch (Exception exception) {
             //发送失败通知
             log.error("【Fu Doc】执行动作失败", exception);
-            FuDocNotification.notifyError(FuBundle.message(exceptionMsg()));
+            FuDocNotification.notifyError((exception instanceof FuDocException) ? exception.getMessage() : FuBundle.message(exceptionMsg()));
         } finally {
             log.info("【Fu Doc】执行动作完成. 耗时:{}ms", System.currentTimeMillis() - start);
             FuDocDataContent.remove();
