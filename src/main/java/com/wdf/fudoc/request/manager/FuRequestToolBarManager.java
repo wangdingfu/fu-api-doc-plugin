@@ -33,7 +33,6 @@ import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
-import icons.ExpUiIcons;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;
 
@@ -172,7 +171,7 @@ public class FuRequestToolBarManager {
 
         if (!fuRequestCallback.isWindow()) {
             //添加设置按钮
-            defaultActionGroup.add(new AnAction("Settings", "Setting", ExpUiIcons.General.MoreVertical) {
+            defaultActionGroup.add(new AnAction("Settings", "Setting", AllIcons.Actions.More) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
                     DefaultActionGroup viewModeGroup = DefaultActionGroup.createPopupGroup(() -> "窗体展示方式");
@@ -249,7 +248,7 @@ public class FuRequestToolBarManager {
 
     private void addSyncAction(DefaultActionGroup defaultActionGroup) {
         //添加同步接口文档事件
-        defaultActionGroup.add(new AnAction("上传接口文档", "", ExpUiIcons.General.Upload) {
+        defaultActionGroup.add(new AnAction("上传接口文档", "", AllIcons.Actions.Upload) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 //获取同步接口文档配置
