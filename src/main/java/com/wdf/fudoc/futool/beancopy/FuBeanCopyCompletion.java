@@ -8,18 +8,21 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
+import com.intellij.psi.search.PsiSearchScopeUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.common.notification.FuDocNotification;
-import com.wdf.fudoc.test.action.CopyBeanBO;
-import com.wdf.fudoc.test.action.CopyBeanMethodBO;
-import com.wdf.fudoc.test.action.FuCompletion;
+import com.wdf.fudoc.futool.beancopy.bo.CopyBeanBO;
+import com.wdf.fudoc.futool.beancopy.bo.CopyBeanMethodBO;
+import com.wdf.fudoc.futool.beancopy.bo.FuCompletion;
 import icons.FuDocIcons;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,6 +34,10 @@ import java.util.Objects;
 @Slf4j
 public class FuBeanCopyCompletion extends CompletionContributor {
 
+    private static final String TYPE_TEXT = "[Fu Doc]";
+    private static final String BEAN_COPY = "beanCopy";
+    private static final String BEAN_COPY_CN = " 拷贝对象";
+
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
@@ -38,7 +45,12 @@ public class FuBeanCopyCompletion extends CompletionContributor {
         if (Objects.isNull(reference)) {
             return;
         }
+        boolean isShowBeanCopy = true;
         PsiElement resolve = reference.resolve();
+        if (Objects.isNull(resolve) && BEAN_COPY.equals(((PsiReferenceExpressionImpl) reference).getLastChild().getText())) {
+            isShowBeanCopy = false;
+            resolve = ((PsiReferenceExpressionImpl) ((PsiReferenceExpressionImpl) reference).getFirstChild()).resolve();
+        }
         PsiClass psiClass;
         String variableName;
         if (Objects.isNull(resolve) || StringUtils.isBlank(variableName = getVariableName(resolve)) || Objects.isNull(psiClass = findPsiClass(resolve))) {
@@ -51,10 +63,19 @@ public class FuBeanCopyCompletion extends CompletionContributor {
         }
         PrefixMatcher originalMatcher = result.getPrefixMatcher();
 
-        CompletionResultSet completionResultSet = result.withRelevanceSorter(CompletionSorter.defaultSorter(parameters, originalMatcher).weigh(new FuBeanCopyWeigher()));
+        CompletionResultSet completionResultSet = result.withRelevanceSorter(CompletionSorter.defaultSorter(parameters, originalMatcher).weighAfter("fudoc", new FuBeanCopyWeigher()));
         completionResultSet.restartCompletionOnAnyPrefixChange();
         //添加需要拷贝的变量到提示列表中
-        addNeedCopyVariable(parameters, completionResultSet, new CopyBeanBO(variableName, psiClass));
+        if (isShowBeanCopy) {
+            result.addElement(buildBeanCopy());
+        } else {
+            addNeedCopyVariable(parameters, result, new CopyBeanBO(variableName, psiClass, resolve));
+        }
+        super.fillCompletionVariants(parameters, result);
+    }
+
+    private LookupElementBuilder buildBeanCopy() {
+        return LookupElementBuilder.create(BEAN_COPY).withIcon(FuDocIcons.FU_DOC).withPresentableText(BEAN_COPY).withItemTextForeground(FuColor.GREEN.color()).appendTailText(BEAN_COPY_CN, false).withTypeText(TYPE_TEXT).bold();
     }
 
 
@@ -63,7 +84,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
         if (StringUtils.isBlank(qualifiedName)) {
             return false;
         }
-        if (qualifiedName.startsWith("java.util")) {
+        if (qualifiedName.startsWith("java.util") || qualifiedName.startsWith("java.lang")) {
             return false;
         }
         return true;
@@ -77,40 +98,35 @@ public class FuBeanCopyCompletion extends CompletionContributor {
         if (Objects.isNull(psiMethod)) {
             return;
         }
-        int index = Integer.MIN_VALUE;
-        @NotNull PsiElement[] children = psiMethod.getChildren();
-        for (PsiElement child : children) {
-            if (child instanceof PsiParameterList) {
-                @NotNull PsiElement[] childList = child.getChildren();
-                for (PsiElement psiElement : childList) {
-                    if (psiElement instanceof PsiParameter) {
-                        PsiParameter psiParameter = (PsiParameter) psiElement;
-                        PsiClass psiClass = findPsiClass(psiParameter);
-                        if (Objects.nonNull(psiClass) && isNeedCopyBean(psiClass)) {
-                            String name = psiParameter.getName();
-                            result.addElement(buildLookupElement(name, psiClass.getName(), new FuCompletion(copyBean, new CopyBeanBO(name, psiClass), ++index)));
-                        }
-                    }
-                }
+        List<LookupElement> elementList = Lists.newArrayList();
+        //添加当前方法的请求参数变量
+        PsiParameterList parameterList = psiMethod.getParameterList();
+        PsiParameter[] psiParameters = parameterList.getParameters();
+        elementList.addAll(buildLookupElement(Lists.newArrayList(psiParameters), copyBean, offset, false));
+
+        //添加当前方法体的变量
+        Collection<PsiVariable> psiVariables = PsiTreeUtil.collectElementsOfType(psiMethod.getBody(), PsiVariable.class);
+        elementList.addAll(buildLookupElement(Lists.newArrayList(psiVariables), copyBean, offset, true));
+        result.addAllElements(elementList);
+    }
+
+
+    private List<LookupElement> buildLookupElement(List<PsiVariable> variableList, CopyBeanBO copyBeanBO, int offset, boolean isScope) {
+        List<LookupElement> variableElementList = Lists.newArrayList();
+        for (PsiVariable psiVariable : variableList) {
+            if (psiVariable.getTextOffset() > offset) {
+                continue;
             }
-            if (child instanceof PsiCodeBlock) {
-                @NotNull PsiElement[] childList = child.getChildren();
-                for (PsiElement psiElement : childList) {
-                    int textOffset = psiElement.getTextOffset();
-                    if (textOffset > offset) {
-                        break;
-                    }
-                    if (psiElement instanceof PsiDeclarationStatement && psiElement.getFirstChild() instanceof PsiLocalVariable) {
-                        PsiLocalVariable psiLocalVariable = (PsiLocalVariable) psiElement.getFirstChild();
-                        PsiClass psiClass = findPsiClass(psiLocalVariable);
-                        if (Objects.nonNull(psiClass) && isNeedCopyBean(psiClass)) {
-                            String name = psiLocalVariable.getName();
-                            result.addElement(buildLookupElement(name, psiClass.getName(), new FuCompletion(copyBean, new CopyBeanBO(name, psiClass), ++index)));
-                        }
-                    }
-                }
+            if (isScope && !isScope(copyBeanBO.getPsiElement(), psiVariable)) {
+                continue;
+            }
+            PsiClass psiClass = findPsiClass(psiVariable);
+            if (Objects.nonNull(psiClass) && isNeedCopyBean(psiClass)) {
+                String name = psiVariable.getName();
+                variableElementList.add(buildLookupElement(name, psiClass.getName(), new FuCompletion(copyBeanBO, new CopyBeanBO(name, psiClass, psiVariable), 0)));
             }
         }
+        return variableElementList;
     }
 
 
@@ -120,15 +136,13 @@ public class FuBeanCopyCompletion extends CompletionContributor {
                     public void renderElement(LookupElement element, LookupElementPresentation presentation) {
                         presentation.setIcon(FuDocIcons.FU_DOC);
                         presentation.setItemText(name);
-                        presentation.setTailText("  [Bean Copy]", FuColor.GREEN.color());
                         presentation.appendTailText("  " + tailText, true);
                         presentation.setTypeText("[Fu Doc]");
                         presentation.setItemTextBold(true);
                     }
                 })
                 //大小写不敏感
-                .withCaseSensitivity(true)
-                .withInsertHandler((context, item) -> {
+                .withCaseSensitivity(true).withInsertHandler((context, item) -> {
                     Object object = item.getObject();
                     if (object instanceof FuCompletion) {
                         List<String> codeList = copyBean((FuCompletion) object);
@@ -136,7 +150,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
                         int lineNumberCurrent = context.getDocument().getLineNumber(offset);
                         String variableName = fuCompletion.getCopyBean().getVariableName();
                         int startOffset = context.getDocument().getLineStartOffset(lineNumberCurrent);
-                        int currentLineStartOffset = offset - variableName.length() - name.length() - 1;
+                        int currentLineStartOffset = offset - variableName.length() - BEAN_COPY.length() - name.length() - 2;
                         int diffOffset = currentLineStartOffset - startOffset;
                         context.getDocument().deleteString(currentLineStartOffset, offset);
                         if (CollectionUtils.isEmpty(codeList)) {
@@ -177,6 +191,13 @@ public class FuBeanCopyCompletion extends CompletionContributor {
 
 
     private PsiClass findPsiClass(PsiElement psiElement) {
+        if (psiElement instanceof PsiParameter) {
+            PsiParameter psiParameter = (PsiParameter) psiElement;
+            PsiType psiType = psiParameter.getType();
+            if (psiType instanceof PsiClassType) {
+                return ((PsiClassType) psiType).resolve();
+            }
+        }
         @NotNull PsiElement[] children = psiElement.getChildren();
         for (PsiElement child : children) {
             if (child instanceof PsiTypeElement) {
@@ -219,6 +240,10 @@ public class FuBeanCopyCompletion extends CompletionContributor {
             sb.insert(0, character);
         }
         return sb.toString();
+    }
+
+    public static boolean isScope(PsiElement psiElement, PsiVariable psiVariable) {
+        return PsiSearchScopeUtil.isInScope(psiElement.getUseScope(), psiVariable);
     }
 
 

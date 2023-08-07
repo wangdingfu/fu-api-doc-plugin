@@ -1,4 +1,4 @@
-package com.wdf.fudoc.test.action;
+package com.wdf.fudoc.futool.beancopy.bo;
 
 import lombok.Getter;
 import lombok.Setter;
