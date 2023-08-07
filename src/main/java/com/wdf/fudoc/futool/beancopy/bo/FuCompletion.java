@@ -1,6 +1,8 @@
 package com.wdf.fudoc.futool.beancopy.bo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -9,11 +11,12 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class FuCompletion {
 
-    private final CopyBeanBO copyBean;
-    private final CopyBeanBO toBean;
-    private final int index;
+    private CopyBeanBO copyBean;
+    private CopyBeanBO toBean;
+    private int index;
 
     public FuCompletion(CopyBeanBO copyBean, CopyBeanBO toBean, int index) {
         this.copyBean = copyBean;
