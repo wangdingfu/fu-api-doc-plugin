@@ -12,7 +12,7 @@ public class FuBeanCopyWeigher extends LookupElementWeigher {
     @Override
     public Integer weigh(LookupElement element) {
         if (element.getObject() instanceof FuCompletion) {
-            return Integer.MIN_VALUE;
+            return 0;
         }
         return Integer.MAX_VALUE;
     }
