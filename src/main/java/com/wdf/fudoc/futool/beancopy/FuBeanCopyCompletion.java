@@ -9,7 +9,9 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
+import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.PsiSearchScopeUtil;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.common.notification.FuDocNotification;
@@ -243,6 +245,16 @@ public class FuBeanCopyCompletion extends CompletionContributor {
     }
 
     public static boolean isScope(PsiElement psiElement, PsiVariable psiVariable) {
+        SearchScope useScope = psiVariable.getUseScope();
+        if (useScope instanceof LocalSearchScope) {
+            LocalSearchScope localSearchScope = (LocalSearchScope) useScope;
+            PsiElement[] scope = localSearchScope.getScope();
+            for (PsiElement element : scope) {
+                if (element instanceof PsiCodeBlock) {
+                    return true;
+                }
+            }
+        }
         return PsiSearchScopeUtil.isInScope(psiElement.getUseScope(), psiVariable);
     }
 
