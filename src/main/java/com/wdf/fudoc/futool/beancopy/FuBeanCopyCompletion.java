@@ -2,9 +2,9 @@ package com.wdf.fudoc.futool.beancopy;
 
 import cn.hutool.core.text.StrFormatter;
 import com.google.common.collect.Lists;
-import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.impl.CompletionSorterImpl;
-import com.intellij.codeInsight.completion.impl.LiveTemplateWeigher;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -62,13 +62,9 @@ public class FuBeanCopyCompletion extends CompletionContributor {
             log.info("对象【{}】无需支持beanCopy", psiClass.getQualifiedName());
             return;
         }
-        PrefixMatcher originalMatcher = result.getPrefixMatcher();
-        result = result.withRelevanceSorter(CompletionSorter.defaultSorter(parameters, originalMatcher).weighAfter("stats", new FuBeanCopyWeigher()));
-        result.restartCompletionOnAnyPrefixChange();
-        super.fillCompletionVariants(parameters, result);
         //添加需要拷贝的变量到提示列表中
         if (isShowBeanCopy) {
-            result.addElement(PrioritizedLookupElement.withPriority(buildBeanCopy(), -50000.0));
+            result.addElement(buildBeanCopy());
         } else {
             addNeedCopyVariable(parameters, result, new CopyBeanBO(variableName, psiClass, resolve));
         }
