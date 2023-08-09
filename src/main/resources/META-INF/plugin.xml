@@ -115,13 +115,14 @@
 
         <searchEverywhereContributor implementation="com.wdf.fudoc.navigation.FuNavigationApiEveryWhereFactory"/>
 
-<!--        <completion.contributor language="JAVA" order="after liveTemplates" id="beanCopy" implementationClass="com.wdf.fudoc.futool.beancopy.FuBeanCopyCompletion"/>-->
-        <completion.contributor language="JAVA" order="last" id="beanCopy2" implementationClass="com.wdf.fudoc.futool.beancopy.FuDocTemplateCompletionContributor"/>
+        <completion.contributor language="JAVA" order="last,before javaLegacy" id="beanCopy" implementationClass="com.wdf.fudoc.futool.beancopy.FuBeanCopyCompletion"/>
+        <!--        <completion.contributor language="JAVA"  order="last" implementationClass="com.wdf.fudoc.futool.beancopy.FuDocTemplateCompletionContributor"/>-->
 
         <customLiveTemplate implementation="com.wdf.fudoc.futool.beancopy.template.FuDocLiveTemplate"/>
 
 
-        <codeInsight.template.postfixTemplateProvider language="JAVA" implementationClass="com.wdf.fudoc.futool.beancopy.template.FuPostfixTemplateProvider"/>
+        <codeInsight.template.postfixTemplateProvider language="JAVA"
+                                                      implementationClass="com.wdf.fudoc.futool.beancopy.template.FuPostfixTemplateProvider"/>
 
     </extensions>
 
