@@ -38,6 +38,10 @@ public class FuBeanCopyCompletion extends CompletionContributor {
     public static final String BEAN_COPY = "beanCopy";
     public static final String BEAN_COPY_CN = " 拷贝对象";
 
+    private static final List<String> EXCLUDE_PKG_LIST = Lists.newArrayList(
+            "java.", "javax."
+    );
+
     public static final Condition<PsiElement> IS_BEAN_COPY = (element) -> {
         PsiReference reference = element.getReference();
         if (Objects.isNull(reference)) {
@@ -91,10 +95,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
         if (StringUtils.isBlank(qualifiedName)) {
             return false;
         }
-        if (qualifiedName.startsWith("java.util") || qualifiedName.startsWith("java.lang")) {
-            return false;
-        }
-        return true;
+        return EXCLUDE_PKG_LIST.stream().noneMatch(qualifiedName::startsWith);
     }
 
 
@@ -183,6 +184,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
 
 
     private static final String FORMAT = "{}.{}({}.{}());\n";
+    private static final String FORMAT2 = "{}.{}();\n";
 
     private List<String> copyBean(FuCompletion fuCompletionData) {
         List<String> codeList = Lists.newArrayList();
@@ -200,7 +202,9 @@ public class FuBeanCopyCompletion extends CompletionContributor {
         String toVar = toBean.getVariableName();
         toMap.forEach((key, value) -> {
             CopyBeanMethodBO copyMethodBO = copyMap.get(key);
-            if (Objects.nonNull(copyMethodBO)) {
+            if (Objects.isNull(copyMethodBO)) {
+                codeList.add(StrFormatter.format(FORMAT2, toVar, value.getSetMethod()));
+            } else {
                 codeList.add(StrFormatter.format(FORMAT, toVar, value.getSetMethod(), copyVar, copyMethodBO.getGetMethod()));
             }
         });
