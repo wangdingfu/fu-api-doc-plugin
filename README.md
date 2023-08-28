@@ -13,33 +13,6 @@
 
 ![img.png](/img/guide.png)
 
-演示
----
-
-**生成接口文档**
-![演示](https://user-images.githubusercontent.com/100477650/171110724-8a653d36-ee3d-4337-a662-1dc68d400e98.gif)
-
-**发起接口请求**
-![img.png](/img/request.png)
-
-
-**快速搜素接口**
-![img.png](/img/search.png)
-
-
-安装步骤
----
-
-- **在线安装:**
-![img.png](img/install.png)
-    - `File` -> `Setting` -> `Plugins` -> 搜索 `fudoc`
-
-- **手动安装:**
-    - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
-    - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/b0dy2hktg) 密码：`8vec`
-    - [下载插件（百度云下载）](https://pan.baidu.com/s/1cC7thCMMdcRjh24sqU59tA?pwd=8888) 密码：`8888`
-    - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins` -> `Install Plugin from Disk...`
-      
 
 使用
 ----
@@ -69,6 +42,35 @@
 
 - **通过`A.`唤醒代码补全列表，搜索`beanCopy`并回车**
 - **通过`beanCopy.`唤醒代码补全列表, 选择`B`变量并回车**
+
+
+演示
+---
+
+**生成接口文档**
+![演示](https://user-images.githubusercontent.com/100477650/171110724-8a653d36-ee3d-4337-a662-1dc68d400e98.gif)
+
+**发起接口请求**
+![img.png](/img/request.png)
+
+
+**快速搜素接口**
+![img.png](/img/search.png)
+
+
+安装步骤
+---
+
+- **在线安装:**
+![img.png](img/install.png)
+    - `File` -> `Setting` -> `Plugins` -> 搜索 `fudoc`
+
+- **手动安装:**
+    - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
+    - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/b0dy2hktg) 密码：`8vec`
+    - [下载插件（百度云下载）](https://pan.baidu.com/s/1cC7thCMMdcRjh24sqU59tA?pwd=8888) 密码：`8888`
+    - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins` -> `Install Plugin from Disk...`
+      
 
 
 未来目标
