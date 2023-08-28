@@ -57,6 +57,9 @@
 **快速搜素接口**
 ![img.png](/img/search.png)
 
+**代码补全（对象拷贝）**
+![img.png](/img/beanCopy1.png)
+![img.png](/img/beanCopy2.png)
 
 安装步骤
 ---
