@@ -11,22 +11,20 @@
 
 查看[Fu Doc文档](http://www.fudoc.cn/)详细了解
 
-
+![img.png](/img/guide.png)
 
 演示
 ---
 
+**生成接口文档**
 ![演示](https://user-images.githubusercontent.com/100477650/171110724-8a653d36-ee3d-4337-a662-1dc68d400e98.gif)
 
-![插件功能概览](https://user-images.githubusercontent.com/100477650/233889169-b149aade-1a67-453a-a973-593cb72c368e.png)
+**发起接口请求**
+![img.png](/img/request.png)
 
-![一键发起http请求](https://user-images.githubusercontent.com/100477650/233889579-620b82ec-ce41-4fb0-a8af-727c89400f09.png)
 
-![一键生成接口文档](https://user-images.githubusercontent.com/100477650/233889676-d1c16348-e6e6-4489-b3e7-4be930739a57.png)
-
-![YApi项目配置](https://user-images.githubusercontent.com/100477650/233889913-6485e904-283a-417b-bef0-2cee173c28b5.png)
-
-![一键同步接口文档至YApi](https://user-images.githubusercontent.com/100477650/233890460-cf7f2ed2-b062-4b5a-9535-1ceb20c63ffa.png)
+**快速搜素接口**
+![img.png](/img/search.png)
 
 
 安装步骤
@@ -51,14 +49,26 @@
 - 去接口文档系统直接将内容粘贴即可（例如ShowDoc或者YApi等）
 
 
-##### 一键发起http请求
+##### 快速同步接口文档
+- 配置文档系统地址（已配置直接跳过该步骤）
+- 快捷键`ALT+S` 或则 右键菜单选择 `Fu Doc Sync`--->`Sync Api`
+- 在弹框中选中需要同步到文档系统的哪个目录 点击确定即可同步至第三方文档系统
+
+
+##### 快速调试接口
 - 快捷键`ALT+R` 或则 右键菜单选择 `Fu Request`
 - 在弹出窗体中发起请求即可
 
-##### 一键将文档同步至第三方文档系统(YApi、showDoc)
-- 快捷键`ALT+S` 或则 右键菜单选择 `Fu Doc Sync`--->`Sync Api`
-- 配置文档系统地址（已配置直接跳过该步骤）
-- 在弹框中选中需要同步到文档系统的哪个目录 点击确定即可同步至第三方文档系统
+##### 快速搜索接口
+- 快捷键`CTRL+Alt+\` 或则 `ALT+\` 或则 双击 `Shift` -> 点击`Fu Api`
+- 输入接口地址即可快速搜索
+
+
+##### 代码补全(对象拷贝)
+> 示例：需要将A对象拷贝至B对象
+
+- 通过`A.`唤醒代码补全列表，搜索`beanCopy`并回车**
+- 通过`beanCopy.`唤醒代码补全列表, 选择`B`变量并回车**
 
 
 未来目标
@@ -66,11 +76,8 @@
 - 支持快速调试Spring容器中所有对象的方法(解放编写单元测试)
 - 支持团队协作
 
-
-
 其他
 ---
-
 - 仅支持IDEA 2020.2以上的版本
 - 鼠标需要在Controller类代码块内 否则有可能会获取不到当前类导致无法生成接口文档
 - 当鼠标停留在方法体内或则选中方法一部分内容在点击生成接口文档. 则只会生成当前方法的接口文档
