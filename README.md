@@ -9,12 +9,12 @@
 
 > Fu Doc是一个根据 `JAVA` 代码一键生成接口文档，并且支持同步接口文档到`ApiFox`、`YApi`、`ShowDoc`等第三方文档系统，支持一键发起HTTP请求的 IDEA插件。你只需要在你的开发工具里安装上Fu Doc这个插件即可，他对你的项目完全零侵入。
 
-查看[Fu Doc文档](http://www.fudoc.cn/)详细了解
+查看[Fu Doc官方文档](http://www.fudoc.cn/)详细了解
 
 ![img.png](/img/guide.png)
 
 
-使用
+快速开始
 ----
 
 ##### 生成接口文档
