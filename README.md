@@ -32,7 +32,7 @@
 
 - **在线安装:**
 ![img.png](img/install.png)
-    - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu Doc`
+    - `File` -> `Setting` -> `Plugins` -> 搜索 `fudoc`
 
 - **手动安装:**
     - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
@@ -67,8 +67,8 @@
 ##### 代码补全(对象拷贝)
 > 示例：需要将A对象拷贝至B对象
 
-- 通过`A.`唤醒代码补全列表，搜索`beanCopy`并回车**
-- 通过`beanCopy.`唤醒代码补全列表, 选择`B`变量并回车**
+- **通过`A.`唤醒代码补全列表，搜索`beanCopy`并回车**
+- **通过`beanCopy.`唤醒代码补全列表, 选择`B`变量并回车**
 
 
 未来目标
