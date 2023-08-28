@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>FuDoc</name>
-    <version>222.1.7.5</version>
+    <version>222.1.7.9</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -103,7 +103,7 @@
 
 
         <!-- provider -->
-        <codeInsight.lineMarkerProvider language="JAVA"
+        <codeInsight.lineMarkerProvider language="JAVA" order="last"
                                         implementationClass="com.wdf.fudoc.request.view.provider.FuDocLineMarkerProvider"/>
 
 
@@ -114,6 +114,13 @@
 
 
         <searchEverywhereContributor implementation="com.wdf.fudoc.navigation.FuNavigationApiEveryWhereFactory"/>
+
+        <completion.contributor language="JAVA" order="last,before javaLegacy" id="beanCopy" implementationClass="com.wdf.fudoc.futool.beancopy.FuBeanCopyCompletion"/>
+        <!--        <completion.contributor language="JAVA"  order="last" implementationClass="com.wdf.fudoc.futool.beancopy.FuDocTemplateCompletionContributor"/>-->
+
+
+        <codeInsight.template.postfixTemplateProvider language="JAVA"
+                                                      implementationClass="com.wdf.fudoc.futool.beancopy.template.FuPostfixTemplateProvider"/>
 
     </extensions>
 
@@ -171,8 +178,7 @@
         </group>
 
 
-        <!-- 测试功能点相关动作 -->
-<!--
+<!--        &lt;!&ndash; 测试功能点相关动作 &ndash;&gt;
         <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test"

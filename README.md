@@ -1,7 +1,8 @@
 
-# fudoc
+# fu-api-doc-plugin
 
-[![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/v/19269-fu-doc.svg)](https://plugins.jetbrains.com/plugin/19269-fu-doc)
+[![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/v/19269-fu-doc.svg)](https://plugins.jetbrains.com/plugin/19269-fu-doc)Cancel changes
+[![Version](http://phpstorm.espend.de/badge/19269/version)](https://plugins.jetbrains.com/plugin/19269-fu-doc/versions)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/19269-fu-doc.svg)](https://plugins.jetbrains.com/plugin/19269-fu-doc)
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
@@ -39,8 +40,7 @@
     - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
     - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/b0dy2hktg) 密码：`8vec`
     - [下载插件（百度云下载）](https://pan.baidu.com/s/1cC7thCMMdcRjh24sqU59tA?pwd=8888) 密码：`8888`
-    - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins`
-      -> `Install Plugin from Disk...`
+    - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins` -> `Install Plugin from Disk...`
       
 
 使用
@@ -60,10 +60,18 @@
 - 配置文档系统地址（已配置直接跳过该步骤）
 - 在弹框中选中需要同步到文档系统的哪个目录 点击确定即可同步至第三方文档系统
 
+
+未来目标
+----
+- 支持快速调试Spring容器中所有对象的方法(解放编写单元测试)
+- 支持团队协作
+
+
+
 其他
 ---
 
-- Intellij Idea 版本支持2018.1 以上
+- 仅支持IDEA 2020.2以上的版本
 - 鼠标需要在Controller类代码块内 否则有可能会获取不到当前类导致无法生成接口文档
 - 当鼠标停留在方法体内或则选中方法一部分内容在点击生成接口文档. 则只会生成当前方法的接口文档
 - 小伙伴们如果使用有任何问题可以给我提Issues. 我会及时回复并解决
