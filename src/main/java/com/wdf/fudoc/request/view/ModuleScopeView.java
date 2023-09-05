@@ -1,17 +1,10 @@
 package com.wdf.fudoc.request.view;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.graph.option.IconCellRenderer;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ui.popup.list.IconListPopupRenderer;
-import com.intellij.util.ui.table.IconTableCellRenderer;
 import com.wdf.fudoc.components.JLabelListRendererComponent;
 import com.wdf.fudoc.util.FuDocUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

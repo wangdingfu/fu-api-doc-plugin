@@ -1,21 +1,14 @@
 package com.wdf.fudoc.util;
 
-import cn.hutool.json.JSONUtil;
-import com.intellij.httpClient.http.request.HttpRequestLanguage;
-import com.intellij.httpClient.http.request.HttpRequestPsiFile;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
 import com.wdf.fudoc.request.http.FuRequest;
-import k.K.E;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -52,25 +45,25 @@ public class StorageUtils {
         }
     }
 
-
-    /**
-     * 读取http文件
-     *
-     * @param project   项目
-     * @param psiClass  controller
-     * @param psiMethod 接口方法体
-     * @return http文件内容
-     */
-    public static HttpRequestPsiFile readHttp(Project project, PsiClass psiClass, PsiMethod psiMethod) {
-        final FileViewProviderFactory factory = LanguageFileViewProviders.INSTANCE.forLanguage(HttpRequestLanguage.INSTANCE);
-        String requestPath = FuRequestUtils.getRequestPath(project, psiClass);
-        VirtualFile file = VfsUtil.findFile(Paths.get(requestPath, psiMethod.getName() + ".http"), false);
-        if (Objects.isNull(file)) {
-            return null;
-        }
-        FileViewProvider fileViewProvider = factory.createFileViewProvider(file, HttpRequestLanguage.INSTANCE, PsiManager.getInstance(project), true);
-        return new HttpRequestPsiFile(fileViewProvider);
-    }
+//
+//    /**
+//     * 读取http文件
+//     *
+//     * @param project   项目
+//     * @param psiClass  controller
+//     * @param psiMethod 接口方法体
+//     * @return http文件内容
+//     */
+//    public static HttpRequestPsiFile readHttp(Project project, PsiClass psiClass, PsiMethod psiMethod) {
+//        final FileViewProviderFactory factory = LanguageFileViewProviders.INSTANCE.forLanguage(HttpRequestLanguage.INSTANCE);
+//        String requestPath = FuRequestUtils.getRequestPath(project, psiClass);
+//        VirtualFile file = VfsUtil.findFile(Paths.get(requestPath, psiMethod.getName() + ".http"), false);
+//        if (Objects.isNull(file)) {
+//            return null;
+//        }
+//        FileViewProvider fileViewProvider = factory.createFileViewProvider(file, HttpRequestLanguage.INSTANCE, PsiManager.getInstance(project), true);
+//        return new HttpRequestPsiFile(fileViewProvider);
+//    }
 
     public static void writeJson(String path, String fileName, Object value) {
         write(path, fileName, JsonUtil.toJson(value));
