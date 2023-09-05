@@ -414,8 +414,9 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
         int rowCount = getRowCount() - 1;
         //逆向移除
         for (int i = rowCount; i >= 0; i--) {
-            removeRowByIndex(i);
+            super.removeRow(i);
         }
+        this.dataList.clear();
     }
 
 

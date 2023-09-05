@@ -19,7 +19,6 @@ import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.components.action.FuRequestViewModeAction;
 import com.wdf.fudoc.components.action.IssueAction;
-import com.wdf.fudoc.request.action.toolbar.CopyCurlAction;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.constants.enumtype.IssueSource;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
@@ -85,6 +84,8 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
         addSyncAction(defaultActionGroup);
+        //复制curl命令
+//        defaultActionGroup.add(new CopyCurlAction(fuRequestCallback));
 
         if (fuRequestCallback.isWindow()) {
             addConfigServerPortAction(defaultActionGroup);
@@ -92,7 +93,7 @@ public class FuRequestToolBarManager {
 
 
         //添加保存事件
-        defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.Menu_saveall) {
+        defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 RequestTabView requestTabView = fuRequestCallback.getRequestTabView();

@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>FuDoc</name>
-    <version>203.1.7.5</version>
+    <version>203.1.7.9</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -11,10 +11,8 @@
     <idea-version since-build="202.6948.69" until-build="203.8084.24"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
-    <depends>JavaScript</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
-    <depends>com.jetbrains.restClient</depends>
     <depends>org.jetbrains.idea.maven</depends>
 
 
@@ -102,6 +100,13 @@
 
 
         <searchEverywhereContributor implementation="com.wdf.fudoc.navigation.FuNavigationApiEveryWhereFactory"/>
+
+        <completion.contributor language="JAVA" order="last,before javaLegacy" id="beanCopy" implementationClass="com.wdf.fudoc.futool.beancopy.FuBeanCopyCompletion"/>
+        <!--        <completion.contributor language="JAVA"  order="last" implementationClass="com.wdf.fudoc.futool.beancopy.FuDocTemplateCompletionContributor"/>-->
+
+
+        <codeInsight.template.postfixTemplateProvider language="JAVA"
+                                                      implementationClass="com.wdf.fudoc.futool.beancopy.template.FuPostfixTemplateProvider"/>
 
     </extensions>
 
