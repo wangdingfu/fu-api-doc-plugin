@@ -93,7 +93,7 @@ public class FuRequestToolBarManager {
 
 
         //添加保存事件
-        defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.MenuSaveall) {
+        defaultActionGroup.add(new AnAction("Save", "Save", AllIcons.Actions.Menu_saveall) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 RequestTabView requestTabView = fuRequestCallback.getRequestTabView();
