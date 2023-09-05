@@ -140,10 +140,10 @@
             <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Fu Request">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
             </action>
-            <action id="fudoc.http.request.curl" class="com.wdf.fudoc.request.action.toolbar.CopyCurlAction"
+<!--            <action id="fudoc.http.request.curl" class="com.wdf.fudoc.request.action.toolbar.CopyCurlAction"
                     text="Gen Curl">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt C"/>
-            </action>
+            </action>-->
             <!--            <action id="fudoc.http.request.http" class="com.wdf.fudoc.request.http.action.RequestHttpAction" text="Fu Http">
                             <keyboard-shortcut keymap="$default" first-keystroke="alt shift R"/>
                         </action>-->
