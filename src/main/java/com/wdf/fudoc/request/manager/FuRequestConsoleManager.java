@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 import com.intellij.execution.impl.ConsoleViewUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.json.JsonFileType;
-import com.intellij.httpClient.http.request.HttpRequestFileType;
+import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.base.KeyValueBO;
 import com.wdf.fudoc.common.constant.FuConsoleConstants;
@@ -90,8 +90,7 @@ public class FuRequestConsoleManager {
 
 
     private static void log(FuLogger fuLogger, String logContent, boolean isSuccess) {
-        if (fuLogger instanceof FuConsoleLogger) {
-            FuConsoleLogger fuConsoleLogger = (FuConsoleLogger) fuLogger;
+        if (fuLogger instanceof FuConsoleLogger fuConsoleLogger) {
             fuConsoleLogger.log(logContent, isSuccess ? ConsoleViewContentType.USER_INPUT : ConsoleViewContentType.ERROR_OUTPUT);
         } else {
             fuLogger.info(logContent);
@@ -108,7 +107,7 @@ public class FuRequestConsoleManager {
         requestConsoleData.setMethodName(httpRequest.getMethod().name());
         requestConsoleData.setUrl(httpRequest.getUrl());
         requestConsoleData.setHeaders(buildHeaderList(httpRequest.headers()));
-        ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), FuDocRender.render(requestConsoleData, "console/request_console.ftl"), HttpRequestFileType.INSTANCE);
+        ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), FuDocRender.render(requestConsoleData, "console/request_console.ftl"), PlainTextFileType.INSTANCE);
         String bodyContent = buildRequestBody(httpRequest);
         if (JSONUtil.isTypeJSON(bodyContent)) {
             ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), bodyContent, JsonFileType.INSTANCE);
@@ -132,7 +131,7 @@ public class FuRequestConsoleManager {
         responseConsoleData.setHeaders(buildHeaderList(httpResponse.headers()));
         String bodyContent = httpResponse.body();
         responseConsoleData.setResponseBody(bodyContent);
-        ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), FuDocRender.render(responseConsoleData, "console/response_console.ftl"), HttpRequestFileType.INSTANCE);
+        ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), FuDocRender.render(responseConsoleData, "console/response_console.ftl"), PlainTextFileType.INSTANCE);
         if (StringUtils.isBlank(bodyContent)) {
             return;
         }

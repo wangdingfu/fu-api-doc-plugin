@@ -11,10 +11,8 @@
     <idea-version since-build="211.6693.111" until-build="221.6008.13"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
-    <depends>JavaScript</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
-    <depends>com.jetbrains.restClient</depends>
     <depends>org.jetbrains.idea.maven</depends>
 
 
@@ -105,6 +103,13 @@
 
 
         <searchEverywhereContributor implementation="com.wdf.fudoc.navigation.FuNavigationApiEveryWhereFactory"/>
+
+        <completion.contributor language="JAVA" order="last,before javaLegacy" id="beanCopy" implementationClass="com.wdf.fudoc.futool.beancopy.FuBeanCopyCompletion"/>
+        <!--        <completion.contributor language="JAVA"  order="last" implementationClass="com.wdf.fudoc.futool.beancopy.FuDocTemplateCompletionContributor"/>-->
+
+
+        <codeInsight.template.postfixTemplateProvider language="JAVA"
+                                                      implementationClass="com.wdf.fudoc.futool.beancopy.template.FuPostfixTemplateProvider"/>
 
     </extensions>
 

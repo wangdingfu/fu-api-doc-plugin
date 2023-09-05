@@ -1,23 +1,15 @@
 package com.wdf.fudoc.util;
 
 import cn.hutool.core.io.FileUtil;
-
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.httpClient.http.request.HttpRequestPsiFile;
-import com.intellij.httpClient.http.request.HttpRequestPsiUtils;
-import com.intellij.httpClient.http.request.psi.HttpRequest;
-import com.intellij.httpClient.http.request.psi.HttpRequestBlock;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.apache.commons.lang3.StringUtils;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
@@ -45,30 +37,30 @@ public class FuRequestUtils {
         }
         return null;
     }
-
-    /**
-     * 根据光标位置从.http或.rest文件中读取指定的接口
-     *
-     * @param httpRequestPsiFile httpClient文件
-     * @return 光标所在的接口对象
-     */
-    public static HttpRequest getHttpRequest(HttpRequestPsiFile httpRequestPsiFile, Editor editor) {
-        HttpRequestBlock[] requestBlocks = HttpRequestPsiUtils.getRequestBlocks(httpRequestPsiFile);
-        if (requestBlocks.length == 0) {
-            return null;
-        }
-        if (requestBlocks.length == 1) {
-            return requestBlocks[0].getRequest();
-        }
-        int offset = editor.getCaretModel().getOffset();
-        for (int i = 1; i < requestBlocks.length; i++) {
-            int textOffset = requestBlocks[i].getTextOffset();
-            if (offset < textOffset) {
-                return requestBlocks[i - 1].getRequest();
-            }
-        }
-        return requestBlocks[requestBlocks.length - 1].getRequest();
-    }
+//
+//    /**
+//     * 根据光标位置从.http或.rest文件中读取指定的接口
+//     *
+//     * @param httpRequestPsiFile httpClient文件
+//     * @return 光标所在的接口对象
+//     */
+//    public static HttpRequest getHttpRequest(HttpRequestPsiFile httpRequestPsiFile, Editor editor) {
+//        HttpRequestBlock[] requestBlocks = HttpRequestPsiUtils.getRequestBlocks(httpRequestPsiFile);
+//        if (requestBlocks.length == 0) {
+//            return null;
+//        }
+//        if (requestBlocks.length == 1) {
+//            return requestBlocks[0].getRequest();
+//        }
+//        int offset = editor.getCaretModel().getOffset();
+//        for (int i = 1; i < requestBlocks.length; i++) {
+//            int textOffset = requestBlocks[i].getTextOffset();
+//            if (offset < textOffset) {
+//                return requestBlocks[i - 1].getRequest();
+//            }
+//        }
+//        return requestBlocks[requestBlocks.length - 1].getRequest();
+//    }
 
 
     /**
@@ -90,15 +82,15 @@ public class FuRequestUtils {
     }
 
 
-
-    /**
-     * 根据url路径从.http或.rest文件中读取指定的接口
-     *
-     * @param httpRequestPsiFile httpClient文件
-     * @param url                接口url
-     * @return 接口url对应的接口对象
-     */
-    public static HttpRequest getHttpRequest(HttpRequestPsiFile httpRequestPsiFile, String url) {
-        return null;
-    }
+//
+//    /**
+//     * 根据url路径从.http或.rest文件中读取指定的接口
+//     *
+//     * @param httpRequestPsiFile httpClient文件
+//     * @param url                接口url
+//     * @return 接口url对应的接口对象
+//     */
+//    public static HttpRequest getHttpRequest(HttpRequestPsiFile httpRequestPsiFile, String url) {
+//        return null;
+//    }
 }
