@@ -90,8 +90,8 @@ public class FuRequestConsoleManager {
 
 
     private static void log(FuLogger fuLogger, String logContent, boolean isSuccess) {
-        if (fuLogger instanceof FuConsoleLogger fuConsoleLogger) {
-            fuConsoleLogger.log(logContent, isSuccess ? ConsoleViewContentType.USER_INPUT : ConsoleViewContentType.ERROR_OUTPUT);
+        if (fuLogger instanceof FuConsoleLogger) {
+            ((FuConsoleLogger)fuLogger).log(logContent, isSuccess ? ConsoleViewContentType.USER_INPUT : ConsoleViewContentType.ERROR_OUTPUT);
         } else {
             fuLogger.info(logContent);
         }
