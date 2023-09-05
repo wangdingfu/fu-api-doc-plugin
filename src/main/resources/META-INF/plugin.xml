@@ -137,10 +137,10 @@
             <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Fu Request">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
             </action>
-            <action id="fudoc.http.request.curl" class="com.wdf.fudoc.request.action.toolbar.CopyCurlAction"
+<!--            <action id="fudoc.http.request.curl" class="com.wdf.fudoc.request.action.toolbar.CopyCurlAction"
                     text="Gen Curl">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt C"/>
-            </action>
+            </action>-->
             <!--            <action id="fudoc.http.request.http" class="com.wdf.fudoc.request.http.action.RequestHttpAction" text="Fu Http">
                             <keyboard-shortcut keymap="$default" first-keystroke="alt shift R"/>
                         </action>-->
@@ -166,6 +166,7 @@
 
         <!-- 测试功能点相关动作 -->
 
+<!--
         <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test"
@@ -173,6 +174,7 @@
             <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
                     description="Test table"/>
         </group>
+-->
 
 
         <!-- 魔法棒格式化json动作  -->
