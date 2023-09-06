@@ -122,7 +122,7 @@ public class FuDocUtils {
             }
         }
         //其次获取注释
-        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass);
         return apiDocCommentData.getCommentTitle();
     }
 

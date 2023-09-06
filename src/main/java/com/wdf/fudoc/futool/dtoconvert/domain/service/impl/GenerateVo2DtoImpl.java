@@ -11,6 +11,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.java.stubs.index.JavaFullClassNameIndex;
+import com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
@@ -20,9 +22,12 @@ import com.wdf.fudoc.futool.dtoconvert.domain.model.GetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.SetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.service.AbstractGenerateVo2Dto;
 import com.wdf.fudoc.futool.dtoconvert.infrastructure.Utils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
 
@@ -109,18 +114,7 @@ public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
                     ++repair;
                 }
             }
-
-            String clazzName = elementAt.getText();
-            List<String> importList = generateContext.getImportList();
-            String importPkg = importList.stream().filter(f -> f.endsWith("." + clazzName + ";"))
-                    .map(m -> m.replace("import", "").replace(";", "").trim())
-                    .findFirst().orElse(clazzName);
-
-            psiClass = JavaPsiFacade.getInstance(generateContext.getProject()).findClass(importPkg, GlobalSearchScope.allScope(generateContext.getProject()));
-            if(Objects.isNull(psiClass)){
-                throw new FuDocException("无法获取到目标类");
-            }
-
+            psiClass = searchPsiClass(generateContext, elementAt.getText());
             repair += psiClass.getName().length();
         }
 
@@ -144,6 +138,7 @@ public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
         return new SetObjConfigDO(clazzParamName, paramList, paramMtdMap);
     }
 
+
     @Override
     protected GetObjConfigDO getObjConfigDOByClipboardText(GenerateContext generateContext) {
         // 获取剪切板信息 【实际使用可补充一些必要的参数判断】
@@ -158,15 +153,8 @@ public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
 
         String clazzName = split[0].trim();
         String clazzParam = split[1].trim();
-        List<String> importList = generateContext.getImportList();
-        String importPkg = importList.stream().filter(f -> f.endsWith("." + clazzName + ";"))
-                .map(m -> m.replace("import", "").replace(";", "").trim())
-                .findFirst().orElse(clazzName);
         // 获取类
-        PsiClass psiClass = JavaPsiFacade.getInstance(generateContext.getProject()).findClass(importPkg, GlobalSearchScope.allScope(generateContext.getProject()));
-        if(Objects.isNull(psiClass)){
-            throw new FuDocException("无法获取到目标类");
-        }
+        PsiClass psiClass = searchPsiClass(generateContext, clazzName);
         List<PsiClass> psiClassLinkList = getPsiClassLinkList(psiClass);
 
         Map<String, String> paramMtdMap = new HashMap<>();

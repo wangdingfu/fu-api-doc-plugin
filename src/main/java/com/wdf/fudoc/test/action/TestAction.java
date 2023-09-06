@@ -18,6 +18,7 @@ import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.httpClient.http.request.run.HttpRequestValidationException;
 import com.wdf.fudoc.common.exception.FuDocException;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
@@ -37,6 +38,11 @@ public class TestAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
+    }
+
+
+    public void showPanel(){
+        KeyValueTableBO keyValueTableBO = new KeyValueTableBO();
     }
 
 
