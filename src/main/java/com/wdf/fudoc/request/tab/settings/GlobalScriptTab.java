@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
@@ -217,6 +218,13 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
     @Override
     public void doAction(ScriptCmd scriptCmd) {
         switchPanel();
+        if (ScriptCmd.DOC.equals(scriptCmd)) {
+            String text = scriptCmd.getText();
+            if (StringUtils.isNotBlank(text)) {
+                BrowserUtil.browse(text);
+            }
+            return;
+        }
         if (ScriptCmd.ADD_HTTP_CONFIG.equals(scriptCmd)) {
             httpCmdView.addHttp();
             return;

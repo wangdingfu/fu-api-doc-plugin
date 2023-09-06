@@ -7,7 +7,7 @@ package com.wdf.fudoc.common.constant;
 public interface UrlConstants {
 
 
-    String DOCUMENT = "https://wangdingfu.github.io/#/zh-cn/?id=fudoc";
+    String DOCUMENT = "http://www.fudoc.cn";
 
     String GITHUB = "https://github.com/wangdingfu/fu-api-doc-plugin";
 
@@ -21,7 +21,9 @@ public interface UrlConstants {
 
     String FU_DOC_URL = "http://150.158.164.160:9090";
 
-    String FU_DOCUMENT_SYNC_URL = "https://wangdingfu.github.io/#/zh-cn/sync/quickstart";
+    String FU_DOCUMENT_SYNC_URL = "http://www.fudoc.cn/pages/0a1917/";
+    String FU_DOCUMENT_SHOW_DOC_URL = "http://www.fudoc.cn/pages/9d2f46/";
+    String FU_DOCUMENT_YAPI_URL = "http://www.fudoc.cn/pages/52ab08/";
 
 
     String API_FOX = "https://api.apifox.cn";
