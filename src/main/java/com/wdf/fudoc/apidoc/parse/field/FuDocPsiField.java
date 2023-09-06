@@ -42,19 +42,15 @@ public class FuDocPsiField extends AbstractFuDocField {
      */
     @Override
     public String getComment() {
-        PsiDocComment docComment = psiField.getDocComment();
-        if (Objects.nonNull(docComment)) {
-            ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(docComment);
-            PsiElement psiElement = apiDocCommentData.getTagComment(CommentTagType.SEE.getName()).getPsiElement();
-            PsiClass psiClass;
-            if (Objects.nonNull(psiElement) && psiElement instanceof PsiClass && (psiClass = (PsiClass) psiElement).isEnum()) {
-                //如果是枚举 则解析枚举
-                String enumContent = EnumParseHelper.parseEnum(psiClass, YesOrNo.YES.getCode());
-                return apiDocCommentData.getCommentTitle() + " " + StringUtils.replace(enumContent, "\r\n", "");
-            }
-            return apiDocCommentData.getCommentTitle();
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiField);
+        PsiElement psiElement = apiDocCommentData.getTagComment(CommentTagType.SEE.getName()).getPsiElement();
+        PsiClass psiClass;
+        if (Objects.nonNull(psiElement) && psiElement instanceof PsiClass && (psiClass = (PsiClass) psiElement).isEnum()) {
+            //如果是枚举 则解析枚举
+            String enumContent = EnumParseHelper.parseEnum(psiClass, YesOrNo.YES.getCode());
+            return apiDocCommentData.getCommentTitle() + " " + StringUtils.replace(enumContent, "\r\n", "");
         }
-        return StringUtils.EMPTY;
+        return apiDocCommentData.getCommentTitle();
     }
 
     /**

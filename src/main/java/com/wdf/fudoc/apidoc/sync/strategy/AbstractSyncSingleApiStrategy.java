@@ -163,7 +163,7 @@ public abstract class AbstractSyncSingleApiStrategy extends AbstractSyncApiStrat
      */
     private String getApiCategoryFromController(PsiClass psiClass) {
         //获取Controller上的标题
-        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass);
         String commentTitle = apiDocCommentData.getCommentTitle();
         return StringUtils.isNotBlank(commentTitle) ? commentTitle : psiClass.getName();
     }

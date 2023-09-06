@@ -2,6 +2,7 @@ package com.wdf.fudoc.apidoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.assemble.handler.ParamValueExecutor;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
@@ -81,6 +82,13 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                 FuDocItemData fuDocItemData = new FuDocItemData();
                 if (doAssembleInfoMethod(fuDocContext, methodInfoDesc, fuDocItemData, assembleBO)) {
                     fuDocItemData.setDocNo(classNo + "." + (docNo++));
+                    //TODO 可以在这里组装项目信息和类信息
+                    PsiClass psiClass = classInfoDesc.getPsiClass();
+                    //项目名称
+                    String name = psiClass.getProject().getName();
+                    //当前操作的类全路径
+                    String qualifiedName = psiClass.getQualifiedName();
+
                     //组装公共信息
                     assembleCommonInfo(fuDocContext, methodInfoDesc, fuDocItemData);
                     //设置接口全局唯一标识
@@ -156,6 +164,8 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
             String title = ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_TITLE, methodInfoDesc);
             commonItemData.setTitle(StringUtils.isNotBlank(title) ? title : PsiClassUtils.getMethodName(methodInfoDesc.getPsiMethod()));
             commonItemData.setDetailInfo(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_DETAIL_INFO, methodInfoDesc));
+
+
         }
     }
 

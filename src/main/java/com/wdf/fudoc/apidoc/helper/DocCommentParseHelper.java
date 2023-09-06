@@ -2,8 +2,7 @@ package com.wdf.fudoc.apidoc.helper;
 
 import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
@@ -14,6 +13,7 @@ import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.constant.enumtype.CommentTagType;
 import com.wdf.fudoc.apidoc.pojo.data.CommentTagData;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +21,89 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
+ * 文档注释解析帮助类
+ *
  * @author wangdingfu
- * @description 文档注释解析帮助类
  * @date 2022-04-21 14:09:55
  */
 public class DocCommentParseHelper {
 
+    /**
+     * 解析Java类 方法 字段上的注释
+     *
+     * @param psiElement psiClass 或则 PsiMethod 或则 PsiField
+     * @return 注释对象
+     */
+    public static ApiDocCommentData parseComment(PsiJavaDocumentedElement psiElement) {
+        if (Objects.isNull(psiElement)) {
+            return new ApiDocCommentData();
+        }
+        PsiDocComment docComment = psiElement.getDocComment();
+        if (Objects.nonNull(docComment)) {
+            return parseComment(docComment);
+        }
+        return parsePsiComment(psiElement);
+    }
+
+
+    public static ApiDocCommentData parsePsiComment(PsiElement psiElement) {
+        @NotNull PsiElement[] children = psiElement.getChildren();
+        List<String> commentList = Lists.newArrayList();
+        for (PsiElement child : children) {
+            if (child instanceof PsiComment) {
+                commentList.add(parseComment((PsiComment) child));
+            } else if (child instanceof PsiWhiteSpace) {
+                //do nothing
+            } else {
+                break;
+            }
+        }
+        ApiDocCommentData apiDocCommentData = new ApiDocCommentData();
+        apiDocCommentData.setCommentTitle(StringUtils.join(commentList, "    "));
+        return apiDocCommentData;
+    }
+
+    public static String parseComment(PsiComment psiComment) {
+        String elementType = getElementType(psiComment);
+        //END_OF_LINE_COMMENT
+        if (FuDocConstants.Comment.COMMENT_END.equals(elementType)) {
+            return formatEndComment(psiComment.getText());
+        }
+        /*
+            C_STYLE_COMMENT
+         */
+        if (FuDocConstants.Comment.COMMENT_C.equals(elementType)) {
+            return formatXComment(psiComment.getText());
+        }
+        return StringUtils.EMPTY;
+    }
+
+
+    private static String formatEndComment(String comment) {
+        if (StringUtils.isBlank(comment)) {
+            return StringUtils.EMPTY;
+        }
+        comment = StringUtils.trim(comment);
+        if (comment.startsWith("//")) {
+            return StringUtils.removeStart(comment, "//");
+        }
+        return comment;
+    }
+
+
+    private static String formatXComment(String comment) {
+        if (StringUtils.isBlank(comment)) {
+            return StringUtils.EMPTY;
+        }
+        comment = StringUtils.trim(comment);
+        if (comment.startsWith("/*")) {
+            comment = StringUtils.removeStart(comment, "/*");
+        }
+        if (comment.endsWith("*/")) {
+            comment = StringUtils.removeEnd(comment, "*/");
+        }
+        return comment.trim();
+    }
 
     /**
      * 解析注释
