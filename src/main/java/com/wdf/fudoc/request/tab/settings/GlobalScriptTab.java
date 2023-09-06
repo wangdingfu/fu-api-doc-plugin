@@ -219,9 +219,9 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
     public void doAction(ScriptCmd scriptCmd) {
         switchPanel();
         if (ScriptCmd.DOC.equals(scriptCmd)) {
-            String text = scriptCmd.getText();
-            if (StringUtils.isNotBlank(text)) {
-                BrowserUtil.browse(text);
+            String cmd = scriptCmd.getCmd();
+            if (StringUtils.isNotBlank(cmd)) {
+                BrowserUtil.browse(cmd);
             }
             return;
         }
