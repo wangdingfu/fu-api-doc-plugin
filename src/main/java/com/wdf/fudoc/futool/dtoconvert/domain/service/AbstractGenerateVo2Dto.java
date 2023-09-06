@@ -3,17 +3,24 @@ package com.wdf.fudoc.futool.dtoconvert.domain.service;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.wdf.fudoc.apidoc.parse.field.FuDocPsiField;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.futool.dtoconvert.application.IGenerateVo2Dto;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GenerateContext;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.SetObjConfigDO;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public abstract class AbstractGenerateVo2Dto implements IGenerateVo2Dto {
 
@@ -94,5 +101,45 @@ public abstract class AbstractGenerateVo2Dto implements IGenerateVo2Dto {
     private boolean isUsedLombok(PsiClass psiClass) {
         return null != psiClass.getAnnotation("lombok.Data");
     }
+
+
+    protected PsiClass searchPsiClass(GenerateContext generateContext, String clazzName) {
+        String className = clazzName;
+        String parentClassName = StringUtils.EMPTY;
+        if (clazzName.contains(".")) {
+            className = StringUtils.substringAfterLast(clazzName, ".");
+            parentClassName = StringUtils.substringBeforeLast(clazzName, ".");
+        }
+        Collection<PsiClass> psiClasses = JavaShortClassNameIndex.getInstance().get(className, generateContext.getProject(), GlobalSearchScope.allScope(generateContext.getProject()));
+        if (CollectionUtils.isEmpty(psiClasses)) {
+            throw new FuDocException("无法获取到目标类【" + clazzName + "】");
+        }
+        if (psiClasses.size() == 1) {
+            return psiClasses.iterator().next();
+        }
+        //TODO 内部类处理
+        List<String> psiClassNameList = findPsiClassName(generateContext, className);
+        if (CollectionUtils.isEmpty(psiClassNameList)) {
+            return psiClasses.iterator().next();
+        }
+        for (PsiClass psiClass : psiClasses) {
+            if (psiClassNameList.contains(psiClass.getQualifiedName())) {
+                return psiClass;
+            }
+        }
+        return psiClasses.iterator().next();
+    }
+
+    private List<String> findPsiClassName(GenerateContext generateContext, String clazzName) {
+        List<String> importList = generateContext.getImportList();
+        List<String> pkgList = importList.stream().filter(f -> f.endsWith("." + clazzName + ";"))
+                .map(m -> m.replace("import", "").replace(";", "").trim())
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(pkgList)) {
+            return pkgList;
+        }
+        return importList.stream().filter(f -> f.endsWith(".*;")).map(m -> m.replace("import", "").replace("*;", clazzName).trim()).collect(Collectors.toList());
+    }
+
 
 }

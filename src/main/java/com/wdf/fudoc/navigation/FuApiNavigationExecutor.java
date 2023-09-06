@@ -76,7 +76,7 @@ public class FuApiNavigationExecutor {
                 }
                 List<String> urlList = FuApiUtils.joinUrl(classUrlList, methodUrlList);
                 //获取title
-                ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiMethod.getDocComment());
+                ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiMethod);
                 String title = apiDocCommentData.getCommentTitle();
                 //组装location
                 String location = psiClass.getName() + "#" + psiMethod.getName();

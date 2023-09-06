@@ -17,12 +17,6 @@
 ---
 ![演示](https://user-images.githubusercontent.com/100477650/171110724-8a653d36-ee3d-4337-a662-1dc68d400e98.gif)
 
-![插件截图1](https://user-images.githubusercontent.com/100477650/171110675-0822fee0-7a3e-4c59-b7cc-d645ac9feaee.png)
-
-![插件截图2](https://user-images.githubusercontent.com/100477650/171111420-cc94d6de-7d83-4132-a97a-23b1ab6c5408.png)
-
-![插件生成的接口文档](https://user-images.githubusercontent.com/100477650/171110794-b1aacc55-8ca1-4795-a018-9e429b62fa9f.png)
-
 
 安装步骤
 ---
@@ -35,8 +29,7 @@
     - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
     - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/b0dy2hktg) 密码：`8vec`
     - [下载插件（百度云下载）](https://pan.baidu.com/s/1cC7thCMMdcRjh24sqU59tA?pwd=8888) 密码：`8888`
-    - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins`
-      -> `Install Plugin from Disk...`
+    - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins` -> `Install Plugin from Disk...`
       
 
 使用
@@ -49,14 +42,15 @@
 未来目标
 ----
 
-- 支持拖拽方式对多个类生成接口文档
-- 一键将接口文档同步至ShowDoc、YApi、第三方文档系统（提供统一对外api）
-- 开发Fu Doc专属文档系统. 与Fu Doc插件无缝对接
+- 支持快速调试Spring容器中所有对象的方法(解放编写单元测试)
+- 支持团队协作
+
+
 
 其他
 ---
 
-- Intellij Idea 版本支持2018.1 以上
+- 仅支持IDEA 2020.2以上的版本
 - 鼠标需要在Controller类代码块内 否则有可能会获取不到当前类导致无法生成接口文档
 - 当鼠标停留在方法体内或则选中方法一部分内容在点击生成接口文档. 则只会生成当前方法的接口文档
 - 小伙伴们如果使用有任何问题可以给我提Issues. 我会及时回复并解决

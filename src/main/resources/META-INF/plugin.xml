@@ -91,7 +91,7 @@
 
 
         <!-- provider -->
-        <codeInsight.lineMarkerProvider language="JAVA"
+        <codeInsight.lineMarkerProvider language="JAVA" order="last"
                                         implementationClass="com.wdf.fudoc.request.view.provider.FuDocLineMarkerProvider"/>
 
 
@@ -102,6 +102,13 @@
 
 
         <searchEverywhereContributor implementation="com.wdf.fudoc.navigation.FuNavigationApiEveryWhereFactory"/>
+
+        <completion.contributor language="JAVA" order="last,before javaLegacy" id="beanCopy" implementationClass="com.wdf.fudoc.futool.beancopy.FuBeanCopyCompletion"/>
+        <!--        <completion.contributor language="JAVA"  order="last" implementationClass="com.wdf.fudoc.futool.beancopy.FuDocTemplateCompletionContributor"/>-->
+
+
+        <codeInsight.template.postfixTemplateProvider language="JAVA"
+                                                      implementationClass="com.wdf.fudoc.futool.beancopy.template.FuPostfixTemplateProvider"/>
 
     </extensions>
 
@@ -161,13 +168,13 @@
 
         <!-- 测试功能点相关动作 -->
 
-        <group id="wdf.fudoc.test" popup="false" compact="true">
+<!--        <group id="wdf.fudoc.test" popup="false" compact="true">
             <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
             <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test"
                     description="Test"/>
             <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
                     description="Test table"/>
-        </group>
+        </group>-->
 
 
         <!-- 魔法棒格式化json动作  -->
