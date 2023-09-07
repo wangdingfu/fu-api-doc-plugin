@@ -14,9 +14,8 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
     <depends>org.jetbrains.idea.maven</depends>
-    <incompatible-with>
-        com.intellij.modules.ultimate
-    </incompatible-with>
+    <!-- 指定插件只能运行在IntelliJ IDEA Community 和 IntelliJ IDEA Educational版本上-->
+    <incompatible-with>com.intellij.modules.ultimate</incompatible-with>
 
     <extensions defaultExtensionNs="com.intellij">
 
