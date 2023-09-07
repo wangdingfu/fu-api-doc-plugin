@@ -23,7 +23,7 @@ public class FuDocPsiClass extends AbstractFuDocField {
 
     public FuDocPsiClass(PsiClass psiClass) {
         this.psiClass = psiClass;
-        this.apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
+        this.apiDocCommentData = DocCommentParseHelper.parseComment(psiClass);
     }
 
     public FuDocPsiClass(PsiClass psiClass, ApiDocCommentData apiDocCommentData) {

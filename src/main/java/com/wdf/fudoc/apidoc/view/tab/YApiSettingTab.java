@@ -1,9 +1,11 @@
 package com.wdf.fudoc.apidoc.view.tab;
 
 import com.google.common.collect.Lists;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
 import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting;
@@ -20,6 +22,8 @@ import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
@@ -186,7 +190,14 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("YApi", FuDocIcons.FU_API_YAPI, this.rootPane).builder();
+        JPanel slidePanel = new JPanel(new BorderLayout());
+        //登录showDoc，进入具体项目后，点击项目设置-“开放API”便可看到
+        ActionLink actionLink = new ActionLink(FuBundle.message("fudoc.sync.token.link"), e -> {
+            BrowserUtil.browse(UrlConstants.FU_DOCUMENT_YAPI_URL);
+        });
+        actionLink.setForeground(FuColor.color6.color());
+        slidePanel.add(actionLink, BorderLayout.EAST);
+        return FuTabComponent.getInstance("YApi", FuDocIcons.FU_API_YAPI, this.rootPane).builder(slidePanel);
     }
 
     private void createUIComponents() {

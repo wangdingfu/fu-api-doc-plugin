@@ -66,7 +66,7 @@ public class EnumParseHelper {
         }
         FuDocEnumData fuDocEnumData = new FuDocEnumData();
         fuDocEnumData.setEnumName(psiClass.getName());
-        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass);
         String commentTitle = apiDocCommentData.getCommentTitle();
         fuDocEnumData.setTitle(StringUtils.isBlank(commentTitle) ? psiClass.getName() : apiDocCommentData.getCommentTitle());
         //移除code为空或则描述为空的枚举项
