@@ -15,6 +15,7 @@ import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.data.*;
 import com.wdf.fudoc.common.FuBundle;
 import com.wdf.fudoc.common.FuTab;
+import com.wdf.fudoc.common.constant.UrlConstants;
 import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
@@ -75,7 +76,8 @@ public class ShowDocSettingTab implements FuTab, FuViewListener {
     public TabInfo getTabInfo() {
         JPanel slidePanel = new JPanel(new BorderLayout());
         //登录showDoc，进入具体项目后，点击项目设置-“开放API”便可看到
-        ActionLink actionLink = new ActionLink(FuBundle.message("fudoc.sync.showdoc.token.link"), e -> {
+        ActionLink actionLink = new ActionLink(FuBundle.message("fudoc.sync.token.link"), e -> {
+            BrowserUtil.browse(UrlConstants.FU_DOCUMENT_SHOW_DOC_URL);
         });
         actionLink.setForeground(FuColor.color6.color());
         slidePanel.add(actionLink, BorderLayout.EAST);
