@@ -14,6 +14,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.wdf.fudoc.common.exception.FuDocException;
+import com.wdf.fudoc.start.FuDocStartUpListener;
 import com.wdf.fudoc.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -44,11 +45,13 @@ public class TestTableAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
+        FuDocStartUpListener.startUp(e.getProject());
 
-        EditorFactory editorFactory = EditorFactory.getInstance();
-        PsiElement targetElement = PsiClassUtils.getTargetElement(e);
-        PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
+//        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
+//
+//        EditorFactory editorFactory = EditorFactory.getInstance();
+//        PsiElement targetElement = PsiClassUtils.getTargetElement(e);
+//        PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
 //        PsiJavaParserFacade psiJavaParserFacade = new PsiJavaParserFacadeImpl(e.getProject());
 //        PsiClass classFromText = psiJavaParserFacade.createClassFromText(TEST_JAVA, targetElement);
 //        Document document = PsiDocumentManager.getInstance(e.getProject()).getDocument(classFromText.getContainingFile());
