@@ -9,23 +9,33 @@ import lombok.Getter;
 @Getter
 public enum FuDocAction {
 
-    INIT("init"),
-    GEN_DOC("Gen Doc"),
-    SYNC_API("Sync Api"),
-    FU_REQUEST("Fu Request"),
-    GEN_CURL("Gen Curl"),
-    NAV_URL("Fu Api"),
-    BEAN_TO_JSON("Bean to Json"),
-    BEAN_COPY("beanCopy"),
-    CLOSE("close"),
-
+    INIT("init", false),
+    GEN_DOC("Gen Doc", true),
+    SYNC_API("Sync Api", true),
+    FU_REQUEST("Fu Request", true),
+    GEN_CURL("Gen Curl", true),
+    NAV_URL("Fu Api", true),
+    BEAN_TO_JSON("Bean to Json", true),
+    BEAN_COPY("beanCopy", true),
+    CLOSE("close", false),
 
 
     ;
 
     private final String code;
+    private final boolean valid;
 
-    FuDocAction(String code) {
+    FuDocAction(String code, boolean valid) {
         this.code = code;
+        this.valid = valid;
+    }
+
+    public static boolean isValid(String action) {
+        for (FuDocAction value : FuDocAction.values()) {
+            if (value.getCode().equals(action)) {
+                return value.valid;
+            }
+        }
+        return false;
     }
 }
