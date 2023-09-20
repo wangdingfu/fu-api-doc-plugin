@@ -10,6 +10,8 @@ import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
 import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
+import com.wdf.fudoc.start.FuDocStartUpListener;
+import com.wdf.fudoc.util.FuRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,11 +24,11 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
+        FuDocStartUpListener.statisticsAction("test", false);
     }
 
 
-    public void showPanel(){
+    public void showPanel() {
         KeyValueTableBO keyValueTableBO = new KeyValueTableBO();
     }
 

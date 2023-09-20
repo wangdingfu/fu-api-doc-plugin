@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.common.AbstractClassAction;
 import com.wdf.fudoc.common.FuBundle;
+import com.wdf.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
@@ -27,6 +28,11 @@ public class GenFuDocAction extends AbstractClassAction {
     @Override
     protected boolean isShow(JavaClassType javaClassType) {
         return !JavaClassType.ANNOTATION.equals(javaClassType);
+    }
+
+    @Override
+    protected FuDocAction getAction() {
+        return FuDocAction.GEN_DOC;
     }
 
 

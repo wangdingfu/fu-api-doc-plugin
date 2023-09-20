@@ -16,7 +16,9 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.common.FuBundle;
+import com.wdf.fudoc.common.FuDocActionListener;
 import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
@@ -106,7 +108,9 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
                 ? autoSyncApi(apiProjectDTO, fuDocItemDataList, configData, psiClass)
                 //弹出弹框显示同步进度（有交互式的同步）
                 : confirmSyncAPi(apiProjectDTO, fuDocItemDataList, configData, psiClass);
-
+        Project project = psiClass.getProject();
+        //发布动作事件
+        project.getMessageBus().syncPublisher(FuDocActionListener.TOPIC).action(FuDocAction.SYNC_API.getCode());
         //6、提示同步结果
         tipSyncResult(configData, resultDTOList);
     }

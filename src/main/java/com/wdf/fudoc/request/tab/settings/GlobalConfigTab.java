@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.tab.settings;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.AnActionButton;
@@ -21,6 +22,7 @@ import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
+import org.jdesktop.swingx.action.OpenBrowserAction;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -70,6 +72,20 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
                 envTable.setDataList(Lists.newArrayList(fuRequestConfigPO.getEnvConfigList()));
             }
         });
+        AnActionButton envAction = new AnActionButton("查看文档","",FuDocIcons.FU_DOC){
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                BrowserUtil.browse("http://www.fudoc.cn/pages/1fa915/");
+            }
+        };
+        AnActionButton authAction = new AnActionButton("查看文档","",FuDocIcons.FU_DOC){
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                BrowserUtil.browse("http://www.fudoc.cn/pages/7881a4/");
+            }
+        };
+        this.envTable.addAnAction(envAction);
+        this.authTable.addAnAction(authAction);
     }
 
     @Override
