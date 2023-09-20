@@ -10,7 +10,7 @@ import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
 import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
-import com.wdf.fudoc.start.FuDocStartUpListener;
+//import com.wdf.fudoc.start.FuDocStartUpListener;
 import com.wdf.fudoc.util.FuRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        FuDocStartUpListener.statisticsAction("test", false);
+//        FuDocStartUpListener.statisticsAction("test", false);
     }
 
 
