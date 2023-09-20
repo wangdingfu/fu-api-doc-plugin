@@ -18,12 +18,16 @@ import com.intellij.httpClient.http.request.psi.HttpRequest;
 import com.intellij.httpClient.http.request.psi.HttpRequestTarget;
 import com.intellij.httpClient.http.request.run.HttpRequestValidationException;
 import com.wdf.fudoc.common.exception.FuDocException;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.psi.PsiFile;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
 import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
-import com.wdf.fudoc.start.FuDocStartUpListener;
 import com.wdf.fudoc.util.FuRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +42,7 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        FuDocStartUpListener.statisticsAction("test", false);
+
     }
 
 
