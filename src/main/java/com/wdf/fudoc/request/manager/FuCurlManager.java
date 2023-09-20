@@ -5,7 +5,11 @@ import com.intellij.httpClient.converters.RequestBuilder;
 import com.intellij.httpClient.converters.curl.CurlRequestBuilder;
 import com.intellij.httpClient.http.request.*;
 import com.intellij.httpClient.http.request.psi.HttpRequest;
+import com.intellij.httpClient.http.request.run.HttpRequestValidationException;
+import com.intellij.openapi.project.Project;
+import com.wdf.fudoc.common.FuDocActionListener;
 import com.wdf.fudoc.common.FuDocRender;
+import com.wdf.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -27,6 +31,8 @@ public class FuCurlManager {
             return StringUtils.EMPTY;
         }
         try {
+            //发布动作事件
+            project.getMessageBus().syncPublisher(FuDocActionListener.TOPIC).action(FuDocAction.GEN_CURL.getCode());
             HttpRequestPsiFile psiFile = HttpRequestPsiFactory.createDummyFile(project, FuDocRender.httpRender(HttpDataConvert.convert(requestData)));
             HttpRequest newRequest = HttpRequestPsiUtils.getFirstRequest(psiFile);
             if (Objects.isNull(newRequest)) {
