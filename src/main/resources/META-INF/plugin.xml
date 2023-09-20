@@ -125,10 +125,6 @@
     </extensions>
 
 
-    <applicationListeners>
-        <listener class="com.wdf.fudoc.start.FuDocListener" topic="com.intellij.ide.plugins.DynamicPluginListener"/>
-    </applicationListeners>
-
 
     <actions>
 
