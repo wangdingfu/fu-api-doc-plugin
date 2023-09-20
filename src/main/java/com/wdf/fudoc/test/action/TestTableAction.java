@@ -1,25 +1,16 @@
 package com.wdf.fudoc.test.action;
 
-import cn.hutool.core.util.RandomUtil;
-import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.EditorKind;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.wdf.fudoc.common.exception.FuDocException;
-//import com.wdf.fudoc.start.FuDocStartUpListener;
-import com.wdf.fudoc.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author wangdingfu
@@ -45,7 +36,6 @@ public class TestTableAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-//        FuDocStartUpListener.startUp(e.getProject());
 
 //        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
 //
