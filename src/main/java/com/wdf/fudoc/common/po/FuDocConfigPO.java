@@ -25,6 +25,11 @@ public class FuDocConfigPO {
     private String issueTo = IssueSource.GITHUB.myActionID;
 
     /**
+     * controller左侧图标是否展示
+     */
+    private boolean isShowControllerIcon = true;
+
+    /**
      * 客户端唯一标识id
      */
     private String clientId;

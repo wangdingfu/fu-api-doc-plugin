@@ -1,9 +1,6 @@
 package com.wdf.fudoc.components.message;
 
-import com.wdf.fudoc.components.message.handler.DialogMsgExecutor;
-import com.wdf.fudoc.components.message.handler.FuMsgExecutor;
-import com.wdf.fudoc.components.message.handler.LinkMsgExecutor;
-import com.wdf.fudoc.components.message.handler.NormalMsgExecutor;
+import com.wdf.fudoc.components.message.handler.*;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
 
 import java.util.Map;
@@ -21,7 +18,7 @@ public class FuMsgHandler {
         FU_MSG_EXECUTOR_MAP.put(MessageType.NORMAL, new NormalMsgExecutor());
         FU_MSG_EXECUTOR_MAP.put(MessageType.LINK, new LinkMsgExecutor());
         FU_MSG_EXECUTOR_MAP.put(MessageType.DIALOG, new DialogMsgExecutor());
-        FU_MSG_EXECUTOR_MAP.put(MessageType.CLICK, new NormalMsgExecutor());
+        FU_MSG_EXECUTOR_MAP.put(MessageType.CLICK, new ClickMsgExecutor());
     }
 
     public static FuMsgExecutor get(MessageType messageType) {
