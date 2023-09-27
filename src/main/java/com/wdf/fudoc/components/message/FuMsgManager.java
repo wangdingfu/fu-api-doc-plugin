@@ -10,6 +10,7 @@ import com.wdf.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.components.bo.FuMsgBO;
 import com.wdf.fudoc.components.bo.FuMsgItemBO;
 import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import com.wdf.fudoc.storage.FuDocConfigStorage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -43,14 +44,27 @@ public class FuMsgManager {
 
     static {
         //系统定义好的一些消息
+        DEFAULT_MESSAGE.add((buildCloeIcon()));
+        DEFAULT_MESSAGE.add((buildDoc()));
         DEFAULT_MESSAGE.add((buildFuMsg("按下esc键可以快速退出当前窗口")));
-        DEFAULT_MESSAGE.add(buildFuMsg("发送请求后会自动保存当前请求记录"));
         DEFAULT_MESSAGE.add(buildFuMsg("点击左侧图标可以切换下一条消息"));
-        DEFAULT_MESSAGE.add(buildFuMsg("建议先请求接口在生成文档(这样你的接口文档实例数据会比较真实)"));
-        DEFAULT_MESSAGE.add(buildFuMsg("当响应结果是文件时 会自动切换到保存文件的页面"));
-        DEFAULT_MESSAGE.add(buildFuMsg("【Fu Doc】目前支持批量编辑请求参数(模仿PostMan的Bulk Edit)"));
+        DEFAULT_MESSAGE.add(buildFuMsg("非常希望您能帮忙给你身边的同事推广这个插件"));
         DEFAULT_MESSAGE.add(buildShare());
         DEFAULT_MESSAGE.add(buildQuestion());
+    }
+
+    private static FuMsgBO buildCloeIcon(){
+        return FuMsgBuilder.getInstance().text("可以点我")
+                .clickText(" 关闭 ",FuColor.GREEN,"close icon")
+                .text("或则")
+                .clickText(" 开启 ",FuColor.ORANGE,"open icon")
+                .text("Controller左侧图标").build();
+    }
+
+    private static FuMsgBO buildDoc(){
+        return FuMsgBuilder.getInstance().text("欢迎查看")
+                .linkText(" 官方文档 ",FuColor.RED,UrlConstants.DOCUMENT)
+                .text("了解插件的详细功能").build();
     }
 
 
@@ -77,7 +91,7 @@ public class FuMsgManager {
      * 当只剩下两条消息时 需要调用接口从服务端获取最新的消息
      */
     public static FuMsgBO nextMsg() {
-        if (CollectionUtils.isNotEmpty(MSG_IDS)) {
+        if (RandomUtil.randomBoolean() && CollectionUtils.isNotEmpty(MSG_IDS)) {
             return WEIGHT_RANDOM.next();
         }
         return DEFAULT_MESSAGE.get(RandomUtil.randomInt(0, DEFAULT_MESSAGE.size()));

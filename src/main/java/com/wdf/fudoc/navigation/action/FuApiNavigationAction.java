@@ -8,7 +8,9 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.common.FuBundle;
+import com.wdf.fudoc.common.FuDocActionListener;
 import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.navigation.FuApiNavigationContributor;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +35,8 @@ public class FuApiNavigationAction extends SearchEverywhereBaseAction implements
         if (project == null) {
             return;
         }
+        //发布动作事件
+        project.getMessageBus().syncPublisher(FuDocActionListener.TOPIC).action(FuDocAction.NAV_URL.getCode());
         boolean dumb = DumbService.isDumb(project);
         if (!dumb) {
             showInSearchEverywherePopup(FuApiNavigationContributor.INSTANCE, e, true, true);

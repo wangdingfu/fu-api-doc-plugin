@@ -14,6 +14,7 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
+import com.wdf.fudoc.storage.FuDocConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +43,9 @@ public class FuDocLineMarkerProvider implements LineMarkerProvider {
         PsiMethod psiMethod = (PsiMethod) element.getParent();
         PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class);
         if (Objects.isNull(psiClass) || !FuDocUtils.isController(psiClass) || !FuDocUtils.isControllerMethod(psiMethod)) {
+            return null;
+        }
+        if (!FuDocConfigStorage.INSTANCE.readData().isShowControllerIcon()) {
             return null;
         }
         FuDocContext fuDocContext = new FuDocContext();

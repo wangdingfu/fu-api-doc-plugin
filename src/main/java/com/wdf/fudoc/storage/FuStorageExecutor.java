@@ -28,14 +28,17 @@ public class FuStorageExecutor {
     public static final String FU_DOC_API = "request";
     public static final String FU_DOC_API_SUFFIX = ".http";
 
+
+
+
+
     /**
      * fuDoc存储初始化
      */
     public static void init(Project project) {
         //初始化fudoc目录
         initHome(project);
-        //初始化配置文件
-        RecentNavigationManager.create(project);
+
     }
 
 
