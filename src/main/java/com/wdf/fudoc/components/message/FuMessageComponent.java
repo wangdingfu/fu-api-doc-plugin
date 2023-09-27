@@ -88,7 +88,7 @@ public class FuMessageComponent extends FuHighlightComponent {
     }
 
     public FuMessageComponent(FuMsgBO fuMsgBO, final Color textForegroundColor, final Color textBackgroundColor, final Color textEffectColor) {
-        defaultAttributes = StartupUiUtil.isUnderDarcula() || UIUtil.isUnderIntelliJLaF() ? new CustomTextAttributes(textBackgroundColor) : new TextAttributes(textForegroundColor, textBackgroundColor, textEffectColor, null, Font.PLAIN);
+        defaultAttributes = UIManager.getLookAndFeel().getName().contains("Darcula") || UIUtil.isUnderIntelliJLaF() ? new CustomTextAttributes(textBackgroundColor) : new TextAttributes(textForegroundColor, textBackgroundColor, textEffectColor, null, Font.PLAIN);
         //设置消息文本
         setMsg(fuMsgBO);
         enableEvents(AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK);

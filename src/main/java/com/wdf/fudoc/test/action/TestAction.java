@@ -56,7 +56,7 @@ public class TestAction extends AnAction {
     }
 
     private void curlTest(AnActionEvent e) {
-        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject(), null);
         //读取http文件
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 
@@ -71,7 +71,7 @@ public class TestAction extends AnAction {
 
 
     private void request(AnActionEvent e) {
-        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject(), null);
         //读取http文件
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 

@@ -38,7 +38,7 @@ public class FuCurlManager {
                 return StringUtils.EMPTY;
             }
             CurlRequestBuilder curlRequestBuilder = new CurlRequestBuilder();
-            return (String) HttpRequestPsiConverter.convertFromHttpRequest(newRequest, HttpRequestVariableSubstitutor.getDefault(project), (RequestBuilder) curlRequestBuilder);
+            return (String) HttpRequestPsiConverter.convertFromHttpRequest(newRequest, HttpRequestVariableSubstitutor.getDefault(project, null), (RequestBuilder) curlRequestBuilder);
         } catch (Exception e) {
             log.error("生成curl命令失败", e);
             throw new FuDocException("生成curl命令失败");
