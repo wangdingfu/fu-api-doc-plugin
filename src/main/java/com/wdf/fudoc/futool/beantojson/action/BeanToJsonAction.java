@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.common.AbstractClassAction;
 import com.wdf.fudoc.common.FuBundle;
+import com.wdf.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.common.constant.MessageConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
@@ -17,7 +18,10 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class BeanToJsonAction extends AbstractClassAction {
 
-
+    @Override
+    protected FuDocAction getAction() {
+        return FuDocAction.BEAN_TO_JSON;
+    }
     @Override
     protected boolean isShow(JavaClassType javaClassType) {
         return JavaClassType.OBJECT.equals(javaClassType);

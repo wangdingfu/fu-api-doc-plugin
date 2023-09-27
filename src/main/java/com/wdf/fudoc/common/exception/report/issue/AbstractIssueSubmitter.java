@@ -1,16 +1,22 @@
 package com.wdf.fudoc.common.exception.report.issue;
 
+import cn.hutool.core.lang.TypeReference;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.http.ContentType;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.json.JSONUtil;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.application.ApplicationNamesInfo;
 import com.intellij.openapi.application.ex.ApplicationInfoEx;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.util.SystemInfo;
+import com.wdf.fudoc.common.CommonResult;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.constant.ApiUrl;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.report.issue.param.IssueBody;
-import com.wdf.fudoc.start.RequestManager;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -100,10 +106,39 @@ public abstract class AbstractIssueSubmitter implements IssueSubmitter {
     protected String getAccessToken(String type) {
         Map<String, Object> param = new HashMap<>();
         param.put("type", type);
-        String result = RequestManager.doSendRequest(ApiUrl.ACCESS_TOKEN, param);
-        String accessToken = RequestManager.getData(result);
+        String result = doSendRequest(ApiUrl.ACCESS_TOKEN, param);
+        String accessToken = getData(result);
         return StringUtils.isBlank(accessToken) ? getAccessToken() : accessToken;
     }
 
+
+    private static final String BASE_URL = "http://www.fudoc.cn:9090";
+    private static final String PRIMARY_KEY = "dfe68b77d54943fc8d481c6ae80a2a9d";
+
+    public static String doSendRequest(String apiUrl, Map<String, Object> paramMap) {
+        //对请求参数加密
+        byte[] request = SecureUtil.aes(PRIMARY_KEY.getBytes()).encrypt(JSONUtil.toJsonStr(paramMap));
+        HttpResponse httpResponse = null;
+        try {
+            //请求获取最新通知信息
+            httpResponse = HttpRequest.post(BASE_URL + apiUrl).timeout(6000).contentType(ContentType.JSON.getValue()).body(request).execute();
+            return httpResponse.body();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            if (Objects.nonNull(httpResponse)) {
+                httpResponse.close();
+            }
+        }
+    }
+
+    public static <T> T getData(String result) {
+        CommonResult<T> commonResult = JSONUtil.toBean(result, new TypeReference<>() {
+        }, true);
+        if (Objects.nonNull(commonResult) && commonResult.getCode() == 200) {
+            return commonResult.getData();
+        }
+        return null;
+    }
 
 }

@@ -45,6 +45,10 @@ public class FuMsgBuilder {
         return text(text, MessageType.LINK, fuColor, value);
     }
 
+    public FuMsgBuilder clickText(String text, FuColor fuColor, String value) {
+        return text(text, MessageType.CLICK, fuColor, value);
+    }
+
     public FuMsgBuilder text(String text, MessageType messageType, FuColor fuColor, String value) {
         FuMsgItemBO fuMsgItemBO = new FuMsgItemBO();
         fuMsgItemBO.setText(text);

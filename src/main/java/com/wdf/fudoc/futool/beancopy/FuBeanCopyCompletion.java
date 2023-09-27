@@ -7,11 +7,14 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.wdf.fudoc.common.FuDocActionListener;
 import com.wdf.fudoc.common.enumtype.FuColor;
+import com.wdf.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.futool.beancopy.bo.CopyBeanBO;
 import com.wdf.fudoc.futool.beancopy.bo.CopyBeanMethodBO;
@@ -164,6 +167,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
                 .withCaseSensitivity(true).withInsertHandler((context, item) -> {
                     Object object = item.getObject();
                     if (object instanceof FuCompletion) {
+                        Project project = context.getProject();
                         List<String> codeList = copyBean((FuCompletion) object);
                         int offset = context.getTailOffset();
                         int lineNumberCurrent = context.getDocument().getLineNumber(offset);
@@ -178,6 +182,8 @@ public class FuBeanCopyCompletion extends CompletionContributor {
                         }
                         int lineStartOffset = context.getDocument().getLineStartOffset(lineNumberCurrent);
                         context.getDocument().insertString(lineStartOffset + diffOffset, StringUtils.join(codeList, fillEmptyString(diffOffset)));
+                        //发布动作事件
+                        project.getMessageBus().syncPublisher(FuDocActionListener.TOPIC).action(FuDocAction.BEAN_COPY.getCode());
                     }
                 });
     }

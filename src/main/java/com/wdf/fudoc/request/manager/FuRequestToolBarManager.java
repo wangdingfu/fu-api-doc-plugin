@@ -17,6 +17,7 @@ import com.wdf.fudoc.apidoc.sync.SyncFuDocExecutor;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.fudoc.common.po.FuDocConfigPO;
 import com.wdf.fudoc.components.action.FuRequestViewModeAction;
 import com.wdf.fudoc.components.action.IssueAction;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
@@ -29,6 +30,7 @@ import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.view.FuRequestSettingView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
+import com.wdf.fudoc.storage.FuDocConfigStorage;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -185,6 +187,8 @@ public class FuRequestToolBarManager {
                     addConfigServerPortAction(actionGroup);
                     //新增提交issue mode
                     addIssueAction(actionGroup);
+                    //设置controller中是否展示左侧图标
+                    addControllerIconAction(actionGroup);
                     int x = 0, y = 0;
                     InputEvent inputEvent = e.getInputEvent();
                     if (inputEvent instanceof MouseEvent mouseEvent) {
@@ -211,6 +215,28 @@ public class FuRequestToolBarManager {
         });
 
 
+    }
+
+    private void addControllerIconAction(DefaultActionGroup defaultActionGroup){
+        //添加同步接口文档事件
+        defaultActionGroup.add(new ToggleAction("Controller左侧图标") {
+            @Override
+            public boolean isSelected(@NotNull AnActionEvent e) {
+                Project project = e.getProject();
+                if (project == null || project.isDisposed()) {
+                    return false;
+                }
+                return FuDocConfigStorage.INSTANCE.readData().isShowControllerIcon();
+            }
+
+            @Override
+            public void setSelected(@NotNull AnActionEvent e, boolean state) {
+                FuDocConfigStorage instance = FuDocConfigStorage.INSTANCE;
+                FuDocConfigPO fuDocConfigPO = instance.readData();
+                fuDocConfigPO.setShowControllerIcon(state);
+                instance.saveData(fuDocConfigPO);
+            }
+        });
     }
 
 
