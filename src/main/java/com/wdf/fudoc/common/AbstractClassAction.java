@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -14,6 +15,7 @@ import com.wdf.fudoc.apidoc.data.FuDocData;
 import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -45,6 +47,8 @@ public abstract class AbstractClassAction extends AnAction {
     protected String exceptionMsg() {
         return MessageConstants.NOTIFY_GEN_FAIL;
     }
+
+    protected abstract FuDocAction getAction();
 
     /**
      * 执行动作
@@ -78,12 +82,22 @@ public abstract class AbstractClassAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
+        Project project = e.getProject();
+        if (Objects.isNull(project)) {
+            return;
+        }
         long start = System.currentTimeMillis();
         PsiElement targetElement = PsiClassUtils.getTargetElement(e);
         if (Objects.isNull(targetElement)) {
             FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.NOTIFY_NOT_FUND_CLASS));
             return;
         }
+        FuDocAction action = getAction();
+        if (Objects.nonNull(action)) {
+            //发布动作事件
+            project.getMessageBus().syncPublisher(FuDocActionListener.TOPIC).action(action.getCode());
+        }
+
         //获取当前操作的类
         PsiClass psiClass = PsiClassUtils.getPsiClass(targetElement);
         //向全局上下文中添加Project内容
