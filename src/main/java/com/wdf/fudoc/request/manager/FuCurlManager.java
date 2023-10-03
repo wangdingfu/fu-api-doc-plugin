@@ -3,7 +3,7 @@ package com.wdf.fudoc.request.manager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ws.http.request.*;
 import com.intellij.ws.http.request.psi.HttpRequest;
-import com.wdf.fudoc.common.FuDocActionListener;
+import com.wdf.api.listener.FuDocActionListener;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.api.enumtype.FuDocAction;
 import com.wdf.fudoc.common.exception.FuDocException;

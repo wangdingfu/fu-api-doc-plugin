@@ -1,7 +1,6 @@
 package com.wdf.fudoc.components.validator;
 
 import com.intellij.openapi.ui.InputValidatorEx;
-import com.intellij.openapi.util.NlsSafe;
 import com.wdf.api.base.FuBundle;
 import com.wdf.api.constants.MessageConstants;
 import org.apache.commons.lang3.StringUtils;
