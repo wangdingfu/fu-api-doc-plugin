@@ -40,6 +40,8 @@ dependencies {
     implementation("cn.hutool:hutool-script:5.8.20")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
     implementation("com.atlassian.commonmark:commonmark:0.17.0")
+    implementation("com.wdf.api:fu-api-commons:1.8.1")
+    implementation("com.wdf.api:fu-api-start:222.1.8.1")
 }
 
 

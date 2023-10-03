@@ -5,7 +5,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;

@@ -3,8 +3,8 @@ package com.wdf.fudoc.common.exception.report.issue;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.wdf.fudoc.common.constant.UrlConstants;
-import com.wdf.fudoc.request.constants.enumtype.IssueSource;
+import com.wdf.api.constants.UrlConstants;
+import com.wdf.api.enumtype.IssueSource;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;

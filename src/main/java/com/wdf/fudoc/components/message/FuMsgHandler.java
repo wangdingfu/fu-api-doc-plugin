@@ -1,7 +1,7 @@
 package com.wdf.fudoc.components.message;
 
 import com.wdf.fudoc.components.message.handler.*;
-import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import com.wdf.api.enumtype.MessageType;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
