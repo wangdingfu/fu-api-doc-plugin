@@ -5,7 +5,7 @@ import com.intellij.ws.http.request.*;
 import com.intellij.ws.http.request.psi.HttpRequest;
 import com.wdf.fudoc.common.FuDocActionListener;
 import com.wdf.fudoc.common.FuDocRender;
-import com.wdf.fudoc.common.enumtype.FuDocAction;
+import com.wdf.api.enumtype.FuDocAction;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;

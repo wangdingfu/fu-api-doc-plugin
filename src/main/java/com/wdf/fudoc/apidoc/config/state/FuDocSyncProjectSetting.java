@@ -6,7 +6,7 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

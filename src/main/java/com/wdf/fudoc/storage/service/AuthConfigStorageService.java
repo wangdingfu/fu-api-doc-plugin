@@ -2,13 +2,13 @@ package com.wdf.fudoc.storage.service;
 
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.wdf.fudoc.common.constant.FuPaths;
+import com.wdf.api.constants.FuPaths;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
 import com.wdf.fudoc.request.pojo.BaseAuthConfig;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.ScriptConfigData;
-import com.wdf.fudoc.util.JsonUtil;
-import com.wdf.fudoc.util.StorageUtils;
+import com.wdf.api.util.JsonUtil;
+import com.wdf.api.util.StorageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;

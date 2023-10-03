@@ -1,10 +1,10 @@
 package com.wdf.fudoc.storage;
 
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.common.constant.FuPaths;
+import com.wdf.api.constants.FuPaths;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
-import com.wdf.fudoc.util.JsonUtil;
-import com.wdf.fudoc.util.StorageUtils;
+import com.wdf.api.util.JsonUtil;
+import com.wdf.api.util.StorageUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Paths;

@@ -50,7 +50,7 @@ public class FuRequestStorage {
         if (Objects.isNull(httpRequestPsiFile)) {
             return null;
         }
-        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project);
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project, null);
         HttpRequestBlock[] requestBlocks = HttpRequestPsiUtils.getRequestBlocks(httpRequestPsiFile);
         for (HttpRequestBlock requestBlock : requestBlocks) {
             HttpRequest request = requestBlock.getRequest();
@@ -66,8 +66,6 @@ public class FuRequestStorage {
         }
         return null;
     }
-
-
 
 
     /**

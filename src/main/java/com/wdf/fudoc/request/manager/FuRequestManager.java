@@ -11,7 +11,7 @@ import com.wdf.fudoc.request.state.FuRequestState;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.storage.FuStorageExecutor;
 import com.wdf.fudoc.storage.handler.FuRequestStorage;
-import com.wdf.fudoc.util.JsonUtil;
+import com.wdf.api.util.JsonUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
