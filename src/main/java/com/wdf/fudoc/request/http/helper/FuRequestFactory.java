@@ -51,7 +51,7 @@ public class FuRequestFactory {
             Project project = httpRequest.getProject();
             //获取psiClass和psiMethod
             HttpRequestTarget requestTarget = httpRequest.getRequestTarget();
-            HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project);
+            HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project, null);
             if (Objects.isNull(requestTarget)) {
                 return null;
             }

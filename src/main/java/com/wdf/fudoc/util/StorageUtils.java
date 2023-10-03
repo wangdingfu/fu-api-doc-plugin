@@ -6,6 +6,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.wdf.api.util.JsonUtil;
 import com.intellij.httpClient.http.request.HttpRequestLanguage;
 import com.intellij.httpClient.http.request.HttpRequestPsiFile;
 import com.wdf.fudoc.request.http.FuRequest;
