@@ -90,6 +90,7 @@ public class YapiConfigData extends BaseSyncConfigData {
         apiProjectDTO.setProjectId(tableData.getProjectId());
         apiProjectDTO.setProjectName(tableData.getProjectName());
         apiProjectDTO.setApplicationName(tableData.getApplicationName());
+        apiProjectDTO.setLatest(tableData.isLatest());
         return apiProjectDTO;
     }
 }

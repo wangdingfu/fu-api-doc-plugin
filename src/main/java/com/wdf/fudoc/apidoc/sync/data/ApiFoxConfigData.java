@@ -99,6 +99,7 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
         apiProjectDTO.setProjectName(tableData.getProjectName());
         apiProjectDTO.setApiCategoryList(JsonUtil.toList(tableData.getCategories(), ApiCategoryDTO.class));
         apiProjectDTO.setApplicationName(tableData.getApplicationName());
+        apiProjectDTO.setLatest(tableData.isLatest());
         return apiProjectDTO;
     }
 
@@ -108,6 +109,7 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
         configData.setProjectName(projectDTO.getProjectName());
         configData.setCategories(JsonUtil.toJson(projectDTO.getApiCategoryList()));
         configData.setApplicationName(projectDTO.getApplicationName());
+        configData.setLatest(projectDTO.isLatest());
         return configData;
     }
 }

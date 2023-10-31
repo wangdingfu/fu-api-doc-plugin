@@ -44,5 +44,10 @@ public class YApiProjectTableData implements Serializable {
      */
     private String applicationName;
 
+    /**
+     * 是否最近同步过
+     */
+    private boolean isLatest;
+
 
 }

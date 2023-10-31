@@ -1,6 +1,8 @@
 package com.wdf.fudoc.common;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -58,11 +60,6 @@ public abstract class AbstractClassAction extends AnAction {
      * @param fuDocContext 全局上下文数据对象
      */
     protected abstract void execute(AnActionEvent e, PsiClass psiClass, FuDocContext fuDocContext);
-
-    @Override
-    public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.BGT;
-    }
 
     /**
      * 在点击右键显示操作栏时 会调用该方法判断是否显示生成接口按钮
