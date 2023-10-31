@@ -7,8 +7,8 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.util.JsonUtil;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.JsonUtil;
+import com.wdf.api.util.ProjectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

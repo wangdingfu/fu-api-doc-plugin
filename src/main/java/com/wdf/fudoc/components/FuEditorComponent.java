@@ -25,7 +25,7 @@ import com.wdf.fudoc.components.factory.LightVirtualFileFactory;
 import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.util.EditorUtils;
 import com.wdf.fudoc.util.FuEditorSettings;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;

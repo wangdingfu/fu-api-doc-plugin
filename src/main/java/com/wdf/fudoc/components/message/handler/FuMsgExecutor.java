@@ -1,6 +1,6 @@
 package com.wdf.fudoc.components.message.handler;
 
-import com.wdf.fudoc.components.bo.FuMsgItemBO;
+import com.wdf.api.msg.bo.FuMsgItemBO;
 
 /**
  * @author wangdingfu
