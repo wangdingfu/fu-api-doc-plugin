@@ -9,6 +9,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.util.LocalTimeCounter;
+import com.wdf.api.util.ProjectUtils;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 
 import java.util.Objects;

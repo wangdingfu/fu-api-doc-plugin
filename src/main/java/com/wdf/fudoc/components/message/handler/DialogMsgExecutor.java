@@ -1,7 +1,7 @@
 package com.wdf.fudoc.components.message.handler;
 
-import com.wdf.fudoc.components.bo.FuMsgItemBO;
-import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import com.wdf.api.msg.bo.FuMsgItemBO;
+import com.wdf.api.enumtype.MessageType;
 
 /**
  * @author wangdingfu

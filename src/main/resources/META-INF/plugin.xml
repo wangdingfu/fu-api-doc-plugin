@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>FuDoc</name>
-    <version>202.1.8.2-IC</version>
+    <version>202.1.8.3-IC</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>
@@ -23,6 +23,7 @@
 
 
         <!-- 应用启动时通知类 -->
+        <postStartupActivity implementation="com.wdf.fudoc.common.listener.FuDocSetupAbleListener"/>
         <backgroundPostStartupActivity implementation="com.wdf.fudoc.spring.LoadSpringConfigListener"/>
 
 
@@ -110,6 +111,10 @@
 
     </extensions>
 
+
+    <applicationListeners>
+        <listener class="com.wdf.fudoc.common.listener.FuDocLoadListener" topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+    </applicationListeners>
 
 
     <actions>

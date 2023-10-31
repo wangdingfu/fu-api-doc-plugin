@@ -13,13 +13,13 @@ import com.wdf.fudoc.apidoc.sync.dto.ShowDocDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.sync.service.ShowDocService;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
-import com.wdf.fudoc.common.FuBundle;
+import com.wdf.api.base.FuBundle;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.ServiceHelper;
-import com.wdf.fudoc.common.notification.FuDocNotification;
+import com.wdf.api.notification.FuDocNotification;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.ObjectUtils;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

@@ -8,9 +8,9 @@ import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
-import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.api.constants.UrlConstants;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
-import com.wdf.fudoc.util.JsonUtil;
+import com.wdf.api.util.JsonUtil;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -99,6 +99,7 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
         apiProjectDTO.setProjectName(tableData.getProjectName());
         apiProjectDTO.setApiCategoryList(JsonUtil.toList(tableData.getCategories(), ApiCategoryDTO.class));
         apiProjectDTO.setApplicationName(tableData.getApplicationName());
+        apiProjectDTO.setLatest(tableData.isLatest());
         return apiProjectDTO;
     }
 
@@ -108,6 +109,7 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
         configData.setProjectName(projectDTO.getProjectName());
         configData.setCategories(JsonUtil.toJson(projectDTO.getApiCategoryList()));
         configData.setApplicationName(projectDTO.getApplicationName());
+        configData.setLatest(projectDTO.isLatest());
         return configData;
     }
 }
