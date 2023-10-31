@@ -4,7 +4,7 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiParameter;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 

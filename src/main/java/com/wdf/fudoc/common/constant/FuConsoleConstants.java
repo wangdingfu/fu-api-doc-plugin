@@ -1,6 +1,6 @@
 package com.wdf.fudoc.common.constant;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
