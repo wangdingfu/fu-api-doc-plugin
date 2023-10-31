@@ -3,7 +3,7 @@ package com.wdf.fudoc.request.view;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.wdf.fudoc.common.FuBundle;
+import com.wdf.api.base.FuBundle;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.constants.enumtype.ScriptType;

@@ -9,7 +9,7 @@ import com.wdf.fudoc.apidoc.sync.strategy.SyncShowDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncToApiFoxStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncToYApiStrategy;
 import com.wdf.fudoc.common.ServiceHelper;
-import com.wdf.fudoc.common.notification.FuDocNotification;
+import com.wdf.api.notification.FuDocNotification;
 
 import java.util.Map;
 import java.util.Objects;

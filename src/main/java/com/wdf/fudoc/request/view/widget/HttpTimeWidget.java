@@ -1,9 +1,9 @@
 package com.wdf.fudoc.request.view.widget;
 
-import com.wdf.fudoc.common.enumtype.FuColor;
-import com.wdf.fudoc.components.bo.FuMsgBO;
+import com.wdf.api.enumtype.FuColor;
+import com.wdf.api.msg.bo.FuMsgBO;
 import com.wdf.fudoc.components.message.FuMessageComponent;
-import com.wdf.fudoc.components.message.FuMsgBuilder;
+import com.wdf.api.msg.FuMsgBuilder;
 import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 

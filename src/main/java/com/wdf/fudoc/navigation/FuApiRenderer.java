@@ -12,7 +12,7 @@ import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.util.TextWithIcon;
 import com.intellij.util.ui.UIUtil;
-import com.wdf.fudoc.common.enumtype.FuColor;
+import com.wdf.api.enumtype.FuColor;
 import com.wdf.fudoc.util.ColorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

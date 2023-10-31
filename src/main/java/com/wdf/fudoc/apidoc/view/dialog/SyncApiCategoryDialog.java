@@ -16,8 +16,8 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncCategory;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncStrategyFactory;
-import com.wdf.fudoc.common.FuBundle;
-import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.api.base.FuBundle;
+import com.wdf.api.constants.MessageConstants;
 import com.wdf.fudoc.components.tree.old.ApiCategoryTreeNode;
 import com.wdf.fudoc.components.tree.old.FuTreeComponent;
 import com.wdf.fudoc.components.validator.CreateCategoryValidator;
@@ -32,9 +32,12 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 选择接口分类弹框
@@ -276,8 +279,8 @@ public class SyncApiCategoryDialog extends DialogWrapper {
                 }
             }
             //将剩余没有在排序中的分类加入到排序分类集合中
-            List<String> categoryIdList = sortList.stream().map(ApiCategoryDTO::getCategoryId).distinct().toList();
-            sortList.addAll(categoryDTOList.stream().filter(f -> !categoryIdList.contains(f.getCategoryId())).toList());
+            List<String> categoryIdList = sortList.stream().map(ApiCategoryDTO::getCategoryId).distinct().collect(Collectors.toList());
+            sortList.addAll(categoryDTOList.stream().filter(f -> !categoryIdList.contains(f.getCategoryId())).collect(Collectors.toList()));
             return sortList;
         }
         return categoryDTOList;

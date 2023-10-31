@@ -6,8 +6,8 @@ import cn.hutool.http.HttpUtil;
 import com.wdf.fudoc.apidoc.sync.data.ShowDocConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ShowDocDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ShowDocResult;
-import com.wdf.fudoc.common.constant.UrlConstants;
-import com.wdf.fudoc.util.JsonUtil;
+import com.wdf.api.constants.UrlConstants;
+import com.wdf.api.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

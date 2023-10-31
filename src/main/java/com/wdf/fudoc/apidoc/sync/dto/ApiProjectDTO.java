@@ -61,6 +61,12 @@ public class ApiProjectDTO {
 
     private String title;
 
+
+    /**
+     * 是否最近同步过
+     */
+    private boolean isLatest;
+
     @Override
     public String toString() {
         return this.projectName;
