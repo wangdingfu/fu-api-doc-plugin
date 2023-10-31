@@ -112,7 +112,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         this.projectNameComboBox = new ComboBox<>(projectConfigList.toArray(new ApiProjectDTO[0]));
         //监听项目变更时 刷新树形组件
         this.projectNameComboBox.addItemListener(e -> {
-            if(ItemEvent.SELECTED == e.getStateChange()){
+            if (ItemEvent.SELECTED == e.getStateChange()) {
                 projectChangeEvent((ApiProjectDTO) e.getItem());
             }
         });
@@ -160,7 +160,6 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
     }
 
 
-
     /**
      * 切换面板
      *
@@ -182,7 +181,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         LinkLabel<String> projectLinkLabel = new LinkLabel<>(CREATE_PROJECT, null, (aSource, aLinkData) -> {
             //当前暂不提供创建项目入口-预留后期
         });
-        if(Objects.isNull(this.apiProjectDTO)){
+        if (Objects.isNull(this.apiProjectDTO)) {
             projectChangeEvent(autoSelectProject());
         }
         projectLinkLabel.setEnabled(false);
@@ -278,6 +277,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         }
         //构建根节点
         ApiCategoryDTO root = new ApiCategoryDTO("根目录", apiCategoryList);
+        apiCategoryList.forEach(f -> f.setParent(root));
         //递归查找分类
         return recursionCategory(paths, 1, root);
     }
