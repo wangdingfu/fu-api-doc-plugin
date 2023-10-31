@@ -226,6 +226,11 @@ public class FuHttpRequestDataFactory {
         if (Objects.nonNull(fuHttpRequestData)) {
             //设置接口url
             String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringBootEnvLoader.getServerPort(module);
+            //读取server.servlet.context-path属性 issue: #20
+            String configValue = SpringConfigManager.getConfigValue(module, "server.servlet.context-path");
+            if (StringUtils.isNotBlank(configValue)) {
+                domainUrl += configValue;
+            }
             FuRequestData request = fuHttpRequestData.getRequest();
             if (Objects.isNull(request)) {
                 request = new FuRequestData();

@@ -154,7 +154,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         }
         Map<String, OpenApiContentDTO> content = new HashMap<>();
         ContentType contentType = fuDocItemData.getContentType();
-        if (Objects.isNull(contentType)) {
+        if (Objects.isNull(contentType) || isResponse) {
             contentType = ContentType.JSON;
         }
         OpenApiContentDTO openApiContentDTO = new OpenApiContentDTO();

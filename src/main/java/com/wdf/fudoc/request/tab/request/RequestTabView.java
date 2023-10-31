@@ -290,6 +290,9 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     private void resetRequestUrl() {
         String requestUrl = this.requestUrlComponent.getText();
+        if (Objects.isNull(fuHttpRequestData)) {
+            return;
+        }
         FuRequestData request = fuHttpRequestData.getRequest();
         if (StringUtils.isBlank(requestUrl)) {
             request.setRequestUrl(StringUtils.EMPTY);

@@ -40,4 +40,9 @@ public class ApiFoxProjectTableData implements Serializable {
      * 分类集合
      */
     private String categories;
+
+    /**
+     * 是否最近同步过
+     */
+    private boolean isLatest;
 }

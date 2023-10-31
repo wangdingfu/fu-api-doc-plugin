@@ -121,7 +121,7 @@ public class FuRequestData {
         if (Objects.isNull(baseUrl)) {
             baseUrl = StringUtils.EMPTY;
         }
-        return URLUtil.normalize(URLUtil.completeUrl(this.domain, baseUrl) + params, false, true);
+        return URLUtil.normalize(this.domain + baseUrl + params, false, true);
     }
 
 
