@@ -1,7 +1,7 @@
 package com.wdf.fudoc.apidoc.parse.field;
 
 import com.intellij.psi.PsiAnnotation;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author wangdingfu
