@@ -9,7 +9,7 @@ import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.desc.BaseInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 import java.util.Optional;

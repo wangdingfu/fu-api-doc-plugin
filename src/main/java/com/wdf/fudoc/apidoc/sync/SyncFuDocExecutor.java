@@ -10,6 +10,7 @@ import com.wdf.fudoc.apidoc.sync.strategy.SyncToApiFoxStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncToYApiStrategy;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.api.notification.FuDocNotification;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Objects;
@@ -19,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author wangdingfu
  * @date 2022-12-31 22:41:16
  */
+@Slf4j
 public class SyncFuDocExecutor {
 
 
@@ -43,7 +45,9 @@ public class SyncFuDocExecutor {
             syncFuDocStrategy.syncFuDoc(fuDocContext, psiClass, baseSyncConfigData);
         } catch (Exception e) {
             //发出提示 插件异常
-            FuDocNotification.notifyError("同步接口文档至" + apiDocSystem.getCode() + "失败. 未知异常");
+            String errorMsg = "同步接口文档至" + apiDocSystem.getCode() + "失败. 未知异常";
+            log.info(errorMsg, e);
+            FuDocNotification.notifyError(errorMsg);
         }
     }
 

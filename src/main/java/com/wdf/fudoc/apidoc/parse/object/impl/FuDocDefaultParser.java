@@ -119,9 +119,11 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
                 }
                 parseObjectBO.setMockRealData(mockRealData);
                 parseObjectBO.setFuDocField(new FuDocPsiField(psiField));
-                childList.add(ObjectParserExecutor.execute(psiField.getType(), parseObjectBO));
+                ObjectInfoDesc execute = ObjectParserExecutor.execute(psiField.getType(), parseObjectBO);
+                if(Objects.nonNull(execute)){
+                    childList.add(execute);
+                }
             }
-            childList.removeAll(Collections.singleton(null));
         }
         return childList;
     }
@@ -201,6 +203,9 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
     private void paddingRootId(Integer rootId, List<ObjectInfoDesc> childList) {
         if (CollectionUtils.isNotEmpty(childList)) {
             for (ObjectInfoDesc objectInfoDesc : childList) {
+                if (Objects.isNull(objectInfoDesc)) {
+                    continue;
+                }
                 objectInfoDesc.setRootId(rootId);
                 List<ObjectInfoDesc> children = objectInfoDesc.getChildList();
                 if (CollectionUtils.isNotEmpty(children)) {

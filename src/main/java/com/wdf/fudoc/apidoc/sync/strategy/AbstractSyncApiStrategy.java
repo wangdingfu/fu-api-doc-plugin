@@ -28,7 +28,7 @@ import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.api.util.ProjectUtils;
 import com.wdf.fudoc.util.ShowSettingUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.util.List;
