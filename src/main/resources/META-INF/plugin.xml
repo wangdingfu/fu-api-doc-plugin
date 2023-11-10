@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wdf.api</id>
     <name>FuDoc</name>
-    <version>211.1.8.3-IC</version>
+    <version>211.1.8.4-IC</version>
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
     <description>

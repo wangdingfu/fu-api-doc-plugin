@@ -16,12 +16,9 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -168,7 +165,7 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
      * @return PathVariable格式的参数
      */
     private List<FuDocParamData> filterPathVariableParams(List<FuDocParamData> requestParams) {
-        if (CollectionUtils.isNotEmpty(requestParams)) {
+        if (Objects.nonNull(requestParams) && requestParams.size() > 0) {
             return requestParams.stream().filter(f -> f.getExt().containsKey(FuDocConstants.PATH_VARIABLE)).collect(Collectors.toList());
         }
         return Lists.newArrayList();
@@ -181,7 +178,7 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
      * @return 不是PathVariable格式的参数
      */
     private List<FuDocParamData> filterRequestParams(List<FuDocParamData> requestParams) {
-        if (CollectionUtils.isNotEmpty(requestParams)) {
+        if (Objects.nonNull(requestParams) && requestParams.size() > 0) {
             return requestParams.stream().filter(f -> !f.getExt().containsKey(FuDocConstants.PATH_VARIABLE)).collect(Collectors.toList());
         }
         return Lists.newArrayList();
@@ -196,7 +193,7 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
      */
     private List<YApiParamDTO> buildParams(List<FuDocParamData> paramList) {
         List<YApiParamDTO> yApiParamDTOList = Lists.newArrayList();
-        if (CollectionUtils.isNotEmpty(paramList)) {
+        if (Objects.nonNull(paramList) && paramList.size() > 0) {
             for (FuDocParamData fuDocParamData : paramList) {
                 YApiParamDTO yApiParamDTO = new YApiParamDTO();
                 yApiParamDTO.setName(fuDocParamData.getParamName());

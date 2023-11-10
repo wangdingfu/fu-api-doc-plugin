@@ -12,7 +12,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
