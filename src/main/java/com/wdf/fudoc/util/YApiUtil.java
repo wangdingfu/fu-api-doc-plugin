@@ -3,7 +3,7 @@ package com.wdf.fudoc.util;
 import cn.hutool.json.JSONUtil;
 import com.wdf.api.util.JsonUtil;
 import com.wdf.fudoc.apidoc.sync.dto.YApiBaseRes;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;

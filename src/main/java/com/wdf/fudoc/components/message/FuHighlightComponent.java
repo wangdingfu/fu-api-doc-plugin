@@ -12,7 +12,7 @@ import com.wdf.api.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nls;
 
 import javax.accessibility.Accessible;

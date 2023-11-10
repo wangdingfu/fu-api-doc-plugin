@@ -114,6 +114,9 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         String requestType = fuDocItemData.getRequestType();
         List<FuDocParamData> requestParams = fuDocItemData.getRequestParams();
         if (RequestType.GET.getRequestType().equals(requestType)) {
+            if (CollectionUtils.isEmpty(requestParams)) {
+                return Lists.newArrayList();
+            }
             //GET请求参数组装
             return requestParams.stream().map(m -> buildParameterItem(m, m.getExt().containsKey(FuDocConstants.PATH_VARIABLE) ? "path" : "query")).collect(Collectors.toList());
         }
