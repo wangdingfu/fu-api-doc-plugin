@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.view;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -17,11 +18,14 @@ import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.api.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author wangdingfu
@@ -46,7 +50,7 @@ public class ResponseFileView {
         this.rootPane = new JRootPane();
         initRootPane();
         //保存至桌面
-        this.saveDesktopBtn.addActionListener(e -> downloadFile(PathConstants.DESKTOP_PATH));
+        this.saveDesktopBtn.addActionListener(e -> downloadFile(PathConstants.desktopPath()));
         //保存至指定路径
         this.saveOtherBtn.addActionListener(e -> {
             //选择路径
@@ -74,10 +78,19 @@ public class ResponseFileView {
         ProgressManager.getInstance().run(new Task.Backgroundable(ProjectUtils.getCurrProject(), "Download file", false) {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
+                String prefix = FileNameUtil.getPrefix(fileName);
                 File targetFile = FileUtil.file(filePath, fileName);
                 if (targetFile.exists()) {
+                    String targetFileName = prefix;
+                    //查找该目录下所有的文件
+                    List<String> fileNames = FileUtil.listFileNames(filePath);
+                    if (CollectionUtils.isNotEmpty(fileNames)) {
+                        Integer number = fileNames.stream().filter(f -> f.startsWith(prefix)).map(m -> FileNameUtil.getPrefix(m).replace(prefix, ""))
+                                .filter(StringUtils::isNumeric).map(Integer::parseInt).max(Comparator.comparingInt(o1 -> o1)).orElse(0);
+                        targetFileName += (number + 1) + "." + FileNameUtil.extName(fileName);
+                    }
                     //生成新的文件名
-                    targetFile = FileUtil.file(filePath, "【Fu Doc】" + RandomUtil.randomInt(100000) + "-" + fileName);
+                    targetFile = FileUtil.file(filePath, targetFileName);
                 }
                 //文件临时暂存目录
                 File srcFile = FileUtil.file(fuResponseData.getFilePath());
@@ -88,6 +101,8 @@ public class ResponseFileView {
                 }
                 //将源文件拷贝至目标文件
                 FileUtil.copyFile(srcFile, targetFile);
+                //发出通知 文件已经保存成功
+                FuDocNotification.notifyInfo(FuBundle.message("fudoc.request.download.success", targetFile.getName(), filePath));
             }
         });
     }
