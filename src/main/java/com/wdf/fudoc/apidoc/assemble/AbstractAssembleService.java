@@ -82,13 +82,6 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                 FuDocItemData fuDocItemData = new FuDocItemData();
                 if (doAssembleInfoMethod(fuDocContext, methodInfoDesc, fuDocItemData, assembleBO)) {
                     fuDocItemData.setDocNo(classNo + "." + (docNo++));
-                    //TODO 可以在这里组装项目信息和类信息
-                    PsiClass psiClass = classInfoDesc.getPsiClass();
-                    //项目名称
-                    String name = psiClass.getProject().getName();
-                    //当前操作的类全路径
-                    String qualifiedName = psiClass.getQualifiedName();
-
                     //组装公共信息
                     assembleCommonInfo(fuDocContext, methodInfoDesc, fuDocItemData);
                     //设置接口全局唯一标识
