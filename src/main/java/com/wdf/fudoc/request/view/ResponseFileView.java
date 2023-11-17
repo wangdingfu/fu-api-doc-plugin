@@ -88,6 +88,8 @@ public class ResponseFileView {
                 }
                 //将源文件拷贝至目标文件
                 FileUtil.copyFile(srcFile, targetFile);
+                //发出通知 文件已经保存成功
+                FuDocNotification.notifyInfo(FuBundle.message("fudoc.request.download.success", fuResponseData.getFilePath()));
             }
         });
     }
