@@ -20,12 +20,11 @@ import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.request.manager.FuRequestManager;
-import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.pojo.FuRequestBodyData;
-import com.wdf.fudoc.request.pojo.FuRequestData;
-import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.request.po.FuRequestConfigPO;
+import com.wdf.fudoc.request.pojo.*;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.spring.SpringConfigManager;
+import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -33,7 +32,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 构建HTTP请求数据的工厂类
@@ -224,20 +225,37 @@ public class FuHttpRequestDataFactory {
 
     private static void paddingDomain(FuHttpRequestData fuHttpRequestData, Module module) {
         if (Objects.nonNull(fuHttpRequestData)) {
-            //设置接口url
-            String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringBootEnvLoader.getServerPort(module);
-            FuRequestData request = fuHttpRequestData.getRequest();
-            if (Objects.isNull(request)) {
-                request = new FuRequestData();
-            }
-            //读取server.servlet.context-path属性 issue: #20
-            String configValue = SpringConfigManager.getContextPath(module);
-            if (StringUtils.isNotBlank(configValue)) {
-                request.setContextPath(configValue);
-            }
-            request.setDomain(domainUrl);
             fuHttpRequestData.setModule(module);
+            FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(module.getProject()).readData();
+            List<ConfigEnvTableBO> envConfigList = fuRequestConfigPO.getEnvConfigList();
+            String envName = fuRequestConfigPO.getEnv(module.getName());
+            if (CollectionUtils.isNotEmpty(envConfigList) && StringUtils.isNotBlank(envName)) {
+                Optional<ConfigEnvTableBO> first = envConfigList.stream().filter(f -> f.getEnvName().equals(envName)).findFirst();
+                if(first.isPresent()){
+                    FuRequestData request = fuHttpRequestData.getRequest();
+                    request.setDomain(first.get().getDomain());
+                    request.setContextPath(null);
+                    return;
+                }
+            }
+            paddingDefaultDomain(fuHttpRequestData, module);
         }
+    }
+
+
+    private static void paddingDefaultDomain(FuHttpRequestData fuHttpRequestData, Module module) {
+        //设置接口url
+        String domainUrl = FuDocConstants.DEFAULT_HOST + ":" + SpringBootEnvLoader.getServerPort(module);
+        FuRequestData request = fuHttpRequestData.getRequest();
+        if (Objects.isNull(request)) {
+            request = new FuRequestData();
+        }
+        //读取server.servlet.context-path属性 issue: #20
+        String configValue = SpringConfigManager.getContextPath(module);
+        if (StringUtils.isNotBlank(configValue)) {
+            request.setContextPath(configValue);
+        }
+        request.setDomain(domainUrl);
     }
 
 

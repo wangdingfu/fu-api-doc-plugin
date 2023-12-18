@@ -29,7 +29,7 @@ public class LoadSpringConfigListener implements StartupActivity.Background {
                 @Override
                 public void exitDumbMode() {
                     log.info("开始加载Spring环境信息...");
-                    SpringBootEnvLoader.doLoad(project, false);
+                    SpringBootEnvLoader.doLoad(project, false,false);
                 }
             });
         } catch (Exception e) {

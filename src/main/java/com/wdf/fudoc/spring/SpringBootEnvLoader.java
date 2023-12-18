@@ -1,5 +1,6 @@
 package com.wdf.fudoc.spring;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.JavaModuleType;
@@ -46,16 +47,16 @@ public class SpringBootEnvLoader {
      *
      * @param project 当前项目
      */
-    public static void doLoad(Project project, boolean isForceLoad) {
+    public static void doLoad(Project project, boolean isForceLoad, boolean isReload) {
         if (DumbService.isDumb(project)) {
             log.info("当前正在加载索引....");
             return;
         }
         if (isForceLoad) {
-            initSpringBoot(project);
+            initSpringBoot(project, true, isReload);
         } else {
             if (Objects.isNull(SPRING_BOOT_MODULE.get(project))) {
-                initSpringBoot(project);
+                initSpringBoot(project, false, isReload);
             }
         }
     }
@@ -123,17 +124,17 @@ public class SpringBootEnvLoader {
         SpringBootEnvModuleInfo springBootEnvModuleInfo = SPRING_BOOT_MODULE.get(project);
         if (Objects.isNull(springBootEnvModuleInfo)) {
             //初始化该module信息
-            return initSpringBoot(project);
+            return initSpringBoot(project, false, false);
         }
         return springBootEnvModuleInfo;
     }
 
 
-    public static SpringBootEnvModuleInfo initSpringBoot(Project project) {
+    public static SpringBootEnvModuleInfo initSpringBoot(Project project, boolean isForceLoad, boolean isReload) {
         SpringBootEnvModuleInfo springBootEnvModuleInfo = ApplicationManager.getApplication().runReadAction((Computable<SpringBootEnvModuleInfo>) () -> doInitSpringBoot(project));
         if (Objects.nonNull(springBootEnvModuleInfo)) {
             SPRING_BOOT_MODULE.put(project, springBootEnvModuleInfo);
-            loadSpringBootConfig(project, true);
+            loadSpringBootConfig(project, isForceLoad, isReload);
         }
         return springBootEnvModuleInfo;
     }
@@ -199,7 +200,7 @@ public class SpringBootEnvLoader {
      * @param project     当前项目
      * @param isForceLoad 是否强制加载（不看配置 如果为true则必须加载）
      */
-    public static void loadSpringBootConfig(Project project, boolean isForceLoad) {
+    public static void loadSpringBootConfig(Project project, boolean isForceLoad, boolean isReLoad) {
         FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(project).readData();
         if (!isForceLoad && !fuRequestConfigPO.isAutoPort()) {
             return;
@@ -216,10 +217,9 @@ public class SpringBootEnvLoader {
             return;
         }
         List<ConfigEnvTableBO> envConfigList = fuRequestConfigPO.getEnvConfigList();
+        List<ConfigEnvTableBO> reloadEnvConfigList = Lists.newArrayList();
         springBootEnvModuleInfo.getEnvMap().forEach((key, value) -> {
             String applicationName = value.getApplicationName();
-            //移除当前已存在的配置
-            envConfigList.removeIf(f -> applicationName.equals(f.getApplication()));
             Map<String, SpringBootEnvConfigInfo> envConfigInfoMap = value.getEnvConfigInfoMap();
             if (MapUtils.isEmpty(envConfigInfoMap)) {
                 return;
@@ -242,9 +242,16 @@ public class SpringBootEnvLoader {
                 configEnvTableBO.setApplication(applicationName);
                 String contextPath = envConfigInfo.getContextPath();
                 String contextPathUrl = StringUtils.isBlank(contextPath) ? StringUtils.EMPTY : "/" + contextPath;
-                configEnvTableBO.setDomain("http://localhost:" + envConfigInfo.getServerPort() + contextPathUrl);
-                envConfigList.add(configEnvTableBO);
+                Optional<ConfigEnvTableBO> first = envConfigList.stream().filter(f -> applicationName.equals(f.getApplication()))
+                        .filter(f -> envName.equals(f.getEnvName())).findFirst();
+                if (!isReLoad && first.isPresent()) {
+                    configEnvTableBO.setDomain(first.get().getDomain());
+                } else {
+                    configEnvTableBO.setDomain("http://localhost:" + envConfigInfo.getServerPort() + contextPathUrl);
+                }
+                reloadEnvConfigList.add(configEnvTableBO);
             });
+            fuRequestConfigPO.setEnvConfigList(reloadEnvConfigList);
         });
         springBootEnvModuleInfo.setLoad(true);
     }

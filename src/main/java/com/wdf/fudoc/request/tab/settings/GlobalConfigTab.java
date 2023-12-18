@@ -67,7 +67,7 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
         this.envTable.addAnAction(new AnActionButton("Refresh", "", AllIcons.Actions.Refresh) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                SpringBootEnvLoader.doLoad(e.getProject(), true);
+                SpringBootEnvLoader.doLoad(e.getProject(), true,true);
                 FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(e.getProject()).readData();
                 envTable.setDataList(Lists.newArrayList(fuRequestConfigPO.getEnvConfigList()));
             }
