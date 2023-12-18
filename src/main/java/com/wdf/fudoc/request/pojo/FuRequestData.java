@@ -37,6 +37,10 @@ public class FuRequestData {
      */
     private String domain;
     /**
+     * server.servlet.context-path配置项目前缀
+     */
+    private String contextPath;
+    /**
      * 接口请求地址
      */
     private String baseUrl;
@@ -121,7 +125,8 @@ public class FuRequestData {
         if (Objects.isNull(baseUrl)) {
             baseUrl = StringUtils.EMPTY;
         }
-        return URLUtil.normalize(this.domain + baseUrl + params, false, true);
+        String contextPathUrl = StringUtils.isBlank(this.contextPath) ? StringUtils.EMPTY : this.contextPath;
+        return URLUtil.normalize(this.domain + contextPathUrl + baseUrl + params, false, true);
     }
 
 
