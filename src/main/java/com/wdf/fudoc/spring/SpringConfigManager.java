@@ -31,6 +31,10 @@ public class SpringConfigManager {
         return StringUtils.isBlank(configValue) ? SpringConfigFileConstants.DEFAULT_SERVER_PORT : Integer.parseInt(configValue);
     }
 
+    public static String getContextPath(Module module){
+        return getConfigValue(module, SpringConfigFileConstants.CONTEXT_PATH_KEY);
+    }
+
 
     public static String getConfigValue(Module module, String configKey) {
         SpringConfigFile springConfigFile = initSpringConfig(module);

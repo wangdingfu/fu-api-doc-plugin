@@ -18,6 +18,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
+import com.wdf.fudoc.request.pojo.SpringBootEnvConfigInfo;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.MavenUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -97,12 +98,12 @@ public class SpringBootEnvLoader {
             return SpringConfigFileConstants.DEFAULT_SERVER_PORT;
         }
         String defaultEnv = envInfo.getDefaultEnv();
-        Map<String, Integer> serverPortMap = envInfo.getServerPortMap();
-        if (StringUtils.isBlank(defaultEnv) || MapUtils.isEmpty(serverPortMap)) {
+        Map<String, SpringBootEnvConfigInfo> envConfigInfoMap = envInfo.getEnvConfigInfoMap();
+        if (StringUtils.isBlank(defaultEnv) || MapUtils.isEmpty(envConfigInfoMap)) {
             return SpringConfigFileConstants.DEFAULT_SERVER_PORT;
         }
-        Integer serverPort = serverPortMap.get(defaultEnv);
-        return Objects.isNull(serverPort) ? SpringConfigFileConstants.DEFAULT_SERVER_PORT : serverPort;
+        SpringBootEnvConfigInfo springBootEnvConfigInfo = envConfigInfoMap.get(defaultEnv);
+        return Objects.isNull(springBootEnvConfigInfo) ? SpringConfigFileConstants.DEFAULT_SERVER_PORT : springBootEnvConfigInfo.getServerPort();
     }
 
 
@@ -184,9 +185,9 @@ public class SpringBootEnvLoader {
             if (!envs.contains(activeEnv)) {
                 activeEnv = envs.iterator().next();
             }
-            Map<String, Integer> serverPortMap = new HashMap<>();
-            envs.forEach(f -> serverPortMap.put(f, springConfigFile.getServerPort(f)));
-            springBootEnvModuleInfo.addEnvInfo(module, applicationName, activeEnv, serverPortMap, MavenUtils.getChildModule(module, modules));
+            Map<String, SpringBootEnvConfigInfo> envConfigInfoMap = new HashMap<>();
+            envs.forEach(f -> envConfigInfoMap.put(f, new SpringBootEnvConfigInfo(springConfigFile.getServerPort(f), springConfigFile.getConfig(SpringConfigFileConstants.CONTEXT_PATH_KEY))));
+            springBootEnvModuleInfo.addEnvInfo(module, applicationName, activeEnv, envConfigInfoMap, MavenUtils.getChildModule(module, modules));
         }
         return springBootEnvModuleInfo;
     }
@@ -219,27 +220,29 @@ public class SpringBootEnvLoader {
             String applicationName = value.getApplicationName();
             //移除当前已存在的配置
             envConfigList.removeIf(f -> applicationName.equals(f.getApplication()));
-            Map<String, Integer> serverPortMap = value.getServerPortMap();
-            if (MapUtils.isEmpty(serverPortMap)) {
+            Map<String, SpringBootEnvConfigInfo> envConfigInfoMap = value.getEnvConfigInfoMap();
+            if (MapUtils.isEmpty(envConfigInfoMap)) {
                 return;
             }
             String moduleName = key.getName();
             String defaultEnv = fuRequestConfigPO.getEnv(moduleName);
-            if (StringUtils.isBlank(defaultEnv) || !serverPortMap.containsKey(defaultEnv)) {
+            if (StringUtils.isBlank(defaultEnv) || !envConfigInfoMap.containsKey(defaultEnv)) {
                 defaultEnv = value.getDefaultEnv();
-                if (!serverPortMap.containsKey(defaultEnv)) {
-                    defaultEnv = serverPortMap.keySet().iterator().next();
+                if (!envConfigInfoMap.containsKey(defaultEnv)) {
+                    defaultEnv = envConfigInfoMap.keySet().iterator().next();
                 }
                 value.setDefaultEnv(defaultEnv);
             }
 
             fuRequestConfigPO.addDefaultEnv(key.getName(), defaultEnv);
-            serverPortMap.forEach((envName, serverPort) -> {
+            envConfigInfoMap.forEach((envName, envConfigInfo) -> {
                 ConfigEnvTableBO configEnvTableBO = new ConfigEnvTableBO();
                 configEnvTableBO.setSelect(true);
                 configEnvTableBO.setEnvName(envName);
                 configEnvTableBO.setApplication(applicationName);
-                configEnvTableBO.setDomain("http://localhost:" + serverPort);
+                String contextPath = envConfigInfo.getContextPath();
+                String contextPathUrl = StringUtils.isBlank(contextPath) ? StringUtils.EMPTY : "/" + contextPath;
+                configEnvTableBO.setDomain("http://localhost:" + envConfigInfo.getServerPort() + contextPathUrl);
                 envConfigList.add(configEnvTableBO);
             });
         });
