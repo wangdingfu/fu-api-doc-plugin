@@ -298,20 +298,7 @@ public class RequestTabView implements FuTab, HttpCallback {
             request.setRequestUrl(StringUtils.EMPTY);
             return;
         }
-        URL url = parseHttpUrl(requestUrl);
-        if (Objects.isNull(url) || StringUtils.isBlank(url.getHost()) || "null".equals(url.getHost())) {
-            request.setDomain(StringUtils.EMPTY);
-            request.setBaseUrl(StringUtils.EMPTY);
-            request.setParamUrl(StringUtils.EMPTY);
-            request.setRequestUrl(StringUtils.EMPTY);
-            return;
-        }
-        String domain = url.getHost();
-        int port = url.getPort();
-        request.setDomain(port != -1 ? domain + ":" + port : domain);
-        request.setBaseUrl(url.getPath());
-        request.setParamUrl(url.getQuery());
-        request.setRequestUrl(StringUtils.EMPTY);
+        request.setRequestUrl(requestUrl);
     }
 
 

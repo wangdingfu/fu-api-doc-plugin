@@ -30,6 +30,7 @@ public interface SpringConfigFileConstants {
     String ENV_KEY = "spring.profiles.active";
     String PROFILES = "spring.profiles";
     String SERVER_PORT_KEY = "server.port";
+    String CONTEXT_PATH_KEY = "server.servlet.context-path";
 
 
     String MAVEN_PROFILES = "@profiles.active@";
