@@ -70,6 +70,12 @@ public class AssembleHelper {
      * @return true 该参数需要排除 无需渲染到接口文档
      */
     private static boolean exclude(ObjectInfoDesc objectInfoDesc) {
-        return StringUtils.isBlank(objectInfoDesc.getName()) || objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.FINAL) || objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.STATIC);
+        if(StringUtils.isBlank(objectInfoDesc.getName())){
+            return true;
+        }
+        if (objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.ROOT_OBJECT)) {
+            return false;
+        }
+        return objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.FINAL) || objectInfoDesc.getBooleanValue(FuDocConstants.ModifierProperty.STATIC);
     }
 }

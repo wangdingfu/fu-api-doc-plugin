@@ -259,6 +259,7 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         if (Objects.nonNull(this.httpRequestData)) {
             FuRequestData request = this.httpRequestData.getRequest();
             request.setParamUrl(paramUrl);
+            request.setRequestUrl(null);
             this.requestTabView.setRequestUrl(request.getRequestUrl());
         }
     }

@@ -72,6 +72,7 @@ public interface FuDocConstants {
     }
 
     interface ExtInfo {
+        String ROOT_OBJECT = "isRootObject";
         String IS_ATTR = "isAttr";
         /**
          * 标识当前对象还未解析完成

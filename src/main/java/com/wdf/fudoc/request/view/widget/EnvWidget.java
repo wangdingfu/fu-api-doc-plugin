@@ -98,6 +98,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
             FuRequestData request = fuHttpRequestData.getRequest();
             request.setDomain(env.getDomain());
             request.setContextPath(null);
+            request.setRequestUrl(null);
             requestTabView.setRequestUrl(request.getRequestUrl());
         });
     }
