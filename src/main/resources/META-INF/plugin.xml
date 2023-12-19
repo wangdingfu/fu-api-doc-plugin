@@ -8,7 +8,7 @@
         <![CDATA[ Description will be added by gradle build]]>
     </description>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="211.6693.111" until-build="221.6008.13"/>
+    <idea-version since-build="222.3345.118"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
