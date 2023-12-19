@@ -26,7 +26,7 @@ public class FuDocToolWindowFactory implements ToolWindowFactory, DumbAware {
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        ContentFactory contentFactory = ContentFactory.getInstance();
         FuRequestWindow fuRequestWindow = new FuRequestWindow(project, toolWindow);
         Content content = contentFactory.createContent(fuRequestWindow, "", false);
         DefaultActionGroup defaultActionGroup = FuRequestToolBarManager.getInstance(fuRequestWindow).initToolBar();
