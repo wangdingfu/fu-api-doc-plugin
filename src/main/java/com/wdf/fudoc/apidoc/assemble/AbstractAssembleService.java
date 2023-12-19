@@ -129,11 +129,14 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         //组装请求参数
         List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
         if (CollectionUtils.isNotEmpty(requestList)) {
+            requestList.forEach(f -> f.addExtInfo(FuDocConstants.ExtInfo.ROOT_OBJECT, true));
             fuDocItemData.setRequestParams(AssembleHelper.assembleParamData(fuDocContext, requestList, null));
         }
         //组装返回参数
         ObjectInfoDesc response = methodInfoDesc.getResponse();
         if (Objects.nonNull(response)) {
+            //标识当前对象无需过滤（兼容响应对象被final关键字修饰后被过滤场景）
+            response.addExtInfo(FuDocConstants.ExtInfo.ROOT_OBJECT, true);
             fuDocItemData.setResponseParams(AssembleHelper.assembleParamData(fuDocContext, Lists.newArrayList(response), null));
         }
         //mock数据
@@ -180,6 +183,7 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                 if (!objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.ROOT)) {
                     continue;
                 }
+                objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.ROOT_OBJECT, true);
                 RootParamBO rootParamBO = new RootParamBO();
                 rootParamBO.setSpringAnnotationData(findRootParamSpringAnnotation(objectInfoDesc));
                 rootParamBO.setFuDocParamDataList(AssembleHelper.assembleParamData(fuDocContext, Lists.newArrayList(objectInfoDesc), null));
