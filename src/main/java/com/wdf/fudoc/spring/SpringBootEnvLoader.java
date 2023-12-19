@@ -22,6 +22,7 @@ import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
 import com.wdf.fudoc.request.pojo.SpringBootEnvConfigInfo;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.MavenUtils;
+import com.wdf.fudoc.util.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -217,7 +218,7 @@ public class SpringBootEnvLoader {
             return;
         }
         List<ConfigEnvTableBO> envConfigList = fuRequestConfigPO.getEnvConfigList();
-        List<ConfigEnvTableBO> reloadEnvConfigList = Lists.newArrayList();
+        Map<String, ConfigEnvTableBO> configEnvMap = ObjectUtils.listToMap(envConfigList, envTableBO -> envTableBO.getApplication() + ":" + envTableBO.getEnvName());
         springBootEnvModuleInfo.getEnvMap().forEach((key, value) -> {
             String applicationName = value.getApplicationName();
             Map<String, SpringBootEnvConfigInfo> envConfigInfoMap = value.getEnvConfigInfoMap();
@@ -236,22 +237,24 @@ public class SpringBootEnvLoader {
 
             fuRequestConfigPO.addDefaultEnv(key.getName(), defaultEnv);
             envConfigInfoMap.forEach((envName, envConfigInfo) -> {
-                ConfigEnvTableBO configEnvTableBO = new ConfigEnvTableBO();
-                configEnvTableBO.setSelect(true);
-                configEnvTableBO.setEnvName(envName);
-                configEnvTableBO.setApplication(applicationName);
+                String configEnvKey = applicationName + ":" + envName;
+                ConfigEnvTableBO configEnvTableBO = configEnvMap.get(configEnvKey);
                 String contextPath = envConfigInfo.getContextPath();
                 String contextPathUrl = StringUtils.isBlank(contextPath) ? StringUtils.EMPTY : "/" + contextPath;
-                Optional<ConfigEnvTableBO> first = envConfigList.stream().filter(f -> applicationName.equals(f.getApplication()))
-                        .filter(f -> envName.equals(f.getEnvName())).findFirst();
-                if (!isReLoad && first.isPresent()) {
-                    configEnvTableBO.setDomain(first.get().getDomain());
+                String domain = "http://localhost:" + envConfigInfo.getServerPort() + contextPathUrl;
+                if (Objects.isNull(configEnvTableBO)) {
+                    configEnvTableBO = new ConfigEnvTableBO();
+                    configEnvTableBO.setSelect(true);
+                    configEnvTableBO.setEnvName(envName);
+                    configEnvTableBO.setApplication(applicationName);
+                    configEnvTableBO.setDomain(domain);
+                    envConfigList.add(configEnvTableBO);
                 } else {
-                    configEnvTableBO.setDomain("http://localhost:" + envConfigInfo.getServerPort() + contextPathUrl);
+                    if (isReLoad) {
+                        configEnvTableBO.setDomain(domain);
+                    }
                 }
-                reloadEnvConfigList.add(configEnvTableBO);
             });
-            fuRequestConfigPO.setEnvConfigList(reloadEnvConfigList);
         });
         springBootEnvModuleInfo.setLoad(true);
     }
