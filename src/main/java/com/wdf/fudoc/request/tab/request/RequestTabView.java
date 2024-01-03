@@ -116,7 +116,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         this.sendBtn = new JButton("Send");
         this.httpHeaderTab = new HttpHeaderTab(project, disposable);
         this.httpGetParamsTab = new HttpGetParamsTab(this, disposable);
-        this.httpPathParamsTab = new HttpPathParamsTab();
+        this.httpPathParamsTab = new HttpPathParamsTab(this);
         this.httpRequestBodyTab = new HttpRequestBodyTab(disposable);
         this.rootPane = new JRootPane();
         initRootPane();
