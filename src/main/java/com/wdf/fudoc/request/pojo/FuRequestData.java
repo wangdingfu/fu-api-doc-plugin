@@ -9,12 +9,14 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.spring.SpringConfigManager;
+import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -122,11 +124,27 @@ public class FuRequestData {
             return StringUtils.EMPTY;
         }
         String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
-        if (Objects.isNull(baseUrl)) {
-            baseUrl = StringUtils.EMPTY;
-        }
         String contextPathUrl = StringUtils.isBlank(this.contextPath) ? StringUtils.EMPTY : this.contextPath;
-        return URLUtil.normalize(this.domain + contextPathUrl + baseUrl + params, false, true);
+        return URLUtil.normalize(this.domain + contextPathUrl + formatBaseUrl(baseUrl) + params, false, true);
+    }
+
+
+    private String formatBaseUrl(String baseUrl) {
+        if (Objects.isNull(baseUrl)) {
+            return StringUtils.EMPTY;
+        }
+        String[] params = StringUtils.substringsBetween(baseUrl, "{", "}");
+        if (Objects.isNull(params)) {
+            return baseUrl;
+        }
+        Map<String, KeyValueTableBO> pathDataMap = ObjectUtils.listToMap(pathVariables, KeyValueTableBO::getKey);
+        String baseUrlText = baseUrl;
+        for (String param : params) {
+            KeyValueTableBO keyValueTableBO = pathDataMap.get(param);
+            String value = Objects.isNull(keyValueTableBO) ? StringUtils.EMPTY : keyValueTableBO.getValue();
+            baseUrlText = baseUrlText.replace("{" + param + "}", value);
+        }
+        return baseUrlText;
     }
 
 
