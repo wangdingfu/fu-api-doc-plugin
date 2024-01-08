@@ -61,9 +61,16 @@ public class SyncShowDocStrategy extends AbstractSyncApiStrategy {
     }
 
 
-    private String autoTitle(List<FuDocItemData> fuDocItemDataList,ApiProjectDTO apiProjectDTO){
+    /**
+     * 自动获取接口title
+     *
+     * @param fuDocItemDataList 接口列表
+     * @param apiProjectDTO     项目信息
+     * @return showdoc文档title
+     */
+    private String autoTitle(List<FuDocItemData> fuDocItemDataList, ApiProjectDTO apiProjectDTO) {
         String title = apiProjectDTO.getTitle();
-        if(fuDocItemDataList.size() == 1 || StringUtils.isBlank(title)){
+        if (fuDocItemDataList.size() == 1 || StringUtils.isBlank(title)) {
             return fuDocItemDataList.get(0).getTitle();
         }
         return title;
