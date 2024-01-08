@@ -16,7 +16,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,11 +50,11 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
      */
     @Override
     protected String doSingleApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
-        if (Objects.isNull(apiProjectDTO) || org.apache.commons.lang.StringUtils.isBlank(apiProjectDTO.getProjectToken()) || org.apache.commons.lang.StringUtils.isBlank(apiProjectDTO.getProjectId())) {
+        if (Objects.isNull(apiProjectDTO) || org.apache.commons.lang.StringUtils.isBlank(apiProjectDTO.getProjectToken()) || StringUtils.isBlank(apiProjectDTO.getProjectId())) {
             //构建返回结果
             throw new FuDocException("同步的项目数据错误");
         }
-        if (Objects.isNull(apiCategoryDTO) || org.apache.commons.lang.StringUtils.isBlank(apiCategoryDTO.getCategoryId()) || org.apache.commons.lang.StringUtils.isBlank(apiCategoryDTO.getCategoryName())) {
+        if (Objects.isNull(apiCategoryDTO) || org.apache.commons.lang.StringUtils.isBlank(apiCategoryDTO.getCategoryId()) || StringUtils.isBlank(apiCategoryDTO.getCategoryName())) {
             //构建返回结果
             throw new FuDocException("同步的分类数据错误");
         }
