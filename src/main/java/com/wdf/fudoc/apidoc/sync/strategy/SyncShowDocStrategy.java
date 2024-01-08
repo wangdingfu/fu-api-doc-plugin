@@ -51,13 +51,22 @@ public class SyncShowDocStrategy extends AbstractSyncApiStrategy {
         showDocDTO.setApiKey(apiProjectDTO.getProjectId());
         showDocDTO.setApiToken(apiProjectDTO.getProjectToken());
         showDocDTO.setCategoryName(recursionPath(apiProjectDTO.getSelectCategory()));
-        showDocDTO.setTitle(apiProjectDTO.getTitle());
+        showDocDTO.setTitle(autoTitle(fuDocItemDataList,apiProjectDTO));
         showDocDTO.setContent(FuDocRender.markdownRender(FuDocSetting.getSettingData(), fuDocItemDataList));
         ShowDocService service = ServiceHelper.getService(ShowDocService.class);
         String errorMsg = service.syncApi(showDocDTO, (ShowDocConfigData) configData);
         ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
         return ObjectUtils.listToList(fuDocItemDataList, f -> buildSyncApiResult(f, apiProjectDTO, syncStatus, errorMsg));
 
+    }
+
+
+    private String autoTitle(List<FuDocItemData> fuDocItemDataList,ApiProjectDTO apiProjectDTO){
+        String title = apiProjectDTO.getTitle();
+        if(fuDocItemDataList.size() == 1 || StringUtils.isBlank(title)){
+            return fuDocItemDataList.get(0).getTitle();
+        }
+        return title;
     }
 
     @Override
