@@ -35,7 +35,7 @@ public class BaseInfoDesc {
 
 
     public String getParamType(){
-        return org.apache.commons.lang.StringUtils.EMPTY;
+        return StringUtils.EMPTY;
     }
 
 
