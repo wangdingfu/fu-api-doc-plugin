@@ -46,35 +46,25 @@ public class SyncShowDocStrategy extends AbstractSyncApiStrategy {
             FuDocNotification.notifyError(FuBundle.message("fudoc.sync.showdoc.tip"));
             return Lists.newArrayList();
         }
-        //将接口文档数据渲染成markdown格式接口文档
-        ShowDocDTO showDocDTO = new ShowDocDTO();
-        showDocDTO.setApiKey(apiProjectDTO.getProjectId());
-        showDocDTO.setApiToken(apiProjectDTO.getProjectToken());
-        showDocDTO.setCategoryName(recursionPath(apiProjectDTO.getSelectCategory()));
-        showDocDTO.setTitle(autoTitle(fuDocItemDataList,apiProjectDTO));
-        showDocDTO.setContent(FuDocRender.markdownRender(FuDocSetting.getSettingData(), fuDocItemDataList));
-        ShowDocService service = ServiceHelper.getService(ShowDocService.class);
-        String errorMsg = service.syncApi(showDocDTO, (ShowDocConfigData) configData);
-        ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
-        return ObjectUtils.listToList(fuDocItemDataList, f -> buildSyncApiResult(f, apiProjectDTO, syncStatus, errorMsg));
+        List<SyncApiResultDTO> resultList = Lists.newArrayList();
+        for (FuDocItemData fuDocItemData : fuDocItemDataList) {
+            //将接口文档数据渲染成markdown格式接口文档
+            ShowDocDTO showDocDTO = new ShowDocDTO();
+            showDocDTO.setApiKey(apiProjectDTO.getProjectId());
+            showDocDTO.setApiToken(apiProjectDTO.getProjectToken());
+            showDocDTO.setCategoryName(recursionPath(apiProjectDTO.getSelectCategory()));
+            showDocDTO.setTitle(fuDocItemData.getTitle());
+            showDocDTO.setContent(FuDocRender.markdownRender(fuDocItemData, FuDocSetting.getSettingData()));
+            ShowDocService service = ServiceHelper.getService(ShowDocService.class);
+            String errorMsg = service.syncApi(showDocDTO, (ShowDocConfigData) configData);
+            ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
+            resultList.add(buildSyncApiResult(fuDocItemData, apiProjectDTO, syncStatus, errorMsg));
 
-    }
-
-
-    /**
-     * 自动获取接口title
-     *
-     * @param fuDocItemDataList 接口列表
-     * @param apiProjectDTO     项目信息
-     * @return showDoc文档title
-     */
-    private String autoTitle(List<FuDocItemData> fuDocItemDataList, ApiProjectDTO apiProjectDTO) {
-        String title = apiProjectDTO.getTitle();
-        if (fuDocItemDataList.size() == 1 || StringUtils.isBlank(title)) {
-            return fuDocItemDataList.get(0).getTitle();
         }
-        return title;
+        return resultList;
+
     }
+
 
     @Override
     protected ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass, ProjectSyncApiRecordData projectRecord) {

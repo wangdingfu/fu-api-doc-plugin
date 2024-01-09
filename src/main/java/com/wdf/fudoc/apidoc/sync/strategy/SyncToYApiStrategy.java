@@ -16,7 +16,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
