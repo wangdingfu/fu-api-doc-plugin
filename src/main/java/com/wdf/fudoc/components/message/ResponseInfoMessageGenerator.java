@@ -1,10 +1,10 @@
 package com.wdf.fudoc.components.message;
 
 import com.google.common.collect.Lists;
-import com.wdf.fudoc.common.enumtype.FuColor;
-import com.wdf.fudoc.components.bo.FuMsgBO;
-import com.wdf.fudoc.components.bo.FuMsgItemBO;
-import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import com.wdf.api.enumtype.FuColor;
+import com.wdf.api.msg.bo.FuMsgBO;
+import com.wdf.api.msg.bo.FuMsgItemBO;
+import com.wdf.api.enumtype.MessageType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 

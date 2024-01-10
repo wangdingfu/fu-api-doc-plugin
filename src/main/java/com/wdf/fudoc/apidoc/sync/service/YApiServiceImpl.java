@@ -4,10 +4,10 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.wdf.fudoc.apidoc.sync.dto.*;
-import com.wdf.fudoc.util.JsonUtil;
+import com.wdf.api.util.JsonUtil;
 import com.wdf.fudoc.util.YApiUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +54,7 @@ public class YApiServiceImpl implements YApiService {
         if (CollectionUtils.isNotEmpty(dataList)) {
             return dataList.get(0).getStr("_id");
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 }

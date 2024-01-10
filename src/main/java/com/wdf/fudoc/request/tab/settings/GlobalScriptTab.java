@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
@@ -20,10 +21,10 @@ import com.intellij.openapi.ui.Splitter;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.components.panels.HorizontalBox;
 import com.intellij.ui.tabs.TabInfo;
-import com.wdf.fudoc.common.FuBundle;
+import com.wdf.api.base.FuBundle;
 import com.wdf.fudoc.common.FuDataTab;
-import com.wdf.fudoc.common.constant.MessageConstants;
-import com.wdf.fudoc.common.notification.FuDocNotification;
+import com.wdf.api.constants.MessageConstants;
+import com.wdf.api.notification.FuDocNotification;
 import com.wdf.fudoc.components.*;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
@@ -49,7 +50,7 @@ import groovy.util.logging.Slf4j;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -116,7 +117,7 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
     }
 
     private String getApplication() {
-        if (StringUtils.isBlank(this.application)) {
+        if (FuStringUtils.isBlank(this.application)) {
             Set<String> applicationList = SpringBootEnvLoader.getApplication(project);
             return CollectionUtils.isEmpty(applicationList) ? SpringConfigFileConstants.APPLICATION : applicationList.iterator().next();
         }
@@ -143,7 +144,7 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
                             return;
                         }
                         String script = globalPreScriptPO.getScript();
-                        if (StringUtils.isBlank(script)) {
+                        if (FuStringUtils.isBlank(script)) {
                             FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.REQUEST_SCRIPT_NO));
                             return;
                         }
@@ -217,12 +218,19 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
     @Override
     public void doAction(ScriptCmd scriptCmd) {
         switchPanel();
+        if (ScriptCmd.DOC.equals(scriptCmd)) {
+            String cmd = scriptCmd.getCmd();
+            if (FuStringUtils.isNotBlank(cmd)) {
+                BrowserUtil.browse(cmd);
+            }
+            return;
+        }
         if (ScriptCmd.ADD_HTTP_CONFIG.equals(scriptCmd)) {
             httpCmdView.addHttp();
             return;
         }
         String cmd = scriptCmd.getCmd();
-        if (StringUtils.isBlank(cmd)) {
+        if (FuStringUtils.isBlank(cmd)) {
             return;
         }
         String content = ScriptCmdType.LOG.equals(scriptCmd.getCmdType())
@@ -277,7 +285,7 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
             fuRequestConfigPO = FuRequestConfigStorage.get(project).readData();
         }
         this.httpCmdView = new HttpCmdView(this.project);
-        if (StringUtils.isBlank(this.application)) {
+        if (FuStringUtils.isBlank(this.application)) {
             this.application = getApplication();
         }
 
@@ -299,7 +307,7 @@ public class GlobalScriptTab implements FuDataTab<FuRequestConfigPO>, FuActionLi
 
         this.isEditor = false;
         String script = globalPreScriptPO.getScript();
-        if (StringUtils.isNotBlank(script)) {
+        if (FuStringUtils.isNotBlank(script)) {
             switchPanel();
             this.fuEditorComponent.setContent(script);
         } else {

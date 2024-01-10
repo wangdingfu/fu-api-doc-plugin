@@ -2,8 +2,7 @@ package com.wdf.fudoc.apidoc.helper;
 
 import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
@@ -13,7 +12,8 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.constant.enumtype.CommentTagType;
 import com.wdf.fudoc.apidoc.pojo.data.CommentTagData;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +21,89 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
+ * 文档注释解析帮助类
+ *
  * @author wangdingfu
- * @description 文档注释解析帮助类
  * @date 2022-04-21 14:09:55
  */
 public class DocCommentParseHelper {
 
+    /**
+     * 解析Java类 方法 字段上的注释
+     *
+     * @param psiElement psiClass 或则 PsiMethod 或则 PsiField
+     * @return 注释对象
+     */
+    public static ApiDocCommentData parseComment(PsiJavaDocumentedElement psiElement) {
+        if (Objects.isNull(psiElement)) {
+            return new ApiDocCommentData();
+        }
+        PsiDocComment docComment = psiElement.getDocComment();
+        if (Objects.nonNull(docComment)) {
+            return parseComment(docComment);
+        }
+        return parsePsiComment(psiElement);
+    }
+
+
+    public static ApiDocCommentData parsePsiComment(PsiElement psiElement) {
+        @NotNull PsiElement[] children = psiElement.getChildren();
+        List<String> commentList = Lists.newArrayList();
+        for (PsiElement child : children) {
+            if (child instanceof PsiComment) {
+                commentList.add(parseComment((PsiComment) child));
+            } else if (child instanceof PsiWhiteSpace) {
+                //do nothing
+            } else {
+                break;
+            }
+        }
+        ApiDocCommentData apiDocCommentData = new ApiDocCommentData();
+        apiDocCommentData.setCommentTitle(FuStringUtils.join(commentList, "    "));
+        return apiDocCommentData;
+    }
+
+    public static String parseComment(PsiComment psiComment) {
+        String elementType = getElementType(psiComment);
+        //END_OF_LINE_COMMENT
+        if (FuDocConstants.Comment.COMMENT_END.equals(elementType)) {
+            return formatEndComment(psiComment.getText());
+        }
+        /*
+            C_STYLE_COMMENT
+         */
+        if (FuDocConstants.Comment.COMMENT_C.equals(elementType)) {
+            return formatXComment(psiComment.getText());
+        }
+        return FuStringUtils.EMPTY;
+    }
+
+
+    private static String formatEndComment(String comment) {
+        if (FuStringUtils.isBlank(comment)) {
+            return FuStringUtils.EMPTY;
+        }
+        comment = FuStringUtils.trim(comment);
+        if (comment.startsWith("//")) {
+            return FuStringUtils.removeStart(comment, "//");
+        }
+        return comment;
+    }
+
+
+    private static String formatXComment(String comment) {
+        if (FuStringUtils.isBlank(comment)) {
+            return FuStringUtils.EMPTY;
+        }
+        comment = FuStringUtils.trim(comment);
+        if (comment.startsWith("/*")) {
+            comment = FuStringUtils.removeStart(comment, "/*");
+        }
+        if (comment.endsWith("*/")) {
+            comment = FuStringUtils.removeEnd(comment, "*/");
+        }
+        return comment.trim();
+    }
 
     /**
      * 解析注释
@@ -80,7 +157,7 @@ public class DocCommentParseHelper {
             } else {
                 String tagDataValue = commentTagData.getValue();
                 String comment = getComment(elementType, dataElement);
-                commentTagData.setValue(StringUtils.isBlank(tagDataValue) ? comment : tagDataValue + " " + comment);
+                commentTagData.setValue(FuStringUtils.isBlank(tagDataValue) ? comment : tagDataValue + " " + comment);
             }
         }
         return commentTagData;
@@ -125,15 +202,15 @@ public class DocCommentParseHelper {
                 return formatText(element);
             default:
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
     private static String formatText(PsiElement psiElement) {
         String text = psiElement.getText();
-        if (StringUtils.isNotBlank(text)) {
+        if (FuStringUtils.isNotBlank(text)) {
             return text.replace("*", "").replace("\n", "");
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
@@ -153,10 +230,10 @@ public class DocCommentParseHelper {
     private static String getTagCommentValue(PsiDocTag psiDocTag) {
         PsiDocTagValue valueElement;
         if (Objects.isNull(psiDocTag) || Objects.isNull(valueElement = psiDocTag.getValueElement())) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         String valueText = valueElement.getText();
-        if (StringUtils.isNotBlank(valueText)) {
+        if (FuStringUtils.isNotBlank(valueText)) {
             return valueText.replace("*", "").replace("\n", "");
         }
         return valueText;
@@ -171,10 +248,10 @@ public class DocCommentParseHelper {
      */
     private static String parseTagCommentValue(PsiDocTag tag, CommentTagType tagType) {
         if (Objects.isNull(tag)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         String text = tag.getText();
-        if (StringUtils.isNotBlank(text)) {
+        if (FuStringUtils.isNotBlank(text)) {
             text = text.replace("*", "").replace("\n", "");
             PsiElement nameElement = tag.getNameElement();
             if (Objects.nonNull(nameElement)) {
@@ -182,7 +259,7 @@ public class DocCommentParseHelper {
             }
             String paramName = getParamName(tag);
             //return tag 没有参数名 此处不替换
-            if (StringUtils.isNotBlank(paramName) && !CommentTagType.RETURN.equals(tagType)) {
+            if (FuStringUtils.isNotBlank(paramName) && !CommentTagType.RETURN.equals(tagType)) {
                 text = text.replace(paramName, "");
             }
         }
@@ -201,7 +278,7 @@ public class DocCommentParseHelper {
         if (Objects.nonNull(psiDocTag) && Objects.nonNull(valueElement = psiDocTag.getValueElement())) {
             return valueElement.getText();
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 

@@ -14,7 +14,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,11 +79,11 @@ public class FuRequestUtils {
      */
     public static String getRequestPath(Project project, PsiClass psiClass) {
         String basePath = project.getBasePath();
-        if (StringUtils.isBlank(basePath)) {
+        if (FuStringUtils.isBlank(basePath)) {
             basePath = FileUtil.getTmpDir().getPath();
         }
         Module module = ModuleUtil.findModuleForPsiElement(psiClass);
-        String moduleName = Objects.isNull(module) ? StringUtils.EMPTY : module.getName();
+        String moduleName = Objects.isNull(module) ? FuStringUtils.EMPTY : module.getName();
         String controllerName = psiClass.getName();
         return Paths.get(basePath, FuDocConstants.IDEA_DIR, FuDocConstants.FU_DOC, FuDocConstants.API_DIR, moduleName, controllerName).toString();
     }

@@ -8,7 +8,7 @@ import com.wdf.fudoc.apidoc.pojo.data.FuDocEnumData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.request.http.data.HttpClientData;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -83,8 +83,8 @@ public class FuDocRender {
     }
 
     public static String render(Object data, String templateName, String templateContent) {
-        if (StringUtils.isBlank(templateContent)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(templateContent)) {
+            return FuStringUtils.EMPTY;
         }
         return FreeMarkerConfig.generateContent(templateName, templateContent, data);
     }

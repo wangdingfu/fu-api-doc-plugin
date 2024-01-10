@@ -7,9 +7,9 @@ import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.common.FuTab;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -142,7 +142,7 @@ public class FuTabBuilder {
                     }
                 }
                 String text = newSelection.getText();
-                if (StringUtils.isNotBlank(text)) {
+                if (FuStringUtils.isNotBlank(text)) {
                     FuTab fuTab = fuTabMap.get(text);
                     if (Objects.nonNull(fuTab)) {
                         fuTab.selectionChanged(oldSelection, newSelection);

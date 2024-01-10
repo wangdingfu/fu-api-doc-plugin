@@ -4,7 +4,7 @@ import com.wdf.fudoc.common.constant.FuConsoleConstants;
 import com.wdf.fudoc.console.FuLogger;
 import com.wdf.fudoc.request.js.context.FuContext;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -25,7 +25,7 @@ public class JsExecutor {
      */
     public static void execute(FuContext fuContext) {
         String script = fuContext.getScript();
-        if (StringUtils.isBlank(script)) {
+        if (FuStringUtils.isBlank(script)) {
             return;
         }
         Context cx = Context.enter();

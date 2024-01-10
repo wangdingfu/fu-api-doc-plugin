@@ -9,18 +9,18 @@ import com.intellij.openapi.diagnostic.IdeaLoggingEvent;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.util.Consumer;
-import com.wdf.fudoc.common.FuBundle;
+import com.wdf.api.base.FuBundle;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.api.constants.MessageConstants;
 import com.wdf.fudoc.common.exception.IssueException;
 import com.wdf.fudoc.common.exception.report.issue.GiteeIssueSubmitter;
 import com.wdf.fudoc.common.exception.report.issue.GithubIssueSubmitter;
 import com.wdf.fudoc.common.exception.report.issue.IssueSubmitter;
-import com.wdf.fudoc.common.notification.FuDocNotification;
-import com.wdf.fudoc.request.constants.enumtype.IssueSource;
-import com.wdf.fudoc.storage.FuDocConfigStorage;
+import com.wdf.api.notification.FuDocNotification;
+import com.wdf.api.enumtype.IssueSource;
+import com.wdf.api.storage.FuDocConfigStorage;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,14 +71,14 @@ public class FuErrorReportSubmitter extends ErrorReportSubmitter {
         try {
             IdeaLoggingEvent event = events[0];
             String throwableText = event.getThrowableText();
-            if (StringUtils.isBlank(throwableText)) {
+            if (FuStringUtils.isBlank(throwableText)) {
                 return false;
             }
             String message = event.getMessage();
-            if (StringUtils.isBlank(message)) {
+            if (FuStringUtils.isBlank(message)) {
                 message = throwableText.substring(0, throwableText.indexOf("\r\n"));
             }
-            if (StringUtils.isBlank(additionalInfo)) {
+            if (FuStringUtils.isBlank(additionalInfo)) {
                 additionalInfo = "";
             }
             //校验当前问题是否提交过 如果提交过则查询该问题
@@ -104,7 +104,7 @@ public class FuErrorReportSubmitter extends ErrorReportSubmitter {
         String issueTo = FuDocConfigStorage.INSTANCE.readData().getIssueTo();
         IssueSubmitter issueSubmitter = getIssueSubmitter(issueTo);
         String issueId = issueSubmitter.findIssue(throwableText);
-        if (StringUtils.isNotBlank(issueId)) {
+        if (FuStringUtils.isNotBlank(issueId)) {
             issueIdMap.put(issueTo, issueId);
             String issueUrl = issueSubmitter.issueUrl(issueId);
             String linkText = FuBundle.message(MessageConstants.ISSUE_LINK_TEXT);
@@ -122,7 +122,7 @@ public class FuErrorReportSubmitter extends ErrorReportSubmitter {
                 ifNecessarySubmitToGitee(throwableText, message, additionalInfo);
             }
         }
-        if (StringUtils.isNotBlank(issueId)) {
+        if (FuStringUtils.isNotBlank(issueId)) {
             issueIdMap.put(issueTo, issueId);
             return new SubmittedReportInfo(issueSubmitter.issueUrl(issueId), issueSubmitter.issueText(issueId), SubmittedReportInfo.SubmissionStatus.NEW_ISSUE);
         }
@@ -140,7 +140,7 @@ public class FuErrorReportSubmitter extends ErrorReportSubmitter {
                 instance.readData().setIssueTo(IssueSource.GITEE.myActionID);
                 instance.saveData();
                 String issue = giteeIssueSubmitter.createIssue(throwableText, message, additionalInfo);
-                if (StringUtils.isNotBlank(issue)) {
+                if (FuStringUtils.isNotBlank(issue)) {
                     String issueUrl = giteeIssueSubmitter.issueUrl(issue);
                     String title = FuBundle.message("fudoc.issue.gitee.success");
                     String linkText = FuBundle.message(MessageConstants.ISSUE_LINK_TEXT);

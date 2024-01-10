@@ -4,7 +4,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
@@ -28,7 +28,7 @@ public class YamlConfigFileHandler implements ConfigFileHandler {
             Yaml yaml = new Yaml();
             String yamlContent = new String(IoUtil.readBytes(inputStream));
             //替换@@包裹的内容
-            String[] itemList = StringUtils.substringsBetween(yamlContent, "@", "@");
+            String[] itemList = FuStringUtils.substringsBetween(yamlContent, "@", "@");
             if (Objects.nonNull(itemList)) {
                 for (String item : itemList) {
                     String itemStr = "@" + item + "@";
@@ -46,12 +46,12 @@ public class YamlConfigFileHandler implements ConfigFileHandler {
     @Override
     public String getConfig(String key) {
         if (Objects.isNull(this.config)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         String value = doGetConfig(key);
-        if (StringUtils.isNotBlank(value)) {
+        if (FuStringUtils.isNotBlank(value)) {
             String itemValue = itemMap.get(value);
-            if (StringUtils.isNotBlank(itemValue)) {
+            if (FuStringUtils.isNotBlank(itemValue)) {
                 return itemValue;
             }
         }
@@ -60,10 +60,10 @@ public class YamlConfigFileHandler implements ConfigFileHandler {
 
 
     private String doGetConfig(String key) {
-        if (Objects.nonNull(this.config) && StringUtils.isNotBlank(key)) {
+        if (Objects.nonNull(this.config) && FuStringUtils.isNotBlank(key)) {
             Object value = this.config.getByPath(key);
-            return Objects.nonNull(value) ? value.toString() : StringUtils.EMPTY;
+            return Objects.nonNull(value) ? value.toString() : FuStringUtils.EMPTY;
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 }

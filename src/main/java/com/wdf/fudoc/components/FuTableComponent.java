@@ -18,10 +18,10 @@ import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.JTableUtils;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -273,7 +273,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
             return new JPanel();
         }
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(this.fuTableView);
-        if (StringUtils.isNotBlank(this.tableKey)) {
+        if (FuStringUtils.isNotBlank(this.tableKey)) {
             decorator.addExtraAction(new AnActionButton("Settings", "", AllIcons.General.Settings) {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent e) {
@@ -361,7 +361,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
 
 
     public void initColumn() {
-        if (StringUtils.isBlank(this.tableKey)) {
+        if (FuStringUtils.isBlank(this.tableKey)) {
             return;
         }
         FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(ProjectUtils.getCurrProject()).readData();
@@ -388,7 +388,7 @@ public class FuTableComponent<T> extends DefaultTableModel implements EditableMo
     private void formatFirstColumn() {
         Column firstColumn = this.columnList.get(0);
         Class<?> columnClass = firstColumn.getColumnClass();
-        if (Objects.nonNull(columnClass) && columnClass == Boolean.class && StringUtils.isBlank(firstColumn.getName())) {
+        if (Objects.nonNull(columnClass) && columnClass == Boolean.class && FuStringUtils.isBlank(firstColumn.getName())) {
             JTableUtils.setupCheckboxColumn(this.fuTableView.getColumnModel().getColumn(0), 30);
             JBTable.setupCheckboxShortcut(this.fuTableView, 0);
         }

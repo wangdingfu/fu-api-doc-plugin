@@ -3,14 +3,14 @@ package com.wdf.fudoc.common.exception.report.issue;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.api.constants.UrlConstants;
 import com.wdf.fudoc.common.exception.IssueException;
 import com.wdf.fudoc.common.exception.report.issue.param.GithubIssueBody;
-import com.wdf.fudoc.request.constants.enumtype.IssueSource;
-import com.wdf.fudoc.util.JsonUtil;
+import com.wdf.api.enumtype.IssueSource;
+import com.wdf.api.util.JsonUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.net.URLCodec;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -42,8 +42,8 @@ public class GithubIssueSubmitter extends AbstractIssueSubmitter {
         try {
             String result = httpRequest.header("Authorization", getAccessToken(IssueSource.GITHUB.myActionID))
                     .body(JsonUtil.toJson(issueBody)).timeout(10000).execute().body();
-            if (StringUtils.isBlank(result)) {
-                return StringUtils.EMPTY;
+            if (FuStringUtils.isBlank(result)) {
+                return FuStringUtils.EMPTY;
             }
             Object number = JSONUtil.parse(result).getByPath("number");
             if (Objects.isNull(number)) {
@@ -75,8 +75,8 @@ public class GithubIssueSubmitter extends AbstractIssueSubmitter {
         URLCodec urlCodec = new URLCodec("utf-8");
         String query = "q=" + urlCodec.encode(q) + "&page=1&per_page=1";
         String result = HttpUtil.get(API_BASE_URL + "/search/issues?" + query);
-        if (StringUtils.isBlank(result) || !JSONUtil.isTypeJSON(result)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(result) || !JSONUtil.isTypeJSON(result)) {
+            return FuStringUtils.EMPTY;
         }
         Object value = JSONUtil.parse(result).getByPath("items[0].number");
         return Objects.isNull(value) ? null : value.toString();
@@ -90,7 +90,7 @@ public class GithubIssueSubmitter extends AbstractIssueSubmitter {
      */
     @Override
     public String issueUrl(String issueId) {
-        if (StringUtils.isBlank(issueId)) {
+        if (FuStringUtils.isBlank(issueId)) {
             return UrlConstants.ISSUE;
         }
         return UrlConstants.ISSUE + "/" + issueId;

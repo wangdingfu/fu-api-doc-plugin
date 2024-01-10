@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +54,7 @@ public class SpringConfigFile {
         String env = getDefaultEnv();
         //第一步 优先从当前激活的环境中获取
         String config = getConfig(configMap.get(env), key);
-        if (StringUtils.isEmpty(config)) {
+        if (FuStringUtils.isEmpty(config)) {
             //第二步 从默认环境中获取
             return getConfig(configMap.get(SpringConfigFileConstants.DEFAULT_ENV), key);
         }
@@ -64,7 +64,7 @@ public class SpringConfigFile {
 
     public Integer getServerPort(String env) {
         String config = getConfig(env, SpringConfigFileConstants.SERVER_PORT_KEY);
-        if (StringUtils.isNotBlank(config) && StringUtils.isNumeric(config)) {
+        if (FuStringUtils.isNotBlank(config) && FuStringUtils.isNumeric(config)) {
             return Integer.parseInt(config);
         }
         return SpringConfigFileConstants.DEFAULT_SERVER_PORT;
@@ -74,7 +74,7 @@ public class SpringConfigFile {
     public String getConfig(String env, String key) {
         //第一步 优先从当前激活的环境中获取
         String config = getConfig(configMap.get(env), key);
-        if (StringUtils.isEmpty(config)) {
+        if (FuStringUtils.isEmpty(config)) {
             //第二步 从默认环境中获取
             return getConfig(configMap.get(SpringConfigFileConstants.DEFAULT_ENV), key);
         }
@@ -97,7 +97,7 @@ public class SpringConfigFile {
         if (Objects.nonNull(configFileHandler)) {
             return configFileHandler.getConfig(key);
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
     public void addConfigFile(VirtualFile virtualFile) {
@@ -119,8 +119,8 @@ public class SpringConfigFile {
 
 
     private void addConfig(String fileName, ConfigFileHandler config) {
-        String env = StringUtils.substringBetween(fileName, SpringConfigFileConstants.SPLIT, ".");
-        if (StringUtils.isBlank(env)) {
+        String env = FuStringUtils.substringBetween(fileName, SpringConfigFileConstants.SPLIT, ".");
+        if (FuStringUtils.isBlank(env)) {
             Object active = config.getConfig(SpringConfigFileConstants.ENV_KEY);
             if (Objects.nonNull(active)) {
                 this.activeEnv = active.toString();
@@ -131,7 +131,7 @@ public class SpringConfigFile {
                 }
             }
         }
-        env = StringUtils.isBlank(env) ? SpringConfigFileConstants.DEFAULT_ENV : env;
+        env = FuStringUtils.isBlank(env) ? SpringConfigFileConstants.DEFAULT_ENV : env;
         ConfigFileHandler configFile = configMap.get(env);
         if (Objects.isNull(configFile)) {
             configMap.put(env, config);

@@ -7,10 +7,10 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.util.JsonUtil;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.JsonUtil;
+import com.wdf.api.util.ProjectUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -28,21 +28,24 @@ public class FuStorageExecutor {
     public static final String FU_DOC_API = "request";
     public static final String FU_DOC_API_SUFFIX = ".http";
 
+
+
+
+
     /**
      * fuDoc存储初始化
      */
     public static void init(Project project) {
         //初始化fudoc目录
         initHome(project);
-        //初始化配置文件
-        RecentNavigationManager.create(project);
+
     }
 
 
     private static void initHome(Project project) {
         //检查是否存在.fudoc目录 没有则创建
         String currentProjectPath = project.getBasePath();
-        if (StringUtils.isNotBlank(currentProjectPath)) {
+        if (FuStringUtils.isNotBlank(currentProjectPath)) {
             File file = FileUtil.file(currentProjectPath, FuDocConstants.IDEA_DIR, FU_DOC_DIR);
             if (file.exists()) {
                 return;
@@ -76,8 +79,8 @@ public class FuStorageExecutor {
         String currentProjectPath = ProjectUtils.getCurrentProjectPath();
         File file = FileUtil.file(currentProjectPath, FU_DOC_DIR, FU_DOC_API, apiName + FU_DOC_API_SUFFIX);
         if (file.exists()) {
-            String httpFileContent = StringUtils.toEncodedString(FileUtil.readBytes(file), StandardCharsets.UTF_8);
-            if (StringUtils.isNotBlank(httpFileContent)) {
+            String httpFileContent = FuStringUtils.toEncodedString(FileUtil.readBytes(file), StandardCharsets.UTF_8);
+            if (FuStringUtils.isNotBlank(httpFileContent)) {
                 return JsonUtil.toBean(httpFileContent, FuHttpRequestData.class);
             }
         }

@@ -7,13 +7,14 @@ import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.PlatformColors;
 import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
-import com.wdf.fudoc.components.bo.FuMsgBO;
-import com.wdf.fudoc.components.bo.FuMsgItemBO;
+import com.wdf.api.msg.FuMsgManager;
+import com.wdf.api.msg.bo.FuMsgBO;
+import com.wdf.api.msg.bo.FuMsgItemBO;
 import com.wdf.fudoc.components.listener.FuMsgListener;
-import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import com.wdf.api.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -88,7 +89,7 @@ public class FuMessageComponent extends FuHighlightComponent {
     }
 
     public FuMessageComponent(FuMsgBO fuMsgBO, final Color textForegroundColor, final Color textBackgroundColor, final Color textEffectColor) {
-        defaultAttributes = StartupUiUtil.isUnderDarcula() || UIUtil.isUnderIntelliJLaF() ? new CustomTextAttributes(textBackgroundColor) : new TextAttributes(textForegroundColor, textBackgroundColor, textEffectColor, null, Font.PLAIN);
+        defaultAttributes = UIManager.getLookAndFeel().getName().contains("Darcula") || UIUtil.isUnderIntelliJLaF() ? new CustomTextAttributes(textBackgroundColor) : new TextAttributes(textForegroundColor, textBackgroundColor, textEffectColor, null, Font.PLAIN);
         //设置消息文本
         setMsg(fuMsgBO);
         enableEvents(AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK);
@@ -159,7 +160,7 @@ public class FuMessageComponent extends FuHighlightComponent {
         super.clear();
         applyFont();
         List<FuMsgItemBO> messageItemList;
-        String myText = StringUtils.EMPTY;
+        String myText = FuStringUtils.EMPTY;
         if (Objects.nonNull(this.message) && CollectionUtils.isNotEmpty(messageItemList = this.message.getItemList())) {
             //循环处理每一段消息
             for (FuMsgItemBO fuMsgItemBO : messageItemList) {

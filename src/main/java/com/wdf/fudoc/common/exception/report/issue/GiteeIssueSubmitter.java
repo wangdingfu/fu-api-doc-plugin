@@ -3,9 +3,9 @@ package com.wdf.fudoc.common.exception.report.issue;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.wdf.fudoc.common.constant.UrlConstants;
-import com.wdf.fudoc.request.constants.enumtype.IssueSource;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.api.constants.UrlConstants;
+import com.wdf.api.enumtype.IssueSource;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -34,11 +34,11 @@ public class GiteeIssueSubmitter extends AbstractIssueSubmitter {
                 .form("body", body)
                 .form("labels", "bug")
                 .form("access_token", getAccessToken(IssueSource.GITEE.myActionID)).execute().body();
-        if (StringUtils.isBlank(result) || !JSONUtil.isTypeJSON(result)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(result) || !JSONUtil.isTypeJSON(result)) {
+            return FuStringUtils.EMPTY;
         }
         Object number = JSONUtil.parse(result).getByPath("number");
-        return Objects.isNull(number) ? StringUtils.EMPTY : number.toString();
+        return Objects.isNull(number) ? FuStringUtils.EMPTY : number.toString();
     }
 
     @Override
@@ -54,12 +54,12 @@ public class GiteeIssueSubmitter extends AbstractIssueSubmitter {
      */
     @Override
     public String findIssue(String throwableText) {
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
     @Override
     public String issueUrl(String issueId) {
-        if (StringUtils.isBlank(issueId)) {
+        if (FuStringUtils.isBlank(issueId)) {
             return UrlConstants.GITEE_ISSUE;
         }
         return UrlConstants.GITEE_ISSUE + "/" + issueId;

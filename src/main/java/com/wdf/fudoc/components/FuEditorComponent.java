@@ -26,9 +26,9 @@ import com.wdf.fudoc.components.factory.LightVirtualFileFactory;
 import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.util.EditorUtils;
 import com.wdf.fudoc.util.FuEditorSettings;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -124,7 +124,7 @@ public class FuEditorComponent implements Disposable {
     }
 
     public static FuEditorComponent create(FileType fileType, Disposable parent) {
-        return new FuEditorComponent(fileType, StringUtils.EMPTY, parent);
+        return new FuEditorComponent(fileType, FuStringUtils.EMPTY, parent);
     }
 
     /**
@@ -223,7 +223,7 @@ public class FuEditorComponent implements Disposable {
     private synchronized void refreshUI() {
         Project currProject = ProjectUtils.getCurrProject();
         EditorHighlighterFactory highlighterFactory = EditorHighlighterFactory.getInstance();
-        if (StringUtils.isBlank(this.content)) {
+        if (FuStringUtils.isBlank(this.content)) {
             this.editor.setViewer(false);
             // 重置文本内容
             WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().setText(""));
@@ -253,7 +253,7 @@ public class FuEditorComponent implements Disposable {
             indentEndOffset++;
         }
         String indent = document.getText().substring(lineStartOffset, indentEndOffset);
-        String[] split = StringUtils.split(appendContent, "\n");
+        String[] split = FuStringUtils.split(appendContent, "\n");
         List<String> appendList = Lists.newArrayList();
         for (String line : split) {
             appendList.add(indent + line);

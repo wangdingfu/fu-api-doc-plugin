@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 
@@ -62,7 +62,7 @@ public class ApiDocCommentData {
      */
     public List<CommentTagData> getTagComments(String tag) {
         List<CommentTagData> commentTagDataList;
-        if (StringUtils.isNotBlank(tag) && MapUtils.isNotEmpty(tagMap) && CollectionUtils.isNotEmpty(commentTagDataList = tagMap.get(tag))) {
+        if (FuStringUtils.isNotBlank(tag) && MapUtils.isNotEmpty(tagMap) && CollectionUtils.isNotEmpty(commentTagDataList = tagMap.get(tag))) {
             return commentTagDataList;
         }
         return Lists.newArrayList();
@@ -86,14 +86,14 @@ public class ApiDocCommentData {
      * @return 对应的注释内容
      */
     public String getCommentTagValue(String tagName, String key) {
-        if (StringUtils.isBlank(tagName) || StringUtils.isBlank(key)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(tagName) || FuStringUtils.isBlank(key)) {
+            return FuStringUtils.EMPTY;
         }
         List<CommentTagData> tagComments = getTagComments(tagName);
         if (CollectionUtils.isNotEmpty(tagComments)) {
             return tagComments.stream().filter(f -> key.equals(f.getName())).findFirst().orElse(new CommentTagData()).getValue();
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 

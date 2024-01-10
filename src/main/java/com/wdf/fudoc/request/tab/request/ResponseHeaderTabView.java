@@ -15,7 +15,7 @@ import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
 import icons.FuDocIcons;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class ResponseHeaderTabView implements FuTab, HttpCallback {
             headers.forEach((key, value) -> {
                 HeaderKeyValueBO headerKeyValueBO = new HeaderKeyValueBO();
                 headerKeyValueBO.setKey(key);
-                headerKeyValueBO.setValue(StringUtils.join(value, ";"));
+                headerKeyValueBO.setValue(FuStringUtils.join(value, ";"));
                 keyValueTableBOList.add(headerKeyValueBO);
             });
             fuTableComponent.setDataList(keyValueTableBOList);

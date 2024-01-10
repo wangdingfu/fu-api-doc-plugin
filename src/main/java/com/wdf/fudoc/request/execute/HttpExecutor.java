@@ -14,7 +14,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.net.ConnectException;
 import java.net.HttpCookie;
@@ -39,7 +39,7 @@ public class HttpExecutor {
     public static void execute(FuHttpRequestData fuHttpRequestData, FuRequestConfigPO fuRequestConfigPO, FuLogger fuLogger) {
         long start = System.currentTimeMillis();
         String requestUrl = fuHttpRequestData.getRequest().getRequestUrl();
-        if (StringUtils.isBlank(requestUrl)) {
+        if (FuStringUtils.isBlank(requestUrl)) {
             fuLogger.errorLog("接口请求地址不合法. url:{}", requestUrl);
             return;
         }

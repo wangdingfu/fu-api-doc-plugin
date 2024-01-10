@@ -20,7 +20,7 @@ import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -139,7 +139,7 @@ public class EditorListComponent<T extends BaseTemplate> extends DefaultListMode
                 return;
             }
             String selectedValue = jbList.getSelectedValue();
-            if (StringUtils.isEmpty(selectedValue)) {
+            if (FuStringUtils.isEmpty(selectedValue)) {
                 return;
             }
             this.currentItem = selectedValue;
@@ -198,7 +198,7 @@ public class EditorListComponent<T extends BaseTemplate> extends DefaultListMode
 
             @Override
             public void update(@NotNull AnActionEvent e) {
-                e.getPresentation().setEnabled(!CollectionUtil.isEmpty(dataList) && !StringUtils.isEmpty(currentItem));
+                e.getPresentation().setEnabled(!CollectionUtil.isEmpty(dataList) && !FuStringUtils.isEmpty(currentItem));
             }
         };
     }
@@ -229,7 +229,7 @@ public class EditorListComponent<T extends BaseTemplate> extends DefaultListMode
 
             @Override
             public void update(@NotNull AnActionEvent e) {
-                e.getPresentation().setEnabled(!CollectionUtil.isEmpty(dataList) && !StringUtils.isEmpty(currentItem));
+                e.getPresentation().setEnabled(!CollectionUtil.isEmpty(dataList) && !FuStringUtils.isEmpty(currentItem));
             }
         };
     }
@@ -282,7 +282,7 @@ public class EditorListComponent<T extends BaseTemplate> extends DefaultListMode
 
     private void inputItemName(String initValue, Consumer<String> consumer) {
         String value = Messages.showInputDialog(label, "Input " + label, Messages.getQuestionIcon(), initValue, new InputExistsValidator(getAllItem()));
-        if (StringUtils.isEmpty(value)) {
+        if (FuStringUtils.isEmpty(value)) {
             return;
         }
         consumer.accept(value);
@@ -305,7 +305,7 @@ public class EditorListComponent<T extends BaseTemplate> extends DefaultListMode
         } finally {
             this.refresh = false;
         }
-        if (StringUtils.isEmpty(this.currentItem) && CollectionUtils.isNotEmpty(this.dataList)) {
+        if (FuStringUtils.isEmpty(this.currentItem) && CollectionUtils.isNotEmpty(this.dataList)) {
             T data = this.dataList.get(0);
             setCurrentItem(data.getIdentify());
             listener.doAction(data);

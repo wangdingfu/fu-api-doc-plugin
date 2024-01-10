@@ -3,7 +3,7 @@ package com.wdf.fudoc.apidoc.constant.enumtype;
 import com.intellij.psi.CommonClassNames;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -105,7 +105,7 @@ public enum FuDocArrayType {
     }
 
     public static FuDocArrayType getEnum(String arrayType) {
-        if (StringUtils.isNotBlank(arrayType)) {
+        if (FuStringUtils.isNotBlank(arrayType)) {
             for (FuDocArrayType value : FuDocArrayType.values()) {
                 if (value.getArrayType().equals(arrayType)) {
                     return value;

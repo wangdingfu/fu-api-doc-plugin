@@ -20,7 +20,7 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -129,7 +129,7 @@ public abstract class AbstractApiDocObjectParser implements ApiDocObjectParser {
      */
     protected Object mockCommonType(ObjectInfoDesc objectInfoDesc) {
         String type;
-        if (Objects.isNull(objectInfoDesc) || StringUtils.isBlank(type = objectInfoDesc.getType())) {
+        if (Objects.isNull(objectInfoDesc) || FuStringUtils.isBlank(type = objectInfoDesc.getType())) {
             return null;
         }
         CommonObjectType commonObjectType = CommonObjectType.getEnum(type);

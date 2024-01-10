@@ -8,7 +8,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.system.SystemUtil;
 import com.ibm.icu.util.LocaleData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -43,8 +43,8 @@ public class ResourceUtils {
      */
     public static File createFuRequestFileDir(String moduleName, String suffix) {
         String timeStr = DatePattern.PURE_DATE_FORMAT.format(new Date());
-        String yyyyMM = StringUtils.substring(timeStr, 0, 6);
-        String day = StringUtils.substring(timeStr, 6, 8);
+        String yyyyMM = FuStringUtils.substring(timeStr, 0, 6);
+        String day = FuStringUtils.substring(timeStr, 6, 8);
         //随机生成文件名
         String fileName = IdUtil.fastUUID() + "." + suffix;
         return FileUtil.file(FileUtil.getTmpDir(), FuDocConstants.FU_DOC_PATH, moduleName, FuDocConstants.FU_REQUEST_PATH, yyyyMM, day, fileName);

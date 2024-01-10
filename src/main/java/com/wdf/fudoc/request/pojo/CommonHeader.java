@@ -3,7 +3,7 @@ package com.wdf.fudoc.request.pojo;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class CommonHeader extends KeyValueTableBO {
      */
     public boolean isVariable() {
         String value = getValue();
-        return StringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}");
+        return FuStringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}");
     }
 
 }

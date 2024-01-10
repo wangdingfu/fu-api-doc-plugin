@@ -23,7 +23,7 @@ import com.wdf.fudoc.spring.SpringBootEnvModuleInfo;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;
@@ -97,6 +97,8 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
             FuHttpRequestData fuHttpRequestData = requestTabView.getFuHttpRequestData();
             FuRequestData request = fuHttpRequestData.getRequest();
             request.setDomain(env.getDomain());
+            request.setContextPath(null);
+            request.setRequestUrl(null);
             requestTabView.setRequestUrl(request.getRequestUrl());
         });
     }
@@ -105,7 +107,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
     @Override
     public void refresh() {
         String text = this.fuStatusLabel.getText();
-        if (StringUtils.isBlank(text)) {
+        if (FuStringUtils.isBlank(text)) {
             setText(getEnvName());
             return;
         }
@@ -123,7 +125,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
 
     private void setText(String text) {
         this.fuStatusLabel.setText(text);
-        if (StringUtils.isNotBlank(text)) {
+        if (FuStringUtils.isNotBlank(text)) {
             select(text);
         }
     }
@@ -139,10 +141,10 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
         }
         String applicationName = envInfo.getApplicationName();
         return envConfigList.stream()
-                .filter(f -> StringUtils.isNotBlank(f.getApplication()))
+                .filter(f -> FuStringUtils.isNotBlank(f.getApplication()))
                 .filter(DynamicTableBO::isSelect)
-                .filter(f -> StringUtils.isNotBlank(f.getDomain()))
-                .filter(f -> StringUtils.isNotBlank(f.getEnvName()))
+                .filter(f -> FuStringUtils.isNotBlank(f.getDomain()))
+                .filter(f -> FuStringUtils.isNotBlank(f.getEnvName()))
                 .filter(f -> f.getApplication().equals(applicationName)).collect(Collectors.toList());
     }
 

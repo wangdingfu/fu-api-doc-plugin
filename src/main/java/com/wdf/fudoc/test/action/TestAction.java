@@ -1,6 +1,5 @@
 package com.wdf.fudoc.test.action;
 
-import cn.hutool.core.util.RandomUtil;
 import com.intellij.httpClient.converters.RequestBuilder;
 import com.intellij.httpClient.converters.curl.CurlRequestBuilder;
 import com.intellij.httpClient.execution.HttpRequestConfig;
@@ -21,7 +20,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiFile;
-import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.navigation.FuApiNavigationExecutor;
@@ -41,11 +39,11 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        log.error("测试异常消息", new FuDocException("异常消息" + RandomUtil.randomNumbers(10)));
+
     }
 
 
-    public void showPanel(){
+    public void showPanel() {
         KeyValueTableBO keyValueTableBO = new KeyValueTableBO();
     }
 
@@ -58,7 +56,7 @@ public class TestAction extends AnAction {
     }
 
     private void curlTest(AnActionEvent e) {
-        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject(), null);
         //读取http文件
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 
@@ -73,7 +71,7 @@ public class TestAction extends AnAction {
 
 
     private void request(AnActionEvent e) {
-        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject());
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject(), null);
         //读取http文件
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 

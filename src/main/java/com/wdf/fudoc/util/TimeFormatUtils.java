@@ -2,7 +2,7 @@ package com.wdf.fudoc.util;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Date;
 import java.util.Objects;
@@ -23,11 +23,11 @@ public class TimeFormatUtils {
 
     public static String format(Long time) {
         if (Objects.isNull(time) || time == 0) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         long currentSeconds = DateUtil.currentSeconds();
         if (time > currentSeconds) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
 
         long diffTime = currentSeconds - time;

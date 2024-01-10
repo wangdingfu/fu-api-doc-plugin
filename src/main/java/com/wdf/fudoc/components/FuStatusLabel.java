@@ -5,7 +5,7 @@ import com.wdf.fudoc.components.listener.FuStatusLabelListener;
 import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,8 +35,8 @@ public class FuStatusLabel {
     }
 
     public void setText(String text) {
-        this.label.setText(Objects.isNull(text) ? StringUtils.EMPTY : text);
-        this.label.setVisible(StringUtils.isNotBlank(text));
+        this.label.setText(Objects.isNull(text) ? FuStringUtils.EMPTY : text);
+        this.label.setVisible(FuStringUtils.isNotBlank(text));
     }
 
 

@@ -1,9 +1,11 @@
 package com.wdf.fudoc.apidoc.view.tab;
 
 import com.google.common.collect.Lists;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
 import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting;
@@ -16,11 +18,13 @@ import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.YapiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.YApiProjectInfoDTO;
 import com.wdf.fudoc.apidoc.sync.service.YApiService;
-import com.wdf.fudoc.common.FuBundle;
+import com.wdf.api.base.FuBundle;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.common.ServiceHelper;
-import com.wdf.fudoc.common.constant.MessageConstants;
-import com.wdf.fudoc.common.notification.FuDocNotification;
+import com.wdf.api.constants.MessageConstants;
+import com.wdf.api.constants.UrlConstants;
+import com.wdf.api.enumtype.FuColor;
+import com.wdf.api.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.PlaceholderTextField;
@@ -30,7 +34,7 @@ import com.wdf.fudoc.components.listener.FuViewListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
 import com.wdf.fudoc.util.ObjectUtils;
 import icons.FuDocIcons;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -151,14 +155,14 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     @Override
     public YApiProjectTableData addData() {
         String baseUrlText = baseUrl.getText();
-        if (StringUtils.isBlank(baseUrlText)) {
+        if (FuStringUtils.isBlank(baseUrlText)) {
             //提示需要填写YApi服务地址
             Messages.showYesNoDialog(FuBundle.message(MessageConstants.SYNC_YAPI_URL_TIP), "", Messages.getQuestionIcon());
             return null;
         }
         List<String> projectTokenList = ObjectUtils.listToList(fuTableComponent.getDataList(), YApiProjectTableData::getProjectToken);
-        String value = Messages.showInputDialog(SYNC_TOKEN, SYNC_TOKEN_TITLE, Messages.getQuestionIcon(), StringUtils.EMPTY, new InputExistsValidator(projectTokenList));
-        if (StringUtils.isEmpty(value)) {
+        String value = Messages.showInputDialog(SYNC_TOKEN, SYNC_TOKEN_TITLE, Messages.getQuestionIcon(), FuStringUtils.EMPTY, new InputExistsValidator(projectTokenList));
+        if (FuStringUtils.isEmpty(value)) {
             return null;
         }
         //根据token获取YApi项目信息
@@ -186,7 +190,14 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
 
     @Override
     public TabInfo getTabInfo() {
-        return FuTabComponent.getInstance("YApi", FuDocIcons.FU_API_YAPI, this.rootPane).builder();
+        JPanel slidePanel = new JPanel(new BorderLayout());
+        //登录showDoc，进入具体项目后，点击项目设置-“开放API”便可看到
+        ActionLink actionLink = new ActionLink(FuBundle.message("fudoc.sync.token.link"), e -> {
+            BrowserUtil.browse(UrlConstants.FU_DOCUMENT_YAPI_URL);
+        });
+        actionLink.setForeground(FuColor.color6.color());
+        slidePanel.add(actionLink, BorderLayout.EAST);
+        return FuTabComponent.getInstance("YApi", FuDocIcons.FU_API_YAPI, this.rootPane).builder(slidePanel);
     }
 
     private void createUIComponents() {

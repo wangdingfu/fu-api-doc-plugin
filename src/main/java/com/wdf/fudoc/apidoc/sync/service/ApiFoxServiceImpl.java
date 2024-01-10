@@ -8,9 +8,9 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiFoxDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiFoxResult;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.common.exception.FuDocException;
-import com.wdf.fudoc.util.JsonUtil;
+import com.wdf.api.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -35,15 +35,15 @@ public class ApiFoxServiceImpl implements ApiFoxService {
             String postResult = httpRequest.execute().body();
             log.info("同步结果:{}", postResult);
             ApiFoxResult result;
-            if (StringUtils.isBlank(postResult) || Objects.isNull(result = JsonUtil.toBean(postResult, ApiFoxResult.class))) {
+            if (FuStringUtils.isBlank(postResult) || Objects.isNull(result = JsonUtil.toBean(postResult, ApiFoxResult.class))) {
                 return "ApiFox返回结果为空";
             }
             Boolean success = result.getSuccess();
             if (Objects.nonNull(success) && success) {
-                return StringUtils.EMPTY;
+                return FuStringUtils.EMPTY;
             }
             String errorMessage = result.getErrorMessage();
-            return StringUtils.isBlank(errorMessage) ? "同步异常" : errorMessage;
+            return FuStringUtils.isBlank(errorMessage) ? "同步异常" : errorMessage;
         } catch (Exception e) {
             log.error("同步Api到ApiFox系统异常", e);
         }

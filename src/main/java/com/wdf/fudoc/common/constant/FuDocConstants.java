@@ -72,6 +72,7 @@ public interface FuDocConstants {
     }
 
     interface ExtInfo {
+        String ROOT_OBJECT = "isRootObject";
         String IS_ATTR = "isAttr";
         /**
          * 标识当前对象还未解析完成
@@ -119,6 +120,12 @@ public interface FuDocConstants {
         String PSI_COMMENT_TAG_VALUE = "DOC_TAG_VALUE_ELEMENT";
         String PSI_PARAMETER_REF = "DOC_PARAMETER_REF";
 
+        //对应双//注释
+        String COMMENT_END = "END_OF_LINE_COMMENT";
+        /*
+        对应该种格式注释
+         */
+        String COMMENT_C = "C_STYLE_COMMENT";
 
         String COMMENT_START_1 = "/*";
         String COMMENT_START_2 = "//";

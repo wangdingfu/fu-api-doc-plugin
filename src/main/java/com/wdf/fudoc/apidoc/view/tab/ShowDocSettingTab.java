@@ -13,15 +13,16 @@ import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.data.*;
-import com.wdf.fudoc.common.FuBundle;
+import com.wdf.api.base.FuBundle;
 import com.wdf.fudoc.common.FuTab;
-import com.wdf.fudoc.common.enumtype.FuColor;
+import com.wdf.api.constants.UrlConstants;
+import com.wdf.api.enumtype.FuColor;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.PlaceholderTextField;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuViewListener;
-import com.wdf.fudoc.util.PopupUtils;
+import com.wdf.api.util.PopupUtils;
 import icons.FuDocIcons;
 
 import javax.swing.*;
@@ -75,7 +76,8 @@ public class ShowDocSettingTab implements FuTab, FuViewListener {
     public TabInfo getTabInfo() {
         JPanel slidePanel = new JPanel(new BorderLayout());
         //登录showDoc，进入具体项目后，点击项目设置-“开放API”便可看到
-        ActionLink actionLink = new ActionLink(FuBundle.message("fudoc.sync.showdoc.token.link"), e -> {
+        ActionLink actionLink = new ActionLink(FuBundle.message("fudoc.sync.token.link"), e -> {
+            BrowserUtil.browse(UrlConstants.FU_DOCUMENT_SHOW_DOC_URL);
         });
         actionLink.setForeground(FuColor.color6.color());
         slidePanel.add(actionLink, BorderLayout.EAST);

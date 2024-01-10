@@ -17,9 +17,9 @@ import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.ObjectUtils;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +40,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
     protected boolean checkConfig(BaseSyncConfigData configData) {
         ApiFoxConfigData apiFoxConfigData = (ApiFoxConfigData) configData;
         String token = apiFoxConfigData.getToken();
-        return StringUtils.isBlank(token);
+        return FuStringUtils.isBlank(token);
     }
 
     /**
@@ -70,7 +70,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         ApiFoxService service = ServiceHelper.getService(ApiFoxService.class);
         //同步api
         String errorMsg = service.syncApi(apiFoxDTO, apiProjectDTO, (ApiFoxConfigData) configData);
-        ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
+        ApiSyncStatus syncStatus = FuStringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
         return ObjectUtils.listToList(fuDocItemDataList, f -> buildSyncApiResult(f, apiProjectDTO, syncStatus, errorMsg));
     }
 
@@ -114,6 +114,9 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         String requestType = fuDocItemData.getRequestType();
         List<FuDocParamData> requestParams = fuDocItemData.getRequestParams();
         if (RequestType.GET.getRequestType().equals(requestType)) {
+            if (CollectionUtils.isEmpty(requestParams)) {
+                return Lists.newArrayList();
+            }
             //GET请求参数组装
             return requestParams.stream().map(m -> buildParameterItem(m, m.getExt().containsKey(FuDocConstants.PATH_VARIABLE) ? "path" : "query")).collect(Collectors.toList());
         }
@@ -154,7 +157,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         }
         Map<String, OpenApiContentDTO> content = new HashMap<>();
         ContentType contentType = fuDocItemData.getContentType();
-        if (Objects.isNull(contentType)) {
+        if (Objects.isNull(contentType) || isResponse) {
             contentType = ContentType.JSON;
         }
         OpenApiContentDTO openApiContentDTO = new OpenApiContentDTO();

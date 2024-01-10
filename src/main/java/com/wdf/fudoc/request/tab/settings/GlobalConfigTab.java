@@ -2,15 +2,16 @@ package com.wdf.fudoc.request.tab.settings;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.ui.tabs.TabInfo;
-import com.wdf.fudoc.common.FuBundle;
+import com.wdf.api.base.FuBundle;
 import com.wdf.fudoc.common.FuDataTab;
-import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.api.constants.MessageConstants;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
@@ -21,6 +22,7 @@ import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
+import org.jdesktop.swingx.action.OpenBrowserAction;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -65,11 +67,25 @@ public class GlobalConfigTab implements FuDataTab<FuRequestConfigPO> {
         this.envTable.addAnAction(new AnActionButton("Refresh", "", AllIcons.Actions.Refresh) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                SpringBootEnvLoader.doLoad(e.getProject(), true);
+                SpringBootEnvLoader.doLoad(e.getProject(), true,true);
                 FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(e.getProject()).readData();
                 envTable.setDataList(Lists.newArrayList(fuRequestConfigPO.getEnvConfigList()));
             }
         });
+        AnActionButton envAction = new AnActionButton("查看文档","",FuDocIcons.FU_DOC){
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                BrowserUtil.browse("http://www.fudoc.cn/pages/1fa915/");
+            }
+        };
+        AnActionButton authAction = new AnActionButton("查看文档","",FuDocIcons.FU_DOC){
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                BrowserUtil.browse("http://www.fudoc.cn/pages/7881a4/");
+            }
+        };
+        this.envTable.addAnAction(envAction);
+        this.authTable.addAnAction(authAction);
     }
 
     @Override

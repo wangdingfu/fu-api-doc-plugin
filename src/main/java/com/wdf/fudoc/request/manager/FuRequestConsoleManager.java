@@ -19,7 +19,7 @@ import com.wdf.fudoc.request.constants.enumtype.RequestStatus;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestConsoleData;
 import com.wdf.fudoc.request.pojo.FuResponseConsoleData;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -132,7 +132,7 @@ public class FuRequestConsoleManager {
         String bodyContent = httpResponse.body();
         responseConsoleData.setResponseBody(bodyContent);
         ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), FuDocRender.render(responseConsoleData, "console/response_console.ftl"), HttpRequestFileType.INSTANCE);
-        if (StringUtils.isBlank(bodyContent)) {
+        if (FuStringUtils.isBlank(bodyContent)) {
             return;
         }
         if (JSONUtil.isTypeJSON(bodyContent)) {
@@ -152,8 +152,8 @@ public class FuRequestConsoleManager {
     private static String buildRequestBody(HttpRequest httpRequest) {
         byte[] bytes = httpRequest.bodyBytes();
         if (Objects.nonNull(bytes)) {
-            String bodyContent = StringUtils.toEncodedString(bytes, StandardCharsets.UTF_8);
-            if (StringUtils.isNotBlank(bodyContent)) {
+            String bodyContent = FuStringUtils.toEncodedString(bytes, StandardCharsets.UTF_8);
+            if (FuStringUtils.isNotBlank(bodyContent)) {
                 return JSONUtil.isTypeJSON(bodyContent) ? JSONUtil.toJsonPrettyStr(bodyContent) : bodyContent;
             }
         }
@@ -163,7 +163,7 @@ public class FuRequestConsoleManager {
 
     private static List<KeyValueBO> buildHeaderList(Map<String, List<String>> headers) {
         List<KeyValueBO> headerList = Lists.newArrayList();
-        headers.forEach((key, value) -> headerList.add(new KeyValueBO(key, StringUtils.join(value, ";"))));
+        headers.forEach((key, value) -> headerList.add(new KeyValueBO(key, FuStringUtils.join(value, ";"))));
         return headerList;
     }
 

@@ -7,15 +7,15 @@ import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.view.tab.ApiFoxSettingTab;
 import com.wdf.fudoc.apidoc.view.tab.ShowDocSettingTab;
 import com.wdf.fudoc.apidoc.view.tab.YApiSettingTab;
-import com.wdf.fudoc.common.constant.UrlConstants;
-import com.wdf.fudoc.common.enumtype.FuColor;
-import com.wdf.fudoc.components.bo.FuMsgBO;
-import com.wdf.fudoc.components.bo.FuMsgItemBO;
+import com.wdf.api.constants.UrlConstants;
+import com.wdf.api.enumtype.FuColor;
+import com.wdf.api.msg.bo.FuMsgBO;
+import com.wdf.api.msg.bo.FuMsgItemBO;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
-import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import com.wdf.api.enumtype.MessageType;
 import com.wdf.fudoc.util.FuMessageUtils;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,7 +59,7 @@ public class FuDocSyncSettingForm {
         //需要判断是否展示提示信息
         FuDocSyncConfigData settingData = FuDocSyncSetting.getSettingData();
         BaseSyncConfigData enableConfigData = settingData.getEnableConfigData();
-        if (Objects.isNull(enableConfigData) || StringUtils.isBlank(enableConfigData.getBaseUrl()) || !enableConfigData.isExistsConfig()) {
+        if (Objects.isNull(enableConfigData) || FuStringUtils.isBlank(enableConfigData.getBaseUrl()) || !enableConfigData.isExistsConfig()) {
             this.rootPanel.add(FuMessageUtils.createMessage(buildMsg()), BorderLayout.NORTH);
         }
         this.rootPanel.add(fuTabBuilder.build(), BorderLayout.CENTER);

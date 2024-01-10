@@ -8,11 +8,11 @@ import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
-import com.wdf.fudoc.common.constant.UrlConstants;
+import com.wdf.api.constants.UrlConstants;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
-import com.wdf.fudoc.util.JsonUtil;
+import com.wdf.api.util.JsonUtil;
 import com.wdf.fudoc.util.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +26,7 @@ public class ShowDocConfigData extends BaseSyncConfigData {
 
     @Override
     public String getBaseUrl() {
-        return StringUtils.isBlank(super.baseUrl) ? UrlConstants.SHOW_DOC : super.baseUrl;
+        return FuStringUtils.isBlank(super.baseUrl) ? UrlConstants.SHOW_DOC : super.baseUrl;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ShowDocConfigData extends BaseSyncConfigData {
             return Lists.newArrayList();
         }
         String application = SpringBootEnvLoader.getApplication(module);
-        return state.getShowDocConfigList().stream().filter(f -> StringUtils.isNotBlank(f.getApplicationName()))
+        return state.getShowDocConfigList().stream().filter(f -> FuStringUtils.isNotBlank(f.getApplicationName()))
                 .filter(f -> f.getApplicationName().equals(application))
                 .map(this::buildApiProjectDTO).collect(Collectors.toList());
     }
@@ -84,6 +84,7 @@ public class ShowDocConfigData extends BaseSyncConfigData {
         apiProjectDTO.setProjectName(tableData.getProjectName());
         apiProjectDTO.setApiCategoryList(JsonUtil.toList(tableData.getCategories(), ApiCategoryDTO.class));
         apiProjectDTO.setApplicationName(tableData.getApplicationName());
+        apiProjectDTO.setLatest(tableData.isLatest());
         return apiProjectDTO;
     }
 
@@ -94,6 +95,7 @@ public class ShowDocConfigData extends BaseSyncConfigData {
         configData.setProjectName(projectDTO.getProjectName());
         configData.setCategories(JsonUtil.toJson(projectDTO.getApiCategoryList()));
         configData.setApplicationName(projectDTO.getApplicationName());
+        configData.setLatest(projectDTO.isLatest());
         return configData;
     }
 }

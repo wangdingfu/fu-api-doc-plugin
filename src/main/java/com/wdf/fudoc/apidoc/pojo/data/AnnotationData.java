@@ -7,7 +7,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,7 @@ public class AnnotationData {
      * @param value    属性值
      */
     public void addAttr(String attrName, AnnotationValueData value) {
-        if (StringUtils.isNotBlank(attrName) && Objects.nonNull(value)) {
+        if (FuStringUtils.isNotBlank(attrName) && Objects.nonNull(value)) {
             if (Objects.isNull(attrMap)) {
                 this.attrMap = new HashMap<>();
             }
@@ -149,7 +149,7 @@ public class AnnotationData {
 
 
     private AnnotationValueData getValue(String attrName) {
-        if (Objects.nonNull(this.attrMap) && StringUtils.isNotBlank(attrName)) {
+        if (Objects.nonNull(this.attrMap) && FuStringUtils.isNotBlank(attrName)) {
             return this.attrMap.get(attrName);
         }
         return null;

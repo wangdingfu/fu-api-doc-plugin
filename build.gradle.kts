@@ -28,6 +28,7 @@ repositories {
     }
     mavenCentral()
 }
+
 dependencies {
     compileOnly("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.projectlombok:lombok:1.18.26")
@@ -38,8 +39,11 @@ dependencies {
     implementation("cn.hutool:hutool-crypto:5.8.20")
     implementation("cn.hutool:hutool-system:5.8.20")
     implementation("cn.hutool:hutool-script:5.8.20")
+    implementation("org.apache.commons:commons-lang3:3.10")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
     implementation("com.atlassian.commonmark:commonmark:0.17.0")
+    implementation("com.wdf.api:fu-api-commons:${properties["ideaVersion"]}.${properties["fudocVersion"]}")
+    implementation("com.wdf.api:fu-api-start:${properties["ideaVersion"]}.${properties["fudocVersion"]}")
 }
 
 

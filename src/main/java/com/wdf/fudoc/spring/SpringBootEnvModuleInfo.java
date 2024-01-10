@@ -1,6 +1,7 @@
 package com.wdf.fudoc.spring;
 
 import com.intellij.openapi.module.Module;
+import com.wdf.fudoc.request.pojo.SpringBootEnvConfigInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,8 +53,8 @@ public class SpringBootEnvModuleInfo {
     }
 
 
-    public void addEnvInfo(Module module, String application, String defaultEnv, Map<String, Integer> serverPortMap, List<Module> childList) {
-        envMap.put(module, new SpringBootEnvInfo(application, defaultEnv, serverPortMap, childList));
+    public void addEnvInfo(Module module, String application, String defaultEnv, Map<String, SpringBootEnvConfigInfo> envConfigInfoMap, List<Module> childList) {
+        envMap.put(module, new SpringBootEnvInfo(application, defaultEnv, envConfigInfoMap, childList));
     }
 
 
@@ -75,7 +76,7 @@ public class SpringBootEnvModuleInfo {
         /**
          * 端口号信息 key：环境 value：端口号
          */
-        private Map<String, Integer> serverPortMap;
+        private Map<String, SpringBootEnvConfigInfo> envConfigInfoMap;
 
         /**
          * 子module

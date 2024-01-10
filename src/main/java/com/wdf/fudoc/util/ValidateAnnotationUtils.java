@@ -4,7 +4,7 @@ import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.desc.BaseInfoDesc;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Optional;
 
@@ -55,7 +55,7 @@ public class ValidateAnnotationUtils {
             return getMessageValue(baseInfoDesc, AnnotationConstants.VALID_NOT_EMPTY);
         }
 
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
@@ -64,7 +64,7 @@ public class ValidateAnnotationUtils {
         if (annotation.isPresent()) {
             return annotation.get().constant(FuDocConstants.AnnotationAttr.MESSAGE).stringValue();
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 

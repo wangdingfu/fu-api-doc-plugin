@@ -13,7 +13,7 @@ import com.wdf.fudoc.futool.dtoconvert.domain.model.GenerateContext;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.SetObjConfigDO;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -105,10 +105,10 @@ public abstract class AbstractGenerateVo2Dto implements IGenerateVo2Dto {
 
     protected PsiClass searchPsiClass(GenerateContext generateContext, String clazzName) {
         String className = clazzName;
-        String parentClassName = StringUtils.EMPTY;
+        String parentClassName = FuStringUtils.EMPTY;
         if (clazzName.contains(".")) {
-            className = StringUtils.substringAfterLast(clazzName, ".");
-            parentClassName = StringUtils.substringBeforeLast(clazzName, ".");
+            className = FuStringUtils.substringAfterLast(clazzName, ".");
+            parentClassName = FuStringUtils.substringBeforeLast(clazzName, ".");
         }
         Collection<PsiClass> psiClasses = JavaShortClassNameIndex.getInstance().get(className, generateContext.getProject(), GlobalSearchScope.allScope(generateContext.getProject()));
         if (CollectionUtils.isEmpty(psiClasses)) {

@@ -11,25 +11,29 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiClass;
 import com.intellij.ui.components.labels.LinkLabel;
 import com.intellij.util.ui.JBUI;
+import com.wdf.api.notification.FuDocNotification;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
+import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
-import com.wdf.fudoc.common.FuBundle;
-import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.api.base.FuBundle;
+import com.wdf.api.constants.MessageConstants;
 import com.wdf.fudoc.components.tree.FuTreeActionListener;
 import com.wdf.fudoc.components.tree.FuTreeComponent;
 import com.wdf.fudoc.components.tree.node.FuTreeNode;
 import com.wdf.fudoc.components.validator.CreateCategoryValidator;
 import com.wdf.fudoc.util.FuDocUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,6 +45,7 @@ import java.util.Optional;
 public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionListener<ApiCategoryDTO> {
 
     private final JPanel rootPanel;
+    private final JPanel categoryPanel;
 
     private final Project project;
 
@@ -76,7 +81,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
     /**
      * 树形组件
      */
-    private final FuTreeComponent<ApiCategoryDTO> fuTreeComponent;
+    private FuTreeComponent<ApiCategoryDTO> fuTreeComponent;
 
     private static final String PROJECT_LABEL = FuBundle.message(MessageConstants.SYNC_API_PROJECT_LABEL);
     private static final String CREATE_PROJECT = FuBundle.message(MessageConstants.SYNC_API_CREATE_PROJECT);
@@ -89,13 +94,12 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         this.project = project;
         this.psiClass = psiClass;
         this.rootPanel = new JPanel(new BorderLayout());
+        this.categoryPanel = new JPanel(new BorderLayout());
         this.module = ModuleUtil.findModuleForPsiElement(psiClass);
         //初始化配置数据
         initConfig();
         //初始化UI
         initProjectUI();
-        //初始化树形组件
-        this.fuTreeComponent = new FuTreeComponent<>(project, buildRoot(this.apiProjectDTO.getApiCategoryList()), this);
         init();
         setTitle("选择api所属目录");
     }
@@ -106,23 +110,68 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         this.configData = settingData.getEnableConfigData();
         this.projectConfigList = this.configData.getProjectConfigList(module);
         this.projectNameComboBox = new ComboBox<>(projectConfigList.toArray(new ApiProjectDTO[0]));
-        if (Objects.isNull(this.apiProjectDTO) && CollectionUtils.isNotEmpty(this.projectConfigList)) {
-            this.apiProjectDTO = projectConfigList.get(0);
-            //是否将当前类的注释信息作为分类
-            String title = FuDocUtils.classTitle(psiClass);
-            if (StringUtils.isNotBlank(title)) {
-                List<ApiCategoryDTO> apiCategoryList = this.apiProjectDTO.getApiCategoryList();
-                if (Objects.isNull(apiCategoryList)) {
-                    apiCategoryList = Lists.newArrayList();
-                    this.apiProjectDTO.setApiCategoryList(apiCategoryList);
-                }
-                if (apiCategoryList.stream().noneMatch(a -> title.equals(a.getCategoryName()))) {
-                    this.defaultApiCategory = new ApiCategoryDTO(title);
-                    apiCategoryList.add(this.defaultApiCategory);
-                }
+        //监听项目变更时 刷新树形组件
+        this.projectNameComboBox.addItemListener(e -> {
+            if (ItemEvent.SELECTED == e.getStateChange()) {
+                projectChangeEvent((ApiProjectDTO) e.getItem());
+            }
+        });
+        //自动选择一个项目
+        ApiProjectDTO autoSelectProject = autoSelectProject();
+        if (Objects.nonNull(autoSelectProject)) {
+            this.projectNameComboBox.setSelectedItem(autoSelectProject);
+        }
+
+    }
+
+    private ApiProjectDTO autoSelectProject() {
+        if (CollectionUtils.isEmpty(this.projectConfigList)) {
+            FuDocNotification.notifyError("请添加项目配置后在同步文档");
+            return null;
+        }
+        ApiProjectDTO autoSelected = projectConfigList.stream().filter(ApiProjectDTO::isLatest).findFirst().orElse(projectConfigList.get(0));
+        //是否将当前类的注释信息作为分类
+        String title = FuDocUtils.classTitle(psiClass);
+        if (FuStringUtils.isNotBlank(title)) {
+            List<ApiCategoryDTO> apiCategoryList = autoSelected.getApiCategoryList();
+            if (Objects.isNull(apiCategoryList)) {
+                apiCategoryList = Lists.newArrayList();
+                autoSelected.setApiCategoryList(apiCategoryList);
+            }
+            if (apiCategoryList.stream().noneMatch(a -> title.equals(a.getCategoryName()))) {
+                this.defaultApiCategory = new ApiCategoryDTO(title);
+                apiCategoryList.add(this.defaultApiCategory);
             }
         }
+        return autoSelected;
     }
+
+
+    private void projectChangeEvent(ApiProjectDTO selected) {
+        this.projectConfigList.forEach(f -> f.setLatest(false));
+        this.apiProjectDTO = selected;
+        this.apiProjectDTO.setLatest(true);
+        //初始化树形组件
+        this.fuTreeComponent = new FuTreeComponent<>(project, buildRoot(this.apiProjectDTO.getApiCategoryList()), this);
+        //切换树形组件面板
+        switchPanel(fuTreeComponent.createUI());
+        //保存到持久化文件中
+        configData.syncApiProjectList(module, this.projectConfigList);
+    }
+
+
+    /**
+     * 切换面板
+     *
+     * @param switchPanel 需要切换的面板
+     */
+    private void switchPanel(JComponent switchPanel) {
+        this.categoryPanel.removeAll();
+        this.categoryPanel.repaint();
+        this.categoryPanel.add(switchPanel, BorderLayout.CENTER);
+        this.categoryPanel.revalidate();
+    }
+
 
     private void initProjectUI() {
         JPanel projectPanel = new JPanel(new BorderLayout());
@@ -132,11 +181,15 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         LinkLabel<String> projectLinkLabel = new LinkLabel<>(CREATE_PROJECT, null, (aSource, aLinkData) -> {
             //当前暂不提供创建项目入口-预留后期
         });
+        if (Objects.isNull(this.apiProjectDTO)) {
+            projectChangeEvent(autoSelectProject());
+        }
         projectLinkLabel.setEnabled(false);
         projectLinkLabel.setBorder(JBUI.Borders.emptyLeft(10));
         projectPanel.add(projectLinkLabel, BorderLayout.EAST);
         projectPanel.setBorder(JBUI.Borders.empty(10));
         this.rootPanel.add(projectPanel, BorderLayout.NORTH);
+        this.rootPanel.add(this.categoryPanel, BorderLayout.CENTER);
     }
 
 
@@ -145,14 +198,13 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
      */
     public ApiProjectDTO getSelected() {
         FuTreeNode<ApiCategoryDTO> selectedNode = fuTreeComponent.getSelectedNode();
-        apiProjectDTO.setSelectCategory(Objects.isNull(selectedNode) ? this.defaultApiCategory : selectedNode.getData());
-        return apiProjectDTO;
+        this.apiProjectDTO.setSelectCategory(Objects.isNull(selectedNode) ? this.defaultApiCategory : selectedNode.getData());
+        return this.apiProjectDTO;
     }
 
 
     @Override
     protected @Nullable JComponent createCenterPanel() {
-        this.rootPanel.add(fuTreeComponent.createUI(), BorderLayout.CENTER);
         this.rootPanel.setPreferredSize(new Dimension(400, 400));
         this.rootPanel.setMaximumSize(new Dimension(300, 200));
         return this.rootPanel;
@@ -177,8 +229,8 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         }
         List<ApiCategoryDTO> apiCategoryList = apiCategoryDTO.getApiCategoryList();
         //弹框让用户输入分类名称
-        String categoryName = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), StringUtils.EMPTY, new CreateCategoryValidator(apiCategoryList));
-        if (StringUtils.isBlank(categoryName)) {
+        String categoryName = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), FuStringUtils.EMPTY, new CreateCategoryValidator(apiCategoryList));
+        if (FuStringUtils.isBlank(categoryName)) {
             return null;
         }
         ApiCategoryDTO addCategory = new ApiCategoryDTO(categoryName);
@@ -225,6 +277,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         }
         //构建根节点
         ApiCategoryDTO root = new ApiCategoryDTO("根目录", apiCategoryList);
+        apiCategoryList.forEach(f -> f.setParent(root));
         //递归查找分类
         return recursionCategory(paths, 1, root);
     }

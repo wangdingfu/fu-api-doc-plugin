@@ -13,14 +13,14 @@ import com.wdf.fudoc.apidoc.sync.dto.ShowDocDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.sync.service.ShowDocService;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
-import com.wdf.fudoc.common.FuBundle;
+import com.wdf.api.base.FuBundle;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.ServiceHelper;
-import com.wdf.fudoc.common.notification.FuDocNotification;
+import com.wdf.api.notification.FuDocNotification;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.ObjectUtils;
-import com.wdf.fudoc.util.ProjectUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.api.util.ProjectUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 
@@ -42,23 +42,29 @@ public class SyncShowDocStrategy extends AbstractSyncApiStrategy {
     protected List<SyncApiResultDTO> doSyncApi(List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData configData, ApiProjectDTO apiProjectDTO, ProjectSyncApiRecordData projectRecord) {
         String projectId = apiProjectDTO.getProjectId();
         String projectToken = apiProjectDTO.getProjectToken();
-        if (StringUtils.isBlank(projectId) || StringUtils.isBlank(projectToken)) {
+        if (FuStringUtils.isBlank(projectId) || FuStringUtils.isBlank(projectToken)) {
             FuDocNotification.notifyError(FuBundle.message("fudoc.sync.showdoc.tip"));
             return Lists.newArrayList();
         }
-        //将接口文档数据渲染成markdown格式接口文档
-        ShowDocDTO showDocDTO = new ShowDocDTO();
-        showDocDTO.setApiKey(apiProjectDTO.getProjectId());
-        showDocDTO.setApiToken(apiProjectDTO.getProjectToken());
-        showDocDTO.setCategoryName(recursionPath(apiProjectDTO.getSelectCategory()));
-        showDocDTO.setTitle(apiProjectDTO.getTitle());
-        showDocDTO.setContent(FuDocRender.markdownRender(FuDocSetting.getSettingData(), fuDocItemDataList));
-        ShowDocService service = ServiceHelper.getService(ShowDocService.class);
-        String errorMsg = service.syncApi(showDocDTO, (ShowDocConfigData) configData);
-        ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
-        return ObjectUtils.listToList(fuDocItemDataList, f -> buildSyncApiResult(f, apiProjectDTO, syncStatus, errorMsg));
+        List<SyncApiResultDTO> resultList = Lists.newArrayList();
+        for (FuDocItemData fuDocItemData : fuDocItemDataList) {
+            //将接口文档数据渲染成markdown格式接口文档
+            ShowDocDTO showDocDTO = new ShowDocDTO();
+            showDocDTO.setApiKey(apiProjectDTO.getProjectId());
+            showDocDTO.setApiToken(apiProjectDTO.getProjectToken());
+            showDocDTO.setCategoryName(recursionPath(apiProjectDTO.getSelectCategory()));
+            showDocDTO.setTitle(fuDocItemData.getTitle());
+            showDocDTO.setContent(FuDocRender.markdownRender(fuDocItemData, FuDocSetting.getSettingData()));
+            ShowDocService service = ServiceHelper.getService(ShowDocService.class);
+            String errorMsg = service.syncApi(showDocDTO, (ShowDocConfigData) configData);
+            ApiSyncStatus syncStatus = FuStringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
+            resultList.add(buildSyncApiResult(fuDocItemData, apiProjectDTO, syncStatus, errorMsg));
+
+        }
+        return resultList;
 
     }
+
 
     @Override
     protected ApiProjectDTO confirmApiCategory(ApiProjectDTO apiProjectDTO, BaseSyncConfigData configData, PsiClass psiClass, ProjectSyncApiRecordData projectRecord) {

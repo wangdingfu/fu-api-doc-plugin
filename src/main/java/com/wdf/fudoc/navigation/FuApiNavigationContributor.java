@@ -15,7 +15,7 @@ import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.navigation.match.FuApiMatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +60,7 @@ public class FuApiNavigationContributor implements WeightedSearchEverywhereContr
         long start = System.currentTimeMillis();
         log.info("搜索api.....");
         List<FoundItemDescriptor<ApiNavigationItem>> recentApiList;
-        if (StringUtils.isBlank(pattern) && CollectionUtils.isNotEmpty(recentApiList = projectRecentApi.historyList())) {
+        if (FuStringUtils.isBlank(pattern) && CollectionUtils.isNotEmpty(recentApiList = projectRecentApi.historyList())) {
             //直接展示最近搜索的api
             ContainerUtil.process(recentApiList, consumer);
             log.info("匹配历史搜索的api【{}】条. 共计耗时:{}ms", recentApiList.size(), System.currentTimeMillis() - start);

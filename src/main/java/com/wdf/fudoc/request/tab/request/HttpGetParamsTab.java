@@ -18,7 +18,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -131,7 +131,7 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         if (CollectionUtils.isNotEmpty(dataList)) {
             for (KeyValueTableBO keyValueTableBO : dataList) {
                 String value = param.remove(keyValueTableBO.getKey());
-                if(StringUtils.isNotBlank(value)){
+                if(FuStringUtils.isNotBlank(value)){
                     keyValueTableBO.setValue(value);
                     keyValueTableBO.setSelect(true);
                 }else {
@@ -249,7 +249,7 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         if (CollectionUtils.isNotEmpty(dataList)) {
             return dataList.stream().filter(KeyValueTableBO::getSelect).map(this::buildKeyValue).collect(Collectors.joining("&"));
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
     /**
@@ -259,6 +259,7 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         if (Objects.nonNull(this.httpRequestData)) {
             FuRequestData request = this.httpRequestData.getRequest();
             request.setParamUrl(paramUrl);
+            request.setRequestUrl(null);
             this.requestTabView.setRequestUrl(request.getRequestUrl());
         }
     }

@@ -10,7 +10,7 @@ import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;
@@ -86,7 +86,7 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
             doActionAfter();
             //选中列表中的指定项时 触发的事件
             String selectedValue = jbList.getSelectedValue();
-            if (StringUtils.isEmpty(selectedValue)) {
+            if (FuStringUtils.isEmpty(selectedValue)) {
                 return;
             }
             this.currentItem = selectedValue;
@@ -110,7 +110,7 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
     public String remove(int index) {
         String remove = super.remove(index);
         this.nameList.remove(index);
-        if (StringUtils.isNotBlank(remove)) {
+        if (FuStringUtils.isNotBlank(remove)) {
             this.listener.remove(this.dataMap.remove(remove));
         }
         return remove;
@@ -125,7 +125,7 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
 
 
     public void doActionAfter(){
-        if (StringUtils.isNotBlank(this.currentItem)) {
+        if (FuStringUtils.isNotBlank(this.currentItem)) {
             T data = dataMap.get(this.currentItem);
             if (Objects.nonNull(data)) {
                 listener.doActionAfter(data);
@@ -146,7 +146,7 @@ public class FuListStringComponent<T extends BaseList> extends DefaultListModel<
 
     private void inputItemName(Consumer<String> consumer) {
         String value = Messages.showInputDialog(label, "Input " + label, Messages.getQuestionIcon(), "前置请求", new InputExistsValidator(this.nameList));
-        if (StringUtils.isEmpty(value)) {
+        if (FuStringUtils.isEmpty(value)) {
             return;
         }
         consumer.accept(value);

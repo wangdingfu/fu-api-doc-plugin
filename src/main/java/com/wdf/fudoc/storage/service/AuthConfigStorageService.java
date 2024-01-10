@@ -2,16 +2,16 @@ package com.wdf.fudoc.storage.service;
 
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.wdf.fudoc.common.constant.FuPaths;
+import com.wdf.api.constants.FuPaths;
 import com.wdf.fudoc.request.pojo.AuthConfigData;
 import com.wdf.fudoc.request.pojo.BaseAuthConfig;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.ScriptConfigData;
-import com.wdf.fudoc.util.JsonUtil;
-import com.wdf.fudoc.util.StorageUtils;
+import com.wdf.api.util.JsonUtil;
+import com.wdf.api.util.StorageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
@@ -41,15 +41,15 @@ public class AuthConfigStorageService {
                         if (!child.exists()) {
                             continue;
                         }
-                        String fileContent = StringUtils.toEncodedString(child.contentsToByteArray(), Charset.defaultCharset());
-                        if (StringUtils.isBlank(fileContent)) {
+                        String fileContent = FuStringUtils.toEncodedString(child.contentsToByteArray(), Charset.defaultCharset());
+                        if (FuStringUtils.isBlank(fileContent)) {
                             continue;
                         }
                         String fileName = child.getName();
                         if (HTTP_FILE.equals(fileName)) {
                             authConfigData.setHttpRequestData(JsonUtil.toBean(fileContent, FuHttpRequestData.class));
                         } else {
-                            String tabName = StringUtils.substringBeforeLast(fileName, ".");
+                            String tabName = FuStringUtils.substringBeforeLast(fileName, ".");
                             ScriptConfigData scriptConfigData = new ScriptConfigData();
                             scriptConfigData.setScript(fileContent);
                             authConfigData.addAuthConfig(tabName, scriptConfigData);
@@ -69,7 +69,7 @@ public class AuthConfigStorageService {
         String name = authConfigData.getName();
         //保存http请求
         FuHttpRequestData httpRequestData = authConfigData.getHttpRequestData();
-        if (StringUtils.isNotBlank(name) && Objects.nonNull(httpRequestData)) {
+        if (FuStringUtils.isNotBlank(name) && Objects.nonNull(httpRequestData)) {
             StorageUtils.writeJson(Paths.get(FuPaths.AUTH_PATH, name).toString(), HTTP_FILE, httpRequestData);
         }
 

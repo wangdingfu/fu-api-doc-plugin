@@ -10,7 +10,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.util.HttpResponseUtil;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -49,10 +49,8 @@ public class FuHttpResponseBuilder {
         response.setContentLength(httpResponse.contentLength());
         response.setResponseType(ResponseType.SUCCESS);
         String fileNameFromDisposition = HttpResponseUtil.getFileNameFromDisposition(httpResponse);
-        if (StringUtils.isNotBlank(fileNameFromDisposition)) {
-            String fileName = URLUtil.decode(fileNameFromDisposition, Charset.defaultCharset());
-            fileName = CharsetUtil.convert(fileName, CharsetUtil.CHARSET_ISO_8859_1, CharsetUtil.CHARSET_UTF_8);
-            response.setFileName(FileNameUtil.cleanInvalid(fileName));
+        if (FuStringUtils.isNotBlank(fileNameFromDisposition)) {
+            response.setFileName(FileNameUtil.cleanInvalid(fileNameFromDisposition));
         } else {
             //只有当不是文件时 才将body中的内容写入content中
             response.setContent(HttpUtil.getString(response.getBody(), CharsetUtil.CHARSET_UTF_8, null == response.getCharsetFromResponse()));

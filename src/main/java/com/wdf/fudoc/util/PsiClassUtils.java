@@ -17,7 +17,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.pojo.bo.PsiClassTypeBO;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -88,7 +88,7 @@ public class PsiClassUtils {
 
     public static List<String> findMappingUrlList(PsiMethod psiMethod) {
         String mapping = FuRequestUtils.getMapping(psiMethod);
-        if (StringUtils.isBlank(mapping)) {
+        if (FuStringUtils.isBlank(mapping)) {
             return null;
         }
         AnnotationData annotationData = AnnotationUtils.parse(psiMethod.getAnnotation(mapping));
@@ -201,7 +201,7 @@ public class PsiClassUtils {
         for (PsiParameter parameter : parameterList.getParameters()) {
             paramTypes.add(parameter.getType().getCanonicalText());
         }
-        return FuRequestManager.getMethodId(psiMethod.getProject(), psiClassName + "#" + name + "(" + StringUtils.join(paramTypes, ",") + ")");
+        return FuRequestManager.getMethodId(psiMethod.getProject(), psiClassName + "#" + name + "(" + FuStringUtils.join(paramTypes, ",") + ")");
     }
 
     public static String getMethodName(PsiMethod psiMethod) {

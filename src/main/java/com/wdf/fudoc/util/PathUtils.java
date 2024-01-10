@@ -2,7 +2,7 @@ package com.wdf.fudoc.util;
 
 import cn.hutool.core.util.URLUtil;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.File;
 import java.util.List;
@@ -64,20 +64,20 @@ public class PathUtils {
      */
     public static String joinUrl(String... urls) {
         if (Objects.isNull(urls) || urls.length <= 0) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         List<String> uriList = Lists.newArrayList();
         for (String uri : urls) {
-            String[] split = StringUtils.split(uri, JOINT);
+            String[] split = FuStringUtils.split(uri, JOINT);
             if (Objects.nonNull(split) && split.length > 0) {
                 for (String s : split) {
                     s = s.replaceAll(JOINT, "");
-                    if (StringUtils.isNotBlank(s) && !JOINT.equals(s)) {
+                    if (FuStringUtils.isNotBlank(s) && !JOINT.equals(s)) {
                         uriList.add(s);
                     }
                 }
             }
         }
-        return StringUtils.join(uriList, JOINT);
+        return FuStringUtils.join(uriList, JOINT);
     }
 }

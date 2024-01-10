@@ -11,10 +11,10 @@ import com.wdf.fudoc.request.state.FuRequestState;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.storage.FuStorageExecutor;
 import com.wdf.fudoc.storage.handler.FuRequestStorage;
-import com.wdf.fudoc.util.JsonUtil;
+import com.wdf.api.util.JsonUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,7 +73,7 @@ public class FuRequestManager {
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> moduleIdMap = data.getModuleIdMap();
         String moduleId = moduleIdMap.get(moduleName);
-        if (StringUtils.isBlank(moduleId)) {
+        if (FuStringUtils.isBlank(moduleId)) {
             moduleId = IdUtil.getSnowflakeNextIdStr();
             moduleIdMap.put(moduleName, moduleId);
         }
@@ -84,7 +84,7 @@ public class FuRequestManager {
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> methodIdMap = data.getMethodIdMap();
         String methodId = methodIdMap.get(methodName);
-        if (StringUtils.isBlank(methodId)) {
+        if (FuStringUtils.isBlank(methodId)) {
             methodId = IdUtil.getSnowflakeNextIdStr();
             methodIdMap.put(methodName, methodId);
         }
@@ -100,7 +100,7 @@ public class FuRequestManager {
     public static void saveRequest(Project project, FuHttpRequestData fuHttpRequestData) {
         String apiKey;
 
-        if (Objects.isNull(fuHttpRequestData) || StringUtils.isBlank(apiKey = fuHttpRequestData.getApiKey())) {
+        if (Objects.isNull(fuHttpRequestData) || FuStringUtils.isBlank(apiKey = fuHttpRequestData.getApiKey())) {
             return;
         }
 //        FuStorageExecutor.saveRequest(fuHttpRequestData);
@@ -152,7 +152,7 @@ public class FuRequestManager {
         GlobalRequestData data = FuRequestState.getData(project);
         Map<String, String> requestDataMap = data.getRequestDataMap();
         String entries = requestDataMap.get(apiKey);
-        if (StringUtils.isBlank(entries)) {
+        if (FuStringUtils.isBlank(entries)) {
             return null;
         }
         return JsonUtil.toBean(entries, FuHttpRequestData.class);

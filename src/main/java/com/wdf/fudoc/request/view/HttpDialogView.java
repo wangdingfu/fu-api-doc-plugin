@@ -26,7 +26,7 @@ import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -157,7 +157,7 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
         this.psiElement = psiElement;
         this.httpRequestData = fuHttpRequestData;
         initData(fuHttpRequestData);
-        setTitle((Objects.isNull(fuHttpRequestData) || StringUtils.isBlank(fuHttpRequestData.getApiName())) ? "Send Http Request" : fuHttpRequestData.getApiName());
+        setTitle((Objects.isNull(fuHttpRequestData) || FuStringUtils.isBlank(fuHttpRequestData.getApiName())) ? "Send Http Request" : fuHttpRequestData.getApiName());
         refresh();
     }
 

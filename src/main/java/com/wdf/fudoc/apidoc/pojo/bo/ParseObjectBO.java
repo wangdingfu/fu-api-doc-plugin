@@ -9,7 +9,7 @@ import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Map;
 
@@ -54,7 +54,7 @@ public class ParseObjectBO {
 
 
     public PsiType getPsiType(String generics) {
-        if (MapUtils.isNotEmpty(genericsMap) && StringUtils.isNotBlank(generics)) {
+        if (MapUtils.isNotEmpty(genericsMap) && FuStringUtils.isNotBlank(generics)) {
             return genericsMap.get(generics);
         }
         return null;

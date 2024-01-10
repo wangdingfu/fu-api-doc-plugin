@@ -5,10 +5,10 @@ import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -45,14 +45,14 @@ public abstract class BaseSyncConfigData implements Serializable {
     private Map<String, ProjectSyncApiRecordData> projectSyncRecordMap = new ConcurrentHashMap<>();
 
     public ProjectSyncApiRecordData getProjectRecord(String projectPath, String projectName) {
-        if (StringUtils.isNotBlank(projectPath) && StringUtils.isNotBlank(projectName)) {
+        if (FuStringUtils.isNotBlank(projectPath) && FuStringUtils.isNotBlank(projectName)) {
             return projectSyncRecordMap.get(projectPath + "-" + projectName);
         }
         return null;
     }
 
     public void addProjectRecordData(String projectPath, String projectName, ProjectSyncApiRecordData recordData) {
-        if (StringUtils.isBlank(projectPath) || StringUtils.isBlank(projectName) || Objects.isNull(recordData)) {
+        if (FuStringUtils.isBlank(projectPath) || FuStringUtils.isBlank(projectName) || Objects.isNull(recordData)) {
             return;
         }
         projectSyncRecordMap.put(projectPath + "-" + projectName, recordData);

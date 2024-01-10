@@ -7,12 +7,12 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.paint.LinePainter2D;
 import com.intellij.util.ui.GraphicsUtil;
-import com.wdf.fudoc.components.bo.FuMsgItemBO;
-import com.wdf.fudoc.request.constants.enumtype.MessageType;
+import com.wdf.api.msg.bo.FuMsgItemBO;
+import com.wdf.api.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nls;
 
 import javax.accessibility.Accessible;
@@ -183,7 +183,7 @@ public class FuHighlightComponent extends JComponent implements Accessible {
     }
 
     protected int getStringWidth(@Nls String text, FontMetrics fontMetrics) {
-        if (StringUtils.isBlank(text)) {
+        if (FuStringUtils.isBlank(text)) {
             return 0;
         }
         return fontMetrics.stringWidth(text);

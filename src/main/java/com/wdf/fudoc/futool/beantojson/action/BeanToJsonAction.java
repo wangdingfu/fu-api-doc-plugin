@@ -3,21 +3,25 @@ package com.wdf.fudoc.futool.beantojson.action;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.common.AbstractClassAction;
-import com.wdf.fudoc.common.FuBundle;
-import com.wdf.fudoc.common.notification.FuDocNotification;
-import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.api.base.FuBundle;
+import com.wdf.api.enumtype.FuDocAction;
+import com.wdf.api.notification.FuDocNotification;
+import com.wdf.api.constants.MessageConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.service.FuDocService;
 import com.wdf.fudoc.futool.beantojson.service.GenObjectJsonServiceImpl;
 import com.wdf.fudoc.util.ClipboardUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 @Slf4j
 public class BeanToJsonAction extends AbstractClassAction {
 
-
+    @Override
+    protected FuDocAction getAction() {
+        return FuDocAction.BEAN_TO_JSON;
+    }
     @Override
     protected boolean isShow(JavaClassType javaClassType) {
         return JavaClassType.OBJECT.equals(javaClassType);
@@ -33,7 +37,7 @@ public class BeanToJsonAction extends AbstractClassAction {
         long start = System.currentTimeMillis();
         FuDocService fuDocService = new GenObjectJsonServiceImpl();
         String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
-        if (StringUtils.isBlank(content)) {
+        if (FuStringUtils.isBlank(content)) {
             content = "{\n}";
         }
         //将接口文档内容拷贝至剪贴板

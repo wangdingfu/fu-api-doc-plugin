@@ -4,10 +4,10 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbAwareToggleAction;
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.request.constants.enumtype.IssueSource;
+import com.wdf.api.enumtype.IssueSource;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
-import com.wdf.fudoc.storage.FuDocConfigStorage;
+import com.wdf.api.storage.FuDocConfigStorage;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import org.jetbrains.annotations.NotNull;
 

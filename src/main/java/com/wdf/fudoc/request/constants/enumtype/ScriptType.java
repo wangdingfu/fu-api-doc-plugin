@@ -1,6 +1,6 @@
 package com.wdf.fudoc.request.constants.enumtype;
 
-import com.wdf.fudoc.common.FuBundle;
+import com.wdf.api.base.FuBundle;
 import lombok.Getter;
 
 /**

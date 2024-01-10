@@ -1,6 +1,7 @@
 package com.wdf.fudoc.request.tab.request;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.Disposable;
@@ -18,7 +19,7 @@ import com.wdf.fudoc.request.view.ResponseFileView;
 import com.wdf.fudoc.util.ResourceUtils;
 import icons.FuDocIcons;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -83,14 +84,18 @@ public class ResponseTabView implements FuTab, HttpCallback {
         switch (responseType) {
             case SUCCESS -> {
                 String fileName = response.getFileName();
-                if (StringUtils.isNotBlank(fileName)) {
+                if (FuStringUtils.isNotBlank(fileName)) {
                     //响应结果是文件
                     response.setFileName(fileName);
-                    //将文件暂存到临时目录
-                    String suffix = FileUtil.getSuffix(fileName);
-                    File tmpFile = ResourceUtils.createFuRequestFileDir(project.getName(), suffix);
-                    FileUtil.writeBytes(response.getBody(), tmpFile);
-                    response.setFilePath(tmpFile.getPath());
+                    HttpResponse httpResponse = response.getHttpResponse();
+                    //issue:#22 解决第二次进入下载界面时由于没有缓存文件字节流导致空指针异常问题
+                    if (Objects.nonNull(httpResponse)) {
+                        //将文件暂存到临时目录
+                        String suffix = FileUtil.getSuffix(fileName);
+                        File tmpFile = ResourceUtils.createFuRequestFileDir(project.getName(), suffix);
+                        FileUtil.writeBytes(httpResponse.bodyBytes(), tmpFile);
+                        response.setFilePath(tmpFile.getPath());
+                    }
                     //响应面板切换到文件下载面板
                     responseFileView.setFileName(fileName);
                     responseFileView.setFuResponseData(response);
@@ -121,7 +126,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
             //是文件面板时
             responseFileView.resetDefaultBtn();
         }
-        if(Objects.nonNull(this.slidePanel)){
+        if (Objects.nonNull(this.slidePanel)) {
             newSelection.setSideComponent(this.slidePanel);
         }
     }

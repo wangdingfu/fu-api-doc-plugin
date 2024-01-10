@@ -8,7 +8,7 @@ import com.intellij.openapi.util.io.FileUtilRt;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.FuDocException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -67,7 +67,7 @@ public class FuStorageAppender {
      */
     public List<String> read() {
         List<String> lineList = FileUtil.readLines(this.file, Charset.defaultCharset());
-        lineList.removeIf(StringUtils::isBlank);
+        lineList.removeIf(FuStringUtils::isBlank);
         return lineList;
     }
 }

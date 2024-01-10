@@ -13,7 +13,7 @@ import k.p.D;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -330,7 +330,7 @@ public class FuTabComponent {
         TabBarListener tabBarListener = tabActionBO.getTabBarListener();
         if (Objects.nonNull(tabBarListener)) {
             if (ActionType.AN_ACTION.equals(tabActionBO.getActionType())) {
-                tabBarListener.onClick(DEFAULT.equals(parentTab) ? StringUtils.EMPTY : parentTab, tabActionBO);
+                tabBarListener.onClick(DEFAULT.equals(parentTab) ? FuStringUtils.EMPTY : parentTab, tabActionBO);
             } else {
                 tabBarListener.onSelect(tabActionBO);
             }

@@ -1,8 +1,8 @@
 package com.wdf.fudoc.request.constants.enumtype;
 
 import com.intellij.ui.JBColor;
-import com.wdf.fudoc.common.FuBundle;
-import com.wdf.fudoc.common.enumtype.FuColor;
+import com.wdf.api.base.FuBundle;
+import com.wdf.api.enumtype.FuColor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public enum ScriptCmd {
 
     DEMO("auth_config.js", FuBundle.message("fudoc.script.study.demo.text"), FuColor.GREEN.color(), ScriptCmdType.DEMO, true),
-    DOC("", FuBundle.message("fudoc.script.study.demo.doc"), FuColor.console_debug.color(), ScriptCmdType.DEMO, true),
+    DOC("http://www.fudoc.cn/pages/4427f1/", FuBundle.message("fudoc.script.study.demo.doc"), FuColor.console_debug.color(), ScriptCmdType.DEMO, true),
     PROJECT_SET_PARAM("code_set_variable.js", FuBundle.message("fudoc.script.study.set.variable"), FuColor.console_verbose.color(), ScriptCmdType.SCRIPT_DEMO, false),
     PROJECT_GET_PARAM("code_get_variable.js", FuBundle.message("fudoc.script.study.get.variable"), FuColor.console_user_info.color(), ScriptCmdType.SCRIPT_DEMO, false),
     PROJECT_SET_HEADER("code_set_header.js", FuBundle.message("fudoc.script.study.set.header"), FuColor.color6.color(), ScriptCmdType.SCRIPT_DEMO, false),

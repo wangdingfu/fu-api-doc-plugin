@@ -11,7 +11,7 @@ import com.intellij.ui.popup.list.IconListPopupRenderer;
 import com.intellij.util.ui.table.IconTableCellRenderer;
 import com.wdf.fudoc.components.JLabelListRendererComponent;
 import com.wdf.fudoc.util.FuDocUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

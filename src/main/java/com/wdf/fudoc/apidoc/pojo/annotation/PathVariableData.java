@@ -3,7 +3,7 @@ package com.wdf.fudoc.apidoc.pojo.annotation;
 import com.wdf.fudoc.apidoc.constant.enumtype.SpringParamAnnotation;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 /**
  * @author wangdingfu
@@ -12,9 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 @NoArgsConstructor
 public class PathVariableData implements SpringAnnotationData {
 
-    private final String value = StringUtils.EMPTY;
+    private final String value = FuStringUtils.EMPTY;
 
-    private final String name = StringUtils.EMPTY;
+    private final String name = FuStringUtils.EMPTY;
 
     private final boolean required = true;
 

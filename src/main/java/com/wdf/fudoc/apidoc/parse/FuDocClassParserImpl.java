@@ -33,7 +33,7 @@ import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.FuDocUtils;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -67,14 +67,14 @@ public class FuDocClassParserImpl implements FuDocClassParser {
             //注解解析
             classInfoDesc.setAnnotationDataMap(annotationParse(psiClass));
             classInfoDesc.setMethodList(methodInfoDescList);
-            classInfoDesc.setCommentData(DocCommentParseHelper.parseComment(psiClass.getDocComment()));
+            classInfoDesc.setCommentData(DocCommentParseHelper.parseComment(psiClass));
             for (PsiMethod method : psiClass.getMethods()) {
                 if (!FuDocUtils.isValidMethod(javaClassType, method)) {
                     //过滤不需要解析的方法
                     continue;
                 }
                 if (CollectionUtils.isEmpty(methodList) || methodList.contains(method)) {
-                    ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method.getDocComment());
+                    ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(method);
                     MethodInfoDesc methodInfoDesc = new MethodInfoDesc();
                     methodInfoDesc.setPsiMethod(method);
                     methodInfoDesc.setMethodId(PsiClassUtils.getMethodId(method));

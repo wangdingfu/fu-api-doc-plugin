@@ -5,7 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.system.SystemUtil;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.request.view.ResponseErrorView;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.io.File;
@@ -24,8 +24,8 @@ public class FuDocSettingTest {
 
     public static File genFilePath(String moduleName) {
         String timeStr = DatePattern.PURE_DATE_FORMAT.format(new Date());
-        String yyyyMM = StringUtils.substring(timeStr, 0, 6);
-        String day = StringUtils.substring(timeStr, 6, 8);
+        String yyyyMM = FuStringUtils.substring(timeStr, 0, 6);
+        String day = FuStringUtils.substring(timeStr, 6, 8);
         return FileUtil.file(FileUtil.getTmpDir(), FuDocConstants.FU_DOC_PATH, moduleName, yyyyMM, day,"a1.xls");
     }
 

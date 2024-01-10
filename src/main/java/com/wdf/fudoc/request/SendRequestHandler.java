@@ -4,6 +4,8 @@ import cn.hutool.core.thread.ThreadUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.project.Project;
+import com.wdf.api.listener.FuDocActionListener;
+import com.wdf.api.enumtype.FuDocAction;
 import com.wdf.fudoc.console.FuLogger;
 import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -41,6 +43,9 @@ public class SendRequestHandler {
         if (Objects.isNull(httpRequestData)) {
             return;
         }
+        //发布动作事件
+        project.getMessageBus().syncPublisher(FuDocActionListener.TOPIC).action(FuDocAction.FU_REQUEST.getCode());
+        //清空日志
         fuLogger.clear();
         this.sendHttpTask = ThreadUtil.execAsync(() -> {
             sendStatus.set(true);

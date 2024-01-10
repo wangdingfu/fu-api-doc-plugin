@@ -11,7 +11,7 @@ import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +43,7 @@ public class YapiConfigData extends BaseSyncConfigData {
     public List<ApiProjectDTO> getProjectConfigList(Module module) {
         String application = SpringBootEnvLoader.getApplication(module);
         return FuDocSyncProjectSetting.getYapiConfigList().stream()
-                .filter(f -> StringUtils.isNotBlank(f.getApplicationName()))
+                .filter(f -> FuStringUtils.isNotBlank(f.getApplicationName()))
                 .filter(f -> f.getApplicationName().equals(application)).map(this::convert).collect(Collectors.toList());
     }
 
@@ -70,14 +70,14 @@ public class YapiConfigData extends BaseSyncConfigData {
     @Override
     public String getApiDocUrl(SyncApiResultDTO syncApiResultDTO) {
         String projectId = syncApiResultDTO.getProjectId();
-        if (StringUtils.isBlank(projectId)) {
+        if (FuStringUtils.isBlank(projectId)) {
             return getBaseUrl();
         }
         String apiUrl = getBaseUrl() + "project/" + syncApiResultDTO.getProjectId() + "/interface/api/";
-        if (StringUtils.isNotBlank(syncApiResultDTO.getApiId())) {
+        if (FuStringUtils.isNotBlank(syncApiResultDTO.getApiId())) {
             return apiUrl + syncApiResultDTO.getApiId();
         }
-        if (StringUtils.isNotBlank(syncApiResultDTO.getCategoryId())) {
+        if (FuStringUtils.isNotBlank(syncApiResultDTO.getCategoryId())) {
             return apiUrl + "cat_" + syncApiResultDTO.getCategoryId();
         }
         return apiUrl;
@@ -90,6 +90,7 @@ public class YapiConfigData extends BaseSyncConfigData {
         apiProjectDTO.setProjectId(tableData.getProjectId());
         apiProjectDTO.setProjectName(tableData.getProjectName());
         apiProjectDTO.setApplicationName(tableData.getApplicationName());
+        apiProjectDTO.setLatest(tableData.isLatest());
         return apiProjectDTO;
     }
 }

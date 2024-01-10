@@ -12,7 +12,7 @@ import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,7 +47,7 @@ public class HttpCmdView {
     }
 
     public void addHttp(String key, FuHttpRequestData fuHttpRequestData) {
-        if (StringUtils.isBlank(key)) {
+        if (FuStringUtils.isBlank(key)) {
             int index = indexList.size() + 1;
             key = "#" + index;
         }

@@ -16,8 +16,8 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncCategory;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncStrategyFactory;
-import com.wdf.fudoc.common.FuBundle;
-import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.api.base.FuBundle;
+import com.wdf.api.constants.MessageConstants;
 import com.wdf.fudoc.components.tree.old.ApiCategoryTreeNode;
 import com.wdf.fudoc.components.tree.old.FuTreeComponent;
 import com.wdf.fudoc.components.validator.CreateCategoryValidator;
@@ -26,15 +26,18 @@ import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 选择接口分类弹框
@@ -223,13 +226,13 @@ public class SyncApiCategoryDialog extends DialogWrapper {
      */
     private void createCategory() {
         //弹框让用户输入分类名称
-        String value = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), StringUtils.EMPTY, new CreateCategoryValidator(this.apiProjectDTO.getApiCategoryList()));
-        if (StringUtils.isNotBlank(value)) {
+        String value = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), FuStringUtils.EMPTY, new CreateCategoryValidator(this.apiProjectDTO.getApiCategoryList()));
+        if (FuStringUtils.isNotBlank(value)) {
             //初始化当前项目下的接口分类
             List<ApiCategoryDTO> apiCategoryList = initCategoryList();
             //调用创建分类接口
             ApiCategoryDTO apiCategoryDTO = this.syncCategory.createCategory(this.configData, this.apiProjectDTO, value);
-            if (Objects.isNull(apiCategoryDTO) || StringUtils.isBlank(apiCategoryDTO.getCategoryName()) || StringUtils.isBlank(apiCategoryDTO.getCategoryId())) {
+            if (Objects.isNull(apiCategoryDTO) || FuStringUtils.isBlank(apiCategoryDTO.getCategoryName()) || FuStringUtils.isBlank(apiCategoryDTO.getCategoryId())) {
                 //创建分类接口失败
                 return;
             }
@@ -276,8 +279,8 @@ public class SyncApiCategoryDialog extends DialogWrapper {
                 }
             }
             //将剩余没有在排序中的分类加入到排序分类集合中
-            List<String> categoryIdList = sortList.stream().map(ApiCategoryDTO::getCategoryId).distinct().toList();
-            sortList.addAll(categoryDTOList.stream().filter(f -> !categoryIdList.contains(f.getCategoryId())).toList());
+            List<String> categoryIdList = sortList.stream().map(ApiCategoryDTO::getCategoryId).distinct().collect(Collectors.toList());
+            sortList.addAll(categoryDTOList.stream().filter(f -> !categoryIdList.contains(f.getCategoryId())).collect(Collectors.toList()));
             return sortList;
         }
         return categoryDTOList;
@@ -300,7 +303,7 @@ public class SyncApiCategoryDialog extends DialogWrapper {
      */
     private void createProject(List<ApiProjectDTO> projectConfigList) {
         List<String> projectNameList = ObjectUtils.listToList(projectConfigList, ApiProjectDTO::getProjectName);
-        String value = Messages.showInputDialog(CREATE_PROJECT_TITLE, PROJECT_LABEL, Messages.getQuestionIcon(), StringUtils.EMPTY, new InputExistsValidator(projectNameList));
+        String value = Messages.showInputDialog(CREATE_PROJECT_TITLE, PROJECT_LABEL, Messages.getQuestionIcon(), FuStringUtils.EMPTY, new InputExistsValidator(projectNameList));
         //请求创建项目
         ApiProjectDTO apiProjectDTO = new ApiProjectDTO();
         apiProjectDTO.setProjectName(value);

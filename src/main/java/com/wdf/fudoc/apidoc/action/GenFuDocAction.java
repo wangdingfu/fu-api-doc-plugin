@@ -3,16 +3,17 @@ package com.wdf.fudoc.apidoc.action;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.common.AbstractClassAction;
-import com.wdf.fudoc.common.FuBundle;
-import com.wdf.fudoc.common.notification.FuDocNotification;
-import com.wdf.fudoc.common.constant.MessageConstants;
+import com.wdf.api.base.FuBundle;
+import com.wdf.api.enumtype.FuDocAction;
+import com.wdf.api.notification.FuDocNotification;
+import com.wdf.api.constants.MessageConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.apidoc.factory.FuDocServiceFactory;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.service.FuDocService;
 import com.wdf.fudoc.util.ClipboardUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -29,6 +30,11 @@ public class GenFuDocAction extends AbstractClassAction {
         return !JavaClassType.ANNOTATION.equals(javaClassType);
     }
 
+    @Override
+    protected FuDocAction getAction() {
+        return FuDocAction.GEN_DOC;
+    }
+
 
     /**
      * 点击按钮或按下快捷键触发生成API接口文档方法
@@ -41,7 +47,7 @@ public class GenFuDocAction extends AbstractClassAction {
         if (Objects.nonNull(fuDocService)) {
             long start = System.currentTimeMillis();
             String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
-            if (StringUtils.isBlank(content)) {
+            if (FuStringUtils.isBlank(content)) {
                 //通知没有可以生成接口文档的内容
                 FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.NOTIFY_GEN_NO_CONTENT, psiClass.getName()));
                 return;

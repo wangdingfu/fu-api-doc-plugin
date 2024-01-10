@@ -5,7 +5,7 @@ import com.intellij.psi.PsiMethod;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -44,7 +44,7 @@ public class ApiNavigationItem {
      */
     @NotNull
     public String getRightText() {
-        if (StringUtils.isNotBlank(title)) {
+        if (FuStringUtils.isNotBlank(title)) {
             return title + "   " + location;
         }
         return location;

@@ -8,7 +8,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.wdf.fudoc.components.listener.ChooseFileListener;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 
 import java.io.File;
 
@@ -48,7 +48,7 @@ public class ChooseFileComponents {
      * @param listener 选择文件监听器
      */
     public void chooseFile(ChooseFileListener listener) {
-        FileChooserDescriptor descriptor = new FileChooserDescriptor(false, false, true, true, false, false) {
+        FileChooserDescriptor descriptor = new FileChooserDescriptor(false, true, false, false, false, false) {
             @Override
             public boolean isFileSelectable(VirtualFile file) {
                 return listener.isFileSelectable(file);

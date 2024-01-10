@@ -14,7 +14,7 @@ import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.ValidateAnnotationUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,31 +38,31 @@ public class ParamCommentValueHandler extends BaseParamFieldValueHandler {
             //ApiModelProperty注解支持
             Optional<AnnotationData> annotation = objectInfoDesc.getAnnotation(AnnotationConstants.SWAGGER_API_MODEL_PROPERTY);
             String swaggerName = AnnotationUtils.getAnnotationValue(annotation, FuDocConstants.VALUE, FuDocConstants.AnnotationAttr.NAME);
-            if (StringUtils.isNotBlank(swaggerName)) {
+            if (FuStringUtils.isNotBlank(swaggerName)) {
                 return swaggerName;
             }
 
             //ApiParam注解支持
             annotation = objectInfoDesc.getAnnotation(AnnotationConstants.SWAGGER_API_PARAM);
             swaggerName = AnnotationUtils.getAnnotationValue(annotation, FuDocConstants.AnnotationAttr.NAME, FuDocConstants.VALUE);
-            if (StringUtils.isNotBlank(swaggerName)) {
+            if (FuStringUtils.isNotBlank(swaggerName)) {
                 return swaggerName;
             }
         }
 
         String docText = objectInfoDesc.getDocText();
-        if (StringUtils.isNotBlank(docText)) {
+        if (FuStringUtils.isNotBlank(docText)) {
             return docText;
         }
         if (fuDocContext.isEnableValidMessage()) {
             //获取校验注解信息截取出字段名
             String validMessage = ValidateAnnotationUtils.getValidMessage(objectInfoDesc);
-            if (StringUtils.isNotBlank(validMessage)) {
+            if (FuStringUtils.isNotBlank(validMessage)) {
                 //替换指定内容
                 return replaceContent(fuDocContext, validMessage);
             }
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
@@ -74,8 +74,8 @@ public class ParamCommentValueHandler extends BaseParamFieldValueHandler {
             return validMessage;
         }
         for (SettingValidMessageBO messageBO : message) {
-            if (ValidMessageType.REPLACE.getMsg().equals(messageBO.getType()) && StringUtils.isNotBlank(messageBO.getValue())) {
-                String[] split = StringUtils.split(messageBO.getValue(), ",");
+            if (ValidMessageType.REPLACE.getMsg().equals(messageBO.getType()) && FuStringUtils.isNotBlank(messageBO.getValue())) {
+                String[] split = FuStringUtils.split(messageBO.getValue(), ",");
                 for (String replace : split) {
                     validMessage = validMessage.replace(replace, "");
                 }

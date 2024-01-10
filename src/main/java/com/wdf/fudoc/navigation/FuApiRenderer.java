@@ -12,10 +12,10 @@ import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.util.TextWithIcon;
 import com.intellij.util.ui.UIUtil;
-import com.wdf.fudoc.common.enumtype.FuColor;
+import com.wdf.api.enumtype.FuColor;
 import com.wdf.fudoc.util.ColorUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -44,14 +44,14 @@ public class FuApiRenderer extends SearchEverywherePsiRenderer {
         ApiNavigationItem apiNavigationItem = (ApiNavigationItem) value;
         String name = apiNavigationItem.getUrl();
         String timeStr = apiNavigationItem.getTimeStr();
-        String timeView = StringUtils.isBlank(timeStr) ? StringUtils.EMPTY : " (" + timeStr + ")";
+        String timeView = FuStringUtils.isBlank(timeStr) ? FuStringUtils.EMPTY : " (" + timeStr + ")";
 
         String locationString = "    " + apiNavigationItem.getRightText();
 
         SpeedSearchUtil.appendColoredFragmentForMatcher(name, renderer, nameAttributes, itemMatchers.nameMatcher, bgColor, selected);
         renderer.setIcon(apiNavigationItem.getRequestType().getIcon());
 
-        if (StringUtils.isNotEmpty(locationString)) {
+        if (FuStringUtils.isNotEmpty(locationString)) {
             FontMetrics fm = list.getFontMetrics(list.getFont());
             int maxWidth = list.getWidth() - fm.stringWidth(name) - myRightComponentWidth - 36;
             int fullWidth = fm.stringWidth(locationString + timeView);
@@ -61,7 +61,7 @@ public class FuApiRenderer extends SearchEverywherePsiRenderer {
                 locationString = StringUtil.trimMiddle(locationString, adjustedWidth);
             }
             SpeedSearchUtil.appendColoredFragmentForMatcher(locationString, renderer, SimpleTextAttributes.GRAYED_ATTRIBUTES, itemMatchers.nameMatcher, bgColor, selected);
-            if (StringUtils.isNotBlank(timeView)) {
+            if (FuStringUtils.isNotBlank(timeView)) {
                 SimpleTextAttributes timeAttributes = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, ColorUtils.convertColor(FuColor.GREEN.getDarkColor()));
                 SpeedSearchUtil.appendColoredFragmentForMatcher(timeView, renderer, timeAttributes, itemMatchers.locationMatcher, UIUtil.getListBackground(), selected);
             }

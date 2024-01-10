@@ -7,19 +7,22 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.wdf.fudoc.common.enumtype.FuColor;
-import com.wdf.fudoc.common.notification.FuDocNotification;
+import com.wdf.api.listener.FuDocActionListener;
+import com.wdf.api.enumtype.FuColor;
+import com.wdf.api.enumtype.FuDocAction;
+import com.wdf.api.notification.FuDocNotification;
 import com.wdf.fudoc.futool.beancopy.bo.CopyBeanBO;
 import com.wdf.fudoc.futool.beancopy.bo.CopyBeanMethodBO;
 import com.wdf.fudoc.futool.beancopy.bo.FuCompletion;
 import icons.FuDocIcons;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -70,7 +73,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
         }
         PsiClass psiClass;
         String variableName;
-        if (Objects.isNull(resolve) || StringUtils.isBlank(variableName = getVariableName(resolve)) || Objects.isNull(psiClass = findPsiClass(resolve))) {
+        if (Objects.isNull(resolve) || FuStringUtils.isBlank(variableName = getVariableName(resolve)) || Objects.isNull(psiClass = findPsiClass(resolve))) {
             return;
         }
         //判断是否为Spring容器对象或则一些固定配置的对象无需copy
@@ -92,7 +95,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
 
     private static boolean isCanCopyBean(PsiClass psiClass) {
         String qualifiedName = psiClass.getQualifiedName();
-        if (StringUtils.isBlank(qualifiedName)) {
+        if (FuStringUtils.isBlank(qualifiedName)) {
             return false;
         }
         return EXCLUDE_PKG_LIST.stream().noneMatch(qualifiedName::startsWith);
@@ -164,6 +167,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
                 .withCaseSensitivity(true).withInsertHandler((context, item) -> {
                     Object object = item.getObject();
                     if (object instanceof FuCompletion) {
+                        Project project = context.getProject();
                         List<String> codeList = copyBean((FuCompletion) object);
                         int offset = context.getTailOffset();
                         int lineNumberCurrent = context.getDocument().getLineNumber(offset);
@@ -177,7 +181,9 @@ public class FuBeanCopyCompletion extends CompletionContributor {
                             return;
                         }
                         int lineStartOffset = context.getDocument().getLineStartOffset(lineNumberCurrent);
-                        context.getDocument().insertString(lineStartOffset + diffOffset, StringUtils.join(codeList, fillEmptyString(diffOffset)));
+                        context.getDocument().insertString(lineStartOffset + diffOffset, FuStringUtils.join(codeList, fillEmptyString(diffOffset)));
+                        //发布动作事件
+                        project.getMessageBus().syncPublisher(FuDocActionListener.TOPIC).action(FuDocAction.BEAN_COPY.getCode());
                     }
                 });
     }
@@ -252,7 +258,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
     }
 
     private static String fillEmptyString(int size) {
-        return fillString(StringUtils.EMPTY, ' ', size);
+        return fillString(FuStringUtils.EMPTY, ' ', size);
     }
 
     public static String fillString(String string, char character, int size) {

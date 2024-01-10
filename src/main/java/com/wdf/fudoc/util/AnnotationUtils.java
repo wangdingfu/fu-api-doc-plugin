@@ -8,7 +8,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationValueData;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 
@@ -26,13 +26,13 @@ public class AnnotationUtils {
             if (Objects.nonNull(attrNames) && attrNames.length > 0) {
                 for (String attrName : attrNames) {
                     String value = annotationData.constant(attrName).stringValue();
-                    if (StringUtils.isNotBlank(value)) {
+                    if (FuStringUtils.isNotBlank(value)) {
                         return value;
                     }
                 }
             }
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
     /**

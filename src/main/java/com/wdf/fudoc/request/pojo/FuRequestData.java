@@ -9,12 +9,14 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.spring.SpringConfigManager;
+import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -36,6 +38,10 @@ public class FuRequestData {
      * 域名地址
      */
     private String domain;
+    /**
+     * server.servlet.context-path配置项目前缀
+     */
+    private String contextPath;
     /**
      * 接口请求地址
      */
@@ -81,7 +87,7 @@ public class FuRequestData {
         if (Objects.isNull(this.headers)) {
             this.headers = Lists.newArrayList();
         }
-        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> StringUtils.isNotBlank(f.getKey())).filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
+        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> FuStringUtils.isNotBlank(f.getKey())).filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
         if (Objects.isNull(keyValueTableBO)) {
             keyValueTableBO = new HeaderKeyValueBO(true, key, value);
             this.headers.add(keyValueTableBO);
@@ -99,7 +105,7 @@ public class FuRequestData {
 
     public void removeHeader(String key) {
         if (CollectionUtils.isNotEmpty(this.headers)) {
-            this.headers.removeIf(f -> StringUtils.isBlank(f.getKey()) || f.getKey().equals(key));
+            this.headers.removeIf(f -> FuStringUtils.isBlank(f.getKey()) || f.getKey().equals(key));
         }
     }
 
@@ -111,17 +117,34 @@ public class FuRequestData {
      * 获取一个完整的请求地址
      */
     public String getRequestUrl(String baseUrl) {
-        if (StringUtils.isNotBlank(this.requestUrl)) {
+        if (FuStringUtils.isNotBlank(this.requestUrl)) {
             return this.requestUrl;
         }
-        if (StringUtils.isBlank(this.domain)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(this.domain)) {
+            return FuStringUtils.EMPTY;
         }
-        String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
+        String params = FuStringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : FuStringUtils.EMPTY;
+        String contextPathUrl = FuStringUtils.isBlank(this.contextPath) ? FuStringUtils.EMPTY : this.contextPath;
+        return URLUtil.normalize(this.domain + contextPathUrl + formatBaseUrl(baseUrl) + params, false, true);
+    }
+
+
+    private String formatBaseUrl(String baseUrl) {
         if (Objects.isNull(baseUrl)) {
-            baseUrl = StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
-        return URLUtil.normalize(URLUtil.completeUrl(this.domain, baseUrl) + params, false, true);
+        String[] params = FuStringUtils.substringsBetween(baseUrl, "{", "}");
+        if (Objects.isNull(params)) {
+            return baseUrl;
+        }
+        Map<String, KeyValueTableBO> pathDataMap = ObjectUtils.listToMap(pathVariables, KeyValueTableBO::getKey);
+        String baseUrlText = baseUrl;
+        for (String param : params) {
+            KeyValueTableBO keyValueTableBO = pathDataMap.get(param);
+            String value = Objects.isNull(keyValueTableBO) ? FuStringUtils.EMPTY : keyValueTableBO.getValue();
+            baseUrlText = baseUrlText.replace("{" + param + "}", value);
+        }
+        return baseUrlText;
     }
 
 

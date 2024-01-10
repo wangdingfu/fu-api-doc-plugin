@@ -7,7 +7,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.helper.EnumParseHelper;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -42,19 +42,15 @@ public class FuDocPsiField extends AbstractFuDocField {
      */
     @Override
     public String getComment() {
-        PsiDocComment docComment = psiField.getDocComment();
-        if (Objects.nonNull(docComment)) {
-            ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(docComment);
-            PsiElement psiElement = apiDocCommentData.getTagComment(CommentTagType.SEE.getName()).getPsiElement();
-            PsiClass psiClass;
-            if (Objects.nonNull(psiElement) && psiElement instanceof PsiClass && (psiClass = (PsiClass) psiElement).isEnum()) {
-                //如果是枚举 则解析枚举
-                String enumContent = EnumParseHelper.parseEnum(psiClass, YesOrNo.YES.getCode());
-                return apiDocCommentData.getCommentTitle() + " " + StringUtils.replace(enumContent, "\r\n", "");
-            }
-            return apiDocCommentData.getCommentTitle();
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiField);
+        PsiElement psiElement = apiDocCommentData.getTagComment(CommentTagType.SEE.getName()).getPsiElement();
+        PsiClass psiClass;
+        if (Objects.nonNull(psiElement) && psiElement instanceof PsiClass && (psiClass = (PsiClass) psiElement).isEnum()) {
+            //如果是枚举 则解析枚举
+            String enumContent = EnumParseHelper.parseEnum(psiClass, YesOrNo.YES.getCode());
+            return apiDocCommentData.getCommentTitle() + " " + FuStringUtils.replace(enumContent, "\r\n", "");
         }
-        return StringUtils.EMPTY;
+        return apiDocCommentData.getCommentTitle();
     }
 
     /**

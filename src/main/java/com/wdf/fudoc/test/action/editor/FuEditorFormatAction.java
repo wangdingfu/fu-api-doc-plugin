@@ -10,7 +10,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import icons.FuDocIcons;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -37,7 +37,7 @@ public class FuEditorFormatAction extends AnAction {
             Editor editor = e.getData(CommonDataKeys.EDITOR);
             if (editor != null && e.getProject() != null) {
                 PsiFile file = PsiDocumentManager.getInstance(e.getProject()).getPsiFile(editor.getDocument());
-                if (Objects.nonNull(file) && StringUtils.isNotBlank(file.getName())) {
+                if (Objects.nonNull(file) && FuStringUtils.isNotBlank(file.getName())) {
                     e.getPresentation().setEnabledAndVisible(file.getName().equals(FuDocConstants.FU_DOC_FILE + JsonFileType.DEFAULT_EXTENSION));
                 }
             } else {

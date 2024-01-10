@@ -9,7 +9,7 @@ import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -39,7 +39,7 @@ public class CustomTableSettingDialog extends DialogWrapper implements FuTableLi
         init();
         setTitle("自定义表头设置");
         if (CollectionUtils.isNotEmpty(dataList)) {
-            dataList.removeIf(f -> StringUtils.isBlank(f.getKey()) || StringUtils.isBlank(f.getValue()));
+            dataList.removeIf(f -> FuStringUtils.isBlank(f.getKey()) || FuStringUtils.isBlank(f.getValue()));
             this.configTable.setDataList(dataList);
         }
     }

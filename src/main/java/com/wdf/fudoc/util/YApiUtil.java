@@ -1,8 +1,9 @@
 package com.wdf.fudoc.util;
 
 import cn.hutool.json.JSONUtil;
+import com.wdf.api.util.JsonUtil;
 import com.wdf.fudoc.apidoc.sync.dto.YApiBaseRes;
-import org.apache.commons.lang.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.Objects;
 public class YApiUtil {
 
     public static boolean isSuccess(String result) {
-        if (StringUtils.isNotBlank(result)) {
+        if (FuStringUtils.isNotBlank(result)) {
             Integer errorCode = JSONUtil.parse(result).getByPath("errcode", Integer.class);
             return Objects.nonNull(errorCode) && errorCode == 0;
         }

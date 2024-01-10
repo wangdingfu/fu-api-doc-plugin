@@ -2,7 +2,7 @@ package com.wdf.fudoc.apidoc.pojo.bo;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 /**
  * @author wangdingfu
@@ -45,7 +45,7 @@ public class CommentLineBO {
 
     @Override
     public String toString() {
-        String tagText = StringUtils.isNotBlank(tag) ? "@" + tag : "";
+        String tagText = FuStringUtils.isNotBlank(tag) ? "@" + tag : "";
         return this.prefix + tagText + this.content + this.suffix;
     }
 }

@@ -15,9 +15,9 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiCategoryDialog;
-import com.wdf.fudoc.util.ProjectUtils;
+import com.wdf.api.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -118,7 +118,7 @@ public abstract class AbstractSyncSingleApiStrategy extends AbstractSyncApiStrat
      * @return 同步结果
      */
     private SyncApiResultDTO singleSyncApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO, ProjectSyncApiRecordData projectRecord) {
-        String errorMsg = StringUtils.EMPTY, apiId = StringUtils.EMPTY;
+        String errorMsg = FuStringUtils.EMPTY, apiId = FuStringUtils.EMPTY;
         try {
             apiId = doSingleApi(configData, fuDocItemData, apiProjectDTO, apiCategoryDTO);
             //如果接口同步成功 则记录下来
@@ -163,9 +163,9 @@ public abstract class AbstractSyncSingleApiStrategy extends AbstractSyncApiStrat
      */
     private String getApiCategoryFromController(PsiClass psiClass) {
         //获取Controller上的标题
-        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass.getDocComment());
+        ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass);
         String commentTitle = apiDocCommentData.getCommentTitle();
-        return StringUtils.isNotBlank(commentTitle) ? commentTitle : psiClass.getName();
+        return FuStringUtils.isNotBlank(commentTitle) ? commentTitle : psiClass.getName();
     }
 
 
@@ -189,7 +189,7 @@ public abstract class AbstractSyncSingleApiStrategy extends AbstractSyncApiStrat
             resultDTO.setCategoryId(apiCategoryDTO.getCategoryId());
             resultDTO.setCategoryName(apiCategoryDTO.getCategoryName());
         }
-        resultDTO.setSyncStatus(StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS.getMessage() : ApiSyncStatus.FAIL.getMessage());
+        resultDTO.setSyncStatus(FuStringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS.getMessage() : ApiSyncStatus.FAIL.getMessage());
         resultDTO.setErrorMsg(errorMsg);
         return resultDTO;
     }

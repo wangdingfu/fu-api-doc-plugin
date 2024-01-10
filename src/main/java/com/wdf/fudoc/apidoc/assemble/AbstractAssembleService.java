@@ -2,6 +2,7 @@ package com.wdf.fudoc.apidoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.assemble.handler.ParamValueExecutor;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
@@ -27,7 +28,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 
@@ -128,11 +129,14 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         //组装请求参数
         List<ObjectInfoDesc> requestList = methodInfoDesc.getRequestList();
         if (CollectionUtils.isNotEmpty(requestList)) {
+            requestList.forEach(f -> f.addExtInfo(FuDocConstants.ExtInfo.ROOT_OBJECT, true));
             fuDocItemData.setRequestParams(AssembleHelper.assembleParamData(fuDocContext, requestList, null));
         }
         //组装返回参数
         ObjectInfoDesc response = methodInfoDesc.getResponse();
         if (Objects.nonNull(response)) {
+            //标识当前对象无需过滤（兼容响应对象被final关键字修饰后被过滤场景）
+            response.addExtInfo(FuDocConstants.ExtInfo.ROOT_OBJECT, true);
             fuDocItemData.setResponseParams(AssembleHelper.assembleParamData(fuDocContext, Lists.newArrayList(response), null));
         }
         //mock数据
@@ -154,8 +158,10 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         ApiDocCommentData commentData = methodInfoDesc.getCommentData();
         if (Objects.nonNull(commentData)) {
             String title = ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_TITLE, methodInfoDesc);
-            commonItemData.setTitle(StringUtils.isNotBlank(title) ? title : PsiClassUtils.getMethodName(methodInfoDesc.getPsiMethod()));
+            commonItemData.setTitle(FuStringUtils.isNotBlank(title) ? title : PsiClassUtils.getMethodName(methodInfoDesc.getPsiMethod()));
             commonItemData.setDetailInfo(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_DETAIL_INFO, methodInfoDesc));
+
+
         }
     }
 
@@ -177,6 +183,7 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
                 if (!objectInfoDesc.getBooleanValue(FuDocConstants.ExtInfo.ROOT)) {
                     continue;
                 }
+                objectInfoDesc.addExtInfo(FuDocConstants.ExtInfo.ROOT_OBJECT, true);
                 RootParamBO rootParamBO = new RootParamBO();
                 rootParamBO.setSpringAnnotationData(findRootParamSpringAnnotation(objectInfoDesc));
                 rootParamBO.setFuDocParamDataList(AssembleHelper.assembleParamData(fuDocContext, Lists.newArrayList(objectInfoDesc), null));

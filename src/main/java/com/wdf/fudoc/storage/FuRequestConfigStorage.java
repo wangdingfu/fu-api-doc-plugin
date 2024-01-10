@@ -1,11 +1,11 @@
 package com.wdf.fudoc.storage;
 
 import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.common.constant.FuPaths;
+import com.wdf.api.constants.FuPaths;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
-import com.wdf.fudoc.util.JsonUtil;
-import com.wdf.fudoc.util.StorageUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.api.util.JsonUtil;
+import com.wdf.api.util.StorageUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.nio.file.Paths;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class FuRequestConfigStorage {
             return this.configPO;
         }
         String content = StorageUtils.readContent(path, FILE_NAME);
-        this.configPO = StringUtils.isNotBlank(content) ? JsonUtil.toBean(content, FuRequestConfigPO.class) : new FuRequestConfigPO();
+        this.configPO = FuStringUtils.isNotBlank(content) ? JsonUtil.toBean(content, FuRequestConfigPO.class) : new FuRequestConfigPO();
         return this.configPO;
     }
 
