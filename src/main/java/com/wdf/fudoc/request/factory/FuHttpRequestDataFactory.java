@@ -29,7 +29,7 @@ import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -105,7 +105,7 @@ public class FuHttpRequestDataFactory {
         fuHttpRequestData.setApiKey(moduleId + ":" + fuDocRootParamData.getApiId());
         //接口名称
         String title = fuDocRootParamData.getTitle();
-        if (StringUtils.isBlank(title)) {
+        if (FuStringUtils.isBlank(title)) {
             title = PsiClassUtils.getMethodName(fuDocRootParamData.getPsiMethod());
         }
         fuHttpRequestData.setApiName(title);
@@ -121,7 +121,7 @@ public class FuHttpRequestDataFactory {
     private static FuRequestData buildFuRequestData(FuDocRootParamData fuDocRootParamData) {
         FuRequestData fuRequestData = new FuRequestData();
         List<String> urlList = fuDocRootParamData.getUrlList();
-        fuRequestData.setBaseUrl(CollectionUtils.isEmpty(urlList) ? StringUtils.EMPTY : urlList.get(0));
+        fuRequestData.setBaseUrl(CollectionUtils.isEmpty(urlList) ? FuStringUtils.EMPTY : urlList.get(0));
         //接口请求类型
         fuRequestData.setRequestType(RequestType.getRequestType(fuDocRootParamData.getRequestType()));
         //设置body内容
@@ -153,13 +153,13 @@ public class FuHttpRequestDataFactory {
         }
         FuRequestData request = fuHttpRequestData.getRequest();
         String baseUrl = request.getBaseUrl();
-        if (StringUtils.isNotBlank(baseUrl)) {
+        if (FuStringUtils.isNotBlank(baseUrl)) {
             String[] split = baseUrl.split("/");
             for (String urlItem : split) {
                 if (urlItem.contains("{{") || urlItem.contains("}}")) {
                     continue;
                 }
-                if (StringUtils.startsWith(urlItem, "{") && StringUtils.endsWith(urlItem, "}")) {
+                if (FuStringUtils.startsWith(urlItem, "{") && FuStringUtils.endsWith(urlItem, "}")) {
                     String name = urlItem.replace("{", "").replace("}", "");
                     if (pathVariableList.stream().noneMatch(a -> a.getKey().equals(name))) {
                         pathVariableList.add(new KeyValueTableBO(true, name, ""));
@@ -229,7 +229,7 @@ public class FuHttpRequestDataFactory {
             FuRequestConfigPO fuRequestConfigPO = FuRequestConfigStorage.get(module.getProject()).readData();
             List<ConfigEnvTableBO> envConfigList = fuRequestConfigPO.getEnvConfigList();
             String envName = fuRequestConfigPO.getEnv(module.getName());
-            if (CollectionUtils.isNotEmpty(envConfigList) && StringUtils.isNotBlank(envName)) {
+            if (CollectionUtils.isNotEmpty(envConfigList) && FuStringUtils.isNotBlank(envName)) {
                 Optional<ConfigEnvTableBO> first = envConfigList.stream().filter(f -> f.getEnvName().equals(envName)).findFirst();
                 if(first.isPresent()){
                     FuRequestData request = fuHttpRequestData.getRequest();
@@ -252,7 +252,7 @@ public class FuHttpRequestDataFactory {
         }
         //读取server.servlet.context-path属性 issue: #20
         String configValue = SpringConfigManager.getContextPath(module);
-        if (StringUtils.isNotBlank(configValue)) {
+        if (FuStringUtils.isNotBlank(configValue)) {
             request.setContextPath(configValue);
         }
         request.setDomain(domainUrl);

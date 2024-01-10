@@ -1,7 +1,7 @@
 package com.wdf.fudoc.util;
 
 import com.wdf.fudoc.common.base.FuFunction;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.beans.Introspector;
 import java.lang.invoke.SerializedLambda;
@@ -29,7 +29,7 @@ public class LambdaUtils {
             String getterMethod = serializedLambda.getImplMethodName();
             return Introspector.decapitalize(getterMethod.replace("get", ""));
         } catch (ReflectiveOperationException e) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
     }
 

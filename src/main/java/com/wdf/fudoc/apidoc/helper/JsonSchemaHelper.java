@@ -9,7 +9,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.api.util.JsonUtil;
 import com.wdf.fudoc.util.MapListUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +101,7 @@ public class JsonSchemaHelper {
             jsonSchema.setItems(buildJsonSchema(item, instance));
         } else {
             String paramValue = fuDocParamData.getParamValue();
-            if (StringUtils.isNotBlank(paramValue)) {
+            if (FuStringUtils.isNotBlank(paramValue)) {
                 jsonSchema.setMock(new YApiMock(paramValue));
             }
         }

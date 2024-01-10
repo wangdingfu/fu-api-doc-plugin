@@ -12,7 +12,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -39,7 +39,7 @@ public class HttpApiExecutor {
         Module module = fuHttpRequestData.getModule();
         String application;
         GlobalPreScriptPO globalPreScriptPO;
-        if (Objects.nonNull(module) && StringUtils.isNotBlank(application = SpringBootEnvLoader.getApplication(module))
+        if (Objects.nonNull(module) && FuStringUtils.isNotBlank(application = SpringBootEnvLoader.getApplication(module))
                 && Objects.nonNull(globalPreScriptPO = fuRequestConfigPO.getScript(ScriptType.PRE_SCRIPT, application))) {
             globalPreScriptPO.setScriptType(ScriptType.PRE_SCRIPT);
             fuLogger.setPrefix(ScriptType.PRE_SCRIPT.getView());

@@ -17,7 +17,7 @@ import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.util.FuApiUtils;
 import com.wdf.fudoc.util.PathUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -85,7 +85,7 @@ public class ControllerAssembleService extends AbstractAssembleService {
                 if (AnnotationConstants.REQUEST_MAPPING.equals(qualifiedName)) {
                     //requestMapping
                     requestType = annotationData.enumValue(FuDocConstants.AnnotationAttr.METHOD).getEnumValue();
-                    if (StringUtils.isBlank(requestType)) {
+                    if (FuStringUtils.isBlank(requestType)) {
                         requestType = RequestType.GET.getRequestType();
                     }
                 } else {

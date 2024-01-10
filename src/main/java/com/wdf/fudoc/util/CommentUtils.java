@@ -3,7 +3,7 @@ package com.wdf.fudoc.util;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.pojo.bo.CommentLineBO;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +24,7 @@ public class CommentUtils {
      */
     public static List<CommentLineBO> parseComment(String comment) {
         List<CommentLineBO> resultList = Lists.newArrayList();
-        if (StringUtils.isNotBlank(comment)) {
+        if (FuStringUtils.isNotBlank(comment)) {
             int row = 0, length = comment.length();
             StringBuilder line = new StringBuilder();
             for (int j = 0; j < length; j++) {
@@ -48,15 +48,15 @@ public class CommentUtils {
     private static CommentLineBO parse(String lineText, int row) {
         CommentLineBO commentLineBO = new CommentLineBO();
         commentLineBO.setRow(row);
-        if (StringUtils.isBlank(lineText)) {
+        if (FuStringUtils.isBlank(lineText)) {
             return commentLineBO;
         }
         if (row == 0) {
             //第一行解析
             if (lineText.startsWith(FuDocConstants.Comment.COMMENT_START_1)) {
-                commentLineBO.setPrefix(StringUtils.substringBefore(lineText, FuDocConstants.Comment.COMMENT_X));
+                commentLineBO.setPrefix(FuStringUtils.substringBefore(lineText, FuDocConstants.Comment.COMMENT_X));
                 if (lineText.endsWith(FuDocConstants.Comment.COMMENT_END_1)) {
-                    commentLineBO.setSuffix(StringUtils.substringAfter(lineText, FuDocConstants.Comment.COMMENT_X));
+                    commentLineBO.setSuffix(FuStringUtils.substringAfter(lineText, FuDocConstants.Comment.COMMENT_X));
                 }
             } else if (lineText.startsWith(FuDocConstants.Comment.COMMENT_START_2)) {
 
@@ -74,7 +74,7 @@ public class CommentUtils {
 
 
     private static boolean parseTag(String lineText, CommentLineBO commentLineBO) {
-        if (StringUtils.isNotBlank(lineText)) {
+        if (FuStringUtils.isNotBlank(lineText)) {
             StringBuilder sb = null;
             String tag = null, param = null;
             for (int i = 0; i < lineText.length(); i++) {
@@ -115,9 +115,9 @@ public class CommentUtils {
                     sb.append(charAt);
                 }
             }
-            commentLineBO.setTag(Objects.nonNull(tag) ? tag : StringUtils.EMPTY);
-            commentLineBO.setKey(Objects.nonNull(param) ? param : StringUtils.EMPTY);
-            commentLineBO.setContent(Objects.nonNull(sb) ? sb.toString() : StringUtils.EMPTY);
+            commentLineBO.setTag(Objects.nonNull(tag) ? tag : FuStringUtils.EMPTY);
+            commentLineBO.setKey(Objects.nonNull(param) ? param : FuStringUtils.EMPTY);
+            commentLineBO.setContent(Objects.nonNull(sb) ? sb.toString() : FuStringUtils.EMPTY);
             return true;
         }
         return false;

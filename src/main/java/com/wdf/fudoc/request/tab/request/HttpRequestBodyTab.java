@@ -20,7 +20,7 @@ import com.wdf.fudoc.util.ChooseFileTableUtils;
 import icons.FuDocIcons;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;
@@ -78,10 +78,10 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
     }
 
     public void clear(){
-        this.jsonComponent.setContent(StringUtils.EMPTY);
+        this.jsonComponent.setContent(FuStringUtils.EMPTY);
         this.urlencodedComponent.setDataList(Lists.newArrayList());
         this.formDataComponent.setDataList(Lists.newArrayList());
-        this.rawComponent.setContent(StringUtils.EMPTY);
+        this.rawComponent.setContent(FuStringUtils.EMPTY);
 
     }
 
@@ -96,7 +96,7 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
         FuRequestData request = httpRequestData.getRequest();
         FuRequestBodyData body = request.getBody();
         String json = body.getJson();
-        if (StringUtils.isNotBlank(json)) {
+        if (FuStringUtils.isNotBlank(json)) {
             this.jsonComponent.setContent(json);
             this.fuTabComponent.switchTab(JSON);
             return;
@@ -115,7 +115,7 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
             return;
         }
         String raw = body.getRaw();
-        if (StringUtils.isNotBlank(raw)) {
+        if (FuStringUtils.isNotBlank(raw)) {
             this.rawComponent.setContent(raw);
             this.fuTabComponent.switchTab(RAW);
         }
@@ -134,7 +134,7 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
         body.setRaw(this.rawComponent.getContent());
         body.setJson(this.jsonComponent.getContent());
         String currentTab = fuTabComponent.getCurrentTab();
-        if (StringUtils.isBlank(currentTab)) {
+        if (FuStringUtils.isBlank(currentTab)) {
             return;
         }
         request.addContentType(getContentType(currentTab));

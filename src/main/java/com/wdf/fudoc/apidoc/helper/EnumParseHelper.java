@@ -20,7 +20,7 @@ import com.wdf.fudoc.apidoc.pojo.data.FuDocEnumData;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocEnumItemData;
 import com.wdf.fudoc.util.MapListUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -68,15 +68,15 @@ public class EnumParseHelper {
         fuDocEnumData.setEnumName(psiClass.getName());
         ApiDocCommentData apiDocCommentData = DocCommentParseHelper.parseComment(psiClass);
         String commentTitle = apiDocCommentData.getCommentTitle();
-        fuDocEnumData.setTitle(StringUtils.isBlank(commentTitle) ? psiClass.getName() : apiDocCommentData.getCommentTitle());
+        fuDocEnumData.setTitle(FuStringUtils.isBlank(commentTitle) ? psiClass.getName() : apiDocCommentData.getCommentTitle());
         //移除code为空或则描述为空的枚举项
-        fuDocEnumItemDataList.removeIf(a -> StringUtils.isBlank(a.getCode()) || StringUtils.isBlank(a.getMsg()));
+        fuDocEnumItemDataList.removeIf(a -> FuStringUtils.isBlank(a.getCode()) || FuStringUtils.isBlank(a.getMsg()));
         if (CollectionUtils.isNotEmpty(fuDocEnumItemDataList)) {
             fuDocEnumData.setItemList(fuDocEnumItemDataList);
             //将枚举数据渲染成markdown格式接口文档
             return FuDocRender.enumRender(fuDocEnumData, type);
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
@@ -84,14 +84,14 @@ public class EnumParseHelper {
         //精准选取
         for (String key : keys) {
             String value = selectValue(codeList, instance.get(key), false);
-            if (StringUtils.isNotBlank(value)) {
+            if (FuStringUtils.isNotBlank(value)) {
                 return value;
             }
         }
         //如果还是没有取到 则随机选取
         for (String key : keys) {
             String value = selectValue(codeList, instance.get(key), true);
-            if (StringUtils.isNotBlank(value)) {
+            if (FuStringUtils.isNotBlank(value)) {
                 return value;
             }
         }
@@ -129,7 +129,7 @@ public class EnumParseHelper {
                 return parseExpression(psiField.getInitializer());
             }
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
@@ -143,11 +143,11 @@ public class EnumParseHelper {
         SettingEnumBO settingEnumBO = customerSettingData.getSetting_enum();
         String code = settingEnumBO.getCode();
         String msg = settingEnumBO.getMsg();
-        if (StringUtils.isNotBlank(code)) {
-            enumSettingConfig.addCode(Lists.newArrayList(StringUtils.split(code, ",")));
+        if (FuStringUtils.isNotBlank(code)) {
+            enumSettingConfig.addCode(Lists.newArrayList(FuStringUtils.split(code, ",")));
         }
-        if (StringUtils.isNotBlank(code)) {
-            enumSettingConfig.addMsg(Lists.newArrayList(StringUtils.split(msg, ",")));
+        if (FuStringUtils.isNotBlank(code)) {
+            enumSettingConfig.addMsg(Lists.newArrayList(FuStringUtils.split(msg, ",")));
         }
         return enumSettingConfig;
     }

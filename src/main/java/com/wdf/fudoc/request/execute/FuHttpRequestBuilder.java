@@ -22,7 +22,7 @@ import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.File;
 import java.net.HttpCookie;
@@ -98,13 +98,13 @@ public class FuHttpRequestBuilder {
             return baseUrl;
         }
         Map<String, KeyValueTableBO> pathVariableMap = ObjectUtils.listToMap(pathVariables, KeyValueTableBO::getKey);
-        if (StringUtils.isNotBlank(baseUrl)) {
+        if (FuStringUtils.isNotBlank(baseUrl)) {
             String[] split = baseUrl.split("/");
             for (String urlItem : split) {
                 if (urlItem.contains("{{") || urlItem.contains("}}")) {
                     continue;
                 }
-                if (StringUtils.startsWith(urlItem, "{") && StringUtils.endsWith(urlItem, "}")) {
+                if (FuStringUtils.startsWith(urlItem, "{") && FuStringUtils.endsWith(urlItem, "}")) {
                     String name = urlItem.replace("{", "").replace("}", "");
                     KeyValueTableBO keyValueTableBO = pathVariableMap.get(name);
                     if (Objects.isNull(keyValueTableBO)) {
@@ -120,7 +120,7 @@ public class FuHttpRequestBuilder {
 
     private String formatUrl(String url) {
         if (url.contains("{{") && url.contains("}}")) {
-            String[] varList = StringUtils.substringsBetween(url, "{{", "}}");
+            String[] varList = FuStringUtils.substringsBetween(url, "{{", "}}");
             if (Objects.nonNull(varList)) {
                 for (String variable : varList) {
                     url = url.replace("{{" + variable + "}}", formatVariable(variable));
@@ -147,7 +147,7 @@ public class FuHttpRequestBuilder {
                 }
                 String requestParamType = keyValueTableBO.getRequestParamType();
 
-                if (isMultiFile && RequestParamType.FILE.getCode().equals(requestParamType) && StringUtils.isNotBlank(value)) {
+                if (isMultiFile && RequestParamType.FILE.getCode().equals(requestParamType) && FuStringUtils.isNotBlank(value)) {
                     File file = new File(value);
                     byte[] bytes = FileUtil.readBytes(file);
                     this.httpRequest.form(keyValueTableBO.getKey(), bytes, file.getName());
@@ -160,8 +160,8 @@ public class FuHttpRequestBuilder {
 
 
     private String formatValue(String value) {
-        if (StringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}")) {
-            return formatVariable(StringUtils.substringBetween(value, "{{", "}}"));
+        if (FuStringUtils.isNotBlank(value) && value.startsWith("{{") && value.endsWith("}}")) {
+            return formatVariable(FuStringUtils.substringBetween(value, "{{", "}}"));
         }
         return value;
     }
@@ -175,8 +175,8 @@ public class FuHttpRequestBuilder {
 
 
     private String getAuthVariable(String authVariableName) {
-        String authName = StringUtils.substringAfterLast(authVariableName, FuDocConstants.FU_AUTH);
-        if (StringUtils.isBlank(authName)) {
+        String authName = FuStringUtils.substringAfterLast(authVariableName, FuDocConstants.FU_AUTH);
+        if (FuStringUtils.isBlank(authName)) {
             fuLogger.error("鉴权用户变量[{}]未正确填写. 无法解析", authVariableName);
             return authVariableName;
         }
@@ -187,8 +187,8 @@ public class FuHttpRequestBuilder {
         }
         String userName = this.configPO.getUserName();
         if (Objects.isNull(authTableBO)) {
-            this.authTableBO = StringUtils.isBlank(userName) ? authConfigList.get(0)
-                    : authConfigList.stream().filter(f -> StringUtils.isNotBlank(f.getUserName()))
+            this.authTableBO = FuStringUtils.isBlank(userName) ? authConfigList.get(0)
+                    : authConfigList.stream().filter(f -> FuStringUtils.isNotBlank(f.getUserName()))
                     .filter(f -> f.getUserName().equals(userName)).findFirst().orElse(null);
             if (Objects.isNull(authTableBO)) {
                 fuLogger.error("鉴权用户[{}]已不存在. 请重新选择一个已经存在的用户", userName);
@@ -205,20 +205,20 @@ public class FuHttpRequestBuilder {
         Object value = dataMap.get(authName);
         if (Objects.isNull(value)) {
             fuLogger.error("解析变量失败. 鉴权用户[{}]未配置变量[{}]", userName, authVariableName);
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         return value.toString();
     }
 
 
     private void addBody(String content) {
-        if (StringUtils.isNotBlank(content)) {
+        if (FuStringUtils.isNotBlank(content)) {
             this.httpRequest.body(formatJsonContent(content));
         }
     }
 
     private String formatJsonContent(String json) {
-        if (!this.isScript || StringUtils.isBlank(json) || !(json.contains("{{") && json.contains("}}"))) {
+        if (!this.isScript || FuStringUtils.isBlank(json) || !(json.contains("{{") && json.contains("}}"))) {
             return json;
         }
         try {

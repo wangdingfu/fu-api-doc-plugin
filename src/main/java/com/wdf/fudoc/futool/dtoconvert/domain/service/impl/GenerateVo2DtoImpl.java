@@ -23,7 +23,7 @@ import com.wdf.fudoc.futool.dtoconvert.domain.model.SetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.service.AbstractGenerateVo2Dto;
 import com.wdf.fudoc.futool.dtoconvert.infrastructure.Utils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 import java.util.regex.Pattern;

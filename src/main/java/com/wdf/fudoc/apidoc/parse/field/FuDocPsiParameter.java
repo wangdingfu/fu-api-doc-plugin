@@ -4,7 +4,7 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiParameter;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -30,7 +30,7 @@ public class FuDocPsiParameter extends AbstractFuDocField {
     @Override
     public String getName() {
         if (Objects.isNull(psiParameter)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         return psiParameter.getName();
     }
@@ -42,7 +42,7 @@ public class FuDocPsiParameter extends AbstractFuDocField {
     @Override
     public String getComment() {
         if (Objects.isNull(apiDocCommentData)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         return apiDocCommentData.getCommentByParam(getName());
     }

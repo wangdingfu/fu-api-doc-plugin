@@ -11,7 +11,7 @@ import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.FastJsonUtils;
 import com.wdf.fudoc.util.MapListUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,10 +46,10 @@ public class MockDataHelper {
      */
     private static String mockGetData(List<ObjectInfoDesc> requestParamList) {
         if (CollectionUtils.isEmpty(requestParamList)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         String value = requestParamList.stream().map(MockDataHelper::formatValue).collect(Collectors.joining("&"));
-        return StringUtils.isBlank(value) ? StringUtils.EMPTY : "?" + value;
+        return FuStringUtils.isBlank(value) ? FuStringUtils.EMPTY : "?" + value;
     }
 
 
@@ -80,7 +80,7 @@ public class MockDataHelper {
     private static void add(ObjectInfoDesc objectInfoDesc, JSONObject jsonObject) {
         String name = objectInfoDesc.getName();
         Object value = objectInfoDesc.getValue();
-        if (StringUtils.isNotBlank(name) && Objects.nonNull(value)) {
+        if (FuStringUtils.isNotBlank(name) && Objects.nonNull(value)) {
             jsonObject.set(name, value);
         }
     }
@@ -133,7 +133,7 @@ public class MockDataHelper {
             }
         }
 
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
@@ -148,34 +148,34 @@ public class MockDataHelper {
             if (value instanceof JSONObject data) {
                 List<String> expressList = Lists.newArrayList();
                 data.forEach((k, v) -> expressList.add(buildExpress(k, v)));
-                return CollectionUtils.isEmpty(expressList) ? StringUtils.EMPTY
-                        : StringUtils.join(expressList, "&");
+                return CollectionUtils.isEmpty(expressList) ? FuStringUtils.EMPTY
+                        : FuStringUtils.join(expressList, "&");
             }
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
     private static String buildExpress(String name, Object value) {
-        if (StringUtils.isNotBlank(name) && Objects.nonNull(value)) {
+        if (FuStringUtils.isNotBlank(name) && Objects.nonNull(value)) {
             return name + "=" + mockStringValue(value);
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
     public static String mockStringValue(Object value) {
         if (Objects.nonNull(value)) {
             if (value instanceof Collection<?>) {
-                return StringUtils.join(Lists.newArrayList((Collection<?>) value), ",");
+                return FuStringUtils.join(Lists.newArrayList((Collection<?>) value), ",");
             }
             if (ArrayUtil.isArray(value)) {
                 String arrayStr = ArrayUtil.toString(value);
-                return StringUtils.substring(arrayStr, 1, arrayStr.length() - 2);
+                return FuStringUtils.substring(arrayStr, 1, arrayStr.length() - 2);
             }
             return value.toString();
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 

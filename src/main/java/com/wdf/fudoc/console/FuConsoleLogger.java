@@ -6,7 +6,7 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.Objects;
@@ -72,7 +72,7 @@ public class FuConsoleLogger implements FuLogger {
         if (Objects.isNull(this.consoleView)) {
             return;
         }
-        if (StringUtils.isNotBlank(this.prefix)) {
+        if (FuStringUtils.isNotBlank(this.prefix)) {
             this.consoleView.print("[" + this.prefix + "] ", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
         }
         this.consoleView.print(info, contentType);

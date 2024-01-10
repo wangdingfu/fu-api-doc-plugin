@@ -14,7 +14,7 @@ import com.wdf.fudoc.components.listener.FuMsgListener;
 import com.wdf.api.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -160,7 +160,7 @@ public class FuMessageComponent extends FuHighlightComponent {
         super.clear();
         applyFont();
         List<FuMsgItemBO> messageItemList;
-        String myText = StringUtils.EMPTY;
+        String myText = FuStringUtils.EMPTY;
         if (Objects.nonNull(this.message) && CollectionUtils.isNotEmpty(messageItemList = this.message.getItemList())) {
             //循环处理每一段消息
             for (FuMsgItemBO fuMsgItemBO : messageItemList) {

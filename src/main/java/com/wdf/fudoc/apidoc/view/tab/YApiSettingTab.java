@@ -34,7 +34,7 @@ import com.wdf.fudoc.components.listener.FuViewListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
 import com.wdf.fudoc.util.ObjectUtils;
 import icons.FuDocIcons;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -155,14 +155,14 @@ public class YApiSettingTab implements FuTab, FuViewListener, FuTableListener<YA
     @Override
     public YApiProjectTableData addData() {
         String baseUrlText = baseUrl.getText();
-        if (StringUtils.isBlank(baseUrlText)) {
+        if (FuStringUtils.isBlank(baseUrlText)) {
             //提示需要填写YApi服务地址
             Messages.showYesNoDialog(FuBundle.message(MessageConstants.SYNC_YAPI_URL_TIP), "", Messages.getQuestionIcon());
             return null;
         }
         List<String> projectTokenList = ObjectUtils.listToList(fuTableComponent.getDataList(), YApiProjectTableData::getProjectToken);
-        String value = Messages.showInputDialog(SYNC_TOKEN, SYNC_TOKEN_TITLE, Messages.getQuestionIcon(), StringUtils.EMPTY, new InputExistsValidator(projectTokenList));
-        if (StringUtils.isEmpty(value)) {
+        String value = Messages.showInputDialog(SYNC_TOKEN, SYNC_TOKEN_TITLE, Messages.getQuestionIcon(), FuStringUtils.EMPTY, new InputExistsValidator(projectTokenList));
+        if (FuStringUtils.isEmpty(value)) {
             return null;
         }
         //根据token获取YApi项目信息

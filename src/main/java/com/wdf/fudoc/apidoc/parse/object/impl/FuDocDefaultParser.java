@@ -23,7 +23,7 @@ import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 
@@ -143,7 +143,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
         }
         String qualifiedName = psiClass.getQualifiedName();
         String fieldNames = filterMap.get(qualifiedName);
-        filterFieldNames.addAll(Sets.newHashSet(Objects.isNull(fieldNames) ? new String[]{} : StringUtils.split(fieldNames, ",")));
+        filterFieldNames.addAll(Sets.newHashSet(Objects.isNull(fieldNames) ? new String[]{} : FuStringUtils.split(fieldNames, ",")));
         filterFieldNames.addAll(getNeedFilterFieldNames(filterMap, psiClass.getSuperClass()));
         return filterFieldNames;
     }
@@ -170,7 +170,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
         }
         AnnotationData annotationData = AnnotationUtils.parse(psiField.getAnnotation(CommonObjectNames.JSON_PROPERTY));
         String enumValue;
-        if (Objects.nonNull(annotationData) && StringUtils.isNotBlank(enumValue = annotationData.enumValue("access").getEnumValue())) {
+        if (Objects.nonNull(annotationData) && FuStringUtils.isNotBlank(enumValue = annotationData.enumValue("access").getEnumValue())) {
             ParamType paramType = parseObjectBO.getParamType();
             if (ParamType.REQUEST_PARAM.equals(paramType) && "WRITE_ONLY".equals(enumValue)) {
                 //请求参数 标识了只写 说明不读取该参数 则返回忽略

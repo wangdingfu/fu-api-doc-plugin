@@ -7,7 +7,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.helper.EnumParseHelper;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -48,7 +48,7 @@ public class FuDocPsiField extends AbstractFuDocField {
         if (Objects.nonNull(psiElement) && psiElement instanceof PsiClass && (psiClass = (PsiClass) psiElement).isEnum()) {
             //如果是枚举 则解析枚举
             String enumContent = EnumParseHelper.parseEnum(psiClass, YesOrNo.YES.getCode());
-            return apiDocCommentData.getCommentTitle() + " " + StringUtils.replace(enumContent, "\r\n", "");
+            return apiDocCommentData.getCommentTitle() + " " + FuStringUtils.replace(enumContent, "\r\n", "");
         }
         return apiDocCommentData.getCommentTitle();
     }

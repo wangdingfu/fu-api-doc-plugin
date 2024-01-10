@@ -1,6 +1,6 @@
 package com.wdf.fudoc.apidoc.mock.real;
 
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -21,7 +21,7 @@ public interface MockRealData {
      */
     default String dataStringData(String fieldName) {
         Object data = getData(fieldName);
-        return Objects.nonNull(data) ? data.toString() : StringUtils.EMPTY;
+        return Objects.nonNull(data) ? data.toString() : FuStringUtils.EMPTY;
     }
 
     /**

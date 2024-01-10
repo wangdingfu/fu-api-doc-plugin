@@ -12,7 +12,7 @@ import com.wdf.api.constants.UrlConstants;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.api.util.JsonUtil;
 import com.wdf.fudoc.util.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +26,7 @@ public class ShowDocConfigData extends BaseSyncConfigData {
 
     @Override
     public String getBaseUrl() {
-        return StringUtils.isBlank(super.baseUrl) ? UrlConstants.SHOW_DOC : super.baseUrl;
+        return FuStringUtils.isBlank(super.baseUrl) ? UrlConstants.SHOW_DOC : super.baseUrl;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ShowDocConfigData extends BaseSyncConfigData {
             return Lists.newArrayList();
         }
         String application = SpringBootEnvLoader.getApplication(module);
-        return state.getShowDocConfigList().stream().filter(f -> StringUtils.isNotBlank(f.getApplicationName()))
+        return state.getShowDocConfigList().stream().filter(f -> FuStringUtils.isNotBlank(f.getApplicationName()))
                 .filter(f -> f.getApplicationName().equals(application))
                 .map(this::buildApiProjectDTO).collect(Collectors.toList());
     }

@@ -16,7 +16,6 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,11 +49,11 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
      */
     @Override
     protected String doSingleApi(BaseSyncConfigData configData, FuDocItemData fuDocItemData, ApiProjectDTO apiProjectDTO, ApiCategoryDTO apiCategoryDTO) {
-        if (Objects.isNull(apiProjectDTO) || StringUtils.isBlank(apiProjectDTO.getProjectToken()) || StringUtils.isBlank(apiProjectDTO.getProjectId())) {
+        if (Objects.isNull(apiProjectDTO) || FuStringUtils.isBlank(apiProjectDTO.getProjectToken()) || FuStringUtils.isBlank(apiProjectDTO.getProjectId())) {
             //构建返回结果
             throw new FuDocException("同步的项目数据错误");
         }
-        if (Objects.isNull(apiCategoryDTO) || StringUtils.isBlank(apiCategoryDTO.getCategoryId()) || StringUtils.isBlank(apiCategoryDTO.getCategoryName())) {
+        if (Objects.isNull(apiCategoryDTO) || FuStringUtils.isBlank(apiCategoryDTO.getCategoryId()) || FuStringUtils.isBlank(apiCategoryDTO.getCategoryName())) {
             //构建返回结果
             throw new FuDocException("同步的分类数据错误");
         }
@@ -78,7 +77,7 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
         YApiCreateCategoryDTO categoryDTO = new YApiCreateCategoryDTO();
         categoryDTO.setToken(apiProjectDTO.getProjectToken());
         String projectId = apiProjectDTO.getProjectId();
-        if (StringUtils.isNotBlank(projectId) && NumberUtil.isNumber(projectId)) {
+        if (FuStringUtils.isNotBlank(projectId) && NumberUtil.isNumber(projectId)) {
             categoryDTO.setProjectId(Long.valueOf(projectId));
         }
         categoryDTO.setName(categoryName);
@@ -114,12 +113,12 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
         //项目token 将接口同步至该项目下
         yApiSaveDTO.setToken(apiProjectDTO.getProjectToken());
         String projectId = apiProjectDTO.getProjectId();
-        if (StringUtils.isNotBlank(projectId) && NumberUtil.isNumber(projectId)) {
+        if (FuStringUtils.isNotBlank(projectId) && NumberUtil.isNumber(projectId)) {
             yApiSaveDTO.setProjectId(Long.valueOf(projectId));
         }
         //接口分类设置 将接口同步至该分类下
         String categoryId = apiCategoryDTO.getCategoryId();
-        if (StringUtils.isNotBlank(categoryId) && NumberUtil.isNumber(categoryId)) {
+        if (FuStringUtils.isNotBlank(categoryId) && NumberUtil.isNumber(categoryId)) {
             yApiSaveDTO.setCatId(Long.valueOf(categoryId));
         }
         //接口url
@@ -199,7 +198,7 @@ public class SyncToYApiStrategy extends AbstractSyncSingleApiStrategy {
                 yApiParamDTO.setName(fuDocParamData.getParamName());
                 RequestParamType requestParamType = RequestParamType.FILE.getCode().equals(fuDocParamData.getParamType()) ? RequestParamType.FILE : RequestParamType.TEXT;
                 yApiParamDTO.setType(requestParamType.getCode());
-                yApiParamDTO.setRequired(YesOrNo.getCode(fuDocParamData.getParamRequire()) + "");
+                yApiParamDTO.setRequired(String.valueOf(YesOrNo.getCode(fuDocParamData.getParamRequire())));
                 yApiParamDTO.setExample(fuDocParamData.getParamValue());
                 yApiParamDTO.setDesc(fuDocParamData.getParamDesc());
                 yApiParamDTOList.add(yApiParamDTO);

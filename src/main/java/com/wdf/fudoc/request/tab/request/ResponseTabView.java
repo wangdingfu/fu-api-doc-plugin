@@ -19,7 +19,7 @@ import com.wdf.fudoc.request.view.ResponseFileView;
 import com.wdf.fudoc.util.ResourceUtils;
 import icons.FuDocIcons;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,7 +84,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
         switch (responseType) {
             case SUCCESS -> {
                 String fileName = response.getFileName();
-                if (StringUtils.isNotBlank(fileName)) {
+                if (FuStringUtils.isNotBlank(fileName)) {
                     //响应结果是文件
                     response.setFileName(fileName);
                     HttpResponse httpResponse = response.getHttpResponse();

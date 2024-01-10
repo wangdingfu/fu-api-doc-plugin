@@ -12,7 +12,7 @@ import com.wdf.api.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nls;
 
 import javax.accessibility.Accessible;
@@ -183,7 +183,7 @@ public class FuHighlightComponent extends JComponent implements Accessible {
     }
 
     protected int getStringWidth(@Nls String text, FontMetrics fontMetrics) {
-        if (StringUtils.isBlank(text)) {
+        if (FuStringUtils.isBlank(text)) {
             return 0;
         }
         return fontMetrics.stringWidth(text);

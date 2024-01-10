@@ -1,7 +1,7 @@
 package com.wdf.fudoc.apidoc.parse.field;
 
 import com.intellij.psi.PsiAnnotation;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 /**
  * @author wangdingfu
@@ -41,6 +41,6 @@ public class FuDocCustomerField extends AbstractFuDocField {
 
     @Override
     public String getParamType() {
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 }

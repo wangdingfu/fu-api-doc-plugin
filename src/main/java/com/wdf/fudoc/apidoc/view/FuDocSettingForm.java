@@ -11,7 +11,7 @@ import com.wdf.fudoc.apidoc.data.SettingData;
 import com.wdf.fudoc.util.FastJsonUtils;
 import com.wdf.fudoc.components.FuEditorComponent;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -95,7 +95,7 @@ public class FuDocSettingForm extends DialogWrapper {
      */
     public void apply() {
         String content = this.settingEditorComponent.getContent();
-        if (StringUtils.isNotBlank(content)) {
+        if (FuStringUtils.isNotBlank(content)) {
             this.settingData.setCustomerSettingData(JSONUtil.toBean(content, CustomerSettingData.class));
         }
         this.settingData.setFuDocTemplateValue(this.mainEditorComponent.getContent());
@@ -119,19 +119,19 @@ public class FuDocSettingForm extends DialogWrapper {
         String enumTemplateValue1 = settingData.getEnumTemplateValue1();
         String enumTemplateValue2 = settingData.getEnumTemplateValue2();
         String yapiTemplateValue = settingData.getYapiTemplateValue();
-        if (StringUtils.isNotBlank(fuDocTemplateValue)) {
+        if (FuStringUtils.isNotBlank(fuDocTemplateValue)) {
             this.mainEditorComponent.setContent(fuDocTemplateValue);
         }
-        if (StringUtils.isNotBlank(objectTemplateValue)) {
+        if (FuStringUtils.isNotBlank(objectTemplateValue)) {
             this.objectEditorComponent.setContent(objectTemplateValue);
         }
-        if (StringUtils.isNotBlank(enumTemplateValue1)) {
+        if (FuStringUtils.isNotBlank(enumTemplateValue1)) {
             this.enum1EditorComponent.setContent(enumTemplateValue1);
         }
-        if (StringUtils.isNotBlank(enumTemplateValue2)) {
+        if (FuStringUtils.isNotBlank(enumTemplateValue2)) {
             this.enum2EditorComponent.setContent(enumTemplateValue2);
         }
-        if (StringUtils.isNotBlank(yapiTemplateValue)) {
+        if (FuStringUtils.isNotBlank(yapiTemplateValue)) {
             this.yapiEditorComponent.setContent(yapiTemplateValue);
         }
     }

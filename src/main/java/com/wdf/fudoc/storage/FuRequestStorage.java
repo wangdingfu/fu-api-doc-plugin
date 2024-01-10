@@ -17,7 +17,7 @@ import com.wdf.fudoc.request.http.dto.HttpRecentDTO;
 import com.wdf.fudoc.request.http.impl.FuHttpClientImpl;
 import com.wdf.fudoc.util.*;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;

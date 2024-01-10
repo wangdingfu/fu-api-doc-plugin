@@ -3,7 +3,7 @@ package com.wdf.fudoc.apidoc.mock.real;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -19,7 +19,7 @@ public class JsonRealDataHandler implements MockRealData {
     private JSONArray arrayRealData;
 
     public JsonRealDataHandler(String json) {
-        if (StringUtils.isNotBlank(json)) {
+        if (FuStringUtils.isNotBlank(json)) {
             if (JSONUtil.isTypeJSONObject(json)) {
                 this.jsonRealData = JSONUtil.parseObj(json);
             }
@@ -36,14 +36,14 @@ public class JsonRealDataHandler implements MockRealData {
     @Override
     public Object getData(String fieldName) {
         if (Objects.nonNull(this.jsonRealData)) {
-            if (StringUtils.isBlank(fieldName)) {
+            if (FuStringUtils.isBlank(fieldName)) {
                 return this.jsonRealData;
             }
             return this.jsonRealData.getByPath(fieldName);
         }
         if (Objects.nonNull(this.arrayRealData) && !this.arrayRealData.isEmpty()) {
             Object firstRaw = this.arrayRealData.get(0);
-            if (StringUtils.isBlank(fieldName)) {
+            if (FuStringUtils.isBlank(fieldName)) {
                 return firstRaw;
             }
             return new JsonRealDataHandler(firstRaw).getData(fieldName);

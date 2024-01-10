@@ -7,7 +7,7 @@ import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,7 +61,7 @@ public class AnnotationArrayValueData extends AnnotationValueData {
         }
 
         public List<String> stringValue() {
-            return valueDataList.stream().map(AnnotationConstantValueData::stringValue).filter(StringUtils::isNotEmpty).collect(Collectors.toList());
+            return valueDataList.stream().map(AnnotationConstantValueData::stringValue).filter(FuStringUtils::isNotEmpty).collect(Collectors.toList());
         }
     }
 
@@ -74,7 +74,7 @@ public class AnnotationArrayValueData extends AnnotationValueData {
         }
 
         public List<String> className() {
-            return valueDataList.stream().map(AnnotationClassValueData::getClassName).filter(StringUtils::isNotEmpty).collect(Collectors.toList());
+            return valueDataList.stream().map(AnnotationClassValueData::getClassName).filter(FuStringUtils::isNotEmpty).collect(Collectors.toList());
         }
     }
 
@@ -94,7 +94,7 @@ public class AnnotationArrayValueData extends AnnotationValueData {
             if (CollectionUtils.isNotEmpty(valueDataList)) {
                 return valueDataList.get(0).getEnumClassName();
             }
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
 
         public boolean isEmpty() {

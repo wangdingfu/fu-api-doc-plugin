@@ -18,7 +18,7 @@ import com.wdf.api.constants.ApiUrl;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.report.issue.param.IssueBody;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.nio.charset.Charset;
@@ -108,7 +108,7 @@ public abstract class AbstractIssueSubmitter implements IssueSubmitter {
         param.put("type", type);
         String result = doSendRequest(ApiUrl.ACCESS_TOKEN, param);
         String accessToken = getData(result);
-        return StringUtils.isBlank(accessToken) ? getAccessToken() : accessToken;
+        return FuStringUtils.isBlank(accessToken) ? getAccessToken() : accessToken;
     }
 
 

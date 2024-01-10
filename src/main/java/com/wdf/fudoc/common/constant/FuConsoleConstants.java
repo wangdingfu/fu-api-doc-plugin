@@ -1,6 +1,6 @@
 package com.wdf.fudoc.common.constant;
 
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -18,7 +18,7 @@ public interface FuConsoleConstants {
 
     static String lineContent(String content) {
         if (Objects.isNull(content)) {
-            content = StringUtils.EMPTY;
+            content = FuStringUtils.EMPTY;
         }
         return " ".repeat((LINE.length() - content.length()) / 2) + content;
     }

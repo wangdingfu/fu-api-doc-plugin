@@ -19,7 +19,7 @@ import com.wdf.api.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -72,7 +72,7 @@ public class ResponseFileView {
     }
 
     private void downloadFile(String filePath) {
-        if (StringUtils.isBlank(filePath)) {
+        if (FuStringUtils.isBlank(filePath)) {
             FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.FU_REQUEST_DOWNLOAD_FILE_FAIL));
         }
         ProgressManager.getInstance().run(new Task.Backgroundable(ProjectUtils.getCurrProject(), "Download file", false) {
@@ -86,7 +86,7 @@ public class ResponseFileView {
                     List<String> fileNames = FileUtil.listFileNames(filePath);
                     if (CollectionUtils.isNotEmpty(fileNames)) {
                         Integer number = fileNames.stream().filter(f -> f.startsWith(prefix)).map(m -> FileNameUtil.getPrefix(m).replace(prefix, ""))
-                                .filter(StringUtils::isNumeric).map(Integer::parseInt).max(Comparator.comparingInt(o1 -> o1)).orElse(0);
+                                .filter(FuStringUtils::isNumeric).map(Integer::parseInt).max(Comparator.comparingInt(o1 -> o1)).orElse(0);
                         targetFileName += (number + 1) + "." + FileNameUtil.extName(fileName);
                     }
                     //生成新的文件名

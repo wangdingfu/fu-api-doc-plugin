@@ -13,7 +13,7 @@ import com.wdf.fudoc.apidoc.pojo.desc.BaseInfoDesc;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 
@@ -76,10 +76,10 @@ public class CustomerValueHelper {
 
 
     private static void autoPaddingComment(String tagName, CommentTagData tagData, Map<String, Object> fuDocMap) {
-        if (StringUtils.isNotBlank(tagName) && Objects.nonNull(tagData) && Objects.nonNull(fuDocMap)) {
+        if (FuStringUtils.isNotBlank(tagName) && Objects.nonNull(tagData) && Objects.nonNull(fuDocMap)) {
             String name = tagData.getName();
             String value = tagData.getValue();
-            if (StringUtils.isNotBlank(name)) {
+            if (FuStringUtils.isNotBlank(name)) {
                 fuDocMap.put(name(name, 0, fuDocMap), value);
             } else {
                 //值为空 则不获取值
@@ -104,21 +104,21 @@ public class CustomerValueHelper {
         if ("annotation".equals(type)) {
             return getValueFromAnnotation(baseInfoDesc, dynamicValueData.getValue());
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
     private static String getValueFromAnnotation(BaseInfoDesc baseInfoDesc, String value) {
         String[] split;
-        if (StringUtils.isNotBlank(value) && value.contains("#") && (split = value.split("#")).length == 2) {
+        if (FuStringUtils.isNotBlank(value) && value.contains("#") && (split = value.split("#")).length == 2) {
             String annotationName = split[0];
             String annotationAttr = split[1];
             Optional<AnnotationData> annotation;
-            if (StringUtils.isNotBlank(annotationName) && StringUtils.isNotBlank(annotationAttr) && (annotation = baseInfoDesc.getAnnotation(annotationName)).isPresent()) {
+            if (FuStringUtils.isNotBlank(annotationName) && FuStringUtils.isNotBlank(annotationAttr) && (annotation = baseInfoDesc.getAnnotation(annotationName)).isPresent()) {
                 AnnotationData annotationData = annotation.get();
                 return annotationData.constant(annotationAttr).stringValue();
             }
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 }

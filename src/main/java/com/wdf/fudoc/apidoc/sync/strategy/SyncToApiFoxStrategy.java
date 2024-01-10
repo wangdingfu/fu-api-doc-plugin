@@ -19,7 +19,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.api.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +40,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
     protected boolean checkConfig(BaseSyncConfigData configData) {
         ApiFoxConfigData apiFoxConfigData = (ApiFoxConfigData) configData;
         String token = apiFoxConfigData.getToken();
-        return StringUtils.isBlank(token);
+        return FuStringUtils.isBlank(token);
     }
 
     /**
@@ -70,7 +70,7 @@ public class SyncToApiFoxStrategy extends AbstractSyncApiStrategy {
         ApiFoxService service = ServiceHelper.getService(ApiFoxService.class);
         //同步api
         String errorMsg = service.syncApi(apiFoxDTO, apiProjectDTO, (ApiFoxConfigData) configData);
-        ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
+        ApiSyncStatus syncStatus = FuStringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
         return ObjectUtils.listToList(fuDocItemDataList, f -> buildSyncApiResult(f, apiProjectDTO, syncStatus, errorMsg));
     }
 

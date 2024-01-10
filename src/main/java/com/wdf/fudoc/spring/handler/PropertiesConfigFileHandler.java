@@ -1,7 +1,7 @@
 package com.wdf.fudoc.spring.handler;
 
 
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 import java.util.Properties;
@@ -20,9 +20,9 @@ public class PropertiesConfigFileHandler implements ConfigFileHandler {
 
     @Override
     public String getConfig(String key) {
-        if (Objects.nonNull(properties) && StringUtils.isNotBlank(key)) {
+        if (Objects.nonNull(properties) && FuStringUtils.isNotBlank(key)) {
             return this.properties.getProperty(key);
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 }

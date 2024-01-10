@@ -13,7 +13,7 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.service.FuDocService;
 import com.wdf.fudoc.util.ClipboardUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -47,7 +47,7 @@ public class GenFuDocAction extends AbstractClassAction {
         if (Objects.nonNull(fuDocService)) {
             long start = System.currentTimeMillis();
             String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
-            if (StringUtils.isBlank(content)) {
+            if (FuStringUtils.isBlank(content)) {
                 //通知没有可以生成接口文档的内容
                 FuDocNotification.notifyWarn(FuBundle.message(MessageConstants.NOTIFY_GEN_NO_CONTENT, psiClass.getName()));
                 return;

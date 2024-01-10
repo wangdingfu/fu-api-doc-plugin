@@ -5,7 +5,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiModifierList;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -39,7 +39,7 @@ public class FuDocPsiClass extends AbstractFuDocField {
     @Override
     public String getComment() {
         if (Objects.isNull(apiDocCommentData)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         return apiDocCommentData.getCommentByParam(getName());
     }

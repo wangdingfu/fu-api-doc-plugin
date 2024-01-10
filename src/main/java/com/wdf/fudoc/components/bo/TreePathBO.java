@@ -7,7 +7,7 @@ import com.wdf.api.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,12 +30,12 @@ public class TreePathBO implements Serializable {
 
     public TreePathBO(List<String> selectPathList) {
         this.selectPathList = selectPathList;
-        this.view = StringUtils.join(selectPathList, ",");
+        this.view = FuStringUtils.join(selectPathList, ",");
 
     }
 
     public boolean isNotNull() {
-        return StringUtils.isNotBlank(this.view) && CollectionUtils.isNotEmpty(selectPathList);
+        return FuStringUtils.isNotBlank(this.view) && CollectionUtils.isNotEmpty(selectPathList);
     }
 
     public boolean isScope(Module module) {
@@ -52,7 +52,7 @@ public class TreePathBO implements Serializable {
     }
 
     public boolean isScope(String moduleName) {
-        if (StringUtils.isBlank(moduleName) || CollectionUtils.isEmpty(selectPathList)) {
+        if (FuStringUtils.isBlank(moduleName) || CollectionUtils.isEmpty(selectPathList)) {
             //没有指定范围 则默认全部有效
             return true;
         }
@@ -76,7 +76,7 @@ public class TreePathBO implements Serializable {
      * @return 0-没有匹配 其他-按照升序体现优先级
      */
     public Integer matchModule(String moduleName) {
-        if (StringUtils.isBlank(moduleName)) {
+        if (FuStringUtils.isBlank(moduleName)) {
             return DEFAULT_SORT;
         }
         if (this.view.equals(moduleName)) {
@@ -91,7 +91,7 @@ public class TreePathBO implements Serializable {
         }
         for (String path : selectPathList) {
             //选中的节点 循环是因为可能会存在多选的情况
-            if (StringUtils.isNotBlank(path) && (moduleName.equals(path) || currProjectName.equals(path))) {
+            if (FuStringUtils.isNotBlank(path) && (moduleName.equals(path) || currProjectName.equals(path))) {
                 return ONE_LEVEL_SORT;
             }
         }
@@ -101,6 +101,6 @@ public class TreePathBO implements Serializable {
 
     @Override
     public String toString() {
-        return StringUtils.isNotBlank(this.view) ? this.view : StringUtils.EMPTY;
+        return FuStringUtils.isNotBlank(this.view) ? this.view : FuStringUtils.EMPTY;
     }
 }

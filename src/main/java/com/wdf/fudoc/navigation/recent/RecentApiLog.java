@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 /**
  * @author wangdingfu
@@ -33,10 +33,10 @@ public class RecentApiLog {
     }
 
     public RecentApiLog(String content) {
-        if (StringUtils.isBlank(content)) {
+        if (FuStringUtils.isBlank(content)) {
             return;
         }
-        String[] split = StringUtils.split(content, "|");
+        String[] split = FuStringUtils.split(content, "|");
         if (split.length == 1) {
             this.url = split[0];
             this.time = 0;
@@ -44,7 +44,7 @@ public class RecentApiLog {
         if (split.length == 2) {
             this.url = split[0];
             String timeStr = split[1];
-            this.time = (StringUtils.isNotBlank(timeStr) && StringUtils.isNumeric(timeStr)) ? Long.parseLong(timeStr) : 0;
+            this.time = (FuStringUtils.isNotBlank(timeStr) && FuStringUtils.isNumeric(timeStr)) ? Long.parseLong(timeStr) : 0;
         }
     }
 }

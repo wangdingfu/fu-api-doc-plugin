@@ -14,7 +14,7 @@ import com.wdf.api.util.JsonUtil;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +35,7 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
 
     @Override
     public String getBaseUrl() {
-        return StringUtils.isBlank(super.baseUrl) ? UrlConstants.API_FOX : super.baseUrl;
+        return FuStringUtils.isBlank(super.baseUrl) ? UrlConstants.API_FOX : super.baseUrl;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ApiFoxConfigData extends BaseSyncConfigData {
             return Lists.newArrayList();
         }
         String application = SpringBootEnvLoader.getApplication(module);
-        return state.getApiFoxConfigList().stream().filter(f -> StringUtils.isNotBlank(f.getApplicationName()))
+        return state.getApiFoxConfigList().stream().filter(f -> FuStringUtils.isNotBlank(f.getApplicationName()))
                 .filter(f -> f.getApplicationName().equals(application))
                 .map(this::buildApiProjectDTO).collect(Collectors.toList());
     }

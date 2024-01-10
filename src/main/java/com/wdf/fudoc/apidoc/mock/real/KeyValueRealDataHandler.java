@@ -2,7 +2,7 @@ package com.wdf.fudoc.apidoc.mock.real;
 
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -29,8 +29,8 @@ public class KeyValueRealDataHandler implements MockRealData {
 
     @Override
     public Object getData(String fieldName) {
-        if (StringUtils.isBlank(fieldName)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(fieldName)) {
+            return FuStringUtils.EMPTY;
         }
         return REAL_DATA_MAP.get(fieldName);
     }

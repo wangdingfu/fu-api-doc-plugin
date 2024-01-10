@@ -14,7 +14,7 @@ import com.wdf.fudoc.apidoc.parse.ObjectParserExecutor;
 import com.wdf.fudoc.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.fudoc.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -108,7 +108,7 @@ public class FuDocCollectionParser extends AbstractApiDocObjectParser {
 
 
     private String getCollectionType(String name) {
-        if (StringUtils.isBlank(name)) {
+        if (FuStringUtils.isBlank(name)) {
             return "array";
         }
         return String.format("array[%s]", name);

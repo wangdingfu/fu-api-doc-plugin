@@ -9,7 +9,7 @@ import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.desc.BaseInfoDesc;
 import com.wdf.fudoc.util.AnnotationUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class FuDocDetailInfoValueHandler implements ParamValueHandler {
         if(fuDocContext.isEnableSwagger()){
             Optional<AnnotationData> annotation = baseInfoDesc.getAnnotation(AnnotationConstants.SWAGGER_API);
             String swaggerName = AnnotationUtils.getAnnotationValue(annotation, FuDocConstants.AnnotationAttr.DESCRIPTION);
-            if (StringUtils.isNotBlank(swaggerName)) {
+            if (FuStringUtils.isNotBlank(swaggerName)) {
                 return swaggerName;
             }
         }
@@ -40,6 +40,6 @@ public class FuDocDetailInfoValueHandler implements ParamValueHandler {
         if (Objects.nonNull(commentData)) {
             return commentData.getCommentDetailInfo();
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 }

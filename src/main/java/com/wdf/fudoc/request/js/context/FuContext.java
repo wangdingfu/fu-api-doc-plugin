@@ -10,7 +10,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.text.NumberFormat;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class FuContext {
         Map<String, FuHttpRequestData> fuHttpRequestDataMap = preScriptPO.getFuHttpRequestDataMap();
         FuHttpRequestData fuHttpRequestData = fuHttpRequestDataMap.get(key);
         if (Objects.isNull(fuHttpRequestData)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         String prefix = fuLogger.getPrefix();
         fuLogger.setPrefix(null);
@@ -76,7 +76,7 @@ public class FuContext {
 
     public String stringify(Object object) {
         if (Objects.isNull(object)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         return JSONUtil.toJsonPrettyStr(object);
     }
@@ -88,7 +88,7 @@ public class FuContext {
      * @param value        变量值
      */
     public void setVariable(String variableName, Object value) {
-        if (StringUtils.isBlank(variableName) || Objects.isNull(value)) {
+        if (FuStringUtils.isBlank(variableName) || Objects.isNull(value)) {
             return;
         }
         configPO.addVariable(variableName, value instanceof Double ? formatDouble((double) value) : value.toString(), this.applicationName);
@@ -102,7 +102,7 @@ public class FuContext {
      * @return 变量值
      */
     public Object variable(String variableName) {
-        if (StringUtils.isNotBlank(variableName)) {
+        if (FuStringUtils.isNotBlank(variableName)) {
             return configPO.variable(variableName, this.applicationName);
         }
         return null;
@@ -116,7 +116,7 @@ public class FuContext {
      * @param value      请求头值
      */
     public void setHeader(String headerName, Object value) {
-        if (StringUtils.isBlank(headerName) || Objects.isNull(value)) {
+        if (FuStringUtils.isBlank(headerName) || Objects.isNull(value)) {
             return;
         }
         configPO.addHeader(headerName, value.toString(), this.applicationName);
@@ -129,7 +129,7 @@ public class FuContext {
      * @return 请求头值
      */
     public Object header(String headerName) {
-        if (StringUtils.isNotBlank(headerName)) {
+        if (FuStringUtils.isNotBlank(headerName)) {
             return configPO.header(headerName, this.applicationName);
         }
         return null;

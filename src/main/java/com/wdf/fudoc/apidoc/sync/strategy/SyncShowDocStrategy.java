@@ -20,7 +20,7 @@ import com.wdf.api.notification.FuDocNotification;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.api.util.ProjectUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class SyncShowDocStrategy extends AbstractSyncApiStrategy {
     protected List<SyncApiResultDTO> doSyncApi(List<FuDocItemData> fuDocItemDataList, BaseSyncConfigData configData, ApiProjectDTO apiProjectDTO, ProjectSyncApiRecordData projectRecord) {
         String projectId = apiProjectDTO.getProjectId();
         String projectToken = apiProjectDTO.getProjectToken();
-        if (StringUtils.isBlank(projectId) || StringUtils.isBlank(projectToken)) {
+        if (FuStringUtils.isBlank(projectId) || FuStringUtils.isBlank(projectToken)) {
             FuDocNotification.notifyError(FuBundle.message("fudoc.sync.showdoc.tip"));
             return Lists.newArrayList();
         }
@@ -57,7 +57,7 @@ public class SyncShowDocStrategy extends AbstractSyncApiStrategy {
             showDocDTO.setContent(FuDocRender.markdownRender(fuDocItemData, FuDocSetting.getSettingData()));
             ShowDocService service = ServiceHelper.getService(ShowDocService.class);
             String errorMsg = service.syncApi(showDocDTO, (ShowDocConfigData) configData);
-            ApiSyncStatus syncStatus = StringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
+            ApiSyncStatus syncStatus = FuStringUtils.isBlank(errorMsg) ? ApiSyncStatus.SUCCESS : ApiSyncStatus.FAIL;
             resultList.add(buildSyncApiResult(fuDocItemData, apiProjectDTO, syncStatus, errorMsg));
 
         }

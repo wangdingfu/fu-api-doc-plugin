@@ -21,7 +21,7 @@ import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -70,7 +70,7 @@ public class HttpHeaderTab extends AbstractBulkEditTabLinkage<HeaderKeyValueBO> 
         FuRequestConfigStorage fuRequestConfigStorage = FuRequestConfigStorage.get(project);
         List<GlobalKeyValuePO> globalHeaderList = fuRequestConfigStorage.readData().getGlobalHeaderList();
         if (CollectionUtils.isNotEmpty(globalHeaderList)) {
-            addHeader(globalHeaderList.stream().filter(f -> StringUtils.isNotBlank(f.getApplicationName()) && application.equals(f.getApplicationName())).collect(Collectors.toList()));
+            addHeader(globalHeaderList.stream().filter(f -> FuStringUtils.isNotBlank(f.getApplicationName()) && application.equals(f.getApplicationName())).collect(Collectors.toList()));
         }
     }
 

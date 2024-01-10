@@ -21,7 +21,7 @@ import com.wdf.fudoc.request.po.FuCookiePO;
 import com.wdf.fudoc.request.po.GlobalKeyValuePO;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -259,7 +259,7 @@ public class FuTableColumnFactory {
             String fieldName = dynamicColumn.getFieldName();
             if (Objects.nonNull(data)
                     && data instanceof DynamicTableBO dynamicTableBO
-                    && StringUtils.isNotBlank(fieldName)) {
+                    && FuStringUtils.isNotBlank(fieldName)) {
                 return (R) dynamicTableBO.getValue(fieldName);
             }
             return null;
@@ -289,7 +289,7 @@ public class FuTableColumnFactory {
             String fieldName = dynamicColumn.getFieldName();
             if (Objects.nonNull(data)
                     && data instanceof DynamicTableBO dynamicTableBO
-                    && StringUtils.isNotBlank(fieldName)) {
+                    && FuStringUtils.isNotBlank(fieldName)) {
                 dynamicTableBO.setValue(fieldName, value);
             }
         }

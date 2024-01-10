@@ -1,7 +1,7 @@
 package com.wdfu.fudoc;
 
 import cn.hutool.json.JSONUtil;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +30,7 @@ public class YamlTest {
         String yamlStr = yamlContent;
         final Map<String, String> itemMap = new ConcurrentHashMap<>();
         //替换@@包裹的内容
-        String[] itemList = StringUtils.substringsBetween(yamlStr, "@", "@");
+        String[] itemList = FuStringUtils.substringsBetween(yamlStr, "@", "@");
         if (Objects.nonNull(itemList)) {
             for (String item : itemList) {
                 String itemStr = "@" + item + "@";

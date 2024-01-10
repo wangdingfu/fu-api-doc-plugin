@@ -3,7 +3,7 @@ package com.wdf.fudoc.spring;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +28,7 @@ public class SpringConfigManager {
      */
     public static Integer getServerPort(Module module) {
         String configValue = getConfigValue(module, SpringConfigFileConstants.SERVER_PORT_KEY);
-        return StringUtils.isBlank(configValue) ? SpringConfigFileConstants.DEFAULT_SERVER_PORT : Integer.parseInt(configValue);
+        return FuStringUtils.isBlank(configValue) ? SpringConfigFileConstants.DEFAULT_SERVER_PORT : Integer.parseInt(configValue);
     }
 
     public static String getContextPath(Module module){
@@ -39,7 +39,7 @@ public class SpringConfigManager {
     public static String getConfigValue(Module module, String configKey) {
         SpringConfigFile springConfigFile = initSpringConfig(module);
         if (Objects.isNull(springConfigFile)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         return springConfigFile.getConfig(configKey);
     }
@@ -68,9 +68,9 @@ public class SpringConfigManager {
             //获取resource目录下所有的文件
             for (VirtualFile child : resourceDir.getChildren()) {
                 if (!child.isDirectory() && SpringConfigFileConstants.EXTENSIONS.contains(child.getExtension())) {
-                    String configFileName = StringUtils.substringBeforeLast(child.getName(), ".");
+                    String configFileName = FuStringUtils.substringBeforeLast(child.getName(), ".");
                     if (configFileName.contains(SpringConfigFileConstants.SPLIT)) {
-                        configFileName = StringUtils.substringBeforeLast(configFileName, SpringConfigFileConstants.SPLIT);
+                        configFileName = FuStringUtils.substringBeforeLast(configFileName, SpringConfigFileConstants.SPLIT);
                     }
                     if (SpringConfigFileConstants.CONFIG_FILE_NAMES.contains(configFileName)) {
                         //配置文件

@@ -5,7 +5,7 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.api.base.FuBundle;
 import com.wdf.api.constants.MessageConstants;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class CreateCategoryValidator implements InputValidatorEx {
 
     @Override
     public boolean checkInput(String inputString) {
-        if (StringUtils.isNotBlank(inputString)) {
+        if (FuStringUtils.isNotBlank(inputString)) {
             //校验输入的内容
             if (CollectionUtils.isNotEmpty(categoryList) && categoryList.stream().anyMatch(a -> a.getCategoryName().equals(inputString))) {
                 //当前项目中存在 则不创建

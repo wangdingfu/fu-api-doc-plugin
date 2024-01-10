@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpResponse;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +19,7 @@ public class HttpResponseUtil {
 
 
     public static String getFileNameFromDisposition(HttpResponse httpResponse) {
-        return Objects.isNull(httpResponse) ? StringUtils.EMPTY : readFileName(httpResponse.header(Header.CONTENT_DISPOSITION));
+        return Objects.isNull(httpResponse) ? FuStringUtils.EMPTY : readFileName(httpResponse.header(Header.CONTENT_DISPOSITION));
     }
 
     /**
@@ -28,13 +28,13 @@ public class HttpResponseUtil {
      * @return 文件名，empty表示无
      */
     public static String readFileName(String contentDisposition) {
-        if (StringUtils.isBlank(contentDisposition)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(contentDisposition)) {
+            return FuStringUtils.EMPTY;
         }
         //默认就用utf-8编码解码
         contentDisposition = URLUtil.decode(contentDisposition);
         String[] split = contentDisposition.split(";");
-        String fileName = StringUtils.EMPTY;
+        String fileName = FuStringUtils.EMPTY;
         for (String str : split) {
             if (str.startsWith("filename=")) {
                 fileName = ReUtil.get("filename=\"(.*?)\"", str, 1);

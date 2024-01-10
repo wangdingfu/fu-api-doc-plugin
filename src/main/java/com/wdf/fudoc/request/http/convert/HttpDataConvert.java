@@ -11,7 +11,7 @@ import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -60,11 +60,11 @@ public class HttpDataConvert {
         }
         FuRequestBodyData body = fuRequestData.getBody();
         String contentType = getContentType(fuRequestData.getHeaders());
-        if (StringUtils.isBlank(contentType)) {
-            if (StringUtils.isNotBlank(body.getJson())) {
+        if (FuStringUtils.isBlank(contentType)) {
+            if (FuStringUtils.isNotBlank(body.getJson())) {
                 return body.getJson();
             }
-            if (StringUtils.isNotBlank(body.getRaw())) {
+            if (FuStringUtils.isNotBlank(body.getRaw())) {
                 return body.getRaw();
             }
             if (CollectionUtils.isNotEmpty(body.getFormUrlEncodedList())) {
@@ -85,7 +85,7 @@ public class HttpDataConvert {
     }
 
     private static boolean isHeader(HeaderKeyValueBO f) {
-        return Objects.nonNull(f) && StringUtils.isNotBlank(f.getKey()) && StringUtils.isNotBlank(f.getValue());
+        return Objects.nonNull(f) && FuStringUtils.isNotBlank(f.getKey()) && FuStringUtils.isNotBlank(f.getValue());
     }
 
 
@@ -93,7 +93,7 @@ public class HttpDataConvert {
         if (CollectionUtils.isNotEmpty(paramList)) {
             return paramList.stream().map(m -> m.getKey() + "=" + m.getValue()).collect(Collectors.joining("&"));
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 

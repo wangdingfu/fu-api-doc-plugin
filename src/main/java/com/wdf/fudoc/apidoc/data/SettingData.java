@@ -3,7 +3,7 @@ package com.wdf.fudoc.apidoc.data;
 import com.wdf.fudoc.util.ResourceUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -41,16 +41,16 @@ public class SettingData {
 
 
     public void defaultValue() {
-        if (StringUtils.isBlank(this.fuDocTemplateValue)) {
+        if (FuStringUtils.isBlank(this.fuDocTemplateValue)) {
             this.setFuDocTemplateValue(ResourceUtils.readResource("template/fu_doc.ftl"));
         }
-        if (StringUtils.isBlank(this.objectTemplateValue)) {
+        if (FuStringUtils.isBlank(this.objectTemplateValue)) {
             this.setObjectTemplateValue(ResourceUtils.readResource("template/fu_doc_object.ftl"));
         }
-        if (StringUtils.isBlank(this.enumTemplateValue1)) {
+        if (FuStringUtils.isBlank(this.enumTemplateValue1)) {
             this.setEnumTemplateValue1(ResourceUtils.readResource("template/fu_doc_enum.ftl"));
         }
-        if (StringUtils.isBlank(this.enumTemplateValue2)) {
+        if (FuStringUtils.isBlank(this.enumTemplateValue2)) {
             this.setEnumTemplateValue2(ResourceUtils.readResource("template/fu_doc_enum_table.ftl"));
         }
         if (Objects.isNull(this.yapiTemplateValue)) {

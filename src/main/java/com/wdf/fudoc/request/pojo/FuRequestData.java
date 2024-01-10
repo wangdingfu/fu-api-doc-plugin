@@ -13,7 +13,7 @@ import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -87,7 +87,7 @@ public class FuRequestData {
         if (Objects.isNull(this.headers)) {
             this.headers = Lists.newArrayList();
         }
-        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> StringUtils.isNotBlank(f.getKey())).filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
+        HeaderKeyValueBO keyValueTableBO = this.headers.stream().filter(f -> FuStringUtils.isNotBlank(f.getKey())).filter(f -> f.getKey().equals(key)).findFirst().orElse(null);
         if (Objects.isNull(keyValueTableBO)) {
             keyValueTableBO = new HeaderKeyValueBO(true, key, value);
             this.headers.add(keyValueTableBO);
@@ -105,7 +105,7 @@ public class FuRequestData {
 
     public void removeHeader(String key) {
         if (CollectionUtils.isNotEmpty(this.headers)) {
-            this.headers.removeIf(f -> StringUtils.isBlank(f.getKey()) || f.getKey().equals(key));
+            this.headers.removeIf(f -> FuStringUtils.isBlank(f.getKey()) || f.getKey().equals(key));
         }
     }
 
@@ -117,23 +117,23 @@ public class FuRequestData {
      * 获取一个完整的请求地址
      */
     public String getRequestUrl(String baseUrl) {
-        if (StringUtils.isNotBlank(this.requestUrl)) {
+        if (FuStringUtils.isNotBlank(this.requestUrl)) {
             return this.requestUrl;
         }
-        if (StringUtils.isBlank(this.domain)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(this.domain)) {
+            return FuStringUtils.EMPTY;
         }
-        String params = StringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : StringUtils.EMPTY;
-        String contextPathUrl = StringUtils.isBlank(this.contextPath) ? StringUtils.EMPTY : this.contextPath;
+        String params = FuStringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : FuStringUtils.EMPTY;
+        String contextPathUrl = FuStringUtils.isBlank(this.contextPath) ? FuStringUtils.EMPTY : this.contextPath;
         return URLUtil.normalize(this.domain + contextPathUrl + formatBaseUrl(baseUrl) + params, false, true);
     }
 
 
     private String formatBaseUrl(String baseUrl) {
         if (Objects.isNull(baseUrl)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
-        String[] params = StringUtils.substringsBetween(baseUrl, "{", "}");
+        String[] params = FuStringUtils.substringsBetween(baseUrl, "{", "}");
         if (Objects.isNull(params)) {
             return baseUrl;
         }
@@ -141,7 +141,7 @@ public class FuRequestData {
         String baseUrlText = baseUrl;
         for (String param : params) {
             KeyValueTableBO keyValueTableBO = pathDataMap.get(param);
-            String value = Objects.isNull(keyValueTableBO) ? StringUtils.EMPTY : keyValueTableBO.getValue();
+            String value = Objects.isNull(keyValueTableBO) ? FuStringUtils.EMPTY : keyValueTableBO.getValue();
             baseUrlText = baseUrlText.replace("{" + param + "}", value);
         }
         return baseUrlText;

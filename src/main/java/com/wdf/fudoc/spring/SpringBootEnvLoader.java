@@ -26,7 +26,7 @@ import com.wdf.fudoc.util.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -101,7 +101,7 @@ public class SpringBootEnvLoader {
         }
         String defaultEnv = envInfo.getDefaultEnv();
         Map<String, SpringBootEnvConfigInfo> envConfigInfoMap = envInfo.getEnvConfigInfoMap();
-        if (StringUtils.isBlank(defaultEnv) || MapUtils.isEmpty(envConfigInfoMap)) {
+        if (FuStringUtils.isBlank(defaultEnv) || MapUtils.isEmpty(envConfigInfoMap)) {
             return SpringConfigFileConstants.DEFAULT_SERVER_PORT;
         }
         SpringBootEnvConfigInfo springBootEnvConfigInfo = envConfigInfoMap.get(defaultEnv);
@@ -227,7 +227,7 @@ public class SpringBootEnvLoader {
             }
             String moduleName = key.getName();
             String defaultEnv = fuRequestConfigPO.getEnv(moduleName);
-            if (StringUtils.isBlank(defaultEnv) || !envConfigInfoMap.containsKey(defaultEnv)) {
+            if (FuStringUtils.isBlank(defaultEnv) || !envConfigInfoMap.containsKey(defaultEnv)) {
                 defaultEnv = value.getDefaultEnv();
                 if (!envConfigInfoMap.containsKey(defaultEnv)) {
                     defaultEnv = envConfigInfoMap.keySet().iterator().next();
@@ -240,7 +240,7 @@ public class SpringBootEnvLoader {
                 String configEnvKey = applicationName + ":" + envName;
                 ConfigEnvTableBO configEnvTableBO = configEnvMap.get(configEnvKey);
                 String contextPath = envConfigInfo.getContextPath();
-                String contextPathUrl = StringUtils.isBlank(contextPath) ? StringUtils.EMPTY : "/" + contextPath;
+                String contextPathUrl = FuStringUtils.isBlank(contextPath) ? FuStringUtils.EMPTY : "/" + contextPath;
                 String domain = "http://localhost:" + envConfigInfo.getServerPort() + contextPathUrl;
                 if (Objects.isNull(configEnvTableBO)) {
                     configEnvTableBO = new ConfigEnvTableBO();

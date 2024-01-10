@@ -11,7 +11,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.FList;
 import com.intellij.util.indexing.FindSymbolParameters;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,7 +59,7 @@ public class MatchUrlUtils {
 
     public static MatchResult matchApi(MinusculeMatcher fullMatcher, @NotNull ApiNavigationItem item) {
         String url = item.getUrl();
-        if (StringUtils.isBlank(url)) {
+        if (FuStringUtils.isBlank(url)) {
             return null;
         }
         for (String separator : getSeparators()) {
@@ -67,7 +67,7 @@ public class MatchUrlUtils {
         }
         MatchResult matchResult = matchName(fullMatcher, url);
         String rightText = item.getRightText();
-        if (Objects.isNull(matchResult) && StringUtils.isNotBlank(rightText)) {
+        if (Objects.isNull(matchResult) && FuStringUtils.isNotBlank(rightText)) {
             matchResult = matchName(fullMatcher, rightText);
         }
         return matchResult;
@@ -100,7 +100,7 @@ public class MatchUrlUtils {
                         }
                         mappings.add(str);
                     }
-                    String formatMappingUrl = StringUtils.join(mappings, "/");
+                    String formatMappingUrl = FuStringUtils.join(mappings, "/");
                     List<String> urls = Lists.newArrayList();
                     for (int i = 0; i < urlList.size(); i++) {
                         if (indexList.contains(i)) {
@@ -108,7 +108,7 @@ public class MatchUrlUtils {
                         }
                         urls.add(urlList.get(i));
                     }
-                    String formatUrl = StringUtils.join(urls, "/");
+                    String formatUrl = FuStringUtils.join(urls, "/");
                     if (formatMappingUrl.equals(formatUrl)) {
                         return true;
                     }

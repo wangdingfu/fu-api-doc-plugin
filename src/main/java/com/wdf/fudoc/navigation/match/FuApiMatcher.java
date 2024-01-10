@@ -18,7 +18,7 @@ import com.intellij.util.indexing.FindSymbolParameters;
 import com.wdf.fudoc.navigation.ApiNavigationItem;
 import com.wdf.fudoc.util.MatchUrlUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

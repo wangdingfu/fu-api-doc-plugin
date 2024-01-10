@@ -22,7 +22,7 @@ import com.wdf.fudoc.futool.beancopy.bo.FuCompletion;
 import icons.FuDocIcons;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -73,7 +73,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
         }
         PsiClass psiClass;
         String variableName;
-        if (Objects.isNull(resolve) || StringUtils.isBlank(variableName = getVariableName(resolve)) || Objects.isNull(psiClass = findPsiClass(resolve))) {
+        if (Objects.isNull(resolve) || FuStringUtils.isBlank(variableName = getVariableName(resolve)) || Objects.isNull(psiClass = findPsiClass(resolve))) {
             return;
         }
         //判断是否为Spring容器对象或则一些固定配置的对象无需copy
@@ -95,7 +95,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
 
     private static boolean isCanCopyBean(PsiClass psiClass) {
         String qualifiedName = psiClass.getQualifiedName();
-        if (StringUtils.isBlank(qualifiedName)) {
+        if (FuStringUtils.isBlank(qualifiedName)) {
             return false;
         }
         return EXCLUDE_PKG_LIST.stream().noneMatch(qualifiedName::startsWith);
@@ -181,7 +181,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
                             return;
                         }
                         int lineStartOffset = context.getDocument().getLineStartOffset(lineNumberCurrent);
-                        context.getDocument().insertString(lineStartOffset + diffOffset, StringUtils.join(codeList, fillEmptyString(diffOffset)));
+                        context.getDocument().insertString(lineStartOffset + diffOffset, FuStringUtils.join(codeList, fillEmptyString(diffOffset)));
                         //发布动作事件
                         project.getMessageBus().syncPublisher(FuDocActionListener.TOPIC).action(FuDocAction.BEAN_COPY.getCode());
                     }
@@ -258,7 +258,7 @@ public class FuBeanCopyCompletion extends CompletionContributor {
     }
 
     private static String fillEmptyString(int size) {
-        return fillString(StringUtils.EMPTY, ' ', size);
+        return fillString(FuStringUtils.EMPTY, ' ', size);
     }
 
     public static String fillString(String string, char character, int size) {

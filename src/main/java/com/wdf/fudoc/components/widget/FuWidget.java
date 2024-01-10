@@ -1,7 +1,7 @@
 package com.wdf.fudoc.components.widget;
 
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 
@@ -22,7 +22,7 @@ public interface FuWidget {
     }
 
     default String getCurrent() {
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
     default boolean isShow() {

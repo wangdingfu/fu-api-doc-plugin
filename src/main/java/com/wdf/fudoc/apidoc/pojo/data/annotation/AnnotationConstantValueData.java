@@ -4,7 +4,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationValueData;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -32,7 +32,7 @@ public class AnnotationConstantValueData extends AnnotationValueData {
      * 获取String类型的值
      */
     public String stringValue() {
-        return Objects.isNull(this.value) ? StringUtils.EMPTY : this.value.toString();
+        return Objects.isNull(this.value) ? FuStringUtils.EMPTY : this.value.toString();
     }
 
 

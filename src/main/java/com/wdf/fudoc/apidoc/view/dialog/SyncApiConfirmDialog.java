@@ -26,7 +26,7 @@ import com.wdf.fudoc.components.tree.node.FuTreeNode;
 import com.wdf.fudoc.components.validator.CreateCategoryValidator;
 import com.wdf.fudoc.util.FuDocUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -132,7 +132,7 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         ApiProjectDTO autoSelected = projectConfigList.stream().filter(ApiProjectDTO::isLatest).findFirst().orElse(projectConfigList.get(0));
         //是否将当前类的注释信息作为分类
         String title = FuDocUtils.classTitle(psiClass);
-        if (StringUtils.isNotBlank(title)) {
+        if (FuStringUtils.isNotBlank(title)) {
             List<ApiCategoryDTO> apiCategoryList = autoSelected.getApiCategoryList();
             if (Objects.isNull(apiCategoryList)) {
                 apiCategoryList = Lists.newArrayList();
@@ -229,8 +229,8 @@ public class SyncApiConfirmDialog extends DialogWrapper implements FuTreeActionL
         }
         List<ApiCategoryDTO> apiCategoryList = apiCategoryDTO.getApiCategoryList();
         //弹框让用户输入分类名称
-        String categoryName = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), StringUtils.EMPTY, new CreateCategoryValidator(apiCategoryList));
-        if (StringUtils.isBlank(categoryName)) {
+        String categoryName = Messages.showInputDialog(CREATE_CATEGORY_TITLE, CATEGORY_LABEL, Messages.getQuestionIcon(), FuStringUtils.EMPTY, new CreateCategoryValidator(apiCategoryList));
+        if (FuStringUtils.isBlank(categoryName)) {
             return null;
         }
         ApiCategoryDTO addCategory = new ApiCategoryDTO(categoryName);

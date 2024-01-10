@@ -5,7 +5,7 @@ import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.helper.MockDataHelper;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -27,7 +27,7 @@ public class AutoMockDataServiceImpl extends AbstractMockDataService {
     protected String mockResponse(MethodInfoDesc methodInfoDesc) {
         ObjectInfoDesc response = methodInfoDesc.getResponse();
         if (Objects.isNull(response)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         return MockDataHelper.mockJsonData(Lists.newArrayList(response));
     }

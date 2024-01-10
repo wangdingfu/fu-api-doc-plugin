@@ -4,7 +4,6 @@ import com.intellij.ui.ColorHexUtil;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.UIUtil;
 import com.wdf.api.msg.bo.FuMsgItemBO;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.util.Objects;
@@ -20,7 +19,7 @@ public class ColorUtils {
         if (Objects.nonNull(fuMsgItemBO)) {
             String regularColor = fuMsgItemBO.getRegularColor();
             String darkColor = fuMsgItemBO.getDarkColor();
-            if (StringUtils.isNotBlank(regularColor) || StringUtils.isNotBlank(darkColor)) {
+            if (FuStringUtils.isNotBlank(regularColor) || FuStringUtils.isNotBlank(darkColor)) {
                 return new JBColor(convertColor(regularColor), convertColor(darkColor));
             }
         }
@@ -29,7 +28,7 @@ public class ColorUtils {
 
 
     public static Color convertColor(String color) {
-        return StringUtils.isBlank(color) ? UIUtil.getLabelBackground() : ColorHexUtil.fromHex(color);
+        return FuStringUtils.isBlank(color) ? UIUtil.getLabelBackground() : ColorHexUtil.fromHex(color);
     }
 
 }

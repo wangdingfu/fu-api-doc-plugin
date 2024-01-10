@@ -13,7 +13,7 @@ import com.wdf.api.util.JsonUtil;
 import com.wdf.fudoc.request.http.FuRequest;
 import k.K.E;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -109,12 +109,12 @@ public class StorageUtils {
         VirtualFile file = ApplicationManager.getApplication().runReadAction((Computable<VirtualFile>) () -> VfsUtil.findFile(Paths.get(path, fileName), false));
         if (Objects.nonNull(file) && file.exists()) {
             try {
-                return StringUtils.toEncodedString(file.contentsToByteArray(), StandardCharsets.UTF_8);
+                return FuStringUtils.toEncodedString(file.contentsToByteArray(), StandardCharsets.UTF_8);
             } catch (Exception e) {
                 log.info("读取文件【{}】异常", file.getPath());
             }
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 

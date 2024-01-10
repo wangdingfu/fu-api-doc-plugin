@@ -1,6 +1,6 @@
 package com.wdf.fudoc.common.constant;
 
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.filechooser.FileSystemView;
 
@@ -17,7 +17,7 @@ public class PathConstants {
 
     public static String desktopPath() {
         String property = System.getProperty("os.name");
-        if (StringUtils.isBlank(property) || property.toLowerCase().startsWith("win")) {
+        if (FuStringUtils.isBlank(property) || property.toLowerCase().startsWith("win")) {
             return DESKTOP_PATH;
         }
         return DESKTOP_PATH + "/Desktop";

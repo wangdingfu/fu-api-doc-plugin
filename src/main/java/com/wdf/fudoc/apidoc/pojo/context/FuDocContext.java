@@ -12,7 +12,7 @@ import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 
@@ -110,7 +110,7 @@ public class FuDocContext {
         if (CollectionUtils.isNotEmpty(filterField)) {
             for (FilterFieldBO filterFieldBO : filterField) {
                 String fieldNames = filterFieldBO.getFieldNames();
-                filterMap.put(filterFieldBO.getClassName(), Objects.isNull(fieldNames) ? StringUtils.EMPTY : fieldNames);
+                filterMap.put(filterFieldBO.getClassName(), Objects.isNull(fieldNames) ? FuStringUtils.EMPTY : fieldNames);
             }
         }
         this.customerSettingData = customerSettingData;
@@ -125,7 +125,7 @@ public class FuDocContext {
     }
 
     public int getClassNo(String classId) {
-        if (StringUtils.isNotBlank(classId)) {
+        if (FuStringUtils.isNotBlank(classId)) {
             classIdSet.add(classId);
         }
         return classIdSet.size();
@@ -179,7 +179,7 @@ public class FuDocContext {
 
 
     public void add(String key, ObjectInfoDesc objectInfoDesc) {
-        if (StringUtils.isNotBlank(key) && Objects.nonNull(objectInfoDesc)) {
+        if (FuStringUtils.isNotBlank(key) && Objects.nonNull(objectInfoDesc)) {
             if (Objects.isNull(this.earlyObjectInfoDescMap)) {
                 this.earlyObjectInfoDescMap = new HashMap<>();
             }
@@ -188,7 +188,7 @@ public class FuDocContext {
     }
 
     public void parseFinish(String key) {
-        if (StringUtils.isNotBlank(key) && Objects.nonNull(this.earlyObjectInfoDescMap)) {
+        if (FuStringUtils.isNotBlank(key) && Objects.nonNull(this.earlyObjectInfoDescMap)) {
             if (Objects.isNull(this.objectInfoDescMap)) {
                 this.objectInfoDescMap = new HashMap<>();
             }

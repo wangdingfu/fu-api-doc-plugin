@@ -16,7 +16,7 @@ import com.wdf.fudoc.request.view.FuRequestSettingView;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;
@@ -72,7 +72,7 @@ public class UserWidget implements FuWidget, FuStatusLabelListener {
     public void refresh() {
         String text = this.fuStatusLabel.getText();
         List<ConfigAuthTableBO> authConfigList = configPO.getAuthConfigList();
-        if (StringUtils.isBlank(text)) {
+        if (FuStringUtils.isBlank(text)) {
             if (CollectionUtils.isNotEmpty(authConfigList)) {
                 setText(authConfigList.stream().filter(ConfigAuthTableBO::getSelect).findFirst().orElse(authConfigList.get(0)).getUserName());
             }

@@ -5,7 +5,7 @@ import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Map;
 import java.util.Objects;
@@ -35,7 +35,7 @@ public class BaseInfoDesc {
 
 
     public String getParamType(){
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
@@ -46,7 +46,7 @@ public class BaseInfoDesc {
      * @return 注解数据
      */
     public Optional<AnnotationData> getAnnotation(String annotationName) {
-        if (Objects.nonNull(annotationDataMap) && StringUtils.isNotBlank(annotationName)) {
+        if (Objects.nonNull(annotationDataMap) && FuStringUtils.isNotBlank(annotationName)) {
             return Optional.ofNullable(this.annotationDataMap.get(annotationName));
         }
         return Optional.empty();

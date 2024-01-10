@@ -13,7 +13,7 @@ import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 
@@ -27,7 +27,7 @@ public class FuCurlManager {
 
     public static String toCurl(Project project, FuHttpRequestData requestData) {
         if (Objects.isNull(requestData)) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         try {
             //发布动作事件
@@ -35,7 +35,7 @@ public class FuCurlManager {
             HttpRequestPsiFile psiFile = HttpRequestPsiFactory.createDummyFile(project, FuDocRender.httpRender(HttpDataConvert.convert(requestData)));
             HttpRequest newRequest = HttpRequestPsiUtils.getFirstRequest(psiFile);
             if (Objects.isNull(newRequest)) {
-                return StringUtils.EMPTY;
+                return FuStringUtils.EMPTY;
             }
             CurlRequestBuilder curlRequestBuilder = new CurlRequestBuilder();
             return (String) HttpRequestPsiConverter.convertFromHttpRequest(newRequest, HttpRequestVariableSubstitutor.getDefault(project, null), (RequestBuilder) curlRequestBuilder);

@@ -6,7 +6,7 @@ import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.apidoc.helper.EnumParseHelper;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 
 /**
@@ -24,7 +24,7 @@ public class GenEnumFuDocServiceImpl implements FuDocService {
         String selectedText = FuDocDataContent.getSelectedText();
         String name = psiClass.getName();
         int type = YesOrNo.NO.getCode();
-        if (StringUtils.isNotBlank(name) && name.equals(selectedText)) {
+        if (FuStringUtils.isNotBlank(name) && name.equals(selectedText)) {
             type = YesOrNo.YES.getCode();
         }
         return EnumParseHelper.parseEnum(psiClass, type);

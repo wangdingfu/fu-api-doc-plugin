@@ -28,7 +28,7 @@ import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 
@@ -158,7 +158,7 @@ public abstract class AbstractAssembleService implements FuDocAssembleService {
         ApiDocCommentData commentData = methodInfoDesc.getCommentData();
         if (Objects.nonNull(commentData)) {
             String title = ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_TITLE, methodInfoDesc);
-            commonItemData.setTitle(StringUtils.isNotBlank(title) ? title : PsiClassUtils.getMethodName(methodInfoDesc.getPsiMethod()));
+            commonItemData.setTitle(FuStringUtils.isNotBlank(title) ? title : PsiClassUtils.getMethodName(methodInfoDesc.getPsiMethod()));
             commonItemData.setDetailInfo(ParamValueExecutor.doGetValue(fuDocContext, ParamValueType.METHOD_DETAIL_INFO, methodInfoDesc));
 
 

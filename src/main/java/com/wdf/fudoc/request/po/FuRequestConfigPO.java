@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -86,15 +86,15 @@ public class FuRequestConfigPO {
     private Map<String, String> defaultEnvMap = new HashMap<>();
 
     public void addDefaultEnv(String moduleName, String defaultEnv) {
-        if (StringUtils.isBlank(moduleName) || StringUtils.isBlank(defaultEnv)) {
+        if (FuStringUtils.isBlank(moduleName) || FuStringUtils.isBlank(defaultEnv)) {
             return;
         }
         defaultEnvMap.put(moduleName, defaultEnv);
     }
 
     public String getEnv(String moduleName) {
-        if (StringUtils.isBlank(moduleName)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(moduleName)) {
+            return FuStringUtils.EMPTY;
         }
         return defaultEnvMap.get(moduleName);
     }
@@ -130,15 +130,15 @@ public class FuRequestConfigPO {
     }
 
     private String getValue(GlobalKeyValuePO globalKeyValuePO) {
-        return Objects.isNull(globalKeyValuePO) ? StringUtils.EMPTY : globalKeyValuePO.getValue();
+        return Objects.isNull(globalKeyValuePO) ? FuStringUtils.EMPTY : globalKeyValuePO.getValue();
     }
 
 
     private GlobalKeyValuePO findGlobalConfig(List<GlobalKeyValuePO> list, String variableName, String applicationName) {
         return list.stream()
                 .filter(KeyValueTableBO::getSelect)
-                .filter(f -> StringUtils.isNotBlank(f.getApplicationName()))
-                .filter(f -> StringUtils.isNotBlank(f.getKey()))
+                .filter(f -> FuStringUtils.isNotBlank(f.getApplicationName()))
+                .filter(f -> FuStringUtils.isNotBlank(f.getKey()))
                 .filter(f -> f.getKey().equals(variableName))
                 .filter(f -> applicationName.equals(f.getApplicationName()))
                 .findFirst().orElse(null);

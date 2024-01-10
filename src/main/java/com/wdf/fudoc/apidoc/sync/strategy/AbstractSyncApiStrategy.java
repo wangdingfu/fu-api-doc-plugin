@@ -28,7 +28,7 @@ import com.wdf.fudoc.util.GenFuDocUtils;
 import com.wdf.api.util.ProjectUtils;
 import com.wdf.fudoc.util.ShowSettingUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;
@@ -85,7 +85,7 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
         //2、检查三方接口文档系统是否能建立连接
         //3、确定当前要同步的项目配置
         List<ApiProjectDTO> projectConfigList = configData.getProjectConfigList(ModuleUtil.findModuleForPsiElement(psiClass));
-        if (StringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList) || checkConfig(configData)) {
+        if (FuStringUtils.isBlank(configData.getBaseUrl()) || CollectionUtils.isEmpty(projectConfigList) || checkConfig(configData)) {
             ApplicationManager.getApplication().invokeLater(() -> {
                 Project project = psiClass.getProject();
                 ShowSettingUtils.showConfigurable(project, new FuDocSyncSettingConfigurable(), 800, 600);
@@ -195,7 +195,7 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
         }
         if (faileList.size() == syncApiSize) {
             //全部同步失败情况 - 同步接口失败 失败原因:{0}
-            String message = FuBundle.message(MessageConstants.SYNC_API_FAILED_ALL, StringUtils.isNotBlank(resultDTO.getErrorMsg()) ? resultDTO.getErrorMsg() : "未知异常");
+            String message = FuBundle.message(MessageConstants.SYNC_API_FAILED_ALL, FuStringUtils.isNotBlank(resultDTO.getErrorMsg()) ? resultDTO.getErrorMsg() : "未知异常");
             FuDocNotification.notifySyncApiResult(NotificationType.ERROR, message, apiSystem, configData.getApiDocUrl(resultDTO), showPanel, pinStatus);
             return;
         }
@@ -230,10 +230,10 @@ public abstract class AbstractSyncApiStrategy implements SyncFuDocStrategy {
 
     protected String recursionPath(ApiCategoryDTO apiCategoryDTO) {
         if (Objects.isNull(apiCategoryDTO) || Objects.isNull(apiCategoryDTO.getParent())) {
-            return StringUtils.EMPTY;
+            return FuStringUtils.EMPTY;
         }
         String parentName = recursionPath(apiCategoryDTO.getParent());
         String categoryName = apiCategoryDTO.getCategoryName();
-        return StringUtils.isBlank(parentName) ? categoryName : parentName + "/" + categoryName;
+        return FuStringUtils.isBlank(parentName) ? categoryName : parentName + "/" + categoryName;
     }
 }

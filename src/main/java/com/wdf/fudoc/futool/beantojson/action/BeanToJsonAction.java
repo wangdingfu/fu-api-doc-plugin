@@ -13,7 +13,7 @@ import com.wdf.fudoc.apidoc.service.FuDocService;
 import com.wdf.fudoc.futool.beantojson.service.GenObjectJsonServiceImpl;
 import com.wdf.fudoc.util.ClipboardUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 @Slf4j
 public class BeanToJsonAction extends AbstractClassAction {
@@ -37,7 +37,7 @@ public class BeanToJsonAction extends AbstractClassAction {
         long start = System.currentTimeMillis();
         FuDocService fuDocService = new GenObjectJsonServiceImpl();
         String content = fuDocService.genFuDocContent(fuDocContext, psiClass);
-        if (StringUtils.isBlank(content)) {
+        if (FuStringUtils.isBlank(content)) {
             content = "{\n}";
         }
         //将接口文档内容拷贝至剪贴板

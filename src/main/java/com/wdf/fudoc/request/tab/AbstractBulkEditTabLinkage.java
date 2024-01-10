@@ -9,7 +9,7 @@ import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -78,7 +78,7 @@ public abstract class AbstractBulkEditTabLinkage<T extends KeyValueTableBO> impl
     }
 
     protected List<T> editorToTableData() {
-        return editorToTableData(StringUtils.EMPTY);
+        return editorToTableData(FuStringUtils.EMPTY);
     }
 
     /**
@@ -92,13 +92,13 @@ public abstract class AbstractBulkEditTabLinkage<T extends KeyValueTableBO> impl
 
     protected List<T> editorToTableDataList(String content){
         List<T> dataList = Lists.newArrayList();
-        if (StringUtils.isNotBlank(content)) {
+        if (FuStringUtils.isNotBlank(content)) {
             for (String line : content.split("\n")) {
-                if (StringUtils.isBlank(line)) {
+                if (FuStringUtils.isBlank(line)) {
                     continue;
                 }
-                String key = StringUtils.contains(line, ":") ? StringUtils.substringBefore(line, ":") : line;
-                String value = StringUtils.substringAfter(line, ":");
+                String key = FuStringUtils.contains(line, ":") ? FuStringUtils.substringBefore(line, ":") : line;
+                String value = FuStringUtils.substringAfter(line, ":");
                 T keyValueTableBO = newInstance();
                 formatKey(key, keyValueTableBO);
                 keyValueTableBO.setValue(value);
@@ -118,7 +118,7 @@ public abstract class AbstractBulkEditTabLinkage<T extends KeyValueTableBO> impl
         if (CollectionUtils.isNotEmpty(params)) {
             return params.stream().map(this::toBulkEdit).collect(Collectors.joining("\n"));
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 
@@ -131,7 +131,7 @@ public abstract class AbstractBulkEditTabLinkage<T extends KeyValueTableBO> impl
     private static <T extends KeyValueTableBO> void formatKey(String key, T keyValueTableBO) {
         if (key.startsWith("//")) {
             keyValueTableBO.setSelect(false);
-            keyValueTableBO.setKey(StringUtils.replace(key, "//", "").trim());
+            keyValueTableBO.setKey(FuStringUtils.replace(key, "//", "").trim());
         } else {
             keyValueTableBO.setSelect(true);
             keyValueTableBO.setKey(key.trim());
@@ -142,10 +142,10 @@ public abstract class AbstractBulkEditTabLinkage<T extends KeyValueTableBO> impl
     private String toBulkEdit(T keyValueTableBO) {
         String key = keyValueTableBO.getKey();
         String value = keyValueTableBO.getValue();
-        if (StringUtils.isBlank(key) || StringUtils.isBlank(value)) {
-            return StringUtils.EMPTY;
+        if (FuStringUtils.isBlank(key) || FuStringUtils.isBlank(value)) {
+            return FuStringUtils.EMPTY;
         }
-        String prefix = keyValueTableBO.getSelect() ? StringUtils.EMPTY : "//";
+        String prefix = keyValueTableBO.getSelect() ? FuStringUtils.EMPTY : "//";
         return prefix + keyValueTableBO.getKey() + ":" + keyValueTableBO.getValue();
     }
 }

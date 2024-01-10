@@ -6,7 +6,7 @@ import com.wdf.fudoc.apidoc.sync.data.SyncApiRecordData;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -42,7 +42,7 @@ public class ProjectSyncApiRecordData implements Serializable {
      */
     public boolean exists(String url) {
         SyncApiRecordData recordData = syncApiRecordMap.get(url);
-        return Objects.nonNull(recordData) && Objects.nonNull(recordData.getCategory()) && StringUtils.isNotBlank(recordData.getProjectName()) && StringUtils.isNotBlank(recordData.getProjectId());
+        return Objects.nonNull(recordData) && Objects.nonNull(recordData.getCategory()) && FuStringUtils.isNotBlank(recordData.getProjectName()) && FuStringUtils.isNotBlank(recordData.getProjectId());
     }
 
     /**
@@ -61,14 +61,14 @@ public class ProjectSyncApiRecordData implements Serializable {
      * @param record 同步记录
      */
     public void addRecord(SyncApiRecordData record) {
-        if (Objects.nonNull(record) && StringUtils.isNotBlank(record.getApiUrl())) {
+        if (Objects.nonNull(record) && FuStringUtils.isNotBlank(record.getApiUrl())) {
             this.syncApiRecordMap.put(record.getApiUrl(), record);
         }
     }
 
 
     public List<String> getCategoryList(String projectName) {
-        if (StringUtils.isNotBlank(projectName)) {
+        if (FuStringUtils.isNotBlank(projectName)) {
             return projectCategoryMap.get(projectName);
         }
         return Lists.newArrayList();
@@ -82,7 +82,7 @@ public class ProjectSyncApiRecordData implements Serializable {
      * @param category    分类名称
      */
     public void addCategory(String projectName, String category) {
-        if (StringUtils.isBlank(category) || StringUtils.isBlank(projectName)) {
+        if (FuStringUtils.isBlank(category) || FuStringUtils.isBlank(projectName)) {
             return;
         }
         List<String> categoryList = projectCategoryMap.get(projectName);

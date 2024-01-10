@@ -1,7 +1,7 @@
 package com.wdf.fudoc.util;
 
 import com.wdf.fudoc.futool.beancopy.bo.FuPsiMethod;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 /**
  * @author wangdingfu
@@ -28,7 +28,7 @@ public class FuPsiUtils {
 
     private static FuPsiMethod buildFuPsiMethod(String methodName, String prefix) {
         FuPsiMethod fuPsiMethod = new FuPsiMethod();
-        String fieldName = StringUtils.substringAfter(methodName, prefix);
+        String fieldName = FuStringUtils.substringAfter(methodName, prefix);
         char[] chars = fieldName.toCharArray();
         if (chars.length > 0) {
             chars[0] = Character.toLowerCase(chars[0]);

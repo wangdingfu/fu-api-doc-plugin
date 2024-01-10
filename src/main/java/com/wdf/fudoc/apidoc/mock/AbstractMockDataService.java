@@ -18,7 +18,7 @@ import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.api.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -76,7 +76,7 @@ public abstract class AbstractMockDataService implements MockDataService {
 
     private boolean mockResponse(MockResultBo mockResultBo, FuResponseData response) {
         String content;
-        if (Objects.nonNull(response) && StringUtils.isNotBlank(content = response.getContent())) {
+        if (Objects.nonNull(response) && FuStringUtils.isNotBlank(content = response.getContent())) {
             mockResultBo.setResponseExample(JSONUtil.formatJsonStr(content));
             mockResultBo.setResponseExampleType(JSONUtil.isTypeJSON(content) ? MockResultType.JSON.getCode() : MockResultType.DEFAULT.getCode());
             return true;
@@ -101,7 +101,7 @@ public abstract class AbstractMockDataService implements MockDataService {
                 if (!mockRequestByBody(mockResultBo, requestData.getBody())) {
                     mockResultBo.setRequestExampleType(MockResultType.PROPERTIES.getCode());
                     mockResultBo.setRequestExample(requestData.getParamUrl());
-                    return StringUtils.isNotBlank(requestData.getParamUrl());
+                    return FuStringUtils.isNotBlank(requestData.getParamUrl());
                 }
                 return true;
         }
@@ -112,18 +112,18 @@ public abstract class AbstractMockDataService implements MockDataService {
     private boolean mockRequestByBody(MockResultBo mockResultBo, FuRequestBodyData body) {
         if (Objects.nonNull(body)) {
             String json = body.getJson();
-            if (StringUtils.isNotBlank(json)) {
+            if (FuStringUtils.isNotBlank(json)) {
                 mockResultBo.setRequestExample(json);
                 mockResultBo.setRequestExampleType(MockResultType.JSON.getCode());
                 return true;
             }
             mockResultBo.setRequestExampleType(MockResultType.YAML.getCode());
             String requestExample = buildParamData(body.getFormDataList());
-            if (StringUtils.isBlank(requestExample)) {
+            if (FuStringUtils.isBlank(requestExample)) {
                 requestExample = buildParamData(body.getFormUrlEncodedList());
             }
             mockResultBo.setRequestExample(requestExample);
-            return StringUtils.isNotBlank(requestExample);
+            return FuStringUtils.isNotBlank(requestExample);
         }
         return false;
     }
@@ -132,7 +132,7 @@ public abstract class AbstractMockDataService implements MockDataService {
         if (CollectionUtils.isNotEmpty(formDataList)) {
             return formDataList.stream().map(this::buildYamlData).collect(Collectors.joining("\r\n"));
         }
-        return StringUtils.EMPTY;
+        return FuStringUtils.EMPTY;
     }
 
 

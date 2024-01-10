@@ -22,7 +22,7 @@ import groovy.util.logging.Slf4j;
 import icons.FuDocIcons;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -196,7 +196,7 @@ public class RequestTabView implements FuTab, HttpCallback {
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
         //设置请求类型
-        setRequestType(requestTypeComponent.getSelectedItem() + StringUtils.EMPTY);
+        setRequestType(requestTypeComponent.getSelectedItem() + FuStringUtils.EMPTY);
         httpHeaderTab.doSendBefore(fuHttpRequestData);
         httpGetParamsTab.doSendBefore(fuHttpRequestData);
         httpPathParamsTab.doSendBefore(fuHttpRequestData);
@@ -231,7 +231,7 @@ public class RequestTabView implements FuTab, HttpCallback {
         List<KeyValueTableBO> formDataList = body.getFormDataList();
         List<KeyValueTableBO> formUrlEncodedList = body.getFormUrlEncodedList();
         String json = body.getJson();
-        if (StringUtils.isBlank(json) && CollectionUtils.isEmpty(formUrlEncodedList) && CollectionUtils.isEmpty(formDataList)) {
+        if (FuStringUtils.isBlank(json) && CollectionUtils.isEmpty(formUrlEncodedList) && CollectionUtils.isEmpty(formDataList)) {
             this.fuTabBuilder.select(HttpPathParamsTab.TITLE);
         } else {
             //定位到body tab页
@@ -295,8 +295,8 @@ public class RequestTabView implements FuTab, HttpCallback {
             return;
         }
         FuRequestData request = fuHttpRequestData.getRequest();
-        if (StringUtils.isBlank(requestUrl)) {
-            request.setRequestUrl(StringUtils.EMPTY);
+        if (FuStringUtils.isBlank(requestUrl)) {
+            request.setRequestUrl(FuStringUtils.EMPTY);
             return;
         }
         request.setRequestUrl(requestUrl);
@@ -317,13 +317,13 @@ public class RequestTabView implements FuTab, HttpCallback {
         String requestUrl = this.requestUrlComponent.getText();
         URL url;
         String queryUrl;
-        if (StringUtils.isBlank(requestUrl)
+        if (FuStringUtils.isBlank(requestUrl)
                 || Objects.isNull(url = parseHttpUrl(requestUrl))
-                || StringUtils.isBlank(queryUrl = url.getQuery())) {
+                || FuStringUtils.isBlank(queryUrl = url.getQuery())) {
             return;
         }
         String path = url.getPath();
-        if (StringUtils.isNotBlank(path)) {
+        if (FuStringUtils.isNotBlank(path)) {
             FuTab httpPathTab = this.fuTabBuilder.get(HttpPathParamsTab.TITLE);
             if (Objects.nonNull(httpPathTab)) {
                 String[] split = path.split("/");
@@ -332,7 +332,7 @@ public class RequestTabView implements FuTab, HttpCallback {
                     if (urlItem.contains("{{") || urlItem.contains("}}")) {
                         continue;
                     }
-                    if (StringUtils.startsWith(urlItem, "{") && StringUtils.endsWith(urlItem, "}")) {
+                    if (FuStringUtils.startsWith(urlItem, "{") && FuStringUtils.endsWith(urlItem, "}")) {
                         String name = urlItem.replace("{", "").replace("}", "");
                         paramMap.put(name, "");
                     }
