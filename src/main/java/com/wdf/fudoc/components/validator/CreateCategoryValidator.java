@@ -2,8 +2,8 @@ package com.wdf.fudoc.components.validator;
 
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
-import com.wdf.api.base.FuBundle;
-import com.wdf.api.constants.MessageConstants;
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.MessageConstants;
 import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;

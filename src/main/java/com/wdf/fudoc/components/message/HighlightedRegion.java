@@ -1,7 +1,7 @@
 package com.wdf.fudoc.components.message;
 
 import com.intellij.openapi.editor.markup.TextAttributes;
-import com.wdf.api.msg.bo.FuMsgItemBO;
+import cn.fudoc.common.msg.bo.FuMsgItemBO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

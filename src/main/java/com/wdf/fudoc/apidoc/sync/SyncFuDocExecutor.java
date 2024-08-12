@@ -9,7 +9,7 @@ import com.wdf.fudoc.apidoc.sync.strategy.SyncShowDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncToApiFoxStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncToYApiStrategy;
 import com.wdf.fudoc.common.ServiceHelper;
-import com.wdf.api.notification.FuDocNotification;
+import cn.fudoc.common.notification.FuDocNotification;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

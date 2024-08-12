@@ -9,7 +9,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.wdf.api.util.JsonUtil;
+import cn.fudoc.common.util.JsonUtil;
 import com.wdf.fudoc.request.http.FuRequest;
 import k.K.E;
 import lombok.extern.slf4j.Slf4j;

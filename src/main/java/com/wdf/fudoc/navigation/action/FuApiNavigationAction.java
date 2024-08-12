@@ -7,10 +7,10 @@ import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.wdf.api.base.FuBundle;
-import com.wdf.api.listener.FuDocActionListener;
-import com.wdf.api.constants.MessageConstants;
-import com.wdf.api.enumtype.FuDocAction;
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.listener.FuDocActionListener;
+import cn.fudoc.common.constants.MessageConstants;
+import cn.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.navigation.FuApiNavigationContributor;
 import org.jetbrains.annotations.NotNull;
 

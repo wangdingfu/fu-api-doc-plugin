@@ -6,7 +6,7 @@ import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.apidoc.sync.dto.YApiJsonSchema;
 import com.wdf.fudoc.apidoc.sync.dto.YApiMock;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import com.wdf.api.util.JsonUtil;
+import cn.fudoc.common.util.JsonUtil;
 import com.wdf.fudoc.util.MapListUtil;
 import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;

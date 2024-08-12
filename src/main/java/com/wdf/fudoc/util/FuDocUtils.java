@@ -13,7 +13,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
-import com.wdf.api.util.ProjectUtils;
+import cn.fudoc.common.util.ProjectUtils;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;

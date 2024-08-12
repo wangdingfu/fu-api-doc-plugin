@@ -1,8 +1,8 @@
 package com.wdf.fudoc.components.message.handler;
 
 import com.intellij.ide.BrowserUtil;
-import com.wdf.api.msg.bo.FuMsgItemBO;
-import com.wdf.api.enumtype.MessageType;
+import cn.fudoc.common.msg.bo.FuMsgItemBO;
+import cn.fudoc.common.enumtype.MessageType;
 import com.wdf.fudoc.util.FuStringUtils;
 
 /**

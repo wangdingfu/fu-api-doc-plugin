@@ -5,7 +5,7 @@ import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.util.ProcessingContext;
-import com.wdf.api.enumtype.FuColor;
+import cn.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.futool.beancopy.bo.FuCompletion;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;

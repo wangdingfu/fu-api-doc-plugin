@@ -8,7 +8,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.wdf.fudoc.components.listener.ChooseFileListener;
-import com.wdf.api.util.ProjectUtils;
+import cn.fudoc.common.util.ProjectUtils;
 
 import java.io.File;
 

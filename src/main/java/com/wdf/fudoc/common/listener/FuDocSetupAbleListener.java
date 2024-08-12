@@ -2,7 +2,7 @@ package com.wdf.fudoc.common.listener;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
-import com.wdf.api.service.FuDocSetupAble;
+import cn.fudoc.common.service.FuDocSetupAble;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,10 +1,10 @@
 package com.wdf.fudoc.util;
 
 import com.intellij.util.ui.JBUI;
-import com.wdf.api.msg.bo.FuMsgBO;
-import com.wdf.api.msg.FuMsgBuilder;
+import cn.fudoc.common.msg.bo.FuMsgBO;
+import cn.fudoc.common.msg.FuMsgBuilder;
 import com.wdf.fudoc.components.message.MessageComponent;
-import com.wdf.api.enumtype.MessageType;
+import cn.fudoc.common.enumtype.MessageType;
 
 import javax.swing.*;
 import java.awt.*;

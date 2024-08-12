@@ -18,7 +18,7 @@ import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
-import com.wdf.api.util.ProjectUtils;
+import cn.fudoc.common.util.ProjectUtils;
 import lombok.Getter;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
