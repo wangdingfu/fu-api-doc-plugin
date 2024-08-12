@@ -1,7 +1,7 @@
 package icons;
 
 import com.intellij.openapi.util.IconLoader;
-import com.wdf.api.util.ProjectUtils;
+import cn.fudoc.common.util.ProjectUtils;
 
 import javax.swing.*;
 

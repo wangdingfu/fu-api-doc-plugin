@@ -5,7 +5,7 @@ import com.intellij.util.ui.AbstractTableCellEditor;
 import com.wdf.fudoc.components.bo.TreePathBO;
 import com.wdf.fudoc.components.tree.old.FuModuleTreeComponent;
 import com.wdf.fudoc.components.tree.old.FuTableTreeComponent;
-import com.wdf.api.util.ProjectUtils;
+import cn.fudoc.common.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;

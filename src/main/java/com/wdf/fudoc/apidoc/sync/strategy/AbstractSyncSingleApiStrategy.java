@@ -15,7 +15,7 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiCategoryDialog;
-import com.wdf.api.util.ProjectUtils;
+import cn.fudoc.common.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
 

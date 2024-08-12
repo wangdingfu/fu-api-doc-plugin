@@ -42,8 +42,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.10")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
     implementation("com.atlassian.commonmark:commonmark:0.17.0")
-    implementation("com.wdf.api:fu-api-commons:${properties["ideaVersion"]}.${properties["fudocVersion"]}")
-    implementation("com.wdf.api:fu-api-start:${properties["ideaVersion"]}.${properties["fudocVersion"]}")
+    implementation("cn.fudoc:fu-api-commons:${properties["ideaVersion"]}.${properties["fudocVersion"]}")
 }
 
 

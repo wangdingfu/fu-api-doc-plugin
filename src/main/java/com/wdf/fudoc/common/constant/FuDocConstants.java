@@ -9,7 +9,7 @@ package com.wdf.fudoc.common.constant;
 public interface FuDocConstants {
 
 
-    String ID = "com.wdf.api";
+    String ID = "cn.fudoc.common";
 
     String KEY = "key";
     String VALUE = "value";

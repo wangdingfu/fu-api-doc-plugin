@@ -1,10 +1,10 @@
 package com.wdf.fudoc.components.message.handler;
 
-import com.wdf.api.base.FuBundle;
-import com.wdf.api.notification.FuDocNotification;
-import com.wdf.api.storage.po.FuDocConfigPO;
-import com.wdf.api.msg.bo.FuMsgItemBO;
-import com.wdf.api.storage.FuDocConfigStorage;
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.notification.FuDocNotification;
+import cn.fudoc.common.storage.po.FuDocConfigPO;
+import cn.fudoc.common.msg.bo.FuMsgItemBO;
+import cn.fudoc.common.storage.FuDocConfigStorage;
 
 /**
  * @author wangdingfu

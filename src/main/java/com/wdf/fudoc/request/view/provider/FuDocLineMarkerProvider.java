@@ -14,7 +14,7 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
-import com.wdf.api.storage.FuDocConfigStorage;
+import cn.fudoc.common.storage.FuDocConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;

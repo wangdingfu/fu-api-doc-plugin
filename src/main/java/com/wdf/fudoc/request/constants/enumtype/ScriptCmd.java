@@ -1,8 +1,8 @@
 package com.wdf.fudoc.request.constants.enumtype;
 
 import com.intellij.ui.JBColor;
-import com.wdf.api.base.FuBundle;
-import com.wdf.api.enumtype.FuColor;
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.enumtype.FuColor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

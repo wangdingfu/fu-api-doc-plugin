@@ -3,7 +3,7 @@ package com.wdf.fudoc.util;
 import com.intellij.ui.ColorHexUtil;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.UIUtil;
-import com.wdf.api.msg.bo.FuMsgItemBO;
+import cn.fudoc.common.msg.bo.FuMsgItemBO;
 
 import java.awt.*;
 import java.util.Objects;

@@ -7,7 +7,7 @@ import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.common.AbstractClassAction;
-import com.wdf.api.enumtype.FuDocAction;
+import cn.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;

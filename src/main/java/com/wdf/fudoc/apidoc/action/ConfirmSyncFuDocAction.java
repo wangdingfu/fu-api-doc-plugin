@@ -10,7 +10,7 @@ import com.wdf.fudoc.apidoc.sync.SyncFuDocExecutor;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.AbstractClassAction;
-import com.wdf.api.enumtype.FuDocAction;
+import cn.fudoc.common.enumtype.FuDocAction;
 
 /**
  * @author wangdingfu

@@ -18,7 +18,7 @@ import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.JTableUtils;
-import com.wdf.api.util.ProjectUtils;
+import cn.fudoc.common.util.ProjectUtils;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;

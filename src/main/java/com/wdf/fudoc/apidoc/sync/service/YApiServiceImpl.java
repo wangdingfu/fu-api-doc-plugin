@@ -4,7 +4,7 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.wdf.fudoc.apidoc.sync.dto.*;
-import com.wdf.api.util.JsonUtil;
+import cn.fudoc.common.util.JsonUtil;
 import com.wdf.fudoc.util.YApiUtil;
 import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;

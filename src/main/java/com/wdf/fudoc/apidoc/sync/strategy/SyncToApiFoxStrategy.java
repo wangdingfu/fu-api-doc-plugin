@@ -17,7 +17,7 @@ import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.ObjectUtils;
-import com.wdf.api.util.ProjectUtils;
+import cn.fudoc.common.util.ProjectUtils;
 import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
 
