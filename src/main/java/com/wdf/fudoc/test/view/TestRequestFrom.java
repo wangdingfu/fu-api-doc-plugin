@@ -1,7 +1,7 @@
 package com.wdf.fudoc.test.view;
 
 import com.google.common.collect.Lists;
-import com.intellij.json.JsonFileType;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.GuiUtils;
@@ -116,7 +116,7 @@ public class TestRequestFrom implements Disposable {
     }
 
     private JPanel createEditorPanel() {
-        return FuEditorComponent.create(JsonFileType.INSTANCE, "",this).getMainPanel();
+        return FuEditorComponent.create(JsonFileTypeCompat.getJsonFileType(), "",this).getMainPanel();
     }
 
     @Override

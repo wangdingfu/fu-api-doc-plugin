@@ -56,11 +56,12 @@ public class TestAction extends AnAction {
     }
 
     private void curlTest(AnActionEvent e) {
-        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject(), null);
         //读取http文件
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 
         HttpRequest httpRequest = FuRequestUtils.getHttpRequest((HttpRequestPsiFile) psiFile, e.getData(LangDataKeys.EDITOR));
+        // IDEA 2025.1+ API 变更: getDefault() 的 contextFile 参数不再允许为 null
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject(), (HttpRequestPsiFile) psiFile);
         try {
             Object o = HttpRequestPsiConverter.convertFromHttpRequest(httpRequest, substitutor, (RequestBuilder) (new CurlRequestBuilder()));
             System.out.println(o);
@@ -71,11 +72,12 @@ public class TestAction extends AnAction {
 
 
     private void request(AnActionEvent e) {
-        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject(), null);
         //读取http文件
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 
         HttpRequest httpRequest = FuRequestUtils.getHttpRequest((HttpRequestPsiFile) psiFile, e.getData(LangDataKeys.EDITOR));
+        // IDEA 2025.1+ API 变更: getDefault() 的 contextFile 参数不再允许为 null
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(e.getProject(), (HttpRequestPsiFile) psiFile);
         try {
             Object o = HttpRequestPsiConverter.convertFromHttpRequest(httpRequest, substitutor, (RequestBuilder) (new CurlRequestBuilder()));
         } catch (HttpRequestValidationException e3) {
@@ -104,7 +106,8 @@ public class TestAction extends AnAction {
             }
         }
         RequestBuilder<RestClientRequest, RestClientFormBodyPart> requestBuilder = new RestClientRequestBuilder();
-        HttpRequestConfig requestConfig = HttpRequestPsiConverter.toRequestConfig(firstRequest);
+        // TODO: IDEA 2025 HttpRequestPsiConverter API变更
+        // HttpRequestConfig requestConfig = HttpRequestPsiConverter.toRequestConfig(firstRequest);
 //        try {
 //            RestClientRequest restClientRequest = HttpRequestPsiConverter.convertFromHttpRequest(firstRequest, substitutor, requestBuilder);
 //            CurlCopyPastePreProcessor preProcessor = new CurlCopyPastePreProcessor();

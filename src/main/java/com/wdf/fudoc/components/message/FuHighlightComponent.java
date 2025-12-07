@@ -41,7 +41,11 @@ public class FuHighlightComponent extends JComponent implements Accessible {
 
     @Override
     public void updateUI() {
-        GraphicsUtil.setAntialiasingType(this, AntialiasingType.getAAHintForSwingComponent());
+        super.updateUI();
+        // Note: AntialiasingType.getAAHintForSwingComponent() is deprecated and removed in IDEA 2025.1+
+        // Use UISettings to get the current antialiasing type instead
+        AntialiasingType aaType = UISettings.getInstance().getIdeAAType();
+        GraphicsUtil.setAntialiasingType(this, aaType);
     }
 
     /**

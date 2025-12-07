@@ -1,7 +1,7 @@
 package com.wdf.fudoc.request.tab.request;
 
 import com.google.common.collect.Lists;
-import com.intellij.json.JsonFileType;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
@@ -60,7 +60,7 @@ public class HttpRequestBodyTab extends AbstractBulkEditTabLinkage<KeyValueTable
         this.urlencodedComponent = FuTableComponent.createKeyValue();
         this.urlencodedPanel = this.urlencodedComponent.createPanel();
         this.rawComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE,disposable);
-        this.jsonComponent = FuEditorComponent.create(JsonFileType.INSTANCE,disposable);
+        this.jsonComponent = FuEditorComponent.create(JsonFileTypeCompat.getJsonFileType(),disposable);
         this.binaryComponent = new JPanel();
         this.formDataEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE,disposable);
         this.urlencodedEditorComponent = FuEditorComponent.create(PlainTextFileType.INSTANCE,disposable);

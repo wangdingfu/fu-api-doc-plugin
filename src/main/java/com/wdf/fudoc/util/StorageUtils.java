@@ -11,7 +11,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import cn.fudoc.common.util.JsonUtil;
 import com.wdf.fudoc.request.http.FuRequest;
-import k.K.E;
+// TODO: 升级到2025后需要更新fu-api-commons:251.1.8
+// import k.K.E;
 import lombok.extern.slf4j.Slf4j;
 import com.wdf.fudoc.util.FuStringUtils;
 

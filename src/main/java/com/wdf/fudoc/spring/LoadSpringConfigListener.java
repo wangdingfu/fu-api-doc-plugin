@@ -25,11 +25,20 @@ public class LoadSpringConfigListener implements StartupActivity.Background {
     @Override
     public void runActivity(@NotNull Project project) {
         try {
+            DumbService dumbService = DumbService.getInstance(project);
+
+            // 如果当前不处于索引模式，直接加载配置
+            if (!dumbService.isDumb()) {
+                log.info("索引已完成，直接加载Spring环境信息...");
+                SpringBootEnvLoader.doLoad(project, false, false);
+            }
+
+            // 订阅索引模式退出事件，以便在索引完成后重新加载
             project.getMessageBus().connect().subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
                 @Override
                 public void exitDumbMode() {
-                    log.info("开始加载Spring环境信息...");
-                    SpringBootEnvLoader.doLoad(project, false,false);
+                    log.info("索引模式退出，重新加载Spring环境信息...");
+                    SpringBootEnvLoader.doLoad(project, true, true);
                 }
             });
         } catch (Exception e) {

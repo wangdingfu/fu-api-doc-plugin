@@ -175,20 +175,38 @@ public class SpringBootEnvLoader {
             }
             String applicationName = psiClass.getName();
             Module module = ModuleUtil.findModuleForPsiElement(psiElement);
+            log.info("发现SpringBoot应用: {}, 模块: {}", applicationName, module.getName());
+
             SpringConfigFile springConfigFile = SpringConfigManager.doLoadSpringConfig(module);
             Set<String> envs = springConfigFile.getEnvs();
             if (CollectionUtils.isEmpty(envs)) {
                 envs = Sets.newHashSet(SpringConfigFileConstants.DEFAULT_ENV);
+                log.warn("模块 {} 未找到环境配置，使用默认环境: application", module.getName());
             }
+
+            // 改进环境处理逻辑
             if (envs.size() > 1) {
-                envs.remove(SpringConfigFileConstants.DEFAULT_ENV);
+                // 保留application环境，但优先使用其他环境
+                log.info("模块 {} 发现多个环境: {}", module.getName(), envs);
             }
+
             String activeEnv = springConfigFile.getActiveEnv();
-            if (!envs.contains(activeEnv)) {
+            if (FuStringUtils.isBlank(activeEnv) || !envs.contains(activeEnv)) {
+                // 如果没有激活环境或激活环境不存在，选择第一个环境
                 activeEnv = envs.iterator().next();
+                log.warn("模块 {} 激活环境无效，使用环境: {}", module.getName(), activeEnv);
             }
+
+            log.info("模块 {} 使用激活环境: {}", module.getName(), activeEnv);
+
             Map<String, SpringBootEnvConfigInfo> envConfigInfoMap = new HashMap<>();
-            envs.forEach(f -> envConfigInfoMap.put(f, new SpringBootEnvConfigInfo(springConfigFile.getServerPort(f), springConfigFile.getConfig(SpringConfigFileConstants.CONTEXT_PATH_KEY))));
+            envs.forEach(f -> {
+                Integer port = springConfigFile.getServerPort(f);
+                String contextPath = springConfigFile.getConfig(SpringConfigFileConstants.CONTEXT_PATH_KEY);
+                log.debug("环境 {} - 端口: {}, ContextPath: {}", f, port, contextPath);
+                envConfigInfoMap.put(f, new SpringBootEnvConfigInfo(port, contextPath));
+            });
+
             springBootEnvModuleInfo.addEnvInfo(module, applicationName, activeEnv, envConfigInfoMap, MavenUtils.getChildModule(module, modules));
         }
         return springBootEnvModuleInfo;
@@ -239,20 +257,25 @@ public class SpringBootEnvLoader {
             envConfigInfoMap.forEach((envName, envConfigInfo) -> {
                 String configEnvKey = applicationName + ":" + envName;
                 ConfigEnvTableBO configEnvTableBO = configEnvMap.get(configEnvKey);
+                Integer serverPort = envConfigInfo.getServerPort();
                 String contextPath = envConfigInfo.getContextPath();
-                String contextPathUrl = FuStringUtils.isBlank(contextPath) ? FuStringUtils.EMPTY : "/" + contextPath;
-                String domain = "http://localhost:" + envConfigInfo.getServerPort() + contextPathUrl;
+
+                log.debug("生成配置: 域名=localhost, 端口={}, 上下文路径={}", serverPort, contextPath);
+
                 if (Objects.isNull(configEnvTableBO)) {
                     configEnvTableBO = new ConfigEnvTableBO();
                     configEnvTableBO.setSelect(true);
                     configEnvTableBO.setEnvName(envName);
                     configEnvTableBO.setApplication(applicationName);
-                    configEnvTableBO.setDomain(domain);
+                    configEnvTableBO.setDomain("localhost");
+                    configEnvTableBO.setPort(serverPort);
+                    configEnvTableBO.setContextPath(contextPath);
                     envConfigList.add(configEnvTableBO);
                 } else {
-                    if (isReLoad) {
-                        configEnvTableBO.setDomain(domain);
-                    }
+                    // 始终更新配置，确保配置变化后能及时生效
+                    configEnvTableBO.setDomain("localhost");
+                    configEnvTableBO.setPort(serverPort);
+                    configEnvTableBO.setContextPath(contextPath);
                 }
             });
         });

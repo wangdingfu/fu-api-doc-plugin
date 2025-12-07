@@ -65,11 +65,19 @@ public class HttpExecutor {
         } catch (Exception e) {
             FuResponseData fuResponseData = FuHttpResponseBuilder.ifNecessaryCreateResponse(fuHttpRequestData);
             log.info("请求接口【{}】异常", requestUrl, e);
-            if (e.getCause() instanceof ConnectException) {
+
+            // IDEA 2025.1+ 修复: 安全处理异常信息,防止 NPE
+            Throwable cause = e.getCause();
+            if (cause instanceof ConnectException) {
                 fuResponseData.setErrorDetail("错误：connect ECONNREFUSED " + httpRequest.getConnection().getUrl().getAuthority());
                 fuResponseData.setResponseType(ResponseType.ERR_CONNECTION_REFUSED);
             } else {
-                fuResponseData.setErrorDetail(e.getCause().getMessage());
+                // 优先使用 cause 的消息,如果没有 cause 则使用异常本身的消息
+                String errorMessage = cause != null ? cause.getMessage() : e.getMessage();
+                if (errorMessage == null) {
+                    errorMessage = e.getClass().getSimpleName();
+                }
+                fuResponseData.setErrorDetail(errorMessage);
                 fuResponseData.setResponseType(ResponseType.ERR_UNKNOWN);
             }
             //记录日志到Console中展示

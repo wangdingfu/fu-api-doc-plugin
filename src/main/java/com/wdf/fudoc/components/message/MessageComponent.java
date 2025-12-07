@@ -1,7 +1,8 @@
 package com.wdf.fudoc.components.message;
 
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
+// TODO: IDEA 2025 MemoryUsagePanel API变更
+// import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import cn.fudoc.common.msg.bo.FuMsgBO;
@@ -132,7 +133,8 @@ public class MessageComponent {
                 public void layoutContainer(Container target) {
                     super.layoutContainer(target);
                     for (Component component : target.getComponents()) {
-                        if (component instanceof MemoryUsagePanel) {
+                        // TODO: IDEA 2025 MemoryUsagePanel API变更
+                        if (false && component.getClass().getSimpleName().equals("MemoryUsagePanel")) {
                             Rectangle r = component.getBounds();
                             r.y = 0;
                             r.width += SystemInfo.isMac ? 4 : 0;

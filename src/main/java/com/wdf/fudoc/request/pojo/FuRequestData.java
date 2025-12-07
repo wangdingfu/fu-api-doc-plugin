@@ -124,8 +124,25 @@ public class FuRequestData {
             return FuStringUtils.EMPTY;
         }
         String params = FuStringUtils.isNotBlank(this.paramUrl) ? "?" + this.paramUrl : FuStringUtils.EMPTY;
-        String contextPathUrl = FuStringUtils.isBlank(this.contextPath) ? FuStringUtils.EMPTY : this.contextPath;
-        return URLUtil.normalize(this.domain + contextPathUrl + formatBaseUrl(baseUrl) + params, false, true);
+
+        // 使用局部变量处理domain，避免修改原字段（副作用）
+        String domainUrl = this.domain;
+
+        // 处理contextPath，确保不会产生双斜杠
+        String contextPathUrl = "";
+        if (FuStringUtils.isNotBlank(this.contextPath)) {
+            contextPathUrl = this.contextPath;
+            // 确保contextPath以/开头
+            if (!contextPathUrl.startsWith("/")) {
+                contextPathUrl = "/" + contextPathUrl;
+            }
+            // 如果domain以/结尾，移除它，避免双斜杠
+            if (domainUrl.endsWith("/")) {
+                domainUrl = domainUrl.substring(0, domainUrl.length() - 1);
+            }
+        }
+
+        return URLUtil.normalize(domainUrl + contextPathUrl + formatBaseUrl(baseUrl) + params, false, true);
     }
 
 

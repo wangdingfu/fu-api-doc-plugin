@@ -38,6 +38,11 @@ public class FuResponseData {
     private String content;
 
     /**
+     * 内容类型
+     */
+    private String contentType;
+
+    /**
      * 字节流内容
      */
     @JsonIgnore

@@ -93,10 +93,22 @@ public class HttpGetParamsTab extends AbstractBulkEditTabLinkage<KeyValueTableBO
         this.httpRequestData = httpRequestData;
         FuRequestData request = httpRequestData.getRequest();
         List<KeyValueTableBO> params = request.getParams();
-        if (CollectionUtils.isNotEmpty(params)) {
-            this.fuTableComponent.setDataList(params);
-            this.fuEditorComponent.setContent(buildBulkEditContent(params));
+
+        // 确保 params 不为 null
+        if (params == null) {
+            params = Lists.newArrayList();
         }
+
+        // 总是设置数据列表，即使为空也要清空表格
+        this.fuTableComponent.setDataList(params);
+
+        // 更新批量编辑内容
+        if (CollectionUtils.isNotEmpty(params)) {
+            this.fuEditorComponent.setContent(buildBulkEditContent(params));
+        } else {
+            this.fuEditorComponent.setContent("");
+        }
+
         //重置接口请求地址
         resetRequestUrlFromTable();
     }

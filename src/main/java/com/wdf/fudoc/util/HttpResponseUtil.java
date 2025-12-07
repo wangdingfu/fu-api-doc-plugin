@@ -8,7 +8,9 @@ import cn.hutool.http.Header;
 import cn.hutool.http.HttpResponse;
 import com.wdf.fudoc.util.FuStringUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -16,6 +18,46 @@ import java.util.Objects;
  * @date 2022-11-23 23:13:43
  */
 public class HttpResponseUtil {
+
+    /**
+     * 从响应头中获取指定 header 的值（忽略大小写）
+     *
+     * @param headers    响应头Map
+     * @param headerName header名称
+     * @return header值列表，找不到返回空列表
+     */
+    public static List<String> getHeaderIgnoreCase(Map<String, List<String>> headers, String headerName) {
+        if (headers == null || headers.isEmpty() || FuStringUtils.isBlank(headerName)) {
+            return Collections.emptyList();
+        }
+
+        // 先精确匹配
+        List<String> values = headers.get(headerName);
+        if (values != null && !values.isEmpty()) {
+            return values;
+        }
+
+        // 忽略大小写查找
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            if (headerName.equalsIgnoreCase(entry.getKey())) {
+                return entry.getValue() != null ? entry.getValue() : Collections.emptyList();
+            }
+        }
+
+        return Collections.emptyList();
+    }
+
+    /**
+     * 从响应头中获取指定 header 的第一个值（忽略大小写）
+     *
+     * @param headers    响应头Map
+     * @param headerName header名称
+     * @return header值，找不到返回null
+     */
+    public static String getFirstHeaderIgnoreCase(Map<String, List<String>> headers, String headerName) {
+        List<String> values = getHeaderIgnoreCase(headers, headerName);
+        return values.isEmpty() ? null : values.get(0);
+    }
 
 
     public static String getFileNameFromDisposition(HttpResponse httpResponse) {

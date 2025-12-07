@@ -6,7 +6,8 @@ import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.HTMLEditorKitBuilder;
-import com.intellij.util.ui.HtmlPanel;
+// TODO: IDEA 2025中HtmlPanel API变更
+// import com.intellij.util.ui.HtmlPanel;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;

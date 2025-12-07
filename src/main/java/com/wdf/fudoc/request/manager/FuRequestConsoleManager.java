@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 import com.intellij.execution.impl.ConsoleViewUtil;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.httpClient.http.request.HttpRequestFileType;
-import com.intellij.json.JsonFileType;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.base.KeyValueBO;
 import com.wdf.fudoc.common.constant.FuConsoleConstants;
@@ -110,7 +110,7 @@ public class FuRequestConsoleManager {
         ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), FuDocRender.render(requestConsoleData, "console/request_console.ftl"), HttpRequestFileType.INSTANCE);
         String bodyContent = buildRequestBody(httpRequest);
         if (JSONUtil.isTypeJSON(bodyContent)) {
-            ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), bodyContent, JsonFileType.INSTANCE);
+            ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), bodyContent, JsonFileTypeCompat.getJsonFileType());
         } else {
             fuLogger.info(bodyContent);
         }
@@ -136,7 +136,7 @@ public class FuRequestConsoleManager {
             return;
         }
         if (JSONUtil.isTypeJSON(bodyContent)) {
-            ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), JSONUtil.toJsonPrettyStr(bodyContent), JsonFileType.INSTANCE);
+            ConsoleViewUtil.printAsFileType(fuLogger.getConsoleView(), JSONUtil.toJsonPrettyStr(bodyContent), JsonFileTypeCompat.getJsonFileType());
             fuLogger.println();
         } else {
             fuLogger.info(bodyContent);

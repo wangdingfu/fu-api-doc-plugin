@@ -19,15 +19,24 @@ import java.util.List;
  */
 public class AssembleServiceExecutor {
 
-    private static final List<FuDocAssembleService> SERVICE_LIST = Lists.newArrayList(
-            ServiceHelper.getService(ControllerAssembleService.class),
-            ServiceHelper.getService(FeignAssembleService.class),
-            ServiceHelper.getService(InterfaceAssembleService.class)
-    );
+    /**
+     * 懒加载服务列表
+     * 不在类初始化时加载,而是在第一次使用时加载
+     * 这样避免了类加载时就依赖 IntelliJ Platform 的服务容器
+     *
+     * @return 组装服务列表
+     */
+    private static List<FuDocAssembleService> getServiceList() {
+        return Lists.newArrayList(
+                ServiceHelper.getService(ControllerAssembleService.class),
+                ServiceHelper.getService(FeignAssembleService.class),
+                ServiceHelper.getService(InterfaceAssembleService.class)
+        );
+    }
 
 
     public static List<FuDocItemData> execute(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
-        for (FuDocAssembleService fuDocAssembleService : SERVICE_LIST) {
+        for (FuDocAssembleService fuDocAssembleService : getServiceList()) {
             if (fuDocAssembleService.isAssemble(fuDocContext, classInfoDesc)) {
                 return fuDocAssembleService.assemble(fuDocContext, classInfoDesc);
             }
@@ -37,7 +46,7 @@ public class AssembleServiceExecutor {
 
 
     public static List<FuDocRootParamData> executeByRequest(FuDocContext fuDocContext, ClassInfoDesc classInfoDesc) {
-        for (FuDocAssembleService fuDocAssembleService : SERVICE_LIST) {
+        for (FuDocAssembleService fuDocAssembleService : getServiceList()) {
             if (fuDocAssembleService.isAssemble(fuDocContext, classInfoDesc)) {
                 return fuDocAssembleService.requestAssemble(fuDocContext, classInfoDesc);
             }

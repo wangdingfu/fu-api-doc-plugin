@@ -22,7 +22,7 @@ public interface SpringConfigFileConstants {
     String BOOTSTRAP = "bootstrap";
 
     Set<String> EXTENSIONS = Sets.newHashSet(YAML, YML, PROPERTIES);
-    Set<String> CONFIG_FILE_NAMES = Sets.newHashSet(BOOTSTRAP, APPLICATION);
+    Set<String> CONFIG_FILE_NAMES = Sets.newHashSet(BOOTSTRAP, APPLICATION, "config", "server");
 
 
     String SPLIT = "-";

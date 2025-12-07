@@ -27,6 +27,8 @@ public class SendRequestHandler {
     private final HttpCallback httpCallback;
     private Future<?> sendHttpTask;
     private final AtomicBoolean sendStatus = new AtomicBoolean(false);
+    // IDEA 2025.1+ 新增: 防止 doSendAfter 被重复调用
+    private final AtomicBoolean afterCalled = new AtomicBoolean(false);
     private final FuLogger fuLogger;
 
 
@@ -47,20 +49,59 @@ public class SendRequestHandler {
         project.getMessageBus().syncPublisher(FuDocActionListener.TOPIC).action(FuDocAction.FU_REQUEST.getCode());
         //清空日志
         fuLogger.clear();
-        this.sendHttpTask = ThreadUtil.execAsync(() -> {
-            sendStatus.set(true);
+
+        // IDEA 2025.1+ 修复: 先设置状态,再调用 doSendBefore
+        sendStatus.set(true);
+        afterCalled.set(false);
+
+        // IDEA 2025.1+ 修复: 在 EDT 线程调用 doSendBefore,确保 UI 更新正确
+        ApplicationManager.getApplication().invokeLater(() -> {
             httpCallback.doSendBefore(httpRequestData);
-            //发起http请求执行
-            HttpApiExecutor.doSendRequest(project, httpRequestData, fuLogger);
-            if (Objects.isNull(this.sendHttpTask) || this.sendHttpTask.isCancelled()) {
-                return;
+        }, ModalityState.any());
+
+        this.sendHttpTask = ThreadUtil.execAsync(() -> {
+            try {
+                //发起http请求执行
+                HttpApiExecutor.doSendRequest(project, httpRequestData, fuLogger);
+                log.info("HTTP请求执行完成");
+            } catch (Exception e) {
+                log.error("发送HTTP请求异常", e);
+            } finally {
+                log.info("进入 finally 块, sendHttpTask={}, isCancelled={}",
+                    this.sendHttpTask,
+                    this.sendHttpTask != null ? this.sendHttpTask.isCancelled() : "null");
+
+                // IDEA 2025.1+ 修复: 无论成功失败,总是调用 doSendAfter 恢复 UI 状态
+                // 使用 CAS 确保只调用一次
+                if (afterCalled.compareAndSet(false, true)) {
+                    ApplicationManager.getApplication().invokeLater(() -> {
+                        log.info("EDT 线程执行 doSendAfter (from finally)");
+                        try {
+                            // 只有未被取消的请求才填充响应数据
+                            if (Objects.nonNull(this.sendHttpTask) && !this.sendHttpTask.isCancelled()) {
+                                log.info("调用 doSendAfter with data");
+                                httpCallback.doSendAfter(httpRequestData);
+                            } else {
+                                // 被取消的请求也要恢复 UI,但不填充数据
+                                log.info("调用 doSendAfter with null");
+                                httpCallback.doSendAfter(null);
+                            }
+                        } catch (Exception e) {
+                            log.error("doSendAfter 执行异常", e);
+                        } finally {
+                            //执行后置逻辑
+                            log.info("设置 sendStatus=false, sendHttpTask=null");
+                            sendStatus.set(false);
+                            this.sendHttpTask = null;
+                        }
+                    }, ModalityState.any());
+                } else {
+                    log.info("doSendAfter 已被调用,跳过 (from finally)");
+                    // 即使 doSendAfter 被跳过,也要清理状态
+                    sendStatus.set(false);
+                    this.sendHttpTask = null;
+                }
             }
-            ApplicationManager.getApplication().invokeLater(() -> {
-                httpCallback.doSendAfter(httpRequestData);
-                //执行后置逻辑
-                sendStatus.set(false);
-                this.sendHttpTask = null;
-            }, ModalityState.any());
         });
     }
 
@@ -74,9 +115,28 @@ public class SendRequestHandler {
             return;
         }
         try {
+            // IDEA 2025.1+ 修复: 取消任务
+            log.info("用户点击 Stop 按钮,取消 HTTP 请求");
             this.sendHttpTask.cancel(true);
-            //执行后置逻辑
-            sendStatus.set(false);
+
+            // IDEA 2025.1+ 修复: 立即在 EDT 线程恢复 UI,不等待 finally 块
+            // 因为被取消的任务可能卡在阻塞 I/O 中,finally 块可能不会立即执行
+            // 使用 CAS 确保只调用一次
+            if (afterCalled.compareAndSet(false, true)) {
+                ApplicationManager.getApplication().invokeLater(() -> {
+                    log.info("Stop 按钮触发: 立即调用 doSendAfter 恢复 UI");
+                    try {
+                        httpCallback.doSendAfter(null);
+                    } catch (Exception e) {
+                        log.error("doSendAfter 执行异常", e);
+                    } finally {
+                        sendStatus.set(false);
+                        this.sendHttpTask = null;
+                    }
+                }, ModalityState.any());
+            } else {
+                log.info("doSendAfter 已被调用,跳过 (from stopHttp)");
+            }
         } catch (Exception e) {
             log.info("终止http请求", e);
         }

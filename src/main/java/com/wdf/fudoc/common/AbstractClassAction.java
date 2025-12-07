@@ -1,5 +1,6 @@
 package com.wdf.fudoc.common;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -51,6 +52,19 @@ public abstract class AbstractClassAction extends AnAction {
     }
 
     protected abstract FuDocAction getAction();
+
+    /**
+     * 指定 Action 的线程模型
+     * 从 IDEA 2022.3+ 开始,必须显式声明 ActionUpdateThread
+     * BGT (Background Thread) 表示在后台线程执行 update() 方法,避免阻塞 EDT
+     * 这样可以安全地在 update() 中访问 PSI 数据
+     *
+     * @return ActionUpdateThread.BGT - 后台线程模型
+     */
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
 
     /**
      * 执行动作

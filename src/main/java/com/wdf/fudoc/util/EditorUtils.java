@@ -1,6 +1,6 @@
 package com.wdf.fudoc.util;
 
-import com.intellij.json.JsonFileType;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileTypes.FileType;
@@ -25,7 +25,7 @@ public class EditorUtils {
     }
 
     public static Document createDocument(String value, FileType fileType, Project project) {
-        if (Objects.nonNull(fileType) && JsonFileType.INSTANCE.equals(fileType)) {
+        if (JsonFileTypeCompat.isJsonFileType(fileType)) {
             //只有json格式才创建虚拟文件
             if (project == null) {
                 project = ProjectUtils.getCurrProject();

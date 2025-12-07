@@ -33,7 +33,8 @@ public class ToolBarUtils {
         ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
         toolbar.setTargetComponent(targetComponent);
         toolbar.setForceMinimumSize(true);
-        toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
+        // Note: setLayoutPolicy() is deprecated and removed in IDEA 2025.1+
+        // The default behavior is already NOWRAP, so this call is not needed
         Utils.setSmallerFontForChildren(toolbar);
         toolbar.getComponent().setBackground(targetComponent.getBackground());
         return toolbar.getComponent();
@@ -53,7 +54,8 @@ public class ToolBarUtils {
         ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
         toolbar.setTargetComponent(toolBarPanel);
         toolbar.setForceMinimumSize(true);
-        toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
+        // Note: setLayoutPolicy() is deprecated and removed in IDEA 2025.1+
+        // The default behavior is already NOWRAP, so this call is not needed
         Utils.setSmallerFontForChildren(toolbar);
         toolBarPanel.add(toolbar.getComponent(), layout);
         return toolBarPanel;

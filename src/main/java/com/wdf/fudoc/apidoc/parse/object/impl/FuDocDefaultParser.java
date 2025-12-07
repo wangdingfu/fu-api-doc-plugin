@@ -112,7 +112,8 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
             boolean isJson = Objects.nonNull(parentMockRealData) && parentMockRealData instanceof JsonRealDataHandler;
             MockRealData mockRealData = isJson ? new JsonRealDataHandler(objectInfoDesc.getValue()) : parentMockRealData;
             //遍历当前类的所有字段（包含父类）
-            for (PsiField psiField : psiClass.getAllFields()) {
+            PsiField[] allFields = psiClass.getAllFields();
+            for (PsiField psiField : allFields) {
                 if (filterFieldNames.contains(psiField.getName()) || fieldIsIgnore(psiField, parseObjectBO)) {
                     //如果属性在过滤列表里 则标识该属性呗过滤掉了
                     continue;
@@ -153,7 +154,7 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
      * 判断当前字段是否标识Ignore注解被忽略了
      * <p>
      * 1、被"@JsonIgnore"注解标识了会被忽略
-     * 2、被“@JsonProperty”注解标识
+     * 2、被"@JsonProperty"注解标识
      * 2.1、access属性的值为READ_ONLY 则只会解析请求参数
      * 2.2、access属性的值为WRITE_ONLY 则只会解析响应参数
      * 2.3、其他情况都会解析
@@ -195,7 +196,8 @@ public class FuDocDefaultParser extends AbstractApiDocObjectParser {
     private void paddingChildList(ObjectInfoDesc objectInfoDesc, List<ObjectInfoDesc> childList) {
         if (CollectionUtils.isNotEmpty(childList)) {
             objectInfoDesc.setChildList(childList);
-            objectInfoDesc.setValue(buildValue(childList));
+            Object value = buildValue(childList);
+            objectInfoDesc.setValue(value);
         }
     }
 

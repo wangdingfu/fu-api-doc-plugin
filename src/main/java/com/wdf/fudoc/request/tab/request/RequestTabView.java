@@ -195,6 +195,12 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     @Override
     public void doSendBefore(FuHttpRequestData fuHttpRequestData) {
+        // IDEA 2025.1+ 新增: 禁用 Send 按钮,防止重复发送
+        System.out.println("=== RequestTabView.doSendBefore: 禁用 Send 按钮 ===");
+        logger.info("RequestTabView.doSendBefore: 禁用 Send 按钮");
+        sendBtn.setEnabled(false);
+        sendBtn.setText("Sending...");
+
         //设置请求类型
         setRequestType(requestTypeComponent.getSelectedItem() + FuStringUtils.EMPTY);
         httpHeaderTab.doSendBefore(fuHttpRequestData);
@@ -205,6 +211,11 @@ public class RequestTabView implements FuTab, HttpCallback {
 
     @Override
     public void doSendAfter(FuHttpRequestData fuHttpRequestData) {
+        // IDEA 2025.1+ 新增: 启用 Send 按钮(无论请求成功、失败还是被取消)
+        System.out.println("=== RequestTabView.doSendAfter: 启用 Send 按钮, data=" + (fuHttpRequestData != null) + " ===");
+        logger.info("RequestTabView.doSendAfter: 启用 Send 按钮, data=" + (fuHttpRequestData != null));
+        sendBtn.setEnabled(true);
+        sendBtn.setText("Send");
     }
 
     /**

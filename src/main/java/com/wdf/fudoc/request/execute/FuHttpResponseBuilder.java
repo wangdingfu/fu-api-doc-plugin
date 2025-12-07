@@ -2,7 +2,6 @@ package com.wdf.fudoc.request.execute;
 
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
@@ -12,7 +11,6 @@ import com.wdf.fudoc.util.HttpResponseUtil;
 import org.apache.commons.collections.MapUtils;
 import com.wdf.fudoc.util.FuStringUtils;
 
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +43,12 @@ public class FuHttpResponseBuilder {
             Map<String, List<String>> responseHeaders = new HashMap<>(headers);
             responseHeaders.remove(null);
             response.setHeaders(responseHeaders);
+
+            // 获取Content-Type（使用case-insensitive查找）
+            String contentType = HttpResponseUtil.getFirstHeaderIgnoreCase(responseHeaders, "Content-Type");
+            if (FuStringUtils.isNotBlank(contentType)) {
+                response.setContentType(contentType);
+            }
         }
         response.setContentLength(httpResponse.contentLength());
         response.setResponseType(ResponseType.SUCCESS);

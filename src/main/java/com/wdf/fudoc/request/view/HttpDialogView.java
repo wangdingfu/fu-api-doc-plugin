@@ -9,6 +9,8 @@ import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
+import cn.fudoc.common.msg.FuMsgBuilder;
+import cn.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.SendRequestHandler;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
@@ -33,6 +35,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -107,6 +111,8 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
     protected void dispose() {
         //当前窗体被销毁了 需要手动移除
         FuRequestManager.remove(this.project, this.httpId);
+        //同步表单数据到 httpRequestData（确保请求参数和响应数据都被保存）
+        doSendBefore(this.httpRequestData);
         //持久化数据
         saveData();
         super.dispose();
@@ -233,11 +239,51 @@ public class HttpDialogView extends DialogWrapper implements HttpCallback, SendH
 
     @Override
     public void doSendAfter(FuHttpRequestData fuHttpRequestData) {
-        this.fuTabBuilder.select(ResponseTabView.RESPONSE);
+        // IDEA 2025.1+ 修复: 必须调用 requestTabView.doSendAfter 来恢复 Send 按钮状态
+        // 无论请求成功、失败还是被取消,都必须调用以恢复 UI 状态
         this.requestTabView.doSendAfter(fuHttpRequestData);
-        this.responseTabView.initData(fuHttpRequestData);
-        //切换消息展示
-        messageComponent.switchInfo();
+
+        // IDEA 2025.1+ 修复: 被取消的请求(fuHttpRequestData == null)不填充响应数据
+        if (fuHttpRequestData != null) {
+            this.fuTabBuilder.select(ResponseTabView.RESPONSE);
+            this.responseTabView.initData(fuHttpRequestData);
+
+            // 请求完成后保存数据（包含响应数据）
+            try {
+                FuRequestManager.saveRequest(project, fuHttpRequestData);
+                FuRequestConfigStorage.get(project).saveData();
+            } catch (Exception e) {
+                log.info("持久化请求数据异常", e);
+            }
+
+            // IDEA 2025.1+ 新增: 在底部状态栏显示请求结果
+            Integer httpCode = fuHttpRequestData.getHttpCode();
+            Long time = fuHttpRequestData.getTime();
+            if (httpCode != null && time != null) {
+                boolean isOk = fuHttpRequestData.isOk();
+                String statusIcon = isOk ? "✓" : "✗";
+                FuColor color = isOk ? FuColor.GREEN : FuColor.RED;
+
+                // 格式化请求时间(精确到毫秒)
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+                String requestTime = sdf.format(new Date());
+
+                cn.fudoc.common.msg.bo.FuMsgBO msgBO = FuMsgBuilder.getInstance()
+                        .text(statusIcon + " 请求完成 | 状态: ")
+                        .text(String.valueOf(httpCode), color)
+                        .text(" | 耗时: ")
+                        .text(time + "ms", FuColor.GREEN)
+                        .text(" | 时间: " + requestTime)
+                        .build();
+                messageComponent.setMsg(msgBO);
+            } else {
+                //切换消息展示
+                messageComponent.switchInfo();
+            }
+        } else {
+            //切换消息展示
+            messageComponent.switchInfo();
+        }
     }
 
 

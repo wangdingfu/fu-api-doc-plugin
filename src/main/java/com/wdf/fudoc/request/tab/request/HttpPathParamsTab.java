@@ -1,5 +1,6 @@
 package com.wdf.fudoc.request.tab.request;
 
+import com.google.common.collect.Lists;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.FuTabComponent;
@@ -49,8 +50,17 @@ public class HttpPathParamsTab implements FuTab, HttpCallback {
         }
         this.httpRequestData = httpRequestData;
         List<KeyValueTableBO> pathVariables = request.getPathVariables();
+
+        // 确保 pathVariables 不为 null
+        if (pathVariables == null) {
+            pathVariables = Lists.newArrayList();
+        }
+
+        // 总是设置数据列表，即使为空也要清空表格
+        this.pathTable.setDataList(pathVariables);
+
+        // 只有当有路径变量时才重置请求URL
         if (CollectionUtils.isNotEmpty(pathVariables)) {
-            this.pathTable.setDataList(pathVariables);
             resetRequestUrlFromTable();
         }
     }

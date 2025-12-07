@@ -38,7 +38,11 @@ public class FuCurlManager {
                 return FuStringUtils.EMPTY;
             }
             CurlRequestBuilder curlRequestBuilder = new CurlRequestBuilder();
-            return (String) HttpRequestPsiConverter.convertFromHttpRequest(newRequest, HttpRequestVariableSubstitutor.getDefault(project, null), (RequestBuilder) curlRequestBuilder);
+            // IDEA 2025.1+ API 变更: getDefault() 的 contextFile 参数不再允许为 null,使用 psiFile
+            HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project, psiFile);
+            Object curlResult = HttpRequestPsiConverter.convertFromHttpRequest(newRequest, substitutor, (RequestBuilder) curlRequestBuilder);
+            // IDEA 2025.1+ API 变更: convertFromHttpRequest 返回 Object,需要调用 toString()
+            return curlResult.toString();
         } catch (Exception e) {
             log.error("生成curl命令失败", e);
             throw new FuDocException("生成curl命令失败");

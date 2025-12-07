@@ -2,7 +2,7 @@ package com.wdf.fudoc.apidoc.view;
 
 import cn.hutool.json.JSONUtil;
 import com.intellij.ide.highlighter.XmlFileType;
-import com.intellij.json.JsonFileType;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -144,7 +144,7 @@ public class FuDocSettingForm extends DialogWrapper {
         this.objectEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null,disposable);
         this.enum1EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null,disposable);
         this.enum2EditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null,disposable);
-        this.settingEditorComponent = FuEditorComponent.create(JsonFileType.INSTANCE, null,disposable);
+        this.settingEditorComponent = FuEditorComponent.create(JsonFileTypeCompat.getJsonFileType(), null,disposable);
         this.yapiEditorComponent = FuEditorComponent.create(XmlFileType.INSTANCE, null,disposable);
 
         //初始化面板

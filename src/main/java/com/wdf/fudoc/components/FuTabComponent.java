@@ -9,7 +9,8 @@ import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
 import com.wdf.fudoc.util.ToolBarUtils;
 import icons.FuDocIcons;
-import k.p.D;
+// TODO: 升级到2025后需要更新fu-api-commons:251.1.8
+// import k.p.D;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;

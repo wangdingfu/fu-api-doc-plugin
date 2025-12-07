@@ -188,8 +188,7 @@ public class FuRequestToolBarManager {
                     addConfigServerPortAction(actionGroup);
                     //新增提交issue mode
                     addIssueAction(actionGroup);
-                    //设置controller中是否展示左侧图标
-                    addControllerIconAction(actionGroup);
+                    // IDEA 2025.1+ 修改: Controller图标开关已移到主工具栏,不再放在弹出菜单中
                     int x = 0, y = 0;
                     InputEvent inputEvent = e.getInputEvent();
                     if (inputEvent instanceof MouseEvent mouseEvent) {
@@ -207,7 +206,7 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
 
-        //添加帮助文档按钮
+        //添加添加帮助文档按钮
         defaultActionGroup.add(new AnAction("Help", "Help", FuDocIcons.FU_DOC) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
@@ -215,12 +214,13 @@ public class FuRequestToolBarManager {
             }
         });
 
+        // IDEA 2025.1+ 新增: Controller左侧图标开关按钮(从弹出菜单移到主工具栏)
+        defaultActionGroup.add(new ToggleAction("Controller左侧图标", "显示/隐藏Controller左侧的图标", AllIcons.Gutter.Colors) {
+            @Override
+            public @NotNull ActionUpdateThread getActionUpdateThread() {
+                return ActionUpdateThread.BGT;
+            }
 
-    }
-
-    private void addControllerIconAction(DefaultActionGroup defaultActionGroup){
-        //添加同步接口文档事件
-        defaultActionGroup.add(new ToggleAction("Controller左侧图标") {
             @Override
             public boolean isSelected(@NotNull AnActionEvent e) {
                 Project project = e.getProject();
@@ -238,8 +238,9 @@ public class FuRequestToolBarManager {
                 instance.saveData(fuDocConfigPO);
             }
         });
-    }
 
+
+    }
 
     private void addIssueAction(DefaultActionGroup defaultActionGroup) {
         DefaultActionGroup issueActionGroup = DefaultActionGroup.createPopupGroup(() -> "提交Issue");

@@ -229,7 +229,9 @@ public class FuEditorComponent implements Disposable {
             WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().setText(""));
             this.editor.setHighlighter(highlighterFactory.createEditorHighlighter(currProject, lightVirtualFile));
         } else {
-            this.content = this.content.replaceAll("\r", "");
+            // IDEA 2025.1+ 修复: 不处理换行符,保持 JSON 内容原样
+            // JSON 格式化已经在外部处理,这里只负责显示
+            // 软换行由编辑器设置控制,不需要修改内容本身
             this.editor.setViewer(false);
             // 重置文本内容
             WriteCommandAction.runWriteCommandAction(currProject, () -> this.editor.getDocument().setText(this.content));

@@ -3,7 +3,7 @@ package com.wdf.fudoc.test.view;
 import com.google.common.collect.Lists;
 import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.icons.AllIcons;
-import com.intellij.json.JsonFileType;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
@@ -65,7 +65,8 @@ public class ToolBarTestForm implements Disposable {
                 .createActionToolbar("FuRequestToolBar", actionGroup, true);
         toolbar.setTargetComponent(toolBarPanel);
         toolbar.setForceMinimumSize(true);
-        toolbar.setLayoutPolicy(ActionToolbar.NOWRAP_LAYOUT_POLICY);
+        // Note: setLayoutPolicy() is deprecated and removed in IDEA 2025.1+
+        // The default behavior is already NOWRAP, so this call is not needed
         Utils.setSmallerFontForChildren(toolbar);
         bulkEditBarPanel.add(toolbar.getComponent(), BorderLayout.EAST);
         return bulkEditBarPanel;
@@ -96,7 +97,7 @@ public class ToolBarTestForm implements Disposable {
 
     private void createUIComponents() {
         this.tablePanel = FuTableComponent.create(FuTableColumnFactory.keyValueColumns(), Lists.newArrayList(), KeyValueTableBO.class).createPanel();
-        this.editPanel = FuEditorComponent.create(JsonFileType.INSTANCE, "",this).getMainPanel();
+        this.editPanel = FuEditorComponent.create(JsonFileTypeCompat.getJsonFileType(), "",this).getMainPanel();
         this.bulkEditPanel = createBulkEditBar();
         this.toolBarPanel = new BorderLayoutPanel();
         this.toolBarPanel.add(createTabPanel(),BorderLayout.CENTER);

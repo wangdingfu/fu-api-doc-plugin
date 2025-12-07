@@ -61,7 +61,16 @@ public class FuBeanCopyCompletion extends CompletionContributor {
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
-        PsiReference reference = position.getParent().getFirstChild().getReference();
+        // IDEA 2025.1+ API 变更: 增加 null 检查,防止 NPE
+        PsiElement parent = position.getParent();
+        if (Objects.isNull(parent)) {
+            return;
+        }
+        PsiElement firstChild = parent.getFirstChild();
+        if (Objects.isNull(firstChild)) {
+            return;
+        }
+        PsiReference reference = firstChild.getReference();
         if (Objects.isNull(reference)) {
             return;
         }
@@ -230,14 +239,21 @@ public class FuBeanCopyCompletion extends CompletionContributor {
         for (PsiElement child : children) {
             if (child instanceof PsiTypeElement) {
                 PsiTypeElement psiTypeElement = (PsiTypeElement) child;
-                PsiElement firstChild = psiTypeElement.getFirstChild();
-                PsiReference reference = firstChild.getReference();
-                if (Objects.isNull(reference)) {
-                    continue;
+                // IDEA 2025.1+ API 变更: 优先使用 PsiTypeElement.getType() 方法获取类型
+                PsiType type = psiTypeElement.getType();
+                if (type instanceof PsiClassType) {
+                    return ((PsiClassType) type).resolve();
                 }
-                PsiElement resolve = reference.resolve();
-                if (resolve instanceof PsiClass) {
-                    return (PsiClass) resolve;
+                // 回退方案: 通过 firstChild 获取引用
+                PsiElement firstChild = psiTypeElement.getFirstChild();
+                if (Objects.nonNull(firstChild)) {
+                    PsiReference reference = firstChild.getReference();
+                    if (Objects.nonNull(reference)) {
+                        PsiElement resolve = reference.resolve();
+                        if (resolve instanceof PsiClass) {
+                            return (PsiClass) resolve;
+                        }
+                    }
                 }
             }
         }

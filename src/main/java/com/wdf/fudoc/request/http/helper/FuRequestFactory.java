@@ -51,7 +51,8 @@ public class FuRequestFactory {
             Project project = httpRequest.getProject();
             //获取psiClass和psiMethod
             HttpRequestTarget requestTarget = httpRequest.getRequestTarget();
-            HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project, null);
+            // IDEA 2025.1+ API 变更: getDefault() 的 contextFile 参数不再允许为 null
+            HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project, httpRequestPsiFile);
             if (Objects.isNull(requestTarget)) {
                 return null;
             }

@@ -3,7 +3,8 @@ package com.wdf.fudoc.request.view;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
+// TODO: IDEA 2025 MemoryUsagePanel API变更
+// import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
@@ -95,7 +96,8 @@ public class FuRequestStatusInfoView {
                 public void layoutContainer(Container target) {
                     super.layoutContainer(target);
                     for (Component component : target.getComponents()) {
-                        if (component instanceof MemoryUsagePanel) {
+                        // TODO: IDEA 2025 MemoryUsagePanel API变更
+                        if (false && component.getClass().getSimpleName().equals("MemoryUsagePanel")) {
                             Rectangle r = component.getBounds();
                             r.y = 0;
                             r.width += SystemInfo.isMac ? 4 : 0;
@@ -119,7 +121,8 @@ public class FuRequestStatusInfoView {
                 public void layoutContainer(Container target) {
                     super.layoutContainer(target);
                     for (Component component : target.getComponents()) {
-                        if (component instanceof MemoryUsagePanel) {
+                        // TODO: IDEA 2025 MemoryUsagePanel API变更
+                        if (false && component.getClass().getSimpleName().equals("MemoryUsagePanel")) {
                             Rectangle r = component.getBounds();
                             r.y = 0;
                             r.width += SystemInfo.isMac ? 4 : 0;

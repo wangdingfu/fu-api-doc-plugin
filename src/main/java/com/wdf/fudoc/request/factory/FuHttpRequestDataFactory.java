@@ -73,6 +73,7 @@ public class FuHttpRequestDataFactory {
         if (Objects.isNull(fuHttpRequestData)) {
             fuHttpRequestData = build(fuDocContext, psiClass, module);
         } else {
+            // 更新域名和端口
             paddingDomain(fuHttpRequestData, module);
         }
         return fuHttpRequestData;
@@ -232,9 +233,15 @@ public class FuHttpRequestDataFactory {
             if (CollectionUtils.isNotEmpty(envConfigList) && FuStringUtils.isNotBlank(envName)) {
                 Optional<ConfigEnvTableBO> first = envConfigList.stream().filter(f -> f.getEnvName().equals(envName)).findFirst();
                 if(first.isPresent()){
+                    ConfigEnvTableBO envConfig = first.get();
                     FuRequestData request = fuHttpRequestData.getRequest();
-                    request.setDomain(first.get().getDomain());
-                    request.setContextPath(null);
+
+                    // 使用工具类构建完整 URL
+                    String domain = com.wdf.fudoc.util.UrlBuildUtils.buildFullUrl(envConfig.getDomain(), envConfig.getPort());
+                    request.setDomain(domain);
+
+                    // 设置上下文路径（规范化处理）
+                    request.setContextPath(com.wdf.fudoc.util.UrlBuildUtils.normalizeContextPath(envConfig.getContextPath()));
                     return;
                 }
             }
@@ -253,6 +260,10 @@ public class FuHttpRequestDataFactory {
         //读取server.servlet.context-path属性 issue: #20
         String configValue = SpringConfigManager.getContextPath(module);
         if (FuStringUtils.isNotBlank(configValue)) {
+            // 确保contextPath不以/开头（在getRequestUrl方法中会处理）
+            if (configValue.startsWith("/")) {
+                configValue = configValue.substring(1);
+            }
             request.setContextPath(configValue);
         }
         request.setDomain(domainUrl);

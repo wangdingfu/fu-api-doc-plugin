@@ -53,7 +53,8 @@ public class FuRequestStorage {
         if (Objects.isNull(httpRequestPsiFile)) {
             return null;
         }
-        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project, null);
+        // IDEA 2025.1+ API 变更: getDefault() 的 contextFile 参数不再允许为 null
+        HttpRequestVariableSubstitutor substitutor = HttpRequestVariableSubstitutor.getDefault(project, httpRequestPsiFile);
         HttpRequestBlock[] requestBlocks = HttpRequestPsiUtils.getRequestBlocks(httpRequestPsiFile);
         for (HttpRequestBlock requestBlock : requestBlocks) {
             HttpRequest request = requestBlock.getRequest();

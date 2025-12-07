@@ -3,3 +3,5 @@
 .qodana
 build
 /src/main/java/com/wdf/fudoc/start/
+.intellijPlatform/
+idea-sandbox

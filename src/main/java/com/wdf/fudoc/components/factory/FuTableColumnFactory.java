@@ -235,7 +235,12 @@ public class FuTableColumnFactory {
         List<Column> columns = Lists.newArrayList();
         columns.add(new BooleanColumn<>("", ConfigEnvTableBO::getSelect, ConfigEnvTableBO::setSelect));
         columns.add(new StringColumn<>("环境名称", ConfigEnvTableBO::getEnvName, ConfigEnvTableBO::setEnvName));
+        columns.add(new StringColumn<>("环境类型", ConfigEnvTableBO::getEnvType, ConfigEnvTableBO::setEnvType));
         columns.add(new StringColumn<>("域名", ConfigEnvTableBO::getDomain, ConfigEnvTableBO::setDomain));
+        columns.add(new StringColumn<>("端口", ConfigEnvTableBO::getPortDisplay, ConfigEnvTableBO::setPortDisplay));
+        columns.add(new StringColumn<>("上下文路径", ConfigEnvTableBO::getContextPath, ConfigEnvTableBO::setContextPath));
+        columns.add(new StringColumn<>("环境描述", ConfigEnvTableBO::getDescription, ConfigEnvTableBO::setDescription));
+        columns.add(new BooleanColumn<>("启用", ConfigEnvTableBO::getEnabled, ConfigEnvTableBO::setEnabled));
         columns.add(new SpringBootColumn<>("作用范围", ConfigEnvTableBO::getApplication, ConfigEnvTableBO::setApplication));
         return columns;
     }

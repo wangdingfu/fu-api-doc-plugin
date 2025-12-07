@@ -2,7 +2,7 @@ package com.wdf.fudoc.components.factory;
 
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.highlighter.XmlFileType;
-import com.intellij.json.JsonFileType;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.testFramework.LightVirtualFile;
 
@@ -32,7 +32,7 @@ public class LightVirtualFileFactory {
             if (fileType instanceof JavaFileType) {
                 return new LightVirtualFile(FILE_NAME + JAVA_SUFFIX);
             }
-            if (fileType instanceof JsonFileType) {
+            if (JsonFileTypeCompat.isJsonFileType(fileType)) {
                 return new LightVirtualFile(FILE_NAME + JSON_SUFFIX);
             }
         }

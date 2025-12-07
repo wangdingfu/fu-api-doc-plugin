@@ -33,5 +33,9 @@ public class FuEditorSettings {
         editorSettings.setAdditionalLinesCount(0);
         // 不显示换行符号
         editorSettings.setCaretRowShown(false);
+        // IDEA 2025.1+ 修复: 启用软换行,避免长 JSON 字符串显示异常
+        editorSettings.setUseSoftWraps(true);
+        // 确保在单词边界换行,而不是在字符串中间
+        editorSettings.setUseCustomSoftWrapIndent(false);
     }
 }
