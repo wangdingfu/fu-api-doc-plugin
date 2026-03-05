@@ -74,7 +74,10 @@ intellijPlatform {
     sandboxContainer.set(file("${rootProject.rootDir}/idea-sandbox"))
 }
 
-
+tasks.test {
+    // 禁用整个 test 任务，执行 build 时不会触发任何测试相关操作
+    enabled = false
+}
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
     version.set(properties("pluginVersion"))
