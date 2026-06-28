@@ -13,6 +13,9 @@
 
 ![img.png](/img/guide.png)
 
+公告
+----
+由于Fu Doc插件在IDEA插件市场因账号不小心修改原因被下架，现已更名Fu Api重新上架[ Fu Api](https://plugins.jetbrains.com/plugin/32256-fuapi)
 
 快速开始
 ----
@@ -66,7 +69,7 @@
 
 - **在线安装:**
   ![img.png](img/install.png)
-    - `File` -> `Setting` -> `Plugins` -> 搜索 `fudoc`
+    - `File` -> `Setting` -> `Plugins` -> 搜索 `Fu Api`
 
 - **手动安装:**
     - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
