@@ -1,51 +1,89 @@
 
-# fu-stock-plugin
+# fu-api-doc-plugin
 
-[![JetBrains Plugins](https://plugins.jetbrains.com/files/29372/913770/icon/default.svg)](https://plugins.jetbrains.com/plugin/29372-fustock)
-[![Version](http://phpstorm.espend.de/badge/19269/version)](https://plugins.jetbrains.com/plugin/29372-fuStock/versions)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/29372-fustock.svg)](https://plugins.jetbrains.com/plugin/29372-fustock)
+[![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/v/19269-fu-doc.svg)](https://plugins.jetbrains.com/plugin/19269-fu-doc)
+[![Version](http://phpstorm.espend.de/badge/19269/version)](https://plugins.jetbrains.com/plugin/19269-fu-doc/versions)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/19269-fu-doc.svg)](https://plugins.jetbrains.com/plugin/19269-fu-doc)
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 
-> FuStock是一个可以实时查看A股和港股股票行情，维护自己股票持仓的炒股插件。支持多分组管理，实时刷新股票行情，股票每日收益信息等
+> Fu Doc是一个根据 `JAVA` 代码一键生成接口文档，并且支持同步接口文档到`ApiFox`、`YApi`、`ShowDoc`等第三方文档系统，支持一键发起HTTP请求的 IDEA插件。你只需要在你的开发工具里安装上Fu Doc这个插件即可，他对你的项目完全零侵入。
 
-> FuStock默认3s刷新一次，只有展开侧边栏并且开启自动刷新时才会实时刷新，当隐藏侧边栏时，会默认停止自动刷新，避免大量无效请求
+查看[Fu Doc官方文档](http://www.fudoc.cn/)详细了解
 
-> 目前仅支持IDEA 2022及以后版本
+![img.png](/img/guide.png)
 
-特性
----
-- 支持自定义维护自选分组，持仓分组（高级展示，自动实时计算收益）
-- 支持今日收益展示，今日收益排行榜展示
-- 支持维护持仓成本，今日买入，卖出等交易，实时计算持仓成本和今日收益
-- 支持隐蔽模式：不展示红绿色字体，隐藏中文，和你的代码融为一体，外人即使盯着看也无法分辨
-- 支持正常模式：高亮红绿色字体，高级展示持仓信息
-- 支持交易费率设置，根据交易费用自动分摊到成本，让你的数据和实际交易保持一致
-- 支持自定义维护中文映射，在隐蔽模式时，页面所有中文内容都可以自定义展示
 
 快速开始
 ----
-![img.png](img/holdings.png)
-![img.png](img/watch-list.png)
-#### 安装插件
-![img.png](/img/install.png)
 
-#### 添加股票分组
-![img.png](img/add-group.png)
-![img.png](img/add-hold.png)
-#### 添加股票
-![img.png](img/add-stock.png)
+##### 生成接口文档
+- 快捷键`ALT+D` 或则 右键菜单选择 `Fu Doc`
+- 去接口文档系统直接将内容粘贴即可（例如ShowDoc或者YApi等）
 
-#### 今日交易
-![img.png](img/sell.png)
 
-![img.png](img/logList.png)
+##### 快速同步接口文档
+- 配置文档系统地址（已配置直接跳过该步骤）
+- 快捷键`ALT+S` 或则 右键菜单选择 `Fu Doc Sync`--->`Sync Api`
+- 在弹框中选中需要同步到文档系统的哪个目录 点击确定即可同步至第三方文档系统
 
-未来计划
+
+##### 快速调试接口
+- 快捷键`ALT+R` 或则 右键菜单选择 `Fu Request`
+- 在弹出窗体中发起请求即可
+
+##### 快速搜索接口
+- 快捷键`CTRL+Alt+\` 或则 `ALT+\` 或则 双击 `Shift` -> 点击`Fu Api`
+- 输入接口地址即可快速搜索
+
+
+##### 代码补全(对象拷贝)
+> 示例：需要将A对象拷贝至B对象
+
+- **通过`A.`唤醒代码补全列表，搜索`beanCopy`并回车**
+- **通过`beanCopy.`唤醒代码补全列表, 选择`B`变量并回车**
+
+
+演示
 ---
-- 新增隐藏模式，去掉颜色以及中文拼音化，只保留关键信息展示，让FuStock与你的代码融为一体
-- 新增大盘指数实时展示，每日全市涨跌数量，成交额展示
-- 支持ETF，基金，黄金等实时数据展示
-- 新增板块数据实时展示
-- 支持买入，卖出记录实时交易信息
-- 支持IDEA底部栏实时展示当天利润
+
+**生成接口文档**
+![演示](https://user-images.githubusercontent.com/100477650/171110724-8a653d36-ee3d-4337-a662-1dc68d400e98.gif)
+
+**发起接口请求**
+![img.png](/img/request.png)
+
+
+**快速搜素接口**
+![img.png](/img/search.png)
+
+**代码补全（对象拷贝）**
+![img.png](/img/beanCopy1.png)
+![img.png](/img/beanCopy2.png)
+
+安装步骤
+---
+
+- **在线安装:**
+  ![img.png](img/install.png)
+    - `File` -> `Setting` -> `Plugins` -> 搜索 `fudoc`
+
+- **手动安装:**
+    - [下载插件（Github下载,速度慢）](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
+    - [下载插件（蓝奏云下载,速度快）](https://wwi.lanzoup.com/b0dy2hktg) 密码：`8vec`
+    - [下载插件（百度云下载）](https://pan.baidu.com/s/1cC7thCMMdcRjh24sqU59tA?pwd=8888) 密码：`8888`
+    - 进入插件市场安装本地插件： `File` -> `Setting` -> `Plugins` -> `Install Plugin from Disk...`
+
+
+
+未来目标
+----
+- 支持快速调试Spring容器中所有对象的方法(解放编写单元测试)
+- 支持团队协作
+
+其他
+---
+- 仅支持IDEA 2020.2以上的版本
+- 鼠标需要在Controller类代码块内 否则有可能会获取不到当前类导致无法生成接口文档
+- 当鼠标停留在方法体内或则选中方法一部分内容在点击生成接口文档. 则只会生成当前方法的接口文档
+- 小伙伴们如果使用有任何问题可以给我提Issues. 我会及时回复并解决
