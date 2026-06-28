@@ -14,9 +14,9 @@ import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.request.tab.settings.GlobalConfigTab;
 import com.wdf.fudoc.request.view.FuRequestSettingView;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.util.FuStringUtils;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;

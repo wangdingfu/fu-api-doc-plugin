@@ -1,18 +1,11 @@
 package com.wdf.fudoc.apidoc.view.tab;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
-import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
-import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiTableData;
-import com.wdf.fudoc.apidoc.sync.strategy.SyncFuDocStrategy;
-import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 
 import javax.swing.*;
-import java.util.List;
 
 /**
  * @author wangdingfu

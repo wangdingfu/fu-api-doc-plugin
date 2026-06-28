@@ -1,11 +1,11 @@
 package com.wdf.fudoc.request;
 
+import cn.fudoc.common.enumtype.FuDocAction;
+import cn.fudoc.common.listener.FuDocActionListener;
 import cn.hutool.core.thread.ThreadUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.project.Project;
-import cn.fudoc.common.listener.FuDocActionListener;
-import cn.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.console.FuLogger;
 import com.wdf.fudoc.request.execute.HttpApiExecutor;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;

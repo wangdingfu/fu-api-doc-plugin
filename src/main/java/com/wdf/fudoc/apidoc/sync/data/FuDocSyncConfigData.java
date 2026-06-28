@@ -3,11 +3,8 @@ package com.wdf.fudoc.apidoc.sync.data;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**

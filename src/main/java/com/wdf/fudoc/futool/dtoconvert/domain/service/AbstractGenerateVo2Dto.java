@@ -2,7 +2,10 @@ package com.wdf.fudoc.futool.dtoconvert.domain.service;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.wdf.fudoc.apidoc.parse.field.FuDocPsiField;
@@ -12,8 +15,8 @@ import com.wdf.fudoc.futool.dtoconvert.application.IGenerateVo2Dto;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GenerateContext;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.SetObjConfigDO;
-import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;

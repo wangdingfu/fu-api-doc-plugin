@@ -1,5 +1,8 @@
 package com.wdf.fudoc.apidoc.view.tab;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.UrlConstants;
+import cn.fudoc.common.enumtype.FuColor;
 import com.google.common.collect.Lists;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
@@ -13,10 +16,7 @@ import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.data.ApiFoxConfigData;
 import com.wdf.fudoc.apidoc.sync.data.ApiFoxProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
-import cn.fudoc.common.base.FuBundle;
 import com.wdf.fudoc.common.FuTab;
-import cn.fudoc.common.constants.UrlConstants;
-import cn.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.PlaceholderTextField;

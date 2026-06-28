@@ -2,8 +2,8 @@ package com.wdf.fudoc.apidoc.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.CommonObjectType;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import lombok.Getter;
 import lombok.Setter;
 

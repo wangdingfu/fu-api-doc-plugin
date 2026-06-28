@@ -1,5 +1,8 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.notification.FuDocNotification;
+import cn.fudoc.common.util.ProjectUtils;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
@@ -13,13 +16,9 @@ import com.wdf.fudoc.apidoc.sync.dto.ShowDocDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.sync.service.ShowDocService;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
-import cn.fudoc.common.base.FuBundle;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.ServiceHelper;
-import cn.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.util.FuDocUtils;
-import com.wdf.fudoc.util.ObjectUtils;
-import cn.fudoc.common.util.ProjectUtils;
 import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;

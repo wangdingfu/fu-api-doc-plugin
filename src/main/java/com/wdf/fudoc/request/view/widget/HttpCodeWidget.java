@@ -1,10 +1,10 @@
 package com.wdf.fudoc.request.view.widget;
 
-import com.wdf.fudoc.apidoc.constant.enumtype.HttpCode;
 import cn.fudoc.common.enumtype.FuColor;
-import cn.fudoc.common.msg.bo.FuMsgBO;
-import com.wdf.fudoc.components.message.FuMessageComponent;
 import cn.fudoc.common.msg.FuMsgBuilder;
+import cn.fudoc.common.msg.bo.FuMsgBO;
+import com.wdf.fudoc.apidoc.constant.enumtype.HttpCode;
+import com.wdf.fudoc.components.message.FuMessageComponent;
 import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 

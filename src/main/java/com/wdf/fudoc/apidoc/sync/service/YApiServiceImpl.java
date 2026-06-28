@@ -1,13 +1,13 @@
 package com.wdf.fudoc.apidoc.sync.service;
 
+import cn.fudoc.common.util.JsonUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.wdf.fudoc.apidoc.sync.dto.*;
-import cn.fudoc.common.util.JsonUtil;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.YApiUtil;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;

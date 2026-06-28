@@ -1,5 +1,10 @@
 package com.wdf.fudoc.apidoc.view;
 
+import cn.fudoc.common.constants.UrlConstants;
+import cn.fudoc.common.enumtype.FuColor;
+import cn.fudoc.common.enumtype.MessageType;
+import cn.fudoc.common.msg.bo.FuMsgBO;
+import cn.fudoc.common.msg.bo.FuMsgItemBO;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
@@ -7,15 +12,10 @@ import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.apidoc.view.tab.ApiFoxSettingTab;
 import com.wdf.fudoc.apidoc.view.tab.ShowDocSettingTab;
 import com.wdf.fudoc.apidoc.view.tab.YApiSettingTab;
-import cn.fudoc.common.constants.UrlConstants;
-import cn.fudoc.common.enumtype.FuColor;
-import cn.fudoc.common.msg.bo.FuMsgBO;
-import cn.fudoc.common.msg.bo.FuMsgItemBO;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
-import cn.fudoc.common.enumtype.MessageType;
 import com.wdf.fudoc.util.FuMessageUtils;
-import lombok.Getter;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;

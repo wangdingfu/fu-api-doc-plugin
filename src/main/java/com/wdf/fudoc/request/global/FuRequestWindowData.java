@@ -3,7 +3,6 @@ package com.wdf.fudoc.request.global;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
-import lombok.Getter;
 
 import java.util.Map;
 import java.util.Objects;

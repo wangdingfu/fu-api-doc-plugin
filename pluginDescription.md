@@ -1,11 +1,10 @@
 <!-- Plugin description -->
 # Generate MarkDown API DOC
 
-
-[&emsp; GitHub   &emsp;|](https://github.com/wangdingfu/fu-api-doc-plugin)
-[&emsp; Document     &emsp;|](https://wangdingfu.github.io/)
-[&emsp; Issues   &emsp;|](https://github.com/wangdingfu/fu-api-doc-plugin/issues)
-[&emsp; Releases &emsp;|](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
+[GitHub|](https://github.com/wangdingfu/fu-api-doc-plugin)
+[Document|](https://wangdingfu.github.io/)
+[Issues|](https://github.com/wangdingfu/fu-api-doc-plugin/issues)
+[Releases|](https://github.com/wangdingfu/fu-api-doc-plugin/releases)
 
 ## English introduction
 > 【fudoc】is an IDEA plugin that generates API documentation entirely based on code. It supports one-click initiation of HTTP requests to debug APIs and also allows for one-click synchronization of API documentation to third-party systems such as YApi, ShowDoc, and Apifox.

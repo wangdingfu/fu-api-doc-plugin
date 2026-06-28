@@ -8,12 +8,10 @@ import com.intellij.ui.BooleanTableCellEditor;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.LocalPathCellEditor;
 import com.wdf.fudoc.components.FuIconListRendererComponent;
-import com.wdf.fudoc.components.JLabelListRendererComponent;
 import com.wdf.fudoc.components.TreeTableCellEditor;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

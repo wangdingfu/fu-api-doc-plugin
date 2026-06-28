@@ -2,7 +2,6 @@ package com.wdf.fudoc.request.view;
 
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.IconManager;
 import com.intellij.ui.PopupHandler;
@@ -11,8 +10,8 @@ import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import lombok.Getter;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;

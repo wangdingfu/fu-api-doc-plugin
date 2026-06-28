@@ -56,7 +56,7 @@ public class ApiListToolWindow extends SimpleToolWindowPanel {
     private List<ApiListItem> cachedApiList = new ArrayList<>();
 
     // 防抖定时器
-    private javax.swing.Timer searchTimer;
+    private Timer searchTimer;
 
     public ApiListToolWindow(@NotNull Project project) {
         super(true, true);
@@ -150,7 +150,7 @@ public class ApiListToolWindow extends SimpleToolWindowPanel {
         searchField = new SearchTextField(true);
 
         // 初始化防抖定时器 (300ms 延迟)
-        searchTimer = new javax.swing.Timer(300, e -> performFilter());
+        searchTimer = new Timer(300, e -> performFilter());
         searchTimer.setRepeats(false);
 
         searchField.addDocumentListener(new javax.swing.event.DocumentListener() {
@@ -721,7 +721,7 @@ public class ApiListToolWindow extends SimpleToolWindowPanel {
      * 复制到剪贴板
      */
     private void copyToClipboard(String text) {
-        java.awt.Toolkit.getDefaultToolkit()
+        Toolkit.getDefaultToolkit()
                 .getSystemClipboard()
                 .setContents(new java.awt.datatransfer.StringSelection(text), null);
     }

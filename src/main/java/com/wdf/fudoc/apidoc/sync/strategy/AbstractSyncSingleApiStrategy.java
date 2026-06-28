@@ -1,7 +1,7 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
+import cn.fudoc.common.util.ProjectUtils;
 import cn.hutool.core.date.DateUtil;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
@@ -15,9 +15,8 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiCategoryDialog;
-import cn.fudoc.common.util.ProjectUtils;
-import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;

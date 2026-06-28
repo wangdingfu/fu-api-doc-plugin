@@ -8,12 +8,11 @@ import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.components.bo.HeaderKeyValueBO;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
-import com.wdf.fudoc.spring.SpringConfigManager;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Map;

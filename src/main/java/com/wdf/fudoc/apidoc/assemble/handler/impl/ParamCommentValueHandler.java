@@ -2,7 +2,6 @@ package com.wdf.fudoc.apidoc.assemble.handler.impl;
 
 import com.wdf.fudoc.apidoc.assemble.handler.BaseParamFieldValueHandler;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.apidoc.constant.enumtype.ValidMessageType;
 import com.wdf.fudoc.apidoc.data.CustomerSettingData;
@@ -11,10 +10,11 @@ import com.wdf.fudoc.apidoc.pojo.bo.SettingValidMessageBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.AnnotationUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ValidateAnnotationUtils;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Optional;

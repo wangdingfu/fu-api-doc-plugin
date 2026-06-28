@@ -1,24 +1,22 @@
 package com.wdf.fudoc.common.exception.report.issue;
 
+import cn.fudoc.common.base.CommonResult;
+import cn.fudoc.common.constants.ApiUrl;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManagerCore;
+import com.intellij.ide.plugins.cl.PluginAwareClassLoader;
 import com.intellij.openapi.application.ApplicationNamesInfo;
 import com.intellij.openapi.application.ex.ApplicationInfoEx;
-import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.extensions.PluginDescriptor;
 import com.intellij.openapi.util.SystemInfo;
-import cn.fudoc.common.base.CommonResult;
 import com.wdf.fudoc.common.FuDocRender;
-import cn.fudoc.common.constants.ApiUrl;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.report.issue.param.IssueBody;
-import org.apache.commons.codec.digest.DigestUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.nio.charset.Charset;
@@ -94,7 +92,7 @@ public abstract class AbstractIssueSubmitter implements IssueSubmitter {
         issueBody.setEncoding(Charset.defaultCharset().displayName());
 
         //插件相关信息
-        IdeaPluginDescriptor pluginDescriptor = PluginManagerCore.getPlugin(PluginId.getId(FuDocConstants.ID));
+        PluginDescriptor pluginDescriptor = getCurrentPluginDescriptor();
         if (Objects.nonNull(pluginDescriptor)) {
             issueBody.setPluginName(pluginDescriptor.getName());
             issueBody.setPluginVersion(pluginDescriptor.getVersion());
@@ -102,6 +100,14 @@ public abstract class AbstractIssueSubmitter implements IssueSubmitter {
         return FuDocRender.render(issueBody, "issue.ftl");
     }
 
+    public static PluginDescriptor getCurrentPluginDescriptor() {
+        ClassLoader classLoader = AbstractIssueSubmitter.class.getClassLoader();
+        if (classLoader instanceof PluginAwareClassLoader pluginClassLoader) {
+            // 直接获取当前插件描述符，无废弃警告
+            return pluginClassLoader.getPluginDescriptor();
+        }
+        return null;
+    }
 
     protected String getAccessToken(String type) {
         Map<String, Object> param = new HashMap<>();

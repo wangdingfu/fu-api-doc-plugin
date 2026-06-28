@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.sync;
 
+import cn.fudoc.common.notification.FuDocNotification;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
@@ -9,7 +10,6 @@ import com.wdf.fudoc.apidoc.sync.strategy.SyncShowDocStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncToApiFoxStrategy;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncToYApiStrategy;
 import com.wdf.fudoc.common.ServiceHelper;
-import cn.fudoc.common.notification.FuDocNotification;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

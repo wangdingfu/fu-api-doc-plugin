@@ -2,16 +2,16 @@ package com.wdf.fudoc.apidoc.view;
 
 import cn.hutool.json.JSONUtil;
 import com.intellij.ide.highlighter.XmlFileType;
-import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.apidoc.data.CustomerSettingData;
 import com.wdf.fudoc.apidoc.data.SettingData;
-import com.wdf.fudoc.util.FastJsonUtils;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.wdf.fudoc.components.FuEditorComponent;
-import lombok.Getter;
+import com.wdf.fudoc.util.FastJsonUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

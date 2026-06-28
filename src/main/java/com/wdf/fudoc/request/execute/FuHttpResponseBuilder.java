@@ -7,9 +7,9 @@ import cn.hutool.http.HttpUtil;
 import com.wdf.fudoc.request.constants.enumtype.ResponseType;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.HttpResponseUtil;
 import org.apache.commons.collections.MapUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;

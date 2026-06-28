@@ -2,17 +2,17 @@ package com.wdf.fudoc.apidoc.pojo.context;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
-import com.wdf.fudoc.apidoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.apidoc.config.EnumSettingConfig;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.data.CustomerSettingData;
 import com.wdf.fudoc.apidoc.data.SettingData;
 import com.wdf.fudoc.apidoc.factory.ObjectInfoDescFactory;
+import com.wdf.fudoc.apidoc.pojo.bo.FilterFieldBO;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 

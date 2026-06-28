@@ -6,8 +6,8 @@ import com.wdf.fudoc.components.factory.TableCellEditorFactory;
 import com.wdf.fudoc.util.LambdaUtils;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * @author wangdingfu

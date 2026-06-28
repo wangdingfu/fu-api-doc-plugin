@@ -1,13 +1,18 @@
 package com.wdf.fudoc.spring.handler;
 
 import cn.hutool.core.io.IoUtil;
+import com.wdf.fudoc.spring.SpringConfigFileConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * YAML配置文件处理器
@@ -22,6 +27,9 @@ public class YamlConfigFileHandler extends AbstractConfigFileHandler {
      * 存储配置的扁平化Map
      */
     private final Map<String, Object> configMap = new LinkedHashMap<>();
+
+    private final Map<String, Map<String, String>> otherEnvConfig = new LinkedHashMap<>();
+
 
     public YamlConfigFileHandler(InputStream inputStream) {
         parseInputStream(inputStream);
@@ -51,17 +59,23 @@ public class YamlConfigFileHandler extends AbstractConfigFileHandler {
 
             // 使用SnakeYAML解析
             Yaml yaml = new Yaml();
-            Object yamlObject = yaml.load(content);
-
-            if (yamlObject != null) {
-                flattenYaml("", yamlObject, configMap);
-                log.debug("YAML解析完成，共{}个配置项", configMap.size());
-            } else {
-                log.debug("YAML解析结果为null");
-            }
-
+            Iterable<Object> objects = yaml.loadAll(content);
+            objects.forEach(yamlObject -> {
+                if (yamlObject != null) {
+                    Map<String, Object> yamlConfigMap = flattenYaml("", yamlObject);
+                    Object profiles = yamlConfigMap.get(SpringConfigFileConstants.PROFILES);
+                    if(Objects.nonNull(profiles)){
+                        otherEnvConfig.put(profiles.toString(),toConfigMap(yamlConfigMap));
+                    }else {
+                        configMap.putAll(yamlConfigMap);
+                    }
+                    log.debug("YAML解析完成，共{}个配置项", configMap.size());
+                } else {
+                    log.debug("YAML解析结果为null");
+                }
+            });
         } catch (Exception e) {
-            log.error("读取YAML配置文件异常", e);
+            log.info("读取YAML配置文件异常", e);
         }
     }
 
@@ -69,11 +83,11 @@ public class YamlConfigFileHandler extends AbstractConfigFileHandler {
      * 递归扁平化YAML对象
      */
     @SuppressWarnings("unchecked")
-    private void flattenYaml(String prefix, Object obj, Map<String, Object> result) {
+    private Map<String, Object> flattenYaml(String prefix, Object obj) {
         if (obj == null) {
-            return;
+            return new LinkedHashMap<>();
         }
-
+        Map<String, Object> result = new LinkedHashMap<>();
         if (obj instanceof Map) {
             Map<String, Object> map = (Map<String, Object>) obj;
             for (Map.Entry<String, Object> entry : map.entrySet()) {
@@ -81,7 +95,7 @@ public class YamlConfigFileHandler extends AbstractConfigFileHandler {
                 Object value = entry.getValue();
 
                 if (value instanceof Map) {
-                    flattenYaml(key, value, result);
+                    result.putAll(flattenYaml(key, value));
                 } else if (value instanceof Iterable) {
                     handleArray(key, value, result);
                 } else {
@@ -93,6 +107,7 @@ public class YamlConfigFileHandler extends AbstractConfigFileHandler {
         } else {
             result.put(prefix.isEmpty() ? "root" : prefix, obj);
         }
+        return result;
     }
 
     /**
@@ -103,7 +118,7 @@ public class YamlConfigFileHandler extends AbstractConfigFileHandler {
         for (Object item : (Iterable<?>) array) {
             String key = prefix + "[" + index + "]";
             if (item instanceof Map || item instanceof Iterable) {
-                flattenYaml(key, item, result);
+                result.putAll(flattenYaml(key, item));
             } else {
                 result.put(key, item);
             }
@@ -119,6 +134,11 @@ public class YamlConfigFileHandler extends AbstractConfigFileHandler {
 
     @Override
     public Map<String, String> getAllConfig() {
+        return toConfigMap(configMap);
+    }
+
+
+    private Map<String, String> toConfigMap(Map<String, Object> configMap){
         Map<String, String> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : configMap.entrySet()) {
             Object value = entry.getValue();
@@ -128,5 +148,11 @@ public class YamlConfigFileHandler extends AbstractConfigFileHandler {
             }
         }
         return result;
+    }
+
+
+    @Override
+    public Map<String, Map<String, String>> getOtherEnvConfig() {
+        return otherEnvConfig;
     }
 }

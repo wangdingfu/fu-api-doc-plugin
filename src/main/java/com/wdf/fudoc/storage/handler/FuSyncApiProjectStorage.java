@@ -1,6 +1,5 @@
 package com.wdf.fudoc.storage.handler;
 
-import com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting;
 import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.storage.enumtype.FuStorageType;
 

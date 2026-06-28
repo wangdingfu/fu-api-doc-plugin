@@ -10,7 +10,6 @@ import com.wdf.fudoc.components.listener.FuStatusLabelListener;
 import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
 import com.wdf.fudoc.request.dialog.EnvQuickConfigDialog;
-import com.wdf.fudoc.request.http.FuRequest;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
@@ -22,9 +21,9 @@ import com.wdf.fudoc.request.view.FuRequestSettingView;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
 import com.wdf.fudoc.spring.SpringBootEnvModuleInfo;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.util.FuStringUtils;
 import icons.FuDocIcons;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;
@@ -53,8 +52,11 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
     public EnvWidget(Project project, RequestTabView requestTabView, FuRequestCallback fuRequestCallback) {
         this.requestTabView = requestTabView;
         this.configPO = FuRequestConfigStorage.get(project).readData();
-        this.fuStatusLabel = new FuStatusLabel(getEnvName(), FuDocIcons.SPRING_BOOT, this);
+        String currentEnv = getEnvName();
+        this.fuStatusLabel = new FuStatusLabel(currentEnv, FuDocIcons.SPRING_BOOT, this);
         this.fuRequestCallback = fuRequestCallback;
+        // 自动选择新添加的环境（更新配置，但不再调用refresh）
+        updateEnvironmentConfig(currentEnv);
     }
 
 
@@ -77,7 +79,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
     public List<BasePopupMenuItem> getList() {
         List<BasePopupMenuItem> envList = Lists.newArrayList(
                 new BasePopupMenuItem(AllIcons.General.Settings, CONFIG_ENV, false),
-                new BasePopupMenuItem(AllIcons.General.Add, "+ 添加环境", false)
+                new BasePopupMenuItem(AllIcons.General.Add, "添加环境", false)
         );
         getEnvConfigList().forEach(f -> {
             // 根据环境类型显示不同的图标
@@ -111,7 +113,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
             return;
         }
 
-        if ("+ 添加环境".equals(text)) {
+        if ("添加环境".equals(text)) {
             // 显示快速添加环境对话框
             ConfigEnvTableBO newEnv = EnvQuickConfigDialog.showEnvConfigDialog(module.getProject(), configPO.getEnvConfigList());
             if (newEnv != null) {
@@ -126,7 +128,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
                 this.fuStatusLabel.setText(newEnv.getEnvName());
 
                 // 自动选择新添加的环境（更新配置，但不再调用refresh）
-                updateEnvironmentConfig(newEnv.getEnvName(), module);
+                updateEnvironmentConfig(newEnv.getEnvName());
             }
             return;
         }
@@ -154,7 +156,7 @@ public class EnvWidget implements FuWidget, FuStatusLabelListener {
     /**
      * 更新环境配置
      */
-    private void updateEnvironmentConfig(String envName, Module module) {
+    private void updateEnvironmentConfig(String envName) {
         List<ConfigEnvTableBO> envConfigList = getEnvConfigList();
         if (CollectionUtils.isEmpty(envConfigList)) {
             return;

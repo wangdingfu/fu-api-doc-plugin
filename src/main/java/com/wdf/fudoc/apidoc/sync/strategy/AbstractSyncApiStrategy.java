@@ -1,5 +1,11 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.MessageConstants;
+import cn.fudoc.common.enumtype.FuDocAction;
+import cn.fudoc.common.listener.FuDocActionListener;
+import cn.fudoc.common.notification.FuDocNotification;
+import cn.fudoc.common.util.ProjectUtils;
 import com.google.common.collect.Lists;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -15,20 +21,14 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
-import cn.fudoc.common.base.FuBundle;
-import cn.fudoc.common.listener.FuDocActionListener;
-import cn.fudoc.common.constants.MessageConstants;
-import cn.fudoc.common.enumtype.FuDocAction;
-import cn.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableDisableListener;
 import com.wdf.fudoc.util.FuDocViewUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.GenFuDocUtils;
-import cn.fudoc.common.util.ProjectUtils;
 import com.wdf.fudoc.util.ShowSettingUtils;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;

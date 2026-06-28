@@ -1,6 +1,6 @@
 package com.wdf.fudoc.util;
 
-import com.wdf.fudoc.compat.JsonFileTypeCompat;
+import cn.fudoc.common.util.ProjectUtils;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileTypes.FileType;
@@ -9,8 +9,8 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.util.LocalTimeCounter;
-import cn.fudoc.common.util.ProjectUtils;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 
 import java.util.Objects;
 

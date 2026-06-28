@@ -1,12 +1,12 @@
 package com.wdf.fudoc.apidoc.service;
 
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.apidoc.helper.EnumParseHelper;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
-import lombok.extern.slf4j.Slf4j;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**

@@ -1,26 +1,26 @@
 package com.wdf.fudoc.request.tab.request;
 
 import com.google.common.collect.Lists;
-import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.common.FuTab;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.tab.AbstractBulkEditTabLinkage;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.ChooseFileTableUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import icons.FuDocIcons;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;

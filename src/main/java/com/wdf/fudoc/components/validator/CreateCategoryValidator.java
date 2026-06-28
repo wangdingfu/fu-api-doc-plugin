@@ -1,11 +1,11 @@
 package com.wdf.fudoc.components.validator;
 
-import com.intellij.openapi.ui.InputValidatorEx;
-import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import cn.fudoc.common.base.FuBundle;
 import cn.fudoc.common.constants.MessageConstants;
-import org.apache.commons.collections.CollectionUtils;
+import com.intellij.openapi.ui.InputValidatorEx;
+import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

@@ -2,9 +2,9 @@ package com.wdf.fudoc.components.factory;
 
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.highlighter.XmlFileType;
-import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.testFramework.LightVirtualFile;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 
 import java.util.Objects;
 

@@ -1,5 +1,6 @@
 package com.wdf.fudoc.components;
 
+import cn.fudoc.common.util.ProjectUtils;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -8,7 +9,6 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.wdf.fudoc.components.listener.ChooseFileListener;
-import cn.fudoc.common.util.ProjectUtils;
 
 import java.io.File;
 
@@ -48,12 +48,7 @@ public class ChooseFileComponents {
      * @param listener 选择文件监听器
      */
     public void chooseFile(ChooseFileListener listener) {
-        FileChooserDescriptor descriptor = new FileChooserDescriptor(false, true, false, false, false, false) {
-            @Override
-            public boolean isFileSelectable(VirtualFile file) {
-                return listener.isFileSelectable(file);
-            }
-        };
+        FileChooserDescriptor descriptor = new FileChooserDescriptor(false, true, false, false, false, false).withFileFilter(listener::isFileSelectable);
         descriptor.setTitle(title);
         descriptor.setDescription(message);
         String oldPath = getOldPath();

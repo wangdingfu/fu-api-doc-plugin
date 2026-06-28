@@ -1,22 +1,16 @@
 <idea-plugin>
-    <id>com.wdf.api</id>
-    <name>FuDoc</name>
-    <version>251.1.8.9</version>
+    <id>cn.wdf.api</id>
+    <name>FuApi</name>
+
     <vendor email="wangdingfu1024@163.com" url="https://github.com/wangdingfu">WANG DINGFU</vendor>
 
-    <description>
-        <![CDATA[ Description will be added by gradle build]]>
-    </description>
+
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="251.18488"/>
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
-    <depends>JavaScript</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
-    <depends>com.jetbrains.restClient</depends>
     <depends>org.jetbrains.idea.maven</depends>
-    <depends>com.intellij.modules.json</depends>
 
 
     <extensions defaultExtensionNs="com.intellij">
@@ -91,15 +85,16 @@
                     secondary="false"
                     doNotActivateOnStart="true"
                     order="last"
+                    hideTitle="true"
                     factoryClass="com.wdf.fudoc.request.view.toolwindow.FuDocToolWindowFactory"/>
 
-        <toolWindow id="Fu API List"
-                    icon="FuDocIcons.HTTP"
-                    anchor="right"
-                    secondary="false"
-                    doNotActivateOnStart="true"
-                    order="last"
-                    factoryClass="com.wdf.fudoc.apilist.view.ApiListToolWindowFactory"/>
+<!--        <toolWindow id="Fu API List"-->
+<!--                    icon="FuDocIcons.HTTP"-->
+<!--                    anchor="right"-->
+<!--                    secondary="false"-->
+<!--                    doNotActivateOnStart="true"-->
+<!--                    order="last"-->
+<!--                    factoryClass="com.wdf.fudoc.apilist.view.ApiListToolWindowFactory"/>-->
 
         <!--
                 <toolWindow id="Fu Console"
@@ -108,7 +103,7 @@
                             secondary="false"
                             doNotActivateOnStart="false"
                             order="last"
-                            factoryClass="com.wdf.fudoc.request.view.toolwindow.FuRequestConsoleToolWindowFactory"/>-->
+                            factoryClass="com.wdf.toolwindow.view.request.com.wdf.fudoc.FuRequestConsoleToolWindowFactory"/>-->
 
 
         <!-- provider -->
@@ -160,11 +155,11 @@
             <action id="fudoc.http.request" class="com.wdf.fudoc.request.action.RequestAction" text="Fu Request">
                 <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
             </action>
-            <action id="fudoc.http.request.curl" class="com.wdf.fudoc.request.action.toolbar.CopyCurlAction"
-                    text="Gen Curl">
-                <keyboard-shortcut keymap="$default" first-keystroke="alt C"/>
-            </action>
-            <!--            <action id="fudoc.http.request.http" class="com.wdf.fudoc.request.http.action.RequestHttpAction" text="Fu Http">
+<!--            <action id="fudoc.http.request.curl" class="com.wdf.fudoc.request.action.toolbar.CopyCurlAction"-->
+<!--                    text="Gen Curl">-->
+<!--                <keyboard-shortcut keymap="$default" first-keystroke="alt C"/>-->
+<!--            </action>-->
+            <!--            <action id="fudoc.http.request.http" class="com.wdf.action.http.request.com.wdf.fudoc.RequestHttpAction" text="Fu Http">
                             <keyboard-shortcut keymap="$default" first-keystroke="alt shift R"/>
                         </action>-->
             <separator/>
@@ -186,17 +181,17 @@
             </action>
         </group>
 
-<!--
+        <!--
 
-        &lt;!&ndash; 测试功能点相关动作 &ndash;&gt;
-        <group id="wdf.fudoc.test" popup="false" compact="true">
-            <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
-            <action id="com.fudoc.test.request" class="com.wdf.fudoc.test.action.TestAction" text="Test"
-                    description="Test"/>
-            <action id="com.fudoc.test.table" class="com.wdf.fudoc.test.action.TestTableAction" text="Test Table"
-                    description="Test table"/>
-        </group>
--->
+                &lt;!&ndash; 测试功能点相关动作 &ndash;&gt;
+                <group id="wdf.fudoc.test" popup="false" compact="true">
+                    <add-to-group group-id="wdf.fudoc.apidoc" anchor="last"/>
+                    <action id="com.fudoc.test.request" class="com.wdf.action.test.com.wdf.fudoc.TestAction" text="Test"
+                            description="Test"/>
+                    <action id="com.fudoc.test.table" class="com.wdf.action.test.com.wdf.fudoc.TestTableAction" text="Test Table"
+                            description="Test table"/>
+                </group>
+        -->
 
 
         <!-- 魔法棒格式化json动作  -->

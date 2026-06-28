@@ -1,8 +1,8 @@
 package com.wdf.fudoc.apidoc.parse.object.impl;
 
 import com.intellij.psi.PsiType;
-import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.fudoc.apidoc.constant.enumtype.CommonObjectType;
+import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.fudoc.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.fudoc.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;

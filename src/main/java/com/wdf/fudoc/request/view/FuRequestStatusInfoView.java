@@ -3,15 +3,9 @@ package com.wdf.fudoc.request.view;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
-// TODO: IDEA 2025 MemoryUsagePanel API变更
-// import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.widget.FuWidget;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import com.wdf.fudoc.request.view.widget.HttpCodeWidget;
-import com.wdf.fudoc.request.view.widget.HttpContentSizeWidget;
-import com.wdf.fudoc.request.view.widget.HttpCookieWidget;
-import com.wdf.fudoc.request.view.widget.HttpTimeWidget;
 import lombok.Getter;
 
 import javax.swing.*;

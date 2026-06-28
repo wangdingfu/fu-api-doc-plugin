@@ -1,18 +1,18 @@
 package com.wdf.fudoc.test.view;
 
 import com.google.common.collect.Lists;
-import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.GuiUtils;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.util.ui.JBUI;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
+import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTabComponent;
+import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
-import com.wdf.fudoc.components.FuEditorComponent;
-import com.wdf.fudoc.components.FuTableComponent;
 import icons.FuDocIcons;
 import lombok.Getter;
 

@@ -1,10 +1,10 @@
 package com.wdf.fudoc.common.exception.report.issue;
 
+import cn.fudoc.common.constants.UrlConstants;
+import cn.fudoc.common.enumtype.IssueSource;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import cn.fudoc.common.constants.UrlConstants;
-import cn.fudoc.common.enumtype.IssueSource;
 import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;

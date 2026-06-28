@@ -1,5 +1,7 @@
 package com.wdf.fudoc.request.view.toolwindow;
 
+import cn.fudoc.common.enumtype.FuColor;
+import cn.fudoc.common.msg.FuMsgBuilder;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -11,8 +13,6 @@ import com.wdf.fudoc.common.datakey.FuDocDataKey;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
-import cn.fudoc.common.msg.FuMsgBuilder;
-import cn.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.SendRequestHandler;
 import com.wdf.fudoc.request.callback.FuRequestCallback;

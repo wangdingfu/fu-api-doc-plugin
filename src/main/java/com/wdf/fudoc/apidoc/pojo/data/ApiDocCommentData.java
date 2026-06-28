@@ -2,13 +2,14 @@ package com.wdf.fudoc.apidoc.pojo.data;
 
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.CommentTagType;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wangdingfu

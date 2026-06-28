@@ -11,7 +11,6 @@ import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.navigation.recent.ProjectRecentApi;
-import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.util.FuApiUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;

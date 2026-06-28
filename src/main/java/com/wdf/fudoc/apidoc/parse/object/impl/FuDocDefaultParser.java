@@ -20,10 +20,10 @@ import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.AnnotationUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 

@@ -1,12 +1,16 @@
 package com.wdf.fudoc.request.view.provider;
 
+import cn.fudoc.common.storage.FuDocConfigStorage;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.content.Content;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
@@ -14,7 +18,6 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
-import cn.fudoc.common.storage.FuDocConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;

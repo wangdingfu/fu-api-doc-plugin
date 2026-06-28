@@ -1,9 +1,10 @@
 package com.wdf.fudoc.apidoc.view.tab;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.UrlConstants;
+import cn.fudoc.common.enumtype.FuColor;
 import com.google.common.collect.Lists;
 import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.ui.JBPopupMenu;
-import com.intellij.openapi.ui.messages.MessageDialog;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.tabs.TabInfo;
@@ -13,23 +14,16 @@ import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.data.*;
-import cn.fudoc.common.base.FuBundle;
 import com.wdf.fudoc.common.FuTab;
-import cn.fudoc.common.constants.UrlConstants;
-import cn.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.PlaceholderTextField;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuViewListener;
-import cn.fudoc.common.util.PopupUtils;
 import icons.FuDocIcons;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.List;
 import java.util.Objects;
 
 /**

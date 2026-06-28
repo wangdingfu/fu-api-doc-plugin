@@ -1,9 +1,9 @@
 package com.wdf.fudoc.apidoc.data;
 
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ResourceUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 

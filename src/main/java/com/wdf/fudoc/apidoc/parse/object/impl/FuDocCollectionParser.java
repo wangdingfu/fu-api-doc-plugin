@@ -5,15 +5,15 @@ import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.fudoc.apidoc.constant.enumtype.CommonObjectType;
+import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.fudoc.apidoc.mock.real.JsonRealDataHandler;
 import com.wdf.fudoc.apidoc.mock.real.MockRealData;
-import com.wdf.fudoc.common.constant.FuDocConstants;
-import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
-import com.wdf.fudoc.apidoc.constant.enumtype.CommonObjectType;
 import com.wdf.fudoc.apidoc.parse.ObjectParserExecutor;
 import com.wdf.fudoc.apidoc.parse.object.AbstractApiDocObjectParser;
 import com.wdf.fudoc.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;

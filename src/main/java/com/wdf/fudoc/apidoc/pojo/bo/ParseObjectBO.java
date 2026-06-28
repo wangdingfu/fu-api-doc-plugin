@@ -5,11 +5,10 @@ import com.wdf.fudoc.apidoc.constant.enumtype.ParamType;
 import com.wdf.fudoc.apidoc.mock.real.MockRealData;
 import com.wdf.fudoc.apidoc.parse.field.FuDocField;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
-import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.MapUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Map;
 

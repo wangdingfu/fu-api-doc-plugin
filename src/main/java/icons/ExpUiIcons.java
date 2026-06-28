@@ -1,6 +1,7 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package icons;
 
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.IconManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +13,7 @@ import javax.swing.*;
  */
 public final class ExpUiIcons {
   private static @NotNull Icon load(@NotNull String path, int cacheKey, int flags) {
-    return IconManager.getInstance().loadRasterizedIcon(path, ExpUiIcons.class.getClassLoader(), cacheKey, flags);
+    return IconLoader.getIcon(path, ExpUiIcons.class);
   }
 
   public static final class Actions {

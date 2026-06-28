@@ -7,12 +7,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.common.exception.FuDocException;
-import lombok.extern.slf4j.Slf4j;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.nio.charset.Charset;
-import java.util.Collections;
 import java.util.List;
 
 /**

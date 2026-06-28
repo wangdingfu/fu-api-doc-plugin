@@ -8,9 +8,9 @@ import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.po.GlobalPreScriptPO;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.text.NumberFormat;
 import java.util.Map;

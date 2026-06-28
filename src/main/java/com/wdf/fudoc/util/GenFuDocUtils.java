@@ -6,7 +6,6 @@ import com.wdf.fudoc.apidoc.assemble.AssembleServiceExecutor;
 import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
 import com.wdf.fudoc.apidoc.parse.FuDocClassParser;
 import com.wdf.fudoc.apidoc.parse.FuDocClassParserImpl;
-import com.wdf.fudoc.apidoc.pojo.bo.RootParamBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;

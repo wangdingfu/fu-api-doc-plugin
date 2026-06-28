@@ -2,12 +2,12 @@ package com.wdf.fudoc.apidoc.pojo.data;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiAnnotation;
+import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.apidoc.pojo.data.annotation.*;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.Map;

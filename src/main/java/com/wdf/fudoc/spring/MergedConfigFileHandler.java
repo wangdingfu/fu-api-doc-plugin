@@ -3,12 +3,7 @@ package com.wdf.fudoc.spring;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 合并后的配置文件处理器
@@ -80,6 +75,10 @@ public class MergedConfigFileHandler {
             }
 
             log.debug("添加环境配置: {}", envName);
+            Map<String, String> configs = envConfigs.get(envName);
+            if(MapUtils.isNotEmpty(configs)){
+                config.putAll(configs);
+            }
             envConfigs.put(envName, config);
             updateMergedConfig(envName);
         } catch (Exception e) {
@@ -143,10 +142,9 @@ public class MergedConfigFileHandler {
      */
     private void updateMergedConfig(String env) {
         try {
-            Map<String, String> merged = new LinkedHashMap<>();
 
             // 1. 先添加主配置作为基础
-            merged.putAll(baseConfig);
+            Map<String, String> merged = new LinkedHashMap<>(baseConfig);
 
             // 2. 再添加环境特定配置（会覆盖主配置中的相同项）
             Map<String, String> envConfig = envConfigs.get(env);

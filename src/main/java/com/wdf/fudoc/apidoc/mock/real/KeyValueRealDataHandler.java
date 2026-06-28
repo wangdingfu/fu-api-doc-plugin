@@ -1,8 +1,8 @@
 package com.wdf.fudoc.apidoc.mock.real;
 
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
-import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;

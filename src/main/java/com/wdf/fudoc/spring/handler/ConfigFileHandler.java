@@ -1,5 +1,6 @@
 package com.wdf.fudoc.spring.handler;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,4 +18,13 @@ public interface ConfigFileHandler {
      * 获取所有配置
      */
     Map<String, String> getAllConfig();
+
+
+    /**
+     * 获取当前配置中其他环境的所有配置
+     */
+    default Map<String, Map<String, String>> getOtherEnvConfig() {
+        //仅yaml 需要考虑实现
+        return null;
+    }
 }

@@ -1,6 +1,5 @@
 package com.wdf.fudoc.test.action.editor;
 
-import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
@@ -8,9 +7,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.compat.JsonFileTypeCompat;
 import icons.FuDocIcons;
-import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

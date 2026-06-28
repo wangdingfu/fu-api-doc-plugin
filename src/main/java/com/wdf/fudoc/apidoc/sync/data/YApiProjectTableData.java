@@ -1,12 +1,9 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
-import com.google.common.collect.Lists;
-import com.wdf.fudoc.components.bo.TreePathBO;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * yapi项目配置

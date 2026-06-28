@@ -1,20 +1,17 @@
 package com.wdf.fudoc.request.manager;
 
+import cn.fudoc.common.util.JsonUtil;
 import cn.hutool.core.util.IdUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.wdf.fudoc.request.global.GlobalRequestData;
-import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.state.FuRequestState;
 import com.wdf.fudoc.request.view.HttpDialogView;
-import com.wdf.fudoc.storage.FuStorageExecutor;
-import com.wdf.fudoc.storage.handler.FuRequestStorage;
-import cn.fudoc.common.util.JsonUtil;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

@@ -2,12 +2,10 @@ package com.wdf.fudoc.components.column;
 
 import com.wdf.fudoc.common.base.FuFunction;
 import com.wdf.fudoc.components.FuTableComboBoxRenderer;
-import com.wdf.fudoc.components.JLabelListRendererComponent;
 import com.wdf.fudoc.components.factory.TableCellEditorFactory;
 import com.wdf.fudoc.util.LambdaUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;

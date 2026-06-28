@@ -1,18 +1,8 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
 import com.intellij.psi.PsiClass;
-import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
-import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
-import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
-import com.wdf.fudoc.apidoc.sync.dto.AddApiCategoryDTO;
-import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
-import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
-import com.wdf.fudoc.apidoc.sync.dto.ApiStructureTreeDTO;
-import com.wdf.fudoc.common.ServiceHelper;
-
-import java.util.List;
 
 
 /**

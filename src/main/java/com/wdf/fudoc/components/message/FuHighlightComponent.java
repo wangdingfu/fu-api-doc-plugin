@@ -1,5 +1,7 @@
 package com.wdf.fudoc.components.message;
 
+import cn.fudoc.common.enumtype.MessageType;
+import cn.fudoc.common.msg.bo.FuMsgItemBO;
 import com.google.common.collect.Lists;
 import com.intellij.ide.ui.AntialiasingType;
 import com.intellij.ide.ui.UISettings;
@@ -7,12 +9,10 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.paint.LinePainter2D;
 import com.intellij.util.ui.GraphicsUtil;
-import cn.fudoc.common.msg.bo.FuMsgItemBO;
-import cn.fudoc.common.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nls;
 
 import javax.accessibility.Accessible;

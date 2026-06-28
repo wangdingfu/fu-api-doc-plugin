@@ -1,6 +1,5 @@
 package com.wdf.fudoc.request.view.widget;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.util.ui.JBUI;

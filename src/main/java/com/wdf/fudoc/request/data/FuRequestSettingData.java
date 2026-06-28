@@ -1,10 +1,10 @@
 package com.wdf.fudoc.request.data;
 
+import cn.fudoc.common.util.ProjectUtils;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.constants.enumtype.HeaderScope;
 import com.wdf.fudoc.request.pojo.CommonHeader;
-import cn.fudoc.common.util.ProjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;

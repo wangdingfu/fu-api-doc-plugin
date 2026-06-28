@@ -1,15 +1,15 @@
 package com.wdf.fudoc.components.factory;
 
-import com.intellij.openapi.util.ActionCallback;
+import cn.fudoc.common.util.ProjectUtils;
+import com.intellij.ui.tabs.JBTabs;
+import com.intellij.ui.tabs.JBTabsFactory;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.TabsListener;
-import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import com.wdf.fudoc.common.FuTab;
-import cn.fudoc.common.util.ProjectUtils;
-import lombok.Getter;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +26,7 @@ public class FuTabBuilder {
     private final JPanel rootPanel;
 
     @Getter
-    private final JBTabsImpl tabs;
+    private final JBTabs tabs;
 
     private final Map<String, FuTab> fuTabMap = new ConcurrentHashMap<>();
 
@@ -34,7 +34,7 @@ public class FuTabBuilder {
 
     public FuTabBuilder() {
         this.rootPanel = new BorderLayoutPanel();
-        this.tabs = new JBTabsImpl(ProjectUtils.getCurrProject());
+        this.tabs = JBTabsFactory.createTabs(ProjectUtils.getCurrProject());
     }
 
     public static FuTabBuilder getInstance() {
@@ -50,7 +50,6 @@ public class FuTabBuilder {
 
 
     public void revalidate(){
-        this.tabs.revalidateAndRepaint();
     }
 
     public void removeTab(String text){

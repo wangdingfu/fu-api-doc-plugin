@@ -1,8 +1,8 @@
 package com.wdf.fudoc.common.listener;
 
+import cn.fudoc.common.service.FuDocSetupAble;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.ProjectActivity;
-import cn.fudoc.common.service.FuDocSetupAble;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import lombok.extern.slf4j.Slf4j;

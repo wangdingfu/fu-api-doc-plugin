@@ -18,11 +18,11 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
+import com.wdf.fudoc.util.FuStringUtils;
 import groovy.util.logging.Slf4j;
 import icons.FuDocIcons;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

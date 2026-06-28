@@ -3,7 +3,6 @@ package com.wdf.fudoc.apidoc.service;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
-import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamType;
 import com.wdf.fudoc.apidoc.helper.AssembleHelper;
 import com.wdf.fudoc.apidoc.parse.ObjectParserExecutor;
@@ -12,6 +11,7 @@ import com.wdf.fudoc.apidoc.pojo.bo.ParseObjectBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.FuDocRender;
 
 import java.util.List;
 

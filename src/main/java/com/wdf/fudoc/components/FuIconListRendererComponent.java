@@ -1,7 +1,5 @@
 package com.wdf.fudoc.components;
 
-import com.intellij.icons.AllIcons;
-
 import javax.swing.*;
 import java.awt.*;
 

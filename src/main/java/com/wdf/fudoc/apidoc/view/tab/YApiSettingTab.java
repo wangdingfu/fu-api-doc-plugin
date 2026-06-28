@@ -1,5 +1,10 @@
 package com.wdf.fudoc.apidoc.view.tab;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.MessageConstants;
+import cn.fudoc.common.constants.UrlConstants;
+import cn.fudoc.common.enumtype.FuColor;
+import cn.fudoc.common.notification.FuDocNotification;
 import com.google.common.collect.Lists;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.ui.Messages;
@@ -18,13 +23,8 @@ import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.YapiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.YApiProjectInfoDTO;
 import com.wdf.fudoc.apidoc.sync.service.YApiService;
-import cn.fudoc.common.base.FuBundle;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.common.ServiceHelper;
-import cn.fudoc.common.constants.MessageConstants;
-import cn.fudoc.common.constants.UrlConstants;
-import cn.fudoc.common.enumtype.FuColor;
-import cn.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.FuTabComponent;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.PlaceholderTextField;
@@ -32,9 +32,9 @@ import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.components.listener.FuViewListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import icons.FuDocIcons;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

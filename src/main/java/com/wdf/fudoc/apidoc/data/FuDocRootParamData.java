@@ -1,7 +1,6 @@
 package com.wdf.fudoc.apidoc.data;
 
 import com.intellij.psi.PsiMethod;
-import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.pojo.bo.RootParamBO;
 import com.wdf.fudoc.apidoc.pojo.data.CommonItemData;
 import lombok.Getter;

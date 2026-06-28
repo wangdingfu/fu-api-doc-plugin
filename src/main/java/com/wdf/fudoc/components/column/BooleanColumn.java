@@ -4,11 +4,9 @@ import com.wdf.fudoc.common.base.FuFunction;
 import com.wdf.fudoc.util.LambdaUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.table.TableCellEditor;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * @author wangdingfu

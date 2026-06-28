@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.action;
 
+import cn.fudoc.common.enumtype.FuDocAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncSetting;
@@ -10,7 +11,6 @@ import com.wdf.fudoc.apidoc.sync.SyncFuDocExecutor;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
 import com.wdf.fudoc.common.AbstractClassAction;
-import cn.fudoc.common.enumtype.FuDocAction;
 
 
 /**

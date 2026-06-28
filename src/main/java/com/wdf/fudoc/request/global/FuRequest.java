@@ -2,6 +2,7 @@ package com.wdf.fudoc.request.global;
 
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.execute.FuHttpRequest;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;

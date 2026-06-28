@@ -3,16 +3,15 @@ package com.wdf.fudoc.request.po;
 
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
-import com.wdf.fudoc.components.bo.TreePathBO;
 import com.wdf.fudoc.request.constants.enumtype.ScriptType;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.pojo.ConfigAuthTableBO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.HashMap;
 import java.util.List;

@@ -76,7 +76,7 @@ public class FuTreePopup extends JPopupMenu implements ComboPopup {
      */
     public MouseListener getMouseListener() {
         if (mouseListener == null) {
-            mouseListener = new FuTreePopup.InvocationMouseHandler();
+            mouseListener = new InvocationMouseHandler();
         }
         return mouseListener;
     }

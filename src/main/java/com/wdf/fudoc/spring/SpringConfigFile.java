@@ -6,16 +6,20 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.wdf.fudoc.spring.handler.ConfigFileHandler;
 import com.wdf.fudoc.spring.handler.PropertiesConfigFileHandler;
 import com.wdf.fudoc.spring.handler.YamlConfigFileHandler;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.MavenUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.collections.MapUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -237,6 +241,14 @@ public class SpringConfigFile {
                 }
             }
 
+            //主配置 yaml文件中可能会存在多个环境的配置
+            Map<String, Map<String, String>> otherEnvConfigMap = config.getOtherEnvConfig();
+            if(MapUtils.isNotEmpty(otherEnvConfigMap)){
+                otherEnvConfigMap.forEach((otherEnv, envConfigMap) -> mergedConfig.addEnvConfig(otherEnv, envConfigMap));
+            }
+
+            mergedConfig.addEnvConfig(env, configValues);
+
             // 保留主配置到默认环境
             configMap.put(SpringConfigFileConstants.DEFAULT_ENV, config);
             return;
@@ -254,7 +266,7 @@ public class SpringConfigFile {
 
     public void readPropertiesConfigFile(String fileName, InputStream inputStream) {
         try {
-            // 直接使用InputStream创建PropertiesConfigFileHandler
+            // 直接使用 InputStream创建PropertiesConfigFileHandler
             addConfig(fileName, new PropertiesConfigFileHandler(inputStream));
         } catch (Exception e) {
             log.error("读取properties配置文件失败: {}", fileName, e);

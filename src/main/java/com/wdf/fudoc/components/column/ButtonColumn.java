@@ -5,7 +5,6 @@ import com.wdf.fudoc.components.ButtonTableCellEditor;
 import com.wdf.fudoc.util.LambdaUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.table.TableCellRenderer;
 import java.util.function.BiConsumer;

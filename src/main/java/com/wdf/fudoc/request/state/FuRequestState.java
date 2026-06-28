@@ -4,18 +4,10 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
-import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.wdf.fudoc.apidoc.config.state.FuDocSecuritySetting;
-import com.wdf.fudoc.apidoc.data.SettingData;
-import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.request.global.GlobalRequestData;
-import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**

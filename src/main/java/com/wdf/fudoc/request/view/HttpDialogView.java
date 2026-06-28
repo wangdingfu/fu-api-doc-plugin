@@ -1,5 +1,7 @@
 package com.wdf.fudoc.request.view;
 
+import cn.fudoc.common.enumtype.FuColor;
+import cn.fudoc.common.msg.FuMsgBuilder;
 import cn.hutool.core.util.IdUtil;
 import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.project.Project;
@@ -9,8 +11,6 @@ import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.factory.FuTabBuilder;
 import com.wdf.fudoc.components.listener.SendHttpListener;
 import com.wdf.fudoc.components.message.MessageComponent;
-import cn.fudoc.common.msg.FuMsgBuilder;
-import cn.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.SendRequestHandler;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
@@ -24,11 +24,10 @@ import com.wdf.fudoc.request.tab.request.ResponseTabView;
 import com.wdf.fudoc.request.view.widget.EnvWidget;
 import com.wdf.fudoc.request.view.widget.UserWidget;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

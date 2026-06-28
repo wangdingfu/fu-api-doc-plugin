@@ -1,18 +1,10 @@
 package com.wdf.fudoc.apidoc.service;
 
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.wdf.fudoc.common.FuDocRender;
-import com.wdf.fudoc.apidoc.assemble.AssembleServiceExecutor;
-import com.wdf.fudoc.common.ServiceHelper;
-import com.wdf.fudoc.apidoc.parse.FuDocClassParser;
-import com.wdf.fudoc.apidoc.parse.FuDocClassParserImpl;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
-import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
+import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.util.GenFuDocUtils;
-import com.wdf.fudoc.util.ObjectUtils;
-import com.wdf.fudoc.util.PsiClassUtils;
 
 import java.util.List;
 

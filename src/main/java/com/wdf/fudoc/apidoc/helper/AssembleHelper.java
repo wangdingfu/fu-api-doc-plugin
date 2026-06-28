@@ -2,13 +2,13 @@ package com.wdf.fudoc.apidoc.helper;
 
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.assemble.handler.ParamValueExecutor;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocParamData;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
-import org.apache.commons.collections.CollectionUtils;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;

@@ -1,8 +1,8 @@
 package com.wdf.fudoc.common.listener;
 
+import cn.fudoc.common.service.FuDocLoadService;
 import com.intellij.ide.plugins.DynamicPluginListener;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import cn.fudoc.common.service.FuDocLoadService;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import org.jetbrains.annotations.NotNull;
 

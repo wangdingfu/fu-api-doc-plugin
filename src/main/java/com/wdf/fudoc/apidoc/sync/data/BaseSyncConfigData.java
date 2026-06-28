@@ -1,14 +1,14 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
+import cn.fudoc.common.util.ProjectUtils;
 import com.intellij.openapi.module.Module;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiDocSystem;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
-import cn.fudoc.common.util.ProjectUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.Serializable;
 import java.util.List;

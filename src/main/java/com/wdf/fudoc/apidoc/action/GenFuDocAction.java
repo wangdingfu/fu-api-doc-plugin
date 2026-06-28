@@ -1,19 +1,19 @@
 package com.wdf.fudoc.apidoc.action;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.psi.PsiClass;
-import com.wdf.fudoc.common.AbstractClassAction;
 import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.MessageConstants;
 import cn.fudoc.common.enumtype.FuDocAction;
 import cn.fudoc.common.notification.FuDocNotification;
-import cn.fudoc.common.constants.MessageConstants;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.apidoc.factory.FuDocServiceFactory;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.service.FuDocService;
+import com.wdf.fudoc.common.AbstractClassAction;
 import com.wdf.fudoc.util.ClipboardUtil;
-import lombok.extern.slf4j.Slf4j;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 

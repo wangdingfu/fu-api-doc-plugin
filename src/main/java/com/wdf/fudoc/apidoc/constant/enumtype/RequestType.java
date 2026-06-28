@@ -6,7 +6,6 @@ import lombok.Getter;
 
 import javax.swing.*;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu

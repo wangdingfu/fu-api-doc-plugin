@@ -1,5 +1,6 @@
 package com.wdf.fudoc.navigation;
 
+import cn.fudoc.common.enumtype.FuColor;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.actions.SearchEverywherePsiRenderer;
 import com.intellij.openapi.Disposable;
@@ -12,10 +13,9 @@ import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.util.TextWithIcon;
 import com.intellij.util.ui.UIUtil;
-import cn.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.util.ColorUtils;
-import lombok.extern.slf4j.Slf4j;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

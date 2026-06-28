@@ -3,11 +3,11 @@ package com.wdf.fudoc.apidoc.pojo.data.annotation;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.AnnotationValueType;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationValueData;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;

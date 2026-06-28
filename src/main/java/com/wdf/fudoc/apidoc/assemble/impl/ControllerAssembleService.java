@@ -1,23 +1,21 @@
 package com.wdf.fudoc.apidoc.assemble.impl;
 
-import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.assemble.AbstractAssembleService;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
 import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
-import com.wdf.fudoc.apidoc.pojo.data.CommonItemData;
-import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.pojo.bo.AssembleBO;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
+import com.wdf.fudoc.apidoc.pojo.data.CommonItemData;
 import com.wdf.fudoc.apidoc.pojo.desc.ClassInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
+import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.FuApiUtils;
-import com.wdf.fudoc.util.PathUtils;
-import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;

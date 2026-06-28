@@ -1,8 +1,9 @@
 package com.wdf.fudoc.util;
 
-import java.awt.event.*;
 import javax.swing.*;
-import java.beans.*;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /*
  * this class listens for changes made to the data in the table via the

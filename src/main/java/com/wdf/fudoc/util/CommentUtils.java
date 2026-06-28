@@ -1,8 +1,8 @@
 package com.wdf.fudoc.util;
 
 import com.google.common.collect.Lists;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.pojo.bo.CommentLineBO;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;

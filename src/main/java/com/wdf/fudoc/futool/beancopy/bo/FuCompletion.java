@@ -1,6 +1,5 @@
 package com.wdf.fudoc.futool.beancopy.bo;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

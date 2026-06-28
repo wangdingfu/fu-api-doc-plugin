@@ -1,5 +1,9 @@
 package com.wdf.fudoc.request.manager;
 
+import cn.fudoc.common.constants.UrlConstants;
+import cn.fudoc.common.enumtype.IssueSource;
+import cn.fudoc.common.storage.FuDocConfigStorage;
+import cn.fudoc.common.storage.po.FuDocConfigPO;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.*;
@@ -16,13 +20,10 @@ import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.sync.SyncFuDocExecutor;
 import com.wdf.fudoc.apidoc.sync.data.BaseSyncConfigData;
 import com.wdf.fudoc.apidoc.sync.data.FuDocSyncConfigData;
-import cn.fudoc.common.constants.UrlConstants;
-import cn.fudoc.common.storage.po.FuDocConfigPO;
 import com.wdf.fudoc.components.action.FuRequestViewModeAction;
 import com.wdf.fudoc.components.action.IssueAction;
-import com.wdf.fudoc.request.action.toolbar.CopyCurlAction;
+//import com.wdf.fudoc.request.action.toolbar.CopyCurlAction;
 import com.wdf.fudoc.request.callback.FuRequestCallback;
-import cn.fudoc.common.enumtype.IssueSource;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.factory.FuHttpRequestDataFactory;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
@@ -31,7 +32,6 @@ import com.wdf.fudoc.request.tab.request.RequestTabView;
 import com.wdf.fudoc.request.view.FuRequestSettingView;
 import com.wdf.fudoc.request.view.HttpDialogView;
 import com.wdf.fudoc.request.view.toolwindow.FuRequestWindow;
-import cn.fudoc.common.storage.FuDocConfigStorage;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import com.wdf.fudoc.util.FuDocUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
@@ -88,8 +88,8 @@ public class FuRequestToolBarManager {
         defaultActionGroup.addSeparator();
 
         addSyncAction(defaultActionGroup);
-        //复制curl命令
-        defaultActionGroup.add(new CopyCurlAction(fuRequestCallback));
+//        //复制curl命令
+//        defaultActionGroup.add(new CopyCurlAction(fuRequestCallback));
 
         if (fuRequestCallback.isWindow()) {
             addConfigServerPortAction(defaultActionGroup);
@@ -195,9 +195,11 @@ public class FuRequestToolBarManager {
                         x = mouseEvent.getX();
                         y = mouseEvent.getY();
                     }
-                    ActionPopupMenu popupMenu =
-                            ((ActionManagerImpl) ActionManager.getInstance())
-                                    .createActionPopupMenu("fudoc.request.settings", actionGroup, new MenuItemPresentationFactory());
+                    // 核心修改：使用公共接口，不再强转 ActionManagerImpl
+                    ActionPopupMenu popupMenu = ActionManager.getInstance()
+                            .createActionPopupMenu("fudoc.request.settings", actionGroup);
+
+                    // 原有弹窗展示逻辑完全保留
                     popupMenu.getComponent().show(e.getInputEvent().getComponent(), x, y);
                 }
             });

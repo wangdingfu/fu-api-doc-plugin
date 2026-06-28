@@ -1,14 +1,14 @@
 package com.wdf.fudoc.futool.dtoconvert.action;
 
+import cn.fudoc.common.notification.FuDocNotification;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.ui.Messages;
 import com.wdf.fudoc.common.exception.FuDocException;
-import cn.fudoc.common.notification.FuDocNotification;
-import com.wdf.fudoc.futool.dtoconvert.domain.service.impl.GenerateVo2DtoImpl;
 import com.wdf.fudoc.futool.dtoconvert.application.IGenerateVo2Dto;
+import com.wdf.fudoc.futool.dtoconvert.domain.service.impl.GenerateVo2DtoImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 

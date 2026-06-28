@@ -13,9 +13,9 @@ import com.wdf.fudoc.request.HttpCallback;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
 import com.wdf.fudoc.request.view.FuRequestStatusInfoView;
+import com.wdf.fudoc.util.FuStringUtils;
 import icons.FuDocIcons;
 import org.apache.commons.collections.MapUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 import java.util.Map;

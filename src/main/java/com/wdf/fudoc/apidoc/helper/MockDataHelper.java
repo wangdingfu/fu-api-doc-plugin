@@ -9,9 +9,9 @@ import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.util.FastJsonUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.MapListUtil;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Collection;
 import java.util.List;

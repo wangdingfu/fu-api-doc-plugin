@@ -1,9 +1,9 @@
 package com.wdf.fudoc.components;
 
+import cn.fudoc.common.util.ProjectUtils;
 import cn.hutool.core.util.ReflectUtil;
 import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.ToolbarDecorator;
@@ -17,11 +17,10 @@ import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.listener.FuTableListener;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.JTableUtils;
-import cn.fudoc.common.util.ProjectUtils;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

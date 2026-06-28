@@ -1,7 +1,5 @@
 package com.wdf.fudoc.components;
 
-import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
-
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 

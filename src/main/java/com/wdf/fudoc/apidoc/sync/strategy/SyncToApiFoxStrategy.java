@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.strategy;
 
+import cn.fudoc.common.util.ProjectUtils;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.constant.enumtype.ApiSyncStatus;
@@ -16,10 +17,9 @@ import com.wdf.fudoc.apidoc.sync.service.ApiFoxService;
 import com.wdf.fudoc.apidoc.view.dialog.SyncApiConfirmDialog;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import com.wdf.fudoc.util.ObjectUtils;
-import cn.fudoc.common.util.ProjectUtils;
-import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import com.wdf.fudoc.util.ObjectUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
 import java.util.List;

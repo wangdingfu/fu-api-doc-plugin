@@ -3,9 +3,9 @@ package com.wdf.fudoc.components;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.listener.FuStatusLabelListener;
 import com.wdf.fudoc.request.pojo.BasePopupMenuItem;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.awt.*;

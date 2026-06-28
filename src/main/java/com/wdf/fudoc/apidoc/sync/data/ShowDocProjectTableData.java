@@ -1,6 +1,5 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
-import com.wdf.fudoc.components.bo.TreePathBO;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.sync.service;
 
+import cn.fudoc.common.util.JsonUtil;
 import cn.hutool.core.text.StrFormatter;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
@@ -7,10 +8,8 @@ import com.wdf.fudoc.apidoc.sync.data.ApiFoxConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiFoxDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiFoxResult;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
-import com.wdf.fudoc.common.exception.FuDocException;
-import cn.fudoc.common.util.JsonUtil;
-import lombok.extern.slf4j.Slf4j;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 

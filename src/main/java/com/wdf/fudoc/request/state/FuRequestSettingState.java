@@ -3,18 +3,11 @@ package com.wdf.fudoc.request.state;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.project.Project;
-import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.request.data.FuRequestSettingData;
-import com.wdf.fudoc.request.global.GlobalRequestData;
-import com.wdf.fudoc.request.pojo.CommonHeader;
-import cn.fudoc.common.util.ProjectUtils;
 import lombok.Data;
-import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
 
 /**

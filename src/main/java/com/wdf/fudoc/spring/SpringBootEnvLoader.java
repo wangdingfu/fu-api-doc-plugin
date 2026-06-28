@@ -1,6 +1,5 @@
 package com.wdf.fudoc.spring;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.JavaModuleType;
@@ -21,12 +20,12 @@ import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.request.pojo.ConfigEnvTableBO;
 import com.wdf.fudoc.request.pojo.SpringBootEnvConfigInfo;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.MavenUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

@@ -11,9 +11,9 @@ import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.data.CommentTagData;
 import com.wdf.fudoc.apidoc.pojo.desc.BaseInfoDesc;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.util.FuStringUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 

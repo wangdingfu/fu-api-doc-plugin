@@ -4,10 +4,10 @@ import com.google.common.collect.Lists;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestParamType;
 import com.wdf.fudoc.components.FuTableComponent;
 import com.wdf.fudoc.components.FuTableView;
-import com.wdf.fudoc.components.listener.FuTableListener;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.factory.FuTableColumnFactory;
 import com.wdf.fudoc.components.factory.TableCellEditorFactory;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.components.listener.FuTableListener;
 
 import javax.swing.table.TableCellEditor;
 

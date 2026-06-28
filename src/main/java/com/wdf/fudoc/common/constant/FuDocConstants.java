@@ -26,7 +26,7 @@ public interface FuDocConstants {
     String FU_AUTH_PASSWORD = "password";
 
     String ROOT = "root";
-    String FU_DOC_DIR = "fudoc";
+    String FU_DOC_DIR = "com/wdf/fudoc";
 
     String LINE = "\r\n";
 

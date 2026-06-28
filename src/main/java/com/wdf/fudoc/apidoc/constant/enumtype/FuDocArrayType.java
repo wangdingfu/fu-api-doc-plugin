@@ -2,8 +2,8 @@ package com.wdf.fudoc.apidoc.constant.enumtype;
 
 import com.intellij.psi.CommonClassNames;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import lombok.Getter;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

@@ -4,12 +4,12 @@ import cn.hutool.core.util.ReflectUtil;
 import com.google.common.collect.Lists;
 import com.wdf.fudoc.components.FuEditorComponent;
 import com.wdf.fudoc.components.FuTableComponent;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;

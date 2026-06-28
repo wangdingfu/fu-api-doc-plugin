@@ -2,11 +2,8 @@ package com.wdf.fudoc.apidoc.assemble;
 
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.assemble.handler.ParamValueExecutor;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
-import com.wdf.fudoc.apidoc.constant.enumtype.ContentType;
-import com.wdf.fudoc.apidoc.constant.enumtype.MockResultType;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.apidoc.constant.enumtype.RequestType;
 import com.wdf.fudoc.apidoc.data.FuDocRootParamData;
@@ -26,11 +23,12 @@ import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
 import com.wdf.fudoc.common.ServiceHelper;
 import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.FuDocUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.PsiClassUtils;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author wangdingfu

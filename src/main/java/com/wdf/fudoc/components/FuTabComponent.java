@@ -7,14 +7,12 @@ import com.wdf.fudoc.apidoc.constant.enumtype.ActionType;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.components.bo.TabActionBO;
 import com.wdf.fudoc.components.listener.TabBarListener;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ToolBarUtils;
 import icons.FuDocIcons;
-// TODO: 升级到2025后需要更新fu-api-commons:251.1.8
-// import k.p.D;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

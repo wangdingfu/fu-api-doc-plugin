@@ -2,8 +2,8 @@ package com.wdf.fudoc.apidoc.pojo.annotation;
 
 import com.wdf.fudoc.apidoc.constant.enumtype.SpringParamAnnotation;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
-import lombok.NoArgsConstructor;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wangdingfu

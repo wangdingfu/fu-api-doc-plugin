@@ -1,5 +1,6 @@
 package com.wdf.fudoc.components;
 
+import cn.fudoc.common.util.ProjectUtils;
 import com.google.common.collect.Lists;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.Disposable;
@@ -26,16 +27,14 @@ import com.wdf.fudoc.components.factory.LightVirtualFileFactory;
 import com.wdf.fudoc.components.listener.FuEditorListener;
 import com.wdf.fudoc.util.EditorUtils;
 import com.wdf.fudoc.util.FuEditorSettings;
-import cn.fudoc.common.util.ProjectUtils;
-import lombok.Getter;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 编辑器组件
@@ -192,7 +191,7 @@ public class FuEditorComponent implements Disposable {
 
             // 描述面板
             this.descriptionPanel = new JPanel(new GridBagLayout());
-            this.descriptionPanel.add(SeparatorFactory.createSeparator(IdeBundle.message("label.description"), null), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, JBUI.insetsBottom(2), 0, 0));
+            this.descriptionPanel.add(SeparatorFactory.createSeparator("Description:", null), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, JBUI.insetsBottom(2), 0, 0));
             this.descriptionPanel.add(ScrollPaneFactory.createScrollPane(editorPane), new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, JBUI.insetsTop(2), 0, 0));
         }
     }

@@ -1,5 +1,10 @@
 package com.wdf.fudoc.common.exception.report;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.MessageConstants;
+import cn.fudoc.common.enumtype.IssueSource;
+import cn.fudoc.common.notification.FuDocNotification;
+import cn.fudoc.common.storage.FuDocConfigStorage;
 import cn.hutool.core.text.StrFormatter;
 import com.intellij.notification.BrowseNotificationAction;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -9,18 +14,12 @@ import com.intellij.openapi.diagnostic.IdeaLoggingEvent;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.util.Consumer;
-import cn.fudoc.common.base.FuBundle;
-import com.wdf.fudoc.common.constant.FuDocConstants;
-import cn.fudoc.common.constants.MessageConstants;
 import com.wdf.fudoc.common.exception.IssueException;
 import com.wdf.fudoc.common.exception.report.issue.GiteeIssueSubmitter;
 import com.wdf.fudoc.common.exception.report.issue.GithubIssueSubmitter;
 import com.wdf.fudoc.common.exception.report.issue.IssueSubmitter;
-import cn.fudoc.common.notification.FuDocNotification;
-import cn.fudoc.common.enumtype.IssueSource;
-import cn.fudoc.common.storage.FuDocConfigStorage;
-import lombok.extern.slf4j.Slf4j;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,9 +1,9 @@
 package com.wdf.fudoc.request.pojo;
 
 import com.wdf.fudoc.components.bo.KeyValueTableBO;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.List;
 

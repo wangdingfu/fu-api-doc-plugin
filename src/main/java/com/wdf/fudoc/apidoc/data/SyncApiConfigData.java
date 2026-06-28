@@ -1,7 +1,6 @@
 package com.wdf.fudoc.apidoc.data;
 
 import com.google.common.collect.Lists;
-import com.wdf.fudoc.apidoc.sync.data.ApiFoxConfigData;
 import com.wdf.fudoc.apidoc.sync.data.ApiFoxProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.ShowDocProjectTableData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;

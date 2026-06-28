@@ -1,8 +1,8 @@
 package com.wdf.fudoc.apidoc.pojo.bo;
 
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 /**
  * @author wangdingfu

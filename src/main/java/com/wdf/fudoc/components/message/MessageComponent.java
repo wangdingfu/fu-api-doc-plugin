@@ -1,17 +1,14 @@
 package com.wdf.fudoc.components.message;
 
+import cn.fudoc.common.enumtype.MessageType;
+import cn.fudoc.common.msg.bo.FuMsgBO;
 import com.intellij.openapi.util.SystemInfo;
-// TODO: IDEA 2025 MemoryUsagePanel API变更
-// import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
-import cn.fudoc.common.msg.bo.FuMsgBO;
-import com.wdf.fudoc.components.widget.FuWidget;
-import cn.fudoc.common.enumtype.MessageType;
 import com.wdf.fudoc.components.message.handler.FuMsgExecutor;
+import com.wdf.fudoc.components.widget.FuWidget;
 import icons.FuDocIcons;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;

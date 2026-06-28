@@ -1,7 +1,6 @@
 package com.wdf.fudoc.request.pojo;
 
 import com.wdf.fudoc.components.bo.DynamicTableBO;
-import com.wdf.fudoc.components.bo.TreePathBO;
 import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;

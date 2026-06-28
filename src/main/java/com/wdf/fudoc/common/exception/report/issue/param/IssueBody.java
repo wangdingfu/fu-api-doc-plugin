@@ -3,8 +3,6 @@ package com.wdf.fudoc.common.exception.report.issue.param;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Properties;
-
 /**
  * @author wangdingfu
  * @date 2023-07-31 21:34:06

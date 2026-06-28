@@ -11,23 +11,15 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.java.stubs.index.JavaFullClassNameIndex;
-import com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiShortNamesCache;
-import com.wdf.fudoc.common.exception.FuDocException;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GenerateContext;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.GetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.model.SetObjConfigDO;
 import com.wdf.fudoc.futool.dtoconvert.domain.service.AbstractGenerateVo2Dto;
 import com.wdf.fudoc.futool.dtoconvert.infrastructure.Utils;
-import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class GenerateVo2DtoImpl extends AbstractGenerateVo2Dto {
 

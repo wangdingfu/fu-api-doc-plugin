@@ -1,6 +1,5 @@
 package com.wdf.fudoc.apidoc.sync.renderer;
 
-import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
 import com.wdf.fudoc.components.listener.FuTableListener;
 

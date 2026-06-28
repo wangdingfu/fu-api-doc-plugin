@@ -1,17 +1,16 @@
 package com.wdf.fudoc.apidoc.sync.dto;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.wdf.fudoc.apidoc.sync.data.SyncApiRecordData;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * @author wangdingfu

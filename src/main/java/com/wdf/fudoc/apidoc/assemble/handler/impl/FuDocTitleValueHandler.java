@@ -2,12 +2,12 @@ package com.wdf.fudoc.apidoc.assemble.handler.impl;
 
 import com.wdf.fudoc.apidoc.assemble.handler.ParamValueHandler;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.ParamValueType;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
 import com.wdf.fudoc.apidoc.pojo.desc.BaseInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.FuStringUtils;
 

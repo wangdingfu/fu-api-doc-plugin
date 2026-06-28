@@ -1,15 +1,14 @@
 package com.wdf.fudoc.apidoc.config.state;
 
+import cn.fudoc.common.util.ProjectUtils;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.data.YApiProjectTableData;
-import cn.fudoc.common.util.ProjectUtils;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;

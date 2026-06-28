@@ -1,11 +1,11 @@
 package com.wdf.fudoc.futool.beancopy;
 
+import cn.fudoc.common.enumtype.FuColor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.util.ProcessingContext;
-import cn.fudoc.common.enumtype.FuColor;
 import com.wdf.fudoc.futool.beancopy.bo.FuCompletion;
 import icons.FuDocIcons;
 import org.jetbrains.annotations.NotNull;

@@ -1,20 +1,19 @@
 package com.wdf.fudoc.components.message;
 
+import cn.fudoc.common.enumtype.MessageType;
+import cn.fudoc.common.msg.FuMsgManager;
+import cn.fudoc.common.msg.bo.FuMsgBO;
+import cn.fudoc.common.msg.bo.FuMsgItemBO;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.PlatformColors;
-import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
-import cn.fudoc.common.msg.FuMsgManager;
-import cn.fudoc.common.msg.bo.FuMsgBO;
-import cn.fudoc.common.msg.bo.FuMsgItemBO;
 import com.wdf.fudoc.components.listener.FuMsgListener;
-import cn.fudoc.common.enumtype.MessageType;
 import com.wdf.fudoc.util.ColorUtils;
-import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
 import java.awt.*;

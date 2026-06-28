@@ -1,5 +1,7 @@
 package com.wdf.fudoc.apidoc.view.dialog;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.MessageConstants;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -16,24 +18,20 @@ import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ProjectSyncApiRecordData;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncCategory;
 import com.wdf.fudoc.apidoc.sync.strategy.SyncStrategyFactory;
-import cn.fudoc.common.base.FuBundle;
-import cn.fudoc.common.constants.MessageConstants;
 import com.wdf.fudoc.components.tree.old.ApiCategoryTreeNode;
 import com.wdf.fudoc.components.tree.old.FuTreeComponent;
 import com.wdf.fudoc.components.validator.CreateCategoryValidator;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;

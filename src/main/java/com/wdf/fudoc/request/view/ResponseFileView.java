@@ -1,25 +1,24 @@
 package com.wdf.fudoc.request.view;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.MessageConstants;
+import cn.fudoc.common.notification.FuDocNotification;
+import cn.fudoc.common.util.ProjectUtils;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
-import cn.hutool.core.util.RandomUtil;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.impl.IdeGlassPaneImpl;
-import cn.fudoc.common.base.FuBundle;
-import cn.fudoc.common.constants.MessageConstants;
 import com.wdf.fudoc.common.constant.PathConstants;
-import cn.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.components.ChooseFileComponents;
 import com.wdf.fudoc.components.listener.ChooseFileListener;
 import com.wdf.fudoc.request.pojo.FuResponseData;
-import cn.fudoc.common.util.ProjectUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

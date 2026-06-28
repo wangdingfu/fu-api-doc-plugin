@@ -1,9 +1,9 @@
 package com.wdf.fudoc.util;
 
+import cn.fudoc.common.msg.bo.FuMsgItemBO;
 import com.intellij.ui.ColorHexUtil;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.UIUtil;
-import cn.fudoc.common.msg.bo.FuMsgItemBO;
 
 import java.awt.*;
 import java.util.Objects;

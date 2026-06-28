@@ -2,7 +2,6 @@ package com.wdf.fudoc.apidoc.sync.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
-import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 

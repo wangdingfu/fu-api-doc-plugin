@@ -1,7 +1,5 @@
 package com.wdf.fudoc.apidoc.view;
 
-import com.wdf.fudoc.components.FuTableComponent;
-
 import javax.swing.*;
 
 /**

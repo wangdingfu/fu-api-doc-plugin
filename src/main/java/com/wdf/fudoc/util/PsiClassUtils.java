@@ -12,14 +12,12 @@ import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
+import com.wdf.fudoc.apidoc.pojo.bo.PsiClassTypeBO;
 import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import com.wdf.fudoc.apidoc.pojo.bo.PsiClassTypeBO;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;

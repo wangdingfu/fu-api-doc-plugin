@@ -1,13 +1,12 @@
 package com.wdf.fudoc.components.bo;
 
-import com.google.common.collect.Lists;
+import cn.fudoc.common.util.ProjectUtils;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import cn.fudoc.common.util.ProjectUtils;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.io.Serializable;
 import java.util.List;

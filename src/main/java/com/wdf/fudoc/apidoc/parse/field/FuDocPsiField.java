@@ -1,7 +1,6 @@
 package com.wdf.fudoc.apidoc.parse.field;
 
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
 import com.wdf.fudoc.apidoc.constant.enumtype.CommentTagType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;

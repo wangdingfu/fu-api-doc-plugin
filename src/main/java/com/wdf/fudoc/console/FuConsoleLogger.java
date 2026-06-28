@@ -4,9 +4,9 @@ import cn.hutool.core.text.StrFormatter;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.wdf.fudoc.common.constant.FuDocConstants;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.Getter;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.Objects;

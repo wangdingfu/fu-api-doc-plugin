@@ -1,5 +1,7 @@
 package com.wdf.fudoc.apidoc.sync.data;
 
+import cn.fudoc.common.constants.UrlConstants;
+import cn.fudoc.common.util.JsonUtil;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.Module;
 import com.wdf.fudoc.apidoc.config.state.FuDocSyncProjectSetting;
@@ -8,11 +10,9 @@ import com.wdf.fudoc.apidoc.data.SyncApiConfigData;
 import com.wdf.fudoc.apidoc.sync.dto.ApiCategoryDTO;
 import com.wdf.fudoc.apidoc.sync.dto.ApiProjectDTO;
 import com.wdf.fudoc.apidoc.sync.dto.SyncApiResultDTO;
-import cn.fudoc.common.constants.UrlConstants;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
-import cn.fudoc.common.util.JsonUtil;
-import com.wdf.fudoc.util.ObjectUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import com.wdf.fudoc.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Objects;

@@ -1,10 +1,10 @@
 package com.wdf.fudoc.navigation.recent;
 
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 /**
  * @author wangdingfu

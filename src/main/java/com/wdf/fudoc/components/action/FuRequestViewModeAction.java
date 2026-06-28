@@ -7,7 +7,6 @@ import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;
 import com.wdf.fudoc.storage.FuRequestConfigStorage;
-import com.wdf.fudoc.storage.FuRequestConfigStorage;
 import org.jetbrains.annotations.NotNull;
 
 public class FuRequestViewModeAction extends DumbAwareToggleAction {

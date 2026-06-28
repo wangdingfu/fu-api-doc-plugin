@@ -1,16 +1,16 @@
 package com.wdf.fudoc.common.exception.report.issue;
 
+import cn.fudoc.common.constants.UrlConstants;
+import cn.fudoc.common.enumtype.IssueSource;
+import cn.fudoc.common.util.JsonUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import cn.fudoc.common.constants.UrlConstants;
 import com.wdf.fudoc.common.exception.IssueException;
 import com.wdf.fudoc.common.exception.report.issue.param.GithubIssueBody;
-import cn.fudoc.common.enumtype.IssueSource;
-import cn.fudoc.common.util.JsonUtil;
+import com.wdf.fudoc.util.FuStringUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.net.URLCodec;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import java.util.Objects;
 

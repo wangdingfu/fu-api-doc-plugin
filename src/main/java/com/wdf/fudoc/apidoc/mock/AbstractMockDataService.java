@@ -1,5 +1,6 @@
 package com.wdf.fudoc.apidoc.mock;
 
+import cn.fudoc.common.util.ProjectUtils;
 import cn.hutool.json.JSONUtil;
 import com.intellij.openapi.module.ModuleUtil;
 import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
@@ -9,16 +10,15 @@ import com.wdf.fudoc.apidoc.pojo.bo.MockResultBo;
 import com.wdf.fudoc.apidoc.pojo.data.FuDocItemData;
 import com.wdf.fudoc.apidoc.pojo.desc.MethodInfoDesc;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
 import com.wdf.fudoc.request.pojo.FuRequestBodyData;
 import com.wdf.fudoc.request.pojo.FuRequestData;
 import com.wdf.fudoc.request.pojo.FuResponseData;
-import com.wdf.fudoc.components.bo.KeyValueTableBO;
 import com.wdf.fudoc.util.FuDocUtils;
-import cn.fudoc.common.util.ProjectUtils;
-import org.apache.commons.collections.CollectionUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;

@@ -1,7 +1,6 @@
 package com.wdf.fudoc.components.message.handler;
 
 import cn.fudoc.common.msg.bo.FuMsgItemBO;
-import cn.fudoc.common.enumtype.MessageType;
 
 /**
  * @author wangdingfu

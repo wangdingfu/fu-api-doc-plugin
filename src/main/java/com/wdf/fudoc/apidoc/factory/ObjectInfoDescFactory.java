@@ -1,8 +1,8 @@
 package com.wdf.fudoc.apidoc.factory;
 
-import com.wdf.fudoc.common.constant.FuDocConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.FuDocObjectType;
 import com.wdf.fudoc.apidoc.pojo.desc.ObjectInfoDesc;
+import com.wdf.fudoc.common.constant.FuDocConstants;
 
 /**
  * @author wangdingfu

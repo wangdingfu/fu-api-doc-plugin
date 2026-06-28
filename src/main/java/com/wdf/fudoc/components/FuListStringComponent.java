@@ -8,9 +8,9 @@ import com.intellij.ui.components.JBList;
 import com.wdf.fudoc.components.bo.BaseList;
 import com.wdf.fudoc.components.listener.FuActionListener;
 import com.wdf.fudoc.components.validator.InputExistsValidator;
+import com.wdf.fudoc.util.FuStringUtils;
 import com.wdf.fudoc.util.ObjectUtils;
 import lombok.Getter;
-import com.wdf.fudoc.util.FuStringUtils;
 
 import javax.swing.*;
 import java.util.List;

@@ -1,5 +1,10 @@
 package com.wdf.fudoc.common;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.constants.MessageConstants;
+import cn.fudoc.common.enumtype.FuDocAction;
+import cn.fudoc.common.listener.FuDocActionListener;
+import cn.fudoc.common.notification.FuDocNotification;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -10,17 +15,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import cn.fudoc.common.base.FuBundle;
-import cn.fudoc.common.listener.FuDocActionListener;
 import com.wdf.fudoc.apidoc.config.state.FuDocSetting;
 import com.wdf.fudoc.apidoc.constant.enumtype.JavaClassType;
 import com.wdf.fudoc.apidoc.data.FuDocData;
 import com.wdf.fudoc.apidoc.data.FuDocDataContent;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
-import cn.fudoc.common.constants.MessageConstants;
-import cn.fudoc.common.enumtype.FuDocAction;
 import com.wdf.fudoc.common.exception.FuDocException;
-import cn.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.util.PsiClassUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

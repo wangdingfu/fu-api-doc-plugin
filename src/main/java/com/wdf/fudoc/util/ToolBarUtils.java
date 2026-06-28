@@ -4,7 +4,6 @@ import com.intellij.find.editorHeaderActions.Utils;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.actionSystem.impl.ActionToolbarImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,14 +29,16 @@ public class ToolBarUtils {
 
 
     public static JComponent addActionToToolBar(JComponent targetComponent, String place, ActionGroup actionGroup) {
-        ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
+        // 标准创建，不再强转为内部实现类 ActionToolbarImpl
+        ActionToolbar toolbar = ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
+
         toolbar.setTargetComponent(targetComponent);
-        toolbar.setForceMinimumSize(true);
-        // Note: setLayoutPolicy() is deprecated and removed in IDEA 2025.1+
-        // The default behavior is already NOWRAP, so this call is not needed
-        Utils.setSmallerFontForChildren(toolbar);
-        toolbar.getComponent().setBackground(targetComponent.getBackground());
-        return toolbar.getComponent();
+
+        JComponent toolbarComp = toolbar.getComponent();
+        Utils.setSmallerFontForChildren(toolbarComp);
+        toolbarComp.setBackground(targetComponent.getBackground());
+
+        return toolbarComp;
     }
 
 
@@ -51,13 +52,14 @@ public class ToolBarUtils {
      */
     public static JPanel genToolBarPanel(String place, ActionGroup actionGroup, String layout) {
         JPanel toolBarPanel = new JPanel(new BorderLayout());
-        ActionToolbarImpl toolbar = (ActionToolbarImpl) ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
+        ActionToolbar toolbar = ActionManager.getInstance().createActionToolbar(place, actionGroup, true);
         toolbar.setTargetComponent(toolBarPanel);
-        toolbar.setForceMinimumSize(true);
         // Note: setLayoutPolicy() is deprecated and removed in IDEA 2025.1+
         // The default behavior is already NOWRAP, so this call is not needed
-        Utils.setSmallerFontForChildren(toolbar);
+        Utils.setSmallerFontForChildren(toolbar.getComponent());
         toolBarPanel.add(toolbar.getComponent(), layout);
         return toolBarPanel;
     }
+
+
 }

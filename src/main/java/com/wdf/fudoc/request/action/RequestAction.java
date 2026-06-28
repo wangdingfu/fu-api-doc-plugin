@@ -1,11 +1,11 @@
 package com.wdf.fudoc.request.action;
 
+import cn.fudoc.common.base.FuBundle;
+import cn.fudoc.common.notification.FuDocNotification;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.wdf.fudoc.apidoc.pojo.context.FuDocContext;
-import cn.fudoc.common.base.FuBundle;
-import cn.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.request.constants.enumtype.ViewMode;
 import com.wdf.fudoc.request.manager.FuRequestManager;
 import com.wdf.fudoc.request.po.FuRequestConfigPO;

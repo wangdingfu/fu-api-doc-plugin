@@ -1,8 +1,8 @@
 package com.wdf.fudoc.components.column;
 
+import cn.fudoc.common.util.ProjectUtils;
 import com.wdf.fudoc.common.base.FuFunction;
 import com.wdf.fudoc.spring.SpringBootEnvLoader;
-import cn.fudoc.common.util.ProjectUtils;
 import icons.FuDocIcons;
 import jdk.jfr.StackTrace;
 import lombok.Getter;

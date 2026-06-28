@@ -2,11 +2,8 @@ package com.wdf.fudoc.components;
 
 import com.intellij.ui.table.JBTable;
 import com.wdf.fudoc.components.listener.FuTableListener;
-import lombok.Setter;
 
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 import java.util.Objects;
 
 /**

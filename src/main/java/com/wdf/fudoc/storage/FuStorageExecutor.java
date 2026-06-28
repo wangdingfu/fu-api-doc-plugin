@@ -1,16 +1,15 @@
 package com.wdf.fudoc.storage;
 
+import cn.fudoc.common.util.JsonUtil;
+import cn.fudoc.common.util.ProjectUtils;
 import cn.hutool.core.io.FileUtil;
 import com.intellij.openapi.project.Project;
 import com.wdf.fudoc.common.FuDocRender;
 import com.wdf.fudoc.common.constant.FuDocConstants;
-import com.wdf.fudoc.navigation.recent.RecentNavigationManager;
 import com.wdf.fudoc.request.http.convert.HttpDataConvert;
 import com.wdf.fudoc.request.pojo.FuHttpRequestData;
-import cn.fudoc.common.util.JsonUtil;
-import cn.fudoc.common.util.ProjectUtils;
-import lombok.extern.slf4j.Slf4j;
 import com.wdf.fudoc.util.FuStringUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -23,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class FuStorageExecutor {
 
-    public static final String FU_DOC_DIR = "fudoc";
+    public static final String FU_DOC_DIR = "com/wdf/fudoc";
     public static final String FU_DOC_CONFIG = "config";
     public static final String FU_DOC_API = "request";
     public static final String FU_DOC_API_SUFFIX = ".http";

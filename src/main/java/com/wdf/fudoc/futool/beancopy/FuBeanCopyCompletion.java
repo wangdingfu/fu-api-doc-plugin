@@ -1,8 +1,14 @@
 package com.wdf.fudoc.futool.beancopy;
 
+import cn.fudoc.common.enumtype.FuColor;
+import cn.fudoc.common.enumtype.FuDocAction;
+import cn.fudoc.common.listener.FuDocActionListener;
+import cn.fudoc.common.notification.FuDocNotification;
 import cn.hutool.core.text.StrFormatter;
 import com.google.common.collect.Lists;
-import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -12,17 +18,13 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.util.PsiTreeUtil;
-import cn.fudoc.common.listener.FuDocActionListener;
-import cn.fudoc.common.enumtype.FuColor;
-import cn.fudoc.common.enumtype.FuDocAction;
-import cn.fudoc.common.notification.FuDocNotification;
 import com.wdf.fudoc.futool.beancopy.bo.CopyBeanBO;
 import com.wdf.fudoc.futool.beancopy.bo.CopyBeanMethodBO;
 import com.wdf.fudoc.futool.beancopy.bo.FuCompletion;
+import com.wdf.fudoc.util.FuStringUtils;
 import icons.FuDocIcons;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import com.wdf.fudoc.util.FuStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
