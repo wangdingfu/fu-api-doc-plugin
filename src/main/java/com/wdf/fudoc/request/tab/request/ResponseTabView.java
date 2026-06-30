@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.ui.tabs.TabInfo;
 import com.wdf.fudoc.common.FuTab;
 import com.wdf.fudoc.compat.JsonFileTypeCompat;
@@ -144,7 +145,7 @@ public class ResponseTabView implements FuTab, HttpCallback {
                                 }
                             }
                         } catch (Exception e) {
-                            log.error("渲染响应内容失败", e);
+                            log.warn("渲染响应内容失败", e);
                             // 出错时使用原始内容
                             fuEditorComponent.setContent(content);
                             switchPanel(1, fuEditorComponent.getMainPanel());
@@ -262,27 +263,30 @@ public class ResponseTabView implements FuTab, HttpCallback {
         if (FuStringUtils.isBlank(content)) {
             return content;
         }
-        try {
-            // IDEA 2025.1+ 修复: 使用 Jackson 进行 JSON 格式化
-            // Jackson 会正确处理字符串中的转义字符,不会将 \r\n 展开为真实换行
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-            // 先解析 JSON,再格式化输出
-            Object json = mapper.readValue(content, Object.class);
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-        } catch (Exception e) {
-            // 如果 Jackson 格式化失败,尝试使用 Hutool
+        if(SystemInfo.isMac){
             try {
-                if (JSONUtil.isTypeJSON(content)) {
-                    return JSONUtil.formatJsonStr(content);
-                }
-            } catch (Exception ex) {
-                // 忽略
+                // IDEA 2025.1+ 修复: 使用 Jackson 进行 JSON 格式化
+                // Jackson 会正确处理字符串中的转义字符,不会将 \r\n 展开为真实换行
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+                // 先解析 JSON,再格式化输出
+                Object json = mapper.readValue(content, Object.class);
+                return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+            } catch (Exception e) {
+                //忽略
             }
-            // 都失败则返回原始内容
-            return content;
         }
+        // 如果 Jackson 格式化失败,尝试使用 Hutool
+        try {
+            if (JSONUtil.isTypeJSON(content)) {
+                return JSONUtil.formatJsonStr(content);
+            }
+        } catch (Exception ex) {
+            // 忽略
+        }
+        // 都失败则返回原始内容
+        return content;
     }
 
 }
