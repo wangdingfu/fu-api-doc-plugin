@@ -76,25 +76,27 @@ public class ControllerAssembleService extends AbstractAssembleService {
     protected boolean doAssembleInfoMethod(FuDocContext fuDocContext, MethodInfoDesc methodInfoDesc, CommonItemData commonItemData, AssembleBO assembleBO) {
         for (String annotationName : AnnotationConstants.MAPPING) {
             Optional<AnnotationData> annotationOptional = methodInfoDesc.getAnnotation(annotationName);
-            if (annotationOptional.isPresent()) {
-                AnnotationData annotationData = annotationOptional.get();
-                String qualifiedName = annotationData.getQualifiedName();
-                String requestType;
-                if (AnnotationConstants.REQUEST_MAPPING.equals(qualifiedName)) {
-                    //requestMapping
-                    requestType = annotationData.enumValue(FuDocConstants.AnnotationAttr.METHOD).getEnumValue();
-                    if (FuStringUtils.isBlank(requestType)) {
-                        requestType = RequestType.GET.getRequestType();
-                    }
-                } else {
-                    requestType = RequestType.getByAnnotationName(qualifiedName).getRequestType();
-                }
-                commonItemData.setRequestType(requestType);
-                commonItemData.setUrlList(FuApiUtils.joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
-                //Content-Type
-                commonItemData.setContentType(analysisContentType(methodInfoDesc.getRequestList()));
-                return true;
+            if (annotationOptional.isEmpty()) {
+                continue;
             }
+            AnnotationData annotationData = annotationOptional.get();
+            String qualifiedName = annotationData.getQualifiedName();
+            String requestType;
+            if (AnnotationConstants.REQUEST_MAPPING.equals(qualifiedName)) {
+                //requestMapping
+                requestType = annotationData.enumValue(FuDocConstants.AnnotationAttr.METHOD).getEnumValue();
+                if (FuStringUtils.isBlank(requestType)) {
+                    //判断请求参数是否有@RequestBody注解
+                    requestType = isRequestBody(methodInfoDesc.getRequestList()) ? RequestType.POST.getRequestType() : RequestType.GET.getRequestType();
+                }
+            } else {
+                requestType = RequestType.getByAnnotationName(qualifiedName).getRequestType();
+            }
+            commonItemData.setRequestType(requestType);
+            commonItemData.setUrlList(FuApiUtils.joinUrl(assembleBO.getControllerUrlList(), annotationData.array().constant().stringValue()));
+            //Content-Type
+            commonItemData.setContentType(analysisContentType(methodInfoDesc.getRequestList()));
+            return true;
         }
         return false;
     }
@@ -102,14 +104,18 @@ public class ControllerAssembleService extends AbstractAssembleService {
 
     public ContentType analysisContentType(List<ObjectInfoDesc> requestList) {
         if (CollectionUtils.isNotEmpty(requestList)) {
-            ObjectInfoDesc objectInfoDesc = requestList.stream().filter(a -> a.exists(AnnotationConstants.REQUEST_BODY)).findFirst().orElse(null);
-            if (Objects.nonNull(objectInfoDesc)) {
+            if (isRequestBody(requestList)) {
                 return ContentType.JSON;
             } else {
                 return requestList.stream().anyMatch(a -> FuDocObjectType.MULTIPART_FILE.equals(a.getFuDocObjectType())) ? ContentType.FORM_DATA : ContentType.URLENCODED;
             }
         }
         return ContentType.URLENCODED;
+    }
+
+
+    private boolean isRequestBody(List<ObjectInfoDesc> requestList){
+        return CollectionUtils.isNotEmpty(requestList) && requestList.stream().anyMatch(a->a.exists(AnnotationConstants.REQUEST_BODY));
     }
 
 }

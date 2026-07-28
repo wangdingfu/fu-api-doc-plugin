@@ -103,7 +103,7 @@ public class FuRequestToolBarManager {
                 RequestTabView requestTabView = fuRequestCallback.getRequestTabView();
                 if (Objects.nonNull(requestTabView)) {
                     FuHttpRequestData fuHttpRequestData = requestTabView.getFuHttpRequestData();
-                    requestTabView.doSendBefore(fuHttpRequestData);
+                    requestTabView.doSendBeforeData(fuHttpRequestData);
                     //保存当前请求
                     FuRequestManager.saveRequest(requestTabView.getProject(), fuHttpRequestData);
                 }

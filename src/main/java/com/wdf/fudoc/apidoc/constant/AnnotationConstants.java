@@ -46,6 +46,9 @@ public interface AnnotationConstants {
     String SWAGGER_API_PARAM = "io.swagger.annotations.ApiParam";
 
 
+    String JSON_PROPERTY = "com.fasterxml.jackson.annotation.JsonProperty";
+
+
 
     String SPRING_BOOT_APPLICATION = "SpringBootApplication";
     String SPRING_BOOT_APPLICATION_ANNOTATION = "org.springframework.boot.autoconfigure.SpringBootApplication";

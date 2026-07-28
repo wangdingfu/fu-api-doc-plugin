@@ -1,12 +1,16 @@
 package com.wdf.fudoc.apidoc.parse.field;
 
 import com.intellij.psi.*;
+import com.wdf.fudoc.apidoc.constant.AnnotationConstants;
 import com.wdf.fudoc.apidoc.constant.enumtype.CommentTagType;
 import com.wdf.fudoc.apidoc.constant.enumtype.YesOrNo;
 import com.wdf.fudoc.apidoc.helper.DocCommentParseHelper;
 import com.wdf.fudoc.apidoc.helper.EnumParseHelper;
+import com.wdf.fudoc.apidoc.pojo.data.AnnotationData;
 import com.wdf.fudoc.apidoc.pojo.data.ApiDocCommentData;
+import com.wdf.fudoc.util.AnnotationUtils;
 import com.wdf.fudoc.util.FuStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -32,7 +36,15 @@ public class FuDocPsiField extends AbstractFuDocField {
      */
     @Override
     public String getName() {
-        return psiField.getName();
+        AnnotationData jsonPropertyAnnotation = AnnotationUtils.parse(psiField.getAnnotation(AnnotationConstants.JSON_PROPERTY));
+        if(Objects.isNull(jsonPropertyAnnotation)){
+            return psiField.getName();
+        }
+        String fieldName = jsonPropertyAnnotation.constant().stringValue();
+        if(StringUtils.isBlank(fieldName)){
+            return psiField.getName();
+        }
+        return fieldName;
     }
 
 
